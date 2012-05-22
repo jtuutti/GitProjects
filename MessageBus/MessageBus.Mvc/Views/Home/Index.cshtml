@@ -1,0 +1,11 @@
+﻿@using (Html.BeginForm())
+{
+    <p>Send Message</p>
+    <p>Enter a number below and click "Go".<br />
+    If the number is wholly divisible by 2, the message will be processed as "even", otherwise as "odd"</p>
+    <br/>
+    @Html.TextBox("textField")
+    <input type="submit" value="Go" />
+    <br/><br/>
+    @ViewBag.ResponseText
+}
