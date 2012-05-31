@@ -5,32 +5,45 @@ using MvcAlt.Infrastructure;
 
 namespace MvcAlt.Binders
 {
-    public class QueryStringBinder : IBinder
+    public class QueryBinder : IBinder
     {
-        public string[] Bind(object resource, IHttpRequest request)
+        public string[] Bind(IHttpRequest request, string parameterName, Type resourceType, ref object resource)
         {
-            if (resource == null) throw new ArgumentNullException("resource");
             if (request == null) throw new ArgumentNullException("request");
+            if (resourceType == null) throw new ArgumentNullException("resourceType");
 
-            Type resourceType = resource.GetType();
+            return !IsPrimitiveType(resourceType) ? BindComplexType(request, resource) : BindSimpleType(request, parameterName, resourceType, ref resource);
+        }
 
-            if (!resourceType.IsPrimitive)
+        private static bool IsPrimitiveType(Type resourceType)
+        {
+            return resourceType.IsPrimitive || resourceType.IsEnum || resourceType == typeof(Guid) || resourceType == typeof(decimal) ||
+                  (resourceType.IsGenericType && resourceType.GetGenericTypeDefinition() == typeof(Nullable<>));
+        }
+
+        private static string[] BindSimpleType(IHttpRequest request, string parameterName, Type resourceType, ref object resource)
+        {
+            object value = Coerce.ChangeType(request.Query[parameterName], resourceType);
+
+            if (value != null)
             {
-                return BindComplexType(resource, request);
+                resource = value;
             }
 
             return new string[0];
         }
 
-        private static string[] BindComplexType(object resource, IHttpRequest request)
+        private static string[] BindComplexType(IHttpRequest request, object resource)
         {
+            if (resource == null) throw new ArgumentNullException("resource");
+
             PropertyInfo[] properties = resource.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
             var bindedProperties = new List<string>();
 
             foreach (PropertyInfo property in properties)
             {
-                if (BindProperty(resource, request, property))
+                if (BindProperty(request, resource, property))
                 {
                     bindedProperties.Add(property.Name);
                 }
@@ -39,7 +52,7 @@ namespace MvcAlt.Binders
             return bindedProperties.ToArray();
         }
 
-        private static bool BindProperty(object resource, IHttpRequest request, PropertyInfo property)
+        private static bool BindProperty(IHttpRequest request, object resource, PropertyInfo property)
         {
             if (!property.CanWrite || property.GetIndexParameters().Length > 0)
             {

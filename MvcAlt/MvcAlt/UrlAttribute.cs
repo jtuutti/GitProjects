@@ -3,15 +3,14 @@
 namespace MvcAlt
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public sealed class UrlAttribute : Attribute
+    public class UrlAttribute : Attribute
     {
         public UrlAttribute(string url, params HttpVerb[] verbs)
         {
             if (url == null) throw new ArgumentNullException("url");
-            if (url.Trim().Length == 0) throw new ArgumentException("Url template cannot be empty", "url");
 
             Url = url;
-            Verbs = verbs ?? new HttpVerb[0];
+            Verbs = (verbs != null && verbs.Length > 0) ? verbs : new[] { HttpVerb.Get, HttpVerb.Head };
         }
 
         public int Priority

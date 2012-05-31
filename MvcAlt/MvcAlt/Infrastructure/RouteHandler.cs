@@ -3,32 +3,38 @@ using System.Web.Routing;
 
 namespace MvcAlt.Infrastructure
 {
-    public class FrontController : IRouteHandler, IHttpHandler
+    public class RouteHandler : IRouteHandler, IHttpHandler
     {
-        private readonly ActionInvoker m_invoker;
+        private readonly IActionMethodInvoker methodInvoker;
 
-        public FrontController()
+        public RouteHandler()
         {
-            m_invoker = new ActionInvoker();
+            methodInvoker = new DefaultActionMethodInvoker();
         }
 
         public bool IsReusable
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
-            return new FrontController();
+            return new RouteHandler();
         }
 
         public void ProcessRequest(HttpContext context)
         {
             IHttpRequest request = new HttpRequest(context);
-            object result = m_invoker.Invoke(request);
+
+            if (request.Verb == HttpVerb.Head)
+            {
+                context.Response.SuppressContent = true;
+            }
+
+            object result = methodInvoker.Invoke(request);
 
             if (result == null)
             {

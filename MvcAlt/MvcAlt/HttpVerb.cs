@@ -2,13 +2,12 @@
 {
     public enum HttpVerb
     {
-        Unknown,
-        Head,
         Get,
         Post,
         Put,
         Patch,
         Delete,
+        Head,
         Options
     }
 }

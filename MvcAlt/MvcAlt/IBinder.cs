@@ -1,7 +1,9 @@
-﻿namespace MvcAlt
+﻿using System;
+
+namespace MvcAlt
 {
     public interface IBinder
     {
-        string[] Bind(object resource, IHttpRequest request);
+        string[] Bind(IHttpRequest request, string parameterName, Type resourceType, ref object resource);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace MvcAlt
 {
-    interface IController
+    public interface IController
     {
     }
 }

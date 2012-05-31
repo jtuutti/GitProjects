@@ -51,7 +51,14 @@ namespace MvcAlt
                 { "_method", actionMethod.Name }
             };
 
-            var route = new Route(urlAttribute.Url, systemRoutes, new FrontController());
+            var constraints = new RouteValueDictionary();
+
+            if (urlAttribute.Verbs.Length > 0)
+            {
+                constraints.Add("httpMethod", new HttpVerbConstraint(urlAttribute.Verbs));
+            }
+
+            var route = new Route(urlAttribute.Url, systemRoutes, constraints, new RouteHandler());
             routes.Add(route);
         }
     }

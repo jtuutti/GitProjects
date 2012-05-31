@@ -9,6 +9,8 @@ namespace MvcAlt.Infrastructure
 {
     public class HttpRequest : IHttpRequest
     {
+        private const string HttpMethodOverrideHeader = "X-HTTP-Method-Override";
+
         private readonly HttpContext context;
         private NameValueCollection values;
 
@@ -17,8 +19,8 @@ namespace MvcAlt.Infrastructure
             if (context == null) throw new ArgumentNullException("context");
             this.context = context;
 
-            PopulateVerb(context.Request.HttpMethod);
-            PopulateRoutes(context);
+            PopulateVerb();
+            PopulateRoutes();
         }
 
         public Uri Url
@@ -149,9 +151,9 @@ namespace MvcAlt.Infrastructure
             return absoluteUrl;
         }
 
-        private void PopulateRoutes(HttpContext httpContext)
+        private void PopulateRoutes()
         {
-            RouteData routeData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
+            RouteData routeData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(context));
 
             if (routeData == null || routeData.Values == null)
             {
@@ -163,15 +165,26 @@ namespace MvcAlt.Infrastructure
             }
         }
 
-        private void PopulateVerb(string httpMethod)
+        private void PopulateVerb()
         {
-            if (String.IsNullOrEmpty(httpMethod))
+            string method = context.Request.Headers[HttpMethodOverrideHeader];
+
+            if (String.IsNullOrEmpty(method))
             {
-                Verb = HttpVerb.Unknown;
-                return;
+                method = context.Request.QueryString[HttpMethodOverrideHeader];
             }
 
-            switch (httpMethod.ToUpperInvariant())
+            if (String.IsNullOrEmpty(method))
+            {
+                method = context.Request.Form[HttpMethodOverrideHeader];
+            }
+
+            if (String.IsNullOrEmpty(method))
+            {
+                method = context.Request.HttpMethod;
+            }
+
+            switch (method.ToUpperInvariant())
             {
                 case "HEAD":
                     Verb = HttpVerb.Head;
@@ -193,9 +206,6 @@ namespace MvcAlt.Infrastructure
                     break;
                 case "OPTIONS":
                     Verb = HttpVerb.Options;
-                    break;
-                default:
-                    Verb = HttpVerb.Unknown;
                     break;
             }
         }

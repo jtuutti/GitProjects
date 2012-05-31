@@ -5,10 +5,11 @@ using MvcAlt.Infrastructure;
 
 namespace MvcAlt.Binders
 {
-    public class RouteBinder : IBinder
+    public class FormBinder : IBinder
     {
         public string[] Bind(IHttpRequest request, string parameterName, Type resourceType, ref object resource)
         {
+            if (String.IsNullOrEmpty(parameterName)) throw new ArgumentNullException("resource");
             if (request == null) throw new ArgumentNullException("request");
 
             return !IsPrimitiveType(resourceType) ? BindComplexType(request, resource) : BindSimpleType(request, parameterName, resourceType, ref resource);
@@ -22,11 +23,11 @@ namespace MvcAlt.Binders
 
         private static string[] BindSimpleType(IHttpRequest request, string parameterName, Type resourceType, ref object resource)
         {
-            object value;
+            object value = Coerce.ChangeType(request.Form[parameterName], resourceType);
 
-            if (request.RouteValues.TryGetValue(parameterName, out value) && value != null)
+            if (value != null)
             {
-                resource = Coerce.ChangeType(value, resourceType);
+                resource = value;
             }
 
             return new string[0];
@@ -38,12 +39,11 @@ namespace MvcAlt.Binders
 
             PropertyInfo[] properties = resource.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
 
-            var caseInsensitiveRouteValues = new Dictionary<string, object>(request.RouteValues, StringComparer.OrdinalIgnoreCase);
             var bindedProperties = new List<string>();
 
             foreach (PropertyInfo property in properties)
             {
-                if (BindComplexProperty(caseInsensitiveRouteValues, resource, property))
+                if (BindProperty(request, resource, property))
                 {
                     bindedProperties.Add(property.Name);
                 }
@@ -52,16 +52,16 @@ namespace MvcAlt.Binders
             return bindedProperties.ToArray();
         }
 
-        private static bool BindComplexProperty(IDictionary<string, object> routeValues, object resource, PropertyInfo property)
+        private static bool BindProperty(IHttpRequest request, object resource, PropertyInfo property)
         {
             if (!property.CanWrite || property.GetIndexParameters().Length > 0)
             {
                 return false;
             }
 
-            object propertyValue;
+            object propertyValue = request.Form[property.Name];
 
-            if (routeValues.TryGetValue(property.Name, out propertyValue) && propertyValue != null)
+            if (propertyValue != null)
             {
                 property.SetValue(resource, Coerce.ChangeType(propertyValue, property.PropertyType), null);
                 return true;
