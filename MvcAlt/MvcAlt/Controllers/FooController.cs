@@ -1,15 +1,13 @@
-﻿using System;
-using MvcAlt.ViewModels;
+﻿using MvcAlt.ViewModels;
 
 namespace MvcAlt.Controllers
 {
     public class FooController : IController
     {
-        [RootUrl]
         [Url("foo/{id}", HttpVerb.Get)]
-        public object Get(StringComparison? id)
+        public object Get(Input foo)
         {
-            return "OK: " + (id != null ? id.ToString() : "No Content");
+            return "OK: " + (foo != null ? foo.ToString() : "No Content");
         }
     }
 }

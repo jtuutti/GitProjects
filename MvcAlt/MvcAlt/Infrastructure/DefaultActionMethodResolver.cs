@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
+using Microsoft.Practices.ServiceLocation;
 
 namespace MvcAlt.Infrastructure
 {
@@ -43,6 +44,32 @@ namespace MvcAlt.Infrastructure
                 throw new HttpException(404, "The current route cannot be resolved to an action method");
             }
 
+            MethodInfo method = GetActionMethod(methodName, controllerType);
+            var args = new List<Type>(method.GetParameters().Select(p => p.ParameterType));
+
+            return Delegate.CreateDelegate(ResolveDelegateType(args, method), InitializeController(controllerType), method.Name);
+        }
+
+        private static Type GetControllerType(string controllerName)
+        {
+            return MvcConfiguration.Current.ControllerAssembly.GetTypes().FirstOrDefault(t => t.Name == controllerName &&
+                                                                                              typeof(IController).IsAssignableFrom(t));
+        }
+
+        private static object InitializeController(Type controllerType)
+        {
+            object controllerInstance = MvcConfiguration.Current.MvcServiceLocator.GetInstance(controllerType);
+
+            if (controllerInstance == null)
+            {
+                throw new ActivationException(String.Format("Controller of type '{0}' could not be instantiated", controllerType.FullName));
+            }
+
+            return controllerInstance;
+        }
+
+        private static MethodInfo GetActionMethod(string methodName, Type controllerType)
+        {
             MethodInfo method;
 
             try
@@ -63,9 +90,11 @@ namespace MvcAlt.Infrastructure
             {
                 throw new HttpException(500, "Action methods with multiple input parameters are not supported");
             }
+            return method;
+        }
 
-            var args = new List<Type>(method.GetParameters().Select(p => p.ParameterType));
-
+        private static Type ResolveDelegateType(List<Type> args, MethodInfo method)
+        {
             Type delegateType;
 
             if (method.ReturnType == typeof(void))
@@ -77,15 +106,10 @@ namespace MvcAlt.Infrastructure
                 args.Add(method.ReturnType);
                 delegateType = Expression.GetFuncType(args.ToArray());
             }
-
-            return Delegate.CreateDelegate(delegateType, null, method);
+            return delegateType;
         }
 
-        private static Type GetControllerType(string controllerName)
-        {
-            return MvcConfiguration.Current.ControllerAssembly.GetTypes().FirstOrDefault(t => t.Name == controllerName &&
-                                                                                              typeof(IController).IsAssignableFrom(t));
-        }
+        #region ActionRoute struct
 
         private struct ActionRoute
         {
@@ -137,5 +161,7 @@ namespace MvcAlt.Infrastructure
                 return !left.Equals(right);
             }
         }
+
+        #endregion
     }
 }

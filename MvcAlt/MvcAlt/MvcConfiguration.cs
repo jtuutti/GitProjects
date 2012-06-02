@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.Practices.ServiceLocation;
 using MvcAlt.Binders;
 using MvcAlt.Infrastructure;
 
@@ -10,7 +12,6 @@ namespace MvcAlt
         protected MvcConfiguration()
         {
             ActionMethodResolver = new DefaultActionMethodResolver();
-            ModelFactory = new DefaultModelFactory();
 
             BindersByType.Add("*", new IBinder[]
             {
@@ -31,8 +32,29 @@ namespace MvcAlt
         public readonly Dictionary<string, IBinder[]> BindersByType = new Dictionary<string, IBinder[]>();
 
         public IActionMethodResolver ActionMethodResolver { get; protected set; }
-        public IModelFactory ModelFactory { get; protected set; }
         public Assembly ControllerAssembly { get; set; }
+
+        internal IServiceLocator MvcServiceLocator
+        {
+            get
+            {
+                try
+                {
+                    if (ServiceLocator.Current == null)
+                    {
+                        throw new Exception();
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new ActivationException("No service locator is available. You can set it by calling the " +
+                                                  "'Microsoft.Practices.ServiceLocation.ServiceLocator.SetLocatorProvider(newProvider)' function " +
+                                                  "from the 'Application_Start' method in the 'Global.asax' file.");
+                }
+
+                return ServiceLocator.Current;
+            }
+        }
 
         static MvcConfiguration()
         {

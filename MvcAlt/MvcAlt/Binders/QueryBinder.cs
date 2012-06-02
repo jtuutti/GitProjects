@@ -12,13 +12,7 @@ namespace MvcAlt.Binders
             if (request == null) throw new ArgumentNullException("request");
             if (resourceType == null) throw new ArgumentNullException("resourceType");
 
-            return !IsPrimitiveType(resourceType) ? BindComplexType(request, resource) : BindSimpleType(request, parameterName, resourceType, ref resource);
-        }
-
-        private static bool IsPrimitiveType(Type resourceType)
-        {
-            return resourceType.IsPrimitive || resourceType.IsEnum || resourceType == typeof(Guid) || resourceType == typeof(decimal) ||
-                  (resourceType.IsGenericType && resourceType.GetGenericTypeDefinition() == typeof(Nullable<>));
+            return !TypeHelper.IsSimpleType(resourceType) ? BindComplexType(request, resource) : BindSimpleType(request, parameterName, resourceType, ref resource);
         }
 
         private static string[] BindSimpleType(IHttpRequest request, string parameterName, Type resourceType, ref object resource)

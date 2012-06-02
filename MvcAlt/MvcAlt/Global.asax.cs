@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Routing;
 using System.Web;
+using Microsoft.Practices.ServiceLocation;
 
 namespace MvcAlt
 {
@@ -10,8 +11,7 @@ namespace MvcAlt
         {
             RouteTable.Routes.AddControllerDefinedRoutes("MvcAlt");
 
-            //var frontControllerRoute = new Route("{*_url}", new FrontController());
-            //RouteTable.Routes.Add(frontControllerRoute);
+            ServiceLocator.SetLocatorProvider(() => new MvcServiceLocator(StructureMap.ObjectFactory.Container));
         }
 
         private void Application_End(object sender, EventArgs e)

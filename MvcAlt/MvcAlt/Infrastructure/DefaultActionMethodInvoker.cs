@@ -42,7 +42,7 @@ namespace MvcAlt.Infrastructure
                 binders = new IBinder[0];
             }
 
-            object parameterValue = Activator.CreateInstance(parameter.ParameterType);
+            object parameterValue = CreateParameterValue(parameter.ParameterType);
 
             foreach (IBinder binder in binders)
             {
@@ -50,6 +50,16 @@ namespace MvcAlt.Infrastructure
             }
 
             return parameterValue;
+        }
+
+        private static object CreateParameterValue(Type parameterType)
+        {
+            if (TypeHelper.IsSimpleType(parameterType))
+            {
+                return Activator.CreateInstance(parameterType);
+            }
+
+            return MvcConfiguration.Current.MvcServiceLocator.GetInstance(parameterType);
         }
 
         private static string GetContentType(IHttpRequest request)
