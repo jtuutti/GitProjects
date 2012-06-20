@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Data.Entity.Design.PluralizationServices;
 using System.Globalization;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace RestFoundation.Results
 {
     public class XmlResult : IResult
     {
+        private static readonly ConcurrentDictionary<Type, XmlSerializer> serializers = new ConcurrentDictionary<Type, XmlSerializer>();
+
         public IHttpRequest Request { get; set; }
         public IHttpResponse Response { get; set; }
         public object Content { get; set; }
@@ -34,9 +37,7 @@ namespace RestFoundation.Results
 
             EncodingManager.FilterResponse(Request, Response);
 
-            Type contentType = Content.GetType();
-
-            XmlSerializer serializer = contentType.IsArray ? GetSerializerForArray(contentType) : new XmlSerializer(contentType, ExtraTypes);
+            XmlSerializer serializer = serializers.GetOrAdd(Content.GetType(), GetSerializerForType);
 
             var namespaces = new XmlSerializerNamespaces();
             namespaces.Add(String.Empty, String.Empty);
@@ -47,6 +48,11 @@ namespace RestFoundation.Results
             };
 
             serializer.Serialize(xmlWriter, Content, namespaces);
+        }
+
+        private XmlSerializer GetSerializerForType(Type contentType)
+        {
+            return contentType.IsArray ? GetSerializerForArray(contentType) : new XmlSerializer(contentType, ExtraTypes);
         }
 
         private XmlSerializer GetSerializerForArray(Type objectType)
