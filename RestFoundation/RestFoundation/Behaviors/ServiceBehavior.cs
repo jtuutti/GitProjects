@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace RestFoundation.Behaviors
 {
@@ -18,6 +19,11 @@ namespace RestFoundation.Behaviors
 
         public virtual void OnActionExecuted(object result)
         {
+        }
+
+        public virtual bool OnException(Exception ex)
+        {
+            return true;
         }
     }
 }

@@ -33,6 +33,11 @@ namespace RestFoundation.Behaviors
         {
         }
 
+        public virtual bool OnException(Exception ex)
+        {
+            return true;
+        }
+
         protected void SetForbiddenErrorMessage(string message)
         {
             m_forbiddenErrorMessage = message ?? DefaultForbiddenMessage;

@@ -14,7 +14,6 @@ namespace RestTestServices
         public ContentResult Get(int? id, string someGarbage)
         {
             Response.WriteFormat("GET : {0}", Request.QueryBag.X_http_method_override);
-            Response.WriteLine().WriteFormat("Logging enabled: {0}", Request.HttpItems.TryGet("logging_enabled") ?? "false");
 
             return Result.Content("<br/><br/>Action completed", false);
         }

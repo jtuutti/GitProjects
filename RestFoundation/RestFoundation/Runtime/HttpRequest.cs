@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Routing;
 using RestFoundation.Collections;
@@ -186,41 +184,11 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public IObjectValueCollection HttpItems
-        {
-            get
-            {
-                return GenerateHttpItems();
-            }
-        }
-
         private static IObjectValueCollection GenerateRouteValues()
         {
             var routeData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(Context));
 
             return routeData != null ? new ObjectValueCollection(routeData.Values) : new ObjectValueCollection(new RouteValueDictionary());
-        }
-
-        private static IObjectValueCollection GenerateHttpItems()
-        {
-            var items = new Dictionary<string, object>();
-
-            foreach (string name in Context.Items.Keys.OfType<string>())
-            {
-                if (name.Equals("REST_Items"))
-                {
-                    continue;
-                }
-
-                object value = Context.Items[name];
-
-                if (value != null)
-                {
-                    items.Add(name, value);
-                }
-            }
-
-            return new ObjectValueCollection(items);
         }
 
         private string GenerateServiceUrl()

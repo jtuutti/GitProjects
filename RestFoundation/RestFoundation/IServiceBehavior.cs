@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace RestFoundation
 {
@@ -10,5 +11,7 @@ namespace RestFoundation
         void OnActionBinding(object service, MethodInfo actionMethod);
         bool OnActionExecuting(object resource);
         void OnActionExecuted(object result);
+
+        bool OnException(Exception ex);
     }
 }

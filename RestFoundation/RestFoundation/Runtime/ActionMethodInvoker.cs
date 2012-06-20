@@ -37,55 +37,46 @@ namespace RestFoundation.Runtime
             }
 
             List<IServiceBehavior> behaviors = BehaviorRegistry.GetBehaviors(routeHandler, m_request, m_response);
-            var serviceBehavior = service as IServiceBehavior;
 
-            if (serviceBehavior != null)
+            var serviceAsBehavior = service as IServiceBehavior;
+
+            if (serviceAsBehavior != null)
             {
-                serviceBehavior.OnActionBinding(serviceBehavior, actionMethod);
+                behaviors.Insert(0, serviceAsBehavior);
             }
-
-            PerformOnBindingBehaviors(behaviors, service, actionMethod);
-
-            object resource;
-            object[] methodArguments = GenerateMethodArguments(actionMethod, out resource);
-
-            if (serviceBehavior != null)
-            {
-                if (!serviceBehavior.OnActionExecuting(resource))
-                {
-                    return null;
-                }
-            }
-
-            if (!PerformOnExecutingBehaviors(behaviors, resource))
-            {
-                return null;
-            }
-
-            object result;
 
             try
             {
-                result = actionMethod.Invoke(service, methodArguments);   
+                return InvokeWithBehaviors(service, actionMethod, behaviors);
             }
-            catch (TargetInvocationException ex)
+            catch (Exception ex)
             {
                 if (ex.InnerException is HttpResponseException || ex.InnerException is HttpRequestValidationException)
                 {
                     throw ex.InnerException;
                 }
 
-                throw;
+                Exception internalException = IsWrapperException(ex) ? ex.InnerException : ex;
+
+                try
+                {
+                    if (PerformOnExceptionBehaviors(behaviors, internalException))
+                    {
+                        throw new ServiceRuntimeException(internalException);
+                    }
+                }
+                catch (Exception innerEx)
+                {
+                    if (IsWrapperException(innerEx))
+                    {
+                        throw new ServiceRuntimeException(innerEx.InnerException, ex);
+                    }
+
+                    throw new ServiceRuntimeException(innerEx, ex);
+                }
             }
 
-            PerformOnExecutedBehaviors(behaviors, result);
-
-            if (serviceBehavior != null)
-            {
-                serviceBehavior.OnActionExecuted(result);
-            }
-
-            return result;
+            return null;
         }
 
         private static void PerformOnBindingBehaviors(List<IServiceBehavior> behaviors, object service, MethodInfo actionMethod)
@@ -117,6 +108,24 @@ namespace RestFoundation.Runtime
             }
         }
 
+        private static bool PerformOnExceptionBehaviors(List<IServiceBehavior> behaviors, Exception ex)
+        {
+            for (int i = 0; i < behaviors.Count; i++)
+            {
+                if (!behaviors[i].OnException(ex))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool IsWrapperException(Exception ex)
+        {
+            return (ex is ServiceRuntimeException || ex is TargetInvocationException || ex is AggregateException) && ex.InnerException != null;
+        }
+
         private object[] GenerateMethodArguments(MethodInfo actionMethod, out object resource)
         {
             var methodArguments = new List<object>();
@@ -145,6 +154,25 @@ namespace RestFoundation.Runtime
             }
 
             return methodArguments.ToArray();
+        }
+
+        private object InvokeWithBehaviors(object service, MethodInfo actionMethod, List<IServiceBehavior> behaviors)
+        {
+            PerformOnBindingBehaviors(behaviors, service, actionMethod);
+
+            object resource;
+            object[] methodArguments = GenerateMethodArguments(actionMethod, out resource);
+
+            if (!PerformOnExecutingBehaviors(behaviors, resource))
+            {
+                return null;
+            }
+
+            object result = actionMethod.Invoke(service, methodArguments);
+
+            PerformOnExecutedBehaviors(behaviors, result);
+
+            return result;
         }
 
         private object GetResource(ParameterInfo parameter)

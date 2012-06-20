@@ -43,9 +43,7 @@ namespace RestTest.App_Start
                                                     });
 
                                         config.For<IServiceFactory>().Use<RestServiceFactory>();
-                                        config.SetAllProperties(convention => convention.TypeMatches(type => type == typeof(IServiceContext) ||
-                                                                                                             type == typeof(IHttpRequest) ||
-                                                                                                             type == typeof(IHttpResponse)));
+                                        config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestContext()));
                                     });
 
             ServiceLocator.SetLocatorProvider(() => new StructureMapServiceLocator(ObjectFactory.Container));

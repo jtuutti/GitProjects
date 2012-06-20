@@ -21,6 +21,5 @@ namespace RestFoundation
         IStringValueCollection QueryString { get; }
         IStringValueCollection ServerVariables { get; }
         ICookieValueCollection Cookies { get; }
-        IObjectValueCollection HttpItems { get; }
     }
 }
