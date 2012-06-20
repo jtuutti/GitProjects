@@ -3,6 +3,7 @@ using System.Data.Entity.Design.PluralizationServices;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Xml;
 using System.Xml.Serialization;
 using RestFoundation.Runtime;
 
@@ -40,7 +41,12 @@ namespace RestFoundation.Results
             var namespaces = new XmlSerializerNamespaces();
             namespaces.Add(String.Empty, String.Empty);
 
-            serializer.Serialize(Response.OutputWriter, Content, namespaces);
+            var xmlWriter = new XmlTextWriter(Response.OutputWriter)
+            {
+                Formatting = Formatting.None
+            };
+
+            serializer.Serialize(xmlWriter, Content, namespaces);
         }
 
         private XmlSerializer GetSerializerForArray(Type objectType)

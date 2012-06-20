@@ -23,8 +23,7 @@ namespace RestTestServices.Utilities
         /// </summary>
         /// <param name="input">The stream containing the XML data to read.</param>
         /// <param name="nt">The <see cref="XmlNameTable"/> to use.</param>
-        public SafeXmlTextReader(Stream input, XmlNameTable nt)
-            : base(input, nt)
+        public SafeXmlTextReader(Stream input, XmlNameTable nt) : base(input, nt)
         {
         }
 
@@ -41,8 +40,7 @@ namespace RestTestServices.Utilities
         /// </summary>
         /// <param name="input">The <see cref="TextReader"/> containing the XML data to read.</param>
         /// <param name="nt">The <see cref="XmlNameTable"/> to use.</param>
-        public SafeXmlTextReader(TextReader input, XmlNameTable nt)
-            : base(input, nt)
+        public SafeXmlTextReader(TextReader input, XmlNameTable nt) : base(input, nt)
         {
         }
 
