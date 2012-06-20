@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ED6954C7-884B-42CD-B216-9FDEAA110707}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RestFoundation</RootNamespace>
+    <AssemblyName>RestFoundation</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ionic.Zlib">
+      <HintPath>..\Dependencies\Ionic.Zlib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\Dependencies\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\Dependencies\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Behaviors\ContentTypeBehavior.cs" />
+    <Compile Include="Behaviors\ServiceSecurityBehavior.cs" />
+    <Compile Include="Collections\Concrete\HeaderCollection.cs" />
+    <Compile Include="Collections\IHeaderCollection.cs" />
+    <Compile Include="Collections\Specialized\AcceptValueCollection.cs" />
+    <Compile Include="Collections\Specialized\DynamicDictionary.cs" />
+    <Compile Include="IServiceContext.cs" />
+    <Compile Include="OutputCacheAttribute.cs" />
+    <Compile Include="Results\BinaryResult.cs" />
+    <Compile Include="Results\ContentResult.cs" />
+    <Compile Include="Results\XmlResult.cs" />
+    <Compile Include="Results\FileUrlResult.cs" />
+    <Compile Include="Results\FilePathResult.cs" />
+    <Compile Include="Results\JsonResult.cs" />
+    <Compile Include="Results\StreamResult.cs" />
+    <Compile Include="RouteExtensionMap.cs" />
+    <Compile Include="Runtime\AcceptValue.cs" />
+    <Compile Include="Runtime\AcceptValueOptions.cs" />
+    <Compile Include="Runtime\EncodingManager.cs" />
+    <Compile Include="Runtime\ServiceContext.cs" />
+    <Compile Include="Runtime\ServiceRequestValidator.cs" />
+    <Compile Include="Runtime\HttpContextExtensions.cs" />
+    <Compile Include="Runtime\OutputCachedPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Runtime\ResultFactory.cs" />
+    <Compile Include="IResult.cs" />
+    <Compile Include="IResultFactory.cs" />
+    <Compile Include="Runtime\RestAsyncHandler.cs" />
+    <Compile Include="DataFormatters\DynamicDictionaryObject.cs" />
+    <Compile Include="DataFormatters\FormsFormatter.cs" />
+    <Compile Include="ISecurityContext.cs" />
+    <Compile Include="Result.cs" />
+    <Compile Include="Results\RedirectResult.cs" />
+    <Compile Include="Behaviors\ServiceBehavior.cs" />
+    <Compile Include="DataFormatters\DynamicXmlDocument.cs" />
+    <Compile Include="DataFormatters\Formatters.cs" />
+    <Compile Include="DataFormatters\JsonFormatter.cs" />
+    <Compile Include="DataFormatters\XmlFormatter.cs" />
+    <Compile Include="HttpResponseModule.cs" />
+    <Compile Include="HttpResponseException.cs" />
+    <Compile Include="IServiceBehavior.cs" />
+    <Compile Include="IDataFormatter.cs" />
+    <Compile Include="IHttpResponse.cs" />
+    <Compile Include="Runtime\BehaviorRegistry.cs" />
+    <Compile Include="Runtime\ActionMethodMetadata.cs" />
+    <Compile Include="Collections\Specialized\DynamicStringCollection.cs" />
+    <Compile Include="Collections\Concrete\CookieValueCollection.cs" />
+    <Compile Include="Collections\ICookieValueCollection.cs" />
+    <Compile Include="Collections\Concrete\ObjectValueCollection.cs" />
+    <Compile Include="Collections\Concrete\StringValueCollection.cs" />
+    <Compile Include="Collections\IObjectValueCollection.cs" />
+    <Compile Include="Collections\IStringValueCollection.cs" />
+    <Compile Include="IActionMethodInvoker.cs" />
+    <Compile Include="Runtime\ActionMethodRegistry.cs" />
+    <Compile Include="Runtime\HttpMethodRegistry.cs" />
+    <Compile Include="Runtime\HttpRequest.cs" />
+    <Compile Include="Runtime\HttpResponse.cs" />
+    <Compile Include="IServiceFactory.cs" />
+    <Compile Include="IHttpRequest.cs" />
+    <Compile Include="ObjectActivator.cs" />
+    <Compile Include="Runtime\UnvalidatedHandlerRegistry.cs" />
+    <Compile Include="ServiceUri.cs" />
+    <Compile Include="ServiceAssembly.cs" />
+    <Compile Include="Runtime\SafeConvert.cs" />
+    <Compile Include="Runtime\ActionMethodInvoker.cs" />
+    <Compile Include="RouteConstants.cs" />
+    <Compile Include="Runtime\RouteMetadata.cs" />
+    <Compile Include="Runtime\RestHandler.cs" />
+    <Compile Include="HttpMethod.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoutingExtensions.cs" />
+    <Compile Include="Runtime\ServiceFactory.cs" />
+    <Compile Include="Runtime\ServiceContractTypeRegistry.cs" />
+    <Compile Include="Results\StatusResult.cs" />
+    <Compile Include="UrlAttribute.cs" />
+    <Compile Include="Runtime\UrlTemplateStandardizer.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
