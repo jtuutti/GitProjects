@@ -1,14 +1,15 @@
 ﻿using RestFoundation;
 using RestFoundation.Results;
+using RestFoundation.ServiceProxy.Attributes;
 using RestTestContracts.Resources;
 
 namespace RestTestContracts
 {
     public interface IIndexService
     {
-        [Url("", HttpMethod.Get, HttpMethod.Head)]
         [Url("index/{id}", HttpMethod.Get, HttpMethod.Head)]
-        ContentResult Get(int? ID, string someGarbage);
+        [UrlMetadata("Gets resources of type 'Index' by ID")]
+        IResult Get(int? ID, string someGarbage);
 
         [Url("index", HttpMethod.Post)]
         Person Post(Person resource);

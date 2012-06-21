@@ -50,10 +50,10 @@ namespace RestFoundation
             if (!serviceContractType.IsInterface) throw new ArgumentException("Service contract type must be an interface", "serviceContractType");
 
             var actionMethods = serviceContractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                                                   .Where(m => m.GetCustomAttributes(urlAttributeType, true).Length > 0);
+                                                   .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);
 
-            List<ActionMethodMetadata> actionMethodMetadata = GenerateActionMethodMetadata(serviceContractType, actionMethods);
-            ActionMethodRegistry.ActionMethods.AddOrUpdate(serviceContractType, t => actionMethodMetadata, (t, u) => actionMethodMetadata);
+            List<ActionMethodMetadata> actionMethodMetadata = GenerateActionMethodMetadata(serviceContractType, actionMethods, url);
+            ActionMethodRegistry.ActionMethods.AddOrUpdate(new ServiceMetadata(serviceContractType, url), t => actionMethodMetadata, (t, u) => actionMethodMetadata);
 
             IEnumerable<IRouteHandler> routeHandlers = MapRoutes(actionMethodMetadata, routes, url, serviceContractType, isAsync);
             return new RouteExtensionMap(routeHandlers);
@@ -95,17 +95,18 @@ namespace RestFoundation
             BehaviorRegistry.ClearGlobalBehaviors();
         }
 
-        private static List<ActionMethodMetadata> GenerateActionMethodMetadata(Type serviceContractType, IEnumerable<MethodInfo> actionMethods)
+        private static List<ActionMethodMetadata> GenerateActionMethodMetadata(Type serviceContractType, IEnumerable<MethodInfo> actionMethods, string url)
         {
             var urlAttributes = new List<ActionMethodMetadata>();
 
             foreach (MethodInfo actionMethod in actionMethods)
             {
-                foreach (UrlAttribute urlAttribute in Attribute.GetCustomAttributes(actionMethod, urlAttributeType, true).Cast<UrlAttribute>())
+                foreach (UrlAttribute urlAttribute in Attribute.GetCustomAttributes(actionMethod, urlAttributeType, false).Cast<UrlAttribute>())
                 {
-                    var actionMetadata = new ActionMethodMetadata(urlAttribute,
+                    var actionMetadata = new ActionMethodMetadata(url,
+                                                                  urlAttribute,
                                                                   actionMethod,
-                                                                  (OutputCacheAttribute) Attribute.GetCustomAttribute(actionMethod, typeof(OutputCacheAttribute), true));
+                                                                  (OutputCacheAttribute) Attribute.GetCustomAttribute(actionMethod, typeof(OutputCacheAttribute), false));
                     urlAttributes.Add(actionMetadata);
 
                     var urlMethods = urlAttribute.HttpMethods;
@@ -153,7 +154,7 @@ namespace RestFoundation
                                    {
                                        { RouteConstants.ServiceContractType, serviceContractType.AssemblyQualifiedName },
                                        { RouteConstants.ServiceUrl, url },
-                                       { RouteConstants.UrlTemplate, urlAttribute.UrlInfo.UrlTemplate },
+                                       { RouteConstants.UrlTemplate, urlAttribute.UrlInfo.UrlTemplate.Trim() },
                                    };
 
                 var routeHandler = isAsync ? (IRouteHandler) ObjectActivator.Create<RestAsyncHandler>() : ObjectActivator.Create<RestHandler>();

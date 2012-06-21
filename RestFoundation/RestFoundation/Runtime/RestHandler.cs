@@ -44,6 +44,7 @@ namespace RestFoundation
         {
             if (context == null) throw new ArgumentNullException("context");
 
+            var serviceUrl = (string) m_routeValues[RouteConstants.ServiceUrl];
             var serviceContractTypeName = (string) m_routeValues[RouteConstants.ServiceContractType];
             var urlTemplate = (string) m_routeValues[RouteConstants.UrlTemplate];
 
@@ -71,7 +72,7 @@ namespace RestFoundation
             object service = m_serviceFactory.Create(serviceContractType);
 
             OutputCacheAttribute cache;
-            MethodInfo actionMethod = ActionMethodRegistry.GetActionMethod(serviceContractType, urlTemplate, httpMethod, out cache);
+            MethodInfo actionMethod = ActionMethodRegistry.GetActionMethod(new ServiceMetadata(serviceContractType, serviceUrl), urlTemplate, httpMethod, out cache);
 
             object result = m_methodInvoker.Invoke(this, service, actionMethod);
 

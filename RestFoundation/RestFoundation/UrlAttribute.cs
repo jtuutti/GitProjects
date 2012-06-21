@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace RestFoundation
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
     public class UrlAttribute : Attribute
     {
         public UrlAttribute(string urlTemplate, params HttpMethod[] methods)
         {
             if (urlTemplate == null) throw new ArgumentNullException("urlTemplate");
 
-            UrlTemplate = urlTemplate;
+            UrlTemplate = urlTemplate.Trim();
             HttpMethods = (methods != null && methods.Length > 0) ? methods : new[] { HttpMethod.Get, HttpMethod.Head };
 
             if (methods != null && Array.IndexOf(methods, HttpMethod.Options) >= 0)

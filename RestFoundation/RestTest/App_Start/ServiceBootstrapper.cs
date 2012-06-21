@@ -6,6 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
 using RestFoundation.Behaviors;
+using RestFoundation.ServiceProxy;
 using RestTest.Behaviors;
 using RestTest.ServiceFactories;
 using RestTestContracts;
@@ -34,6 +35,8 @@ namespace RestTest.App_Start
         {
             DynamicModuleUtility.RegisterModule(typeof(HttpResponseModule));
 
+            ProxyPathProvider.AppInitialize();
+
             ObjectFactory.Configure(config =>
                                     {
                                         config.Scan(action =>
@@ -52,7 +55,7 @@ namespace RestTest.App_Start
         }
 
         private static void RegisterRoutes()
-        {           
+        {
             RouteTable.Routes.AddGlobalBehaviors(new ContentTypeBehavior(standardContentTypes));
 
             RouteTable.Routes.MapRestRoute<IIndexService>("home").WithBehaviors(new StatisticsBehavior(), new ContentTypeBehavior(homeContentTypes), new LoggingBehavior()).DoNotValidateRequests();

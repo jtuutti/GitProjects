@@ -7,8 +7,6 @@ namespace RestFoundation.Results
 {
     public class StreamResult : IResult
     {
-        private const int BufferSize = 4096;
-
         public StreamResult()
         {
             ClearResponse = true;
@@ -52,11 +50,6 @@ namespace RestFoundation.Results
 
             EncodingManager.FilterResponse(Request, Response);
 
-            WriteFromStream();
-        }
-
-        private void WriteFromStream()
-        {
             using (Stream)
             {
                 if (Stream.CanSeek)
@@ -64,19 +57,7 @@ namespace RestFoundation.Results
                     Stream.Seek(0, SeekOrigin.Begin);
                 }
 
-                var buffer = new byte[BufferSize];
-
-                while (true)
-                {
-                    int count = Stream.Read(buffer, 0, buffer.Length);
-
-                    if (count == 0)
-                    {
-                        return;
-                    }
-
-                    Response.Output.Write(buffer, 0, count);
-                }
+                Stream.CopyTo(Response.Output);
             }
         }
     }

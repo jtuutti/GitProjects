@@ -11,11 +11,11 @@ namespace RestTestServices
         public IHttpRequest Request { get; set; }
         public IHttpResponse Response { get; set; }
 
-        public ContentResult Get(int? id, string someGarbage)
+        public IResult Get(int? id, string someGarbage)
         {
             Response.WriteFormat("GET : {0}", Request.QueryBag.X_http_method_override);
 
-            return Result.Content("<br/><br/>Action completed", false);
+            return Result.Content("<br/><br/>GET completed", false);
         }
 
         public Person Post(Person resource)

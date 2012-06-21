@@ -51,12 +51,12 @@ namespace RestFoundation.Runtime
             }
             catch (Exception ex)
             {
-                if (ex.InnerException is HttpResponseException || ex.InnerException is HttpRequestValidationException)
-                {
-                    throw ex.InnerException;
-                }
-
                 Exception internalException = IsWrapperException(ex) ? ex.InnerException : ex;
+
+                if (internalException is HttpResponseException || internalException is HttpRequestValidationException)
+                {
+                    throw;
+                }
 
                 try
                 {

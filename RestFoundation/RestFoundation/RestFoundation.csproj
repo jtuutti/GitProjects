@@ -45,6 +45,7 @@
       <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Web" />
@@ -75,6 +76,7 @@
     <Compile Include="Runtime\AcceptValueOptions.cs" />
     <Compile Include="Runtime\EncodingManager.cs" />
     <Compile Include="Runtime\ServiceContext.cs" />
+    <Compile Include="Runtime\ServiceMetadata.cs" />
     <Compile Include="Runtime\ServiceRequestValidator.cs" />
     <Compile Include="Runtime\HttpContextExtensions.cs" />
     <Compile Include="Runtime\OutputCachedPage.cs">
@@ -117,6 +119,11 @@
     <Compile Include="IHttpRequest.cs" />
     <Compile Include="ObjectActivator.cs" />
     <Compile Include="Runtime\UnvalidatedHandlerRegistry.cs" />
+    <Compile Include="ServiceProxy\Attributes\UrlMetadataAttribute.cs" />
+    <Compile Include="ServiceProxy\Helpers\EndPoint.cs" />
+    <Compile Include="ServiceProxy\Helpers\EndpointGenerator.cs" />
+    <Compile Include="ServiceProxy\ProxyFile.cs" />
+    <Compile Include="ServiceProxy\ProxyPathProvider.cs" />
     <Compile Include="ServiceRuntimeException.cs" />
     <Compile Include="ServiceUri.cs" />
     <Compile Include="ServiceAssembly.cs" />
@@ -134,6 +141,16 @@
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UrlAttribute.cs" />
     <Compile Include="Runtime\UrlTemplateStandardizer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ServiceProxy\Resources\proxy.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ServiceProxy\Resources\proxy.master">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

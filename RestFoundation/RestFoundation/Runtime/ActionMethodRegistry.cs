@@ -8,9 +8,9 @@ namespace RestFoundation.Runtime
 {
     internal static class ActionMethodRegistry
     {
-        private static readonly ConcurrentDictionary<Type, List<ActionMethodMetadata>> actionMethods = new ConcurrentDictionary<Type, List<ActionMethodMetadata>>();
+        private static readonly ConcurrentDictionary<ServiceMetadata, List<ActionMethodMetadata>> actionMethods = new ConcurrentDictionary<ServiceMetadata, List<ActionMethodMetadata>>();
 
-        public static ConcurrentDictionary<Type, List<ActionMethodMetadata>> ActionMethods
+        public static ConcurrentDictionary<ServiceMetadata, List<ActionMethodMetadata>> ActionMethods
         {
             get
             {
@@ -18,14 +18,14 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public static MethodInfo GetActionMethod(Type serviceContractType, string urlTemplate, HttpMethod httpMethod, out OutputCacheAttribute cache)
+        public static MethodInfo GetActionMethod(ServiceMetadata metadata, string urlTemplate, HttpMethod httpMethod, out OutputCacheAttribute cache)
         {
-            if (serviceContractType == null) throw new ArgumentNullException("serviceContractType");
+            if (metadata == null) throw new ArgumentNullException("metadata");
             if (urlTemplate == null) throw new ArgumentNullException("urlTemplate");
 
             List<ActionMethodMetadata> serviceActionMethods;
 
-            if (!actionMethods.TryGetValue(serviceContractType, out serviceActionMethods))
+            if (!actionMethods.TryGetValue(metadata, out serviceActionMethods))
             {
                 cache = null;
                 return null;

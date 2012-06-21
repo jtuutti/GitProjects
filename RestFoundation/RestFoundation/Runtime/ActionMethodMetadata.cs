@@ -5,18 +5,39 @@ namespace RestFoundation.Runtime
 {
     internal struct ActionMethodMetadata : IEquatable<ActionMethodMetadata>
     {
+        private readonly Guid m_actionMethodId;
+        private readonly string m_serviceUrl;
         private readonly UrlAttribute m_urlInfo;
         private readonly MethodInfo m_methodInfo;
         private readonly OutputCacheAttribute m_outputCache;
 
-        public ActionMethodMetadata(UrlAttribute urlInfo, MethodInfo methodInfo, OutputCacheAttribute outputCache)
+        public ActionMethodMetadata(string serviceUrl, UrlAttribute urlInfo, MethodInfo methodInfo, OutputCacheAttribute outputCache)
         {
+            if (serviceUrl == null) throw new ArgumentNullException("serviceUrl");
             if (urlInfo == null) throw new ArgumentNullException("urlInfo");
             if (methodInfo == null) throw new ArgumentNullException("methodInfo");
 
+            m_actionMethodId = Guid.NewGuid();
+            m_serviceUrl = serviceUrl.Trim();
             m_urlInfo = urlInfo;
             m_methodInfo = methodInfo;
             m_outputCache = outputCache;
+        }
+
+        public Guid ActionMethodId
+        {
+            get
+            {
+                return m_actionMethodId;
+            }
+        }
+
+        public string ServiceUrl
+        {
+            get
+            {
+                return m_serviceUrl;
+            }
         }
 
         public UrlAttribute UrlInfo
