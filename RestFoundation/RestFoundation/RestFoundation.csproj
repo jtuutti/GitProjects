@@ -39,6 +39,7 @@
       <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity.Design" />
@@ -51,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\ContentTypeBehavior.cs" />
+    <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
     <Compile Include="Behaviors\ServiceSecurityBehavior.cs" />
     <Compile Include="Collections\Concrete\HeaderCollection.cs" />
     <Compile Include="Collections\IHeaderCollection.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="IStreamCompressor.cs" />
     <Compile Include="ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
+    <Compile Include="IResourceValidator.cs" />
     <Compile Include="OutputCacheAttribute.cs" />
     <Compile Include="Results\BinaryResult.cs" />
     <Compile Include="Results\ContentResult.cs" />
@@ -73,8 +76,10 @@
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptions.cs" />
     <Compile Include="Runtime\Cache.cs" />
+    <Compile Include="Runtime\CompositeValidationResult.cs" />
     <Compile Include="Runtime\Logger.cs" />
     <Compile Include="Runtime\OutputCompressionManager.cs" />
+    <Compile Include="Runtime\ResourceValidator.cs" />
     <Compile Include="Runtime\SerializationValidator.cs" />
     <Compile Include="Runtime\StreamCompressor.cs" />
     <Compile Include="Runtime\ServiceContext.cs" />
@@ -142,6 +147,8 @@
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UrlAttribute.cs" />
     <Compile Include="Runtime\UrlTemplateStandardizer.cs" />
+    <Compile Include="ValidateObjectAttribute.cs" />
+    <Compile Include="ValidationError.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ServiceProxy\Resources\proxy.aspx">

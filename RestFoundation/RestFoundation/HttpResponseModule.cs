@@ -53,11 +53,17 @@ namespace RestFoundation
 
         private static void SetResponseStatus(HttpApplication context, HttpStatusCode statusCode, string statusDescription)
         {
-            context.Response.Clear();
-            context.Response.StatusCode = (int) statusCode;
-            context.Response.StatusDescription = statusDescription;
-            context.Server.ClearError();
-            context.CompleteRequest();
+            try
+            {
+                context.Response.Clear();
+                context.Response.StatusCode = (int) statusCode;
+                context.Response.StatusDescription = statusDescription;
+                context.Server.ClearError();
+                context.CompleteRequest();
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

@@ -210,7 +210,6 @@ namespace RestFoundation.Runtime
             public HttpMethod? Method { get; set; }
 
             public dynamic Query { get; set; }
-            public dynamic Item { get; set; }
 
             public IObjectValueCollection RouteValues { get; set; }
             public IHeaderCollection Headers { get; set; }

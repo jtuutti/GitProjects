@@ -59,7 +59,12 @@ namespace RestFoundation.Runtime
 
                 if (internalException is HttpResponseException || internalException is HttpRequestValidationException)
                 {
-                    throw;
+                    if (ex == internalException)
+                    {
+                        throw;
+                    }
+
+                    throw internalException;
                 }
 
                 try

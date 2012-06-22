@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Routing;
+using RestFoundation.Behaviors;
 
 namespace RestFoundation.Runtime
 {
     internal static class BehaviorRegistry
     {
-        private static readonly List<IServiceBehavior> globalBehaviors = new List<IServiceBehavior>();
+        private static readonly List<IServiceBehavior> globalBehaviors = new List<IServiceBehavior>
+        {
+            new ResourceValidationBehavior()
+        };
+
         private static readonly ConcurrentDictionary<IRouteHandler, List<IServiceBehavior>> behaviors = new ConcurrentDictionary<IRouteHandler, List<IServiceBehavior>>();
         private static readonly object syncRoot = new object();
 

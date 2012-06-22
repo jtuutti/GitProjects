@@ -52,15 +52,10 @@ namespace RestFoundation.Runtime
 
         public static void SetServiceMethodResponseStatus(this HttpContext context, Type methodReturnType)
         {
-            if (methodReturnType == typeof(void))
+            if (context.Response.StatusCode == 200 && methodReturnType == typeof(void))
             {
                 context.Response.StatusCode = 204;
-                context.Response.StatusDescription = String.Empty;
-            }
-            else
-            {
-                context.Response.StatusCode = 200;
-                context.Response.StatusDescription = "OK";
+                context.Response.StatusDescription = "No Content";
             }
         }
     }
