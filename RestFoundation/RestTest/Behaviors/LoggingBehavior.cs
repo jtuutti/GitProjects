@@ -5,24 +5,17 @@ namespace RestTest.Behaviors
 {
     public class LoggingBehavior : ServiceBehavior
     {
-        private string methodName;
-
-        public override void OnActionBinding(object service, MethodInfo actionMethod)
+        public override bool OnMethodExecuting(object service, MethodInfo method, object resource)
         {
-            methodName = actionMethod.Name;
-
             Response.SetHttpItem("logging_enabled", true);
-        }
+            Response.WriteFormat("Action '{0}' executing", method.Name).WriteLine(2);
 
-        public override bool OnActionExecuting(object resource)
-        {
-            Response.WriteFormat("Action '{0}' executing", methodName).WriteLine(2);
             return true;
         }
 
-        public override void OnActionExecuted(object result)
+        public override void OnMethodExecuted(object service, MethodInfo method, object result)
         {
-            Response.WriteLine(2).WriteFormat("Action '{0}' executed", methodName);
+            Response.WriteLine(2).WriteFormat("Action '{0}' executed", method.Name);
         }
     }
 }

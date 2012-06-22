@@ -16,11 +16,11 @@ namespace RestFoundation.Behaviors
             m_contentTypes = new HashSet<string>(contentTypes, StringComparer.OrdinalIgnoreCase);
         }
 
-        public override void OnActionBinding(object service, MethodInfo actionMethod)
+        public override bool OnMethodExecuting(object service, MethodInfo method, object resource)
         {
             if (Request.Method != HttpMethod.Post && Request.Method != HttpMethod.Put && Request.Method != HttpMethod.Patch)
             {
-                return;
+                return true;
             }
 
             string contentType = Request.Headers.ContentType ?? String.Empty;
@@ -29,6 +29,8 @@ namespace RestFoundation.Behaviors
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Content type is not specified or not allowed");
             }
+
+            return true;
         }
     }
 }

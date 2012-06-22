@@ -62,6 +62,7 @@
     <Compile Include="Collections\IHeaderCollection.cs" />
     <Compile Include="Collections\Specialized\AcceptValueCollection.cs" />
     <Compile Include="Collections\Specialized\DynamicDictionary.cs" />
+    <Compile Include="ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
     <Compile Include="OutputCacheAttribute.cs" />
     <Compile Include="Results\BinaryResult.cs" />
@@ -102,7 +103,7 @@
     <Compile Include="IDataFormatter.cs" />
     <Compile Include="IHttpResponse.cs" />
     <Compile Include="Runtime\BehaviorRegistry.cs" />
-    <Compile Include="Runtime\ActionMethodMetadata.cs" />
+    <Compile Include="Runtime\ServiceMethodMetadata.cs" />
     <Compile Include="Collections\Specialized\DynamicStringCollection.cs" />
     <Compile Include="Collections\Concrete\CookieValueCollection.cs" />
     <Compile Include="Collections\ICookieValueCollection.cs" />
@@ -110,8 +111,8 @@
     <Compile Include="Collections\Concrete\StringValueCollection.cs" />
     <Compile Include="Collections\IObjectValueCollection.cs" />
     <Compile Include="Collections\IStringValueCollection.cs" />
-    <Compile Include="IActionMethodInvoker.cs" />
-    <Compile Include="Runtime\ActionMethodRegistry.cs" />
+    <Compile Include="IServiceMethodInvoker.cs" />
+    <Compile Include="Runtime\ServiceMethodRegistry.cs" />
     <Compile Include="Runtime\HttpMethodRegistry.cs" />
     <Compile Include="Runtime\HttpRequest.cs" />
     <Compile Include="Runtime\HttpResponse.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="ServiceUri.cs" />
     <Compile Include="ServiceAssembly.cs" />
     <Compile Include="Runtime\SafeConvert.cs" />
-    <Compile Include="Runtime\ActionMethodInvoker.cs" />
+    <Compile Include="Runtime\ServiceMethodInvoker.cs" />
     <Compile Include="RouteConstants.cs" />
     <Compile Include="Runtime\RouteMetadata.cs" />
     <Compile Include="Runtime\RestHandler.cs" />

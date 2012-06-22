@@ -50,9 +50,9 @@ namespace RestFoundation.Runtime
             return httpMethod;
         }
 
-        public static void SetActionMethodResponseStatus(this HttpContext context, Type actionMethodReturnType)
+        public static void SetServiceMethodResponseStatus(this HttpContext context, Type methodReturnType)
         {
-            if (actionMethodReturnType == typeof(void))
+            if (methodReturnType == typeof(void))
             {
                 context.Response.StatusCode = 204;
                 context.Response.StatusDescription = String.Empty;

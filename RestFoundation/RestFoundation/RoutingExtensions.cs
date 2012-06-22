@@ -49,13 +49,13 @@ namespace RestFoundation
             if (serviceContractType == null) throw new ArgumentNullException("serviceContractType");
             if (!serviceContractType.IsInterface) throw new ArgumentException("Service contract type must be an interface", "serviceContractType");
 
-            var actionMethods = serviceContractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                                                   .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);
+            var serviceMethods = serviceContractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                                                    .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);
 
-            List<ActionMethodMetadata> actionMethodMetadata = GenerateActionMethodMetadata(serviceContractType, actionMethods, url);
-            ActionMethodRegistry.ActionMethods.AddOrUpdate(new ServiceMetadata(serviceContractType, url), t => actionMethodMetadata, (t, u) => actionMethodMetadata);
+            List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(serviceContractType, serviceMethods, url);
+            ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(serviceContractType, url), t => methodMetadata, (t, u) => methodMetadata);
 
-            IEnumerable<IRouteHandler> routeHandlers = MapRoutes(actionMethodMetadata, routes, url, serviceContractType, isAsync);
+            IEnumerable<IRouteHandler> routeHandlers = MapRoutes(methodMetadata, routes, url, serviceContractType, isAsync);
             return new RouteExtensionMap(routeHandlers);
         }
 
@@ -95,19 +95,19 @@ namespace RestFoundation
             BehaviorRegistry.ClearGlobalBehaviors();
         }
 
-        private static List<ActionMethodMetadata> GenerateActionMethodMetadata(Type serviceContractType, IEnumerable<MethodInfo> actionMethods, string url)
+        private static List<ServiceMethodMetadata> GenerateMethodMetadata(Type serviceContractType, IEnumerable<MethodInfo> methods, string url)
         {
-            var urlAttributes = new List<ActionMethodMetadata>();
+            var urlAttributes = new List<ServiceMethodMetadata>();
 
-            foreach (MethodInfo actionMethod in actionMethods)
+            foreach (MethodInfo method in methods)
             {
-                foreach (UrlAttribute urlAttribute in Attribute.GetCustomAttributes(actionMethod, urlAttributeType, false).Cast<UrlAttribute>())
+                foreach (UrlAttribute urlAttribute in Attribute.GetCustomAttributes(method, urlAttributeType, false).Cast<UrlAttribute>())
                 {
-                    var actionMetadata = new ActionMethodMetadata(url,
-                                                                  urlAttribute,
-                                                                  actionMethod,
-                                                                  (OutputCacheAttribute) Attribute.GetCustomAttribute(actionMethod, typeof(OutputCacheAttribute), false));
-                    urlAttributes.Add(actionMetadata);
+                    var methodMetadata = new ServiceMethodMetadata(url,
+                                                                   urlAttribute,
+                                                                   method,
+                                                                   (OutputCacheAttribute) Attribute.GetCustomAttribute(method, typeof(OutputCacheAttribute), false));
+                    urlAttributes.Add(methodMetadata);
 
                     var urlMethods = urlAttribute.HttpMethods;
 
@@ -142,13 +142,13 @@ namespace RestFoundation
             return allowedMethods;
         }
 
-        private static IEnumerable<IRouteHandler> MapRoutes(IEnumerable<ActionMethodMetadata> actionMetadata, RouteCollection routes, string url, Type serviceContractType, bool isAsync)
+        private static IEnumerable<IRouteHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, RouteCollection routes, string url, Type serviceContractType, bool isAsync)
         {
             var routeHandlers = new List<IRouteHandler>();
 
             url = url.Trim();
 
-            foreach (ActionMethodMetadata urlAttribute in actionMetadata)
+            foreach (ServiceMethodMetadata urlAttribute in methodMetadata)
             {
                 var defaults = new RouteValueDictionary
                                    {

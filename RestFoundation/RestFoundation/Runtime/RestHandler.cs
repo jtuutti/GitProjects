@@ -13,7 +13,7 @@ namespace RestFoundation
         private RouteValueDictionary m_routeValues;
         private IServiceFactory m_serviceFactory;
         private IResultFactory m_resultFactory;
-        private IActionMethodInvoker m_methodInvoker;
+        private IServiceMethodInvoker m_methodInvoker;
 
         public bool IsReusable
         {
@@ -35,7 +35,7 @@ namespace RestFoundation
             m_routeValues = requestContext.RouteData.Values;
             m_serviceFactory = ObjectActivator.Create<IServiceFactory>();
             m_resultFactory = ObjectActivator.Create<IResultFactory>();
-            m_methodInvoker = ObjectActivator.Create<IActionMethodInvoker>();
+            m_methodInvoker = ObjectActivator.Create<IServiceMethodInvoker>();
 
             return this;
         }
@@ -72,14 +72,14 @@ namespace RestFoundation
             object service = m_serviceFactory.Create(serviceContractType);
 
             OutputCacheAttribute cache;
-            MethodInfo actionMethod = ActionMethodRegistry.GetActionMethod(new ServiceMetadata(serviceContractType, serviceUrl), urlTemplate, httpMethod, out cache);
+            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, serviceUrl), urlTemplate, httpMethod, out cache);
 
-            object result = m_methodInvoker.Invoke(this, service, actionMethod);
+            object result = m_methodInvoker.Invoke(this, service, method);
 
-            ProcessResult(context, httpMethod, result, cache, actionMethod.ReturnType);
+            ProcessResult(context, httpMethod, result, cache, method.ReturnType);
         }
 
-        private void ProcessResult(HttpContext context, HttpMethod httpMethod, object result, OutputCacheAttribute cache, Type actionMethodReturnType)
+        private void ProcessResult(HttpContext context, HttpMethod httpMethod, object result, OutputCacheAttribute cache, Type methodReturnType)
         {
             IResult httpResult = m_resultFactory.Create(result);
 
@@ -97,7 +97,7 @@ namespace RestFoundation
             }
             else
             {
-                context.SetActionMethodResponseStatus(actionMethodReturnType);
+                context.SetServiceMethodResponseStatus(methodReturnType);
             }
         }
     }

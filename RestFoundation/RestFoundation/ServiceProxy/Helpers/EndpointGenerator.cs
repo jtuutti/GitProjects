@@ -14,7 +14,7 @@ namespace RestFoundation.ServiceProxy.Helpers
         {
             var endPoints = new SortedSet<EndPoint>();
 
-            foreach (ActionMethodMetadata metadata in ActionMethodRegistry.ActionMethods.SelectMany(m => m.Value))
+            foreach (ServiceMethodMetadata metadata in ServiceMethodRegistry.ServiceMethods.SelectMany(m => m.Value))
             {
                 if (metadata.UrlInfo == null || metadata.UrlInfo.UrlTemplate == null)
                 {
@@ -45,7 +45,7 @@ namespace RestFoundation.ServiceProxy.Helpers
             return endPoints;
         }
 
-        private static string GetUrlTemplate(ActionMethodMetadata metadata)
+        private static string GetUrlTemplate(ServiceMethodMetadata metadata)
         {
             return (metadata.ServiceUrl + (metadata.UrlInfo.UrlTemplate.Length > 0 ? UrlSeparator + metadata.UrlInfo.UrlTemplate.TrimStart(UrlSeparator[0]) : UrlSeparator)).Trim(UrlSeparator[0]);
         }

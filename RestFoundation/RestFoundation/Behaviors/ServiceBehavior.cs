@@ -5,23 +5,20 @@ namespace RestFoundation.Behaviors
 {
     public abstract class ServiceBehavior : IServiceBehavior
     {
+        public IServiceContext Context { get; set; }
         public IHttpRequest Request { get; set; }
         public IHttpResponse Response { get; set; }
 
-        public virtual void OnActionBinding(object service, MethodInfo actionMethod)
-        {
-        }
-
-        public virtual bool OnActionExecuting(object resource)
+        public virtual bool OnMethodExecuting(object service, MethodInfo method, object resource)
         {
             return true;
         }
 
-        public virtual void OnActionExecuted(object result)
+        public virtual void OnMethodExecuted(object service, MethodInfo method, object result)
         {
         }
 
-        public virtual bool OnException(Exception ex)
+        public virtual bool OnMethodException(object service, MethodInfo method, Exception ex)
         {
             return true;
         }

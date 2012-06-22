@@ -8,16 +8,17 @@ namespace RestTest.Behaviors
     {
         private Stopwatch timer;
 
-        public override void OnActionBinding(object service, MethodInfo actionMethod)
+        public override bool OnMethodExecuting(object service, MethodInfo method, object resource)
         {
             timer = Stopwatch.StartNew();
 
             Response.WriteFormat("Service: {0}", service.GetType().Name).WriteLine();
-            Response.WriteFormat("Method: {0}", actionMethod.Name).WriteLine();
+            Response.WriteFormat("Method: {0}", method.Name).WriteLine();
             Response.WriteFormat("Full URL: {0}", Request.Url.ToString()).WriteLine();
             Response.WriteFormat("Relative URL: {0}", Request.Url.LocalPath).WriteLine();
             Response.WriteFormat("Service absolute URL: {0}", Request.Url.ServiceUrl.ToString()).WriteLine();
             Response.WriteFormat("Service relative URL: {0}", Request.Url.ServiceUrl.LocalPath).WriteLine();
+            Response.WriteFormat("Is Authenticated: {0}", Context.IsAuthenticated).WriteLine();
             Response.WriteFormat("Is Local: {0}", Request.IsLocal).WriteLine();
             Response.WriteFormat("Is Secure: {0}", Request.IsSecure).WriteLine();
             Response.WriteFormat("Is AJAX: {0}", Request.IsAjax).WriteLine();
@@ -37,9 +38,10 @@ namespace RestTest.Behaviors
             }
 
             Response.WriteLine();
+            return true;
         }
 
-        public override void OnActionExecuted(object result)
+        public override void OnMethodExecuted(object service, MethodInfo method, object result)
         {
             timer.Stop();
 

@@ -11,7 +11,7 @@ namespace RestFoundation.Runtime
         private static readonly ConcurrentDictionary<IRouteHandler, List<IServiceBehavior>> behaviors = new ConcurrentDictionary<IRouteHandler, List<IServiceBehavior>>();
         private static readonly object syncRoot = new object();
 
-        public static List<IServiceBehavior> GetBehaviors(IRouteHandler routeHandler, IHttpRequest request, IHttpResponse response)
+        public static List<IServiceBehavior> GetBehaviors(IRouteHandler routeHandler, IServiceContext context, IHttpRequest request, IHttpResponse response)
         {
             var allBehaviors = new List<IServiceBehavior>(globalBehaviors);
             List<IServiceBehavior> serviceBehaviors;
@@ -27,6 +27,7 @@ namespace RestFoundation.Runtime
 
             foreach (IServiceBehavior behavior in allBehaviors)
             {
+                behavior.Context = context;
                 behavior.Request = request;
                 behavior.Response = response;
             }

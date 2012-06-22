@@ -5,13 +5,12 @@ namespace RestFoundation
 {
     public interface IServiceBehavior
     {
+        IServiceContext Context { get; set; }
         IHttpRequest Request { get; set; }
         IHttpResponse Response { get; set; }
 
-        void OnActionBinding(object service, MethodInfo actionMethod);
-        bool OnActionExecuting(object resource);
-        void OnActionExecuted(object result);
-
-        bool OnException(Exception ex);
+        bool OnMethodExecuting(object service, MethodInfo method, object resource);
+        void OnMethodExecuted(object service, MethodInfo method, object result);
+        bool OnMethodException(object service, MethodInfo method, Exception ex);
     }
 }

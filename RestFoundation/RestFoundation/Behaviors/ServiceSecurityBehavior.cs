@@ -5,72 +5,55 @@ using System.Web;
 
 namespace RestFoundation.Behaviors
 {
-    public abstract class ServiceSecurityBehavior : IServiceBehavior
+    public abstract class ServiceSecurityBehavior : ServiceBehavior, ISecureServiceBehavior
     {
         private const string DefaultForbiddenMessage = "Forbidden";
 
-        private string m_forbiddenErrorMessage;
+        private string m_forbiddenMessage;
 
         protected ServiceSecurityBehavior()
         {
-            m_forbiddenErrorMessage = DefaultForbiddenMessage;
+            m_forbiddenMessage = DefaultForbiddenMessage;
         }
 
-        public IHttpRequest Request { get; set; }
-        public IHttpResponse Response { get; set; }
-
-        public virtual bool OnActionBinding(object service, MethodInfo actionMethod)
+        public virtual bool OnMethodAuthorizing(object service, MethodInfo method)
         {
             return false;
         }
 
-        public virtual bool OnActionExecuting(object resource)
-        {
-            return true;
-        }
-
-        public virtual void OnActionExecuted(object result)
-        {
-        }
-
-        public virtual bool OnException(Exception ex)
-        {
-            return true;
-        }
-
         protected void SetForbiddenErrorMessage(string message)
         {
-            m_forbiddenErrorMessage = message ?? DefaultForbiddenMessage;
+            m_forbiddenMessage = message ?? DefaultForbiddenMessage;
         }
 
-        void IServiceBehavior.OnActionBinding(object service, MethodInfo actionMethod)
+        void ISecureServiceBehavior.OnMethodAuthorizing(object service, MethodInfo method)
         {
             if (HttpContext.Current == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP context found");
             }
 
-            if (!OnActionBinding(service, actionMethod))
+            if (!OnMethodAuthorizing(service, method))
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden, m_forbiddenErrorMessage);
+                throw new HttpResponseException(HttpStatusCode.Forbidden, m_forbiddenMessage);
             }
 
             HttpCachePolicy cache = HttpContext.Current.Response.Cache;
             cache.SetProxyMaxAge(new TimeSpan(0L));
-            cache.AddValidationCallback(CacheValidateHandler, new CacheValidateHandlerData(service, actionMethod));
+            cache.AddValidationCallback(CacheValidateHandler, new CacheValidateHandlerData(service, method));
         }
 
         private void CacheValidateHandler(HttpContext context, object data, ref HttpValidationStatus validationstatus)
         {
             var handlerData = data as CacheValidateHandlerData;
 
-            if (handlerData == null || handlerData.Service == null || handlerData.ActionMethod == null)
+            if (handlerData == null || handlerData.Service == null || handlerData.Method == null)
             {
                 validationstatus = HttpValidationStatus.Invalid;
                 return;
             }
 
-            if (!OnActionBinding(handlerData.Service, handlerData.ActionMethod))
+            if (!OnMethodAuthorizing(handlerData.Service, handlerData.Method))
             {
                 validationstatus = HttpValidationStatus.IgnoreThisRequest;
                 return;
@@ -83,14 +66,14 @@ namespace RestFoundation.Behaviors
 
         private sealed class CacheValidateHandlerData
         {
-            public CacheValidateHandlerData(object service, MethodInfo actionMethod)
+            public CacheValidateHandlerData(object service, MethodInfo method)
             {
                 Service = service;
-                ActionMethod = actionMethod;
+                Method = method;
             }
 
             public object Service { get; private set; }
-            public MethodInfo ActionMethod { get; private set; }
+            public MethodInfo Method { get; private set; }
         }
 
         #endregion

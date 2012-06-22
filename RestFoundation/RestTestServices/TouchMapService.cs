@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml;
@@ -24,10 +25,6 @@ namespace RestTestServices
             { "Production", "smartcare" }
         }; // web.config mocking
 
-        public static string cached_xml;
-
-        public IServiceContext Context { get; set; }
-
         public object Get()
         {
             var sessionInfo = (SessionInfo) Context.ItemBag.SessionInfo;
@@ -39,7 +36,7 @@ namespace RestTestServices
 
             if (File.Exists(relativePath))
             {
-                Response.SetFileDependencies(relativePath, HttpCacheability.Public);
+                Response.SetFileDependencies(relativePath);
             }
             else
             {
@@ -49,7 +46,7 @@ namespace RestTestServices
             using (var fileStream = new FileStream(relativePath, FileMode.Open, FileAccess.Read))
             {
                 var reader = new StreamReader(fileStream);
-                string xml = cached_xml ?? (cached_xml = ModifyForEnvironment(reader.ReadToEnd(), sessionInfo.Environment));
+                string xml = ModifyForEnvironment(reader.ReadToEnd(), sessionInfo.Environment);
 
                 var xmlReader = new SafeXmlTextReader(xml, XmlNodeType.Document, null)
                 {
@@ -61,7 +58,7 @@ namespace RestTestServices
             }
         }
 
-        public override bool OnActionBinding(object service, System.Reflection.MethodInfo actionMethod)
+        public override bool OnMethodAuthorizing(object service, MethodInfo method)
         {
             var sessionInfo = new SessionInfo(Request.Headers.TryGet("X-SpeechCycle-SmartCare-ApplicationID"),
                                               Request.Headers.TryGet("X-SpeechCycle-SmartCare-CustomerID"),

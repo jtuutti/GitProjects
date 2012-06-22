@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web;
@@ -8,35 +9,38 @@ using RestFoundation.DataFormatters;
 
 namespace RestFoundation.Runtime
 {
-    public class ActionMethodInvoker : IActionMethodInvoker
+    public class ServiceMethodInvoker : IServiceMethodInvoker
     {
         protected const string ResourceParameterName = "resource";
 
+        private readonly IServiceContext m_context;
         private readonly IHttpRequest m_request;
         private readonly IHttpResponse m_response;
 
-        public ActionMethodInvoker(IHttpRequest request, IHttpResponse response)
+        public ServiceMethodInvoker(IServiceContext context, IHttpRequest request, IHttpResponse response)
         {
+            if (context == null) throw new ArgumentNullException("context");
             if (request == null) throw new ArgumentNullException("request");
             if (response == null) throw new ArgumentNullException("response");
 
+            m_context = context;
             m_request = request;
             m_response = response;
         }
 
-        public virtual object Invoke(IRouteHandler routeHandler, object service, MethodInfo actionMethod)
+        public virtual object Invoke(IRouteHandler routeHandler, object service, MethodInfo method)
         {
-            if (service == null || actionMethod == null)
+            if (service == null || method == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound, "No matching service type or action method was found");
+                throw new HttpResponseException(HttpStatusCode.NotFound, "No matching service type or service method was found");
             }
 
             if (routeHandler == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route handler was passed to the action invoker");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route handler was passed to the service method invoker");
             }
 
-            List<IServiceBehavior> behaviors = BehaviorRegistry.GetBehaviors(routeHandler, m_request, m_response);
+            List<IServiceBehavior> behaviors = BehaviorRegistry.GetBehaviors(routeHandler, m_context, m_request, m_response);
 
             var serviceAsBehavior = service as IServiceBehavior;
 
@@ -47,7 +51,7 @@ namespace RestFoundation.Runtime
 
             try
             {
-                return InvokeWithBehaviors(service, actionMethod, behaviors);
+                return InvokeWithBehaviors(service, method, behaviors);
             }
             catch (Exception ex)
             {
@@ -60,7 +64,7 @@ namespace RestFoundation.Runtime
 
                 try
                 {
-                    if (PerformOnExceptionBehaviors(behaviors, internalException))
+                    if (PerformOnExceptionBehaviors(behaviors, service, method, internalException))
                     {
                         throw new ServiceRuntimeException(internalException);
                     }
@@ -79,19 +83,19 @@ namespace RestFoundation.Runtime
             return null;
         }
 
-        private static void PerformOnBindingBehaviors(List<IServiceBehavior> behaviors, object service, MethodInfo actionMethod)
+        private static void PerformOnBindingBehaviors(IEnumerable<ISecureServiceBehavior> behaviors, object service, MethodInfo method)
         {
-            for (int i = 0; i < behaviors.Count; i++)
+            foreach (ISecureServiceBehavior behavior in behaviors)
             {
-                behaviors[i].OnActionBinding(service, actionMethod);
+                behavior.OnMethodAuthorizing(service, method);
             }
         }
 
-        private static bool PerformOnExecutingBehaviors(List<IServiceBehavior> behaviors, object resource)
+        private static bool PerformOnExecutingBehaviors(List<IServiceBehavior> behaviors, object service, MethodInfo method, object resource)
         {
             for (int i = 0; i < behaviors.Count; i++)
             {
-                if (!behaviors[i].OnActionExecuting(resource))
+                if (!behaviors[i].OnMethodExecuting(service, method, resource))
                 {
                     return false;
                 }
@@ -100,19 +104,19 @@ namespace RestFoundation.Runtime
             return true;
         }
 
-        private static void PerformOnExecutedBehaviors(List<IServiceBehavior> behaviors, object result)
+        private static void PerformOnExecutedBehaviors(List<IServiceBehavior> behaviors, object service, MethodInfo method, object result)
         {
             for (int i = behaviors.Count - 1; i >= 0; i--)
             {
-                behaviors[i].OnActionExecuted(result);
+                behaviors[i].OnMethodExecuted(service, method, result);
             }
         }
 
-        private static bool PerformOnExceptionBehaviors(List<IServiceBehavior> behaviors, Exception ex)
+        private static bool PerformOnExceptionBehaviors(List<IServiceBehavior> behaviors, object service, MethodInfo method, Exception ex)
         {
             for (int i = 0; i < behaviors.Count; i++)
             {
-                if (!behaviors[i].OnException(ex))
+                if (!behaviors[i].OnMethodException(service, method, ex))
                 {
                     return false;
                 }
@@ -126,13 +130,13 @@ namespace RestFoundation.Runtime
             return (ex is ServiceRuntimeException || ex is TargetInvocationException || ex is AggregateException) && ex.InnerException != null;
         }
 
-        private object[] GenerateMethodArguments(MethodInfo actionMethod, out object resource)
+        private object[] GenerateMethodArguments(MethodInfo method, out object resource)
         {
             var methodArguments = new List<object>();
 
             resource = null;
 
-            foreach (ParameterInfo parameter in actionMethod.GetParameters())
+            foreach (ParameterInfo parameter in method.GetParameters())
             {
                 object parameterRoute = m_request.RouteValues.TryGet(parameter.Name);
 
@@ -156,21 +160,21 @@ namespace RestFoundation.Runtime
             return methodArguments.ToArray();
         }
 
-        private object InvokeWithBehaviors(object service, MethodInfo actionMethod, List<IServiceBehavior> behaviors)
+        private object InvokeWithBehaviors(object service, MethodInfo method, List<IServiceBehavior> behaviors)
         {
-            PerformOnBindingBehaviors(behaviors, service, actionMethod);
+            PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>(), service, method);
 
             object resource;
-            object[] methodArguments = GenerateMethodArguments(actionMethod, out resource);
+            object[] methodArguments = GenerateMethodArguments(method, out resource);
 
-            if (!PerformOnExecutingBehaviors(behaviors, resource))
+            if (!PerformOnExecutingBehaviors(behaviors, service, method, resource))
             {
                 return null;
             }
 
-            object result = actionMethod.Invoke(service, methodArguments);
+            object result = method.Invoke(service, methodArguments);
 
-            PerformOnExecutedBehaviors(behaviors, result);
+            PerformOnExecutedBehaviors(behaviors, service, method, result);
 
             return result;
         }

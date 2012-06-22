@@ -15,7 +15,7 @@ namespace RestFoundation
 
             if (methods != null && Array.IndexOf(methods, HttpMethod.Options) >= 0)
             {
-                throw new InvalidOperationException("HTTP method OPTIONS cannot be manually defined on a service action method");
+                throw new InvalidOperationException("HTTP method OPTIONS cannot be manually defined on a service method");
             }
         }
 

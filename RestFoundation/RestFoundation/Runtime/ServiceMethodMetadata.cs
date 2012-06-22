@@ -3,32 +3,32 @@ using System.Reflection;
 
 namespace RestFoundation.Runtime
 {
-    internal struct ActionMethodMetadata : IEquatable<ActionMethodMetadata>
+    internal struct ServiceMethodMetadata : IEquatable<ServiceMethodMetadata>
     {
-        private readonly Guid m_actionMethodId;
+        private readonly Guid m_serviceMethodId;
         private readonly string m_serviceUrl;
         private readonly UrlAttribute m_urlInfo;
         private readonly MethodInfo m_methodInfo;
         private readonly OutputCacheAttribute m_outputCache;
 
-        public ActionMethodMetadata(string serviceUrl, UrlAttribute urlInfo, MethodInfo methodInfo, OutputCacheAttribute outputCache)
+        public ServiceMethodMetadata(string serviceUrl, UrlAttribute urlInfo, MethodInfo methodInfo, OutputCacheAttribute outputCache)
         {
             if (serviceUrl == null) throw new ArgumentNullException("serviceUrl");
             if (urlInfo == null) throw new ArgumentNullException("urlInfo");
             if (methodInfo == null) throw new ArgumentNullException("methodInfo");
 
-            m_actionMethodId = Guid.NewGuid();
+            m_serviceMethodId = Guid.NewGuid();
             m_serviceUrl = serviceUrl.Trim();
             m_urlInfo = urlInfo;
             m_methodInfo = methodInfo;
             m_outputCache = outputCache;
         }
 
-        public Guid ActionMethodId
+        public Guid ServiceMethodId
         {
             get
             {
-                return m_actionMethodId;
+                return m_serviceMethodId;
             }
         }
 
@@ -64,7 +64,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public bool Equals(ActionMethodMetadata other)
+        public bool Equals(ServiceMethodMetadata other)
         {
             return Equals(other.m_urlInfo, m_urlInfo) && Equals(other.m_methodInfo, m_methodInfo);
         }
@@ -72,7 +72,7 @@ namespace RestFoundation.Runtime
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is ActionMethodMetadata && Equals((ActionMethodMetadata) obj);
+            return obj is ServiceMethodMetadata && Equals((ServiceMethodMetadata) obj);
         }
 
         public override int GetHashCode()
@@ -83,12 +83,12 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public static bool operator ==(ActionMethodMetadata left, ActionMethodMetadata right)
+        public static bool operator ==(ServiceMethodMetadata left, ServiceMethodMetadata right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(ActionMethodMetadata left, ActionMethodMetadata right)
+        public static bool operator !=(ServiceMethodMetadata left, ServiceMethodMetadata right)
         {
             return !left.Equals(right);
         }

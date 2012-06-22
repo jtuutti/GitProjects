@@ -16,12 +16,12 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public static HashSet<HttpMethod> GetHttpMethods(RouteMetadata actionMetadata)
+        public static HashSet<HttpMethod> GetHttpMethods(RouteMetadata metadata)
         {
-            if (actionMetadata == null) throw new ArgumentNullException("actionMetadata");
+            if (metadata == null) throw new ArgumentNullException("metadata");
 
             HashSet<HttpMethod> allowedMethods;
-            return httpMethods.TryGetValue(actionMetadata, out allowedMethods) ? allowedMethods : new HashSet<HttpMethod>();
+            return httpMethods.TryGetValue(metadata, out allowedMethods) ? allowedMethods : new HashSet<HttpMethod>();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace RestFoundation
         private RouteValueDictionary m_routeValues;
         private IServiceFactory m_serviceFactory;
         private IResultFactory m_resultFactory;
-        private IActionMethodInvoker m_methodInvoker;
+        private IServiceMethodInvoker m_methodInvoker;
 
         public bool IsReusable
         {
@@ -36,7 +36,7 @@ namespace RestFoundation
             m_routeValues = requestContext.RouteData.Values;
             m_serviceFactory = ObjectActivator.Create<IServiceFactory>();
             m_resultFactory = ObjectActivator.Create<IResultFactory>();
-            m_methodInvoker = ObjectActivator.Create<IActionMethodInvoker>();
+            m_methodInvoker = ObjectActivator.Create<IServiceMethodInvoker>();
 
             return this;
         }
@@ -79,14 +79,14 @@ namespace RestFoundation
             object service = m_serviceFactory.Create(serviceContractType);
 
             OutputCacheAttribute cache;
-            MethodInfo actionMethod = ActionMethodRegistry.GetActionMethod(new ServiceMetadata(serviceContractType, serviceUrl), urlTemplate, httpMethod, out cache);
+            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, serviceUrl), urlTemplate, httpMethod, out cache);
 
-            var httpArguments = new HttpArguments(HttpContext.Current, httpMethod, cache, actionMethod.ReturnType);
+            var httpArguments = new HttpArguments(HttpContext.Current, httpMethod, cache, method.ReturnType);
 
             return Task<IResult>.Factory.StartNew(state =>
                                                  {
                                                      HttpContext.Current = ((HttpArguments) state).Context;
-                                                     return m_resultFactory.Create(m_methodInvoker.Invoke(this, service, actionMethod));
+                                                     return m_resultFactory.Create(m_methodInvoker.Invoke(this, service, method));
                                                  }, httpArguments)
                                         .ContinueWith(action => cb(action));
         }
@@ -138,7 +138,7 @@ namespace RestFoundation
             }
             else
             {
-               httpArguments.Context.SetActionMethodResponseStatus(httpArguments.ActionMethodReturnType);
+               httpArguments.Context.SetServiceMethodResponseStatus(httpArguments.MethodReturnType);
             }
         }
 
@@ -146,28 +146,28 @@ namespace RestFoundation
 
         private sealed class HttpArguments
         {
-            public HttpArguments(HttpContext context, HttpMethod method, OutputCacheAttribute cache, Type actionMethodReturnType)
+            public HttpArguments(HttpContext context, HttpMethod method, OutputCacheAttribute cache, Type methodReturnType)
             {
                 if (context == null)
                 {
                     throw new ArgumentNullException("context");
                 }
 
-                if (actionMethodReturnType == null)
+                if (methodReturnType == null)
                 {
-                    throw new ArgumentNullException("actionMethodReturnType");
+                    throw new ArgumentNullException("methodReturnType");
                 }
 
                 Context = context;
                 Method = method;
                 Cache = cache;
-                ActionMethodReturnType = actionMethodReturnType;
+                MethodReturnType = methodReturnType;
             }
 
             public HttpContext Context { get; private set; }
             public HttpMethod Method { get; private set; }
             public OutputCacheAttribute Cache { get; private set; }
-            public Type ActionMethodReturnType { get; private set; }
+            public Type MethodReturnType { get; private set; }
         }
 
         #endregion
