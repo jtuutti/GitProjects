@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zlib">
-      <HintPath>..\Dependencies\Ionic.Zlib.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\Dependencies\log4net.dll</HintPath>
     </Reference>
@@ -62,6 +59,7 @@
     <Compile Include="Collections\IHeaderCollection.cs" />
     <Compile Include="Collections\Specialized\AcceptValueCollection.cs" />
     <Compile Include="Collections\Specialized\DynamicDictionary.cs" />
+    <Compile Include="IStreamCompressor.cs" />
     <Compile Include="ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
     <Compile Include="OutputCacheAttribute.cs" />
@@ -75,7 +73,8 @@
     <Compile Include="RouteExtensionMap.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptions.cs" />
-    <Compile Include="Runtime\EncodingManager.cs" />
+    <Compile Include="Runtime\OutputCompressionManager.cs" />
+    <Compile Include="Runtime\StreamCompressor.cs" />
     <Compile Include="Runtime\ServiceContext.cs" />
     <Compile Include="Runtime\ServiceMetadata.cs" />
     <Compile Include="Runtime\ServiceRequestValidator.cs" />
@@ -89,7 +88,6 @@
     <Compile Include="Runtime\RestAsyncHandler.cs" />
     <Compile Include="DataFormatters\DynamicDictionaryObject.cs" />
     <Compile Include="DataFormatters\FormsFormatter.cs" />
-    <Compile Include="ISecurityContext.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Results\RedirectResult.cs" />
     <Compile Include="Behaviors\ServiceBehavior.cs" />

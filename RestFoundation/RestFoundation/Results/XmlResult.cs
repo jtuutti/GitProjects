@@ -14,6 +14,7 @@ namespace RestFoundation.Results
     {
         private static readonly ConcurrentDictionary<Type, XmlSerializer> serializers = new ConcurrentDictionary<Type, XmlSerializer>();
 
+        public IServiceContext Context { get; set; }
         public IHttpRequest Request { get; set; }
         public IHttpResponse Response { get; set; }
         public object Content { get; set; }
@@ -35,7 +36,7 @@ namespace RestFoundation.Results
             Response.SetHeader("Content-Type", "application/xml");
             Response.SetCharsetEncoding(Request.Headers.AcceptCharsetEncoding);
 
-            EncodingManager.FilterResponse(Request, Response);
+            OutputCompressionManager.FilterResponse(Request, Response);
 
             XmlSerializer serializer = serializers.GetOrAdd(Content.GetType(), GetSerializerForType);
 

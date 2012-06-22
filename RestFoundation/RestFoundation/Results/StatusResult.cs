@@ -11,6 +11,7 @@ namespace RestFoundation.Results
             AdditionalHeaders = new Dictionary<string, string>();
         }
         
+        public IServiceContext Context { get; set; }
         public IHttpRequest Request { get; set; }
         public IHttpResponse Response { get; set; }
         public IDictionary<string, string> AdditionalHeaders { get; protected set; }

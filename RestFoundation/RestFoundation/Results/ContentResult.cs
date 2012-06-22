@@ -11,6 +11,7 @@ namespace RestFoundation.Results
             ClearResponse = true;
         }
 
+        public IServiceContext Context { get; set; }
         public IHttpRequest Request { get; set; }
         public IHttpResponse Response { get; set; }
         public string Content { get; set; }
@@ -41,7 +42,7 @@ namespace RestFoundation.Results
 
             Response.SetCharsetEncoding(Request.Headers.AcceptCharsetEncoding);
             
-            EncodingManager.FilterResponse(Request, Response);
+            OutputCompressionManager.FilterResponse(Request, Response);
 
             Response.Write(Content);
         }

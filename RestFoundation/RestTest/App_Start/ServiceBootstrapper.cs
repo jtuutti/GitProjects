@@ -9,6 +9,7 @@ using RestFoundation.Behaviors;
 using RestFoundation.ServiceProxy;
 using RestTest.Behaviors;
 using RestTest.ServiceFactories;
+using RestTest.StreamCompressors;
 using RestTestContracts;
 using StructureMap;
 
@@ -46,6 +47,8 @@ namespace RestTest.App_Start
                                                     });
 
                                         config.For<IServiceFactory>().Use<RestServiceFactory>();
+                                        config.ForSingletonOf<IStreamCompressor>().Use<RestStreamCompressor>();
+
                                         config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestContext()));
                                     });
 

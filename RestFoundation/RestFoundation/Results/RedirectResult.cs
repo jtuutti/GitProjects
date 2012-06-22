@@ -4,6 +4,7 @@ namespace RestFoundation.Results
 {
     public class RedirectResult : IResult
     {
+        public IServiceContext Context { get; set; }
         public IHttpRequest Request { get; set; }
         public IHttpResponse Response { get; set; }
         public virtual bool IsPermanent { get; set; }

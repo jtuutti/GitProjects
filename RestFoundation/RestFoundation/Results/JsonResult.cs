@@ -6,6 +6,7 @@ namespace RestFoundation.Results
 {
     public class JsonResult : IResult
     {
+        public IServiceContext Context { get; set; }
         public IHttpRequest Request { get; set; }
         public IHttpResponse Response { get; set; }
         public object Content { get; set; }
@@ -26,7 +27,7 @@ namespace RestFoundation.Results
             Response.SetHeader("Content-Type", "application/json");
             Response.SetCharsetEncoding(Request.Headers.AcceptCharsetEncoding);
 
-            EncodingManager.FilterResponse(Request, Response);
+            OutputCompressionManager.FilterResponse(Request, Response);
 
             var serializer = new JsonSerializer();
             serializer.Serialize(Response.OutputWriter, Content);
