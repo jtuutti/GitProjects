@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\Dependencies\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\Dependencies\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -59,6 +56,8 @@
     <Compile Include="Collections\IHeaderCollection.cs" />
     <Compile Include="Collections\Specialized\AcceptValueCollection.cs" />
     <Compile Include="Collections\Specialized\DynamicDictionary.cs" />
+    <Compile Include="ICache.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="IStreamCompressor.cs" />
     <Compile Include="ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
@@ -73,7 +72,10 @@
     <Compile Include="RouteExtensionMap.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptions.cs" />
+    <Compile Include="Runtime\Cache.cs" />
+    <Compile Include="Runtime\Logger.cs" />
     <Compile Include="Runtime\OutputCompressionManager.cs" />
+    <Compile Include="Runtime\SerializationValidator.cs" />
     <Compile Include="Runtime\StreamCompressor.cs" />
     <Compile Include="Runtime\ServiceContext.cs" />
     <Compile Include="Runtime\ServiceMetadata.cs" />
@@ -116,7 +118,7 @@
     <Compile Include="Runtime\HttpResponse.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="IHttpRequest.cs" />
-    <Compile Include="ObjectActivator.cs" />
+    <Compile Include="Runtime\ObjectActivator.cs" />
     <Compile Include="Runtime\UnvalidatedHandlerRegistry.cs" />
     <Compile Include="ServiceProxy\Attributes\UrlMetadataAttribute.cs" />
     <Compile Include="ServiceProxy\Helpers\EndPoint.cs" />

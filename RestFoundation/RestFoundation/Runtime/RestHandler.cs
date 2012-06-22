@@ -4,9 +4,8 @@ using System.Net;
 using System.Reflection;
 using System.Web;
 using System.Web.Routing;
-using RestFoundation.Runtime;
 
-namespace RestFoundation
+namespace RestFoundation.Runtime
 {
     public sealed class RestHandler : IRouteHandler, IHttpHandler
     {

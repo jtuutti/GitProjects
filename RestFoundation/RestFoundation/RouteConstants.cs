@@ -1,6 +1,6 @@
 ﻿namespace RestFoundation
 {
-    public static class RouteConstants
+    internal static class RouteConstants
     {
         public static readonly string ServiceContractType = "_serviceContractType";
         public static readonly string ServiceUrl = "_serviceUrl";

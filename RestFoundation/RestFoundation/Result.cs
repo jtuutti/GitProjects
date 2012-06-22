@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using RestFoundation.Results;
+using RestFoundation.Runtime;
 
 namespace RestFoundation
 {

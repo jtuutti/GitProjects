@@ -5,9 +5,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
-using RestFoundation.Runtime;
 
-namespace RestFoundation
+namespace RestFoundation.Runtime
 {
     public sealed class RestAsyncHandler : IRouteHandler, IHttpAsyncHandler
     {

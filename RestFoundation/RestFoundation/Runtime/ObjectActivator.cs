@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Practices.ServiceLocation;
 
-namespace RestFoundation
+namespace RestFoundation.Runtime
 {
     internal static class ObjectActivator
     {

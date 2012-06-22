@@ -49,7 +49,7 @@ namespace RestTest.App_Start
                                         config.For<IServiceFactory>().Use<RestServiceFactory>();
                                         config.ForSingletonOf<IStreamCompressor>().Use<RestStreamCompressor>();
 
-                                        config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestContext()));
+                                        config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestDependency()));
                                     });
 
             ServiceLocator.SetLocatorProvider(() => new StructureMapServiceLocator(ObjectFactory.Container));
