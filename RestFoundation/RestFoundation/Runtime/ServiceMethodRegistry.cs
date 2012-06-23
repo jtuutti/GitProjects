@@ -20,9 +20,6 @@ namespace RestFoundation.Runtime
 
         public static MethodInfo GetMethod(ServiceMetadata metadata, string urlTemplate, HttpMethod httpMethod, out OutputCacheAttribute cache)
         {
-            if (metadata == null) throw new ArgumentNullException("metadata");
-            if (urlTemplate == null) throw new ArgumentNullException("urlTemplate");
-
             List<ServiceMethodMetadata> methods;
 
             if (!serviceMethods.TryGetValue(metadata, out methods))

@@ -11,7 +11,7 @@ namespace RestFoundation.Runtime
             if (request == null) throw new ArgumentNullException("request");
             if (response == null) throw new ArgumentNullException("response");
 
-            var streamCompressor = ObjectActivator.Create<IStreamCompressor>();
+            var streamCompressor = Rest.Active.CreateObject<IStreamCompressor>();
 
             if (streamCompressor == null)
             {

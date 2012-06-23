@@ -6,7 +6,7 @@ namespace RestFoundation.Runtime
     {
         public virtual object Create(Type serviceContractType)
         {
-            return ObjectActivator.Create(serviceContractType);
+            return Rest.Active.CreateObject(serviceContractType);
         }
     }
 }

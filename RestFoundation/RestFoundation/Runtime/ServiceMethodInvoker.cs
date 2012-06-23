@@ -186,7 +186,13 @@ namespace RestFoundation.Runtime
 
         private object GetResource(ParameterInfo parameter)
         {
-            IDataFormatter formatter = Formatters.GetFormatter(m_request.Headers.ContentType);
+            IDataFormatter formatter = DataFormatterRegistry.GetFormatter(parameter.ParameterType) ??
+                                       DataFormatterRegistry.GetFormatter(m_request.Headers.ContentType);
+
+            if (formatter == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Unsupported content type provided");
+            }
 
             object argumentValue;
 

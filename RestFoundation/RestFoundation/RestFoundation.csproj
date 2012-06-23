@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\Dependencies\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -51,6 +48,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BehaviorBuilder.cs" />
     <Compile Include="Behaviors\ContentTypeBehavior.cs" />
     <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
     <Compile Include="Behaviors\ServiceSecurityBehavior.cs" />
@@ -58,13 +56,18 @@
     <Compile Include="Collections\IHeaderCollection.cs" />
     <Compile Include="Collections\Specialized\AcceptValueCollection.cs" />
     <Compile Include="Collections\Specialized\DynamicDictionary.cs" />
+    <Compile Include="DataFormatterBuilder.cs" />
+    <Compile Include="DataFormatterType.cs" />
     <Compile Include="ICache.cs" />
     <Compile Include="ILogger.cs" />
+    <Compile Include="IObjectActivator.cs" />
     <Compile Include="IStreamCompressor.cs" />
     <Compile Include="ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
     <Compile Include="IResourceValidator.cs" />
+    <Compile Include="ObjectActivationException.cs" />
     <Compile Include="OutputCacheAttribute.cs" />
+    <Compile Include="Rest.cs" />
     <Compile Include="Results\BinaryResult.cs" />
     <Compile Include="Results\ContentResult.cs" />
     <Compile Include="Results\XmlResult.cs" />
@@ -72,14 +75,16 @@
     <Compile Include="Results\FilePathResult.cs" />
     <Compile Include="Results\JsonResult.cs" />
     <Compile Include="Results\StreamResult.cs" />
-    <Compile Include="RouteExtensionMap.cs" />
+    <Compile Include="RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptions.cs" />
     <Compile Include="Runtime\Cache.cs" />
     <Compile Include="Runtime\CompositeValidationResult.cs" />
+    <Compile Include="Runtime\DelegateObjectActivator.cs" />
     <Compile Include="Runtime\Logger.cs" />
     <Compile Include="Runtime\OutputCompressionManager.cs" />
     <Compile Include="Runtime\ResourceValidator.cs" />
+    <Compile Include="RouteBuilder.cs" />
     <Compile Include="Runtime\SerializationValidator.cs" />
     <Compile Include="Runtime\StreamCompressor.cs" />
     <Compile Include="Runtime\ServiceContext.cs" />
@@ -99,7 +104,7 @@
     <Compile Include="Results\RedirectResult.cs" />
     <Compile Include="Behaviors\ServiceBehavior.cs" />
     <Compile Include="DataFormatters\DynamicXmlDocument.cs" />
-    <Compile Include="DataFormatters\Formatters.cs" />
+    <Compile Include="DataFormatters\DataFormatterRegistry.cs" />
     <Compile Include="DataFormatters\JsonFormatter.cs" />
     <Compile Include="DataFormatters\XmlFormatter.cs" />
     <Compile Include="HttpResponseModule.cs" />
@@ -123,7 +128,6 @@
     <Compile Include="Runtime\HttpResponse.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="IHttpRequest.cs" />
-    <Compile Include="Runtime\ObjectActivator.cs" />
     <Compile Include="Runtime\UnvalidatedHandlerRegistry.cs" />
     <Compile Include="ServiceProxy\Attributes\UrlMetadataAttribute.cs" />
     <Compile Include="ServiceProxy\Helpers\EndPoint.cs" />
@@ -135,12 +139,11 @@
     <Compile Include="ServiceAssembly.cs" />
     <Compile Include="Runtime\SafeConvert.cs" />
     <Compile Include="Runtime\ServiceMethodInvoker.cs" />
-    <Compile Include="RouteConstants.cs" />
+    <Compile Include="Runtime\RouteConstants.cs" />
     <Compile Include="Runtime\RouteMetadata.cs" />
     <Compile Include="Runtime\RestHandler.cs" />
     <Compile Include="HttpMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoutingExtensions.cs" />
     <Compile Include="Runtime\ServiceFactory.cs" />
     <Compile Include="Runtime\ServiceContractTypeRegistry.cs" />
     <Compile Include="Results\StatusResult.cs" />

@@ -1,4 +1,4 @@
-﻿namespace RestFoundation
+﻿namespace RestFoundation.Runtime
 {
     internal static class RouteConstants
     {

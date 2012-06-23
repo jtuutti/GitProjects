@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace RestFoundation.Runtime
@@ -18,8 +17,6 @@ namespace RestFoundation.Runtime
 
         public static HashSet<HttpMethod> GetHttpMethods(RouteMetadata metadata)
         {
-            if (metadata == null) throw new ArgumentNullException("metadata");
-
             HashSet<HttpMethod> allowedMethods;
             return httpMethods.TryGetValue(metadata, out allowedMethods) ? allowedMethods : new HashSet<HttpMethod>();
         }

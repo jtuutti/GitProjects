@@ -13,7 +13,6 @@ namespace RestTestContracts.Resources
         [Range(16, 125, ErrorMessage = "Age must be between 16 and 125")]
         public int Age { get; set; }
 
-        [Required(ErrorMessage = "No value collection provided")]
         public string[] Values { get; set; }
 
         /// <summary>

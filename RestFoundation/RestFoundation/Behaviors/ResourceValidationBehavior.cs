@@ -11,7 +11,7 @@ namespace RestFoundation.Behaviors
 
         public ResourceValidationBehavior()
         {
-            m_validator = ObjectActivator.Create<IResourceValidator>();
+            m_validator = Rest.Active.CreateObject<IResourceValidator>();
         }
 
         public override bool OnMethodExecuting(object service, MethodInfo method, object resource)

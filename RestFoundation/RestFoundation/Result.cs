@@ -13,7 +13,7 @@ namespace RestFoundation
         {
             get
             {
-                var result = ObjectActivator.Create<StatusResult>();
+                var result = Rest.Active.CreateObject<StatusResult>();
                 result.StatusCode = HttpStatusCode.OK;
                 result.StatusDescription = "OK";
                 return result;
@@ -24,7 +24,7 @@ namespace RestFoundation
         {
             get
             {
-                var result = ObjectActivator.Create<StatusResult>();
+                var result = Rest.Active.CreateObject<StatusResult>();
                 result.StatusCode = HttpStatusCode.NoContent;
                 result.StatusDescription = String.Empty;
                 return result;
@@ -35,7 +35,7 @@ namespace RestFoundation
         {
             get
             {
-                var result = ObjectActivator.Create<StatusResult>();
+                var result = Rest.Active.CreateObject<StatusResult>();
                 result.StatusCode = HttpStatusCode.NotFound;
                 result.StatusDescription = "Not Found";
                 return result;
@@ -54,7 +54,7 @@ namespace RestFoundation
 
         public static ContentResult Content(string content, string contentType, bool clearResponse)
         {
-            var result = ObjectActivator.Create<ContentResult>();
+            var result = Rest.Active.CreateObject<ContentResult>();
             result.Content = content;
             result.ContentType = contentType;
             result.ClearResponse = clearResponse;
@@ -79,7 +79,7 @@ namespace RestFoundation
 
         public static BinaryResult Content(byte[] data, string contentType, string contentDisposition, bool clearResponse)
         {
-            var result = ObjectActivator.Create<BinaryResult>();
+            var result = Rest.Active.CreateObject<BinaryResult>();
             result.Content = data;
             result.ContentType = contentType;
             result.ContentDisposition = contentDisposition;
@@ -105,7 +105,7 @@ namespace RestFoundation
 
         public static StreamResult Content(Stream stream, string contentType, string contentDisposition, bool clearResponse)
         {
-            var result = ObjectActivator.Create<StreamResult>();
+            var result = Rest.Active.CreateObject<StreamResult>();
             result.Stream = stream;
             result.ContentType = contentType;
             result.ContentDisposition = contentDisposition;
@@ -136,7 +136,7 @@ namespace RestFoundation
 
         public static FilePathResult FilePath(string filePath, string contentType, string contentDisposition, bool clearResponse, bool cacheOutput)
         {
-            var result = ObjectActivator.Create<FilePathResult>();
+            var result = Rest.Active.CreateObject<FilePathResult>();
             result.FilePath = filePath;
             result.ContentType = contentType;
             result.ContentDisposition = contentDisposition;
@@ -168,7 +168,7 @@ namespace RestFoundation
 
         public static FileUrlResult FileUrl(string fileUrl, string contentType, string contentDisposition, bool clearResponse, bool cacheOutput)
         {
-            var result = ObjectActivator.Create<FileUrlResult>();
+            var result = Rest.Active.CreateObject<FileUrlResult>();
             result.FileUrl = fileUrl;
             result.ContentType = contentType;
             result.ContentDisposition = contentDisposition;
@@ -185,7 +185,7 @@ namespace RestFoundation
 
         public static RedirectResult Redirect(string redirectUrl, bool isPermanent)
         {
-            var result = ObjectActivator.Create<RedirectResult>();
+            var result = Rest.Active.CreateObject<RedirectResult>();
             result.RedirectUrl = redirectUrl;
             result.IsPermanent = isPermanent;
 
@@ -204,7 +204,7 @@ namespace RestFoundation
 
         public static StatusResult SetStatus(HttpStatusCode code, string description, IDictionary<string, string> additionalHeaders)
         {
-            var result = ObjectActivator.Create<StatusResult>();
+            var result = Rest.Active.CreateObject<StatusResult>();
             result.StatusCode = code;
             result.StatusDescription = description;
 
@@ -221,7 +221,7 @@ namespace RestFoundation
 
         public static JsonResult Json(object obj)
         {
-            var result = ObjectActivator.Create<JsonResult>();
+            var result = Rest.Active.CreateObject<JsonResult>();
             result.Content = obj;
 
             return result;
@@ -234,7 +234,7 @@ namespace RestFoundation
 
         public static XmlResult Xml(object obj, Type[] extraTypes)
         {
-            var result = ObjectActivator.Create<XmlResult>();
+            var result = Rest.Active.CreateObject<XmlResult>();
             result.Content = obj;
             result.ExtraTypes = extraTypes;
 

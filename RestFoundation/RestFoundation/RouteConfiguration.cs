@@ -6,18 +6,18 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
-    public sealed class RouteExtensionMap
+    public sealed class RouteConfiguration
     {
         private readonly IEnumerable<IRouteHandler> m_routeHandlers;
 
-        public RouteExtensionMap(IEnumerable<IRouteHandler> routeHandlers)
+        internal RouteConfiguration(IEnumerable<IRouteHandler> routeHandlers)
         {
             if (routeHandlers == null) throw new ArgumentNullException("routeHandlers");
 
             m_routeHandlers = routeHandlers;
         }
 
-        public RouteExtensionMap WithBehaviors(params IServiceBehavior[] behaviors)
+        public RouteConfiguration WithBehaviors(params IServiceBehavior[] behaviors)
         {
             if (behaviors == null) throw new ArgumentNullException("behaviors");
 
@@ -42,7 +42,7 @@ namespace RestFoundation
             return this;
         }
 
-        public RouteExtensionMap DoNotValidateRequests()
+        public RouteConfiguration DoNotValidateRequests()
         {           
             foreach (IRouteHandler routeHandler in m_routeHandlers)
             {

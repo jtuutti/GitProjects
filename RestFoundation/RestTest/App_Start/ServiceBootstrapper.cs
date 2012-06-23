@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Routing;
-using Microsoft.Practices.ServiceLocation;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
 using RestFoundation.Behaviors;
-using RestFoundation.ServiceProxy;
+using RestFoundation.DataFormatters;
 using RestTest.Behaviors;
 using RestTest.ServiceFactories;
 using RestTest.StreamCompressors;
@@ -34,136 +30,54 @@ namespace RestTest.App_Start
 
         public static void RegisterDependencies()
         {
+            // StructureMap IoC container configuration
+            ObjectFactory.Configure(ConfigureIoC);
+
+            // Registering RestFoundation.HttpResponseModule using WebActivator for a cleaner Web.config file
             DynamicModuleUtility.RegisterModule(typeof(HttpResponseModule));
 
-            ProxyPathProvider.AppInitialize();
-
-            ObjectFactory.Configure(config =>
-                                    {
-                                        config.Scan(action =>
-                                                    {
-                                                        action.Assembly(ServiceAssembly.Executing);
-                                                        action.WithDefaultConventions();
-                                                    });
-
-                                        config.For<IServiceFactory>().Use<RestServiceFactory>();
-                                        config.ForSingletonOf<IStreamCompressor>().Use<RestStreamCompressor>();
-
-                                        config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestDependency()));
-                                    });
-
-            ServiceLocator.SetLocatorProvider(() => new StructureMapServiceLocator(ObjectFactory.Container));
-
-            RegisterRoutes();
+            // Configuring REST foundation
+            Rest.Configure.WithObjectFactory(CreateObjectFactory)
+                          .WithDataFormatters(builder => builder.SetForContentType("application/x-www-form-urlencoded", new FormsFormatter()))
+                          .WithGlobalBehaviors(builder => builder.AddGlobalBehaviors(new ContentTypeBehavior(standardContentTypes)))
+                          .WithRoutes(RegisterRoutes)
+                          .EnableServiceProxyUI();
         }
 
-        private static void RegisterRoutes()
+        private static void ConfigureIoC(ConfigurationExpression config)
         {
-            RouteTable.Routes.AddGlobalBehaviors(new ContentTypeBehavior(standardContentTypes));
+            config.Scan(action =>
+                        {
+                            action.Assembly(ServiceAssembly.Executing);
+                            action.WithDefaultConventions();
+                        });
 
-            RouteTable.Routes.MapRestRoute<IIndexService>("home").WithBehaviors(new StatisticsBehavior(), new ContentTypeBehavior(homeContentTypes), new LoggingBehavior()).DoNotValidateRequests();
-            RouteTable.Routes.MapRestRouteAsync<IIndexService>("async").WithBehaviors(new StatisticsBehavior(), new ContentTypeBehavior(homeContentTypes), new LoggingBehavior());
-            RouteTable.Routes.MapRestRoute<ITouchMapService>("touch-map");
+            config.For<IServiceFactory>().Use<RestServiceFactory>();
+            config.ForSingletonOf<IStreamCompressor>().Use<RestStreamCompressor>();
+
+            config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestDependency()));
         }
 
-        #region ServiceLocator
-
-        private sealed class StructureMapServiceLocator : IServiceLocator
+        private static object CreateObjectFactory(Type type)
         {
-            private const string ActivationExceptionMessage = "There was an exception locating service of type '{0}'";
-
-            private readonly IContainer container;
-
-            public StructureMapServiceLocator(IContainer container)
+            if (type.IsInterface || type.IsAbstract)
             {
-                if (container == null)
-                    throw new ArgumentNullException("container");
-
-                this.container = container;
+                return ObjectFactory.TryGetInstance(type);
             }
 
-            public object GetInstance(Type serviceType)
-            {
-                return GetInstance(serviceType, null);
-            }
-
-            public object GetInstance(Type serviceType, string key)
-            {
-                if (serviceType == null)
-                    throw new ArgumentNullException("serviceType");
-
-                try
-                {
-                    if (serviceType.IsAbstract || serviceType.IsInterface)
-                    {
-                        return key != null ? container.TryGetInstance(serviceType, key) : container.TryGetInstance(serviceType);
-                    }
-
-                    return key != null ? container.GetInstance(serviceType, key) : container.GetInstance(serviceType);
-                }
-                catch (Exception ex)
-                {
-                    throw new ActivationException(String.Format(ActivationExceptionMessage, serviceType.FullName), ex);
-                }
-            }
-
-            public IEnumerable<object> GetAllInstances(Type serviceType)
-            {
-                if (serviceType == null)
-                    throw new ArgumentNullException("serviceType");
-
-                try
-                {
-                    return container.GetAllInstances(serviceType).Cast<object>();
-                }
-                catch (Exception ex)
-                {
-                    throw new ActivationException(String.Format(ActivationExceptionMessage, serviceType.FullName), ex);
-                }
-            }
-
-            public TService GetInstance<TService>()
-            {
-                return GetInstance<TService>(null);
-            }
-
-            public TService GetInstance<TService>(string key)
-            {
-                Type serviceType = typeof(TService);
-
-                try
-                {
-                    if (serviceType.IsAbstract || serviceType.IsInterface)
-                    {
-                        return key != null ? container.TryGetInstance<TService>(key) : container.TryGetInstance<TService>();
-                    }
-
-                    return key != null ? container.GetInstance<TService>(key) : container.GetInstance<TService>();
-                }
-                catch (Exception ex)
-                {
-                    throw new ActivationException(String.Format(ActivationExceptionMessage, serviceType.FullName), ex);
-                }
-            }
-
-            public IEnumerable<TService> GetAllInstances<TService>()
-            {
-                try
-                {
-                    return container.GetAllInstances<TService>();
-                }
-                catch (Exception ex)
-                {
-                    throw new ActivationException(String.Format(ActivationExceptionMessage, typeof(TService).FullName), ex);
-                }
-            }
-
-            object IServiceProvider.GetService(Type serviceType)
-            {
-                return GetInstance(serviceType, null);
-            }
+            return ObjectFactory.GetInstance(type);
         }
 
-        #endregion
+        private static void RegisterRoutes(RouteBuilder routeBuilder)
+        {
+            routeBuilder.MapRestRoute<IIndexService>("home")
+                        .WithBehaviors(new StatisticsBehavior(), new ContentTypeBehavior(homeContentTypes), new LoggingBehavior())
+                        .DoNotValidateRequests();
+
+            routeBuilder.MapRestRouteAsync<IIndexService>("async")
+                        .WithBehaviors(new StatisticsBehavior(), new ContentTypeBehavior(homeContentTypes), new LoggingBehavior());
+
+            routeBuilder.MapRestRoute<ITouchMapService>("touch-map");
+        }
     }
 }

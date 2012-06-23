@@ -52,7 +52,7 @@
         #ResponseHeightControls a,#SessionPersistence{margin-left:10px}
     </style>
     <% if (!String.IsNullOrEmpty(ConfigurationManager.AppSettings["JQueryUrl"])) { %>
-    <script type="text/javascript" src="<%= ConfigurationManager.AppSettings["JQueryUrl"].Trim() %>"></script>
+    <script type="text/javascript" src="<%: ConfigurationManager.AppSettings["JQueryUrl"].Trim() %>"></script>
     <% } else { %>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
     <% } %>

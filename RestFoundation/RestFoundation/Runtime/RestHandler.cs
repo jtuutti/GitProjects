@@ -32,9 +32,9 @@ namespace RestFoundation.Runtime
             }
 
             m_routeValues = requestContext.RouteData.Values;
-            m_serviceFactory = ObjectActivator.Create<IServiceFactory>();
-            m_resultFactory = ObjectActivator.Create<IResultFactory>();
-            m_methodInvoker = ObjectActivator.Create<IServiceMethodInvoker>();
+            m_serviceFactory = Rest.Active.CreateObject<IServiceFactory>();
+            m_resultFactory = Rest.Active.CreateObject<IResultFactory>();
+            m_methodInvoker = Rest.Active.CreateObject<IServiceMethodInvoker>();
 
             return this;
         }
