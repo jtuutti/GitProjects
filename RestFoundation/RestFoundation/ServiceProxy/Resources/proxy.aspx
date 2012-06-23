@@ -14,7 +14,7 @@
     <table>
         <thead>
         <tr>
-            <th>Uri</th>
+            <th>Relative Url</th>
             <th>Method</th>
             <th>Description</th>
         </tr>

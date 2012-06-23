@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using RestFoundation.Collections.Specialized;
 
 namespace RestFoundation.Runtime
 {
@@ -35,15 +36,15 @@ namespace RestFoundation.Runtime
 
         private IResult CreateSerializerResult(object returnedObj)
         {
-            string returnedContentType = GetReturnedContentType();
+            string acceptedType = GetAcceptedTypes().GetPreferredName();
 
-            if (String.Equals("application/json", returnedContentType, StringComparison.OrdinalIgnoreCase))
+            if (String.Equals("application/json", acceptedType, StringComparison.OrdinalIgnoreCase))
             {
                 return Result.Json(returnedObj);
             }
 
-            if (String.Equals("application/xml", returnedContentType, StringComparison.OrdinalIgnoreCase) ||
-                String.Equals("text/xml", returnedContentType, StringComparison.OrdinalIgnoreCase))
+            if (String.Equals("application/xml", acceptedType, StringComparison.OrdinalIgnoreCase) ||
+                String.Equals("text/xml", acceptedType, StringComparison.OrdinalIgnoreCase))
             {
                 return Result.Xml(returnedObj);
             }
@@ -51,21 +52,21 @@ namespace RestFoundation.Runtime
             throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported content type was provided in the Accept or the Content-Type header");
         }
 
-        private string GetReturnedContentType()
+        private AcceptValueCollection GetAcceptedTypes()
         {
-            string returnedContentType = m_request.QueryString.TryGet(AcceptOverrideQueryValue);
+            string acceptValue = m_request.QueryString.TryGet(AcceptOverrideQueryValue);
 
-            if (String.IsNullOrEmpty(returnedContentType))
+            if (String.IsNullOrEmpty(acceptValue))
             {
-                returnedContentType = m_request.Headers.AcceptType;
+                acceptValue = m_request.Headers.AcceptType;
             }
 
-            if (String.IsNullOrEmpty(returnedContentType))
+            if (String.IsNullOrEmpty(acceptValue))
             {
-                returnedContentType = m_request.Headers.ContentType;
+                acceptValue = m_request.Headers.ContentType;
             }
 
-            return returnedContentType;
+            return new AcceptValueCollection(acceptValue);
         }
     }
 }

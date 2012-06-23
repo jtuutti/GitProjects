@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace RestFoundation.DataFormatters
 {
@@ -27,6 +28,11 @@ namespace RestFoundation.DataFormatters
             IDataFormatter formatter;
 
             return resourceTypeFormatters.TryGetValue(resourceType, out formatter) ? formatter : null;
+        }
+
+        public static string[] GetContentTypesToFormat()
+        {
+            return contentTypeFormatters.Keys.ToArray();
         }
 
         public static void SetFormatter(string contentType, IDataFormatter formatter)

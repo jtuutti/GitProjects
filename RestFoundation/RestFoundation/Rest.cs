@@ -10,12 +10,34 @@ namespace RestFoundation
     {
         protected internal static Rest Active = new Rest();
 
+        private static bool defaultUrlMapped;
         private IObjectActivator m_activator;
-        private bool isServiceProxyInitialized;
 
         protected Rest()
         {
+            if (defaultUrlMapped)
+            {
+                return;
+            }
+
+            RouteCollection routes = RouteTable.Routes;
+
+            if (routes == null)
+            {
+                throw new InvalidOperationException("No active routing table was found.");
+            }
+
+            lock (typeof(Rest))
+            {
+                if (!defaultUrlMapped)
+                {
+                    routes.Add(new Route(String.Empty, new RootRouteHandler()));
+                    defaultUrlMapped = true;
+                }
+            }
         }
+
+        protected internal bool IsServiceProxyInitialized { get; protected set; }
 
         public static Rest Configure
         {
@@ -64,14 +86,7 @@ namespace RestFoundation
 
         public virtual Rest WithRoutes(Action<RouteBuilder> builder)
         {
-            RouteCollection routes = RouteTable.Routes;
-
-            if (routes == null)
-            {
-                throw new InvalidOperationException("No active routing table was found.");
-            }
-
-            builder(new RouteBuilder(routes));
+            builder(new RouteBuilder(RouteTable.Routes));
             return this;
         }
 
@@ -83,13 +98,13 @@ namespace RestFoundation
 
         public virtual Rest EnableServiceProxyUI()
         {
-            if (isServiceProxyInitialized)
+            if (IsServiceProxyInitialized)
             {
                 throw new InvalidOperationException("Service proxy UI is already enabled.");
             }
 
             ProxyPathProvider.AppInitialize();
-            isServiceProxyInitialized = true;
+            IsServiceProxyInitialized = true;
 
             return this;
         }
