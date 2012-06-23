@@ -26,7 +26,12 @@ namespace RestFoundation
         private static void CompleteRequestOnError(HttpApplication context)
         {
             Exception exception = context.Server.GetLastError();
-            
+
+            if (exception is HttpUnhandledException && exception.InnerException == null)
+            {
+                exception = exception.InnerException;
+            }
+
             var responseException = exception as HttpResponseException;
 
             if (responseException != null)

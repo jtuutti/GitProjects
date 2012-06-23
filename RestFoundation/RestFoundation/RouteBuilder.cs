@@ -68,8 +68,9 @@ namespace RestFoundation
                 foreach (UrlAttribute urlAttribute in Attribute.GetCustomAttributes(method, urlAttributeType, false).Cast<UrlAttribute>())
                 {
                     var methodMetadata = new ServiceMethodMetadata(url,
-                                                                   urlAttribute,
                                                                    method,
+                                                                   urlAttribute,
+                                                                   (ValidateAclAttribute) Attribute.GetCustomAttribute(method, typeof(ValidateAclAttribute), false),
                                                                    (OutputCacheAttribute) Attribute.GetCustomAttribute(method, typeof(OutputCacheAttribute), false));
                     urlAttributes.Add(methodMetadata);
 

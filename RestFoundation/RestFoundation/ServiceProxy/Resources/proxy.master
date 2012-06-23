@@ -1,4 +1,36 @@
 ﻿<%@ Master Language="C#" %>
+<%@ Import Namespace="RestFoundation.Acl" %>
+
+<script language="C#" runat="server">
+    public void Page_Init(object sender, EventArgs e)
+    {
+        List<IPAddressRange> ranges = IPAddressRange.GetConfiguredRanges("serviceProxyAcl").ToList();
+
+        if (ranges.Count == 0)
+        {
+            return;
+        }
+
+        bool isAllowed = false;
+
+        foreach (var range in ranges)
+        {
+            if (range.IsInRange(Request.UserHostAddress))
+            {
+                isAllowed = true;
+                break;
+            }
+        }
+
+        if (!isAllowed)
+        {
+            Response.Clear();
+            Response.StatusCode = 403;
+            Response.StatusDescription = "Access denied due to ACL restrictions";
+            Response.End();
+        }
+    }
+</script>
 
 <!DOCTYPE html>
 <html>

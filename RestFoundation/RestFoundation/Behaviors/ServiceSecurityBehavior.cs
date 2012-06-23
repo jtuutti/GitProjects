@@ -40,33 +40,33 @@ namespace RestFoundation.Behaviors
 
             HttpCachePolicy cache = HttpContext.Current.Response.Cache;
             cache.SetProxyMaxAge(new TimeSpan(0L));
-            cache.AddValidationCallback(CacheValidateHandler, new CacheValidateHandlerData(service, method));
+            cache.AddValidationCallback(CacheValidationHandler, new CacheValidationHandlerData(service, method));
         }
 
-        private void CacheValidateHandler(HttpContext context, object data, ref HttpValidationStatus validationstatus)
+        private void CacheValidationHandler(HttpContext context, object data, ref HttpValidationStatus validationStatus)
         {
-            var handlerData = data as CacheValidateHandlerData;
+            var handlerData = data as CacheValidationHandlerData;
 
             if (handlerData == null || handlerData.Service == null || handlerData.Method == null)
             {
-                validationstatus = HttpValidationStatus.Invalid;
+                validationStatus = HttpValidationStatus.Invalid;
                 return;
             }
 
             if (!OnMethodAuthorizing(handlerData.Service, handlerData.Method))
             {
-                validationstatus = HttpValidationStatus.IgnoreThisRequest;
+                validationStatus = HttpValidationStatus.IgnoreThisRequest;
                 return;
             }
 
-            validationstatus = HttpValidationStatus.Valid;
+            validationStatus = HttpValidationStatus.Valid;
         }
 
-        #region Cache Validate Handler Data
+        #region Cache Validation Handler Data
 
-        private sealed class CacheValidateHandlerData
+        private sealed class CacheValidationHandlerData
         {
-            public CacheValidateHandlerData(object service, MethodInfo method)
+            public CacheValidationHandlerData(object service, MethodInfo method)
             {
                 Service = service;
                 Method = method;

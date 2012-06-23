@@ -4,6 +4,7 @@ using System.Net;
 using System.Reflection;
 using System.Web;
 using System.Web.Routing;
+using RestFoundation.Acl;
 
 namespace RestFoundation.Runtime
 {
@@ -70,8 +71,14 @@ namespace RestFoundation.Runtime
 
             object service = m_serviceFactory.Create(serviceContractType);
 
+            ValidateAclAttribute acl;
             OutputCacheAttribute cache;
-            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, serviceUrl), urlTemplate, httpMethod, out cache);
+            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, serviceUrl), urlTemplate, httpMethod, out acl, out cache);
+
+            if (acl != null)
+            {
+                AclValidator.Validate(context, acl.SectionName);
+            }
 
             object result = m_methodInvoker.Invoke(this, service, method);
 

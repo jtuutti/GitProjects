@@ -18,12 +18,13 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public static MethodInfo GetMethod(ServiceMetadata metadata, string urlTemplate, HttpMethod httpMethod, out OutputCacheAttribute cache)
+        public static MethodInfo GetMethod(ServiceMetadata metadata, string urlTemplate, HttpMethod httpMethod, out ValidateAclAttribute acl, out OutputCacheAttribute cache)
         {
             List<ServiceMethodMetadata> methods;
 
             if (!serviceMethods.TryGetValue(metadata, out methods))
             {
+                acl = null;
                 cache = null;
                 return null;
             }
@@ -33,11 +34,13 @@ namespace RestFoundation.Runtime
                 if (String.Equals(UrlTemplateStandardizer.Standardize(method.UrlInfo.UrlTemplate), UrlTemplateStandardizer.Standardize(urlTemplate)) &&
                     method.UrlInfo.HttpMethods.Contains(httpMethod))
                 {
+                    acl = method.Acl;
                     cache = method.OutputCache;
                     return method.MethodInfo;
                 }
             }
 
+            acl = null;
             cache = null;
             return null;
         }
