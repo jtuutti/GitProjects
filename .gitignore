@@ -31,6 +31,7 @@ obj/
 [Dd]ebug*/
 [Rr]elease*/
 Ankh.NoLoad
+*.publish.xml
 
 #MonoDevelop
 *.pidb
@@ -66,3 +67,4 @@ TestResults
 
 /RestFoundation/RestTest/App_Data/AlphaMedia
 /RestFoundation/RestTest/App_Data/AlphaMedia
+/RestFoundation/RestTest/RestTest.Publish.xml
