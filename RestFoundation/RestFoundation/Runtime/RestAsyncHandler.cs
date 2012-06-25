@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
 using RestFoundation.Acl;
+using RestFoundation.Results;
 
 namespace RestFoundation.Runtime
 {
@@ -62,7 +63,7 @@ namespace RestFoundation.Runtime
             if (httpMethod == HttpMethod.Options)
             {
                 context.AppendAllowHeader(allowedHttpMethods);
-                return Task<IResult>.Factory.StartNew(() => Result.Ok).ContinueWith(action => cb(action));
+                return Task<IResult>.Factory.StartNew(() => new EmptyResult()).ContinueWith(action => cb(action));
             }
 
             if (!allowedHttpMethods.Contains(httpMethod))
@@ -105,7 +106,10 @@ namespace RestFoundation.Runtime
                 throw UnwrapFaultException(task);
             }
 
-            ProcessResult(task.Result, (HttpArguments) result.AsyncState);
+            if (!(task.Result is EmptyResult))
+            {
+                ProcessResult(task.Result, (HttpArguments) result.AsyncState);
+            }
         }
 
         private static Exception UnwrapFaultException(Task<IResult> task)

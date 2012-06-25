@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Routing;
 using RestFoundation.Acl;
+using RestFoundation.Results;
 
 namespace RestFoundation.Runtime
 {
@@ -82,7 +83,10 @@ namespace RestFoundation.Runtime
 
             object result = m_methodInvoker.Invoke(this, service, method);
 
-            ProcessResult(context, httpMethod, result, cache, method.ReturnType);
+            if (!(result is EmptyResult))
+            {
+                ProcessResult(context, httpMethod, result, cache, method.ReturnType);
+            }
         }
 
         private void ProcessResult(HttpContext context, HttpMethod httpMethod, object result, OutputCacheAttribute cache, Type methodReturnType)

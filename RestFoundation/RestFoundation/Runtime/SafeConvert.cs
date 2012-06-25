@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace RestFoundation.Runtime
 {
-    internal static class SafeConvert
+    public static class SafeConvert
     {
         public static object ChangeType(object value, Type conversionType)
         {

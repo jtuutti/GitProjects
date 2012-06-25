@@ -41,6 +41,15 @@ namespace RestFoundation.Results
             {
                 Response.SetHeader("Content-Type", ContentType);
             }
+            else
+            {
+                string acceptType = Request.GetPreferredAcceptType();
+
+                if (!String.IsNullOrEmpty(acceptType))
+                {
+                    Response.SetHeader("Content-Type", acceptType);
+                }
+            }
 
             if (!String.IsNullOrEmpty(ContentDisposition))
             {

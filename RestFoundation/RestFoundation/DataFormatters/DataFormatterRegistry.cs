@@ -18,6 +18,11 @@ namespace RestFoundation.DataFormatters
 
         public static IDataFormatter GetFormatter(string contentType)
         {
+            if (contentType == null)
+            {
+                return null;
+            }
+
             IDataFormatter formatter;
 
             return contentTypeFormatters.TryGetValue(contentType, out formatter) ? formatter : null;
@@ -25,6 +30,11 @@ namespace RestFoundation.DataFormatters
 
         public static IDataFormatter GetFormatter(Type resourceType)
         {
+            if (resourceType == null)
+            {
+                return null;
+            }
+
             IDataFormatter formatter;
 
             return resourceTypeFormatters.TryGetValue(resourceType, out formatter) ? formatter : null;
@@ -47,6 +57,11 @@ namespace RestFoundation.DataFormatters
 
         public static bool RemoveFormatter(string contentType)
         {
+            if (contentType == null)
+            {
+                return false;
+            }
+
             IDataFormatter formatter;
 
             return contentTypeFormatters.TryRemove(contentType, out formatter);
@@ -54,6 +69,11 @@ namespace RestFoundation.DataFormatters
 
         public static bool RemoveFormatter(Type resourceType)
         {
+            if (resourceType == null)
+            {
+                return false;
+            }
+
             IDataFormatter formatter;
 
             return resourceTypeFormatters.TryRemove(resourceType, out formatter);

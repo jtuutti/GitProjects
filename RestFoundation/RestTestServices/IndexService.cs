@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using RestFoundation;
 using RestFoundation.Results;
 using RestTestContracts;
@@ -25,21 +26,38 @@ namespace RestTestServices
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
             }
 
-            resource.Values = new[] { "Added" };
+            resource.Values = new[] { "New person added" };
 
             return resource;
         }
 
-        public StatusResult Put()
+        public Person Put(int? id, Person resource)
         {
-            Response.Write("PUT");
+            if (resource == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
+            }
 
-            return Result.SetStatus(HttpStatusCode.OK, "Updated");
+            resource.Values = new[] { String.Format("Person #{0} updated", id) };
+
+            return resource;
         }
 
-        public RedirectResult Delete()
+        public Person Patch(int? id, Person resource)
         {
-            return Result.Redirect("http://www.google.com");
+            if (resource == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
+            }
+
+            resource.Values = new[] { String.Format("Person #{0} partially updated", id) };
+
+            return resource;
+        }
+
+        public ContentResult Delete()
+        {
+            return Result.Content("Deleted");
         }
     }
 }

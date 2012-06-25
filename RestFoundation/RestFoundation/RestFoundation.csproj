@@ -66,6 +66,7 @@
     <Compile Include="ICache.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IObjectActivator.cs" />
+    <Compile Include="IParameterBinder.cs" />
     <Compile Include="IStreamCompressor.cs" />
     <Compile Include="ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Rest.cs" />
     <Compile Include="Results\BinaryResult.cs" />
     <Compile Include="Results\ContentResult.cs" />
+    <Compile Include="Results\EmptyResult.cs" />
     <Compile Include="Results\XmlResult.cs" />
     <Compile Include="Results\FileUrlResult.cs" />
     <Compile Include="Results\FilePathResult.cs" />
@@ -83,11 +85,14 @@
     <Compile Include="RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptions.cs" />
+    <Compile Include="Runtime\BehaviorInvoker.cs" />
     <Compile Include="Runtime\Cache.cs" />
     <Compile Include="Runtime\CompositeValidationResult.cs" />
     <Compile Include="Runtime\DelegateObjectActivator.cs" />
+    <Compile Include="Runtime\HttpRequestExtensions.cs" />
     <Compile Include="Runtime\Logger.cs" />
     <Compile Include="Runtime\OutputCompressionManager.cs" />
+    <Compile Include="Runtime\ParameterBinder.cs" />
     <Compile Include="Runtime\ResourceValidator.cs" />
     <Compile Include="RouteBuilder.cs" />
     <Compile Include="Runtime\SerializationValidator.cs" />

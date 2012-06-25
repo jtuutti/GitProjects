@@ -33,7 +33,7 @@ namespace RestFoundation
         {
             if (Rest.Active.IsServiceProxyInitialized && IsInBrowser(context.Request))
             {
-                context.Response.Redirect("proxy.aspx", false);
+                context.Response.Redirect((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/proxy.aspx", false);
                 return;
             }
 
@@ -79,9 +79,9 @@ namespace RestFoundation
                 acceptedValue = request.Headers.Get("Accept");
             }
 
-            var acceptedContentTypes = new AcceptValueCollection(acceptedValue);
+            var acceptTypeCollection = new AcceptValueCollection(acceptedValue);
 
-            if (acceptedContentTypes.AcceptedNames.Length == 0)
+            if (acceptTypeCollection.AcceptedNames.Length == 0)
             {
                 return false;
             }
@@ -90,13 +90,13 @@ namespace RestFoundation
 
             for (int i = 0; i < contentTypes.Length; i++)
             {
-                if (String.Equals(contentTypes[i], acceptedContentTypes.AcceptedNames[0], StringComparison.OrdinalIgnoreCase))
+                if (String.Equals(contentTypes[i], acceptTypeCollection.GetPreferredName(), StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
             }
 
-            return acceptedContentTypes.CanAccept("text/html");
+            return acceptTypeCollection.CanAccept("text/html");
         }
 
         private static Operation[] GetOperations()

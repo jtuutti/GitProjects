@@ -5,27 +5,27 @@ using System.Net;
 using System.Reflection;
 using System.Web;
 using System.Web.Routing;
-using RestFoundation.DataFormatters;
 
 namespace RestFoundation.Runtime
 {
     public class ServiceMethodInvoker : IServiceMethodInvoker
     {
-        protected const string ResourceParameterName = "resource";
-
         private readonly IServiceContext m_context;
         private readonly IHttpRequest m_request;
         private readonly IHttpResponse m_response;
+        private readonly IParameterBinder m_parameterBinder;
 
-        public ServiceMethodInvoker(IServiceContext context, IHttpRequest request, IHttpResponse response)
+        public ServiceMethodInvoker(IServiceContext context, IHttpRequest request, IHttpResponse response, IParameterBinder parameterBinder)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (request == null) throw new ArgumentNullException("request");
             if (response == null) throw new ArgumentNullException("response");
+            if (parameterBinder == null) throw new ArgumentNullException("parameterBinder");
 
             m_context = context;
             m_request = request;
             m_response = response;
+            m_parameterBinder = parameterBinder;
         }
 
         public virtual object Invoke(IRouteHandler routeHandler, object service, MethodInfo method)
@@ -40,6 +40,7 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route handler was passed to the service method invoker");
             }
 
+            var behaviorInvoker = new BehaviorInvoker(service, method);
             List<IServiceBehavior> behaviors = BehaviorRegistry.GetBehaviors(routeHandler, m_context, m_request, m_response);
 
             var serviceAsBehavior = service as IServiceBehavior;
@@ -51,7 +52,7 @@ namespace RestFoundation.Runtime
 
             try
             {
-                return InvokeWithBehaviors(service, method, behaviors);
+                return InvokeWithBehaviors(behaviorInvoker, behaviors);
             }
             catch (Exception ex)
             {
@@ -69,7 +70,7 @@ namespace RestFoundation.Runtime
 
                 try
                 {
-                    if (PerformOnExceptionBehaviors(behaviors, service, method, internalException))
+                    if (behaviorInvoker.PerformOnExceptionBehaviors(behaviors, internalException))
                     {
                         throw new ServiceRuntimeException(internalException);
                     }
@@ -88,131 +89,48 @@ namespace RestFoundation.Runtime
             return null;
         }
 
-        private static void PerformOnBindingBehaviors(IEnumerable<ISecureServiceBehavior> behaviors, object service, MethodInfo method)
-        {
-            foreach (ISecureServiceBehavior behavior in behaviors)
-            {
-                behavior.OnMethodAuthorizing(service, method);
-            }
-        }
-
-        private static bool PerformOnExecutingBehaviors(List<IServiceBehavior> behaviors, object service, MethodInfo method, object resource)
-        {
-            for (int i = 0; i < behaviors.Count; i++)
-            {
-                if (!behaviors[i].OnMethodExecuting(service, method, resource))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private static void PerformOnExecutedBehaviors(List<IServiceBehavior> behaviors, object service, MethodInfo method, object result)
-        {
-            for (int i = behaviors.Count - 1; i >= 0; i--)
-            {
-                behaviors[i].OnMethodExecuted(service, method, result);
-            }
-        }
-
-        private static bool PerformOnExceptionBehaviors(List<IServiceBehavior> behaviors, object service, MethodInfo method, Exception ex)
-        {
-            for (int i = 0; i < behaviors.Count; i++)
-            {
-                if (!behaviors[i].OnMethodException(service, method, ex))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         public static bool IsWrapperException(Exception ex)
         {
             return (ex is ServiceRuntimeException || ex is TargetInvocationException || ex is AggregateException) && ex.InnerException != null;
         }
 
-        private object[] GenerateMethodArguments(MethodInfo method, out object resource)
+        private object InvokeWithBehaviors(BehaviorInvoker behaviorInvoker, List<IServiceBehavior> behaviors)
         {
-            var methodArguments = new List<object>();
-
-            resource = null;
-
-            foreach (ParameterInfo parameter in method.GetParameters())
-            {
-                object parameterRoute = m_request.RouteValues.TryGet(parameter.Name);
-
-                if (parameterRoute != null)
-                {
-                    object argumentValue = SafeConvert.ChangeType(parameterRoute, parameter.ParameterType);
-                    methodArguments.Add(argumentValue);
-                    continue;
-                }
-
-                if (String.Equals(ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    resource = GetResource(parameter);
-                    methodArguments.Add(resource);
-                    continue;
-                }
-
-                methodArguments.Add(null);
-            }
-
-            return methodArguments.ToArray();
-        }
-
-        private object InvokeWithBehaviors(object service, MethodInfo method, List<IServiceBehavior> behaviors)
-        {
-            PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>(), service, method);
+            behaviorInvoker.PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>());
 
             object resource;
-            object[] methodArguments = GenerateMethodArguments(method, out resource);
+            object[] methodArguments = GenerateMethodArguments(behaviorInvoker.Method, out resource);
 
-            if (!PerformOnExecutingBehaviors(behaviors, service, method, resource))
+            if (!behaviorInvoker.PerformOnExecutingBehaviors(behaviors, resource))
             {
                 return null;
             }
 
-            object result = method.Invoke(service, methodArguments);
-
-            PerformOnExecutedBehaviors(behaviors, service, method, result);
+            object result = behaviorInvoker.Method.Invoke(behaviorInvoker.Service, methodArguments);
+            behaviorInvoker.PerformOnExecutedBehaviors(behaviors, result);
 
             return result;
         }
 
-        private object GetResource(ParameterInfo parameter)
+        private object[] GenerateMethodArguments(MethodInfo method, out object resource)
         {
-            IDataFormatter formatter = DataFormatterRegistry.GetFormatter(parameter.ParameterType) ??
-                                       DataFormatterRegistry.GetFormatter(m_request.Headers.ContentType);
+            var methodArguments = new List<object>();
+            resource = null;
 
-            if (formatter == null)
+            foreach (ParameterInfo parameter in method.GetParameters())
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Unsupported content type provided");
-            }
+                bool isResource;
+                object argumentValue = m_parameterBinder.BindParameter(parameter, out isResource);
 
-            object argumentValue;
-
-            try
-            {
-                argumentValue = formatter.Format(m_request.Body, m_request.Headers.ContentCharsetEncoding, parameter.ParameterType);
-            }
-            catch (Exception ex)
-            {
-                // Log the original exception {ex}
-
-                if (ex is HttpRequestValidationException)
+                if (isResource)
                 {
-                    throw;
+                    resource = argumentValue;
                 }
 
-                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid resource body provided");
+                methodArguments.Add(argumentValue);
             }
 
-            return argumentValue;
+            return methodArguments.ToArray();
         }
     }
 }
