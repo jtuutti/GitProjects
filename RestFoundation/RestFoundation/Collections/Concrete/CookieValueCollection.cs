@@ -62,7 +62,7 @@ namespace RestFoundation.Collections.Concrete
             return m_values.GetEnumerator();
         }
 
-        protected class CookieValueEnumerator : IEnumerator<HttpCookie>
+        private class CookieValueEnumerator : IEnumerator<HttpCookie>
         {
             private readonly IEnumerator enumerator;
 

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 using System.Web;
 
 namespace RestFoundation.Runtime
 {
-    public sealed class ServiceUri : Uri
+    [Serializable]
+    public class ServiceUri : Uri
     {
         public ServiceUri(Uri uri, string serviceUrl) : base(uri.ToString(), UriKind.Absolute)
         {
@@ -13,7 +16,17 @@ namespace RestFoundation.Runtime
             ServiceUrl = new Uri(ToAbsoluteUrl(serviceUrl), UriKind.Absolute);
         }
 
-        public Uri ServiceUrl { get; private set; }
+        protected ServiceUri(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            string serviceUrl = info.GetString("ServiceUrl");
+
+            if (!String.IsNullOrEmpty(serviceUrl))
+            {
+                ServiceUrl = new Uri(serviceUrl, UriKind.Absolute);
+            }
+        }
+
+        public Uri ServiceUrl { get; protected set; }
 
         public string ToAbsoluteUrl(string url)
         {
@@ -50,6 +63,14 @@ namespace RestFoundation.Runtime
             }
 
             return absoluteUrl;
+        }
+
+        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)] 
+        protected new virtual void GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext) 
+        {
+            base.GetObjectData(serializationInfo, streamingContext);
+
+            serializationInfo.AddValue("ServiceUrl", ServiceUrl);
         }
     }
 }

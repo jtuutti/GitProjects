@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,6 +57,19 @@
     <Compile Include="Behaviors\ContentTypeBehavior.cs" />
     <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
     <Compile Include="Behaviors\ServiceSecurityBehavior.cs" />
+    <Compile Include="Client\RestClientExtensions.cs" />
+    <Compile Include="Client\RestClientFactory.cs" />
+    <Compile Include="Client\IRestSerializerFactory.cs" />
+    <Compile Include="Client\RestClient.cs" />
+    <Compile Include="Client\RestResource.cs" />
+    <Compile Include="Client\RestResourceT.cs" />
+    <Compile Include="Client\RestResourceType.cs" />
+    <Compile Include="Client\IRestClient.cs" />
+    <Compile Include="Client\IRestSerializer.cs" />
+    <Compile Include="Client\Serializers\JsonObjectSerializer.cs" />
+    <Compile Include="Client\Serializers\RestSerializerFactory.cs" />
+    <Compile Include="Client\Serializers\StringSerializer.cs" />
+    <Compile Include="Client\Serializers\XmlObjectSerializer.cs" />
     <Compile Include="Collections\Concrete\HeaderCollection.cs" />
     <Compile Include="Collections\IHeaderCollection.cs" />
     <Compile Include="Collections\Specialized\AcceptValueCollection.cs" />
@@ -64,6 +77,7 @@
     <Compile Include="DataFormatterBuilder.cs" />
     <Compile Include="DataFormatterType.cs" />
     <Compile Include="ICache.cs" />
+    <Compile Include="ICredentialResolver.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IObjectActivator.cs" />
     <Compile Include="IParameterBinder.cs" />
@@ -88,6 +102,7 @@
     <Compile Include="Runtime\BehaviorInvoker.cs" />
     <Compile Include="Runtime\Cache.cs" />
     <Compile Include="Runtime\CompositeValidationResult.cs" />
+    <Compile Include="Runtime\CredentialResolver.cs" />
     <Compile Include="Runtime\DelegateObjectActivator.cs" />
     <Compile Include="Runtime\HttpRequestExtensions.cs" />
     <Compile Include="Runtime\Logger.cs" />

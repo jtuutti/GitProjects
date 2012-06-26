@@ -58,7 +58,7 @@ namespace RestFoundation.Collections.Concrete
             return m_values.GetEnumerator();
         }
 
-        protected class ObjectValueEnumerator : IEnumerator<object>
+        private class ObjectValueEnumerator : IEnumerator<object>
         {
             private readonly IEnumerator enumerator;
 

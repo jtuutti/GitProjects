@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Net;
 using RestFoundation.Collections;
 using RestFoundation.Runtime;
 
@@ -13,6 +14,8 @@ namespace RestFoundation
         ServiceUri Url { get; }
         HttpMethod Method { get; }
         Stream Body { get; }
+
+        NetworkCredential Credentials { get; }
 
         dynamic QueryBag { get; }
 

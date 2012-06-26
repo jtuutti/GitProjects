@@ -70,7 +70,7 @@ namespace RestFoundation.Collections.Concrete
             return m_values.GetEnumerator();
         }
 
-        protected class StringValueEnumerator : IEnumerator<string>
+        private class StringValueEnumerator : IEnumerator<string>
         {
             private readonly IEnumerator enumerator;
 

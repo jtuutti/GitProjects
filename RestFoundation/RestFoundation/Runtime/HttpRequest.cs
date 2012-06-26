@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Web;
 using System.Web.Routing;
 using RestFoundation.Collections;
@@ -15,6 +16,14 @@ namespace RestFoundation.Runtime
         private const string ContextContainerKey = "REST_Context";
 
         private static readonly object syncRoot = new object();
+        private readonly ICredentialResolver m_credentialResolver;
+
+        public HttpRequest(ICredentialResolver credentialResolver)
+        {
+            if (credentialResolver == null) throw new ArgumentNullException("credentialResolver");
+
+            m_credentialResolver = credentialResolver;
+        }
 
         private static HttpContext Context
         {
@@ -85,14 +94,6 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public Stream Body
-        {
-            get
-            {
-                return Context.Request.InputStream;
-            }
-        }
-
         public HttpMethod Method
         {
             get
@@ -103,6 +104,22 @@ namespace RestFoundation.Runtime
                 }
 
                 return ContextContainer.Method.Value;
+            }
+        }
+
+        public Stream Body
+        {
+            get
+            {
+                return Context.Request.InputStream;
+            }
+        }
+
+        public NetworkCredential Credentials
+        {
+            get
+            {
+                return m_credentialResolver.GetCredentials(null, this);
             }
         }
 

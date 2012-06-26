@@ -8,6 +8,7 @@ namespace RestFoundation
 {
     public class Rest
     {
+        protected static readonly object syncRoot = new object();
         protected internal static Rest Active = new Rest();
 
         private static bool defaultUrlMapped;
@@ -27,7 +28,7 @@ namespace RestFoundation
                 throw new InvalidOperationException("No active routing table was found.");
             }
 
-            lock (typeof(Rest))
+            lock (syncRoot)
             {
                 if (!defaultUrlMapped)
                 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Web.Hosting;
 
@@ -32,6 +33,8 @@ namespace RestFoundation.ServiceProxy
             }
         }
 
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
+                         Justification = "The stream is returned to the outer scope and cannot be closed in this method")]
         public override Stream Open()
         {
             var fileStream = new MemoryStream();
