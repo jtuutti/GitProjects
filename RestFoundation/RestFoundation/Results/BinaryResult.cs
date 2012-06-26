@@ -8,7 +8,7 @@ namespace RestFoundation.Results
     {
         public BinaryResult()
         {
-            ClearResponse = true;
+            ClearOutput = true;
         }
 
         public IServiceContext Context { get; set; }
@@ -17,7 +17,7 @@ namespace RestFoundation.Results
         public byte[] Content { get; set; }
         public string ContentType { get; set; }
         public string ContentDisposition { get; set; }
-        public bool ClearResponse { get; set; }
+        public bool ClearOutput { get; set; }
 
         public void Execute()
         {
@@ -31,9 +31,9 @@ namespace RestFoundation.Results
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No valid binary content provided");
             }
 
-            if (ClearResponse)
+            if (ClearOutput)
             {
-                Response.Clear();
+                Response.Output.Clear();
             }
 
             if (!String.IsNullOrEmpty(ContentType))
@@ -61,7 +61,7 @@ namespace RestFoundation.Results
 
             if (Content.Length > 0)
             {
-                Response.Output.Write(Content, 0, Content.Length);
+                Response.Output.Stream.Write(Content, 0, Content.Length);
             }
         }
     }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
 using System.Net;
 using System.Text;
 using System.Web;
@@ -11,41 +9,33 @@ namespace RestFoundation.Runtime
 {
     public class HttpResponse : IHttpResponse
     {
-        private const string LineBreak = "<br/>";
+        private readonly IHttpResponseOutput m_output;
+
+        public HttpResponse()
+        {
+            m_output = new HttpResponseOutput();
+        }
 
         private static HttpContext Context
         {
             get
             {
-                return HttpContext.Current;
+                HttpContext context = HttpContext.Current;
+
+                if (context == null)
+                {
+                    throw new InvalidOperationException("No HTTP context was found");
+                }
+
+                return context;
             }
         }
 
-        public Stream Output
+        public IHttpResponseOutput Output
         {
             get
             {
-                return Context.Response.OutputStream;
-            }
-        }
-
-        public TextWriter OutputWriter
-        {
-            get
-            {
-                return Context.Response.Output;
-            }
-        }
-
-        public Stream OutputFilter
-        {
-            get
-            {
-                return Context.Response.Filter;
-            }
-            set
-            {
-                Context.Response.Filter = value;
+                return m_output;
             }
         }
 
@@ -81,11 +71,29 @@ namespace RestFoundation.Runtime
             Context.Response.AppendHeader(headerName, headerValue);
         }
 
-        public void RemoveHeader(string headerName)
+        public bool RemoveHeader(string headerName)
         {
             if (headerName == null) throw new ArgumentNullException("headerName");
 
+            if (Array.IndexOf(Context.Response.Headers.AllKeys, headerName) < 0)
+            {
+                return false;
+            }
+
             Context.Response.Headers.Remove(headerName);
+            return true;
+        }
+
+        public void ClearHeaders()
+        {
+            Context.Response.ClearHeaders();
+        }
+
+        public void SetCharsetEncoding(Encoding encoding)
+        {
+            if (encoding == null) throw new ArgumentNullException("encoding");
+
+            Context.Response.ContentEncoding = encoding;
         }
 
         public HttpStatusCode GetStatusCode()
@@ -109,13 +117,6 @@ namespace RestFoundation.Runtime
             Context.Response.StatusDescription = statusDescription ?? String.Empty;
         }
 
-        public void SetCharsetEncoding(Encoding encoding)
-        {
-            if (encoding == null) throw new ArgumentNullException("encoding");
-
-            Context.Response.ContentEncoding = encoding;
-        }
-
         public HttpCookie GetCookie(string cookieName)
         {
             if (cookieName == null) throw new ArgumentNullException("cookieName");
@@ -135,42 +136,12 @@ namespace RestFoundation.Runtime
             Context.Response.SetCookie(cookie);
         }
 
-        public void RemoveCookie(HttpCookie cookie)
+        public void ExpireCookie(HttpCookie cookie)
         {
             if (cookie == null) throw new ArgumentNullException("cookie");
 
             cookie.Expires = DateTime.Now.AddDays(-1);
             Context.Response.SetCookie(cookie);
-        }
-
-        public object GetHttpItem(string name)
-        {
-            return Context.Items[name];
-        }
-
-        public void SetHttpItem(string name, object value)
-        {
-            Context.Items[name] = value;
-        }
-
-        public void RemoveHttpItem(string name)
-        {
-            Context.Items.Remove(name);
-        }
-
-        public void Flush()
-        {
-            Context.Response.Flush();
-        }
-
-        public void Clear()
-        {
-            Context.Response.Clear();
-        }
-
-        public void ClearHeaders()
-        {
-            Context.Response.ClearHeaders();
         }
 
         public void Redirect(string url)
@@ -230,57 +201,6 @@ namespace RestFoundation.Runtime
         public void TransmitFile(string filePath)
         {
             Context.Response.TransmitFile(filePath);
-        }
-
-        public IHttpResponse Write(string value)
-        {
-            Context.Response.Write(value);
-            return this;
-        }
-
-        public IHttpResponse Write(object obj)
-        {
-            Context.Response.Write(obj);
-            return this;
-        }
-
-        public IHttpResponse WriteLine()
-        {
-            Context.Response.Write(LineBreak);
-            return this;
-        }
-
-        public IHttpResponse WriteLine(string value)
-        {
-            Context.Response.Write(value);
-            Context.Response.Write(LineBreak);
-            return this;
-        }
-
-        public IHttpResponse WriteLine(byte times)
-        {
-            for (byte i = 0; i < times; i++)
-            {
-                WriteLine();
-            }
-
-            return this;
-        }
-
-        public IHttpResponse WriteFormat(string format, params object[] values)
-        {
-            if (format == null) throw new ArgumentNullException("format");
-
-            Context.Response.Write(String.Format(format, values));
-            return this;
-        }
-
-        public IHttpResponse WriteFormat(CultureInfo provider, string format, params object[] values)
-        {
-            if (format == null) throw new ArgumentNullException("format");
-
-            Context.Response.Write(String.Format(provider, format, values));
-            return this;
         }
     }
 }

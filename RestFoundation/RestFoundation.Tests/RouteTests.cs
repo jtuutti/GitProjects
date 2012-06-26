@@ -9,7 +9,7 @@ namespace RestFoundation.Tests
     public class RouteTests
     {
         [Test]
-        public void TestValidRoutes()
+        public void ValidRoutes()
         {
             // default URL that supports GET and HEAD
             RouteAssert.Url("~/test/1").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.Get(1));
@@ -40,13 +40,13 @@ namespace RestFoundation.Tests
         }
         
         [Test]
-        public void TestInvalidRoutes()
+        public void InvalidRoutes()
         {
             // invalid relative URL
             Assert.Throws(typeof(ArgumentException), () => RouteAssert.Url("/rest/test/1").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.Get(1)));
 
             // invalid service contract type
-            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/").WithHttpMethod(HttpMethod.Get).Invokes<RouteTests>(s => s.TestInvalidRoutes()));
+            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/").WithHttpMethod(HttpMethod.Get).Invokes<RouteTests>(s => s.InvalidRoutes()));
 
             // mismatched route
             Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.Get(null)));

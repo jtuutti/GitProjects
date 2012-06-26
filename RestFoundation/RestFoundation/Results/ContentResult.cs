@@ -8,7 +8,7 @@ namespace RestFoundation.Results
     {
         public ContentResult()
         {
-            ClearResponse = true;
+            ClearOutput = true;
         }
 
         public IServiceContext Context { get; set; }
@@ -16,7 +16,7 @@ namespace RestFoundation.Results
         public IHttpResponse Response { get; set; }
         public string Content { get; set; }
         public string ContentType { get; set; }
-        public bool ClearResponse { get; set; }
+        public bool ClearOutput { get; set; }
 
         public void Execute()
         {
@@ -30,9 +30,9 @@ namespace RestFoundation.Results
                 return;
             }
 
-            if (ClearResponse)
+            if (ClearOutput)
             {
-                Response.Clear();
+                Response.Output.Clear();
             }
 
             if (!String.IsNullOrEmpty(ContentType))
@@ -53,7 +53,7 @@ namespace RestFoundation.Results
             
             OutputCompressionManager.FilterResponse(Request, Response);
 
-            Response.Write(Content);
+            Response.Output.Write(Content);
         }
     }
 }

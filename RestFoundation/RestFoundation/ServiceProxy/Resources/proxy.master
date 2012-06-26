@@ -1,7 +1,7 @@
 ﻿<%@ Master Language="C#" %>
 <%@ Import Namespace="RestFoundation.Acl" %>
 
-<script language="C#" runat="server">
+<script runat="server" language="C#">
     public void Page_Init(object sender, EventArgs e)
     {
         List<IPAddressRange> ranges = IPAddressRange.GetConfiguredRanges("serviceProxyAcl").ToList();

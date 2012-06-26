@@ -32,7 +32,7 @@ namespace RestFoundation.Results
                 return;
             }
 
-            Response.Clear();
+            Response.Output.Clear();
             Response.SetHeader("Content-Type", "application/xml");
             Response.SetCharsetEncoding(Request.Headers.AcceptCharsetEncoding);
 
@@ -43,7 +43,7 @@ namespace RestFoundation.Results
             var namespaces = new XmlSerializerNamespaces();
             namespaces.Add(String.Empty, String.Empty);
 
-            var xmlWriter = new XmlTextWriter(Response.OutputWriter)
+            var xmlWriter = new XmlTextWriter(Response.Output.Writer)
             {
                 Formatting = Formatting.None
             };

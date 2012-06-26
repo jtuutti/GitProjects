@@ -16,9 +16,7 @@ namespace RestFoundation.Test
                 throw new ArgumentException("Relative URL must start with the tilde sign: ~", "relativeUrl");
             }
 
-            string[] urlParts = relativeUrl.Split(new[] { '?', '#' }, StringSplitOptions.RemoveEmptyEntries);
-
-            return new HttpMethodBuilder(urlParts[0].Trim());
+            return new HttpMethodBuilder(relativeUrl);
         }
     }
 }

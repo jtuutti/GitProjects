@@ -78,6 +78,7 @@
     <Compile Include="DataFormatterType.cs" />
     <Compile Include="ICache.cs" />
     <Compile Include="ICredentialResolver.cs" />
+    <Compile Include="IHttpResponseOutput.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IObjectActivator.cs" />
     <Compile Include="IParameterBinder.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Runtime\CredentialResolver.cs" />
     <Compile Include="Runtime\DelegateObjectActivator.cs" />
     <Compile Include="Runtime\HttpRequestExtensions.cs" />
+    <Compile Include="Runtime\HttpResponseOutput.cs" />
     <Compile Include="Runtime\Logger.cs" />
     <Compile Include="Runtime\OutputCompressionManager.cs" />
     <Compile Include="Runtime\ParameterBinder.cs" />

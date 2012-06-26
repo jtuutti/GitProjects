@@ -12,6 +12,10 @@ namespace RestFoundation.Collections.Concrete
     {
         private readonly NameValueCollection m_values;
 
+        public StringValueCollection() : this(new NameValueCollection())
+        {
+        }
+
         internal StringValueCollection(NameValueCollection values)
         {
             if (values == null) throw new ArgumentNullException("values");
