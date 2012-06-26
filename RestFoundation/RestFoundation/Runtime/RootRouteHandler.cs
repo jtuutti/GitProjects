@@ -5,8 +5,10 @@ using System.Web;
 using System.Web.Routing;
 using RestFoundation.Collections.Specialized;
 using RestFoundation.DataFormatters;
+using RestFoundation.Runtime;
 using RestFoundation.ServiceProxy.Helpers;
 using EndPoint = RestFoundation.ServiceProxy.Helpers.EndPoint;
+using HttpRequest = System.Web.HttpRequest;
 
 namespace RestFoundation
 {
@@ -31,6 +33,18 @@ namespace RestFoundation
 
         public void ProcessRequest(HttpContext context)
         {
+            if (String.Equals(HttpMethod.Options.ToString(), context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            {
+                context.AppendAllowHeader(new[] { HttpMethod.Get, HttpMethod.Head });
+                return;
+            }
+
+            if (!String.Equals(HttpMethod.Get.ToString(), context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) &&
+                !String.Equals(HttpMethod.Head.ToString(), context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "HTTP method is not allowed");
+            }
+
             if (Rest.Active.IsServiceProxyInitialized && IsInBrowser(context.Request))
             {
                 context.Response.Redirect((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/proxy.aspx", false);
