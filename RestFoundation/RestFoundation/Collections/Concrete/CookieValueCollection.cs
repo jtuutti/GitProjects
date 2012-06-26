@@ -12,6 +12,13 @@ namespace RestFoundation.Collections.Concrete
     {
         private readonly HttpCookieCollection m_values;
 
+        internal CookieValueCollection(HttpCookieCollection values)
+        {
+            if (values == null) throw new ArgumentNullException("values");
+
+            m_values = values;
+        }
+
         public ICollection<string> Keys
         {
             get
@@ -26,13 +33,6 @@ namespace RestFoundation.Collections.Concrete
             {
                 return m_values.Count;
             }
-        }
-
-        public CookieValueCollection(HttpCookieCollection values)
-        {
-            if (values == null) throw new ArgumentNullException("values");
-
-            m_values = values;
         }
 
         public IEnumerator<HttpCookie> GetEnumerator()

@@ -11,6 +11,13 @@ namespace RestFoundation.Collections.Concrete
     {
         private readonly IDictionary<string, object> m_values;
 
+        internal ObjectValueCollection(IDictionary<string, object> values)
+        {
+            if (values == null) throw new ArgumentNullException("values");
+
+            m_values = values;
+        }
+
         public ICollection<string> Keys
         {
             get
@@ -25,13 +32,6 @@ namespace RestFoundation.Collections.Concrete
             {
                 return m_values.Count;
             }
-        }
-
-        public ObjectValueCollection(IDictionary<string, object> values)
-        {
-            if (values == null) throw new ArgumentNullException("values");
-
-            m_values = values;
         }
 
         public IEnumerator<object> GetEnumerator()
