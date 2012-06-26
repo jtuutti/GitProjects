@@ -1,4 +1,5 @@
-﻿using System.Security.Principal;
+﻿using System;
+using System.Security.Principal;
 using System.Web;
 using RestFoundation.Collections.Specialized;
 
@@ -10,7 +11,14 @@ namespace RestFoundation.Runtime
         {
             get
             {
-                return HttpContext.Current;
+                HttpContext context = HttpContext.Current;
+
+                if (context == null)
+                {
+                    throw new InvalidOperationException("No HTTP context was found");
+                }
+
+                return context;
             }
         }
 

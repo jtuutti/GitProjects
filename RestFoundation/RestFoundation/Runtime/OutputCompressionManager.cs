@@ -19,7 +19,7 @@ namespace RestFoundation.Runtime
             }
 
             string outputEncoding;
-            response.OutputFilter = streamCompressor.Compress(response.OutputFilter, request.Headers.AcceptEncodings, out outputEncoding);
+            response.Output.Filter = streamCompressor.Compress(response.Output.Filter, request.Headers.AcceptEncodings, out outputEncoding);
 
             if (!String.IsNullOrEmpty(outputEncoding))
             {

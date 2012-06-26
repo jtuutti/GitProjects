@@ -12,7 +12,6 @@ namespace RestFoundation
         protected internal static Rest Active = new Rest();
 
         private static bool defaultUrlMapped;
-        private IObjectActivator m_activator;
 
         protected Rest()
         {
@@ -38,8 +37,6 @@ namespace RestFoundation
             }
         }
 
-        protected internal bool IsServiceProxyInitialized { get; protected set; }
-
         public static Rest Configure
         {
             get
@@ -53,16 +50,19 @@ namespace RestFoundation
             }
         }
 
+        public IObjectActivator Activator { get; protected set; }
+        protected internal bool IsServiceProxyInitialized { get; protected set; }
+
         public virtual Rest WithObjectActivator(IObjectActivator activator)
         {
             if (activator == null) throw new ArgumentNullException("activator");
 
-            if (m_activator != null)
+            if (Activator != null)
             {
                 throw new InvalidOperationException("An object activator or an object factory has already been assigned.");
             }
 
-            m_activator = activator;
+            Activator = activator;
             return this;
         }
 
@@ -70,12 +70,12 @@ namespace RestFoundation
         {
             if (factory == null) throw new ArgumentNullException("factory");
 
-            if (m_activator != null)
+            if (Activator != null)
             {
                 throw new InvalidOperationException("An object activator or an object factory has already been assigned.");
             }
 
-            m_activator = new DelegateObjectActivator(factory);
+            Activator = new DelegateObjectActivator(factory);
             return this;
         }
 
@@ -114,14 +114,14 @@ namespace RestFoundation
         {
             if (objectType == null) throw new ArgumentNullException("objectType");
 
-            if (m_activator == null)
+            if (Activator == null)
             {
                 throw new ObjectActivationException("No object activator or factory has been assigned.");
             }
 
             try
             {
-                return m_activator.Create(objectType);
+                return Activator.Create(objectType);
             }
             catch (Exception ex)
             {

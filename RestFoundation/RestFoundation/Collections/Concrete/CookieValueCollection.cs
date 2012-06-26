@@ -12,6 +12,10 @@ namespace RestFoundation.Collections.Concrete
     {
         private readonly HttpCookieCollection m_values;
 
+        public CookieValueCollection() : this(new HttpCookieCollection())
+        {
+        }
+
         internal CookieValueCollection(HttpCookieCollection values)
         {
             if (values == null) throw new ArgumentNullException("values");

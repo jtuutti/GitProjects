@@ -9,7 +9,7 @@ namespace RestFoundation.Results
     {
         public StreamResult()
         {
-            ClearResponse = true;
+            ClearOutput = true;
         }
 
         public IServiceContext Context { get; set; }
@@ -18,7 +18,7 @@ namespace RestFoundation.Results
         public Stream Stream { get; set; }
         public string ContentType { get; set; }
         public string ContentDisposition { get; set; }
-        public bool ClearResponse { get; set; }
+        public bool ClearOutput { get; set; }
 
         public void Execute()
         {
@@ -32,9 +32,9 @@ namespace RestFoundation.Results
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No valid input stream provided");
             }
 
-            if (ClearResponse)
+            if (ClearOutput)
             {
-                Response.Clear();
+                Response.Output.Clear();
             }
 
             if (!String.IsNullOrEmpty(ContentType))
@@ -67,7 +67,7 @@ namespace RestFoundation.Results
                     Stream.Seek(0, SeekOrigin.Begin);
                 }
 
-                Stream.CopyTo(Response.Output);
+                Stream.CopyTo(Response.Output.Stream);
             }
         }
     }

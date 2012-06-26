@@ -9,7 +9,7 @@ namespace RestFoundation.Results
     {
         public FilePathResult()
         {
-            ClearResponse = true;
+            ClearOutput = true;
         }
 
         public IServiceContext Context { get; set; }
@@ -18,8 +18,8 @@ namespace RestFoundation.Results
         public string FilePath { get; set; }
         public string ContentType { get; set; }
         public string ContentDisposition { get; set; }
-        public bool ClearResponse { get; set; }
         public bool CacheOutput { get; set; }
+        public bool ClearOutput { get; set; }
 
         public void Execute()
         {
@@ -40,9 +40,9 @@ namespace RestFoundation.Results
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No valid file path provided");
             }
 
-            if (ClearResponse)
+            if (ClearOutput)
             {
-                Response.Clear();
+                Response.Output.Clear();
             }
 
             if (!String.IsNullOrEmpty(ContentType))

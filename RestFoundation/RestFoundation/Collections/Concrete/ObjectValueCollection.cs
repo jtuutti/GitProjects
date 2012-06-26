@@ -11,6 +11,10 @@ namespace RestFoundation.Collections.Concrete
     {
         private readonly IDictionary<string, object> m_values;
 
+        public ObjectValueCollection() : this(new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase))
+        {
+        }
+
         internal ObjectValueCollection(IDictionary<string, object> values)
         {
             if (values == null) throw new ArgumentNullException("values");

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Dynamic;
 using System.Linq;
+using RestFoundation.Collections.Concrete;
 
 namespace RestFoundation.Collections.Specialized
 {
@@ -15,6 +17,10 @@ namespace RestFoundation.Collections.Specialized
             {
                 return m_inner.Keys.Count;
             }
+        }
+
+        public DynamicStringCollection() : this(new StringValueCollection(new NameValueCollection()))
+        {
         }
 
         public DynamicStringCollection(IStringValueCollection collection)

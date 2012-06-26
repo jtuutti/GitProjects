@@ -25,8 +25,13 @@ namespace RestFoundation.Tests
             config.Scan(action =>
                         {
                             action.Assembly(ServiceAssembly.Executing);
+                            action.TheCallingAssembly();
                             action.WithDefaultConventions();
                         });
+
+            config.For<IServiceContext>().Use(Mocks.ServiceContext());
+            config.For<IHttpRequest>().Use(Mocks.HttpRequest());
+            config.For<IHttpResponse>().Use(Mocks.HttpResponse());
 
             config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestDependency()));
         }

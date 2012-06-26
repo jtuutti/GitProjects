@@ -23,14 +23,14 @@ namespace RestFoundation.Results
                 return;
             }
 
-            Response.Clear();
+            Response.Output.Clear();
             Response.SetHeader("Content-Type", "application/json");
             Response.SetCharsetEncoding(Request.Headers.AcceptCharsetEncoding);
 
             OutputCompressionManager.FilterResponse(Request, Response);
 
             var serializer = new JsonSerializer();
-            serializer.Serialize(Response.OutputWriter, Content);
+            serializer.Serialize(Response.Output.Writer, Content);
         }
     }
 }

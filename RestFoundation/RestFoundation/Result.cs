@@ -46,17 +46,17 @@ namespace RestFoundation
             return Content(content, null, true);
         }
 
-        public static ContentResult Content(string content, bool clearResponse)
+        public static ContentResult Content(string content, bool clearOutput)
         {
-            return Content(content, null, clearResponse);
+            return Content(content, null, clearOutput);
         }
 
-        public static ContentResult Content(string content, string contentType, bool clearResponse)
+        public static ContentResult Content(string content, string contentType, bool clearOutput)
         {
             var result = Rest.Active.CreateObject<ContentResult>();
             result.Content = content;
             result.ContentType = contentType;
-            result.ClearResponse = clearResponse;
+            result.ClearOutput = clearOutput;
 
             return result;
         }
@@ -66,23 +66,23 @@ namespace RestFoundation
             return Content(data, null, null, true);
         }
 
-        public static BinaryResult Content(byte[] data, bool clearResponse)
+        public static BinaryResult Content(byte[] data, bool clearOutput)
         {
-            return Content(data, null, null, clearResponse);
+            return Content(data, null, null, clearOutput);
         }
 
-        public static BinaryResult Content(byte[] data, string contentType, bool clearResponse)
+        public static BinaryResult Content(byte[] data, string contentType, bool clearOutput)
         {
-            return Content(data, contentType, null, clearResponse);
+            return Content(data, contentType, null, clearOutput);
         }
 
-        public static BinaryResult Content(byte[] data, string contentType, string contentDisposition, bool clearResponse)
+        public static BinaryResult Content(byte[] data, string contentType, string contentDisposition, bool clearOutput)
         {
             var result = Rest.Active.CreateObject<BinaryResult>();
             result.Content = data;
             result.ContentType = contentType;
             result.ContentDisposition = contentDisposition;
-            result.ClearResponse = clearResponse;
+            result.ClearOutput = clearOutput;
 
             return result;
         }
@@ -92,23 +92,23 @@ namespace RestFoundation
             return Content(stream, null, null, true);
         }
 
-        public static StreamResult Content(Stream stream, bool clearResponse)
+        public static StreamResult Content(Stream stream, bool clearOutput)
         {
-            return Content(stream, null, null, clearResponse);
+            return Content(stream, null, null, clearOutput);
         }
 
-        public static StreamResult Content(Stream stream, string contentType, bool clearResponse)
+        public static StreamResult Content(Stream stream, string contentType, bool clearOutput)
         {
-            return Content(stream, contentType, null, clearResponse);
+            return Content(stream, contentType, null, clearOutput);
         }
 
-        public static StreamResult Content(Stream stream, string contentType, string contentDisposition, bool clearResponse)
+        public static StreamResult Content(Stream stream, string contentType, string contentDisposition, bool clearOutput)
         {
             var result = Rest.Active.CreateObject<StreamResult>();
             result.Stream = stream;
             result.ContentType = contentType;
             result.ContentDisposition = contentDisposition;
-            result.ClearResponse = clearResponse;
+            result.ClearOutput = clearOutput;
 
             return result;
         }
@@ -118,28 +118,28 @@ namespace RestFoundation
             return FilePath(filePath, null, null, true, true);
         }
 
-        public static FilePathResult FilePath(string filePath, bool clearResponse)
+        public static FilePathResult FilePath(string filePath, bool clearOutput)
         {
-            return FilePath(filePath, null, null, clearResponse, true);
+            return FilePath(filePath, null, null, clearOutput, true);
         }
 
-        public static FilePathResult FilePath(string filePath, string contentType, bool clearResponse)
+        public static FilePathResult FilePath(string filePath, string contentType, bool clearOutput)
         {
-            return FilePath(filePath, contentType, null, clearResponse, true);
+            return FilePath(filePath, contentType, null, clearOutput, true);
         }
 
-        public static FilePathResult FilePath(string filePath, string contentType, bool clearResponse, bool cacheOutput)
+        public static FilePathResult FilePath(string filePath, string contentType, bool clearOutput, bool cacheOutput)
         {
-            return FilePath(filePath, contentType, null, clearResponse, cacheOutput);
+            return FilePath(filePath, contentType, null, clearOutput, cacheOutput);
         }
 
-        public static FilePathResult FilePath(string filePath, string contentType, string contentDisposition, bool clearResponse, bool cacheOutput)
+        public static FilePathResult FilePath(string filePath, string contentType, string contentDisposition, bool clearOutput, bool cacheOutput)
         {
             var result = Rest.Active.CreateObject<FilePathResult>();
             result.FilePath = filePath;
             result.ContentType = contentType;
             result.ContentDisposition = contentDisposition;
-            result.ClearResponse = clearResponse;
+            result.ClearOutput = clearOutput;
             result.CacheOutput = cacheOutput;
 
             return result;
@@ -150,28 +150,28 @@ namespace RestFoundation
             return FileUrl(fileUrl, null, null, true, true);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, bool clearResponse)
+        public static FileUrlResult FileUrl(string fileUrl, bool clearOutput)
         {
-            return FileUrl(fileUrl, null, null, clearResponse, true);
+            return FileUrl(fileUrl, null, null, clearOutput, true);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, string contentType, bool clearResponse)
+        public static FileUrlResult FileUrl(string fileUrl, string contentType, bool clearOutput)
         {
-            return FileUrl(fileUrl, contentType, null, clearResponse, true);
+            return FileUrl(fileUrl, contentType, null, clearOutput, true);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, string contentType, bool clearResponse, bool cacheOutput)
+        public static FileUrlResult FileUrl(string fileUrl, string contentType, bool clearOutput, bool cacheOutput)
         {
-            return FileUrl(fileUrl, contentType, null, clearResponse, cacheOutput);
+            return FileUrl(fileUrl, contentType, null, clearOutput, cacheOutput);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, string contentType, string contentDisposition, bool clearResponse, bool cacheOutput)
+        public static FileUrlResult FileUrl(string fileUrl, string contentType, string contentDisposition, bool clearOutput, bool cacheOutput)
         {
             var result = Rest.Active.CreateObject<FileUrlResult>();
             result.FileUrl = fileUrl;
             result.ContentType = contentType;
             result.ContentDisposition = contentDisposition;
-            result.ClearResponse = clearResponse;
+            result.ClearOutput = clearOutput;
             result.CacheOutput = cacheOutput;
 
             return result;

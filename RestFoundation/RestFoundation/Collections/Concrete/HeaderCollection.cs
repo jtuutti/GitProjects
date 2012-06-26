@@ -15,6 +15,10 @@ namespace RestFoundation.Collections.Concrete
     {
         private const string Utf8Charset = "utf-8";
 
+        public HeaderCollection() : this(new NameValueCollection())
+        {
+        }
+
         internal HeaderCollection(NameValueCollection values) : base(values)
         {
             Authorization = TryGet("Authorization");

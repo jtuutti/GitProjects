@@ -8,9 +8,17 @@ namespace RestFoundation.Runtime
     [Serializable]
     public class ServiceUri : Uri
     {
-        public ServiceUri(Uri uri, string serviceUrl) : base(uri.ToString(), UriKind.Absolute)
+        public ServiceUri(string baseUrl, string serviceUrl) : base(new Uri(baseUrl, UriKind.Absolute), serviceUrl)
         {
-            if (uri == null) throw new ArgumentNullException("uri");
+            if (String.IsNullOrEmpty(baseUrl)) throw new ArgumentNullException("baseUrl");
+            if (String.IsNullOrEmpty(serviceUrl)) throw new ArgumentNullException("serviceUrl");
+
+            ServiceUrl = new Uri(new Uri(baseUrl, UriKind.Absolute), serviceUrl.TrimStart('/', '~', ' '));
+        }
+
+        public ServiceUri(Uri currentUri, string serviceUrl) : base(currentUri.ToString(), UriKind.Absolute)
+        {
+            if (currentUri == null) throw new ArgumentNullException("currentUri");
             if (String.IsNullOrEmpty(serviceUrl)) throw new ArgumentNullException("serviceUrl");
 
             ServiceUrl = new Uri(ToAbsoluteUrl(serviceUrl), UriKind.Absolute);

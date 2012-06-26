@@ -18,6 +18,10 @@ namespace RestFoundation.Collections.Specialized
             }
         }
 
+        public DynamicDictionary() : this(new Hashtable())
+        {
+        }
+
         public DynamicDictionary(IDictionary dictionary)
         {
             if (dictionary == null) throw new ArgumentNullException("dictionary");
