@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestTestServices", "RestTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestTestContracts", "RestTestContracts\RestTestContracts.csproj", "{BD354EC2-BA78-40A0-85FF-1209200166BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestFoundation.Tests", "RestFoundation.Tests\RestFoundation.Tests.csproj", "{A9050C1E-F135-4227-A101-AE7D6D9395E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{BD354EC2-BA78-40A0-85FF-1209200166BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD354EC2-BA78-40A0-85FF-1209200166BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD354EC2-BA78-40A0-85FF-1209200166BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9050C1E-F135-4227-A101-AE7D6D9395E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9050C1E-F135-4227-A101-AE7D6D9395E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9050C1E-F135-4227-A101-AE7D6D9395E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9050C1E-F135-4227-A101-AE7D6D9395E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

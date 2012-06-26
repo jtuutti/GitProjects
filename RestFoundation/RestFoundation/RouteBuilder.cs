@@ -115,10 +115,11 @@ namespace RestFoundation
         private IEnumerable<IRouteHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, string url, Type serviceContractType, bool isAsync)
         {
             var routeHandlers = new List<IRouteHandler>();
+            var orderedMethodMetadata = methodMetadata.OrderByDescending(m => m.UrlInfo.Priority);
 
             url = url.Trim();
 
-            foreach (ServiceMethodMetadata urlAttribute in methodMetadata)
+            foreach (ServiceMethodMetadata urlAttribute in orderedMethodMetadata)
             {
                 var defaults = new RouteValueDictionary
                                    {
