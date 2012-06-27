@@ -29,7 +29,8 @@ namespace RestFoundation.Runtime
                 return SafeConvert.ChangeType(parameterRoute, parameter.ParameterType);
             }
 
-            if (String.Equals(ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase))
+            if (String.Equals(ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase) ||
+                Attribute.GetCustomAttribute(parameter, typeof(BindResourceAttribute), true) != null)
             {
                 isResource = true;
                 return BindResource(parameter);

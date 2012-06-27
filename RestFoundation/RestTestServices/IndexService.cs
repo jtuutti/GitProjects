@@ -33,16 +33,16 @@ namespace RestTestServices
             return resource;
         }
 
-        public Person Put(int? id, Person resource)
+        public Person Put(int? id, Person personToUpdate)
         {
-            if (resource == null)
+            if (personToUpdate == null)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
             }
 
-            resource.Values = new[] { String.Format("Person #{0} updated", id) };
+            personToUpdate.Values = new[] { String.Format("Person #{0} updated", id) };
 
-            return resource;
+            return personToUpdate;
         }
 
         public Person Patch(int? id, Person resource)

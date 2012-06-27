@@ -57,6 +57,7 @@
     <Compile Include="Behaviors\ContentTypeBehavior.cs" />
     <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
     <Compile Include="Behaviors\ServiceSecurityBehavior.cs" />
+    <Compile Include="BindResourceAttribute.cs" />
     <Compile Include="Client\RestClientExtensions.cs" />
     <Compile Include="Client\RestClientFactory.cs" />
     <Compile Include="Client\IRestSerializerFactory.cs" />

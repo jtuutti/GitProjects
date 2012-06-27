@@ -18,7 +18,7 @@ namespace RestTestContracts
 
         [Url("index/{id}", HttpMethod.Put)]
         [ProxyStatusCode(HttpStatusCode.OK, "Resource is updated")]
-        Person Put([ProxyRouteParameter(1)] int? id, Person resource);
+        Person Put([ProxyRouteParameter(1)] int? id, [BindResource] Person personToUpdate);
 
         [Url("index/{id}", HttpMethod.Patch)]
         [ProxyStatusCode(HttpStatusCode.OK, "Resource is partially updated")]
