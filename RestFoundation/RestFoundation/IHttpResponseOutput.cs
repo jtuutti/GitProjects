@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿using System;
 using System.IO;
 
 namespace RestFoundation
@@ -18,6 +18,6 @@ namespace RestFoundation
         IHttpResponseOutput WriteLine(string value);
         IHttpResponseOutput WriteLine(byte times);
         IHttpResponseOutput WriteFormat(string format, params object[] values);
-        IHttpResponseOutput WriteFormat(CultureInfo provider, string format, params object[] values);
+        IHttpResponseOutput WriteFormat(IFormatProvider provider, string format, params object[] values);
     }
 }

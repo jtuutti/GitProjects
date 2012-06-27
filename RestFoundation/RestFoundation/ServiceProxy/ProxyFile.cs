@@ -11,6 +11,8 @@ namespace RestFoundation.ServiceProxy
         private static readonly Dictionary<string, string> resourceMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "proxy.master", "RestFoundation.ServiceProxy.Resources.proxy.master" },
+            { "index.aspx", "RestFoundation.ServiceProxy.Resources.index.aspx" },
+            { "metadata.aspx", "RestFoundation.ServiceProxy.Resources.metadata.aspx" },
             { "proxy.aspx", "RestFoundation.ServiceProxy.Resources.proxy.aspx" },
         };
 

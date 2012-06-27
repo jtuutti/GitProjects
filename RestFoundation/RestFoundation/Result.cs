@@ -61,6 +61,20 @@ namespace RestFoundation
             return result;
         }
 
+        public static ContentResult ContentFormat(string format, params object[] args)
+        {
+            if (format == null) throw new ArgumentNullException("format");
+
+            return Content(String.Format(format, args), null, true);
+        }
+
+        public static ContentResult ContentFormat(IFormatProvider provider, string format, params object[] args)
+        {
+            if (format == null) throw new ArgumentNullException("format");
+
+            return Content(String.Format(provider, format, args), null, true);
+        }
+
         public static BinaryResult Content(byte[] data)
         {
             return Content(data, null, null, true);

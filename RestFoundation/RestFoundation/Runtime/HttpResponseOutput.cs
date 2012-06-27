@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using System.Web;
 
@@ -105,7 +104,7 @@ namespace RestFoundation.Runtime
             return this;
         }
 
-        public IHttpResponseOutput WriteFormat(CultureInfo provider, string format, params object[] values)
+        public IHttpResponseOutput WriteFormat(IFormatProvider provider, string format, params object[] values)
         {
             if (format == null) throw new ArgumentNullException("format");
 

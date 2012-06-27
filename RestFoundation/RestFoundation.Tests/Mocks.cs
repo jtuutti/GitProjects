@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Security.Principal;
@@ -69,9 +68,9 @@ namespace RestFoundation.Tests
                                                                                                                }
                                                                                                            });
             outputMock.Setup(x => x.WriteFormat(It.IsAny<string>(), It.IsAny<object[]>())).Returns(outputMock.Object).Callback<string, object[]>(Console.Write);
-            outputMock.Setup(x => x.WriteFormat(It.IsAny<CultureInfo>(), It.IsAny<string>(), It.IsAny<object[]>()))
+            outputMock.Setup(x => x.WriteFormat(It.IsAny<IFormatProvider>(), It.IsAny<string>(), It.IsAny<object[]>()))
                                                   .Returns(outputMock.Object)
-                                                  .Callback<CultureInfo, string, object[]>((c, s, args) => Console.Write(s, args));
+                                                  .Callback<IFormatProvider, string, object[]>((c, s, args) => Console.Write(s, args));
 
             var mock = new Mock<IHttpResponse>();
             mock.SetupGet(x => x.Output).Returns(outputMock.Object);

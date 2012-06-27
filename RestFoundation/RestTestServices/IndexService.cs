@@ -28,6 +28,8 @@ namespace RestTestServices
 
             resource.Values = new[] { "New person added" };
 
+            Response.SetStatus(HttpStatusCode.Created);
+
             return resource;
         }
 
@@ -55,9 +57,14 @@ namespace RestTestServices
             return resource;
         }
 
-        public ContentResult Delete()
+        public ContentResult Delete(string name)
         {
-            return Result.Content("Deleted");
+            if (String.IsNullOrWhiteSpace(name))
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person's name provided");
+            }
+
+            return Result.ContentFormat("Person '{0}' deleted", name);
         }
     }
 }

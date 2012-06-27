@@ -2,10 +2,10 @@
 
 namespace RestFoundation.ServiceProxy.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Interface, AllowMultiple = false, Inherited = false)]
-    public sealed class UrlMetadataAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    public sealed class ProxyOperationDescriptionAttribute : Attribute
     {
-        public UrlMetadataAttribute(string description)
+        public ProxyOperationDescriptionAttribute(string description)
         {
             if (description == null)
             {
@@ -16,6 +16,5 @@ namespace RestFoundation.ServiceProxy.Attributes
         }
 
         public string Description { get; private set; }
-        public string RelativeUrl { get; set; }
     }
 }

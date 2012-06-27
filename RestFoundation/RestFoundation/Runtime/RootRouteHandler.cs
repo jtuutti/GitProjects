@@ -7,7 +7,6 @@ using RestFoundation.Collections.Specialized;
 using RestFoundation.DataFormatters;
 using RestFoundation.Runtime;
 using RestFoundation.ServiceProxy.Helpers;
-using EndPoint = RestFoundation.ServiceProxy.Helpers.EndPoint;
 using HttpRequest = System.Web.HttpRequest;
 
 namespace RestFoundation
@@ -47,7 +46,7 @@ namespace RestFoundation
 
             if (Rest.Active.IsServiceProxyInitialized && IsInBrowser(context.Request))
             {
-                context.Response.Redirect((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/proxy.aspx", false);
+                context.Response.Redirect((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/index.aspx", false);
                 return;
             }
 
@@ -115,11 +114,11 @@ namespace RestFoundation
 
         private static Operation[] GetOperations()
         {
-            IEnumerable<EndPoint> endPoints = EndPointGenerator.Generate();
+            IEnumerable<ProxyOperation> endPoints = ProxyOperationGenerator.Generate();
 
             var operations = new List<Operation>();
 
-            foreach (EndPoint endPoint in endPoints)
+            foreach (ProxyOperation endPoint in endPoints)
             {
                 operations.Add(new Operation
                 {

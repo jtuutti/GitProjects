@@ -157,9 +157,13 @@
     <Compile Include="IHttpRequest.cs" />
     <Compile Include="Runtime\UnvalidatedHandlerRegistry.cs" />
     <Compile Include="Operation.cs" />
-    <Compile Include="ServiceProxy\Attributes\UrlMetadataAttribute.cs" />
-    <Compile Include="ServiceProxy\Helpers\EndPoint.cs" />
-    <Compile Include="ServiceProxy\Helpers\EndpointGenerator.cs" />
+    <Compile Include="ServiceProxy\Attributes\ProxyOperationDescriptionAttribute.cs" />
+    <Compile Include="ServiceProxy\Attributes\ProxyRouteParameterAttribute.cs" />
+    <Compile Include="ServiceProxy\Attributes\ProxyStatusCodeAttribute.cs" />
+    <Compile Include="ServiceProxy\Helpers\ProxyRouteParameter.cs" />
+    <Compile Include="ServiceProxy\Helpers\ProxyOperation.cs" />
+    <Compile Include="ServiceProxy\Helpers\ProxyOperationGenerator.cs" />
+    <Compile Include="ServiceProxy\Helpers\ProxyStatusCode.cs" />
     <Compile Include="ServiceProxy\ProxyFile.cs" />
     <Compile Include="ServiceProxy\ProxyPathProvider.cs" />
     <Compile Include="Runtime\RootRouteHandler.cs" />
@@ -191,7 +195,7 @@
     <Compile Include="ValidationError.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ServiceProxy\Resources\proxy.aspx">
+    <EmbeddedResource Include="ServiceProxy\Resources\index.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -200,7 +204,11 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="ServiceProxy\Resources\metadata.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

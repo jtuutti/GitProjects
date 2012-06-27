@@ -39,7 +39,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
         body{color:#000;background-color:#fff;font-family:Verdana;margin-left:0;margin-top:0}
-        a:link,a:visited,a:active{color:#369;font-weight:700;text-decoration:underline}
+        a:link,a:visited,a:active{color:#369;font-weight:700;text-decoration:none}
+        a:hover{color:#369;font-weight:700;text-decoration:underline}
         table{border-collapse:collapse;border-spacing:0;font-family:Verdana}
         table th{border-right:2px #fff solid;border-bottom:2px #fff solid;font-weight:700;background-color:#cecf9c;padding:5px}
         table td{border-right:2px #fff solid;border-bottom:2px #fff solid;background-color:#e5e5cc;padding:3px 5px}
@@ -90,12 +91,12 @@
     <% } %>
 </head>
 <body>
-<p class="heading1"><a href="proxy.aspx" title="Service proxy home page">Index Service</a></p>
+<p class="heading1"><a href="index.aspx" title="Service proxy home page">Index Service</a></p>
 <form runat="server" id="bodyForm">
     <asp:ContentPlaceHolder runat="server" ID="bodyPlaceholder"></asp:ContentPlaceHolder>
 </form>
 <div id="footer">
-    This web service was built with the <b>REST Foundation</b> framework (c) 2012-<%= DateTime.Now.Year %> by Dmitry Starosta
+    This web service was built with the <strong>REST Foundation</strong> framework (c) 2012-<%= DateTime.Now.Year %> by Dmitry Starosta
 </div>
 <script type="text/javascript">
     jQuery.cookie=function(d,b,a){if(arguments.length>1&&(b===null||typeof b!=="object")){a=jQuery.extend({},a);if(b===null)a.expires=-1;if(typeof a.expires==="number"){var g=a.expires,e=a.expires=new Date;e.setDate(e.getDate()+g)}return document.cookie=[encodeURIComponent(d),"=",a.raw?String(b):encodeURIComponent(String(b)),a.expires?"; expires="+a.expires.toUTCString():"",a.path?"; path="+a.path:"",a.domain?"; domain="+a.domain:"",a.secure?"; secure":""].join("")}a=b||{};var c,f=a.raw?function(a){return a}:decodeURIComponent;return(c=new RegExp("(?:^|; )"+encodeURIComponent(d)+"=([^;]*)").exec(document.cookie))?f(c[1]):null};

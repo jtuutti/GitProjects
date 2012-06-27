@@ -17,24 +17,21 @@
             <th>Relative Url</th>
             <th>Method</th>
             <th>Description</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
         </tr>
         </thead>
         <tbody>
-            <% foreach (EndPoint endPoint in EndPointGenerator.Generate()) { %>
+            <% foreach (ProxyOperation operation in ProxyOperationGenerator.Generate()) { %>
             <tr>
-                <td class="operation_uri"><a href="<%: endPoint.RelativeUrl %>" title="Profile or debug the service"><%: endPoint.UrlTempate %></a></td>
-                <td><a href="#" title="View detailed service information"><%: endPoint.HttpMethod.ToString().ToUpperInvariant() %></a></td>
-                <td><%: endPoint.Description %></td>
+                <td class="operation_uri"><strong><%: operation.UrlTempate %></strong></td>
+                <td><strong><%: operation.HttpMethod.ToString().ToUpperInvariant() %></strong></td>
+                <td><%: operation.Description %></td>
+                <td><a href="<%: operation.MetadataUrl %>" title="View detailed service information">Metadata</a></td>
+                <td><a href="<%: operation.ProxyUrl %>" title="Profile or debug the service">Proxy</a></td>
             </tr>
             <% } %>
         </tbody>
     </table>
 </div>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("a").click(function () {
-            return $(this).attr("href") != "#";
-        });
-    });
-</script>
 </asp:Content>
