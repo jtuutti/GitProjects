@@ -14,7 +14,7 @@ namespace RestTestServices
 
         public IResult Get(int? id, string someGarbage)
         {
-            Response.Output.WriteFormat("GET : {0}", Request.QueryBag.X_http_method_override);
+            Response.Output.WriteFormat("GET : {0}", id);
 
             return Result.Content("<br/><br/>GET completed", false);
         }

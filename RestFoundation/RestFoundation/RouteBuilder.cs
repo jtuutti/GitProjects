@@ -24,25 +24,35 @@ namespace RestFoundation
 
         public RouteConfiguration MapRestRoute<TContract>(string url)
         {
-            return MapRestRoute(url, typeof(TContract), false);
+            return MapRestRoute(url, typeof(TContract), null, false);
         }
 
         public RouteConfiguration MapRestRoute(string url, Type serviceContractType)
         {
-            return MapRestRoute(url, serviceContractType, false);
+            return MapRestRoute(url, serviceContractType, null, false);
+        }
+
+        public RouteConfiguration MapRestRoute(string url, Type serviceContractType, RouteValueDictionary constraints)
+        {
+            return MapRestRoute(url, serviceContractType, constraints, false);
         }
 
         public RouteConfiguration MapRestRouteAsync<TContract>(string url)
         {
-            return MapRestRoute(url, typeof(TContract), true);
+            return MapRestRoute(url, typeof(TContract), null, true);
         }
 
         public RouteConfiguration MapRestRouteAsync(string url, Type serviceContractType)
         {
-            return MapRestRoute(url, serviceContractType, true);
+            return MapRestRoute(url, serviceContractType, null, true);
         }
 
-        private RouteConfiguration MapRestRoute(string url, Type serviceContractType, bool isAsync)
+        public RouteConfiguration MapRestRouteAsync(string url, Type serviceContractType, RouteValueDictionary constraints)
+        {
+            return MapRestRoute(url, serviceContractType, constraints, true);
+        }
+
+        private RouteConfiguration MapRestRoute(string url, Type serviceContractType, RouteValueDictionary constraints, bool isAsync)
         {
             if (url == null) throw new ArgumentNullException("url");
             if (url.Trim().Length == 0) throw new ArgumentException("Route url cannot be null or empty", "url");
@@ -55,7 +65,7 @@ namespace RestFoundation
             List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(serviceContractType, serviceMethods, url);
             ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(serviceContractType, url), t => methodMetadata, (t, u) => methodMetadata);
 
-            IEnumerable<IRouteHandler> routeHandlers = MapRoutes(methodMetadata, url, serviceContractType, isAsync);
+            IEnumerable<IRouteHandler> routeHandlers = MapRoutes(methodMetadata, url, serviceContractType, constraints, isAsync);
             return new RouteConfiguration(routeHandlers);
         }
 
@@ -112,7 +122,7 @@ namespace RestFoundation
             return String.Concat(url.TrimEnd(Slash), Slash, urlTemplate.TrimStart(Slash, Tilda));
         }
 
-        private IEnumerable<IRouteHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, string url, Type serviceContractType, bool isAsync)
+        private IEnumerable<IRouteHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, string url, Type serviceContractType, RouteValueDictionary constraints, bool isAsync)
         {
             var routeHandlers = new List<IRouteHandler>();
             var orderedMethodMetadata = methodMetadata.OrderByDescending(m => m.UrlInfo.Priority);
@@ -131,7 +141,7 @@ namespace RestFoundation
                 var routeHandler = isAsync ? (IRouteHandler) Rest.Active.CreateObject<RestAsyncHandler>() : Rest.Active.CreateObject<RestHandler>();
                 routeHandlers.Add(routeHandler);
 
-                m_routes.Add(new Route(ConcatUrl(url, urlAttribute.UrlInfo.UrlTemplate.Trim()), defaults, routeHandler));
+                m_routes.Add(new Route(ConcatUrl(url, urlAttribute.UrlInfo.UrlTemplate.Trim()), defaults, constraints, routeHandler));
             }
 
             return routeHandlers;
