@@ -64,6 +64,11 @@ namespace RestFoundation.Collections.Concrete
             return m_values.GetValues(key);
         }
 
+        public NameValueCollection ToNameValueCollection()
+        {
+            return new NameValueCollection(m_values);
+        }
+
         public override string ToString()
         {
             return m_values.ToString();

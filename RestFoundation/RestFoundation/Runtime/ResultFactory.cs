@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using RestFoundation.Odata;
 
 namespace RestFoundation.Runtime
 {
@@ -31,9 +34,48 @@ namespace RestFoundation.Runtime
             return CreateSerializerResult(returnedObj);
         }
 
+        private object PerformOdataOperations(object returnedObj)
+        {
+            object filteredResults;
+
+            try
+            {
+                filteredResults = QueryableHelper.Filter(returnedObj, m_request.QueryString.ToNameValueCollection());
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid OData parameters provided");
+            }
+
+            var filteredResultArray = filteredResults as object[];
+
+            if (filteredResultArray == null || filteredResultArray.Length == 0 || filteredResultArray[0] == null)
+            {
+                return filteredResults;
+            }
+
+            Type returnItemType = filteredResultArray[0].GetType();
+            Type filteredResultListType = typeof(List<>).MakeGenericType(returnItemType);
+
+            object filteredResultList = Activator.CreateInstance(filteredResultListType);
+            var method = filteredResultListType.GetMethod("Add", new[] { returnItemType });
+
+            foreach (var filteredResult in filteredResultArray)
+            {
+                method.Invoke(filteredResultList, new[] { filteredResult });
+            }
+
+            return filteredResultListType.GetMethod("ToArray").Invoke(filteredResultList, null);
+        }
+
         private IResult CreateSerializerResult(object returnedObj)
         {
             string acceptedType = m_request.GetPreferredAcceptType();
+
+            if (returnedObj.GetType().IsGenericType && returnedObj.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) != null)
+            {
+                returnedObj = PerformOdataOperations(returnedObj);
+            }
 
             if (String.Equals("application/json", acceptedType, StringComparison.OrdinalIgnoreCase))
             {

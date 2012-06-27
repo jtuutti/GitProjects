@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace RestFoundation.Collections
 {
@@ -11,5 +12,7 @@ namespace RestFoundation.Collections
         string TryGet(string key);
 
         ICollection<string> GetValues(string key);
+
+        NameValueCollection ToNameValueCollection();
     }
 }

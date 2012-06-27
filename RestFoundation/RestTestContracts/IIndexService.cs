@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using RestFoundation;
 using RestFoundation.Results;
 using RestFoundation.ServiceProxy.Attributes;
@@ -8,6 +9,10 @@ namespace RestTestContracts
 {
     public interface IIndexService
     {
+        [Url("index/all", HttpMethod.Get, HttpMethod.Head)]
+        [ProxyOperationDescription("Gets all resources of type 'Index'")]
+        IQueryable<Person> GetAll();
+
         [Url("index/{id}", HttpMethod.Get, HttpMethod.Head)]
         [ProxyOperationDescription("Gets resources of type 'Index' by ID")]
         IResult Get([ProxyRouteParameter(1)] int? id, string someGarbage);

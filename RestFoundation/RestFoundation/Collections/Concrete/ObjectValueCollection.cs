@@ -57,6 +57,11 @@ namespace RestFoundation.Collections.Concrete
             return m_values.TryGetValue(key, out value) ? value : null;
         }
 
+        public IDictionary<string, object> ToDictionary()
+        {
+            return new Dictionary<string, object>(m_values, StringComparer.OrdinalIgnoreCase);
+        }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return m_values.GetEnumerator();

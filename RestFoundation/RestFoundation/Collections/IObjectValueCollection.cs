@@ -9,5 +9,7 @@ namespace RestFoundation.Collections
 
         object Get(string key);
         object TryGet(string key);
+
+        IDictionary<string, object> ToDictionary();
     }
 }

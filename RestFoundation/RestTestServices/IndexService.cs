@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using RestFoundation;
 using RestFoundation.Results;
@@ -11,6 +13,19 @@ namespace RestTestServices
     {
         public IHttpRequest Request { get; set; }
         public IHttpResponse Response { get; set; }
+
+        public IQueryable<Person> GetAll()
+        {
+            var people = new List<Person>
+            {
+                new Person { Name = "John", Age = 51, Values = new[] { "Manager", "old" } },
+                new Person { Name = "Mike", Age = 16, Values = new string[0] },
+                new Person { Name = "Beth", Age = 32, Values = new[] { "Secretary" } },
+                new Person { Name = "Saul", Age = 62 }
+            };
+
+            return people.AsQueryable();
+        }
 
         public IResult Get(int? id, string someGarbage)
         {
