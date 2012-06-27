@@ -44,6 +44,11 @@ namespace RestFoundation
                 throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "HTTP method is not allowed");
             }
 
+            if (String.Equals(HttpMethod.Head.ToString(), context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            {
+                context.Response.SuppressContent = true;
+            }
+
             if (Rest.Active.IsServiceProxyInitialized && IsInBrowser(context.Request))
             {
                 context.Response.Redirect((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/index.aspx", false);
