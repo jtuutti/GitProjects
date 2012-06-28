@@ -162,7 +162,14 @@ namespace RestFoundation.DataFormatters
                 }
                 else
                 {
-                    property.SetValue(resource, SafeConvert.ChangeType(value[0], property.PropertyType));
+                    object propertyValue;
+
+                    if (!SafeConvert.TryChangeType(value[0], property.PropertyType, out propertyValue))
+                    {
+                        propertyValue = null;
+                    }
+
+                    property.SetValue(resource, propertyValue);
                 }
             }
         }

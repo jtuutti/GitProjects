@@ -59,6 +59,12 @@ namespace RestFoundation.Tests
 
             // mismatched parameter values
             Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test/1").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.Get(11)));
+
+            // invalid parameter type
+            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test/a").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.Get(1)));
+
+            // parameter constraint violation - orderby must start with a letter or underscore
+            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test/all/1name").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.GetAll("1name")));
         }
     }
 }

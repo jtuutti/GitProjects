@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace RestFoundation
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
-    public class UrlAttribute : Attribute
+    public sealed class UrlAttribute : Attribute
     {
         public UrlAttribute(string urlTemplate, params HttpMethod[] methods)
         {
@@ -25,16 +25,16 @@ namespace RestFoundation
             set;
         }
 
-        public string UrlTemplate
+        internal string UrlTemplate
         {
             get;
             private set;
         }
 
-        public IEnumerable<HttpMethod> HttpMethods
+        internal IEnumerable<HttpMethod> HttpMethods
         {
             get;
-            protected set;
+            private set;
         }
     }
 }

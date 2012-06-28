@@ -15,6 +15,6 @@ namespace RestFoundation.ServiceProxy.Attributes
             Description = description;
         }
 
-        public string Description { get; private set; }
+        internal string Description { get; private set; }
     }
 }

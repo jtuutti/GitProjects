@@ -220,6 +220,7 @@
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UrlAttribute.cs" />
     <Compile Include="Runtime\UrlTemplateStandardizer.cs" />
+    <Compile Include="ParameterConstraintAttribute.cs" />
     <Compile Include="ValidateAclAttribute.cs" />
     <Compile Include="ValidateObjectAttribute.cs" />
     <Compile Include="ValidationError.cs" />
