@@ -78,6 +78,7 @@ namespace RestTest.App_Start
                         .WithBehaviors(new StatisticsBehavior(), new ContentTypeBehavior(homeContentTypes), new LoggingBehavior());
 
             routeBuilder.MapRestRoute<ITouchMapService>("touch-map");
+            routeBuilder.MapRestRoute<IDynamicService>("dynamic").WithBehaviors(new ContentTypeBehavior(homeContentTypes));
         }
     }
 }
