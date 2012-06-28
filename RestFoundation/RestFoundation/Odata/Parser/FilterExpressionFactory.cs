@@ -14,10 +14,7 @@ using System.Text.RegularExpressions;
 
 namespace RestFoundation.Odata.Parser
 {
-    /// <summary>
-    /// Defines the FilterExpressionFactory.
-    /// </summary>
-    public class FilterExpressionFactory : IFilterExpressionFactory
+    internal class FilterExpressionFactory : IFilterExpressionFactory
     {
         private static readonly CultureInfo defaultCulture = CultureInfo.GetCultureInfo("en-US");
         private static readonly Regex stringRx = new Regex(@"^[""']([^""']*?)[""']$", RegexOptions.Compiled);
@@ -26,24 +23,11 @@ namespace RestFoundation.Odata.Parser
         private static readonly Regex newRx = new Regex(@"^new (?<type>[^\(\)]+)\((?<parameters>.*)\)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly ConcurrentDictionary<Type, MethodInfo> parseMethods = new ConcurrentDictionary<Type, MethodInfo>();
 
-        /// <summary>
-        /// Creates a filter expression from its string representation.
-        /// </summary>
-        /// <param name="filter">The string representation of the filter.</param>
-        /// <typeparam name="T">The <see cref="Type"/> of item to filter.</typeparam>
-        /// <returns>An <see cref="Expression{TDelegate}"/> if the passed filter is valid, otherwise null.</returns>
         public Expression<Func<T, bool>> Create<T>(string filter)
         {
             return Create<T>(filter, defaultCulture);
         }
 
-        /// <summary>
-        /// Creates a filter expression from its string representation.
-        /// </summary>
-        /// <param name="filter">The string representation of the filter.</param>
-        /// <param name="formatProvider">The <see cref="IFormatProvider"/> to use when reading the filter.</param>
-        /// <typeparam name="T">The <see cref="Type"/> of item to filter.</typeparam>
-        /// <returns>An <see cref="Expression{TDelegate}"/> if the passed filter is valid, otherwise null.</returns>
         public Expression<Func<T, bool>> Create<T>(string filter, IFormatProvider formatProvider)
         {
             if (string.IsNullOrWhiteSpace(filter))

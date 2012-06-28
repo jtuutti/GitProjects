@@ -12,11 +12,7 @@ using System.Threading;
 
 namespace RestFoundation.Odata.Parser
 {
-    /// <summary>
-    /// Defines the SelectExpressionFactory.
-    /// </summary>
-    /// <typeparam name="T">The <see cref="Type"/> of object to project.</typeparam>
-    public class SelectExpressionFactory<T> : ISelectExpressionFactory<T>
+    internal class SelectExpressionFactory<T> : ISelectExpressionFactory<T>
     {
         private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
@@ -24,9 +20,6 @@ namespace RestFoundation.Odata.Parser
         private readonly IRuntimeTypeProvider m_runtimeTypeProvider;
         private readonly IDictionary<string, Expression<Func<T, object>>> m_knownSelections;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SelectExpressionFactory{T}"/> class.
-        /// </summary>
         public SelectExpressionFactory(IMemberNameResolver nameResolver, IRuntimeTypeProvider runtimeTypeProvider)
         {
             if (nameResolver == null) throw new ArgumentNullException("nameResolver");
@@ -40,11 +33,6 @@ namespace RestFoundation.Odata.Parser
                                 };
         }
 
-        /// <summary>
-        /// Creates a select expression.
-        /// </summary>
-        /// <param name="selection">The properties to select.</param>
-        /// <returns>An instance of a <see cref="Func{T1,TResult}"/>.</returns>
         public Expression<Func<T, object>> Create(string selection)
         {
             var fieldNames = (selection ?? string.Empty).Split(',')

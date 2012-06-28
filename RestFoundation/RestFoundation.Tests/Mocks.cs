@@ -103,9 +103,6 @@ namespace RestFoundation.Tests
             mock.Setup(x => x.SetCookie(It.IsAny<HttpCookie>())).Callback<HttpCookie>(cookies.Add);
             mock.Setup(x => x.ExpireCookie(It.IsAny<HttpCookie>())).Callback<HttpCookie>(c => cookies.Remove(c.Name));
 
-            mock.Setup(x => x.Redirect(It.IsAny<string>()));
-            mock.Setup(x => x.Redirect(It.IsAny<string>(), It.IsAny<bool>()));
-            mock.Setup(x => x.Redirect(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>()));
             mock.Setup(x => x.MapPath(It.IsAny<string>())).Returns<string>(s =>
                                                                            {
                                                                                if (s == null)

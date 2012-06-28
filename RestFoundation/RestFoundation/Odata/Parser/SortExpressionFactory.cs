@@ -12,31 +12,15 @@ using System.Web.UI.WebControls;
 
 namespace RestFoundation.Odata.Parser
 {
-	/// <summary>
-	/// Defines the SortExpressionFactory´.
-	/// </summary>
-	public class SortExpressionFactory : ISortExpressionFactory
+	internal class SortExpressionFactory : ISortExpressionFactory
 	{
 		private static readonly CultureInfo defaultCulture = CultureInfo.GetCultureInfo("en-US");
 
-		/// <summary>
-		/// Creates an enumeration of sort descriptions from its string representation.
-		/// </summary>
-		/// <param name="filter">The string representation of the sort descriptions.</param>
-		/// <typeparam name="T">The <see cref="Type"/> of item to sort.</typeparam>
-		/// <returns>An <see cref="IEnumerable{T}"/> if the passed sort descriptions are valid, otherwise null.</returns>
 		public IEnumerable<SortDescription<T>> Create<T>(string filter)
 		{
 			return Create<T>(filter, defaultCulture);
 		}
 
-		/// <summary>
-		/// Creates an enumeration of sort descriptions from its string representation.
-		/// </summary>
-		/// <param name="filter">The string representation of the sort descriptions.</param>
-		/// <param name="formatProvider">The <see cref="IFormatProvider"/> to use when reading the sort descriptions.</param>
-		/// <typeparam name="T">The <see cref="Type"/> of item to sort.</typeparam>
-		/// <returns>An <see cref="IEnumerable{T}"/> if the passed sort descriptions are valid, otherwise null.</returns>
 		public IEnumerable<SortDescription<T>> Create<T>(string filter, IFormatProvider formatProvider)
 		{
 			if (string.IsNullOrWhiteSpace(filter))

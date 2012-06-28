@@ -144,30 +144,6 @@ namespace RestFoundation.Runtime
             Context.Response.SetCookie(cookie);
         }
 
-        public void Redirect(string url)
-        {
-            Redirect(url, false, true);
-        }
-
-        public void Redirect(string url, bool isPermanent)
-        {
-            Redirect(url, isPermanent, true);
-        }
-
-        public void Redirect(string url, bool isPermanent, bool endResponse)
-        {
-            if (String.IsNullOrEmpty(url)) throw new ArgumentNullException("url");
-
-            if (isPermanent)
-            {
-                Context.Response.RedirectPermanent(url, endResponse);
-            }
-            else
-            {
-                Context.Response.Redirect(url, endResponse);
-            }
-        }
-
         public string MapPath(string filePath)
         {
             return Context.Server.MapPath(filePath);

@@ -14,10 +14,7 @@ using RestFoundation.Odata.Parser;
 
 namespace RestFoundation.Odata
 {
-    /// <summary>
-    /// Defines the RuntimeTypeProvider.
-    /// </summary>
-    public class RuntimeTypeProvider : IRuntimeTypeProvider
+    internal class RuntimeTypeProvider : IRuntimeTypeProvider
     {
         private const MethodAttributes GetSetAttr = MethodAttributes.Final | MethodAttributes.Public;
 
@@ -37,10 +34,6 @@ namespace RestFoundation.Odata
                 .DefineDynamicModule(assemblyName.Name);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RuntimeTypeProvider"/> class.
-        /// </summary>
-        /// <param name="nameResolver"></param>
         public RuntimeTypeProvider(IMemberNameResolver nameResolver)
         {
             if (nameResolver == null) throw new ArgumentNullException("nameResolver");
@@ -48,12 +41,6 @@ namespace RestFoundation.Odata
             m_nameResolver = nameResolver;
         }
 
-        /// <summary>
-        /// Gets the <see cref="Type"/> matching the provided members.
-        /// </summary>
-        /// <param name="sourceType">The <see cref="Type"/> to generate the runtime type from.</param>
-        /// <param name="properties">The <see cref="MemberInfo"/> to use to generate properties.</param>
-        /// <returns>A <see cref="Type"/> mathing the provided properties.</returns>
         public Type Get(Type sourceType, IEnumerable<MemberInfo> properties)
         {
             properties = properties.ToArray();

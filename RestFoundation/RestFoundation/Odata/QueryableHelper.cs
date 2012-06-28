@@ -5,15 +5,8 @@ using RestFoundation.Odata.Parser;
 
 namespace RestFoundation.Odata
 {
-    /// <summary>
-    /// Provides the filter method for a queryable sequence of elements.
-    /// </summary>
-    public static class QueryableHelper
+    internal static class QueryableHelper
     {
-        /// <summary>
-        /// Filters a queryable sequence of elements based on ODATA parameters.
-        /// </summary>
-        /// <returns>The filtered sequence of elements.</returns>
         public static object Filter(object source, NameValueCollection query)
         {
             if (source == null) throw new ArgumentNullException("source");

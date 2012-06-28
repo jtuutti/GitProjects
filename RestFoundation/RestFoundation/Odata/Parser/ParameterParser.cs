@@ -8,19 +8,12 @@ using System.Collections.Specialized;
 
 namespace RestFoundation.Odata.Parser
 {
-	/// <summary>
-	/// Defines the default implementation of a parameter parser.
-	/// </summary>
-	/// <typeparam name="T">The <see cref="Type"/> of item to create parser for.</typeparam>
-	public class ParameterParser<T> : IParameterParser<T>
+	internal class ParameterParser<T> : IParameterParser<T>
 	{
 		private readonly IFilterExpressionFactory m_filterExpressionFactory;
 		private readonly ISortExpressionFactory m_sortExpressionFactory;
 		private readonly ISelectExpressionFactory<T> m_selectExpressionFactory;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ParameterParser{T}"/> class.
-		/// </summary>
 		public ParameterParser()
 		{
 			m_filterExpressionFactory = new FilterExpressionFactory();
@@ -30,12 +23,6 @@ namespace RestFoundation.Odata.Parser
 			m_selectExpressionFactory = new SelectExpressionFactory<T>(nameResolver, new RuntimeTypeProvider(nameResolver));
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ParameterParser{T}"/> class.
-		/// </summary>
-		/// <param name="filterExpressionFactory">The <see cref="IFilterExpressionFactory"/> to use.</param>
-		/// <param name="sortExpressionFactory">The <see cref="ISortExpressionFactory"/> to use.</param>
-		/// <param name="selectExpressionFactory">The <see cref="ISelectExpressionFactory{T}"/> to use.</param>
 		public ParameterParser(
 			IFilterExpressionFactory filterExpressionFactory,
 			ISortExpressionFactory sortExpressionFactory,
@@ -50,11 +37,6 @@ namespace RestFoundation.Odata.Parser
 			m_selectExpressionFactory = selectExpressionFactory;
 		}
 
-		/// <summary>
-		/// Parses the passes query parameters to a <see cref="ModelFilter{T}"/>.
-		/// </summary>
-		/// <param name="queryParameters"></param>
-		/// <returns></returns>
 		public IModelFilter<T> Parse(NameValueCollection queryParameters)
 		{
 			var orderbyField = queryParameters[StringConstants.OrderByParameter];

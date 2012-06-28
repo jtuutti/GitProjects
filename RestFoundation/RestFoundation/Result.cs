@@ -191,20 +191,6 @@ namespace RestFoundation
             return result;
         }
 
-        public static RedirectResult Redirect(string redirectUrl)
-        {
-            return Redirect(redirectUrl, false);
-        }
-
-        public static RedirectResult Redirect(string redirectUrl, bool isPermanent)
-        {
-            var result = Rest.Active.CreateObject<RedirectResult>();
-            result.RedirectUrl = redirectUrl;
-            result.IsPermanent = isPermanent;
-
-            return result;
-        }
-
         public static StatusResult SetStatus(HttpStatusCode code)
         {
             return SetStatus(code, String.Empty, null);

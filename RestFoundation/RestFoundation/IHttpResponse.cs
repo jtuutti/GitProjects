@@ -25,10 +25,6 @@ namespace RestFoundation
         void SetCookie(HttpCookie cookie);
         void ExpireCookie(HttpCookie cookie);
 
-        void Redirect(string url);
-        void Redirect(string url, bool isPermanent);
-        void Redirect(string url, bool isPermanent, bool endResponse);
-
         string MapPath(string filePath);
         void SetFileDependencies(string filePath);
         void SetFileDependencies(string filePath, HttpCacheability cacheability);

@@ -17,7 +17,8 @@ namespace RestFoundation.Results
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP context found");
             }
 
-            Response.Redirect(RedirectUrl, false, false);
+            Response.SetHeader("Location", RedirectUrl);
+            Response.SetStatus(IsPermanent ? HttpStatusCode.MovedPermanently : HttpStatusCode.Redirect);
         }
     }
 }
