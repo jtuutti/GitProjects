@@ -41,6 +41,8 @@
   <ItemGroup>
     <Compile Include="IIndexService.cs" />
     <Compile Include="ITouchMapService.cs" />
+    <Compile Include="Metadata\PersonArrayExample.cs" />
+    <Compile Include="Metadata\PersonExample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\TouchMap\Action.cs" />
     <Compile Include="Resources\TouchMap\Constant.cs" />

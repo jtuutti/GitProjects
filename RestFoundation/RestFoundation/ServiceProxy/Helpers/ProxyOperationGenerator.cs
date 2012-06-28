@@ -35,6 +35,10 @@ namespace RestFoundation.ServiceProxy.Helpers
 
             operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, operation.HasResource, operation.HasResponse);
 
+            Tuple<Type, Type> resourceExampleTypes = GetResourceExampleTypes(metadata.MethodInfo);
+            operation.RequestExampleType = resourceExampleTypes.Item1;
+            operation.ResponseExampleType = resourceExampleTypes.Item2;
+
             return operation;
         }
 
@@ -146,6 +150,18 @@ namespace RestFoundation.ServiceProxy.Helpers
             }
 
             return routeParameters;
+        }
+
+        private static Tuple<Type, Type> GetResourceExampleTypes(MethodInfo methodInfo)
+        {
+            var resourceExampleAttribute = Attribute.GetCustomAttribute(methodInfo, typeof(ProxyResourceExampleAttribute), false) as ProxyResourceExampleAttribute;
+
+            if (resourceExampleAttribute == null)
+            {
+                return new Tuple<Type, Type>(null, null);
+            }
+
+            return Tuple.Create(resourceExampleAttribute.RequestExampleType, resourceExampleAttribute.ResponseExampleType);
         }
     }
 }

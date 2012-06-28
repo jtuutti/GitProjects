@@ -14,20 +14,20 @@ namespace RestTestServices
         public IHttpRequest Request { get; set; }
         public IHttpResponse Response { get; set; }
 
+        private readonly List<Person> people = new List<Person>
+        {
+            new Person { Name = "John", Age = 51, Values = new[] { "Manager", "old" } },
+            new Person { Name = "Mike", Age = 16, Values = new string[0] },
+            new Person { Name = "Beth", Age = 32, Values = new[] { "Secretary" } },
+            new Person { Name = "Saul", Age = 62 }
+        };
+
         public IQueryable<Person> GetAll()
         {
-            var people = new List<Person>
-            {
-                new Person { Name = "John", Age = 51, Values = new[] { "Manager", "old" } },
-                new Person { Name = "Mike", Age = 16, Values = new string[0] },
-                new Person { Name = "Beth", Age = 32, Values = new[] { "Secretary" } },
-                new Person { Name = "Saul", Age = 62 }
-            };
-
-            return people.AsQueryable();
+            return new List<Person>(people).AsQueryable();
         }
 
-        public IResult Get(int? id, string someGarbage)
+        public ContentResult Get(int? id, string someGarbage)
         {
             Response.Output.WriteFormat("GET : {0}", id);
 
@@ -72,14 +72,14 @@ namespace RestTestServices
             return resource;
         }
 
-        public ContentResult Delete(string name)
+        public StatusResult Delete(string name)
         {
             if (String.IsNullOrWhiteSpace(name))
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person's name provided");
             }
 
-            return Result.ContentFormat("Person '{0}' deleted", name);
+            return Result.NoContent;
         }
     }
 }

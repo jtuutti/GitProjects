@@ -242,14 +242,8 @@ namespace RestFoundation
 
         public static XmlResult Xml(object obj)
         {
-            return Xml(obj, null);
-        }
-
-        public static XmlResult Xml(object obj, Type[] extraTypes)
-        {
             var result = Rest.Active.CreateObject<XmlResult>();
             result.Content = obj;
-            result.ExtraTypes = extraTypes;
 
             return result;
         }

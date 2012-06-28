@@ -3,6 +3,7 @@ using System.Net;
 using RestFoundation;
 using RestFoundation.Results;
 using RestFoundation.ServiceProxy.Attributes;
+using RestTestContracts.Metadata;
 using RestTestContracts.Resources;
 
 namespace RestTestContracts
@@ -11,26 +12,30 @@ namespace RestTestContracts
     {
         [Url("index/all", HttpMethod.Get, HttpMethod.Head)]
         [ProxyOperationDescription("Gets all resources of type 'Index'")]
+        [ProxyResourceExample(ResponseExampleType = typeof(PersonArrayExample))]
         IQueryable<Person> GetAll();
 
         [Url("index/{id}", HttpMethod.Get, HttpMethod.Head)]
         [ProxyOperationDescription("Gets resources of type 'Index' by ID")]
-        IResult Get([ProxyRouteParameter(1)] int? id, string someGarbage);
+        ContentResult Get([ProxyRouteParameter(1)] int? id, string dummyParam);
 
         [Url("index", HttpMethod.Post)]
         [ProxyStatusCode(HttpStatusCode.Created, "Resource is created")]
+        [ProxyResourceExample(RequestExampleType = typeof(PersonExample), ResponseExampleType = typeof(PersonExample))]
         Person Post(Person resource);
 
         [Url("index/{id}", HttpMethod.Put)]
         [ProxyStatusCode(HttpStatusCode.OK, "Resource is updated")]
+        [ProxyResourceExample(RequestExampleType = typeof(PersonExample), ResponseExampleType = typeof(PersonExample))]
         Person Put([ProxyRouteParameter(1)] int? id, [BindResource] Person personToUpdate);
 
         [Url("index/{id}", HttpMethod.Patch)]
         [ProxyStatusCode(HttpStatusCode.OK, "Resource is partially updated")]
+        [ProxyResourceExample(RequestExampleType = typeof(PersonExample), ResponseExampleType = typeof(PersonExample))]
         Person Patch([ProxyRouteParameter(1)] int? id, Person resource);
 
         [Url("index/{name}", HttpMethod.Delete)]
-        [ProxyStatusCode(HttpStatusCode.OK, "Resource is deleted")]
-        ContentResult Delete([ProxyRouteParameter("John Doe")] string name);
+        [ProxyStatusCode(HttpStatusCode.NoContent, "Resource is deleted")]
+        StatusResult Delete([ProxyRouteParameter("John Doe")] string name);
     }
 }

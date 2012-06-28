@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -22,6 +21,8 @@ namespace RestFoundation.ServiceProxy.Helpers
         public Type ResultType { get; set; }
         public List<ProxyStatusCode> StatusCodes { get; set; }
         public List<ProxyRouteParameter> RouteParameters { get; set; }
+        public Type RequestExampleType { get; set; }
+        public Type ResponseExampleType { get; set; }
 
         public bool HasResource
         {

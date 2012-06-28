@@ -1,8 +1,12 @@
 ﻿<%@ Page Language="C#" MasterPageFile="proxy.master" %>
+<%@ Import Namespace="Newtonsoft.Json" %>
+<%@ Import Namespace="RestFoundation.Runtime" %>
+<%@ Import Namespace="RestFoundation.ServiceProxy" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy.Helpers" %>
 
 <script runat="server" language="C#">
     public ProxyOperation Operation;
+    public string RequestJsonExample, RequestXmlExample, ResponseJsonExample, ResponseXmlExample;
 
     public void Page_Init(object sender, EventArgs e)
     {
@@ -12,6 +16,7 @@
         if (!Guid.TryParse(Request.QueryString["oid"], out operationId) || operationId == Guid.Empty)
         {
             Response.Redirect("index.aspx");
+            return;
         }
 
         Operation = ProxyOperationGenerator.Get(operationId);
@@ -19,6 +24,105 @@
         if (Operation == null)
         {
             Response.Redirect("index.aspx");
+            return;
+        }
+
+        if (Operation.HasResource && Operation.RequestExampleType != null)
+        {
+            IResourceExample requestExample;
+
+            try
+            {
+                requestExample = Activator.CreateInstance(Operation.RequestExampleType) as IResourceExample;
+            }
+            catch (Exception)
+            {
+                requestExample = null;
+            }
+
+            if (requestExample != null)
+            {
+                object requestObj;
+
+                try
+                {
+                    requestObj = requestExample.Create();
+                }
+                catch (Exception)
+                {
+                    requestObj = null;
+                }
+
+                if (requestObj != null)
+                {
+                    try
+                    {
+                        RequestJsonExample = JsonConvert.SerializeObject(requestObj, Formatting.Indented);
+                    }
+                    catch (Exception)
+                    {
+                        RequestJsonExample = null;
+                    }
+
+                    try
+                    {
+                        RequestXmlExample = XmlConvert.SerializeObject(requestObj, System.Xml.Formatting.Indented);
+                    }
+                    catch (Exception)
+                    {
+                        RequestXmlExample = null;
+                    }
+                }
+            }
+        }
+
+        if (Operation.HasResponse && Operation.ResponseExampleType != null)
+        {
+            IResourceExample responseExample;
+
+            try
+            {
+                responseExample = Activator.CreateInstance(Operation.ResponseExampleType) as IResourceExample;
+            }
+            catch (Exception)
+            {
+                responseExample = null;
+            }
+
+            if (responseExample != null)
+            {
+                object responseObj;
+
+                try
+                {
+                    responseObj = responseExample.Create();
+                }
+                catch (Exception)
+                {
+                    responseObj = null;
+                }
+
+                if (responseObj != null)
+                {
+                    try
+                    {
+                        ResponseJsonExample = JsonConvert.SerializeObject(responseObj, Formatting.Indented);
+                    }
+                    catch (Exception)
+                    {
+                        ResponseJsonExample = null;
+                    }
+
+                    try
+                    {
+                        ResponseXmlExample = XmlConvert.SerializeObject(responseObj, System.Xml.Formatting.Indented);
+                    }
+                    catch (Exception)
+                    {
+                        ResponseXmlExample = null;
+                    }
+                }
+            }
         }
     }
 </script>
@@ -69,36 +173,42 @@
         <th>Format</th>
         <th>Body</th>
     </tr>
-    <% if (Operation.HasResource) { %>
+    <% if (RequestJsonExample != null) { %>
     <tr>
         <td>Request</td>
         <td>JSON</td>
         <td><a href="#request-json">Example</a></td>
     </tr>
+    <% } %>
+    <% if (RequestXmlExample != null) { %>
     <tr>
         <td>Request</td>
         <td>XML</td>
         <td><a href="#request-xml">Example</a></td>
     </tr>
-    <% } else { %>
+    <% } %>
+    <% if (RequestJsonExample == null && RequestXmlExample == null) { %>
     <tr>
         <td>Request</td>
         <td>N/A</td>
         <td>The request body is empty</td>
     </tr>
     <% } %>
-    <% if (Operation.HasResponse) { %>
+    <% if (ResponseJsonExample != null) { %>
     <tr>
         <td>Response</td>
         <td>JSON</td>
         <td><a href="#response-json">Example</a></td>
     </tr>
+    <% } %>
+    <% if (ResponseXmlExample != null) { %>
     <tr>
         <td>Response</td>
         <td>XML</td>
         <td><a href="#response-xml">Example</a></td>
     </tr>
-    <% } else { %>
+    <% } %>
+    <% if (ResponseJsonExample == null && ResponseXmlExample == null) { %>
     <tr>
         <td>Response</td>
         <td>N/A</td>
@@ -118,6 +228,34 @@
     </tr>
     <% } %>
     </table>
+    <% if (Operation.ResponseExampleType != null) { %>
+    <% if (!String.IsNullOrEmpty(RequestJsonExample)) { %>
+    <div class="schemaSection">
+        <a name="request-json">The following is an example JSON serialized request:</a>           
+        <pre><%: RequestJsonExample %></pre>
+    </div>
+    <% } %>
+    <% if (!String.IsNullOrEmpty(RequestXmlExample)) { %>
+    <div class="schemaSection">
+        <a name="request-xml">The following is an example XML serialized request:</a>           
+        <pre><%: RequestXmlExample %></pre>
+    </div>
+    <% } %>
+    <% } %>
+    <% if (Operation.ResponseExampleType != null) { %>
+    <% if (!String.IsNullOrEmpty(ResponseJsonExample)) { %>
+    <div class="schemaSection">
+        <a name="response-json">The following is an example JSON serialized response:</a>
+        <pre><%: ResponseJsonExample %></pre>
+    </div>
+    <% } %>
+    <% if (!String.IsNullOrEmpty(ResponseXmlExample)) { %>
+    <div class="schemaSection">
+        <a name="response-xml">The following is an example XML serialized response:</a>
+        <pre><%: ResponseXmlExample %></pre>
+    </div>
+    <% } %>
+    <% } %>
 </div>
 
 </asp:Content>
