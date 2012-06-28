@@ -12,7 +12,7 @@ namespace RestFoundation.ServiceProxy.Attributes
             ExampleValue = exampleValue;
         }
 
-        public object ExampleValue { get; private set; }
         public string AllowedValues { get; set; }
+        internal object ExampleValue { get; private set; }
     }
 }

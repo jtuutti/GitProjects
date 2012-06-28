@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
 using System.Reflection;
 using System.Web;
@@ -26,21 +27,40 @@ namespace RestFoundation.Runtime
             if (parameterRoute != null)
             {
                 isResource = false;
-                return SafeConvert.ChangeType(parameterRoute, parameter.ParameterType);
+                return GetParameterValue(parameter, parameterRoute);
             }
 
             if (String.Equals(ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase) ||
                 Attribute.GetCustomAttribute(parameter, typeof(BindResourceAttribute), true) != null)
             {
                 isResource = true;
-                return BindResource(parameter);
+                return GetResourceValue(parameter);
             }
 
             isResource = false;
             return null;
         }
 
-        private object BindResource(ParameterInfo parameter)
+        private static object GetParameterValue(ParameterInfo parameter, object parameterRoute)
+        {
+            object value;
+
+            if (!SafeConvert.TryChangeType(parameterRoute, parameter.ParameterType, out value))
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
+            }
+
+            var constraintAttribute = Attribute.GetCustomAttribute(parameter, typeof(ParameterConstraintAttribute), false) as ParameterConstraintAttribute;
+
+            if (constraintAttribute != null && !constraintAttribute.Pattern.IsMatch(Convert.ToString(parameterRoute, CultureInfo.InvariantCulture)))
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
+            }
+
+            return value;
+        }
+
+        private object GetResourceValue(ParameterInfo parameter)
         {
             IDataFormatter formatter = DataFormatterRegistry.GetFormatter(parameter.ParameterType) ??
                                        DataFormatterRegistry.GetFormatter(m_request.Headers.ContentType);

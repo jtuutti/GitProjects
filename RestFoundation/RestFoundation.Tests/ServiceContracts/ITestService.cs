@@ -6,7 +6,7 @@
         IResult Get(int? id);
 
         [Url("all/{orderBy}", HttpMethod.Get, HttpMethod.Head)]
-        IResult GetAll(string orderBy);
+        IResult GetAll([ParameterConstraint("[a-zA-Z_][a-zA-Z0-9_]*")] string orderBy);
 
         // has a higher priority for the "new" constant to take precedence over the URLs with a dynamic parameter
         [Url("new", HttpMethod.Post, Priority = 1)]

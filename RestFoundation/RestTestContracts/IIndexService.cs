@@ -17,7 +17,7 @@ namespace RestTestContracts
 
         [Url("index/{id}", HttpMethod.Get, HttpMethod.Head)]
         [ProxyOperationDescription("Gets resources of type 'Index' by ID")]
-        ContentResult Get([ProxyRouteParameter(1)] int? id, string dummyParam);
+        ContentResult Get([ParameterConstraint(@"\d{1,3}"), ProxyRouteParameter(1)] int? id, string dummyParam);
 
         [Url("index", HttpMethod.Post)]
         [ProxyStatusCode(HttpStatusCode.Created, "Resource is created")]
@@ -27,12 +27,12 @@ namespace RestTestContracts
         [Url("index/{id}", HttpMethod.Put)]
         [ProxyStatusCode(HttpStatusCode.OK, "Resource is updated")]
         [ProxyResourceExample(RequestExampleType = typeof(PersonExample), ResponseExampleType = typeof(PersonExample))]
-        Person Put([ProxyRouteParameter(1)] int? id, [BindResource] Person personToUpdate);
+        Person Put([ParameterConstraint(@"\d{1,3}"), ProxyRouteParameter(1)] int? id, [BindResource] Person personToUpdate);
 
         [Url("index/{id}", HttpMethod.Patch)]
         [ProxyStatusCode(HttpStatusCode.OK, "Resource is partially updated")]
         [ProxyResourceExample(RequestExampleType = typeof(PersonExample), ResponseExampleType = typeof(PersonExample))]
-        Person Patch([ProxyRouteParameter(1)] int? id, Person resource);
+        Person Patch([ParameterConstraint(@"\d{1,3}"), ProxyRouteParameter(1)] int? id, Person resource);
 
         [Url("index/{name}", HttpMethod.Delete)]
         [ProxyStatusCode(HttpStatusCode.NoContent, "Resource is deleted")]

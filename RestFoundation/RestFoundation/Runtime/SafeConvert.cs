@@ -6,27 +6,45 @@ namespace RestFoundation.Runtime
 {
     public static class SafeConvert
     {
-        public static object ChangeType(object value, Type conversionType)
+        public static bool TryChangeType(object value, Type conversionType, out object changedValue)
         {
-            if (value == null) return null;
-            if (conversionType == null) throw new ArgumentNullException("conversionType");
-            if (value.GetType() == conversionType) return value;
+            if (value == null)
+            {
+                changedValue = null;
+                return true;
+            }
+
+            if (conversionType == null)
+            {
+                throw new ArgumentNullException("conversionType");
+            }
+
+            if (value.GetType() == conversionType)
+            {
+                changedValue = value;
+                return true;
+            }
 
             var stringValue = value as string;
 
             if (conversionType.IsEnum && !String.IsNullOrEmpty(stringValue))
             {
-                return Enum.Parse(conversionType, stringValue);
+                try
+                {
+                    changedValue = Enum.Parse(conversionType, stringValue);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    changedValue = null;
+                    return false;
+                }
             }
 
-            return CompatibleChangeType(value, conversionType);
-        }
-
-        private static object CompatibleChangeType(object value, Type conversionType)
-        {
             try
             {
-                return Convert.ChangeType(value, conversionType, CultureInfo.CurrentCulture);
+                changedValue = Convert.ChangeType(value, conversionType, CultureInfo.CurrentCulture);
+                return true;
             }
             catch (Exception)
             {
@@ -36,14 +54,16 @@ namespace RestFoundation.Runtime
 
                     if (converter.CanConvertFrom(value.GetType()))
                     {
-                        return converter.ConvertFrom(value);
+                        changedValue = converter.ConvertFrom(value);
+                        return true;
                     }
                 }
                 catch (Exception)
                 {
                 }
 
-                return null;
+                changedValue = null;
+                return false;
             }
         }
     }

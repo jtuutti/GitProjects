@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Web.Routing;
@@ -105,13 +106,24 @@ namespace RestFoundation.Test
 
                 object argumentValue = GetArgumentValue(argument, argumentExpression);
                 object routeArgumentValue = routeData.Values[argument.Name];
+                object convertedArgumentValue;
 
-                if (!Equals(argumentValue, SafeConvert.ChangeType(routeArgumentValue, argumentExpression.Type)))
+                if (!SafeConvert.TryChangeType(routeArgumentValue, argumentExpression.Type, out convertedArgumentValue) || !Equals(argumentValue, convertedArgumentValue))
                 {
                     throw new RouteAssertException(String.Format("Service method delegate value of the argument '{0}' does not match the corresponding route value: {1} != {2}",
-                                                                      argument.Name,
-                                                                      argumentValue ?? "(null)",
-                                                                      routeArgumentValue ?? "(null)"));
+                                                   argument.Name,
+                                                   argumentValue ?? "(null)",
+                                                   routeArgumentValue ?? "(null)"));
+                }
+
+                var constraintAttribute = Attribute.GetCustomAttribute(argument, typeof(ParameterConstraintAttribute), false) as ParameterConstraintAttribute;
+
+                if (constraintAttribute != null && !constraintAttribute.Pattern.IsMatch(Convert.ToString(routeArgumentValue, CultureInfo.InvariantCulture)))
+                {
+                    throw new RouteAssertException(String.Format("Route parameter '{0}' with value '{1}' does not match the constraint pattern '{2}'.",
+                                                   argument.Name,
+                                                   routeArgumentValue,
+                                                   constraintAttribute.Pattern));
                 }
             }
         }
