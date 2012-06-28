@@ -66,23 +66,17 @@ namespace RestFoundation.DataFormatters
                     result = elements.Count;
                     break;
                 default:
-                    XAttribute attr = elements[0].Attribute(XName.Get(binder.Name));
+                    List<XElement> items = elements.Descendants(XName.Get(binder.Name)).ToList();
 
-                    if (attr != null)
+                    if (items.Count == 1 && !items[0].HasElements)
                     {
-                        result = attr;
+                        result = items[0].Value;                           
                     }
-                    else
+                    else if (items.Count > 0)
                     {
-                        List<XElement> items = elements.Descendants(XName.Get(binder.Name)).ToList();
-
-                        if (items.Count == 0)
-                        {
-                            return false;
-                        }
-
-                        result = new DynamicXDocument(items);
+                        result = GetItemWithElementsValue(items);
                     }
+
                     break;
             }
 
@@ -169,6 +163,23 @@ namespace RestFoundation.DataFormatters
             }
 
             return rootElement;
+        }
+
+        private static object GetItemWithElementsValue(List<XElement> items)
+        {
+            if (items.Any(item => item.HasElements))
+            {
+                return new DynamicXDocument(items);
+            }
+
+            var valueList = new List<string>();
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                valueList.Add(items[i].Value);
+            }
+
+            return valueList.ToArray();
         }
     }
 }

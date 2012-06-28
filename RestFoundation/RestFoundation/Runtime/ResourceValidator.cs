@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace RestFoundation.Runtime
 {
@@ -9,7 +11,7 @@ namespace RestFoundation.Runtime
     {
         public bool IsValid(object resource, out ICollection<ValidationError> errors)
         {
-            if (resource == null)
+            if (resource == null || resource is DynamicObject || resource is JObject)
             {
                 errors = new ReadOnlyCollection<ValidationError>(new ValidationError[0]);
                 return true;

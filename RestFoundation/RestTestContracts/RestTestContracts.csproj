@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDynamicService.cs" />
     <Compile Include="IIndexService.cs" />
     <Compile Include="ITouchMapService.cs" />
     <Compile Include="Metadata\PersonArrayExample.cs" />
