@@ -37,7 +37,6 @@ namespace RestFoundation
             return MapRestRoute(url, typeof(TContract), true);
         }
 
-
         public RouteConfiguration MapRestRouteAsync(string url, Type serviceContractType)
         {
             return MapRestRoute(url, serviceContractType, true);
