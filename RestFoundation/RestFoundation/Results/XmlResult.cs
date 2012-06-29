@@ -11,10 +11,16 @@ namespace RestFoundation.Results
 {
     public class XmlResult : IResult
     {
+        public XmlResult()
+        {
+            ContentType = "application/xml";
+        }
+
         public IServiceContext Context { get; set; }
         public IHttpRequest Request { get; set; }
         public IHttpResponse Response { get; set; }
         public object Content { get; set; }
+        public string ContentType { get; set; }
 
         public void Execute()
         {
@@ -29,7 +35,7 @@ namespace RestFoundation.Results
             }
 
             Response.Output.Clear();
-            Response.SetHeader("Content-Type", "application/xml");
+            Response.SetHeader("Content-Type", ContentType);
             Response.SetCharsetEncoding(Request.Headers.AcceptCharsetEncoding);
 
             OutputCompressionManager.FilterResponse(Request, Response);

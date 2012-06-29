@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using RestFoundation.Results;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.DataFormatters
@@ -31,24 +32,13 @@ namespace RestFoundation.DataFormatters
             }
         }
 
-        public void FormatResponse(IHttpRequest request, IHttpResponse response, object obj)
+        public IResult FormatResponse(IHttpRequest request, IHttpResponse response, object obj)
         {
-            if (request == null) throw new ArgumentNullException("request");
-            if (response == null) throw new ArgumentNullException("response");
+            var result = Rest.Active.CreateObject<JsonResult>();
+            result.Content = obj;
+            result.ContentType = request.GetPreferredAcceptType();
 
-            if (obj == null)
-            {
-                return;
-            }
-
-            response.Output.Clear();
-            response.SetHeader("Content-Type", request.GetPreferredAcceptType());
-            response.SetCharsetEncoding(request.Headers.AcceptCharsetEncoding);
-
-            OutputCompressionManager.FilterResponse(request, response);
-
-            var serializer = new JsonSerializer();
-            serializer.Serialize(response.Output.Writer, obj);
+            return result;
         }
     }
 }

@@ -2,20 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using RestFoundation.DataFormatters;
 using RestFoundation.Odata;
-using RestFoundation.Results;
 
 namespace RestFoundation.Runtime
 {
     public class ResultFactory : IResultFactory
     {
         private readonly IHttpRequest m_request;
+        private readonly IHttpResponse m_response;
 
-        public ResultFactory(IHttpRequest request)
+        public ResultFactory(IHttpRequest request, IHttpResponse response)
         {
             if (request == null) throw new ArgumentNullException("request");
+            if (response == null) throw new ArgumentNullException("response");
 
             m_request = request;
+            m_response = response;
         }
 
         public IResult Create(object returnedObj)
@@ -42,9 +45,14 @@ namespace RestFoundation.Runtime
                 returnedObj = PerformOdataOperations(returnedObj);
             }
 
-            var result = Rest.Active.CreateObject<FormatterResult>();
-            result.ReturnedObject = returnedObj;
-            return result;
+            IDataFormatter formatter = DataFormatterRegistry.GetFormatter(m_request.GetPreferredAcceptType());
+
+            if (formatter == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported content type was provided in the Accept or the Content-Type header");
+            }
+
+            return formatter.FormatResponse(m_request, m_response, returnedObj);
         }
 
         private object PerformOdataOperations(object returnedObj)

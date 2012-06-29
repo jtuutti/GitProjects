@@ -59,7 +59,7 @@ namespace RestFoundation.DataFormatters
             return resource;
         }
 
-        public void FormatResponse(IHttpRequest request, IHttpResponse response, object obj)
+        public IResult FormatResponse(IHttpRequest request, IHttpResponse response, object obj)
         {
             throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported content type was provided in the Accept or the Content-Type header");
         }
