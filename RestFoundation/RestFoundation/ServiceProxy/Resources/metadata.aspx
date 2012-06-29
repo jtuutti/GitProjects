@@ -154,15 +154,17 @@
     <tr>
         <th>URL parameter</th>
         <th>Type</th>
-        <th>Example</th>
+        <th>Constraint</th>
         <th>Allowed values</th>
+        <th>Example</th>
     </tr>
     <% foreach (var routeParameter in Operation.RouteParameters) { %>
     <tr>
         <td><%: "{" + routeParameter.Name + "}" %></td>
         <td><%: routeParameter.Type %></td>
-        <td><%: routeParameter.ExampleValue ?? String.Empty %></td>
+        <td><%: routeParameter.Constraint ?? String.Empty %></td>
         <td><%: routeParameter.AllowedValues ?? String.Empty %></td>
+        <td><%: routeParameter.ExampleValue ?? String.Empty %></td>
     </tr>
     <% } %>
     </table>

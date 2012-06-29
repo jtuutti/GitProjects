@@ -6,20 +6,22 @@ namespace RestFoundation.ServiceProxy.Helpers
     {
         private readonly string m_name;
         private readonly string m_type;
+        private readonly string m_constraint;
         private readonly object m_exampleValue;
         private readonly string m_allowedValues;
 
-        public ProxyRouteParameter(string name, string type) : this(name, type, null, null)
+        public ProxyRouteParameter(string name, string type, string constraint) : this(name, type, constraint, null, null)
         {
         }
 
-        public ProxyRouteParameter(string name, string type, object exampleValue, string allowedValues)
+        public ProxyRouteParameter(string name, string type, string constraint, object exampleValue, string allowedValues)
         {
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
             if (String.IsNullOrEmpty(type)) throw new ArgumentNullException("type");
 
             m_name = name;
             m_type = type;
+            m_constraint = constraint;
             m_exampleValue = exampleValue;
             m_allowedValues = allowedValues;
         }
@@ -37,6 +39,14 @@ namespace RestFoundation.ServiceProxy.Helpers
             get
             {
                 return m_type;
+            }
+        }
+
+        public string Constraint
+        {
+            get
+            {
+                return m_constraint;
             }
         }
 
