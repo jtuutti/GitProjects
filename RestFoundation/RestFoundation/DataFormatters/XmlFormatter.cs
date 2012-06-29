@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 using RestFoundation.Runtime;
+using Formatting = System.Xml.Formatting;
 
 namespace RestFoundation.DataFormatters
 {
@@ -45,6 +48,14 @@ namespace RestFoundation.DataFormatters
             response.SetCharsetEncoding(request.Headers.AcceptCharsetEncoding);
 
             OutputCompressionManager.FilterResponse(request, response);
+
+            if (Attribute.GetCustomAttribute(obj.GetType(), typeof(CompilerGeneratedAttribute), false) != null)
+            {
+                var xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj), "Object");
+                response.Output.Write(xmlDocument.OuterXml);
+
+                return;
+            }
 
             XmlSerializer serializer = XmlSerializerRegistry.Get(obj.GetType());
 
