@@ -74,7 +74,7 @@ namespace RestFoundation.Runtime
 
             try
             {
-                argumentValue = formatter.Format(m_request.Body, m_request.Headers.ContentCharsetEncoding, parameter.ParameterType);
+                argumentValue = formatter.FormatRequest(m_request, parameter.ParameterType);
             }
             catch (Exception ex)
             {

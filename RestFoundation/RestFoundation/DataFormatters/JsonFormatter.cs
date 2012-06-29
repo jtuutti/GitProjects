@@ -1,22 +1,24 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using Newtonsoft.Json;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.DataFormatters
 {
     public class JsonFormatter : IDataFormatter
     {
-        public object Format(Stream body, Encoding encoding, Type objectType)
+        public object FormatRequest(IHttpRequest request, Type objectType)
         {
-            if (body == null) throw new ArgumentNullException("body");
-            if (encoding == null) throw new ArgumentNullException("encoding");
+            if (request == null) throw new ArgumentNullException("request");
             if (objectType == null) throw new ArgumentNullException("objectType");
 
-            using (var streamReader = new StreamReader(body, encoding))
+            if (request.Body.CanSeek)
             {
-                body.Position = 0;
+                request.Body.Seek(0, SeekOrigin.Begin);
+            }
 
+            using (var streamReader = new StreamReader(request.Body, request.Headers.ContentCharsetEncoding))
+            {
                 var serializer = new JsonSerializer();
                 var reader = new JsonTextReader(streamReader);
 
@@ -27,6 +29,26 @@ namespace RestFoundation.DataFormatters
 
                 return serializer.Deserialize(reader, objectType);
             }
+        }
+
+        public void FormatResponse(IHttpRequest request, IHttpResponse response, object obj)
+        {
+            if (request == null) throw new ArgumentNullException("request");
+            if (response == null) throw new ArgumentNullException("response");
+
+            if (obj == null)
+            {
+                return;
+            }
+
+            response.Output.Clear();
+            response.SetHeader("Content-Type", request.GetPreferredAcceptType());
+            response.SetCharsetEncoding(request.Headers.AcceptCharsetEncoding);
+
+            OutputCompressionManager.FilterResponse(request, response);
+
+            var serializer = new JsonSerializer();
+            serializer.Serialize(response.Output.Writer, obj);
         }
     }
 }

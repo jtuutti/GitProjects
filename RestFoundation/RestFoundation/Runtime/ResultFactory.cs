@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using RestFoundation.Odata;
+using RestFoundation.Results;
 
 namespace RestFoundation.Runtime
 {
@@ -31,7 +32,19 @@ namespace RestFoundation.Runtime
                 return result;
             }
 
-            return CreateSerializerResult(returnedObj);
+            return CreateFormatterResult(returnedObj);
+        }
+
+        private IResult CreateFormatterResult(object returnedObj)
+        {
+            if (returnedObj.GetType().IsGenericType && returnedObj.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) != null)
+            {
+                returnedObj = PerformOdataOperations(returnedObj);
+            }
+
+            var result = Rest.Active.CreateObject<FormatterResult>();
+            result.ReturnedObject = returnedObj;
+            return result;
         }
 
         private object PerformOdataOperations(object returnedObj)
@@ -66,29 +79,6 @@ namespace RestFoundation.Runtime
             }
 
             return filteredResultListType.GetMethod("ToArray").Invoke(filteredResultList, null);
-        }
-
-        private IResult CreateSerializerResult(object returnedObj)
-        {
-            string acceptedType = m_request.GetPreferredAcceptType();
-
-            if (returnedObj.GetType().IsGenericType && returnedObj.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) != null)
-            {
-                returnedObj = PerformOdataOperations(returnedObj);
-            }
-
-            if (String.Equals("application/json", acceptedType, StringComparison.OrdinalIgnoreCase))
-            {
-                return Result.Json(returnedObj);
-            }
-
-            if (String.Equals("application/xml", acceptedType, StringComparison.OrdinalIgnoreCase) ||
-                String.Equals("text/xml", acceptedType, StringComparison.OrdinalIgnoreCase))
-            {
-                return Result.Xml(returnedObj);
-            }
-
-            throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported content type was provided in the Accept or the Content-Type header");
         }
     }
 }

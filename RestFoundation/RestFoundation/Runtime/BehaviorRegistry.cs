@@ -14,7 +14,8 @@ namespace RestFoundation.Runtime
         };
 
         private static readonly ConcurrentDictionary<IRouteHandler, List<IServiceBehavior>> behaviors = new ConcurrentDictionary<IRouteHandler, List<IServiceBehavior>>();
-        private static readonly object syncRoot = new object();
+        private static readonly object globalSyncRoot = new object();
+        private static readonly object handlerSyncRoot = new object();
 
         public static List<IServiceBehavior> GetBehaviors(IRouteHandler routeHandler, IServiceContext context, IHttpRequest request, IHttpResponse response)
         {
@@ -54,8 +55,13 @@ namespace RestFoundation.Runtime
                                   },
                                   (routeHandlerToUpdate, behaviorsToUpdate) =>
                                   {
-                                      if (!behaviorsToUpdate.Contains(behavior, ServiceBehaviorEqualityComparer.Default))
+                                      lock (handlerSyncRoot)
                                       {
+                                          if (behaviorsToUpdate.Contains(behavior, ServiceBehaviorEqualityComparer.Default))
+                                          {
+                                              behaviorsToUpdate.RemoveAll(b => b.GetType() == behavior.GetType());
+                                          }
+
                                           behaviorsToUpdate.Add(behavior);
                                       }
 
@@ -65,7 +71,7 @@ namespace RestFoundation.Runtime
 
         public static void AddGlobalBehavior(IServiceBehavior behavior)
         {
-            lock (syncRoot)
+            lock (globalSyncRoot)
             {
                 if (!globalBehaviors.Contains(behavior, ServiceBehaviorEqualityComparer.Default))
                 {

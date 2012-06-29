@@ -118,6 +118,7 @@
     <Compile Include="Results\BinaryResult.cs" />
     <Compile Include="Results\ContentResult.cs" />
     <Compile Include="Results\EmptyResult.cs" />
+    <Compile Include="Results\FormatterResult.cs" />
     <Compile Include="Results\XmlResult.cs" />
     <Compile Include="Results\FileUrlResult.cs" />
     <Compile Include="Results\FilePathResult.cs" />

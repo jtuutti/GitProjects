@@ -80,7 +80,7 @@ namespace RestFoundation.Collections.Concrete
             }
             catch (Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, "The accept charset provided is not supported");
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No accepted charset was provided in the Accept-Charset header");
             }
 
             var acceptEncodings = new AcceptValueCollection(TryGet("Accept-Encoding"));

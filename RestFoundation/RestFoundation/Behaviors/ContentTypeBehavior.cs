@@ -5,11 +5,11 @@ using System.Reflection;
 
 namespace RestFoundation.Behaviors
 {
-    public class ContentTypeBehavior : ServiceBehavior
+    internal sealed class ContentTypeBehavior : ServiceBehavior
     {
         private readonly HashSet<string> m_contentTypes;
 
-        public ContentTypeBehavior(params string[] contentTypes)
+        public ContentTypeBehavior(IEnumerable<string> contentTypes)
         {
             if (contentTypes == null) throw new ArgumentNullException("contentTypes");
 
@@ -27,7 +27,7 @@ namespace RestFoundation.Behaviors
 
             if (!m_contentTypes.Contains(contentType))
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Content type is not specified or not allowed");
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Content type is not specified or does not have an associated data formatter");
             }
 
             return true;

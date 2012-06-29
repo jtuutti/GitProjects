@@ -217,21 +217,5 @@ namespace RestFoundation
 
             return result;
         }
-
-        public static JsonResult Json(object obj)
-        {
-            var result = Rest.Active.CreateObject<JsonResult>();
-            result.Content = obj;
-
-            return result;
-        }
-
-        public static XmlResult Xml(object obj)
-        {
-            var result = Rest.Active.CreateObject<XmlResult>();
-            result.Content = obj;
-
-            return result;
-        }
     }
 }

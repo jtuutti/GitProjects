@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
-using RestFoundation.Behaviors;
 using RestFoundation.DataFormatters;
 using RestTest.Behaviors;
 using RestTest.ServiceFactories;
@@ -13,21 +12,6 @@ namespace RestTest.App_Start
 {
     public static class ServiceBootstrapper
     {
-        private static readonly string[] standardContentTypes = new[]
-                                                                {
-                                                                    "application/json",
-                                                                    "application/xml",
-                                                                    "text/xml"
-                                                                };
-
-        private static readonly string[] homeContentTypes = new[]
-                                                            {
-                                                                "application/json",
-                                                                "application/xml",
-                                                                "text/xml",
-                                                                "application/x-www-form-urlencoded"
-                                                            };
-
         public static void RegisterDependencies()
         {
             // StructureMap IoC container configuration
@@ -39,7 +23,6 @@ namespace RestTest.App_Start
             // Configuring REST foundation
             Rest.Configure.WithObjectFactory(CreateObjectFactory)
                           .WithDataFormatters(builder => builder.SetForContentType("application/x-www-form-urlencoded", new FormsFormatter()))
-                          .WithGlobalBehaviors(builder => builder.AddGlobalBehaviors(new ContentTypeBehavior(standardContentTypes)))
                           .WithRoutes(RegisterRoutes)
                           .EnableServiceProxyUI();
         }
@@ -71,14 +54,16 @@ namespace RestTest.App_Start
         private static void RegisterRoutes(RouteBuilder routeBuilder)
         {
             routeBuilder.MapRestRoute<IIndexService>("home")
-                        .WithBehaviors(new StatisticsBehavior(), new ContentTypeBehavior(homeContentTypes), new LoggingBehavior())
+                        .WithBehaviors(new StatisticsBehavior(), new LoggingBehavior())
                         .DoNotValidateRequests();
 
             routeBuilder.MapRestRouteAsync<IIndexService>("async")
-                        .WithBehaviors(new StatisticsBehavior(), new ContentTypeBehavior(homeContentTypes), new LoggingBehavior());
+                        .WithBehaviors(new StatisticsBehavior(), new LoggingBehavior());
 
-            routeBuilder.MapRestRoute<ITouchMapService>("touch-map");
-            routeBuilder.MapRestRoute<IDynamicService>("dynamic").WithBehaviors(new ContentTypeBehavior(homeContentTypes));
+            routeBuilder.MapRestRoute<IDynamicService>("dynamic");
+
+            routeBuilder.MapRestRoute<ITouchMapService>("touch-map")
+                        .WithContentTypesRestrictedTo("text/xml", "application/xml", "application/json");
         }
     }
 }
