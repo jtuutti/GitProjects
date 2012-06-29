@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.ServiceModel.Syndication;
 using RestFoundation.Results;
 
 namespace RestFoundation
@@ -214,6 +215,21 @@ namespace RestFoundation
                     result.AdditionalHeaders[header.Key] = header.Value;
                 }
             }
+
+            return result;
+        }
+
+        public static FeedResult Feed(SyndicationFeed feed, FeedResult.SyndicationFormat format)
+        {
+            return Feed(feed, format, false);
+        }
+
+        public static FeedResult Feed(SyndicationFeed feed, FeedResult.SyndicationFormat format, bool xmlStyleDates)
+        {
+            var result = Rest.Active.CreateObject<FeedResult>();
+            result.Feed = feed;
+            result.Format = format;
+            result.XmlStyleDates = xmlStyleDates;
 
             return result;
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace RestFoundation.ServiceProxy.Helpers
+namespace RestFoundation.ServiceProxy
 {
     public struct ProxyStatusCode : IEquatable<ProxyStatusCode>, IComparable<ProxyStatusCode>
     {

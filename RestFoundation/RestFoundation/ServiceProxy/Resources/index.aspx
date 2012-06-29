@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="proxy.master" %>
-<%@ Import Namespace="RestFoundation.ServiceProxy.Helpers" %>
+<%@ Import Namespace="RestFoundation.ServiceProxy" %>
 
 <script runat="server" language="C#">
     public void Page_Init(object sender, EventArgs e)

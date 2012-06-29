@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RestFoundation.ServiceProxy.Helpers
+namespace RestFoundation.ServiceProxy
 {
     public struct ProxyRouteParameter : IEquatable<ProxyRouteParameter>
     {

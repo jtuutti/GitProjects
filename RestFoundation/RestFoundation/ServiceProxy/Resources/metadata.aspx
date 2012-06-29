@@ -3,7 +3,6 @@
 <%@ Import Namespace="Newtonsoft.Json" %>
 <%@ Import Namespace="RestFoundation.Runtime" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
-<%@ Import Namespace="RestFoundation.ServiceProxy.Helpers" %>
 
 <script runat="server" language="C#">
     public ProxyOperation Operation;

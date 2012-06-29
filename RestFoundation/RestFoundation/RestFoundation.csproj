@@ -40,6 +40,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
@@ -118,6 +119,7 @@
     <Compile Include="Results\BinaryResult.cs" />
     <Compile Include="Results\ContentResult.cs" />
     <Compile Include="Results\EmptyResult.cs" />
+    <Compile Include="Results\FeedResult.cs" />
     <Compile Include="Results\XmlResult.cs" />
     <Compile Include="Results\FileUrlResult.cs" />
     <Compile Include="Results\FilePathResult.cs" />
@@ -185,14 +187,15 @@
     <Compile Include="Operation.cs" />
     <Compile Include="Runtime\XmlSchemaGenerator.cs" />
     <Compile Include="Runtime\XmlSerializerRegistry.cs" />
+    <Compile Include="ServiceProxy\Attributes\ProxyHiddenOperation.cs" />
     <Compile Include="ServiceProxy\Attributes\ProxyOperationDescriptionAttribute.cs" />
     <Compile Include="ServiceProxy\Attributes\ProxyResourceExampleAttribute.cs" />
     <Compile Include="ServiceProxy\Attributes\ProxyRouteParameterAttribute.cs" />
     <Compile Include="ServiceProxy\Attributes\ProxyStatusCodeAttribute.cs" />
-    <Compile Include="ServiceProxy\Helpers\ProxyRouteParameter.cs" />
-    <Compile Include="ServiceProxy\Helpers\ProxyOperation.cs" />
-    <Compile Include="ServiceProxy\Helpers\ProxyOperationGenerator.cs" />
-    <Compile Include="ServiceProxy\Helpers\ProxyStatusCode.cs" />
+    <Compile Include="ServiceProxy\ProxyRouteParameter.cs" />
+    <Compile Include="ServiceProxy\ProxyOperation.cs" />
+    <Compile Include="ServiceProxy\ProxyOperationGenerator.cs" />
+    <Compile Include="ServiceProxy\ProxyStatusCode.cs" />
     <Compile Include="ServiceProxy\IResourceExample.cs" />
     <Compile Include="ServiceProxy\ProxyFile.cs" />
     <Compile Include="ServiceProxy\ProxyPathProvider.cs" />

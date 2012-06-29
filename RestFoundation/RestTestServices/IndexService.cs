@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.ServiceModel.Syndication;
+using System.Xml.Serialization;
 using RestFoundation;
 using RestFoundation.Results;
 using RestTestContracts;
@@ -21,6 +23,43 @@ namespace RestTestServices
             new Person { Name = "Beth", Age = 32, Values = new[] { "Secretary" } },
             new Person { Name = "Saul", Age = 62 }
         };
+
+        public FeedResult Feed(string format)
+        {
+            FeedResult.SyndicationFormat feedFormat;
+
+            if (!Enum.TryParse(format, true, out feedFormat))
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "The feed only supports ATOM and RSS formats");
+            }
+
+            var feedItems = new List<SyndicationItem>(people.Count);
+            var xmlSerializer = new XmlSerializer(typeof(Person));
+
+            for (int i = 0; i < people.Count; i++)
+            {
+                var item = new SyndicationItem
+                           {
+                               Id = String.Format("urn:uuid:{0}", Guid.NewGuid().ToString().ToLowerInvariant()),
+                               Title = new TextSyndicationContent("Person #" + (i + 1), TextSyndicationContentKind.Plaintext),
+                               Content = new XmlSyndicationContent("application/vnd.person+xml", people[i], xmlSerializer),
+                               PublishDate = DateTime.UtcNow,
+                               LastUpdatedTime = DateTime.UtcNow
+                           };
+
+                feedItems.Add(item);
+            }
+
+            var feed = new SyndicationFeed(feedItems)
+            {
+                 Id = "urn:uuid:6b46a53d-99c3-49e5-8828-c3d8aad2db0f",
+                 Title = new TextSyndicationContent("People Feed", TextSyndicationContentKind.Plaintext),
+                 Copyright = new TextSyndicationContent("(c) Rest Foundation, 2012", TextSyndicationContentKind.Plaintext),
+                 Generator = "Rest Foundation Service"
+            };
+
+            return Result.Feed(feed, feedFormat);
+        }
 
         public IQueryable<Person> GetAll()
         {

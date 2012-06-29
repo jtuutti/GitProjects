@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using RestFoundation.Results;
 
-namespace RestFoundation.ServiceProxy.Helpers
+namespace RestFoundation.ServiceProxy
 {
     public sealed class ProxyOperation : IComparable<ProxyOperation>
     {

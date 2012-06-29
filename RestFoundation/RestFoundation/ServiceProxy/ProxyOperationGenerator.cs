@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using RestFoundation.Runtime;
 using RestFoundation.ServiceProxy.Attributes;
 
-namespace RestFoundation.ServiceProxy.Helpers
+namespace RestFoundation.ServiceProxy
 {
     public static class ProxyOperationGenerator
     {
@@ -18,6 +17,11 @@ namespace RestFoundation.ServiceProxy.Helpers
             ServiceMethodMetadata metadata = ServiceMethodRegistry.ServiceMethods.SelectMany(m => m.Value).FirstOrDefault(m => m.ServiceMethodId == operationId);
 
             if (metadata.MethodInfo == null || metadata.UrlInfo == null)
+            {
+                return null;
+            }
+
+            if (Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyHiddenOperation), false) != null)
             {
                 return null;
             }
@@ -50,6 +54,11 @@ namespace RestFoundation.ServiceProxy.Helpers
             foreach (ServiceMethodMetadata metadata in ServiceMethodRegistry.ServiceMethods.SelectMany(m => m.Value))
             {
                 if (metadata.UrlInfo == null || metadata.UrlInfo.UrlTemplate == null)
+                {
+                    continue;
+                }
+
+                if (Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyHiddenOperation), false) != null)
                 {
                     continue;
                 }
