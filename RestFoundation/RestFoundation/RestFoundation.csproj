@@ -184,6 +184,7 @@
     <Compile Include="IHttpRequest.cs" />
     <Compile Include="Runtime\UnvalidatedHandlerRegistry.cs" />
     <Compile Include="Operation.cs" />
+    <Compile Include="Runtime\XmlSchemaGenerator.cs" />
     <Compile Include="Runtime\XmlSerializerRegistry.cs" />
     <Compile Include="ServiceProxy\Attributes\ProxyOperationDescriptionAttribute.cs" />
     <Compile Include="ServiceProxy\Attributes\ProxyResourceExampleAttribute.cs" />
@@ -198,6 +199,7 @@
     <Compile Include="ServiceProxy\ProxyPathProvider.cs" />
     <Compile Include="Runtime\RootRouteHandler.cs" />
     <Compile Include="Runtime\XmlConvert.cs" />
+    <Compile Include="ServiceProxy\XmlSchemasExtensions.cs" />
     <Compile Include="ServiceRuntimeException.cs" />
     <Compile Include="ServiceUri.cs" />
     <Compile Include="ServiceAssembly.cs" />

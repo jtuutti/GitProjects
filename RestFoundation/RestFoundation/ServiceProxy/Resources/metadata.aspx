@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="proxy.master" %>
+<%@ Import Namespace="System.Xml.Serialization" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
 <%@ Import Namespace="RestFoundation.Runtime" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
@@ -7,7 +8,8 @@
 <script runat="server" language="C#">
     public ProxyOperation Operation;
     public string RequestJsonExample, RequestXmlExample, ResponseJsonExample, ResponseXmlExample;
-
+    public IList<string> XmlSchemas;
+    
     public void Page_Init(object sender, EventArgs e)
     {
         EnableViewState = false;
@@ -120,6 +122,16 @@
                     catch (Exception)
                     {
                         ResponseXmlExample = null;
+                    }
+                }
+
+                if (ResponseXmlExample != null)
+                {
+                    XmlSchemas schemas = responseExample.GetSchemas();
+
+                    if (schemas != null && schemas.Count > 0)
+                    {
+                        XmlSchemas = schemas.Serialize();
                     }
                 }
             }
@@ -255,6 +267,20 @@
     <div class="schemaSection">
         <a name="response-xml">The following is an example XML serialized response:</a>
         <pre><%: ResponseXmlExample %></pre>
+    </div>
+    <% } %>
+    <% } %>
+    <% if (XmlSchemas != null && XmlSchemas.Count > 0) { %>
+    <div class="schemaSection">
+    <a name="response-schema">The following is the response model XSD Schema:</a>           
+    <pre><%: XmlSchemas[0] %></pre>
+    </div>
+    <% if (XmlSchemas.Count > 1) { %>
+    <div class="schemaSection">
+    <span>Additional response XSD Schemas:</span>
+    <% for (int i = 1; i < XmlSchemas.Count; i++) { %>
+        <pre><%: XmlSchemas[i] %></pre>
+    <% } %>
     </div>
     <% } %>
     <% } %>

@@ -1,4 +1,6 @@
-﻿using RestFoundation.ServiceProxy;
+﻿using System.Xml.Serialization;
+using RestFoundation.Runtime;
+using RestFoundation.ServiceProxy;
 using RestTestContracts.Resources;
 
 namespace RestTestContracts.Metadata
@@ -27,6 +29,11 @@ namespace RestTestContracts.Metadata
                     Age = 33
                 }
             };
+        }
+
+        public XmlSchemas GetSchemas()
+        {
+            return XmlSchemaGenerator.Generate<Person[]>();
         }
     }
 }
