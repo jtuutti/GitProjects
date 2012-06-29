@@ -51,9 +51,7 @@ namespace RestFoundation.DataFormatters
 
             if (Attribute.GetCustomAttribute(obj.GetType(), typeof(CompilerGeneratedAttribute), false) != null)
             {
-                var xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj), "Object");
-                response.Output.Write(xmlDocument.OuterXml);
-
+                SerializeAnonymousType(response, obj);
                 return;
             }
 
@@ -68,6 +66,20 @@ namespace RestFoundation.DataFormatters
             namespaces.Add(String.Empty, String.Empty);
 
             serializer.Serialize(xmlWriter, obj, namespaces);
+        }
+
+        private static void SerializeAnonymousType(IHttpResponse response, object obj)
+        {
+            var xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj), "Object");
+
+            var xmlWriter = new XmlTextWriter(response.Output.Writer)
+            {
+                Formatting = Formatting.None,
+            };
+
+            xmlWriter.WriteStartDocument();
+            xmlWriter.WriteRaw(xmlDocument.OuterXml);
+            xmlWriter.Flush();
         }
     }
 }
