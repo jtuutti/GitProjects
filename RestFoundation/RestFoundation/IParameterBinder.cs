@@ -4,6 +4,6 @@ namespace RestFoundation
 {
     public interface IParameterBinder
     {
-        object BindParameter(ParameterInfo parameter, out bool isResource);
+        object BindParameter(IServiceContext context, ParameterInfo parameter, out bool isResource);
     }
 }

@@ -7,8 +7,6 @@ namespace RestFoundation.Tests.Services
     public class TestService : ITestService
     {
         public IServiceContext Context { get; set; }
-        public IHttpRequest Request { get; set; }
-        public IHttpResponse Response { get; set; }
 
         public IResult Get(int? id)
         {
@@ -24,7 +22,7 @@ namespace RestFoundation.Tests.Services
         {
             return Result.SetStatus(HttpStatusCode.Created, "Created", new Dictionary<string, string>
                                                                        {
-                                                                           { "Location", Request.Url.ServiceUrl + "/1" }
+                                                                           { "Location", Context.Request.Url.ServiceUrl + "/1" }
                                                                        });
         }
 

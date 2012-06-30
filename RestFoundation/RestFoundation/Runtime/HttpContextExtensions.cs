@@ -18,6 +18,15 @@ namespace RestFoundation.Runtime
 
         public static HttpMethod GetOverriddenHttpMethod(this HttpContext context)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
+            return GetOverriddenHttpMethod(new HttpContextWrapper(context));
+        }
+
+        public static HttpMethod GetOverriddenHttpMethod(this HttpContextBase context)
+        {
+            if (context == null) throw new ArgumentNullException("context");
+
             string httpMethodString;
 
             if (String.Equals("POST", context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))

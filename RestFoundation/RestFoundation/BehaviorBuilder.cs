@@ -23,25 +23,25 @@ namespace RestFoundation
 
             for (int i = 0; i < behaviors.Length; i++)
             {
-                BehaviorRegistry.AddGlobalBehavior(behaviors[i]);
+                ServiceBehaviorRegistry.AddGlobalBehavior(behaviors[i]);
             }
         }
 
         public IEnumerable<IServiceBehavior> GetGlobalBehaviors()
         {
-            return new ReadOnlyCollection<IServiceBehavior>(BehaviorRegistry.GetGlobalBehaviors());
+            return new ReadOnlyCollection<IServiceBehavior>(ServiceBehaviorRegistry.GetGlobalBehaviors());
         }
 
         public bool RemoveGlobalBehavior(IServiceBehavior behavior)
         {
             if (behavior == null) throw new ArgumentNullException("behavior");
 
-            return BehaviorRegistry.RemoveGlobalBehavior(behavior);
+            return ServiceBehaviorRegistry.RemoveGlobalBehavior(behavior);
         }
 
         public void ClearGlobalBehaviors()
         {
-            BehaviorRegistry.ClearGlobalBehaviors();
+            ServiceBehaviorRegistry.ClearGlobalBehaviors();
         }
     }
 }

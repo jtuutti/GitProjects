@@ -1,24 +1,19 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 namespace RestFoundation.Results
 {
     public class RedirectResult : IResult
     {
-        public IServiceContext Context { get; set; }
-        public IHttpRequest Request { get; set; }
-        public IHttpResponse Response { get; set; }
         public virtual bool IsPermanent { get; set; }
         public virtual string RedirectUrl { get; set; }
 
-        public void Execute()
+        public void Execute(IServiceContext context)
         {
-            if (Response == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP context found");
-            }
+            if (context == null) throw new ArgumentNullException("context");
 
-            Response.SetHeader("Location", RedirectUrl);
-            Response.SetStatus(IsPermanent ? HttpStatusCode.MovedPermanently : HttpStatusCode.Redirect);
+            context.Response.SetHeader("Location", RedirectUrl);
+            context.Response.SetStatus(IsPermanent ? HttpStatusCode.MovedPermanently : HttpStatusCode.Redirect);
         }
     }
 }

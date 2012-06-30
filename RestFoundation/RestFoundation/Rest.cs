@@ -97,6 +97,12 @@ namespace RestFoundation
             return this;
         }
 
+        public virtual Rest WithDataBinders(Action<DataBinderBuilder> builder)
+        {
+            builder(new DataBinderBuilder());
+            return this;
+        }
+
         public virtual Rest EnableServiceProxyUI()
         {
             if (IsServiceProxyInitialized)

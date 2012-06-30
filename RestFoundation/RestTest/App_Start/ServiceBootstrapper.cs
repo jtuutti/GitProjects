@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
+using RestFoundation.DataBinders;
 using RestFoundation.DataFormatters;
 using RestTest.Behaviors;
 using RestTest.ServiceFactories;
@@ -23,6 +24,7 @@ namespace RestTest.App_Start
             // Configuring REST foundation
             Rest.Configure.WithObjectFactory(CreateObjectFactory)
                           .WithDataFormatters(builder => builder.SetForContentType("application/x-www-form-urlencoded", new FormsFormatter()))
+                          .WithDataBinders(builder => builder.Set(typeof(string), new StringDataBinder()))
                           .WithRoutes(RegisterRoutes)
                           .EnableServiceProxyUI();
         }

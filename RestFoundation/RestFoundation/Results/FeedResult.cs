@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.ServiceModel.Syndication;
 using System.Xml;
 
@@ -10,19 +9,13 @@ namespace RestFoundation.Results
     {
         public enum SyndicationFormat { Atom, Rss }
 
-        public IServiceContext Context { get; set; }
-        public IHttpRequest Request { get; set; }
-        public IHttpResponse Response { get; set; }
         public SyndicationFeed Feed { get; set; }
         public SyndicationFormat Format { get; set; }
         public bool XmlStyleDates { get; set; }
 
-        public void Execute()
+        public void Execute(IServiceContext context)
         {
-            if (Response == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP context found");
-            }
+            if (context == null) throw new ArgumentNullException("context");
 
             if (Feed == null)
             {
@@ -43,11 +36,11 @@ namespace RestFoundation.Results
                 contentType = "application/atom+xml";
             }
 
-            Response.Output.Clear();
-            Response.SetHeader("Content-Type", contentType);
-            Response.SetCharsetEncoding(Request.Headers.AcceptCharsetEncoding);
+            context.Response.Output.Clear();
+            context.Response.SetHeader("Content-Type", contentType);
+            context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
-            using (XmlWriter writer = new FeedWriter(Response.Output.Writer, XmlStyleDates))
+            using (XmlWriter writer = new FeedWriter(context.Response.Output.Writer, XmlStyleDates))
             {
                 formatter.WriteTo(writer);
             }

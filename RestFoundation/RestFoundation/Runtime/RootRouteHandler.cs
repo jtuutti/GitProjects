@@ -13,6 +13,7 @@ namespace RestFoundation
 {
     public class RootRouteHandler : IRouteHandler, IHttpHandler
     {
+        private IServiceContext m_serviceContext;
         private IResultFactory m_resultFactory;
 
         public bool IsReusable
@@ -25,6 +26,7 @@ namespace RestFoundation
 
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
+            m_serviceContext = Rest.Active.CreateObject<IServiceContext>();
             m_resultFactory = Rest.Active.CreateObject<IResultFactory>();
 
             return this;
@@ -59,7 +61,7 @@ namespace RestFoundation
             
             try
             {
-                result = m_resultFactory.Create(GetOperations());
+                result = m_resultFactory.Create(m_serviceContext, GetOperations());
             }
             catch (HttpResponseException)
             {
@@ -71,7 +73,7 @@ namespace RestFoundation
                 return;
             }
 
-            result.Execute();
+            result.Execute(Rest.Active.CreateObject<IServiceContext>());
         }
 
         private static bool IsInBrowser(HttpRequest request)

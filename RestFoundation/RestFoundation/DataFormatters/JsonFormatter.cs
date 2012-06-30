@@ -8,17 +8,17 @@ namespace RestFoundation.DataFormatters
 {
     public class JsonFormatter : IDataFormatter
     {
-        public object FormatRequest(IHttpRequest request, Type objectType)
+        public object FormatRequest(IServiceContext context, Type objectType)
         {
-            if (request == null) throw new ArgumentNullException("request");
+            if (context == null) throw new ArgumentNullException("context");
             if (objectType == null) throw new ArgumentNullException("objectType");
 
-            if (request.Body.CanSeek)
+            if (context.Request.Body.CanSeek)
             {
-                request.Body.Seek(0, SeekOrigin.Begin);
+                context.Request.Body.Seek(0, SeekOrigin.Begin);
             }
 
-            using (var streamReader = new StreamReader(request.Body, request.Headers.ContentCharsetEncoding))
+            using (var streamReader = new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding))
             {
                 var serializer = new JsonSerializer();
                 var reader = new JsonTextReader(streamReader);
@@ -32,11 +32,13 @@ namespace RestFoundation.DataFormatters
             }
         }
 
-        public IResult FormatResponse(IHttpRequest request, IHttpResponse response, object obj)
+        public IResult FormatResponse(IServiceContext context, object obj)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             var result = Rest.Active.CreateObject<JsonResult>();
             result.Content = obj;
-            result.ContentType = request.GetPreferredAcceptType();
+            result.ContentType = context.Request.GetPreferredAcceptType();
 
             return result;
         }

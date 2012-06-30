@@ -10,25 +10,16 @@ namespace RestFoundation.Runtime
 {
     public class ServiceMethodInvoker : IServiceMethodInvoker
     {
-        private readonly IServiceContext m_context;
-        private readonly IHttpRequest m_request;
-        private readonly IHttpResponse m_response;
         private readonly IParameterBinder m_parameterBinder;
 
-        public ServiceMethodInvoker(IServiceContext context, IHttpRequest request, IHttpResponse response, IParameterBinder parameterBinder)
+        public ServiceMethodInvoker(IParameterBinder parameterBinder)
         {
-            if (context == null) throw new ArgumentNullException("context");
-            if (request == null) throw new ArgumentNullException("request");
-            if (response == null) throw new ArgumentNullException("response");
             if (parameterBinder == null) throw new ArgumentNullException("parameterBinder");
 
-            m_context = context;
-            m_request = request;
-            m_response = response;
             m_parameterBinder = parameterBinder;
         }
 
-        public virtual object Invoke(IRouteHandler routeHandler, object service, MethodInfo method)
+        public virtual object Invoke(IRouteHandler routeHandler, IServiceContext context, object service, MethodInfo method)
         {
             if (service == null || method == null)
             {
@@ -40,8 +31,13 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route handler was passed to the service method invoker");
             }
 
-            var behaviorInvoker = new BehaviorInvoker(service, method);
-            List<IServiceBehavior> behaviors = BehaviorRegistry.GetBehaviors(routeHandler, m_context, m_request, m_response);
+            if (context == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No service context was passed to the service method invoker");
+            }
+
+            var behaviorInvoker = new ServiceBehaviorInvoker(context, service, method);
+            List<IServiceBehavior> behaviors = ServiceBehaviorRegistry.GetBehaviors(routeHandler);
 
             var serviceAsBehavior = service as IServiceBehavior;
 
@@ -52,7 +48,7 @@ namespace RestFoundation.Runtime
 
             try
             {
-                return InvokeWithBehaviors(behaviorInvoker, behaviors);
+                return InvokeWithBehaviors(context, behaviorInvoker, behaviors);
             }
             catch (Exception ex)
             {
@@ -89,30 +85,30 @@ namespace RestFoundation.Runtime
             return null;
         }
 
-        public static bool IsWrapperException(Exception ex)
+        private static bool IsWrapperException(Exception ex)
         {
             return (ex is ServiceRuntimeException || ex is TargetInvocationException || ex is AggregateException) && ex.InnerException != null;
         }
 
-        private object InvokeWithBehaviors(BehaviorInvoker behaviorInvoker, List<IServiceBehavior> behaviors)
+        private object InvokeWithBehaviors(IServiceContext context, ServiceBehaviorInvoker serviceBehaviorInvoker, List<IServiceBehavior> behaviors)
         {
-            behaviorInvoker.PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>());
+            serviceBehaviorInvoker.PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>());
 
             object resource;
-            object[] methodArguments = GenerateMethodArguments(behaviorInvoker.Method, out resource);
+            object[] methodArguments = GenerateMethodArguments(context, serviceBehaviorInvoker.Method, out resource);
 
-            if (!behaviorInvoker.PerformOnExecutingBehaviors(behaviors, resource))
+            if (!serviceBehaviorInvoker.PerformOnExecutingBehaviors(behaviors, resource))
             {
                 return null;
             }
 
-            object result = behaviorInvoker.Method.Invoke(behaviorInvoker.Service, methodArguments);
-            behaviorInvoker.PerformOnExecutedBehaviors(behaviors, result);
+            object result = serviceBehaviorInvoker.Method.Invoke(serviceBehaviorInvoker.Service, methodArguments);
+            serviceBehaviorInvoker.PerformOnExecutedBehaviors(behaviors, result);
 
             return result;
         }
 
-        private object[] GenerateMethodArguments(MethodInfo method, out object resource)
+        private object[] GenerateMethodArguments(IServiceContext context, MethodInfo method, out object resource)
         {
             var methodArguments = new List<object>();
             resource = null;
@@ -120,7 +116,7 @@ namespace RestFoundation.Runtime
             foreach (ParameterInfo parameter in method.GetParameters())
             {
                 bool isResource;
-                object argumentValue = m_parameterBinder.BindParameter(parameter, out isResource);
+                object argumentValue = m_parameterBinder.BindParameter(context, parameter, out isResource);
 
                 if (isResource)
                 {

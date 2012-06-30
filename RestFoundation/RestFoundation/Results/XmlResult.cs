@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Serialization;
@@ -16,39 +15,33 @@ namespace RestFoundation.Results
             ContentType = "application/xml";
         }
 
-        public IServiceContext Context { get; set; }
-        public IHttpRequest Request { get; set; }
-        public IHttpResponse Response { get; set; }
         public object Content { get; set; }
         public string ContentType { get; set; }
 
-        public void Execute()
+        public void Execute(IServiceContext context)
         {
-            if (Response == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP context found");
-            }
+            if (context == null) throw new ArgumentNullException("context");
 
             if (Content == null)
             {
                 return;
             }
 
-            Response.Output.Clear();
-            Response.SetHeader("Content-Type", ContentType);
-            Response.SetCharsetEncoding(Request.Headers.AcceptCharsetEncoding);
+            context.Response.Output.Clear();
+            context.Response.SetHeader("Content-Type", ContentType);
+            context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
-            OutputCompressionManager.FilterResponse(Request, Response);
+            OutputCompressionManager.FilterResponse(context);
 
             if (Attribute.GetCustomAttribute(Content.GetType(), typeof(CompilerGeneratedAttribute), false) != null)
             {
-                SerializeAnonymousType(Response, Content);
+                SerializeAnonymousType(context.Response, Content);
                 return;
             }
 
             XmlSerializer serializer = XmlSerializerRegistry.Get(Content.GetType());
 
-            var xmlWriter = new XmlTextWriter(Response.Output.Writer)
+            var xmlWriter = new XmlTextWriter(context.Response.Output.Writer)
             {
                 Formatting = Formatting.None
             };

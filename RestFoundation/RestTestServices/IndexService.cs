@@ -13,8 +13,7 @@ namespace RestTestServices
 {
     public class IndexService : IIndexService
     {
-        public IHttpRequest Request { get; set; }
-        public IHttpResponse Response { get; set; }
+        public IServiceContext Context { get; set; }
 
         private readonly List<Person> people = new List<Person>
         {
@@ -68,7 +67,7 @@ namespace RestTestServices
 
         public ContentResult Get(int? id, string someGarbage)
         {
-            Response.Output.WriteFormat("GET : {0}", id);
+            Context.Response.Output.WriteFormat("GET : {0}", id);
 
             return Result.Content("<br/><br/>GET completed", false);
         }
@@ -82,7 +81,8 @@ namespace RestTestServices
 
             resource.Values = new[] { "New person added" };
 
-            Response.SetStatus(HttpStatusCode.Created);
+            Context.Response.SetHeader("Location", Context.Request.Url.ToAbsoluteUrl("~/home/index/999"));
+            Context.Response.SetStatus(HttpStatusCode.Created);
 
             return resource;
         }
@@ -118,7 +118,7 @@ namespace RestTestServices
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person's name provided");
             }
 
-            return Result.NoContent;
+            return Result.SetStatus(HttpStatusCode.NoContent, String.Format("Person '{0}' deleted", name));
         }
     }
 }

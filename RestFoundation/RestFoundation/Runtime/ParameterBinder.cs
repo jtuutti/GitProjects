@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Globalization;
 using System.Net;
 using System.Reflection;
 using System.Web;
+using RestFoundation.DataBinders;
 using RestFoundation.DataFormatters;
 
 namespace RestFoundation.Runtime
@@ -11,18 +11,19 @@ namespace RestFoundation.Runtime
     {
         protected const string ResourceParameterName = "resource";
 
-        private readonly IHttpRequest m_request;
-
-        public ParameterBinder(IHttpRequest request)
+        public virtual object BindParameter(IServiceContext context, ParameterInfo parameter, out bool isResource)
         {
-            if (request == null) throw new ArgumentNullException("request");
+            if (context == null) throw new ArgumentNullException("context");
 
-            m_request = request;
-        }
+            IDataBinder dataBinder = DataBinderRegistry.GetBinder(parameter.ParameterType);
 
-        public object BindParameter(ParameterInfo parameter, out bool isResource)
-        {
-            object parameterRoute = m_request.RouteValues.TryGet(parameter.Name);
+            if (dataBinder != null)
+            {
+                isResource = false;
+                return dataBinder.Bind(context, parameter.Name);
+            }
+
+            object parameterRoute = context.Request.RouteValues.TryGet(parameter.Name);
 
             if (parameterRoute != null)
             {
@@ -30,11 +31,12 @@ namespace RestFoundation.Runtime
                 return GetParameterValue(parameter, parameterRoute);
             }
 
-            if (String.Equals(ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase) ||
+            if ((context.Request.Method == HttpMethod.Post || context.Request.Method == HttpMethod.Put || context.Request.Method == HttpMethod.Patch) &&
+                String.Equals(ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase) ||
                 Attribute.GetCustomAttribute(parameter, typeof(BindResourceAttribute), true) != null)
             {
                 isResource = true;
-                return GetResourceValue(parameter);
+                return GetResourceValue(parameter, context);
             }
 
             isResource = false;
@@ -50,20 +52,13 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
             }
 
-            var constraintAttribute = Attribute.GetCustomAttribute(parameter, typeof(ParameterConstraintAttribute), false) as ParameterConstraintAttribute;
-
-            if (constraintAttribute != null && !constraintAttribute.Pattern.IsMatch(Convert.ToString(parameterRoute, CultureInfo.InvariantCulture)))
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
-            }
-
             return value;
         }
 
-        private object GetResourceValue(ParameterInfo parameter)
+        private static object GetResourceValue(ParameterInfo parameter, IServiceContext context)
         {
             IDataFormatter formatter = DataFormatterRegistry.GetFormatter(parameter.ParameterType) ??
-                                       DataFormatterRegistry.GetFormatter(m_request.Headers.ContentType);
+                                       DataFormatterRegistry.GetFormatter(context.Request.Headers.ContentType);
 
             if (formatter == null)
             {
@@ -74,7 +69,7 @@ namespace RestFoundation.Runtime
 
             try
             {
-                argumentValue = formatter.FormatRequest(m_request, parameter.ParameterType);
+                argumentValue = formatter.FormatRequest(context, parameter.ParameterType);
             }
             catch (Exception ex)
             {

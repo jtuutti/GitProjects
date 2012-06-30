@@ -36,7 +36,7 @@ namespace RestFoundation
                     }
                 }
 
-                BehaviorRegistry.AddBehavior(routeHandler, new ContentTypeBehavior(contentTypes));
+                ServiceBehaviorRegistry.AddBehavior(routeHandler, new ContentTypeBehavior(contentTypes));
             }
 
             return this;
@@ -59,7 +59,7 @@ namespace RestFoundation
 
                     if (behavior != null)
                     {
-                        BehaviorRegistry.AddBehavior(routeHandler, behaviors[i]);
+                        ServiceBehaviorRegistry.AddBehavior(routeHandler, behaviors[i]);
                     }
                 }
             }

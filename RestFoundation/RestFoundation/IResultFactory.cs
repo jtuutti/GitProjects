@@ -2,6 +2,6 @@
 {
     public interface IResultFactory
     {
-        IResult Create(object returnedObj);
+        IResult Create(IServiceContext context, object returnedObj);
     }
 }

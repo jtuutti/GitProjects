@@ -13,6 +13,7 @@ namespace RestFoundation.Runtime
     public sealed class RestAsyncHandler : IRouteHandler, IHttpAsyncHandler
     {
         private RouteValueDictionary m_routeValues;
+        private IServiceContext m_serviceContext;
         private IServiceFactory m_serviceFactory;
         private IResultFactory m_resultFactory;
         private IServiceMethodInvoker m_methodInvoker;
@@ -35,6 +36,7 @@ namespace RestFoundation.Runtime
             }
 
             m_routeValues = requestContext.RouteData.Values;
+            m_serviceContext = Rest.Active.CreateObject<IServiceContext>();
             m_serviceFactory = Rest.Active.CreateObject<IServiceFactory>();
             m_resultFactory = Rest.Active.CreateObject<IResultFactory>();
             m_methodInvoker = Rest.Active.CreateObject<IServiceMethodInvoker>();
@@ -56,19 +58,14 @@ namespace RestFoundation.Runtime
             var urlTemplate = (string) m_routeValues[RouteConstants.UrlTemplate];
 
             Type serviceContractType = ServiceContractTypeRegistry.GetType(serviceContractTypeName);
-
-            HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
             HttpMethod httpMethod = context.GetOverriddenHttpMethod();
 
             if (httpMethod == HttpMethod.Options)
             {
+                HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
                 context.AppendAllowHeader(allowedHttpMethods);
-                return Task<IResult>.Factory.StartNew(() => new EmptyResult()).ContinueWith(action => cb(action));
-            }
 
-            if (!allowedHttpMethods.Contains(httpMethod))
-            {
-                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "HTTP method is not allowed");
+                return Task<IResult>.Factory.StartNew(() => new EmptyResult()).ContinueWith(action => cb(action));
             }
 
             if (httpMethod == HttpMethod.Head)
@@ -76,7 +73,7 @@ namespace RestFoundation.Runtime
                 context.Response.SuppressContent = true;
             }
 
-            object service = m_serviceFactory.Create(serviceContractType);
+            object service = m_serviceFactory.Create(m_serviceContext, serviceContractType);
 
             ValidateAclAttribute acl;
             OutputCacheAttribute cache;
@@ -92,7 +89,7 @@ namespace RestFoundation.Runtime
             return Task<IResult>.Factory.StartNew(state =>
                                                  {
                                                      HttpContext.Current = ((HttpArguments) state).Context;
-                                                     return m_resultFactory.Create(m_methodInvoker.Invoke(this, service, method));
+                                                     return m_resultFactory.Create(m_serviceContext, m_methodInvoker.Invoke(this, m_serviceContext, service, method));
                                                  }, httpArguments)
                                         .ContinueWith(action => cb(action));
         }
@@ -129,7 +126,7 @@ namespace RestFoundation.Runtime
             return taskException;
         }
 
-        private static void ProcessResult(IResult result, HttpArguments httpArguments)
+        private void ProcessResult(IResult result, HttpArguments httpArguments)
         {
             HttpContext.Current = httpArguments.Context;
 
@@ -143,7 +140,7 @@ namespace RestFoundation.Runtime
                     }
                 }
 
-                result.Execute();
+                result.Execute(m_serviceContext);
             }
             else
             {

@@ -13,7 +13,7 @@ namespace RestFoundation.Runtime
         private const string XGzip = "x-gzip";
         private const string AllEncodings = "*";
 
-        public Stream Compress(Stream output, IEnumerable<string> acceptedEncodings, out string outputEncoding)
+        public virtual Stream Compress(Stream output, IEnumerable<string> acceptedEncodings, out string outputEncoding)
         {
             if (output == null || acceptedEncodings == null || output is DeflateStream || output is GZipStream)
             {

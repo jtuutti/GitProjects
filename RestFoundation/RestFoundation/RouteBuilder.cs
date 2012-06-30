@@ -125,13 +125,18 @@ namespace RestFoundation
                                    {
                                        { RouteConstants.ServiceContractType, serviceContractType.AssemblyQualifiedName },
                                        { RouteConstants.ServiceUrl, url },
-                                       { RouteConstants.UrlTemplate, metadata.UrlInfo.UrlTemplate.Trim() },
+                                       { RouteConstants.UrlTemplate, metadata.UrlInfo.UrlTemplate.Trim() }
                                    };
 
-                var routeHandler = isAsync ? (IRouteHandler) Rest.Active.CreateObject<RestAsyncHandler>() : Rest.Active.CreateObject<RestHandler>();
+                var constraints = new RouteValueDictionary
+                {
+                    { RouteConstants.RouteConstraint, new ServiceRouteConstraint(metadata) }
+                };
+
+                var routeHandler = isAsync ? (IRouteHandler) new RestAsyncHandler() : new RestHandler();
                 routeHandlers.Add(routeHandler);
 
-                m_routes.Add(new Route(ConcatUrl(url, metadata.UrlInfo.UrlTemplate.Trim()), defaults, routeHandler));
+                m_routes.Add(new Route(ConcatUrl(url, metadata.UrlInfo.UrlTemplate.Trim()), defaults, constraints, routeHandler));
             }
 
             return routeHandlers;

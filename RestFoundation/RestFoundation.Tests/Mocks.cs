@@ -21,6 +21,8 @@ namespace RestFoundation.Tests
         public static IServiceContext ServiceContext()
         {
             var mock = new Mock<IServiceContext>();
+            mock.SetupGet(x => x.Request).Returns(HttpRequest());
+            mock.SetupGet(x => x.Response).Returns(HttpResponse());
             mock.SetupGet(x => x.IsAuthenticated).Returns(true);
             mock.SetupGet(x => x.ItemBag).Returns(itemBag);
             mock.SetupProperty(x => x.User, new GenericPrincipal(new GenericIdentity("Tester"), new[] { "Test Runner" }));

@@ -16,7 +16,7 @@ namespace RestFoundation.Behaviors
             m_forbiddenMessage = DefaultForbiddenMessage;
         }
 
-        public virtual bool OnMethodAuthorizing(object service, MethodInfo method)
+        public virtual bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
             return false;
         }
@@ -26,21 +26,21 @@ namespace RestFoundation.Behaviors
             m_forbiddenMessage = message ?? DefaultForbiddenMessage;
         }
 
-        void ISecureServiceBehavior.OnMethodAuthorizing(object service, MethodInfo method)
+        void ISecureServiceBehavior.OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
             if (HttpContext.Current == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP context found");
             }
 
-            if (!OnMethodAuthorizing(service, method))
+            if (!OnMethodAuthorizing(context, service, method))
             {
                 throw new HttpResponseException(HttpStatusCode.Forbidden, m_forbiddenMessage);
             }
 
             HttpCachePolicy cache = HttpContext.Current.Response.Cache;
             cache.SetProxyMaxAge(new TimeSpan(0L));
-            cache.AddValidationCallback(CacheValidationHandler, new CacheValidationHandlerData(service, method));
+            cache.AddValidationCallback(CacheValidationHandler, new CacheValidationHandlerData(context, service, method));
         }
 
         private void CacheValidationHandler(HttpContext context, object data, ref HttpValidationStatus validationStatus)
@@ -53,7 +53,7 @@ namespace RestFoundation.Behaviors
                 return;
             }
 
-            if (!OnMethodAuthorizing(handlerData.Service, handlerData.Method))
+            if (!OnMethodAuthorizing(handlerData.Context, handlerData.Service, handlerData.Method))
             {
                 validationStatus = HttpValidationStatus.IgnoreThisRequest;
                 return;
@@ -66,12 +66,14 @@ namespace RestFoundation.Behaviors
 
         private sealed class CacheValidationHandlerData
         {
-            public CacheValidationHandlerData(object service, MethodInfo method)
+            public CacheValidationHandlerData(IServiceContext context, object service, MethodInfo method)
             {
+                Context = context;
                 Service = service;
                 Method = method;
             }
 
+            public IServiceContext Context { get; private set; }
             public object Service { get; private set; }
             public MethodInfo Method { get; private set; }
         }

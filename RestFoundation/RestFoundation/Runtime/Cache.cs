@@ -48,7 +48,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         /// <param name="key">The cache key.</param>
         /// <returns>true if the key was found; false otherwise.</returns>
-        public bool Contains(string key)
+        public virtual bool Contains(string key)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
@@ -60,7 +60,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         /// <param name="key">The cache key.</param>
         /// <returns>The corresponding value.</returns>
-        public object Get(string key)
+        public virtual object Get(string key)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
@@ -72,7 +72,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         /// <param name="key">The cache key.</param>
         /// <param name="value">The cached value.</param>
-        public void Add(string key, object value)
+        public virtual void Add(string key, object value)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
             if (value == null) throw new ArgumentNullException("value");
@@ -87,7 +87,7 @@ namespace RestFoundation.Runtime
         /// <param name="key">The cache key.</param>
         /// <param name="value">The cached value.</param>
         /// <param name="absoluteExpiration">A <see cref="DateTime"/> representing an absolute expiration time.</param>
-        public void Add(string key, object value, DateTime absoluteExpiration)
+        public virtual void Add(string key, object value, DateTime absoluteExpiration)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
             if (value == null) throw new ArgumentNullException("value");
@@ -102,7 +102,7 @@ namespace RestFoundation.Runtime
         /// <param name="key">The cache key.</param>
         /// <param name="value">The cached value.</param>
         /// <param name="slidingExpiration">A <see cref="TimeSpan"/> representing a sliding expiration time.</param>
-        public void Add(string key, object value, TimeSpan slidingExpiration)
+        public virtual void Add(string key, object value, TimeSpan slidingExpiration)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
             if (value == null) throw new ArgumentNullException("value");
@@ -116,7 +116,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         /// <param name="key">The cache key.</param>
         /// <param name="value">The cached value.</param>
-        public void Update(string key, object value)
+        public virtual void Update(string key, object value)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
             if (value == null) throw new ArgumentNullException("value");
@@ -130,7 +130,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         /// <param name="key">The cache key.</param>
         /// <returns>If the cache key was found and the entry was removed.</returns>
-        public bool Remove(string key)
+        public virtual bool Remove(string key)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
@@ -140,7 +140,7 @@ namespace RestFoundation.Runtime
         /// <summary>
         /// Clears all entries in the cache.
         /// </summary>
-        public void Clear()
+        public virtual void Clear()
         {
             IDictionaryEnumerator enumerator = cache.GetEnumerator();
 

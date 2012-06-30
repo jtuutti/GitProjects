@@ -4,6 +4,6 @@ namespace RestFoundation
 {
     public interface IServiceFactory
     {
-        object Create(Type serviceContractType);
+        object Create(IServiceContext context, Type serviceContractType);
     }
 }

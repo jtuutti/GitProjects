@@ -4,6 +4,6 @@ namespace RestFoundation
 {
     public interface ICredentialResolver
     {
-        NetworkCredential GetCredentials(IServiceContext context, IHttpRequest request);
+        NetworkCredential GetCredentials(IHttpRequest request);
     }
 }

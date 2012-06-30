@@ -7,6 +7,18 @@ namespace RestFoundation.Runtime
 {
     public class ServiceContext : IServiceContext
     {
+        private readonly IHttpRequest m_request;
+        private readonly IHttpResponse m_response;
+
+        public ServiceContext(IHttpRequest request, IHttpResponse response)
+        {
+            if (request == null) throw new ArgumentNullException("request");
+            if (response == null) throw new ArgumentNullException("response");
+
+            m_request = request;
+            m_response = response;
+        }
+
         private static HttpContext Context
         {
             get
@@ -22,7 +34,23 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public IPrincipal User
+        public virtual IHttpRequest Request
+        {
+            get
+            {
+                return m_request;
+            }
+        }
+
+        public virtual IHttpResponse Response
+        {
+            get
+            {
+                return m_response;
+            }
+        }
+
+        public virtual IPrincipal User
         {
             get
             {
@@ -42,7 +70,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public dynamic ItemBag
+        public virtual dynamic ItemBag
         {
             get
             {

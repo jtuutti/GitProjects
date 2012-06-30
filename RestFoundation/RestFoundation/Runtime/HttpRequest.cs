@@ -64,7 +64,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public bool IsAjax
+        public virtual bool IsAjax
         {
             get
             {
@@ -72,7 +72,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public bool IsLocal
+        public virtual bool IsLocal
         {
             get
             {
@@ -80,7 +80,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public bool IsSecure
+        public virtual bool IsSecure
         {
             get
             {
@@ -88,20 +88,15 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public ServiceUri Url
+        public virtual ServiceUri Url
         {
             get
             {
-                if (ContextContainer.Url == null)
-                {
-                    ContextContainer.Url = new ServiceUri(Context.Request.Url, GenerateServiceUrl());
-                }
-
-                return ContextContainer.Url;
+                return ContextContainer.Url ?? (ContextContainer.Url = new ServiceUri(Context.Request.Url, GenerateServiceUrl()));
             }
         }
 
-        public HttpMethod Method
+        public virtual HttpMethod Method
         {
             get
             {
@@ -114,7 +109,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public Stream Body
+        public virtual Stream Body
         {
             get
             {
@@ -122,89 +117,59 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public NetworkCredential Credentials
+        public virtual NetworkCredential Credentials
         {
             get
             {
-                return m_credentialResolver.GetCredentials(null, this);
+                return m_credentialResolver.GetCredentials(this);
             }
         }
 
-        public dynamic QueryBag
+        public virtual dynamic QueryBag
         {
             get
             {
-                if (ContextContainer.Query == null)
-                {
-                    ContextContainer.Query = new DynamicStringCollection(QueryString);
-                }
-
-                return ContextContainer.Query;
+                return ContextContainer.Query ?? (ContextContainer.Query = new DynamicStringCollection(QueryString));
             }
         }
 
-        public IObjectValueCollection RouteValues
+        public virtual IObjectValueCollection RouteValues
         {
             get
             {
-                if (ContextContainer.RouteValues == null)
-                {
-                    ContextContainer.RouteValues = GenerateRouteValues();
-                }
-
-                return ContextContainer.RouteValues;
+                return ContextContainer.RouteValues ?? (ContextContainer.RouteValues = GenerateRouteValues());
             }
         }
 
-        public IHeaderCollection Headers
+        public virtual IHeaderCollection Headers
         {
             get
             {
-                if (ContextContainer.Headers == null)
-                {
-                    ContextContainer.Headers = new HeaderCollection(Context.Request.Headers);
-                }
-
-                return ContextContainer.Headers;
+                return ContextContainer.Headers ?? (ContextContainer.Headers = new HeaderCollection(Context.Request.Headers));
             }
         }
 
-        public IStringValueCollection QueryString
+        public virtual IStringValueCollection QueryString
         {
             get
             {
-                if (ContextContainer.QueryString == null)
-                {
-                    ContextContainer.QueryString = new StringValueCollection(Context.Request.QueryString);
-                }
-
-                return ContextContainer.QueryString;
+                return ContextContainer.QueryString ?? (ContextContainer.QueryString = new StringValueCollection(Context.Request.QueryString));
             }
         }
 
-        public IStringValueCollection ServerVariables
+        public virtual IStringValueCollection ServerVariables
         {
             get
             {
-                if (ContextContainer.ServerVariables == null)
-                {
-                    ContextContainer.ServerVariables = new StringValueCollection(Context.Request.ServerVariables);
-                }
-
-                return ContextContainer.ServerVariables;
+                return ContextContainer.ServerVariables ?? (ContextContainer.ServerVariables = new StringValueCollection(Context.Request.ServerVariables));
             }
         }
 
-        public ICookieValueCollection Cookies
+        public virtual ICookieValueCollection Cookies
         {
             get
             {
-                if (ContextContainer.Cookies == null)
-                {
-                    ContextContainer.Cookies = new CookieValueCollection(Context.Request.Cookies);
-                }
-
-                return ContextContainer.Cookies;
+                return ContextContainer.Cookies ?? (ContextContainer.Cookies = new CookieValueCollection(Context.Request.Cookies));
             }
         }
 

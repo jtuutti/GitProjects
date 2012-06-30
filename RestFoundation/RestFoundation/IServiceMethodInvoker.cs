@@ -5,6 +5,6 @@ namespace RestFoundation
 {
     public interface IServiceMethodInvoker
     {
-        object Invoke(IRouteHandler handler, object service, MethodInfo method);
+        object Invoke(IRouteHandler handler, IServiceContext context, object service, MethodInfo method);
     }
 }

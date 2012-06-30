@@ -44,7 +44,7 @@ namespace RestFoundation.Test
                 throw new RouteAssertException("Invalid service contract type provided.");
             }
 
-            RouteData routeData = RouteTable.Routes.GetRouteData(new TestHttpContext(m_relativeUrl));
+            RouteData routeData = RouteTable.Routes.GetRouteData(new TestHttpContext(m_relativeUrl, m_httpMethod.ToString().ToUpperInvariant()));
 
             if (routeData == null)
             {

@@ -16,14 +16,14 @@ namespace RestFoundation.Behaviors
             m_contentTypes = new HashSet<string>(contentTypes, StringComparer.OrdinalIgnoreCase);
         }
 
-        public override bool OnMethodExecuting(object service, MethodInfo method, object resource)
+        public override bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
         {
-            if (Request.Method != HttpMethod.Post && Request.Method != HttpMethod.Put && Request.Method != HttpMethod.Patch)
+            if (context.Request.Method != HttpMethod.Post && context.Request.Method != HttpMethod.Put && context.Request.Method != HttpMethod.Patch)
             {
                 return true;
             }
 
-            string contentType = Request.Headers.ContentType ?? String.Empty;
+            string contentType = context.Request.Headers.ContentType ?? String.Empty;
 
             if (!m_contentTypes.Contains(contentType))
             {

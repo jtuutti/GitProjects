@@ -12,21 +12,15 @@ namespace RestFoundation.Results
             ClearOutput = true;
         }
 
-        public IServiceContext Context { get; set; }
-        public IHttpRequest Request { get; set; }
-        public IHttpResponse Response { get; set; }
         public string FilePath { get; set; }
         public string ContentType { get; set; }
         public string ContentDisposition { get; set; }
         public bool CacheOutput { get; set; }
         public bool ClearOutput { get; set; }
 
-        public void Execute()
+        public void Execute(IServiceContext context)
         {
-            if (Response == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP context found");
-            }
+            if (context == null) throw new ArgumentNullException("context");
 
             if (FilePath == null)
             {
@@ -42,38 +36,38 @@ namespace RestFoundation.Results
 
             if (ClearOutput)
             {
-                Response.Output.Clear();
+                context.Response.Output.Clear();
             }
 
             if (!String.IsNullOrEmpty(ContentType))
             {
-                Response.SetHeader("Content-Type", ContentType);
+                context.Response.SetHeader("Content-Type", ContentType);
             }
             else
             {
-                string acceptType = Request.GetPreferredAcceptType();
+                string acceptType = context.Request.GetPreferredAcceptType();
 
                 if (!String.IsNullOrEmpty(acceptType))
                 {
-                    Response.SetHeader("Content-Type", acceptType);
+                    context.Response.SetHeader("Content-Type", acceptType);
                 }
             }
 
             if (!String.IsNullOrEmpty(ContentDisposition))
             {
-                Response.SetHeader("Content-Disposition", ContentType);
+                context.Response.SetHeader("Content-Disposition", ContentType);
             }
 
-            Response.SetCharsetEncoding(Request.Headers.AcceptCharsetEncoding);
+            context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
-            OutputCompressionManager.FilterResponse(Request, Response);
+            OutputCompressionManager.FilterResponse(context);
 
             if (CacheOutput)
             {
-                Response.SetFileDependencies(file.FullName);
+                context.Response.SetFileDependencies(file.FullName);
             }
 
-            Response.TransmitFile(file.FullName);
+            context.Response.TransmitFile(file.FullName);
         }
     }
 }

@@ -4,6 +4,9 @@ namespace RestFoundation
 {
     public interface IServiceContext
     {
+        IHttpRequest Request { get; }
+        IHttpResponse Response { get; }
+
         IPrincipal User { get; set; }
         bool IsAuthenticated { get; }
 

@@ -25,15 +25,18 @@ namespace RestFoundation.Tests
         [Test]
         public void InstantiateServiceFromContract()
         {
-            var service = m_serviceFactory.Create(typeof(ITestService)) as ITestService;
+            var context = ObjectFactory.GetInstance<IServiceContext>();
+            Assert.That(context, Is.Not.Null);
+
+            var service = m_serviceFactory.Create(context, typeof(ITestService)) as ITestService;
             Assert.That(service, Is.Not.Null);
 
             var serviceImpl = (TestService) service;
             Assert.That(serviceImpl, Is.Not.Null);
             Assert.That(serviceImpl.Context, Is.Not.Null);
-            Assert.That(serviceImpl.Request, Is.Not.Null);
-            Assert.That(serviceImpl.Response, Is.Not.Null);
-            Assert.That(serviceImpl.Response.Output, Is.Not.Null);
+            Assert.That(serviceImpl.Context.Request, Is.Not.Null);
+            Assert.That(serviceImpl.Context.Response, Is.Not.Null);
+            Assert.That(serviceImpl.Context.Response.Output, Is.Not.Null);
         }
     }
 }

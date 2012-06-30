@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Reflection;
 using System.Web;
 using System.Web.Routing;
@@ -12,6 +11,7 @@ namespace RestFoundation.Runtime
     public sealed class RestHandler : IRouteHandler, IHttpHandler
     {
         private RouteValueDictionary m_routeValues;
+        private IServiceContext m_serviceContext;
         private IServiceFactory m_serviceFactory;
         private IResultFactory m_resultFactory;
         private IServiceMethodInvoker m_methodInvoker;
@@ -34,6 +34,7 @@ namespace RestFoundation.Runtime
             }
 
             m_routeValues = requestContext.RouteData.Values;
+            m_serviceContext = Rest.Active.CreateObject<IServiceContext>();
             m_serviceFactory = Rest.Active.CreateObject<IServiceFactory>();
             m_resultFactory = Rest.Active.CreateObject<IResultFactory>();
             m_methodInvoker = Rest.Active.CreateObject<IServiceMethodInvoker>();
@@ -50,19 +51,14 @@ namespace RestFoundation.Runtime
             var urlTemplate = (string) m_routeValues[RouteConstants.UrlTemplate];
 
             Type serviceContractType = ServiceContractTypeRegistry.GetType(serviceContractTypeName);
-
-            HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
             HttpMethod httpMethod = context.GetOverriddenHttpMethod();
 
             if (httpMethod == HttpMethod.Options)
             {
+                HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
                 context.AppendAllowHeader(allowedHttpMethods);
-                return;
-            }
 
-            if (!allowedHttpMethods.Contains(httpMethod))
-            {
-                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "HTTP method is not allowed");
+                return;
             }
 
             if (httpMethod == HttpMethod.Head)
@@ -70,7 +66,7 @@ namespace RestFoundation.Runtime
                 context.Response.SuppressContent = true;
             }
 
-            object service = m_serviceFactory.Create(serviceContractType);
+            object service = m_serviceFactory.Create(m_serviceContext, serviceContractType);
 
             ValidateAclAttribute acl;
             OutputCacheAttribute cache;
@@ -81,7 +77,7 @@ namespace RestFoundation.Runtime
                 AclValidator.Validate(context, acl.SectionName);
             }
 
-            object result = m_methodInvoker.Invoke(this, service, method);
+            object result = m_methodInvoker.Invoke(this, m_serviceContext, service, method);
 
             if (!(result is EmptyResult))
             {
@@ -91,7 +87,7 @@ namespace RestFoundation.Runtime
 
         private void ProcessResult(HttpContext context, HttpMethod httpMethod, object result, OutputCacheAttribute cache, Type methodReturnType)
         {
-            IResult httpResult = m_resultFactory.Create(result);
+            IResult httpResult = m_resultFactory.Create(m_serviceContext, result);
 
             if (httpResult != null)
             {
@@ -103,7 +99,7 @@ namespace RestFoundation.Runtime
                     }
                 }
 
-                httpResult.Execute();
+                httpResult.Execute(m_serviceContext);
             }
             else
             {

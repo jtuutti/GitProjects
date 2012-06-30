@@ -1,4 +1,4 @@
-﻿using System.Net;
+﻿using System;
 using Newtonsoft.Json;
 using RestFoundation.Runtime;
 
@@ -11,32 +11,26 @@ namespace RestFoundation.Results
             ContentType = "application/json";
         }
 
-        public IServiceContext Context { get; set; }
-        public IHttpRequest Request { get; set; }
-        public IHttpResponse Response { get; set; }
         public object Content { get; set; }
         public string ContentType { get; set; }
 
-        public void Execute()
+        public void Execute(IServiceContext context)
         {
-            if (Response == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP context found");
-            }
+            if (context == null) throw new ArgumentNullException("context");
 
             if (Content == null)
             {
                 return;
             }
 
-            Response.Output.Clear();
-            Response.SetHeader("Content-Type", ContentType);
-            Response.SetCharsetEncoding(Request.Headers.AcceptCharsetEncoding);
+            context.Response.Output.Clear();
+            context.Response.SetHeader("Content-Type", ContentType);
+            context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
-            OutputCompressionManager.FilterResponse(Request, Response);
+            OutputCompressionManager.FilterResponse(context);
 
             var serializer = new JsonSerializer();
-            serializer.Serialize(Response.Output.Writer, Content);
+            serializer.Serialize(context.Response.Output.Writer, Content);
         }
     }
 }

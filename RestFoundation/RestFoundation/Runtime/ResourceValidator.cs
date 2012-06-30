@@ -9,7 +9,7 @@ namespace RestFoundation.Runtime
 {
     public class ResourceValidator : IResourceValidator
     {
-        public bool IsValid(object resource, out ICollection<ValidationError> errors)
+        public virtual bool IsValid(object resource, out ICollection<ValidationError> errors)
         {
             if (resource == null || resource is DynamicObject || resource is JObject)
             {

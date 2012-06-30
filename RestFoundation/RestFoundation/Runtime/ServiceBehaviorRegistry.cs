@@ -6,7 +6,7 @@ using RestFoundation.Behaviors;
 
 namespace RestFoundation.Runtime
 {
-    internal static class BehaviorRegistry
+    internal static class ServiceBehaviorRegistry
     {
         private static readonly List<IServiceBehavior> globalBehaviors = new List<IServiceBehavior>
         {
@@ -17,7 +17,7 @@ namespace RestFoundation.Runtime
         private static readonly object globalSyncRoot = new object();
         private static readonly object handlerSyncRoot = new object();
 
-        public static List<IServiceBehavior> GetBehaviors(IRouteHandler routeHandler, IServiceContext context, IHttpRequest request, IHttpResponse response)
+        public static List<IServiceBehavior> GetBehaviors(IRouteHandler routeHandler)
         {
             var allBehaviors = new List<IServiceBehavior>(globalBehaviors);
             List<IServiceBehavior> serviceBehaviors;
@@ -29,13 +29,6 @@ namespace RestFoundation.Runtime
                     TryRemoveBehavior(serviceBehavior, allBehaviors);
                     allBehaviors.Add(serviceBehavior);
                 }
-            }
-
-            foreach (IServiceBehavior behavior in allBehaviors)
-            {
-                behavior.Context = context;
-                behavior.Request = request;
-                behavior.Response = response;
             }
 
             return allBehaviors;

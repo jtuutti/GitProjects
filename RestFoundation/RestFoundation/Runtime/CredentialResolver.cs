@@ -6,7 +6,7 @@ namespace RestFoundation.Runtime
 {
     public class CredentialResolver : ICredentialResolver
     {
-        public NetworkCredential GetCredentials(IServiceContext context, IHttpRequest request)
+        public virtual NetworkCredential GetCredentials(IHttpRequest request)
         {
             if (request == null) throw new ArgumentNullException("request");
 

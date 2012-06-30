@@ -9,20 +9,10 @@ namespace RestFoundation.Runtime
 {
     public class ResultFactory : IResultFactory
     {
-        private readonly IHttpRequest m_request;
-        private readonly IHttpResponse m_response;
-
-        public ResultFactory(IHttpRequest request, IHttpResponse response)
+        public virtual IResult Create(IServiceContext context, object returnedObj)
         {
-            if (request == null) throw new ArgumentNullException("request");
-            if (response == null) throw new ArgumentNullException("response");
+            if (context == null) throw new ArgumentNullException("context");
 
-            m_request = request;
-            m_response = response;
-        }
-
-        public IResult Create(object returnedObj)
-        {
             if (returnedObj == null)
             {
                 return null;
@@ -35,33 +25,33 @@ namespace RestFoundation.Runtime
                 return result;
             }
 
-            return CreateFormatterResult(returnedObj);
+            return CreateFormatterResult(context, returnedObj);
         }
 
-        private IResult CreateFormatterResult(object returnedObj)
+        private IResult CreateFormatterResult(IServiceContext context, object returnedObj)
         {
             if (returnedObj.GetType().IsGenericType && returnedObj.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) != null)
             {
-                returnedObj = PerformOdataOperations(returnedObj);
+                returnedObj = PerformOdataOperations(context, returnedObj);
             }
 
-            IDataFormatter formatter = DataFormatterRegistry.GetFormatter(m_request.GetPreferredAcceptType());
+            IDataFormatter formatter = DataFormatterRegistry.GetFormatter(context.Request.GetPreferredAcceptType());
 
             if (formatter == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported content type was provided in the Accept or the Content-Type header");
             }
 
-            return formatter.FormatResponse(m_request, m_response, returnedObj);
+            return formatter.FormatResponse(context, returnedObj);
         }
 
-        private object PerformOdataOperations(object returnedObj)
+        private object PerformOdataOperations(IServiceContext context, object returnedObj)
         {
             object filteredResults;
 
             try
             {
-                filteredResults = QueryableHelper.Filter(returnedObj, m_request.QueryString.ToNameValueCollection());
+                filteredResults = QueryableHelper.Filter(returnedObj, context.Request.QueryString.ToNameValueCollection());
             }
             catch (Exception)
             {

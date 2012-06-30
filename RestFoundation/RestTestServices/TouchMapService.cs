@@ -24,18 +24,20 @@ namespace RestTestServices
             { "Production", "smartcare" }
         }; // web.config mocking
 
+        public IServiceContext Context { get; set; }
+
         public object Get()
         {
             var sessionInfo = (SessionInfo) Context.ItemBag.SessionInfo;
 
-            string relativePath = Response.MapPath(String.Format(@"~\App_Data\{0}\{1}\{2}\TouchMap.xml",
-                                                                 sessionInfo.CustomerId,
-                                                                 sessionInfo.ApplicationId,
-                                                                 sessionInfo.Culture));
+            string relativePath = Context.Response.MapPath(String.Format(@"~\App_Data\{0}\{1}\{2}\TouchMap.xml",
+                                                           sessionInfo.CustomerId,
+                                                           sessionInfo.ApplicationId,
+                                                           sessionInfo.Culture));
 
             if (File.Exists(relativePath))
             {
-                Response.SetFileDependencies(relativePath);
+                Context.Response.SetFileDependencies(relativePath);
             }
             else
             {
@@ -57,13 +59,13 @@ namespace RestTestServices
             }
         }
 
-        public override bool OnMethodAuthorizing(object service, MethodInfo method)
+        public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
-            var sessionInfo = new SessionInfo(Request.Headers.TryGet("X-SpeechCycle-SmartCare-ApplicationID"),
-                                              Request.Headers.TryGet("X-SpeechCycle-SmartCare-CustomerID"),
-                                              Request.Headers.TryGet("X-SpeechCycle-SmartCare-SessionID"),
-                                              Request.Headers.TryGet("X-SpeechCycle-SmartCare-CultureCode"),
-                                              Request.Headers.TryGet("X-SpeechCycle-SmartCare-Environment"));
+            var sessionInfo = new SessionInfo(context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-ApplicationID"),
+                                              context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-CustomerID"),
+                                              context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-SessionID"),
+                                              context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-CultureCode"),
+                                              context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-Environment"));
 
             if (String.IsNullOrEmpty(sessionInfo.ApplicationId) ||
                 String.IsNullOrEmpty(sessionInfo.CustomerId) ||
@@ -74,7 +76,7 @@ namespace RestTestServices
                 return false;
             }
 
-            Context.ItemBag.SessionInfo = sessionInfo;
+            context.ItemBag.SessionInfo = sessionInfo;
             return true;
         }
 

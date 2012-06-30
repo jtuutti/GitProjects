@@ -6,9 +6,9 @@ namespace RestFoundation.Test
     {
         private readonly HttpRequestBase m_request;
 
-        public TestHttpContext(string relativeUrl)
+        public TestHttpContext(string relativeUrl, string httpMethod)
         {
-            m_request = new TestHttpRequest(relativeUrl);
+            m_request = new TestHttpRequest(relativeUrl, httpMethod);
         }
 
         public override HttpRequestBase Request

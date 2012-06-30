@@ -4,33 +4,36 @@ using System.Reflection;
 
 namespace RestFoundation.Runtime
 {
-    public class BehaviorInvoker
+    public class ServiceBehaviorInvoker
     {
-        public BehaviorInvoker(object service, MethodInfo method)
+        public ServiceBehaviorInvoker(IServiceContext context, object service, MethodInfo method)
         {
+            if (context == null) throw new ArgumentNullException("context");
             if (service == null) throw new ArgumentNullException("service");
             if (method == null) throw new ArgumentNullException("method");
 
+            Context = context;
             Service = service;
             Method = method;
         }
 
+        public IServiceContext Context { get; protected set; }
         public object Service { get; protected set; }
         public MethodInfo Method { get; protected set; }
 
-        public void PerformOnBindingBehaviors(IEnumerable<ISecureServiceBehavior> behaviors)
+        public virtual void PerformOnBindingBehaviors(IEnumerable<ISecureServiceBehavior> behaviors)
         {
             foreach (ISecureServiceBehavior behavior in behaviors)
             {
-                behavior.OnMethodAuthorizing(Service, Method);
+                behavior.OnMethodAuthorizing(Context, Service, Method);
             }
         }
 
-        public bool PerformOnExecutingBehaviors(List<IServiceBehavior> behaviors, object resource)
+        public virtual bool PerformOnExecutingBehaviors(List<IServiceBehavior> behaviors, object resource)
         {
             for (int i = 0; i < behaviors.Count; i++)
             {
-                if (!behaviors[i].OnMethodExecuting(Service, Method, resource))
+                if (!behaviors[i].OnMethodExecuting(Context, Service, Method, resource))
                 {
                     return false;
                 }
@@ -39,19 +42,19 @@ namespace RestFoundation.Runtime
             return true;
         }
 
-        public void PerformOnExecutedBehaviors(List<IServiceBehavior> behaviors, object result)
+        public virtual void PerformOnExecutedBehaviors(List<IServiceBehavior> behaviors, object result)
         {
             for (int i = behaviors.Count - 1; i >= 0; i--)
             {
-                behaviors[i].OnMethodExecuted(Service, Method, result);
+                behaviors[i].OnMethodExecuted(Context, Service, Method, result);
             }
         }
 
-        public bool PerformOnExceptionBehaviors(List<IServiceBehavior> behaviors, Exception ex)
+        public virtual bool PerformOnExceptionBehaviors(List<IServiceBehavior> behaviors, Exception ex)
         {
             for (int i = 0; i < behaviors.Count; i++)
             {
-                if (!behaviors[i].OnMethodException(Service, Method, ex))
+                if (!behaviors[i].OnMethodException(Context, Service, Method, ex))
                 {
                     return false;
                 }

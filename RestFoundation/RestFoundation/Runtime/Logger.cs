@@ -8,7 +8,7 @@
         /// <summary>
         /// Gets or sets a <see cref="bool"/> value indicating whether the FATAL level logging is enabled.
         /// </summary>
-        public bool IsFatalEnabled
+        public virtual bool IsFatalEnabled
         {
             get
             {
@@ -19,7 +19,7 @@
         /// <summary>
         /// Gets or sets a <see cref="bool"/> value indicating whether the ERROR level logging is enabled.
         /// </summary>
-        public bool IsErrorEnabled
+        public virtual bool IsErrorEnabled
         {
             get
             {
@@ -30,7 +30,7 @@
         /// <summary>
         /// Gets or sets a <see cref="bool"/> value indicating whether the WARN level logging is enabled.
         /// </summary>
-        public bool IsWarnEnabled
+        public virtual bool IsWarnEnabled
         {
             get
             {
@@ -41,7 +41,7 @@
         /// <summary>
         /// Gets or sets a <see cref="bool"/> value indicating whether the DEBUG level logging is enabled.
         /// </summary>
-        public bool IsDebugEnabled
+        public virtual bool IsDebugEnabled
         {
             get
             {
@@ -52,7 +52,7 @@
         /// <summary>
         /// Gets or sets a <see cref="bool"/> value indicating whether the INFO level logging is enabled.
         /// </summary>
-        public bool IsInfoEnabled
+        public virtual bool IsInfoEnabled
         {
             get
             {
@@ -64,7 +64,7 @@
         /// Logs fatal error data.
         /// </summary>
         /// <param name="info">An object to log.</param>
-        public void Fatal(object info)
+        public virtual void Fatal(object info)
         {
         }
 
@@ -72,7 +72,7 @@
         /// Logs error data.
         /// </summary>
         /// <param name="info">An object to log.</param>
-        public void Error(object info)
+        public virtual void Error(object info)
         {
         }
 
@@ -80,7 +80,7 @@
         /// Logs warning data.
         /// </summary>
         /// <param name="info">An object to log.</param>
-        public void Warn(object info)
+        public virtual void Warn(object info)
         {
         }
 
@@ -88,7 +88,7 @@
         /// Logs debugging data.
         /// </summary>
         /// <param name="info">An object to log.</param>
-        public void Debug(object info)
+        public virtual void Debug(object info)
         {
         }
 
@@ -96,7 +96,7 @@
         /// Logs information data.
         /// </summary>
         /// <param name="info">An object to log.</param>
-        public void Info(object info)
+        public virtual void Info(object info)
         {
         }
 
@@ -105,7 +105,7 @@
         /// </summary>
         /// <param name="info">A format string to log.</param>
         /// <param name="args">A sequence of parameters.</param>
-        public void FatalFormat(string info, params object[] args)
+        public virtual void FatalFormat(string info, params object[] args)
         {
         }
 
@@ -114,7 +114,7 @@
         /// </summary>
         /// <param name="info">A format string to log.</param>
         /// <param name="args">A sequence of parameters.</param>
-        public void ErrorFormat(string info, params object[] args)
+        public virtual void ErrorFormat(string info, params object[] args)
         {
         }
 
@@ -123,7 +123,7 @@
         /// </summary>
         /// <param name="info">A format string to log.</param>
         /// <param name="args">A sequence of parameters.</param>
-        public void WarnFormat(string info, params object[] args)
+        public virtual void WarnFormat(string info, params object[] args)
         {
         }
 
@@ -132,7 +132,7 @@
         /// </summary>
         /// <param name="info">A format string to log.</param>
         /// <param name="args">A sequence of parameters.</param>
-        public void DebugFormat(string info, params object[] args)
+        public virtual void DebugFormat(string info, params object[] args)
         {
         }
 
@@ -141,7 +141,7 @@
         /// </summary>
         /// <param name="info">A format string to log.</param>
         /// <param name="args">A sequence of parameters.</param>
-        public void InfoFormat(string info, params object[] args)
+        public virtual void InfoFormat(string info, params object[] args)
         {
         }
     }
