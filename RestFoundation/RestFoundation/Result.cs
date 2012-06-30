@@ -13,9 +13,12 @@ namespace RestFoundation
         {
             get
             {
-                var result = Rest.Active.CreateObject<StatusResult>();
-                result.StatusCode = HttpStatusCode.OK;
-                result.StatusDescription = "OK";
+                var result = new StatusResult
+                             {
+                                 StatusCode = HttpStatusCode.OK,
+                                 StatusDescription = "OK"
+                             };
+
                 return result;
             }
         }
@@ -24,9 +27,12 @@ namespace RestFoundation
         {
             get
             {
-                var result = Rest.Active.CreateObject<StatusResult>();
-                result.StatusCode = HttpStatusCode.NoContent;
-                result.StatusDescription = String.Empty;
+                var result = new StatusResult
+                             {
+                                 StatusCode = HttpStatusCode.NoContent,
+                                 StatusDescription = String.Empty
+                             };
+
                 return result;
             }
         }
@@ -35,9 +41,12 @@ namespace RestFoundation
         {
             get
             {
-                var result = Rest.Active.CreateObject<StatusResult>();
-                result.StatusCode = HttpStatusCode.NotFound;
-                result.StatusDescription = "Not Found";
+                var result = new StatusResult
+                             {
+                                 StatusCode = HttpStatusCode.NotFound,
+                                 StatusDescription = "Not Found"
+                             };
+
                 return result;
             }
         }
@@ -54,10 +63,12 @@ namespace RestFoundation
 
         public static ContentResult Content(string content, string contentType, bool clearOutput)
         {
-            var result = Rest.Active.CreateObject<ContentResult>();
-            result.Content = content;
-            result.ContentType = contentType;
-            result.ClearOutput = clearOutput;
+            var result = new ContentResult
+                         {
+                             Content = content,
+                             ContentType = contentType,
+                             ClearOutput = clearOutput
+                         };
 
             return result;
         }
@@ -93,11 +104,13 @@ namespace RestFoundation
 
         public static BinaryResult Content(byte[] data, string contentType, string contentDisposition, bool clearOutput)
         {
-            var result = Rest.Active.CreateObject<BinaryResult>();
-            result.Content = data;
-            result.ContentType = contentType;
-            result.ContentDisposition = contentDisposition;
-            result.ClearOutput = clearOutput;
+            var result = new BinaryResult
+                         {
+                             Content = data,
+                             ContentType = contentType,
+                             ContentDisposition = contentDisposition,
+                             ClearOutput = clearOutput
+                         };
 
             return result;
         }
@@ -119,11 +132,13 @@ namespace RestFoundation
 
         public static StreamResult Content(Stream stream, string contentType, string contentDisposition, bool clearOutput)
         {
-            var result = Rest.Active.CreateObject<StreamResult>();
-            result.Stream = stream;
-            result.ContentType = contentType;
-            result.ContentDisposition = contentDisposition;
-            result.ClearOutput = clearOutput;
+            var result = new StreamResult
+                         {
+                             Stream = stream,
+                             ContentType = contentType,
+                             ContentDisposition = contentDisposition,
+                             ClearOutput = clearOutput
+                         };
 
             return result;
         }
@@ -150,12 +165,14 @@ namespace RestFoundation
 
         public static FilePathResult FilePath(string filePath, string contentType, string contentDisposition, bool clearOutput, bool cacheOutput)
         {
-            var result = Rest.Active.CreateObject<FilePathResult>();
-            result.FilePath = filePath;
-            result.ContentType = contentType;
-            result.ContentDisposition = contentDisposition;
-            result.ClearOutput = clearOutput;
-            result.CacheOutput = cacheOutput;
+            var result = new FilePathResult
+                         {
+                             FilePath = filePath,
+                             ContentType = contentType,
+                             ContentDisposition = contentDisposition,
+                             ClearOutput = clearOutput,
+                             CacheOutput = cacheOutput
+                         };
 
             return result;
         }
@@ -182,12 +199,14 @@ namespace RestFoundation
 
         public static FileUrlResult FileUrl(string fileUrl, string contentType, string contentDisposition, bool clearOutput, bool cacheOutput)
         {
-            var result = Rest.Active.CreateObject<FileUrlResult>();
-            result.FileUrl = fileUrl;
-            result.ContentType = contentType;
-            result.ContentDisposition = contentDisposition;
-            result.ClearOutput = clearOutput;
-            result.CacheOutput = cacheOutput;
+            var result = new FileUrlResult
+                         {
+                             FileUrl = fileUrl,
+                             ContentType = contentType,
+                             ContentDisposition = contentDisposition,
+                             ClearOutput = clearOutput,
+                             CacheOutput = cacheOutput
+                         };
 
             return result;
         }
@@ -204,9 +223,11 @@ namespace RestFoundation
 
         public static StatusResult SetStatus(HttpStatusCode code, string description, IDictionary<string, string> additionalHeaders)
         {
-            var result = Rest.Active.CreateObject<StatusResult>();
-            result.StatusCode = code;
-            result.StatusDescription = description;
+            var result = new StatusResult
+                         {
+                             StatusCode = code,
+                             StatusDescription = description
+                         };
 
             if (additionalHeaders != null)
             {
@@ -226,10 +247,12 @@ namespace RestFoundation
 
         public static FeedResult Feed(SyndicationFeed feed, FeedResult.SyndicationFormat format, bool xmlStyleDates)
         {
-            var result = Rest.Active.CreateObject<FeedResult>();
-            result.Feed = feed;
-            result.Format = format;
-            result.XmlStyleDates = xmlStyleDates;
+            var result = new FeedResult
+                         {
+                             Feed = feed,
+                             Format = format,
+                             XmlStyleDates = xmlStyleDates
+                         };
 
             return result;
         }

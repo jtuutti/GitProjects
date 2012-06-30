@@ -13,30 +13,6 @@ namespace RestFoundation
 
         private static bool defaultUrlMapped;
 
-        protected Rest()
-        {
-            if (defaultUrlMapped)
-            {
-                return;
-            }
-
-            RouteCollection routes = RouteTable.Routes;
-
-            if (routes == null)
-            {
-                throw new InvalidOperationException("No active routing table was found.");
-            }
-
-            lock (syncRoot)
-            {
-                if (!defaultUrlMapped)
-                {
-                    routes.Add(new Route(String.Empty, new RootRouteHandler()));
-                    defaultUrlMapped = true;
-                }
-            }
-        }
-
         public static Rest Configure
         {
             get
@@ -63,6 +39,8 @@ namespace RestFoundation
             }
 
             Activator = activator;
+
+            MapDefaultUrl();
             return this;
         }
 
@@ -76,6 +54,8 @@ namespace RestFoundation
             }
 
             Activator = new DelegateObjectActivator(factory);
+
+            MapDefaultUrl();
             return this;
         }
 
@@ -146,6 +126,30 @@ namespace RestFoundation
             catch (Exception ex)
             {
                 throw new ObjectActivationException(String.Format("Object of type '{0}' could not be activated.", objectType), ex);
+            }
+        }
+
+        protected void MapDefaultUrl()
+        {
+            if (defaultUrlMapped)
+            {
+                return;
+            }
+
+            RouteCollection routes = RouteTable.Routes;
+
+            if (routes == null)
+            {
+                throw new InvalidOperationException("No active routing table was found.");
+            }
+
+            lock (syncRoot)
+            {
+                if (!defaultUrlMapped)
+                {
+                    routes.Add(new Route(String.Empty, Active.CreateObject<RootRouteHandler>()));
+                    defaultUrlMapped = true;
+                }
             }
         }
     }

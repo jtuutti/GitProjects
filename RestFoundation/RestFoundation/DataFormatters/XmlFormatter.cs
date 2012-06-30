@@ -34,9 +34,11 @@ namespace RestFoundation.DataFormatters
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            var result = Rest.Active.CreateObject<XmlResult>();
-            result.Content = obj;
-            result.ContentType = context.Request.GetPreferredAcceptType();
+            var result = new XmlResult
+                         {
+                             Content = obj,
+                             ContentType = context.Request.GetPreferredAcceptType()
+                         };
 
             return result;
         }

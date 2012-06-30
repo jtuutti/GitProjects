@@ -66,7 +66,7 @@ namespace RestFoundation.Runtime
 
                 try
                 {
-                    if (behaviorInvoker.PerformOnExceptionBehaviors(behaviors, internalException))
+                    if (InvokeOnExceptionBehaviors(behaviorInvoker, behaviors, internalException))
                     {
                         throw new ServiceRuntimeException(internalException);
                     }
@@ -92,20 +92,40 @@ namespace RestFoundation.Runtime
 
         private object InvokeWithBehaviors(IServiceContext context, ServiceBehaviorInvoker serviceBehaviorInvoker, List<IServiceBehavior> behaviors)
         {
-            serviceBehaviorInvoker.PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>());
+            InvokeOnBindingBehaviors(serviceBehaviorInvoker, behaviors);
 
             object resource;
             object[] methodArguments = GenerateMethodArguments(context, serviceBehaviorInvoker.Method, out resource);
 
-            if (!serviceBehaviorInvoker.PerformOnExecutingBehaviors(behaviors, resource))
+            if (!InvokeOnExecutingBehaviors(serviceBehaviorInvoker, behaviors, resource))
             {
                 return null;
             }
 
             object result = serviceBehaviorInvoker.Method.Invoke(serviceBehaviorInvoker.Service, methodArguments);
-            serviceBehaviorInvoker.PerformOnExecutedBehaviors(behaviors, result);
+            InvokeOnExecutedBehaviors(serviceBehaviorInvoker, behaviors, result);
 
             return result;
+        }
+
+        protected virtual bool InvokeOnExecutingBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, object resource)
+        {
+            return serviceBehaviorInvoker.PerformOnExecutingBehaviors(behaviors, resource);
+        }
+
+        private static void InvokeOnExecutedBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, object result)
+        {
+            serviceBehaviorInvoker.PerformOnExecutedBehaviors(behaviors, result);
+        }
+
+        protected virtual void InvokeOnBindingBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors)
+        {
+            serviceBehaviorInvoker.PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList());
+        }
+
+        protected virtual bool InvokeOnExceptionBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, Exception internalException)
+        {
+            return serviceBehaviorInvoker.PerformOnExceptionBehaviors(behaviors, internalException);
         }
 
         private object[] GenerateMethodArguments(IServiceContext context, MethodInfo method, out object resource)

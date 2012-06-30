@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Behaviors
 {
@@ -8,9 +10,15 @@ namespace RestFoundation.Behaviors
     {
         private readonly IResourceValidator m_validator;
 
-        public ResourceValidationBehavior()
+        public ResourceValidationBehavior() : this(new ResourceValidator())
         {
-            m_validator = Rest.Active.CreateObject<IResourceValidator>();
+        }
+
+        public ResourceValidationBehavior(IResourceValidator validator)
+        {
+            if (validator == null) throw new ArgumentNullException("validator");
+
+            m_validator = validator;
         }
 
         public override bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)

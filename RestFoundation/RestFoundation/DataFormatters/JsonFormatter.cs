@@ -36,9 +36,11 @@ namespace RestFoundation.DataFormatters
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            var result = Rest.Active.CreateObject<JsonResult>();
-            result.Content = obj;
-            result.ContentType = context.Request.GetPreferredAcceptType();
+            var result = new JsonResult
+                         {
+                             Content = obj,
+                             ContentType = context.Request.GetPreferredAcceptType()
+                         };
 
             return result;
         }

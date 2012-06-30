@@ -12,11 +12,24 @@ namespace RestFoundation.Runtime
 {
     public sealed class RestAsyncHandler : IRouteHandler, IHttpAsyncHandler
     {
+        private readonly IServiceContext m_serviceContext;
+        private readonly IServiceFactory m_serviceFactory;
+        private readonly IResultFactory m_resultFactory;
+        private readonly IServiceMethodInvoker m_methodInvoker;
         private RouteValueDictionary m_routeValues;
-        private IServiceContext m_serviceContext;
-        private IServiceFactory m_serviceFactory;
-        private IResultFactory m_resultFactory;
-        private IServiceMethodInvoker m_methodInvoker;
+
+        public RestAsyncHandler(IServiceContext serviceContext, IServiceFactory serviceFactory, IServiceMethodInvoker methodInvoker, IResultFactory resultFactory)
+        {
+            if (serviceContext == null) throw new ArgumentNullException("serviceContext");
+            if (serviceFactory == null) throw new ArgumentNullException("serviceFactory");
+            if (methodInvoker == null) throw new ArgumentNullException("methodInvoker");
+            if (resultFactory == null) throw new ArgumentNullException("resultFactory");
+
+            m_serviceContext = serviceContext;
+            m_serviceFactory = serviceFactory;
+            m_methodInvoker = methodInvoker;
+            m_resultFactory = resultFactory;
+        }
 
         public bool IsReusable
         {
@@ -36,11 +49,6 @@ namespace RestFoundation.Runtime
             }
 
             m_routeValues = requestContext.RouteData.Values;
-            m_serviceContext = Rest.Active.CreateObject<IServiceContext>();
-            m_serviceFactory = Rest.Active.CreateObject<IServiceFactory>();
-            m_resultFactory = Rest.Active.CreateObject<IResultFactory>();
-            m_methodInvoker = Rest.Active.CreateObject<IServiceMethodInvoker>();
-
             return this;
         }
 

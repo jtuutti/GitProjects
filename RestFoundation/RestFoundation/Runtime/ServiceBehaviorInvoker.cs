@@ -4,9 +4,9 @@ using System.Reflection;
 
 namespace RestFoundation.Runtime
 {
-    public class ServiceBehaviorInvoker
+    public sealed class ServiceBehaviorInvoker
     {
-        public ServiceBehaviorInvoker(IServiceContext context, object service, MethodInfo method)
+        internal ServiceBehaviorInvoker(IServiceContext context, object service, MethodInfo method)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (service == null) throw new ArgumentNullException("service");
@@ -17,11 +17,11 @@ namespace RestFoundation.Runtime
             Method = method;
         }
 
-        public IServiceContext Context { get; protected set; }
-        public object Service { get; protected set; }
-        public MethodInfo Method { get; protected set; }
+        public IServiceContext Context { get; private set; }
+        public object Service { get; private set; }
+        public MethodInfo Method { get; private set; }
 
-        public virtual void PerformOnBindingBehaviors(IEnumerable<ISecureServiceBehavior> behaviors)
+        public void PerformOnBindingBehaviors(IList<ISecureServiceBehavior> behaviors)
         {
             foreach (ISecureServiceBehavior behavior in behaviors)
             {
@@ -29,7 +29,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual bool PerformOnExecutingBehaviors(List<IServiceBehavior> behaviors, object resource)
+        public bool PerformOnExecutingBehaviors(IList<IServiceBehavior> behaviors, object resource)
         {
             for (int i = 0; i < behaviors.Count; i++)
             {
@@ -42,7 +42,7 @@ namespace RestFoundation.Runtime
             return true;
         }
 
-        public virtual void PerformOnExecutedBehaviors(List<IServiceBehavior> behaviors, object result)
+        public void PerformOnExecutedBehaviors(IList<IServiceBehavior> behaviors, object result)
         {
             for (int i = behaviors.Count - 1; i >= 0; i--)
             {
@@ -50,7 +50,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual bool PerformOnExceptionBehaviors(List<IServiceBehavior> behaviors, Exception ex)
+        public bool PerformOnExceptionBehaviors(IList<IServiceBehavior> behaviors, Exception ex)
         {
             for (int i = 0; i < behaviors.Count; i++)
             {
