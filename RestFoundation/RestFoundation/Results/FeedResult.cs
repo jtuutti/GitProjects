@@ -13,7 +13,7 @@ namespace RestFoundation.Results
         public SyndicationFormat Format { get; set; }
         public bool XmlStyleDates { get; set; }
 
-        public void Execute(IServiceContext context)
+        public virtual void Execute(IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
 

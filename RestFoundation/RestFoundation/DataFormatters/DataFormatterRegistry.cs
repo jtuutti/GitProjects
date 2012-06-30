@@ -7,7 +7,6 @@ namespace RestFoundation.DataFormatters
     internal static class DataFormatterRegistry
     {
         private static readonly ConcurrentDictionary<string, IDataFormatter> contentTypeFormatters = new ConcurrentDictionary<string, IDataFormatter>(StringComparer.OrdinalIgnoreCase);
-        private static readonly ConcurrentDictionary<Type, IDataFormatter> resourceTypeFormatters = new ConcurrentDictionary<Type, IDataFormatter>();
 
         static DataFormatterRegistry()
         {
@@ -18,7 +17,7 @@ namespace RestFoundation.DataFormatters
 
         public static IDataFormatter GetFormatter(string contentType)
         {
-            if (contentType == null)
+            if (String.IsNullOrWhiteSpace(contentType))
             {
                 return null;
             }
@@ -28,19 +27,7 @@ namespace RestFoundation.DataFormatters
             return contentTypeFormatters.TryGetValue(contentType, out formatter) ? formatter : null;
         }
 
-        public static IDataFormatter GetFormatter(Type resourceType)
-        {
-            if (resourceType == null)
-            {
-                return null;
-            }
-
-            IDataFormatter formatter;
-
-            return resourceTypeFormatters.TryGetValue(resourceType, out formatter) ? formatter : null;
-        }
-
-        public static string[] GetContentTypesToFormat()
+        public static string[] GetContentTypes()
         {
             return contentTypeFormatters.Keys.ToArray();
         }
@@ -49,15 +36,10 @@ namespace RestFoundation.DataFormatters
         {
             contentTypeFormatters.AddOrUpdate(contentType, type => formatter, (type, previousFormatter) => formatter);
         }
-        
-        public static void SetFormatter(Type resourceType, IDataFormatter formatter)
-        {
-            resourceTypeFormatters.AddOrUpdate(resourceType, type => formatter, (type, previousFormatter) => formatter);
-        }
 
         public static bool RemoveFormatter(string contentType)
         {
-            if (contentType == null)
+            if (String.IsNullOrWhiteSpace(contentType))
             {
                 return false;
             }
@@ -67,26 +49,9 @@ namespace RestFoundation.DataFormatters
             return contentTypeFormatters.TryRemove(contentType, out formatter);
         }
 
-        public static bool RemoveFormatter(Type resourceType)
-        {
-            if (resourceType == null)
-            {
-                return false;
-            }
-
-            IDataFormatter formatter;
-
-            return resourceTypeFormatters.TryRemove(resourceType, out formatter);
-        }
-
-        public static void ClearContentTypeFormatters()
+        public static void Clear()
         {
             contentTypeFormatters.Clear();
-        }
-
-        public static void ClearResourceTypeFormatters()
-        {
-            resourceTypeFormatters.Clear();
         }
     }
 }

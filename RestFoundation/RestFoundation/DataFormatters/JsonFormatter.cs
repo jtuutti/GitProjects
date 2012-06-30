@@ -8,7 +8,7 @@ namespace RestFoundation.DataFormatters
 {
     public class JsonFormatter : IDataFormatter
     {
-        public object FormatRequest(IServiceContext context, Type objectType)
+        public virtual object FormatRequest(IServiceContext context, Type objectType)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (objectType == null) throw new ArgumentNullException("objectType");
@@ -32,7 +32,7 @@ namespace RestFoundation.DataFormatters
             }
         }
 
-        public IResult FormatResponse(IServiceContext context, object obj)
+        public virtual IResult FormatResponse(IServiceContext context, object obj)
         {
             if (context == null) throw new ArgumentNullException("context");
 

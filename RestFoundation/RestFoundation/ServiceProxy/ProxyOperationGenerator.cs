@@ -74,8 +74,8 @@ namespace RestFoundation.ServiceProxy
                                       ServiceUrl = metadata.ServiceUrl,
                                       UrlTempate = GetUrlTemplate(metadata),
                                       HttpMethod = httpMethod,
-                                      MetadataUrl = String.Concat("metadata.aspx?oid=", metadata.ServiceMethodId),
-                                      ProxyUrl = String.Concat("proxy.aspx?oid=", metadata.ServiceMethodId),
+                                      MetadataUrl = String.Concat("metadata?oid=", metadata.ServiceMethodId),
+                                      ProxyUrl = String.Concat("proxy?oid=", metadata.ServiceMethodId),
                                       Description = GetDescription(metadata.MethodInfo)
                                   });
                 }

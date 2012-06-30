@@ -59,7 +59,7 @@ namespace RestFoundation
 
             if (Rest.Active.IsServiceProxyInitialized && IsInBrowser(context.Request))
             {
-                context.Response.Redirect((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/index.aspx", false);
+                context.Response.Redirect((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/help/index", false);
                 return;
             }
 
@@ -112,7 +112,7 @@ namespace RestFoundation
                 return false;
             }
 
-            string[] contentTypes = DataFormatterRegistry.GetContentTypesToFormat();
+            string[] contentTypes = DataFormatterRegistry.GetContentTypes();
 
             for (int i = 0; i < contentTypes.Length; i++)
             {

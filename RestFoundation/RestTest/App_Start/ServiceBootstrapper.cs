@@ -22,7 +22,7 @@ namespace RestTest.App_Start
 
             // Configuring REST foundation
             Rest.Configure.WithObjectFactory(CreateObjectFactory)
-                          .WithDataFormatters(builder => builder.SetForContentType("application/x-www-form-urlencoded", new FormsFormatter()))
+                          .WithDataFormatters(builder => builder.Set("application/x-www-form-urlencoded", new FormsFormatter()))
                           .WithRoutes(RegisterRoutes)
                           .EnableServiceProxyUI();
         }

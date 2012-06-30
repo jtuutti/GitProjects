@@ -12,7 +12,7 @@ namespace RestFoundation.DataFormatters
 {
     public class FormsFormatter : IDataFormatter
     {
-        public object FormatRequest(IServiceContext context, Type objectType)
+        public virtual object FormatRequest(IServiceContext context, Type objectType)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (objectType == null) throw new ArgumentNullException("objectType");
@@ -49,7 +49,7 @@ namespace RestFoundation.DataFormatters
             return resource;
         }
 
-        public IResult FormatResponse(IServiceContext context, object obj)
+        public virtual IResult FormatResponse(IServiceContext context, object obj)
         {
             throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported content type was provided in the Accept or the Content-Type header");
         }

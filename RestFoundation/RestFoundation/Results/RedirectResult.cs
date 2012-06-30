@@ -8,7 +8,7 @@ namespace RestFoundation.Results
         public virtual bool IsPermanent { get; set; }
         public virtual string RedirectUrl { get; set; }
 
-        public void Execute(IServiceContext context)
+        public virtual void Execute(IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
 

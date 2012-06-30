@@ -2,6 +2,7 @@
 using System.Net;
 using System.Reflection;
 using System.Web;
+using RestFoundation.Collections;
 using RestFoundation.DataFormatters;
 
 namespace RestFoundation.Runtime
@@ -22,12 +23,12 @@ namespace RestFoundation.Runtime
                 return dataBinder.Bind(context, parameter.Name);
             }
 
-            object parameterRoute = context.Request.RouteValues.TryGet(parameter.Name);
+            object routeValue = BindRouteValue(parameter, context.Request.RouteValues);
 
-            if (parameterRoute != null)
+            if (routeValue != null)
             {
                 isResource = false;
-                return GetParameterValue(parameter, parameterRoute);
+                return routeValue;
             }
 
             if ((context.Request.Method == HttpMethod.Post || context.Request.Method == HttpMethod.Put || context.Request.Method == HttpMethod.Patch) &&
@@ -35,18 +36,25 @@ namespace RestFoundation.Runtime
                 Attribute.GetCustomAttribute(parameter, typeof(BindResourceAttribute), true) != null)
             {
                 isResource = true;
-                return GetResourceValue(parameter, context);
+                return BindResourceValue(parameter, context);
             }
 
             isResource = false;
             return null;
         }
 
-        private static object GetParameterValue(ParameterInfo parameter, object parameterRoute)
+        protected virtual object BindRouteValue(ParameterInfo parameter, IObjectValueCollection routeValues)
         {
+            object routeValue = routeValues.TryGet(parameter.Name);
+
+            if (routeValue == null)
+            {
+                return null;
+            }
+
             object value;
 
-            if (!SafeConvert.TryChangeType(parameterRoute, parameter.ParameterType, out value))
+            if (!SafeConvert.TryChangeType(routeValue, parameter.ParameterType, out value))
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
             }
@@ -54,10 +62,9 @@ namespace RestFoundation.Runtime
             return value;
         }
 
-        private static object GetResourceValue(ParameterInfo parameter, IServiceContext context)
+        protected virtual object BindResourceValue(ParameterInfo parameter, IServiceContext context)
         {
-            IDataFormatter formatter = DataFormatterRegistry.GetFormatter(parameter.ParameterType) ??
-                                       DataFormatterRegistry.GetFormatter(context.Request.Headers.ContentType);
+            IDataFormatter formatter = DataFormatterRegistry.GetFormatter(context.Request.Headers.ContentType);
 
             if (formatter == null)
             {

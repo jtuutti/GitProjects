@@ -91,6 +91,11 @@ namespace RestFoundation
             }
 
             ProxyPathProvider.AppInitialize();
+
+            RouteTable.Routes.MapPageRoute(String.Empty, "help/index", "~/index.aspx");
+            RouteTable.Routes.MapPageRoute(String.Empty, "help/metadata", "~/metadata.aspx");
+            RouteTable.Routes.MapPageRoute(String.Empty, "help/proxy", "~/proxy.aspx");
+
             IsServiceProxyInitialized = true;
 
             return this;

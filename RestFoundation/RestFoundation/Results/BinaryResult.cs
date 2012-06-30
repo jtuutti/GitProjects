@@ -15,7 +15,7 @@ namespace RestFoundation.Results
         public string ContentDisposition { get; set; }
         public bool ClearOutput { get; set; }
 
-        public void Execute(IServiceContext context)
+        public virtual void Execute(IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
 

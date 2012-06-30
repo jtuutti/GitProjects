@@ -78,7 +78,6 @@
     <Compile Include="Collections\Specialized\DynamicDictionary.cs" />
     <Compile Include="DataBinderBuilder.cs" />
     <Compile Include="DataFormatterBuilder.cs" />
-    <Compile Include="DataFormatterType.cs" />
     <Compile Include="ICache.cs" />
     <Compile Include="ICredentialResolver.cs" />
     <Compile Include="IDataBinder.cs" />

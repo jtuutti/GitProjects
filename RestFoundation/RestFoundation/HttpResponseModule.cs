@@ -8,6 +8,11 @@ namespace RestFoundation
     {
         public void Init(HttpApplication context)
         {
+            if (!HttpRuntime.UsingIntegratedPipeline)
+            {
+                throw new HttpException(500, "Rest Foundation services can only run under the IIS 7+ integrated pipeline mode");
+            }
+
             context.PreSendRequestHeaders += (sender, args) => RemoveServerHeaders(context);
             context.Error += (sender, args) => CompleteRequestOnError(context);
         }

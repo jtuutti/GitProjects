@@ -18,7 +18,7 @@ namespace RestFoundation.Results
         public object Content { get; set; }
         public string ContentType { get; set; }
 
-        public void Execute(IServiceContext context)
+        public virtual void Execute(IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
 
