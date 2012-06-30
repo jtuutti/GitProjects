@@ -108,19 +108,19 @@ namespace RestFoundation.Runtime
             return result;
         }
 
+        protected virtual void InvokeOnBindingBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors)
+        {
+            serviceBehaviorInvoker.PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList());
+        }
+
         protected virtual bool InvokeOnExecutingBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, object resource)
         {
             return serviceBehaviorInvoker.PerformOnExecutingBehaviors(behaviors, resource);
         }
 
-        private static void InvokeOnExecutedBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, object result)
+        protected virtual void InvokeOnExecutedBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, object result)
         {
             serviceBehaviorInvoker.PerformOnExecutedBehaviors(behaviors, result);
-        }
-
-        protected virtual void InvokeOnBindingBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors)
-        {
-            serviceBehaviorInvoker.PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList());
         }
 
         protected virtual bool InvokeOnExceptionBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, Exception internalException)

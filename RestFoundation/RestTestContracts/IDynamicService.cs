@@ -1,5 +1,5 @@
 ﻿using RestFoundation;
-using RestFoundation.ServiceProxy.Attributes;
+using RestFoundation.ServiceProxy;
 
 namespace RestTestContracts
 {
