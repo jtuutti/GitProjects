@@ -2,7 +2,7 @@
 
 namespace RestFoundation
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public sealed class ValidateAclAttribute : Attribute
     {
         public ValidateAclAttribute(string nameValueSectionName)

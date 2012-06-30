@@ -2,7 +2,7 @@
 
 namespace RestFoundation
 {
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
     public sealed class BindResourceAttribute : Attribute
     {
     }

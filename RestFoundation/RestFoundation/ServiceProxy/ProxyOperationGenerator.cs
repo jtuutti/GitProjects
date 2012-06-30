@@ -32,12 +32,13 @@ namespace RestFoundation.ServiceProxy
                                 HttpMethod = metadata.UrlInfo.HttpMethods.First(),
                                 SupportedHttpMethods = GetSupportedHttpMethods(metadata),
                                 Description = GetDescription(metadata.MethodInfo),
-                                HasResourceParameter = metadata.MethodInfo.GetParameters().Any(p => String.Equals("resource", p.Name, StringComparison.OrdinalIgnoreCase)),
                                 ResultType = metadata.MethodInfo.ReturnType,
-                                RouteParameters = GetRouteParameters(metadata)
+                                RouteParameters = GetRouteParameters(metadata),
+                                IsIpFiltered = (metadata.Acl != null)
                             };
 
             operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, operation.HasResource, operation.HasResponse);
+            operation.HasResource = HasResource(metadata, operation.HttpMethod);
 
             Tuple<Type, Type> resourceExampleTypes = GetResourceExampleTypes(metadata.MethodInfo);
             operation.RequestExampleType = resourceExampleTypes.Item1;
@@ -76,7 +77,8 @@ namespace RestFoundation.ServiceProxy
                                       HttpMethod = httpMethod,
                                       MetadataUrl = String.Concat("metadata?oid=", metadata.ServiceMethodId),
                                       ProxyUrl = String.Concat("proxy?oid=", metadata.ServiceMethodId),
-                                      Description = GetDescription(metadata.MethodInfo)
+                                      Description = GetDescription(metadata.MethodInfo),
+                                      IsIpFiltered = (metadata.Acl != null)
                                   });
                 }
             }
@@ -258,6 +260,23 @@ namespace RestFoundation.ServiceProxy
             var constraintAttribute = Attribute.GetCustomAttribute(parameter, typeof(ParameterConstraintAttribute), false) as ParameterConstraintAttribute;
 
             return constraintAttribute != null ? constraintAttribute.Pattern.ToString().TrimStart('^').TrimEnd('$') : null;
+        }
+
+        private static bool HasResource(ServiceMethodMetadata metadata, HttpMethod httpMethod)
+        {
+            if (httpMethod != HttpMethod.Post && httpMethod != HttpMethod.Put && httpMethod != HttpMethod.Patch)
+            {
+                return false;
+            }
+
+            var methodParameters = metadata.MethodInfo.GetParameters();
+
+            if (methodParameters.Any(p => String.Equals("resource", p.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                return true;
+            }
+
+            return methodParameters.Any(p => Attribute.GetCustomAttribute(p, typeof(BindResourceAttribute), false) != null);
         }
     }
 }

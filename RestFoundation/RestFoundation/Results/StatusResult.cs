@@ -19,6 +19,11 @@ namespace RestFoundation.Results
         {
             if (context == null) throw new ArgumentNullException("context");
 
+            if (StatusCode == HttpStatusCode.NoContent)
+            {
+                context.Response.Output.Clear();
+            }
+
             foreach (var header in AdditionalHeaders)
             {
                 context.Response.SetHeader(header.Key, header.Value);

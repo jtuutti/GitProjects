@@ -17,25 +17,13 @@ namespace RestFoundation.ServiceProxy
         public HttpMethod HttpMethod { get; set; }
         public string SupportedHttpMethods { get; set; }
         public string Description { get; set; }
-        public bool HasResourceParameter { get; set; }
+        public bool HasResource { get; set; }
         public Type ResultType { get; set; }
         public List<ProxyStatusCode> StatusCodes { get; set; }
         public List<ProxyRouteParameter> RouteParameters { get; set; }
         public Type RequestExampleType { get; set; }
         public Type ResponseExampleType { get; set; }
-
-        public bool HasResource
-        {
-            get
-            {
-                if (HttpMethod != HttpMethod.Post && HttpMethod != HttpMethod.Put && HttpMethod != HttpMethod.Patch)
-                {
-                    return false;
-                }
-
-                return HasResourceParameter;
-            }
-        }
+        public bool IsIpFiltered { get; set; }
 
         public bool HasResponse
         {

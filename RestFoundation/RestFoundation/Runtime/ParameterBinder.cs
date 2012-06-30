@@ -33,7 +33,7 @@ namespace RestFoundation.Runtime
 
             if ((context.Request.Method == HttpMethod.Post || context.Request.Method == HttpMethod.Put || context.Request.Method == HttpMethod.Patch) &&
                 String.Equals(ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase) ||
-                Attribute.GetCustomAttribute(parameter, typeof(BindResourceAttribute), true) != null)
+                Attribute.GetCustomAttribute(parameter, typeof(BindResourceAttribute), false) != null)
             {
                 isResource = true;
                 return BindResourceValue(parameter, context);

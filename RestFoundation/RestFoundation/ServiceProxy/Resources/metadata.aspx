@@ -7,7 +7,7 @@
 <script runat="server" language="C#">
     private ProxyOperation operation;
     private string requestJsonExample, requestXmlExample, responseJsonExample, responseXmlExample;
-    private IList<string> xmlSchemas;
+    private IList<string> requestXmlSchemas, responseXmlSchemas;
     
     public void Page_Init(object sender, EventArgs e)
     {
@@ -75,6 +75,16 @@
                         requestXmlExample = null;
                     }
                 }
+                
+                if (requestXmlExample != null)
+                {
+                    XmlSchemas schemas = requestExample.GetSchemas();
+
+                    if (schemas != null && schemas.Count > 0)
+                    {
+                        requestXmlSchemas = schemas.Serialize();
+                    }
+                }
             }
         }
 
@@ -131,7 +141,7 @@
 
                     if (schemas != null && schemas.Count > 0)
                     {
-                        xmlSchemas = schemas.Serialize();
+                        responseXmlSchemas = schemas.Serialize();
                     }
                 }
             }
@@ -196,7 +206,9 @@
     <tr>
         <td>Request</td>
         <td>XML</td>
-        <td><a href="#request-xml">Example</a></td>
+        <td>
+            <a href="#request-xml">Example</a><% if (requestXmlSchemas != null && requestXmlSchemas.Count > 0) { %><span>, </span><a href="#request-schema">Schema</a><% } %>
+        </td>
     </tr>
     <% } %>
     <% if (requestJsonExample == null && requestXmlExample == null) { %>
@@ -217,7 +229,9 @@
     <tr>
         <td>Response</td>
         <td>XML</td>
-        <td><a href="#response-xml">Example</a></td>
+        <td>
+            <a href="#response-xml">Example</a><% if (responseXmlSchemas != null && responseXmlSchemas.Count > 0) { %><span>, </span><a href="#response-schema">Schema</a><% } %>
+        </td>
     </tr>
     <% } %>
     <% if (responseJsonExample == null && responseXmlExample == null) { %>
@@ -268,16 +282,30 @@
     </div>
     <% } %>
     <% } %>
-    <% if (xmlSchemas != null && xmlSchemas.Count > 0) { %>
+    <% if (requestXmlSchemas != null && requestXmlSchemas.Count > 0) { %>
+    <div class="schemaSection">
+    <a name="request-schema">The following is the request model XSD Schema:</a>           
+    <pre><%: requestXmlSchemas[0] %></pre>
+    </div>
+    <% if (requestXmlSchemas.Count > 1) { %>
+    <div class="schemaSection">
+    <span>Additional request XSD Schemas:</span>
+    <% for (int i = 1; i < requestXmlSchemas.Count; i++) { %>
+        <pre><%: requestXmlSchemas[i] %></pre>
+    <% } %>
+    </div>
+    <% } %>
+    <% } %>
+    <% if (responseXmlSchemas != null && responseXmlSchemas.Count > 0) { %>
     <div class="schemaSection">
     <a name="response-schema">The following is the response model XSD Schema:</a>           
-    <pre><%: xmlSchemas[0] %></pre>
+    <pre><%: responseXmlSchemas[0] %></pre>
     </div>
-    <% if (xmlSchemas.Count > 1) { %>
+    <% if (responseXmlSchemas.Count > 1) { %>
     <div class="schemaSection">
     <span>Additional response XSD Schemas:</span>
-    <% for (int i = 1; i < xmlSchemas.Count; i++) { %>
-        <pre><%: xmlSchemas[i] %></pre>
+    <% for (int i = 1; i < responseXmlSchemas.Count; i++) { %>
+        <pre><%: responseXmlSchemas[i] %></pre>
     <% } %>
     </div>
     <% } %>

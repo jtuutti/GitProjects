@@ -3,7 +3,7 @@ using System.Web.UI;
 
 namespace RestFoundation
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class OutputCacheAttribute : Attribute
     {
         public OutputCacheAttribute()

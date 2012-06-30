@@ -132,7 +132,7 @@
                 string data, protocolVersion, responseCode;
                 TimeSpan duration;
 
-                string url = String.Concat(serviceUrl, OperationUrl.Value);
+                string url = String.Concat(serviceUrl, OperationUrl.Value.Replace("+", "%20"));
 
                 AddHeaders(client);
                 SetEncoding(client);
