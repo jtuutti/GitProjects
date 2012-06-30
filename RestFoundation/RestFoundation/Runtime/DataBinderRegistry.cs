@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace RestFoundation.DataBinders
+namespace RestFoundation.Runtime
 {
     internal static class DataBinderRegistry
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-using RestFoundation.DataBinders;
+using RestFoundation.Runtime;
 
 namespace RestFoundation
 {

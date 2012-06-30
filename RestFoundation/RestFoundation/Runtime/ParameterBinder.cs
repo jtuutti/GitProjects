@@ -2,7 +2,6 @@
 using System.Net;
 using System.Reflection;
 using System.Web;
-using RestFoundation.DataBinders;
 using RestFoundation.DataFormatters;
 
 namespace RestFoundation.Runtime

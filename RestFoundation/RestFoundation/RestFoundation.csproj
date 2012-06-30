@@ -77,7 +77,6 @@
     <Compile Include="Collections\Specialized\AcceptValueCollection.cs" />
     <Compile Include="Collections\Specialized\DynamicDictionary.cs" />
     <Compile Include="DataBinderBuilder.cs" />
-    <Compile Include="DataBinders\StringDataBinder.cs" />
     <Compile Include="DataFormatterBuilder.cs" />
     <Compile Include="DataFormatterType.cs" />
     <Compile Include="ICache.cs" />
@@ -136,7 +135,7 @@
     <Compile Include="Runtime\Cache.cs" />
     <Compile Include="Runtime\CompositeValidationResult.cs" />
     <Compile Include="Runtime\CredentialResolver.cs" />
-    <Compile Include="DataBinders\DataBinderRegistry.cs" />
+    <Compile Include="Runtime\DataBinderRegistry.cs" />
     <Compile Include="Runtime\DelegateObjectActivator.cs" />
     <Compile Include="Runtime\HttpRequestExtensions.cs" />
     <Compile Include="Runtime\HttpResponseOutput.cs" />
