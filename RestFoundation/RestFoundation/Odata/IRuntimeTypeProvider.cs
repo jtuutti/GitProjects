@@ -9,8 +9,8 @@ using System.Reflection;
 
 namespace RestFoundation.Odata
 {
-	internal interface IRuntimeTypeProvider
-	{
-		Type Get(Type sourceType, IEnumerable<MemberInfo> properties);
-	}
+    internal interface IRuntimeTypeProvider
+    {
+        Type Get(Type sourceType, IEnumerable<MemberInfo> properties);
+    }
 }

@@ -8,8 +8,8 @@ using System.Linq.Expressions;
 
 namespace RestFoundation.Odata.Parser
 {
-	internal interface ISelectExpressionFactory<T>
-	{
-		Expression<Func<T, object>> Create(string selection);
-	}
+    internal interface ISelectExpressionFactory<T>
+    {
+        Expression<Func<T, object>> Create(string selection);
+    }
 }

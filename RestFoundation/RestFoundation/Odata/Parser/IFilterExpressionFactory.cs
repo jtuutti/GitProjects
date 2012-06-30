@@ -8,9 +8,9 @@ using System.Linq.Expressions;
 
 namespace RestFoundation.Odata.Parser
 {
-	internal interface IFilterExpressionFactory
-	{
-		Expression<Func<T, bool>> Create<T>(string filter);
-		Expression<Func<T, bool>> Create<T>(string filter, IFormatProvider formatProvider);
-	}
+    internal interface IFilterExpressionFactory
+    {
+        Expression<Func<T, bool>> Create<T>(string filter);
+        Expression<Func<T, bool>> Create<T>(string filter, IFormatProvider formatProvider);
+    }
 }

@@ -7,8 +7,8 @@ using System.Collections.Generic;
 
 namespace RestFoundation.Odata
 {
-	internal interface IModelFilter<in T>
-	{
-		IEnumerable<object> Filter(IEnumerable<T> source);
-	}
+    internal interface IModelFilter<in T>
+    {
+        IEnumerable<object> Filter(IEnumerable<T> source);
+    }
 }

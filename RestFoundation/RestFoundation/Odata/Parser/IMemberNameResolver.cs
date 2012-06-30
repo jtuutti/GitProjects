@@ -8,18 +8,18 @@ using System.Reflection;
 
 namespace RestFoundation.Odata.Parser
 {
-	internal interface IMemberNameResolver
-	{
-		string ResolveName(MemberInfo member);
-	}
+    internal interface IMemberNameResolver
+    {
+        string ResolveName(MemberInfo member);
+    }
 
-	internal abstract class MemberNameResolverContracts : IMemberNameResolver
-	{
-		public string ResolveName(MemberInfo member)
-		{
-		    if (member == null) throw new ArgumentNullException("member");
+    internal abstract class MemberNameResolverContracts : IMemberNameResolver
+    {
+        public string ResolveName(MemberInfo member)
+        {
+            if (member == null) throw new ArgumentNullException("member");
 
-		    throw new NotImplementedException();
-		}
-	}
+            throw new NotImplementedException();
+        }
+    }
 }

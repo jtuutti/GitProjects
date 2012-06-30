@@ -5,12 +5,12 @@
 
 namespace RestFoundation.Odata
 {
-	internal static class StringConstants
-	{
-		internal const string OrderByParameter = "$orderby";
-		internal const string SelectParameter = "$select";
-		internal const string FilterParameter = "$filter";
-		internal const string SkipParameter = "$skip";
-		internal const string TopParameter = "$top";
-	}
+    internal static class StringConstants
+    {
+        internal const string OrderByParameter = "$orderby";
+        internal const string SelectParameter = "$select";
+        internal const string FilterParameter = "$filter";
+        internal const string SkipParameter = "$skip";
+        internal const string TopParameter = "$top";
+    }
 }

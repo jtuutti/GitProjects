@@ -7,8 +7,8 @@ using System.Collections.Specialized;
 
 namespace RestFoundation.Odata.Parser
 {
-	internal interface IParameterParser<in T>
-	{
-		IModelFilter<T> Parse(NameValueCollection queryParameters);
-	}
+    internal interface IParameterParser<in T>
+    {
+        IModelFilter<T> Parse(NameValueCollection queryParameters);
+    }
 }

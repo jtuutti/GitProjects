@@ -8,27 +8,27 @@ using System.Web.UI.WebControls;
 
 namespace RestFoundation.Odata.Parser
 {
-	internal class SortDescription<T>
-	{
-		private readonly Func<T, object> m_keySelector;
-		private readonly SortDirection m_direction;
+    internal class SortDescription<T>
+    {
+        private readonly Func<T, object> m_keySelector;
+        private readonly SortDirection m_direction;
 
-		public SortDescription(Func<T, object> keySelector, SortDirection direction)
-		{
-		    if (keySelector == null) throw new ArgumentNullException("keySelector");
+        public SortDescription(Func<T, object> keySelector, SortDirection direction)
+        {
+            if (keySelector == null) throw new ArgumentNullException("keySelector");
 
-		    m_keySelector = keySelector;
-			m_direction = direction;
-		}
+            m_keySelector = keySelector;
+            m_direction = direction;
+        }
 
-		public SortDirection Direction
-		{
-			get { return m_direction; }
-		}
+        public SortDirection Direction
+        {
+            get { return m_direction; }
+        }
 
-		public Func<T, object> KeySelector
-		{
-			get { return m_keySelector; }
-		}
-	}
+        public Func<T, object> KeySelector
+        {
+            get { return m_keySelector; }
+        }
+    }
 }

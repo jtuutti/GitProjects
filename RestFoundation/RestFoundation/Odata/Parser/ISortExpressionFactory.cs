@@ -8,9 +8,9 @@ using System.Collections.Generic;
 
 namespace RestFoundation.Odata.Parser
 {
-	internal interface ISortExpressionFactory
-	{
-		IEnumerable<SortDescription<T>> Create<T>(string filter);
-		IEnumerable<SortDescription<T>> Create<T>(string filter, IFormatProvider formatProvider);
-	}
+    internal interface ISortExpressionFactory
+    {
+        IEnumerable<SortDescription<T>> Create<T>(string filter);
+        IEnumerable<SortDescription<T>> Create<T>(string filter, IFormatProvider formatProvider);
+    }
 }

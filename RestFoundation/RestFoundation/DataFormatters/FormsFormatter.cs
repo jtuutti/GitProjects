@@ -30,17 +30,7 @@ namespace RestFoundation.DataFormatters
                 return null;
             }
 
-            NameValueCollection formData;
-
-            if (context.Request.Body.CanSeek)
-            {
-                context.Request.Body.Seek(0, SeekOrigin.Begin);
-            }
-
-            var streamReader = new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding);
-            {
-                formData = ParseFormData(streamReader.ReadToEnd());
-            }
+            NameValueCollection formData = PopulateFormData(context);
 
             if (formData.Count == 0)
             {
@@ -62,6 +52,23 @@ namespace RestFoundation.DataFormatters
         public IResult FormatResponse(IServiceContext context, object obj)
         {
             throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported content type was provided in the Accept or the Content-Type header");
+        }
+
+        private static NameValueCollection PopulateFormData(IServiceContext context)
+        {
+            NameValueCollection formData;
+
+            if (context.Request.Body.CanSeek)
+            {
+                context.Request.Body.Seek(0, SeekOrigin.Begin);
+            }
+
+            var streamReader = new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding);
+            {
+                formData = ParseFormData(streamReader.ReadToEnd());
+            }
+
+            return formData;
         }
 
         private static object InitializeResource(Type objectType)
