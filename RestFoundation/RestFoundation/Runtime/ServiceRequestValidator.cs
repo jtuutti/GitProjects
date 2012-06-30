@@ -6,7 +6,7 @@ namespace RestFoundation.Runtime
 {
     public sealed class ServiceRequestValidator : RequestValidator
     {
-        internal const string UnvalidatedHandlerKey = "_validateRequest";
+        internal const string UnvalidatedHandlerKey = "_ignoreRequest";
 
         protected override bool IsValidRequestString(HttpContext context, string value, RequestValidationSource requestValidationSource, string collectionKey, out int validationFailureIndex)
         {

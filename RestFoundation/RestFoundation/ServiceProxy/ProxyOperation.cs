@@ -45,38 +45,33 @@ namespace RestFoundation.ServiceProxy
             }
         }
 
-        public string GenerateSampleUrl(bool generateAbsoluteUrl)
+        public Tuple<string, string> GenerateSampleUrlParts()
         {
-            string urlTemplate = UrlTempate;
-
-            if (urlTemplate.IndexOf('{') < 0)
-            {
-                return GenerateAbsoluteUrl(urlTemplate, generateAbsoluteUrl);
-            }
-
-            var routeParametersWithValues = RouteParameters.Where(p => p.ExampleValue != null);
-
-            foreach (ProxyRouteParameter routeParameter in routeParametersWithValues)
-            {
-                urlTemplate = Regex.Replace(urlTemplate,
-                                            String.Concat(@"\{", routeParameter.Name, @"\}"),
-                                            HttpUtility.UrlEncode(Convert.ToString(routeParameter.ExampleValue, CultureInfo.InvariantCulture)),
-                                            RegexOptions.IgnoreCase);
-            }
-
-            return urlTemplate.IndexOf('{') < 0 ? GenerateAbsoluteUrl(urlTemplate, generateAbsoluteUrl) : String.Empty;
-        }
-
-        private static string GenerateAbsoluteUrl(string urlTemplate, bool generateAbsoluteUrl)
-        {
-            if (!generateAbsoluteUrl)
-            {
-                return urlTemplate;
-            }
-
             HttpContext context = HttpContext.Current;
 
-            return context != null ? String.Concat(context.Request.Url.GetLeftPart(UriPartial.Authority), context.Request.ApplicationPath, "/", urlTemplate) : urlTemplate;
+            if (context == null || context.Request.ApplicationPath == null)
+            {
+                return null;
+            }
+
+            string urlTemplate = UrlTempate;
+
+            if (urlTemplate.IndexOf('{') > 0)
+            {
+                var routeParametersWithValues = RouteParameters.Where(p => p.ExampleValue != null);
+
+                foreach (ProxyRouteParameter routeParameter in routeParametersWithValues)
+                {
+                    urlTemplate = Regex.Replace(urlTemplate,
+                                                String.Concat(@"\{", routeParameter.Name, @"\}"),
+                                                HttpUtility.UrlEncode(Convert.ToString(routeParameter.ExampleValue, CultureInfo.InvariantCulture)),
+                                                RegexOptions.IgnoreCase);
+                }
+            }
+
+            const char slash = '/';
+
+            return Tuple.Create(String.Concat(context.Request.Url.GetLeftPart(UriPartial.Authority), context.Request.ApplicationPath.TrimEnd(slash), slash), urlTemplate);
         }
 
         public int CompareTo(ProxyOperation other)

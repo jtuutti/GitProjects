@@ -10,10 +10,11 @@ namespace RestFoundation.ServiceProxy
     {
         private static readonly Dictionary<string, string> resourceMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "proxy.master", "RestFoundation.ServiceProxy.Resources.proxy.master" },
+            { "help.master", "RestFoundation.ServiceProxy.Resources.help.master" },
             { "index.aspx", "RestFoundation.ServiceProxy.Resources.index.aspx" },
             { "metadata.aspx", "RestFoundation.ServiceProxy.Resources.metadata.aspx" },
-            { "proxy.aspx", "RestFoundation.ServiceProxy.Resources.proxy.aspx" },
+            { "output.aspx", "RestFoundation.ServiceProxy.Resources.output.aspx" },
+            { "proxy.aspx", "RestFoundation.ServiceProxy.Resources.proxy.aspx" }
         };
 
         private readonly string m_fileName;

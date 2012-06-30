@@ -82,7 +82,7 @@ namespace RestTestServices
             resource.Values = new[] { "New person added" };
 
             Context.Response.SetHeader("Location", Context.Request.Url.ToAbsoluteUrl("~/home/index/999"));
-            Context.Response.SetStatus(HttpStatusCode.Created);
+            Context.Response.SetStatus(HttpStatusCode.Created, "Person #999 created");
 
             return resource;
         }
