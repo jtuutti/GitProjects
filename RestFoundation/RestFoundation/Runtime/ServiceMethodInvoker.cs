@@ -85,6 +85,26 @@ namespace RestFoundation.Runtime
             return null;
         }
 
+        protected virtual void InvokeOnBindingBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors)
+        {
+            serviceBehaviorInvoker.PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList());
+        }
+
+        protected virtual bool InvokeOnExecutingBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, object resource)
+        {
+            return serviceBehaviorInvoker.PerformOnExecutingBehaviors(behaviors, resource);
+        }
+
+        protected virtual void InvokeOnExecutedBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, object result)
+        {
+            serviceBehaviorInvoker.PerformOnExecutedBehaviors(behaviors, result);
+        }
+
+        protected virtual bool InvokeOnExceptionBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, Exception internalException)
+        {
+            return serviceBehaviorInvoker.PerformOnExceptionBehaviors(behaviors, internalException);
+        }
+
         private static bool IsWrapperException(Exception ex)
         {
             return (ex is ServiceRuntimeException || ex is TargetInvocationException || ex is AggregateException) && ex.InnerException != null;
@@ -106,26 +126,6 @@ namespace RestFoundation.Runtime
             InvokeOnExecutedBehaviors(serviceBehaviorInvoker, behaviors, result);
 
             return result;
-        }
-
-        protected virtual void InvokeOnBindingBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors)
-        {
-            serviceBehaviorInvoker.PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList());
-        }
-
-        protected virtual bool InvokeOnExecutingBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, object resource)
-        {
-            return serviceBehaviorInvoker.PerformOnExecutingBehaviors(behaviors, resource);
-        }
-
-        protected virtual void InvokeOnExecutedBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, object result)
-        {
-            serviceBehaviorInvoker.PerformOnExecutedBehaviors(behaviors, result);
-        }
-
-        protected virtual bool InvokeOnExceptionBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, Exception internalException)
-        {
-            return serviceBehaviorInvoker.PerformOnExceptionBehaviors(behaviors, internalException);
         }
 
         private object[] GenerateMethodArguments(IServiceContext context, MethodInfo method, out object resource)
