@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace RestFoundation.ServiceProxy.Attributes
+namespace RestFoundation.ServiceProxy
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public sealed class ProxyStatusCodeAttribute : Attribute

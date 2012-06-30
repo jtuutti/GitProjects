@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RestFoundation.ServiceProxy.Attributes
+namespace RestFoundation.ServiceProxy
 {
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
     public sealed class ProxyRouteParameterAttribute : Attribute

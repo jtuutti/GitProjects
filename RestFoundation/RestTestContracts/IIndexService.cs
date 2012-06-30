@@ -2,7 +2,7 @@
 using System.Net;
 using RestFoundation;
 using RestFoundation.Results;
-using RestFoundation.ServiceProxy.Attributes;
+using RestFoundation.ServiceProxy;
 using RestTestContracts.Metadata;
 using RestTestContracts.Resources;
 
