@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using RestFoundation;
 using RestFoundation.Results;
@@ -13,8 +14,12 @@ namespace RestTestContracts
         [Url("index/feed.{format}")]
         [ProxyHiddenOperation]
         FeedResult Feed(string format);
-
         [Url("index/all", HttpMethod.Get, HttpMethod.Head)]
+
+        [Url("index/upload", HttpMethod.Post)]
+        [ProxyHiddenOperation]
+        ContentResult File(ICollection<IUploadedFile> files);
+
         [ProxyOperationDescription("Gets all resources of type 'Index'")]
         [ProxyResourceExample(ResponseExampleType = typeof(PersonArrayExample))]
         IQueryable<Person> GetAll();

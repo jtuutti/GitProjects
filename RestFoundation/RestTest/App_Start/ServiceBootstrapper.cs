@@ -22,11 +22,10 @@ namespace RestTest.App_Start
 
             // Configuring REST foundation
             Rest.Configure.WithObjectFactory(CreateObjectFactory)
-                          .WithDataFormatters(builder => builder.Set("application/x-www-form-urlencoded", new FormsFormatter()))
+                          .WithDataFormatters(RegisterDataFormatters)
                           .WithRoutes(RegisterRoutes)
                           .EnableServiceProxyUI();
         }
-
         private static void ConfigureIoC(ConfigurationExpression config)
         {
             config.Scan(action =>
@@ -49,6 +48,12 @@ namespace RestTest.App_Start
             }
 
             return ObjectFactory.GetInstance(type);
+        }
+
+        private static void RegisterDataFormatters(DataFormatterBuilder builder)
+        {
+            builder.Set("application/x-www-form-urlencoded", new FormsFormatter());
+            builder.Set("multipart/form-data", new MultiPartFormatter());
         }
 
         private static void RegisterRoutes(RouteBuilder routeBuilder)

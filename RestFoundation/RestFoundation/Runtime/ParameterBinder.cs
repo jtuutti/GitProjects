@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 using System.Web;
@@ -33,7 +34,8 @@ namespace RestFoundation.Runtime
 
             if ((context.Request.Method == HttpMethod.Post || context.Request.Method == HttpMethod.Put || context.Request.Method == HttpMethod.Patch) &&
                 String.Equals(ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase) ||
-                Attribute.GetCustomAttribute(parameter, typeof(BindResourceAttribute), false) != null)
+                Attribute.GetCustomAttribute(parameter, typeof(BindResourceAttribute), false) != null ||
+                parameter.ParameterType == typeof(IEnumerable<IUploadedFile>) || parameter.ParameterType == typeof(ICollection<IUploadedFile>))
             {
                 isResource = true;
                 return BindResourceValue(parameter, context);
@@ -79,9 +81,16 @@ namespace RestFoundation.Runtime
             }
             catch (Exception ex)
             {
-                if (ex is HttpRequestValidationException)
+                if (ex is HttpResponseException || ex is HttpRequestValidationException)
                 {
                     throw;
+                }
+
+                var httpException = ex as HttpException;
+
+                if (httpException != null)
+                {
+                    throw new HttpResponseException((HttpStatusCode) httpException.GetHttpCode(), httpException.Message);
                 }
 
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid resource body provided");

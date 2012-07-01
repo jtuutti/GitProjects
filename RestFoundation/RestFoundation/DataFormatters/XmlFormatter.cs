@@ -26,7 +26,17 @@ namespace RestFoundation.DataFormatters
                 context.Request.Body.Seek(0, SeekOrigin.Begin);
             }
 
-            var serializer = new XmlSerializer(objectType);
+            XmlSerializer serializer;
+
+            try
+            {
+                serializer = new XmlSerializer(objectType);
+            }
+            catch (NotSupportedException) // cannot find a serializer for the type
+            {
+                return null;
+            }
+
             return serializer.Deserialize(context.Request.Body);
         }
 

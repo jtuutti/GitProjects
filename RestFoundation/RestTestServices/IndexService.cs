@@ -60,6 +60,16 @@ namespace RestTestServices
             return Result.Feed(feed, feedFormat);
         }
 
+        public ContentResult File(ICollection<IUploadedFile> files)
+        {
+            if (files == null || files.Count == 0)
+            {
+                return Result.Content("No files");
+            }
+
+            return Result.Content("Files: " + String.Join(", ", files.Select(f => f.Name)));
+        }
+
         public IQueryable<Person> GetAll()
         {
             return new List<Person>(people).AsQueryable();

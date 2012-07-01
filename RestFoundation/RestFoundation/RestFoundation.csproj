@@ -78,6 +78,7 @@
     <Compile Include="Collections\Specialized\DynamicDictionary.cs" />
     <Compile Include="DataBinderBuilder.cs" />
     <Compile Include="DataFormatterBuilder.cs" />
+    <Compile Include="DataFormatters\MultiPartFormatter.cs" />
     <Compile Include="ICache.cs" />
     <Compile Include="ICredentialResolver.cs" />
     <Compile Include="IDataBinder.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
     <Compile Include="IResourceValidator.cs" />
+    <Compile Include="IUploadedFile.cs" />
     <Compile Include="ObjectActivationException.cs" />
     <Compile Include="Odata\IModelFilter.cs" />
     <Compile Include="Odata\IRuntimeTypeProvider.cs" />
@@ -189,6 +191,7 @@
     <Compile Include="IHttpRequest.cs" />
     <Compile Include="Runtime\UnvalidatedHandlerRegistry.cs" />
     <Compile Include="Operation.cs" />
+    <Compile Include="Runtime\UploadedFile.cs" />
     <Compile Include="Runtime\XmlSchemaGenerator.cs" />
     <Compile Include="Runtime\XmlSerializerRegistry.cs" />
     <Compile Include="ServiceProxy\ProxyHiddenOperation.cs" />
