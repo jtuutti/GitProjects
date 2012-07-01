@@ -30,10 +30,10 @@ namespace RestTestServices
         {
             var sessionInfo = (SessionInfo) Context.ItemBag.SessionInfo;
 
-            string relativePath = Context.Response.MapPath(String.Format(@"~\App_Data\{0}\{1}\{2}\TouchMap.xml",
-                                                           sessionInfo.CustomerId,
-                                                           sessionInfo.ApplicationId,
-                                                           sessionInfo.Culture));
+            string relativePath = Context.MapPath(String.Format(@"~\App_Data\{0}\{1}\{2}\TouchMap.xml",
+                                                  sessionInfo.CustomerId,
+                                                  sessionInfo.ApplicationId,
+                                                  sessionInfo.Culture));
 
             if (File.Exists(relativePath))
             {

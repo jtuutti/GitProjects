@@ -7,7 +7,7 @@ using RestFoundation.Collections.Concrete;
 
 namespace RestFoundation.Runtime
 {
-    public class HttpResponse : IHttpResponse
+    public sealed class HttpResponse : IHttpResponse
     {
         private readonly IHttpResponseOutput m_output;
 
@@ -33,7 +33,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual IHttpResponseOutput Output
+        public IHttpResponseOutput Output
         {
             get
             {
@@ -41,7 +41,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual bool TrySkipIisCustomErrors
+        public bool TrySkipIisCustomErrors
         {
             get
             {
@@ -53,14 +53,14 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual string GetHeader(string headerName)
+        public string GetHeader(string headerName)
         {
             if (headerName == null) throw new ArgumentNullException("headerName");
 
             return Context.Response.Headers.Get(headerName);
         }
 
-        public virtual void SetHeader(string headerName, string headerValue)
+        public void SetHeader(string headerName, string headerValue)
         {
             if (headerName == null) throw new ArgumentNullException("headerName");
             if (headerValue == null) throw new ArgumentNullException("headerValue");
@@ -73,7 +73,7 @@ namespace RestFoundation.Runtime
             Context.Response.AppendHeader(headerName, headerValue);
         }
 
-        public virtual bool RemoveHeader(string headerName)
+        public bool RemoveHeader(string headerName)
         {
             if (headerName == null) throw new ArgumentNullException("headerName");
 
@@ -86,24 +86,24 @@ namespace RestFoundation.Runtime
             return true;
         }
 
-        public virtual void ClearHeaders()
+        public void ClearHeaders()
         {
             Context.Response.ClearHeaders();
         }
 
-        public virtual void SetCharsetEncoding(Encoding encoding)
+        public void SetCharsetEncoding(Encoding encoding)
         {
             if (encoding == null) throw new ArgumentNullException("encoding");
 
             Context.Response.ContentEncoding = encoding;
         }
 
-        public virtual HttpStatusCode GetStatusCode()
+        public HttpStatusCode GetStatusCode()
         {
             return (HttpStatusCode) Context.Response.StatusCode;
         }
 
-        public virtual string GetStatusDescription()
+        public string GetStatusDescription()
         {
             return Context.Response.StatusDescription;
         }
@@ -113,32 +113,32 @@ namespace RestFoundation.Runtime
             SetStatus(statusCode, String.Empty);
         }
 
-        public virtual void SetStatus(HttpStatusCode statusCode, string statusDescription)
+        public void SetStatus(HttpStatusCode statusCode, string statusDescription)
         {
             Context.Response.StatusCode = (int) statusCode;
             Context.Response.StatusDescription = statusDescription ?? String.Empty;
         }
 
-        public virtual HttpCookie GetCookie(string cookieName)
+        public HttpCookie GetCookie(string cookieName)
         {
             if (cookieName == null) throw new ArgumentNullException("cookieName");
 
             return Context.Response.Cookies.Get(cookieName);
         }
 
-        public virtual ICookieValueCollection GetCookies()
+        public ICookieValueCollection GetCookies()
         {
             return new CookieValueCollection(Context.Response.Cookies);
         }
 
-        public virtual void SetCookie(HttpCookie cookie)
+        public void SetCookie(HttpCookie cookie)
         {
             if (cookie == null) throw new ArgumentNullException("cookie");
 
             Context.Response.SetCookie(cookie);
         }
 
-        public virtual void ExpireCookie(HttpCookie cookie)
+        public void ExpireCookie(HttpCookie cookie)
         {
             if (cookie == null) throw new ArgumentNullException("cookie");
 
@@ -146,17 +146,12 @@ namespace RestFoundation.Runtime
             Context.Response.SetCookie(cookie);
         }
 
-        public virtual string MapPath(string filePath)
-        {
-            return Context.Server.MapPath(filePath);
-        }
-
         public void SetFileDependencies(string filePath)
         {
             SetFileDependencies(filePath, HttpCacheability.ServerAndPrivate);
         }
 
-        public virtual void SetFileDependencies(string filePath, HttpCacheability cacheability)
+        public void SetFileDependencies(string filePath, HttpCacheability cacheability)
         {
             if (String.IsNullOrEmpty(filePath)) throw new ArgumentNullException("filePath");
 
@@ -176,7 +171,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual void TransmitFile(string filePath)
+        public void TransmitFile(string filePath)
         {
             Context.Response.TransmitFile(filePath);
         }

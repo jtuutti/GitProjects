@@ -5,7 +5,7 @@ using RestFoundation.Collections.Specialized;
 
 namespace RestFoundation.Runtime
 {
-    public class ServiceContext : IServiceContext
+    public sealed class ServiceContext : IServiceContext
     {
         private readonly IHttpRequest m_request;
         private readonly IHttpResponse m_response;
@@ -34,7 +34,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual IHttpRequest Request
+        public IHttpRequest Request
         {
             get
             {
@@ -42,7 +42,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual IHttpResponse Response
+        public IHttpResponse Response
         {
             get
             {
@@ -50,7 +50,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual IPrincipal User
+        public IPrincipal User
         {
             get
             {
@@ -70,12 +70,17 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual dynamic ItemBag
+        public dynamic ItemBag
         {
             get
             {
                 return new DynamicDictionary(Context.Items);
             }
+        }
+
+        public string MapPath(string filePath)
+        {
+            return Context.Server.MapPath(filePath);
         }
     }
 }

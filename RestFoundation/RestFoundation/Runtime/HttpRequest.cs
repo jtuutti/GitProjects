@@ -9,7 +9,7 @@ using RestFoundation.Collections.Specialized;
 
 namespace RestFoundation.Runtime
 {
-    public class HttpRequest : IHttpRequest
+    public sealed class HttpRequest : IHttpRequest
     {
         private const string AjaxHeaderName = "X-Requested-With";
         private const string AjaxHeaderValue = "XMLHttpRequest";
@@ -64,7 +64,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual bool IsAjax
+        public bool IsAjax
         {
             get
             {
@@ -72,7 +72,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual bool IsLocal
+        public bool IsLocal
         {
             get
             {
@@ -80,7 +80,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual bool IsSecure
+        public bool IsSecure
         {
             get
             {
@@ -88,7 +88,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual ServiceUri Url
+        public ServiceUri Url
         {
             get
             {
@@ -96,7 +96,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual HttpMethod Method
+        public HttpMethod Method
         {
             get
             {
@@ -109,7 +109,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual Stream Body
+        public Stream Body
         {
             get
             {
@@ -117,7 +117,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual NetworkCredential Credentials
+        public NetworkCredential Credentials
         {
             get
             {
@@ -125,7 +125,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual dynamic QueryBag
+        public dynamic QueryBag
         {
             get
             {
@@ -133,7 +133,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual IObjectValueCollection RouteValues
+        public IObjectValueCollection RouteValues
         {
             get
             {
@@ -141,7 +141,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual IHeaderCollection Headers
+        public IHeaderCollection Headers
         {
             get
             {
@@ -149,7 +149,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual IStringValueCollection QueryString
+        public IStringValueCollection QueryString
         {
             get
             {
@@ -157,7 +157,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual IStringValueCollection ServerVariables
+        public IStringValueCollection ServerVariables
         {
             get
             {
@@ -165,7 +165,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public virtual ICookieValueCollection Cookies
+        public ICookieValueCollection Cookies
         {
             get
             {

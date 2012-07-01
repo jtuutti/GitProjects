@@ -4,7 +4,7 @@ using System.Web;
 
 namespace RestFoundation.Runtime
 {
-    public class HttpResponseOutput : IHttpResponseOutput
+    public sealed class HttpResponseOutput : IHttpResponseOutput
     {
         private const string LineBreak = "<br/>";
 

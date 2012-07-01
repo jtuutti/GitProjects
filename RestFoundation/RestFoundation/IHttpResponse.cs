@@ -25,7 +25,6 @@ namespace RestFoundation
         void SetCookie(HttpCookie cookie);
         void ExpireCookie(HttpCookie cookie);
 
-        string MapPath(string filePath);
         void SetFileDependencies(string filePath);
         void SetFileDependencies(string filePath, HttpCacheability cacheability);
         void TransmitFile(string filePath);

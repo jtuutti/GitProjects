@@ -11,5 +11,7 @@ namespace RestFoundation
         bool IsAuthenticated { get; }
 
         dynamic ItemBag { get; }
+
+        string MapPath(string filePath);
     }
 }

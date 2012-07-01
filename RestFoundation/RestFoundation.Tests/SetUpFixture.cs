@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using RestFoundation.Test;
 using RestFoundation.Tests.ServiceContracts;
 using StructureMap;
 
@@ -29,9 +30,11 @@ namespace RestFoundation.Tests
                             action.WithDefaultConventions();
                         });
 
-            config.For<IServiceContext>().Use(Mocks.ServiceContext());
-            config.For<IHttpRequest>().Use(Mocks.HttpRequest());
-            config.For<IHttpResponse>().Use(Mocks.HttpResponse());
+            IServiceContext context = new MockServiceContext("~/test-service");
+
+            config.For<IServiceContext>().Use(context);
+            config.For<IHttpRequest>().Use(context.Request);
+            config.For<IHttpResponse>().Use(context.Response);
 
             config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestDependency()));
         }

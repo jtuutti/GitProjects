@@ -27,7 +27,7 @@ namespace RestFoundation.Results
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No valid file URL provided");
             }
 
-            var file = new FileInfo(context.Response.MapPath(FileUrl));
+            var file = new FileInfo(context.MapPath(FileUrl));
 
             if (!file.Exists)
             {

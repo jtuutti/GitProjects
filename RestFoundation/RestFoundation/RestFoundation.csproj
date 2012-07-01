@@ -231,6 +231,10 @@
     <Compile Include="Runtime\ServiceContractTypeRegistry.cs" />
     <Compile Include="Results\StatusResult.cs" />
     <Compile Include="Test\HttpMethodBuilder.cs" />
+    <Compile Include="Test\MockHttpRequest.cs" />
+    <Compile Include="Test\MockHttpResponse.cs" />
+    <Compile Include="Test\MockHttpResponseOutput.cs" />
+    <Compile Include="Test\MockServiceContext.cs" />
     <Compile Include="Test\RouteAssert.cs" />
     <Compile Include="Test\RouteAssertException.cs" />
     <Compile Include="Test\RouteValidatorBuilder.cs" />
