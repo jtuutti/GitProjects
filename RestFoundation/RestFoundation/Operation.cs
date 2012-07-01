@@ -8,5 +8,6 @@ namespace RestFoundation
         public string RelativeUrlTemplate { get; set; }
         public string HttpMethod { get; set; }
         public string Description { get; set; }
+        public string SampleUrl { get; set; }
     }
 }

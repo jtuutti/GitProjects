@@ -127,17 +127,25 @@ namespace RestFoundation
 
         private static Operation[] GetOperations()
         {
-            IEnumerable<ProxyOperation> endPoints = ProxyOperationGenerator.Generate();
+            IEnumerable<ProxyOperation> proxyOperations = ProxyOperationGenerator.Generate();
 
             var operations = new List<Operation>();
 
-            foreach (ProxyOperation endPoint in endPoints)
+            foreach (ProxyOperation proxyOperation in proxyOperations)
             {
+                if (proxyOperation.IsIpFiltered)
+                {
+                    continue;
+                }
+
+                var sampleUrlParts = proxyOperation.GenerateSampleUrlParts();
+
                 operations.Add(new Operation
                 {
-                    RelativeUrlTemplate = endPoint.UrlTempate,
-                    Description = endPoint.Description,
-                    HttpMethod = endPoint.HttpMethod.ToString().ToUpperInvariant()
+                    RelativeUrlTemplate = proxyOperation.UrlTempate,
+                    Description = proxyOperation.Description,
+                    HttpMethod = proxyOperation.HttpMethod.ToString().ToUpperInvariant(),
+                    SampleUrl = sampleUrlParts != null ? String.Concat(sampleUrlParts.Item1, sampleUrlParts.Item2) : String.Empty
                 });
             }
 

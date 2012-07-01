@@ -25,32 +25,12 @@ namespace RestFoundation.ServiceProxy
                 return null;
             }
 
-            var operation = new ProxyOperation
-                            {
-                                ServiceUrl = metadata.ServiceUrl,
-                                UrlTempate = GetUrlTemplate(metadata),
-                                HttpMethod = metadata.UrlInfo.HttpMethods.First(),
-                                SupportedHttpMethods = GetSupportedHttpMethods(metadata),
-                                Description = GetDescription(metadata.MethodInfo),
-                                ResultType = metadata.MethodInfo.ReturnType,
-                                RouteParameters = GetParameters(metadata),
-                                IsIpFiltered = (metadata.Acl != null),
-                                AdditionalHeaders = GetAdditionalHeaders(metadata)
-                            };
-
-            operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, operation.HasResource, operation.HasResponse);
-            operation.HasResource = HasResource(metadata, operation.HttpMethod);
-
-            Tuple<Type, Type> resourceExampleTypes = GetResourceExampleTypes(metadata.MethodInfo);
-            operation.RequestExampleType = resourceExampleTypes.Item1;
-            operation.ResponseExampleType = resourceExampleTypes.Item2;
-
-            return operation;
+            return GenerateProxyOperation(metadata);
         }
 
         public static IEnumerable<ProxyOperation> Generate()
         {
-            var endPoints = new SortedSet<ProxyOperation>();
+            var operations = new SortedSet<ProxyOperation>();
 
             foreach (ServiceMethodMetadata metadata in ServiceMethodRegistry.ServiceMethods.SelectMany(m => m.Value))
             {
@@ -71,20 +51,11 @@ namespace RestFoundation.ServiceProxy
                         continue;
                     }
 
-                    endPoints.Add(new ProxyOperation
-                                  {
-                                      ServiceUrl = metadata.ServiceUrl,
-                                      UrlTempate = GetUrlTemplate(metadata),
-                                      HttpMethod = httpMethod,
-                                      MetadataUrl = String.Concat("metadata?oid=", metadata.ServiceMethodId),
-                                      ProxyUrl = String.Concat("proxy?oid=", metadata.ServiceMethodId),
-                                      Description = GetDescription(metadata.MethodInfo),
-                                      IsIpFiltered = (metadata.Acl != null)
-                                  });
+                    operations.Add(GenerateProxyOperation(metadata));
                 }
             }
 
-            return endPoints;
+            return operations;
         }
 
         private static string GetUrlTemplate(ServiceMethodMetadata metadata)
@@ -327,6 +298,33 @@ namespace RestFoundation.ServiceProxy
             }
 
             return methodParameters.Any(p => Attribute.GetCustomAttribute(p, typeof(BindResourceAttribute), false) != null);
+        }
+
+        private static ProxyOperation GenerateProxyOperation(ServiceMethodMetadata metadata)
+        {
+            var operation = new ProxyOperation
+                            {
+                                ServiceUrl = metadata.ServiceUrl,
+                                UrlTempate = GetUrlTemplate(metadata),
+                                HttpMethod = metadata.UrlInfo.HttpMethods.First(),
+                                SupportedHttpMethods = GetSupportedHttpMethods(metadata),
+                                MetadataUrl = String.Concat("metadata?oid=", metadata.ServiceMethodId),
+                                ProxyUrl = String.Concat("proxy?oid=", metadata.ServiceMethodId),
+                                Description = GetDescription(metadata.MethodInfo),
+                                ResultType = metadata.MethodInfo.ReturnType,
+                                RouteParameters = GetParameters(metadata),
+                                IsIpFiltered = (metadata.Acl != null),
+                                AdditionalHeaders = GetAdditionalHeaders(metadata)
+                            };
+
+            operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, operation.HasResource, operation.HasResponse);
+            operation.HasResource = HasResource(metadata, operation.HttpMethod);
+
+            Tuple<Type, Type> resourceExampleTypes = GetResourceExampleTypes(metadata.MethodInfo);
+            operation.RequestExampleType = resourceExampleTypes.Item1;
+            operation.ResponseExampleType = resourceExampleTypes.Item2;
+
+            return operation;
         }
     }
 }
