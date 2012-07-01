@@ -2,19 +2,20 @@
 
 namespace RestFoundation.ServiceProxy
 {
-    public struct ProxyRouteParameter : IEquatable<ProxyRouteParameter>
+    public struct ProxyParameter : IEquatable<ProxyParameter>
     {
         private readonly string m_name;
         private readonly string m_type;
         private readonly string m_constraint;
         private readonly object m_exampleValue;
         private readonly string m_allowedValues;
+        private readonly bool m_isRouteParameter;
 
-        public ProxyRouteParameter(string name, string type, string constraint) : this(name, type, constraint, null, null)
+        public ProxyParameter(string name, string type, string constraint, bool isRouteParameter) : this(name, type, constraint, null, null, isRouteParameter)
         {
         }
 
-        public ProxyRouteParameter(string name, string type, string constraint, object exampleValue, string allowedValues)
+        public ProxyParameter(string name, string type, string constraint, object exampleValue, string allowedValues, bool isRouteParameter)
         {
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
             if (String.IsNullOrEmpty(type)) throw new ArgumentNullException("type");
@@ -24,6 +25,7 @@ namespace RestFoundation.ServiceProxy
             m_constraint = constraint;
             m_exampleValue = exampleValue;
             m_allowedValues = allowedValues;
+            m_isRouteParameter = isRouteParameter;
         }
 
         public string Name
@@ -66,7 +68,15 @@ namespace RestFoundation.ServiceProxy
             }
         }
 
-        public bool Equals(ProxyRouteParameter other)
+        public bool IsRouteParameter
+        {
+            get
+            {
+                return m_isRouteParameter;
+            }
+        }
+
+        public bool Equals(ProxyParameter other)
         {
             return Equals(other.m_name, m_name);
         }
@@ -75,7 +85,7 @@ namespace RestFoundation.ServiceProxy
         {
             if (ReferenceEquals(null, obj)) return false;
 
-            return obj is ProxyRouteParameter && Equals((ProxyRouteParameter) obj);
+            return obj is ProxyParameter && Equals((ProxyParameter) obj);
         }
 
         public override int GetHashCode()
@@ -83,12 +93,12 @@ namespace RestFoundation.ServiceProxy
             return m_name.GetHashCode();
         }
 
-        public static bool operator ==(ProxyRouteParameter left, ProxyRouteParameter right)
+        public static bool operator ==(ProxyParameter left, ProxyParameter right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(ProxyRouteParameter left, ProxyRouteParameter right)
+        public static bool operator !=(ProxyParameter left, ProxyParameter right)
         {
             return !left.Equals(right);
         }

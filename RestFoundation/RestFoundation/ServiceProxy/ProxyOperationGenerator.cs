@@ -33,8 +33,9 @@ namespace RestFoundation.ServiceProxy
                                 SupportedHttpMethods = GetSupportedHttpMethods(metadata),
                                 Description = GetDescription(metadata.MethodInfo),
                                 ResultType = metadata.MethodInfo.ReturnType,
-                                RouteParameters = GetRouteParameters(metadata),
-                                IsIpFiltered = (metadata.Acl != null)
+                                RouteParameters = GetParameters(metadata),
+                                IsIpFiltered = (metadata.Acl != null),
+                                AdditionalHeaders = GetAdditionalHeaders(metadata)
                             };
 
             operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, operation.HasResource, operation.HasResponse);
@@ -134,9 +135,17 @@ namespace RestFoundation.ServiceProxy
             return statusCodes;
         }
 
-        private static List<ProxyRouteParameter> GetRouteParameters(ServiceMethodMetadata metadata)
+        private static List<ProxyParameter> GetParameters(ServiceMethodMetadata metadata)
         {
-            var routeParameters = new List<ProxyRouteParameter>();
+            List<ProxyParameter> parameters = GetRouteParameters(metadata);
+            parameters.AddRange(GetQueryParameters(metadata));
+
+            return parameters;
+        }
+
+        private static List<ProxyParameter> GetRouteParameters(ServiceMethodMetadata metadata)
+        {
+            var routeParameters = new List<ProxyParameter>();
 
             foreach (ParameterInfo parameter in metadata.MethodInfo.GetParameters())
             {
@@ -146,22 +155,41 @@ namespace RestFoundation.ServiceProxy
                 }
 
                 var routeParameterAttribute = Attribute.GetCustomAttribute(parameter, typeof(ProxyRouteParameterAttribute), true) as ProxyRouteParameterAttribute;
-                ProxyRouteParameter routeParameter;
+                ProxyParameter routeParameter;
 
                 if (routeParameterAttribute == null)
                 {
-                    routeParameter = new ProxyRouteParameter(parameter.Name.ToLowerInvariant(), GetParameterType(parameter.ParameterType), GetParameterConstraint(parameter));
+                    routeParameter = new ProxyParameter(parameter.Name.ToLowerInvariant(), GetParameterType(parameter.ParameterType), GetParameterConstraint(parameter), true);
                 }
                 else
                 {
-                    routeParameter = new ProxyRouteParameter(parameter.Name.ToLowerInvariant(),
-                                                             GetParameterType(parameter.ParameterType),
-                                                             GetParameterConstraint(parameter),
-                                                             routeParameterAttribute.ExampleValue,
-                                                             routeParameterAttribute.AllowedValues);
+                    routeParameter = new ProxyParameter(parameter.Name.ToLowerInvariant(),
+                                                        GetParameterType(parameter.ParameterType),
+                                                        GetParameterConstraint(parameter),
+                                                        routeParameterAttribute.ExampleValue,
+                                                        routeParameterAttribute.AllowedValues,
+                                                        true);
                 }
 
                 routeParameters.Add(routeParameter);
+            }
+
+            return routeParameters;
+        }
+
+        private static List<ProxyParameter> GetQueryParameters(ServiceMethodMetadata metadata)
+        {
+            var routeParameters = new List<ProxyParameter>();
+            var queryParameterAttributes = metadata.MethodInfo.GetCustomAttributes(typeof(ProxyQueryParameterAttribute), false).Cast<ProxyQueryParameterAttribute>();
+
+            foreach (ProxyQueryParameterAttribute queryParameterAttribute in queryParameterAttributes)
+            {
+                routeParameters.Add(new ProxyParameter(queryParameterAttribute.Name,
+                                                       queryParameterAttribute.ParameterType != null ? GetParameterType(queryParameterAttribute.ParameterType) : GetParameterType(typeof(string)),
+                                                       queryParameterAttribute.RegexConstraint,
+                                                       queryParameterAttribute.ExampleValue,
+                                                       queryParameterAttribute.AllowedValues,
+                                                       false));
             }
 
             return routeParameters;
@@ -260,6 +288,28 @@ namespace RestFoundation.ServiceProxy
             var constraintAttribute = Attribute.GetCustomAttribute(parameter, typeof(ParameterConstraintAttribute), false) as ParameterConstraintAttribute;
 
             return constraintAttribute != null ? constraintAttribute.Pattern.ToString().TrimStart('^').TrimEnd('$') : null;
+        }
+
+        private static List<Tuple<string, string>> GetAdditionalHeaders(ServiceMethodMetadata metadata)
+        {
+            List<ProxyAdditionalHeaderAttribute> methodAttributes = metadata.MethodInfo.GetCustomAttributes(typeof(ProxyAdditionalHeaderAttribute), false).Cast<ProxyAdditionalHeaderAttribute>().ToList();
+
+            if (metadata.MethodInfo.DeclaringType != null)
+            {
+                IEnumerable<ProxyAdditionalHeaderAttribute> contractAttributes = metadata.MethodInfo.DeclaringType.GetCustomAttributes(typeof(ProxyAdditionalHeaderAttribute), false).Cast<ProxyAdditionalHeaderAttribute>();
+
+                foreach (ProxyAdditionalHeaderAttribute contractAttribute in contractAttributes)
+                {
+                    if (!methodAttributes.Any(a => String.Equals(contractAttribute.Name, a.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        methodAttributes.Add(contractAttribute);
+                    }
+                }
+            }
+
+            methodAttributes.Sort((a1, a2) => String.Compare(a1.Name, a2.Name, StringComparison.OrdinalIgnoreCase));
+
+            return methodAttributes.Select(a => Tuple.Create(a.Name, a.Value)).ToList();
         }
 
         private static bool HasResource(ServiceMethodMetadata metadata, HttpMethod httpMethod)

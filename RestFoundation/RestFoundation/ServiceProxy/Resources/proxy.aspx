@@ -61,6 +61,11 @@
         ResourceFormat.Text = format.ToUpperInvariant();
         HttpMethod.Value = operation.HttpMethod.ToString().ToUpperInvariant();
 
+        foreach (Tuple<string, string> header in operation.AdditionalHeaders)
+        {
+            HeaderText.Value += String.Concat(header.Item1, ": ", header.Item2, Environment.NewLine);
+        }
+
         if (operation.HasResource && operation.RequestExampleType != null)
         {
             IResourceExample requestExample;

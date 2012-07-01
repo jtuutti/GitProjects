@@ -169,10 +169,16 @@
             <span class="method"><%: operation.SupportedHttpMethods %></span>
         <% } %>
     </p>
+    <% if (operation.SupportOdata) { %>
+    <p>
+        This operation supports <a href="http://www.odata.org" target="_blank" title="OData">OData</a> URL conventions.
+    </p>
+    <% } %>
     <% if (operation.RouteParameters.Count > 0) { %>
-    <table id="queryParameters">
+    <table class="parameters">
     <tr>
         <th>URL parameter</th>
+        <th>Query parameter?</th>
         <th>Type</th>
         <th>Constraint</th>
         <th>Allowed values</th>
@@ -181,6 +187,7 @@
     <% foreach (var routeParameter in operation.RouteParameters) { %>
     <tr>
         <td><%: "{" + routeParameter.Name + "}" %></td>
+        <td><%: routeParameter.IsRouteParameter ? "N" : "Y" %></td>
         <td><%: routeParameter.Type %></td>
         <td><%: routeParameter.Constraint ?? String.Empty %></td>
         <td><%: routeParameter.AllowedValues ?? String.Empty %></td>
@@ -189,10 +196,19 @@
     <% } %>
     </table>
     <% } %>
-    <% if (operation.SupportOdata) { %>
-    <p>
-        This operation supports <a href="http://www.odata.org" target="_blank" title="OData">OData</a> URL conventions.
-    </p>
+    <% if (operation.AdditionalHeaders.Count > 0) { %>
+    <table class="parameters">
+    <tr>
+        <th>Header Name</th>
+        <th>Example</th>
+    </tr>
+    <% foreach (var header in operation.AdditionalHeaders) { %>
+    <tr>
+        <td><%: header.Item1 %></td>
+        <td><%: header.Item2 %></td>
+    </tr>
+    <% } %>
+    </table>
     <% } %>
     <table>
     <tr>

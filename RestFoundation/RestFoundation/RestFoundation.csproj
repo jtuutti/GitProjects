@@ -194,13 +194,15 @@
     <Compile Include="Runtime\UploadedFile.cs" />
     <Compile Include="Runtime\XmlSchemaGenerator.cs" />
     <Compile Include="Runtime\XmlSerializerRegistry.cs" />
+    <Compile Include="ServiceProxy\ProxyAdditionalHeaderAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyHiddenOperation.cs" />
     <Compile Include="ServiceProxy\ProxyOperationDescriptionAttribute.cs" />
+    <Compile Include="ServiceProxy\ProxyQueryParameterAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyResourceExampleAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyRootHandler.cs" />
     <Compile Include="ServiceProxy\ProxyRouteParameterAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyStatusCodeAttribute.cs" />
-    <Compile Include="ServiceProxy\ProxyRouteParameter.cs" />
+    <Compile Include="ServiceProxy\ProxyParameter.cs" />
     <Compile Include="ServiceProxy\ProxyOperation.cs" />
     <Compile Include="ServiceProxy\ProxyOperationGenerator.cs" />
     <Compile Include="ServiceProxy\ProxyStatusCode.cs" />

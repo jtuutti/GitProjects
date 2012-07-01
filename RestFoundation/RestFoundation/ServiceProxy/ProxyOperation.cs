@@ -20,10 +20,11 @@ namespace RestFoundation.ServiceProxy
         public bool HasResource { get; set; }
         public Type ResultType { get; set; }
         public List<ProxyStatusCode> StatusCodes { get; set; }
-        public List<ProxyRouteParameter> RouteParameters { get; set; }
+        public List<ProxyParameter> RouteParameters { get; set; }
         public Type RequestExampleType { get; set; }
         public Type ResponseExampleType { get; set; }
         public bool IsIpFiltered { get; set; }
+        public List<Tuple<string, string>> AdditionalHeaders { get; set; }
 
         public bool HasResponse
         {
@@ -56,7 +57,7 @@ namespace RestFoundation.ServiceProxy
             {
                 var routeParametersWithValues = RouteParameters.Where(p => p.ExampleValue != null);
 
-                foreach (ProxyRouteParameter routeParameter in routeParametersWithValues)
+                foreach (ProxyParameter routeParameter in routeParametersWithValues)
                 {
                     urlTemplate = Regex.Replace(urlTemplate,
                                                 String.Concat(@"\{", routeParameter.Name, @"\}"),
