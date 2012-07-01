@@ -33,6 +33,14 @@ namespace RestFoundation.ServiceProxy
             }
         }
 
+        public bool SupportOdata
+        {
+            get
+            {
+                return ResultType != null && ResultType.IsGenericType && ResultType.GetGenericTypeDefinition() == typeof(IQueryable<>);
+            }
+        }
+
         public Tuple<string, string> GenerateSampleUrlParts()
         {
             HttpContext context = HttpContext.Current;

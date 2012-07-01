@@ -189,6 +189,11 @@
     <% } %>
     </table>
     <% } %>
+    <% if (operation.SupportOdata) { %>
+    <p>
+        This operation supports <a href="http://www.odata.org" target="_blank" title="OData">OData</a> URL conventions.
+    </p>
+    <% } %>
     <table>
     <tr>
         <th>Message direction</th>
@@ -257,57 +262,68 @@
     <% if (operation.ResponseExampleType != null) { %>
     <% if (!String.IsNullOrEmpty(requestJsonExample)) { %>
     <div class="schemaSection">
-        <a name="request-json">The following is an example JSON serialized request:</a>           
-        <pre><%: requestJsonExample %></pre>
+        <a name="request-json"></a>The following is an example JSON serialized request:
+        <pre id="JsonRequest"><%: requestJsonExample %></pre>
+        <a id="ViewJsonRequest" href="#">View Request</a>
     </div>
     <% } %>
     <% if (!String.IsNullOrEmpty(requestXmlExample)) { %>
     <div class="schemaSection">
-        <a name="request-xml">The following is an example XML serialized request:</a>           
-        <pre><%: requestXmlExample %></pre>
+        <a name="request-xml"></a>The following is an example XML serialized request:
+        <pre id="XmlRequest"><%: requestXmlExample %></pre>
+        <a id="ViewXmlRequest" href="#">View Request</a>
     </div>
     <% } %>
     <% } %>
     <% if (operation.ResponseExampleType != null) { %>
     <% if (!String.IsNullOrEmpty(responseJsonExample)) { %>
     <div class="schemaSection">
-        <a name="response-json">The following is an example JSON serialized response:</a>
-        <pre><%: responseJsonExample %></pre>
+        <a name="response-json"></a>The following is an example JSON serialized response:
+        <pre id="JsonResponse"><%: responseJsonExample %></pre>
+        <a id="ViewJsonResponse" href="#">View Response</a>
     </div>
     <% } %>
     <% if (!String.IsNullOrEmpty(responseXmlExample)) { %>
     <div class="schemaSection">
-        <a name="response-xml">The following is an example XML serialized response:</a>
-        <pre><%: responseXmlExample %></pre>
+        <a name="response-xml"></a>The following is an example XML serialized response:
+        <pre id="XmlResponse"><%: responseXmlExample %></pre>
+        <a id="ViewXmlResponse" href="#">View Response</a>
     </div>
     <% } %>
     <% } %>
     <% if (requestXmlSchemas != null && requestXmlSchemas.Count > 0) { %>
     <div class="schemaSection">
-    <a name="request-schema">The following is the request model XSD Schema:</a>           
-    <pre><%: requestXmlSchemas[0] %></pre>
+    <a name="request-schema"></a>The following is the request model XSD Schema:         
+    <pre id="RequestSchema"><%: requestXmlSchemas[0] %></pre>
+    <a id="ViewRequestSchema" href="#">View Schema</a>
     </div>
     <% if (requestXmlSchemas.Count > 1) { %>
     <div class="schemaSection">
     <span>Additional request XSD Schemas:</span>
     <% for (int i = 1; i < requestXmlSchemas.Count; i++) { %>
-        <pre><%: requestXmlSchemas[i] %></pre>
+        <pre id="RequestSchema<%: i %>"><%: requestXmlSchemas[i] %></pre>
+        <a id="ViewRequestSchema<%: i %>" href="#">View Schema</a>
     <% } %>
     </div>
     <% } %>
     <% } %>
     <% if (responseXmlSchemas != null && responseXmlSchemas.Count > 0) { %>
     <div class="schemaSection">
-    <a name="response-schema">The following is the response model XSD Schema:</a>           
-    <pre><%: responseXmlSchemas[0] %></pre>
+    <a name="response-schema"></a>The following is the response model XSD Schema:
+    <pre id="ResponseSchema"><%: responseXmlSchemas[0] %></pre>
+    <a id="ViewResponseSchema" href="#">Response Schema</a>
     </div>
     <% if (responseXmlSchemas.Count > 1) { %>
     <div class="schemaSection">
     <span>Additional response XSD Schemas:</span>
     <% for (int i = 1; i < responseXmlSchemas.Count; i++) { %>
-        <pre><%: responseXmlSchemas[i] %></pre>
+        <pre id="ResponseSchema<%: i %>"><%: responseXmlSchemas[i] %></pre>
+        <a id="ViewResponseSchema<%: i %>" href="#">View Schema</a>
     <% } %>
     </div>
     <% } %>
     <% } %>
+    <script type="text/javascript">
+        $(function(){$("#ViewJsonRequest").click(function(){displayCode($("#JsonRequest").text());return!1});$("#ViewXmlRequest").click(function(){displayCode($("#XmlRequest").text());return!1});$("#ViewJsonResponse").click(function(){displayCode($("#JsonResponse").text());return!1});$("#ViewXmlResponse").click(function(){displayCode($("#XmlResponse").text());return!1});$("#ViewRequestSchema").click(function(){displayCode($("#RequestSchema").text());return!1});$("#ViewResponseSchema").click(function(){displayCode($("#ResponseSchema").text()); return!1});for(var a=1;10>a&&0!=$("#RequestSchema"+a).length;a++)$("#ViewRequestSchema"+a).click(function(){var a=$(this).attr("id").replace(/^View/,"");displayCode($("#"+a).text());return!1});for(a=1;10>a&&0!=$("#ResponseSchema"+a).length;a++)$("#ViewResponseSchema"+a).click(function(){var a=$(this).attr("id").replace(/^View/,"");displayCode($("#"+a).text());return!1})}); function displayCode(a){$("#OutputForm").remove();var b=['<form id="OutputForm" method="POST" action="output" target="_blank">'];b.push('<input type="hidden" name="format" value="text/plain"/>');b.push('<input type="hidden" name="responseText" value="'+encodeURIComponent(a)+'"/>');b.push("</form>");$(b.join("")).appendTo("body")[0].submit()};
+    </script>
 </asp:Content>
