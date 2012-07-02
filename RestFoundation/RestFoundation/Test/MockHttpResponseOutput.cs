@@ -23,7 +23,6 @@ namespace RestFoundation.Test
 
         public virtual void Clear()
         {
-            Console.Clear();
         }
 
         public virtual IHttpResponseOutput Write(string value)

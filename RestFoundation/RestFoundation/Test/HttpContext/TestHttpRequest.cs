@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Text;
 using System.Web;
 
-namespace RestFoundation.Test
+namespace RestFoundation.Test.HttpContext
 {
-    internal sealed class TestHttpRequest : HttpRequestBase
+    public sealed class TestHttpRequest : HttpRequestBase
     {
         private readonly string m_executionFilePath;
         private readonly string m_rawUrl;
@@ -16,7 +17,7 @@ namespace RestFoundation.Test
         private readonly NameValueCollection m_serverVariables;
         private readonly NameValueCollection m_params;
 
-        public TestHttpRequest(string relativeUrl, string httpMethod)
+        internal TestHttpRequest(string relativeUrl, string httpMethod)
         {
             string[] urlParts = relativeUrl.Split(new[] { '?', '#' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -30,6 +31,9 @@ namespace RestFoundation.Test
             m_serverVariables = new NameValueCollection();
             m_params = new NameValueCollection();
         }
+
+        public override Encoding ContentEncoding { get; set; }
+        public override string ContentType { get; set; }
 
         public override string[] AcceptTypes
         {

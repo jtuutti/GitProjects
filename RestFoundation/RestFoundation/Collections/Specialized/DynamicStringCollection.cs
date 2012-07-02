@@ -9,15 +9,7 @@ namespace RestFoundation.Collections.Specialized
 {
     public class DynamicStringCollection : DynamicObject
     {
-       private readonly IStringValueCollection m_inner;
-
-        public int Count
-        {
-            get
-            {
-                return m_inner.Keys.Count;
-            }
-        }
+        private readonly IStringValueCollection m_inner;
 
         public DynamicStringCollection() : this(new StringValueCollection(new NameValueCollection()))
         {
@@ -28,6 +20,14 @@ namespace RestFoundation.Collections.Specialized
             if (collection == null) throw new ArgumentNullException("collection");
 
             m_inner = collection;
+        }
+
+        public int Count
+        {
+            get
+            {
+                return m_inner.Keys.Count;
+            }
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)

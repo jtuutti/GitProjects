@@ -25,7 +25,7 @@ namespace RestFoundation.Runtime
             m_credentialResolver = credentialResolver;
         }
 
-        private static HttpContext Context
+        private static HttpContextBase Context
         {
             get
             {
@@ -36,7 +36,7 @@ namespace RestFoundation.Runtime
                     throw new InvalidOperationException("No HTTP context was found");
                 }
 
-                return context;
+                return new HttpContextWrapper(context);
             }
         }
 
@@ -102,7 +102,7 @@ namespace RestFoundation.Runtime
             {
                 if (!ContextContainer.Method.HasValue)
                 {
-                    ContextContainer.Method = HttpContext.Current.GetOverriddenHttpMethod();
+                    ContextContainer.Method = Context.GetOverriddenHttpMethod();
                 }
 
                 return ContextContainer.Method.Value;
@@ -175,7 +175,7 @@ namespace RestFoundation.Runtime
 
         private static IObjectValueCollection GenerateRouteValues()
         {
-            var routeData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(Context));
+            var routeData = RouteTable.Routes.GetRouteData(Context);
 
             return routeData != null ? new ObjectValueCollection(routeData.Values) : new ObjectValueCollection(new RouteValueDictionary());
         }

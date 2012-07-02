@@ -9,6 +9,8 @@ namespace RestFoundation.Tests
     [SetUpFixture]
     public class SetUpFixture
     {
+        public const string RelativeUrl = "test-service";
+
         [SetUp]
         public void Setup()
         {
@@ -30,7 +32,7 @@ namespace RestFoundation.Tests
                             action.WithDefaultConventions();
                         });
 
-            IServiceContext context = new MockServiceContext("~/test-service");
+            IServiceContext context = new MockServiceContext(RelativeUrl);
 
             config.For<IServiceContext>().Use(context);
             config.For<IHttpRequest>().Use(context.Request);
@@ -51,7 +53,7 @@ namespace RestFoundation.Tests
 
         private static void RegisterRoutes(RouteBuilder routeBuilder)
         {
-            routeBuilder.MapRestRoute<ITestService>("test");
+            routeBuilder.MapRestRoute<ITestService>(RelativeUrl);
         }
     }
 }

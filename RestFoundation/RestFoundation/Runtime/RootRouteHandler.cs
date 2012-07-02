@@ -5,9 +5,7 @@ using System.Web;
 using System.Web.Routing;
 using RestFoundation.Collections.Specialized;
 using RestFoundation.DataFormatters;
-using RestFoundation.Runtime;
 using RestFoundation.ServiceProxy;
-using HttpRequest = System.Web.HttpRequest;
 
 namespace RestFoundation
 {
@@ -15,6 +13,8 @@ namespace RestFoundation
     {
         private readonly IServiceContext m_serviceContext;
         private readonly IResultFactory m_resultFactory;
+
+        private HttpContextBase m_context;
 
         public RootRouteHandler(IServiceContext serviceContext, IResultFactory resultFactory)
         {
@@ -35,31 +35,35 @@ namespace RestFoundation
 
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
+            if (requestContext == null) throw new ArgumentNullException("requestContext");
+
+            m_context = requestContext.HttpContext;
+
             return this;
         }
 
         public void ProcessRequest(HttpContext context)
         {
-            if (String.Equals(HttpMethod.Options.ToString(), context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            if (String.Equals(HttpMethod.Options.ToString(), m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
             {
-                context.AppendAllowHeader(new[] { HttpMethod.Get, HttpMethod.Head });
+                m_serviceContext.Response.SetHeader("Allow", "GET, HEAD");
                 return;
             }
 
-            if (!String.Equals(HttpMethod.Get.ToString(), context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) &&
-                !String.Equals(HttpMethod.Head.ToString(), context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            if (!String.Equals(HttpMethod.Get.ToString(), m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) &&
+                !String.Equals(HttpMethod.Head.ToString(), m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
             {
                 throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "HTTP method is not allowed");
             }
 
-            if (String.Equals(HttpMethod.Head.ToString(), context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            if (String.Equals(HttpMethod.Head.ToString(), m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
             {
-                context.Response.SuppressContent = true;
+                m_context.Response.SuppressContent = true;
             }
 
-            if (Rest.Active.IsServiceProxyInitialized && IsInBrowser(context.Request))
+            if (Rest.Active.IsServiceProxyInitialized && IsInBrowser(m_context.Request))
             {
-                context.Response.Redirect((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/help/index", false);
+                m_context.Response.Redirect((m_context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/help/index", false);
                 return;
             }
 
@@ -82,7 +86,7 @@ namespace RestFoundation
             result.Execute(m_serviceContext);
         }
 
-        private static bool IsInBrowser(HttpRequest request)
+        private static bool IsInBrowser(HttpRequestBase request)
         {
             if (!String.Equals(request.HttpMethod, HttpMethod.Get.ToString(), StringComparison.OrdinalIgnoreCase) &&
                 !String.Equals(request.HttpMethod, HttpMethod.Head.ToString(), StringComparison.OrdinalIgnoreCase))

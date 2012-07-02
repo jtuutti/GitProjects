@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -8,20 +7,7 @@ namespace RestFoundation.Runtime
 {
     internal static class HttpContextExtensions
     {
-        private const string AllowHeader = "Allow";
         private const string HttpMethodOverrideHeader = "X-HTTP-Method-Override";
-
-        public static void AppendAllowHeader(this HttpContext context, IEnumerable<HttpMethod> allowedHttpMethods)
-        {
-                context.Response.AppendHeader(AllowHeader, String.Join(", ", allowedHttpMethods.Select(m => m.ToString().ToUpperInvariant()).OrderBy(m => m)));
-        }
-
-        public static HttpMethod GetOverriddenHttpMethod(this HttpContext context)
-        {
-            if (context == null) throw new ArgumentNullException("context");
-
-            return GetOverriddenHttpMethod(new HttpContextWrapper(context));
-        }
 
         public static HttpMethod GetOverriddenHttpMethod(this HttpContextBase context)
         {
@@ -57,15 +43,6 @@ namespace RestFoundation.Runtime
             }
 
             return httpMethod;
-        }
-
-        public static void SetServiceMethodResponseStatus(this HttpContext context, Type methodReturnType)
-        {
-            if (context.Response.StatusCode == 200 && methodReturnType == typeof(void))
-            {
-                context.Response.StatusCode = 204;
-                context.Response.StatusDescription = "No Content";
-            }
         }
     }
 }

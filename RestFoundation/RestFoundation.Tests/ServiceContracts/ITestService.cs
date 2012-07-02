@@ -19,6 +19,6 @@
         IResult Patch(int? id);
 
         [Url("{id}", HttpMethod.Delete)]
-        IResult Delete(int? id);
+        void Delete(int? id);
     }
 }

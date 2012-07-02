@@ -8,7 +8,7 @@ namespace RestFoundation.Runtime
     {
         private const string LineBreak = "<br/>";
 
-        private static HttpContext Context
+        private static HttpContextBase Context
         {
             get
             {
@@ -19,7 +19,7 @@ namespace RestFoundation.Runtime
                     throw new InvalidOperationException("No HTTP context was found");
                 }
 
-                return context;
+                return new HttpContextWrapper(context);
             }
         }
 

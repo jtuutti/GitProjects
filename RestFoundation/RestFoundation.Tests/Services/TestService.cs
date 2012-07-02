@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using RestFoundation.Tests.ServiceContracts;
 
@@ -10,11 +11,18 @@ namespace RestFoundation.Tests.Services
 
         public IResult Get(int? id)
         {
+            ValidateId(id);
+
             return Result.Ok;
         }
 
         public IResult GetAll(string orderBy)
         {
+            if (String.IsNullOrWhiteSpace(orderBy))
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "No order provided");
+            }
+
             return Result.Ok;
         }
 
@@ -28,17 +36,34 @@ namespace RestFoundation.Tests.Services
 
         public IResult Put(int? id)
         {
+            ValidateId(id);
+
             return Result.NoContent;
         }
 
         public IResult Patch(int? id)
         {
+            ValidateId(id);
+
             return Result.NoContent;
         }
 
-        public IResult Delete(int? id)
+        public void Delete(int? id)
         {
-            return Result.NoContent;
+            ValidateId(id);
+        }
+
+        private static void ValidateId(int? id)
+        {
+            if (id == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "No ID provided");
+            }
+
+            if (id.Value < 0)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid ID provided");
+            }
         }
     }
 }

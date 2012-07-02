@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ namespace RestFoundation.Runtime
         private readonly IServiceFactory m_serviceFactory;
         private readonly IResultFactory m_resultFactory;
         private readonly IServiceMethodInvoker m_methodInvoker;
+
+        private HttpContextBase m_context;
         private RouteValueDictionary m_routeValues;
 
         public RestAsyncHandler(IServiceContext serviceContext, IServiceFactory serviceFactory, IServiceMethodInvoker methodInvoker, IResultFactory resultFactory)
@@ -48,7 +51,9 @@ namespace RestFoundation.Runtime
                 requestContext.HttpContext.Items[ServiceRequestValidator.UnvalidatedHandlerKey] = Boolean.TrueString;
             }
 
+            m_context = requestContext.HttpContext;
             m_routeValues = requestContext.RouteData.Values;
+
             return this;
         }
 
@@ -59,35 +64,49 @@ namespace RestFoundation.Runtime
 
         public IAsyncResult BeginProcessRequest(HttpContext context, AsyncCallback cb, object extraData)
         {
-            if (context == null) throw new ArgumentNullException("context");
-
             var serviceUrl = (string) m_routeValues[RouteConstants.ServiceUrl];
             var serviceContractTypeName = (string) m_routeValues[RouteConstants.ServiceContractType];
             var urlTemplate = (string) m_routeValues[RouteConstants.UrlTemplate];
 
+            if (String.IsNullOrEmpty(serviceUrl) || String.IsNullOrEmpty(serviceContractTypeName) || String.IsNullOrEmpty(urlTemplate))
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
+            }
+
             Type serviceContractType = ServiceContractTypeRegistry.GetType(serviceContractTypeName);
-            HttpMethod httpMethod = context.GetOverriddenHttpMethod();
+
+            if (serviceContractType == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service contract of type '{0}' could not be determined", serviceContractTypeName));
+            }
+
+            HttpMethod httpMethod = m_context.GetOverriddenHttpMethod();
 
             if (httpMethod == HttpMethod.Options)
             {
                 HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
-                context.AppendAllowHeader(allowedHttpMethods);
+                m_serviceContext.Response.SetHeader("Allow", String.Join(", ", allowedHttpMethods.Select(m => m.ToString().ToUpperInvariant()).OrderBy(m => m)));
 
                 return Task<IResult>.Factory.StartNew(() => new EmptyResult()).ContinueWith(action => cb(action));
             }
 
             if (httpMethod == HttpMethod.Head)
             {
-                context.Response.SuppressContent = true;
+                m_context.Response.SuppressContent = true;
             }
 
             object service = m_serviceFactory.Create(m_serviceContext, serviceContractType);
+
+            if (service == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service with contract of type '{0}' could not be created", serviceContractTypeName));
+            }
 
             ValidateAclAttribute acl;
             OutputCacheAttribute cache;
             MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, serviceUrl), urlTemplate, httpMethod, out acl, out cache);
 
-            if (acl != null)
+            if (acl != null && context != null)
             {
                 AclValidator.Validate(context, acl.SectionName);
             }
@@ -140,7 +159,7 @@ namespace RestFoundation.Runtime
 
             if (result != null)
             {
-                if ((httpArguments.Method == HttpMethod.Get || httpArguments.Method == HttpMethod.Head) && httpArguments.Cache != null)
+                if ((httpArguments.Method == HttpMethod.Get || httpArguments.Method == HttpMethod.Head) && httpArguments.Cache != null && httpArguments.Context != null)
                 {
                     using (var page = new OutputCachedPage(httpArguments.Cache.CacheSettings))
                     {
@@ -150,9 +169,9 @@ namespace RestFoundation.Runtime
 
                 result.Execute(m_serviceContext);
             }
-            else
+            else if (m_serviceContext.Response.GetStatusCode() == HttpStatusCode.OK && httpArguments.MethodReturnType == typeof(void))
             {
-               httpArguments.Context.SetServiceMethodResponseStatus(httpArguments.MethodReturnType);
+                m_serviceContext.Response.SetStatus(HttpStatusCode.NoContent, "No Content");
             }
         }
 
@@ -162,11 +181,6 @@ namespace RestFoundation.Runtime
         {
             public HttpArguments(HttpContext context, HttpMethod method, OutputCacheAttribute cache, Type methodReturnType)
             {
-                if (context == null)
-                {
-                    throw new ArgumentNullException("context");
-                }
-
                 if (methodReturnType == null)
                 {
                     throw new ArgumentNullException("methodReturnType");

@@ -18,7 +18,7 @@ namespace RestFoundation.Runtime
             m_output = output;
         }
 
-        private static HttpContext Context
+        private static HttpContextBase Context
         {
             get
             {
@@ -29,7 +29,7 @@ namespace RestFoundation.Runtime
                     throw new InvalidOperationException("No HTTP context was found");
                 }
 
-                return context;
+                return new HttpContextWrapper(context);
             }
         }
 
