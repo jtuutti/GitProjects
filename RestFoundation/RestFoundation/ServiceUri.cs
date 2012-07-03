@@ -8,10 +8,14 @@ namespace RestFoundation.Runtime
     [Serializable]
     public class ServiceUri : Uri
     {
+        private readonly string m_serviceRelativeUrl;
+
         public ServiceUri(string baseUrl, string serviceUrl) : base(new Uri(baseUrl, UriKind.Absolute), serviceUrl)
         {
             if (String.IsNullOrEmpty(baseUrl)) throw new ArgumentNullException("baseUrl");
             if (String.IsNullOrEmpty(serviceUrl)) throw new ArgumentNullException("serviceUrl");
+
+            m_serviceRelativeUrl = serviceUrl.TrimStart('~', ' ').TrimEnd('/', ' ');
 
             ServiceUrl = new Uri(new Uri(baseUrl, UriKind.Absolute), serviceUrl.TrimStart('/', '~', ' '));
         }
@@ -20,6 +24,8 @@ namespace RestFoundation.Runtime
         {
             if (currentUri == null) throw new ArgumentNullException("currentUri");
             if (String.IsNullOrEmpty(serviceUrl)) throw new ArgumentNullException("serviceUrl");
+
+            m_serviceRelativeUrl = serviceUrl.TrimStart('~', ' ').TrimEnd('/', ' ');
 
             ServiceUrl = new Uri(ToAbsoluteUrl(serviceUrl), UriKind.Absolute);
         }
@@ -58,7 +64,7 @@ namespace RestFoundation.Runtime
                 baseUrl = VirtualPathUtility.Combine("~", baseUrl);
             }
 
-            string absoluteUrl = VirtualPathUtility.ToAbsolute(baseUrl);
+            string absoluteUrl = VirtualPathUtility.ToAbsolute(baseUrl, m_serviceRelativeUrl);
 
             if (absoluteUrl.StartsWith("/"))
             {

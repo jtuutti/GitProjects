@@ -9,21 +9,6 @@ namespace RestFoundation.DataFormatters
 {
     public class MultiPartFormatter : IDataFormatter
     {
-        private static HttpContext Context
-        {
-            get
-            {
-                HttpContext context = HttpContext.Current;
-
-                if (context == null)
-                {
-                    throw new InvalidOperationException("No HTTP context was found");
-                }
-
-                return context;
-            }
-        }
-
         public object FormatRequest(IServiceContext context, Type objectType)
         {
             if (objectType != typeof(IEnumerable<IUploadedFile>) && objectType != typeof(ICollection<IUploadedFile>))
@@ -32,10 +17,11 @@ namespace RestFoundation.DataFormatters
             }
 
             var fileList = new List<IUploadedFile>();
+            HttpContextBase httpContext = context.GetHttpContext();
 
-            foreach (string fileName in Context.Request.Files.AllKeys)
+            foreach (string fileName in httpContext.Request.Files.AllKeys)
             {
-                fileList.Add(new UploadedFile(Context.Request.Files.Get(fileName)));
+                fileList.Add(new UploadedFile(httpContext.Request.Files.Get(fileName)));
             }
 
             return new ReadOnlyCollection<IUploadedFile>(fileList);

@@ -6,9 +6,9 @@ namespace RestFoundation.Runtime
 {
     internal sealed class UploadedFile : IUploadedFile
     {
-        private readonly HttpPostedFile m_file;
+        private readonly HttpPostedFileBase m_file;
 
-        public UploadedFile(HttpPostedFile file)
+        public UploadedFile(HttpPostedFileBase file)
         {
             if (file == null) throw new ArgumentNullException("file");
 

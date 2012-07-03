@@ -1,4 +1,6 @@
-﻿using System.Security.Principal;
+﻿using System;
+using System.Security.Principal;
+using System.Web;
 
 namespace RestFoundation
 {
@@ -7,11 +9,14 @@ namespace RestFoundation
         IHttpRequest Request { get; }
         IHttpResponse Response { get; }
 
+        TimeSpan ServiceTimeout { get; set; }
         IPrincipal User { get; set; }
         bool IsAuthenticated { get; }
 
         dynamic ItemBag { get; }
 
         string MapPath(string filePath);
+
+        HttpContextBase GetHttpContext();
     }
 }

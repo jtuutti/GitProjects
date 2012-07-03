@@ -15,7 +15,7 @@ namespace RestFoundation.Results
         public string FileUrl { get; set; }
         public string ContentType { get; set; }
         public string ContentDisposition { get; set; }
-        public bool CacheOutput { get; set; }
+        public TimeSpan CacheForTimeSpan { get; set; }
         public bool ClearOutput { get; set; }
 
         public virtual void Execute(IServiceContext context)
@@ -62,9 +62,9 @@ namespace RestFoundation.Results
 
             OutputCompressionManager.FilterResponse(context);
 
-            if (CacheOutput)
+            if (CacheForTimeSpan > TimeSpan.Zero)
             {
-                context.Response.SetFileDependencies(file.FullName);
+                context.Response.SetFileDependencies(file.FullName, CacheForTimeSpan);
             }
 
             context.Response.TransmitFile(file.FullName);

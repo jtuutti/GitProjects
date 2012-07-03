@@ -5,7 +5,7 @@ using RestFoundation.Collections.Specialized;
 
 namespace RestFoundation.Runtime
 {
-    public sealed class ServiceContext : IServiceContext
+    public class ServiceContext : ContextBase, IServiceContext
     {
         private readonly IHttpRequest m_request;
         private readonly IHttpResponse m_response;
@@ -17,21 +17,6 @@ namespace RestFoundation.Runtime
 
             m_request = request;
             m_response = response;
-        }
-
-        private static HttpContextBase Context
-        {
-            get
-            {
-                HttpContext context = HttpContext.Current;
-
-                if (context == null)
-                {
-                    throw new InvalidOperationException("No HTTP context was found");
-                }
-
-                return new HttpContextWrapper(context);
-            }
         }
 
         public IHttpRequest Request
@@ -47,6 +32,18 @@ namespace RestFoundation.Runtime
             get
             {
                 return m_response;
+            }
+        }
+
+        public TimeSpan ServiceTimeout
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(Context.Server.ScriptTimeout);
+            }
+            set
+            {
+                Context.Server.ScriptTimeout = Convert.ToInt32(value.TotalSeconds);
             }
         }
 
@@ -81,6 +78,11 @@ namespace RestFoundation.Runtime
         public string MapPath(string filePath)
         {
             return Context.Server.MapPath(filePath);
+        }
+
+        public HttpContextBase GetHttpContext()
+        {
+            return Context;
         }
     }
 }

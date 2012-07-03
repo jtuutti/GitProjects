@@ -1,27 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Web;
 
 namespace RestFoundation.Runtime
 {
-    public sealed class HttpResponseOutput : IHttpResponseOutput
+    public class HttpResponseOutput : ContextBase, IHttpResponseOutput
     {
         private const string LineBreak = "<br/>";
-
-        private static HttpContextBase Context
-        {
-            get
-            {
-                HttpContext context = HttpContext.Current;
-
-                if (context == null)
-                {
-                    throw new InvalidOperationException("No HTTP context was found");
-                }
-
-                return new HttpContextWrapper(context);
-            }
-        }
 
         public Stream Stream
         {

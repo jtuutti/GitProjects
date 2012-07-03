@@ -145,25 +145,25 @@ namespace RestFoundation
 
         public static FilePathResult FilePath(string filePath)
         {
-            return FilePath(filePath, null, null, true, true);
+            return FilePath(filePath, null, null, true, TimeSpan.Zero);
         }
 
         public static FilePathResult FilePath(string filePath, bool clearOutput)
         {
-            return FilePath(filePath, null, null, clearOutput, true);
+            return FilePath(filePath, null, null, clearOutput, TimeSpan.Zero);
         }
 
         public static FilePathResult FilePath(string filePath, string contentType, bool clearOutput)
         {
-            return FilePath(filePath, contentType, null, clearOutput, true);
+            return FilePath(filePath, contentType, null, clearOutput, TimeSpan.Zero);
         }
 
-        public static FilePathResult FilePath(string filePath, string contentType, bool clearOutput, bool cacheOutput)
+        public static FilePathResult FilePath(string filePath, string contentType, bool clearOutput, TimeSpan maxAge)
         {
-            return FilePath(filePath, contentType, null, clearOutput, cacheOutput);
+            return FilePath(filePath, contentType, null, clearOutput, maxAge);
         }
 
-        public static FilePathResult FilePath(string filePath, string contentType, string contentDisposition, bool clearOutput, bool cacheOutput)
+        public static FilePathResult FilePath(string filePath, string contentType, string contentDisposition, bool clearOutput, TimeSpan maxAge)
         {
             var result = new FilePathResult
                          {
@@ -171,7 +171,7 @@ namespace RestFoundation
                              ContentType = contentType,
                              ContentDisposition = contentDisposition,
                              ClearOutput = clearOutput,
-                             CacheOutput = cacheOutput
+                             CacheForTimeSpan = maxAge
                          };
 
             return result;
@@ -179,25 +179,25 @@ namespace RestFoundation
 
         public static FileUrlResult FileUrl(string fileUrl)
         {
-            return FileUrl(fileUrl, null, null, true, true);
+            return FileUrl(fileUrl, null, null, true, TimeSpan.Zero);
         }
 
         public static FileUrlResult FileUrl(string fileUrl, bool clearOutput)
         {
-            return FileUrl(fileUrl, null, null, clearOutput, true);
+            return FileUrl(fileUrl, null, null, clearOutput, TimeSpan.Zero);
         }
 
         public static FileUrlResult FileUrl(string fileUrl, string contentType, bool clearOutput)
         {
-            return FileUrl(fileUrl, contentType, null, clearOutput, true);
+            return FileUrl(fileUrl, contentType, null, clearOutput, TimeSpan.Zero);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, string contentType, bool clearOutput, bool cacheOutput)
+        public static FileUrlResult FileUrl(string fileUrl, string contentType, bool clearOutput, bool cacheOutput, TimeSpan maxAge)
         {
-            return FileUrl(fileUrl, contentType, null, clearOutput, cacheOutput);
+            return FileUrl(fileUrl, contentType, null, clearOutput, maxAge);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, string contentType, string contentDisposition, bool clearOutput, bool cacheOutput)
+        public static FileUrlResult FileUrl(string fileUrl, string contentType, string contentDisposition, bool clearOutput, TimeSpan maxAge)
         {
             var result = new FileUrlResult
                          {
@@ -205,7 +205,7 @@ namespace RestFoundation
                              ContentType = contentType,
                              ContentDisposition = contentDisposition,
                              ClearOutput = clearOutput,
-                             CacheOutput = cacheOutput
+                             CacheForTimeSpan = maxAge
                          };
 
             return result;
