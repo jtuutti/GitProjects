@@ -1,57 +1,28 @@
 ﻿using System;
-using System.Security.Principal;
-using System.Threading;
-using RestFoundation.Collections.Specialized;
+using System.Web;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Test
 {
-    public class MockServiceContext : IServiceContext
+    public class MockServiceContext : ServiceContext
     {
-        private readonly string m_relativeServiceUrl;
-
-        public MockServiceContext(string relativeServiceUrl)
+        public MockServiceContext(IHttpRequest request, IHttpResponse response) : base(request, response)
         {
-            if (String.IsNullOrEmpty(relativeServiceUrl)) throw new ArgumentNullException("relativeServiceUrl");
-
-            m_relativeServiceUrl = relativeServiceUrl.TrimStart('~').Trim('/');
-
-            Request = new MockHttpRequest(m_relativeServiceUrl);
-            Response = new MockHttpResponse();
-            ItemBag = new DynamicDictionary();
         }
 
-        public virtual IHttpRequest Request { get; set; }
-        public virtual IHttpResponse Response { get; set; }
-        public virtual dynamic ItemBag { get; set; }
-
-        public virtual IPrincipal User
+        protected override HttpContextBase Context
         {
             get
             {
-                return Thread.CurrentPrincipal;
-            }
-            set
-            {
-                Thread.CurrentPrincipal = value;
-            }
-        }
+                HttpContextBase context = MockContextFactory.Context;
 
-        public bool IsAuthenticated
-        {
-            get
-            {
-                return User != null && User.Identity.IsAuthenticated;
-            }
-        }
+                if (context == null)
+                {
+                    throw new InvalidOperationException("No HTTP context was found");
+                }
 
-        public virtual string MapPath(string filePath)
-        {
-            if (filePath == null)
-            {
-                return null;
+                return context;
             }
-
-            return filePath.ToLowerInvariant().Replace("http://localhost/" + m_relativeServiceUrl, Environment.CurrentDirectory).Replace("/", @"\").TrimStart('~', '\\');
         }
     }
 }

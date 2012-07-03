@@ -131,6 +131,7 @@
     <Compile Include="RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptions.cs" />
+    <Compile Include="Runtime\ContextBase.cs" />
     <Compile Include="Runtime\RouteParameter.cs" />
     <Compile Include="Runtime\ServiceBehaviorInvoker.cs" />
     <Compile Include="Runtime\Cache.cs" />
@@ -230,9 +231,9 @@
     <Compile Include="Runtime\ServiceFactory.cs" />
     <Compile Include="Runtime\ServiceContractTypeRegistry.cs" />
     <Compile Include="Results\StatusResult.cs" />
-    <Compile Include="Test\MockHttpRequestExtensions.cs" />
-    <Compile Include="Test\RequestContextMockFactory.cs" />
-    <Compile Include="Test\HttpContext\TestHttpResponse.cs" />
+    <Compile Include="Test\MockContextFactory.cs" />
+    <Compile Include="Test\TestHttpCachePolicyBase.cs" />
+    <Compile Include="Test\TestHttpResponse.cs" />
     <Compile Include="Test\HttpMethodBuilder.cs" />
     <Compile Include="Test\MockHttpRequest.cs" />
     <Compile Include="Test\MockHttpResponse.cs" />
@@ -241,9 +242,10 @@
     <Compile Include="Test\RouteAssert.cs" />
     <Compile Include="Test\RouteAssertException.cs" />
     <Compile Include="Test\RouteValidatorBuilder.cs" />
-    <Compile Include="Test\HttpContext\TestHttpContext.cs" />
-    <Compile Include="Test\HttpContext\TestHttpRequest.cs" />
+    <Compile Include="Test\TestHttpContext.cs" />
+    <Compile Include="Test\TestHttpRequest.cs" />
     <Compile Include="Test\RouteValidator.cs" />
+    <Compile Include="Test\TestHttpServerUtility.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UrlAttribute.cs" />
     <Compile Include="Runtime\UrlTemplateStandardizer.cs" />

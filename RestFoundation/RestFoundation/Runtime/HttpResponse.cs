@@ -7,7 +7,7 @@ using RestFoundation.Collections.Concrete;
 
 namespace RestFoundation.Runtime
 {
-    public sealed class HttpResponse : IHttpResponse
+    public class HttpResponse : ContextBase, IHttpResponse
     {
         private readonly IHttpResponseOutput m_output;
 
@@ -16,21 +16,6 @@ namespace RestFoundation.Runtime
             if (output == null) throw new ArgumentNullException("output");
 
             m_output = output;
-        }
-
-        private static HttpContextBase Context
-        {
-            get
-            {
-                HttpContext context = HttpContext.Current;
-
-                if (context == null)
-                {
-                    throw new InvalidOperationException("No HTTP context was found");
-                }
-
-                return new HttpContextWrapper(context);
-            }
         }
 
         public IHttpResponseOutput Output
@@ -148,10 +133,15 @@ namespace RestFoundation.Runtime
 
         public void SetFileDependencies(string filePath)
         {
-            SetFileDependencies(filePath, HttpCacheability.ServerAndPrivate);
+            SetFileDependencies(filePath, HttpCacheability.ServerAndPrivate, TimeSpan.Zero);
         }
 
-        public void SetFileDependencies(string filePath, HttpCacheability cacheability)
+        public void SetFileDependencies(string filePath, TimeSpan maxAge)
+        {
+            SetFileDependencies(filePath, HttpCacheability.ServerAndPrivate, maxAge);
+        }
+
+        public void SetFileDependencies(string filePath, HttpCacheability cacheability, TimeSpan maxAge)
         {
             if (String.IsNullOrEmpty(filePath)) throw new ArgumentNullException("filePath");
 
@@ -159,6 +149,12 @@ namespace RestFoundation.Runtime
             Context.Response.Cache.SetCacheability(cacheability);
             Context.Response.Cache.SetETagFromFileDependencies();
             Context.Response.Cache.SetLastModifiedFromFileDependencies();
+
+            if (maxAge != TimeSpan.Zero)
+            {
+                Context.Response.Cache.SetMaxAge(maxAge);
+            }
+
             Context.Response.Cache.VaryByParams["*"] = true;
 
             foreach (string headerName in Context.Request.Headers.AllKeys)

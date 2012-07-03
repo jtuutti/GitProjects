@@ -14,8 +14,6 @@ namespace RestFoundation
         private readonly IServiceContext m_serviceContext;
         private readonly IResultFactory m_resultFactory;
 
-        private HttpContextBase m_context;
-
         public RootRouteHandler(IServiceContext serviceContext, IResultFactory resultFactory)
         {
             if (serviceContext == null) throw new ArgumentNullException("serviceContext");
@@ -37,34 +35,34 @@ namespace RestFoundation
         {
             if (requestContext == null) throw new ArgumentNullException("requestContext");
 
-            m_context = requestContext.HttpContext;
-
             return this;
         }
 
         public void ProcessRequest(HttpContext context)
         {
-            if (String.Equals(HttpMethod.Options.ToString(), m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            if (m_serviceContext.Request.Method == HttpMethod.Options)
             {
                 m_serviceContext.Response.SetHeader("Allow", "GET, HEAD");
                 return;
             }
 
-            if (!String.Equals(HttpMethod.Get.ToString(), m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) &&
-                !String.Equals(HttpMethod.Head.ToString(), m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            if (m_serviceContext.Request.Method != HttpMethod.Get && m_serviceContext.Request.Method != HttpMethod.Head)
             {
                 throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "HTTP method is not allowed");
             }
 
-            if (String.Equals(HttpMethod.Head.ToString(), m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            if (context != null)
             {
-                m_context.Response.SuppressContent = true;
-            }
+                if (m_serviceContext.Request.Method == HttpMethod.Head)
+                {
+                    context.Response.SuppressContent = true;
+                }
 
-            if (Rest.Active.IsServiceProxyInitialized && IsInBrowser(m_context.Request))
-            {
-                m_context.Response.Redirect((m_context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/help/index", false);
-                return;
+                if (Rest.Active.IsServiceProxyInitialized && IsInBrowser(context.Request))
+                {
+                    context.Response.Redirect((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/help/index", false);
+                    return;
+                }
             }
 
             IResult result;
@@ -86,14 +84,8 @@ namespace RestFoundation
             result.Execute(m_serviceContext);
         }
 
-        private static bool IsInBrowser(HttpRequestBase request)
+        private static bool IsInBrowser(HttpRequest request)
         {
-            if (!String.Equals(request.HttpMethod, HttpMethod.Get.ToString(), StringComparison.OrdinalIgnoreCase) &&
-                !String.Equals(request.HttpMethod, HttpMethod.Head.ToString(), StringComparison.OrdinalIgnoreCase))
-            {
-                return false;
-            }
-
             string browser = request.Browser != null ? request.Browser.Browser : null;
             string[] acceptTypes = request.AcceptTypes;
 

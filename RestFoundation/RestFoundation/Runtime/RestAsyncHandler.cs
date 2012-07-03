@@ -18,7 +18,6 @@ namespace RestFoundation.Runtime
         private readonly IResultFactory m_resultFactory;
         private readonly IServiceMethodInvoker m_methodInvoker;
 
-        private HttpContextBase m_context;
         private RouteValueDictionary m_routeValues;
 
         public RestAsyncHandler(IServiceContext serviceContext, IServiceFactory serviceFactory, IServiceMethodInvoker methodInvoker, IResultFactory resultFactory)
@@ -51,7 +50,6 @@ namespace RestFoundation.Runtime
                 requestContext.HttpContext.Items[ServiceRequestValidator.UnvalidatedHandlerKey] = Boolean.TrueString;
             }
 
-            m_context = requestContext.HttpContext;
             m_routeValues = requestContext.RouteData.Values;
 
             return this;
@@ -80,7 +78,7 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service contract of type '{0}' could not be determined", serviceContractTypeName));
             }
 
-            HttpMethod httpMethod = m_context.GetOverriddenHttpMethod();
+            HttpMethod httpMethod = m_serviceContext.Request.Method;
 
             if (httpMethod == HttpMethod.Options)
             {
@@ -90,9 +88,9 @@ namespace RestFoundation.Runtime
                 return Task<IResult>.Factory.StartNew(() => new EmptyResult()).ContinueWith(action => cb(action));
             }
 
-            if (httpMethod == HttpMethod.Head)
+            if (httpMethod == HttpMethod.Head && context != null)
             {
-                m_context.Response.SuppressContent = true;
+                context.Response.SuppressContent = true;
             }
 
             object service = m_serviceFactory.Create(m_serviceContext, serviceContractType);

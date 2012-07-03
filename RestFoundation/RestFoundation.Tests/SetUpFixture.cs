@@ -32,11 +32,10 @@ namespace RestFoundation.Tests
                             action.WithDefaultConventions();
                         });
 
-            IServiceContext context = new MockServiceContext(RelativeUrl);
-
-            config.For<IServiceContext>().Use(context);
-            config.For<IHttpRequest>().Use(context.Request);
-            config.For<IHttpResponse>().Use(context.Response);
+            config.For<IServiceContext>().Use<MockServiceContext>();
+            config.For<IHttpRequest>().Use<MockHttpRequest>();
+            config.For<IHttpResponse>().Use<MockHttpResponse>();
+            config.For<IHttpResponseOutput>().Use<MockHttpResponseOutput>();
 
             config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestDependency()));
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Web;
 using System.Web.Routing;
 using RestFoundation.Collections;
 using RestFoundation.Collections.Concrete;
@@ -9,13 +8,12 @@ using RestFoundation.Collections.Specialized;
 
 namespace RestFoundation.Runtime
 {
-    public sealed class HttpRequest : IHttpRequest
+    public class HttpRequest : ContextBase, IHttpRequest
     {
         private const string AjaxHeaderName = "X-Requested-With";
         private const string AjaxHeaderValue = "XMLHttpRequest";
         private const string ContextContainerKey = "REST_Context";
 
-        private static readonly object syncRoot = new object();
         private readonly ICredentialResolver m_credentialResolver;
 
         public HttpRequest(ICredentialResolver credentialResolver)
@@ -25,22 +23,7 @@ namespace RestFoundation.Runtime
             m_credentialResolver = credentialResolver;
         }
 
-        private static HttpContextBase Context
-        {
-            get
-            {
-                HttpContext context = HttpContext.Current;
-
-                if (context == null)
-                {
-                    throw new InvalidOperationException("No HTTP context was found");
-                }
-
-                return new HttpContextWrapper(context);
-            }
-        }
-
-        private static HttpRequestContainer ContextContainer
+        private HttpRequestContainer ContextContainer
         {
             get
             {
@@ -48,16 +31,8 @@ namespace RestFoundation.Runtime
 
                 if (items == null)
                 {
-                    lock (syncRoot)
-                    {
-                        items = Context.Items[ContextContainerKey] as HttpRequestContainer;
-
-                        if (items == null)
-                        {
-                            items = new HttpRequestContainer();
-                            Context.Items[ContextContainerKey] = items;
-                        }
-                    }
+                    items = new HttpRequestContainer();
+                    Context.Items[ContextContainerKey] = items;
                 }
 
                 return items;
@@ -173,7 +148,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        private static IObjectValueCollection GenerateRouteValues()
+        private IObjectValueCollection GenerateRouteValues()
         {
             var routeData = RouteTable.Routes.GetRouteData(Context);
 

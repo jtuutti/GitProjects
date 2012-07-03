@@ -18,7 +18,7 @@ namespace RestFoundation.DataFormatters
             if (objectType == null) throw new ArgumentNullException("objectType");
 
             // A hack to trigger form collection validation
-            if (HttpContext.Current.Request.Form.ToString().Length == 0)
+            if (context.GetHttpContext().Request.Form.ToString().Length == 0)
             {
                 return null;
             }

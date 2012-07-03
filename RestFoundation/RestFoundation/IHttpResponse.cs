@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Text;
 using System.Web;
 
@@ -26,7 +27,8 @@ namespace RestFoundation
         void ExpireCookie(HttpCookie cookie);
 
         void SetFileDependencies(string filePath);
-        void SetFileDependencies(string filePath, HttpCacheability cacheability);
+        void SetFileDependencies(string filePath, TimeSpan maxAge);
+        void SetFileDependencies(string filePath, HttpCacheability cacheability, TimeSpan maxAge);
         void TransmitFile(string filePath);
     }
 }

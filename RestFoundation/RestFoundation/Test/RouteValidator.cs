@@ -4,7 +4,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Web.Routing;
 using RestFoundation.Runtime;
-using RestFoundation.Test.HttpContext;
 
 namespace RestFoundation.Test
 {

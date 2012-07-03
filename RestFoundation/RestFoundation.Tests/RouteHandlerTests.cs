@@ -16,435 +16,498 @@ namespace RestFoundation.Tests
         [Test]
         public void GetMethodWithSyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestHandler>();
-            Assert.That(handler, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "GET");
-            Assert.That(requestContext, Is.Not.Null);
+                var requestContext = factory.Create<ITestService>("~/test-service/1", m => m.Get(1));
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("GET"));
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
+                ProcessRequest(handler);
 
-            ProcessRequest(handler);
-
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+            }
         }
 
         [Test]
         public void GetMethodWithAsyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
-            Assert.That(handler, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "GET");
-            Assert.That(requestContext, Is.Not.Null);
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/1", m => m.Get(1));
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("GET"));
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
+                ProcessRequest(handler);
 
-            ProcessRequest(handler);
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+            }
+        }
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+        [Test, ExpectedException(typeof(HttpResponseException))]
+        public void GetMethodWithSyncHandler_ShouldFailDueToMismatchedRoute()
+        {
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestHandler>();
+                Assert.That(handler, Is.Not.Null);
+
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/a/b", m => m.Get(-1));
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("GET"));
+
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
+
+                ProcessRequest(handler);
+
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+            }
         }
 
         [Test, ExpectedException(typeof(HttpResponseException))]
         public void GetMethodWithSyncHandler_ShouldFailDueToNegativeIdValue()
         {
-            var handler = ObjectFactory.GetInstance<RestHandler>();
-            Assert.That(handler, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "GET");
-            Assert.That(requestContext, Is.Not.Null);
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/-1", m => m.Get(-1));
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("GET"));
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = -1 });
+                ProcessRequest(handler);
 
-            ProcessRequest(handler);
-
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+            }
         }
 
         [Test, ExpectedException(typeof(NotSupportedException))]
         public void GetMethodWithAsyncHandler_ShouldFailDueToCallingSynchronousProcessRequest()
         {
-            var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "GET");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/1", m => m.Get(-1));
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("GET"));
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
 
-            handler.ProcessRequest(null);
+                handler.ProcessRequest(null);
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+            }
         }
 
         [Test]
         public void HeadMethodWithSyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "all/{orderBy}", "HEAD");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/all/Name", m => m.GetAll("Name"), HttpMethod.Head);
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("HEAD"));
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { orderBy = "Name" });
+                requestContext.RouteData.Values["orderBy"] = "Name";
 
-            ProcessRequest(handler);
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+                ProcessRequest(handler);
+
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+            }
         }
 
         [Test]
         public void HeadMethodWithAsyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "all/{orderBy}", "HEAD");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { orderBy = "Name" });
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/all/Name", m => m.GetAll("Name"), HttpMethod.Head);
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("HEAD"));
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
+                requestContext.RouteData.Values["orderBy"] = "Name";
 
-            ProcessRequest(handler);
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+                ProcessRequest(handler);
+
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+            }
         }
 
         [Test]
         public void PostMethodWithSyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "new", "POST");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/new", m => m.Post());
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("POST"));
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
 
-            ProcessRequest(handler);
+                var request = ObjectFactory.GetInstance<IHttpRequest>();
+                Assert.That(request, Is.Not.Null);
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.Created));
-            Assert.That(response.GetHeader("Location"), Is.EqualTo(String.Concat(request.Url.ServiceUrl, "/1")));
+                ProcessRequest(handler);
+
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.Created));
+                Assert.That(response.GetHeader("Location"), Is.EqualTo(String.Concat(request.Url.ServiceUrl, "/1")));
+            }
         }
 
         [Test, ExpectedException(typeof(HttpResponseException))]
         public void PostMethodWithSyncHandler_ShouldFailDueToMismatchedUrlTemplate()
         {
-            var handler = ObjectFactory.GetInstance<RestHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "POST");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/1", m => m.Post());
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("POST"));
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
 
-            ProcessRequest(handler);
+                var request = ObjectFactory.GetInstance<IHttpRequest>();
+                Assert.That(request, Is.Not.Null);
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.Created));
-            Assert.That(response.GetHeader("Location"), Is.EqualTo(String.Concat(request.Url, "/1")));
+                ProcessRequest(handler);
+
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.Created));
+                Assert.That(response.GetHeader("Location"), Is.EqualTo(String.Concat(request.Url.ServiceUrl, "/1")));
+            }
         }
 
         [Test]
         public void PostMethodWithAsyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "new", "POST");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/new", m => m.Post());
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("POST"));
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
+                var request = ObjectFactory.GetInstance<IHttpRequest>();
+                Assert.That(request, Is.Not.Null);
 
-            ProcessRequest(handler);
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.Created));
-            Assert.That(response.GetHeader("Location"), Is.EqualTo(String.Concat(request.Url, "/1")));
+                ProcessRequest(handler);
+
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.Created));
+                Assert.That(response.GetHeader("Location"), Is.EqualTo(String.Concat(request.Url.ServiceUrl, "/1")));
+            }
         }
 
         [Test]
         public void PutMethodWithSyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "PUT");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/1", m => m.Put(1));
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("PUT"));
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
 
-            ProcessRequest(handler);
+                ProcessRequest(handler);
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+            }
         }
 
         [Test]
         public void PutMethodWithAsyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "PUT");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/1", m => m.Put(1));
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("PUT"));
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
 
-            ProcessRequest(handler);
+                ProcessRequest(handler);
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+            }
         }
 
         [Test]
         public void PatchMethodWithSyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "PATCH");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/1", m => m.Patch(1));
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("PATCH"));
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
 
-            ProcessRequest(handler);
+                ProcessRequest(handler);
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+            }
         }
 
         [Test]
         public void PatchMethodWithAsyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "PATCH");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/1", m => m.Patch(1));
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("PATCH"));
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
 
-            ProcessRequest(handler);
+                ProcessRequest(handler);
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+            }
         }
 
         [Test]
         public void DeleteMethodWithSyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "DELETE");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/1", m => m.Delete(1));
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("DELETE"));
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
 
-            ProcessRequest(handler);
+                ProcessRequest(handler);
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+            }
         }
 
         [Test]
         public void DeleteMethodWithAsyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "DELETE");
-            Assert.That(requestContext, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/1", m => m.Delete(1));
+                Assert.That(requestContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Response, Is.Not.Null);
+                Assert.That(requestContext.HttpContext.Request.HttpMethod, Is.EqualTo("DELETE"));
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
 
-            ProcessRequest(handler);
+                ProcessRequest(handler);
 
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
-        }
-
-        [Test, ExpectedException(typeof(HttpResponseException))]
-        public void ClearMethodWithSyncHandler_ShouldFailDueToInvalidVerb()
-        {
-            var handler = ObjectFactory.GetInstance<RestHandler>();
-            Assert.That(handler, Is.Not.Null);
-            
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "CLEAR");
-            Assert.That(requestContext, Is.Not.Null);
-
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
-
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
-
-            ProcessRequest(handler);
-
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
+            }
         }
 
         [Test]
         public void OptionsMethodWithSyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestHandler>();
-            Assert.That(handler, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "OPTIONS");
-            Assert.That(requestContext, Is.Not.Null);
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/1", m => m.Get(1), HttpMethod.Options);
+                Assert.That(requestContext, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestHandler>());
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
+                ProcessRequest(handler);
 
-            ProcessRequest(handler);
-
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(response.GetHeader("Allow"), Is.EqualTo("DELETE, GET, HEAD, PATCH, PUT"));
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+                Assert.That(response.GetHeader("Allow"), Is.EqualTo("DELETE, GET, HEAD, PATCH, PUT"));
+            }
         }
 
         [Test]
         public void OptionsMethodWithAsyncHandler()
         {
-            var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
-            Assert.That(handler, Is.Not.Null);
+            using (var factory = new MockContextFactory())
+            {
+                var handler = ObjectFactory.GetInstance<RestAsyncHandler>();
+                Assert.That(handler, Is.Not.Null);
 
-            RequestContext requestContext = RequestContextMockFactory.Create(typeof(ITestService), SetUpFixture.RelativeUrl, "{id}", "OPTIONS");
-            Assert.That(requestContext, Is.Not.Null);
+                RequestContext requestContext = factory.Create<ITestService>("~/test-service/new", m => m.Post(), HttpMethod.Options);
+                Assert.That(requestContext, Is.Not.Null);
 
-            IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
-            Assert.That(httpHandler, Is.Not.Null);
-            Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
+                IHttpHandler httpHandler = handler.GetHttpHandler(requestContext);
+                Assert.That(httpHandler, Is.Not.Null);
+                Assert.That(httpHandler, Is.InstanceOf<RestAsyncHandler>());
 
-            var request = ObjectFactory.GetInstance<IHttpRequest>();
-            Assert.That(request, Is.Not.Null);
-            request.SetRouteValues(new { id = 1 });
+                ProcessRequest(handler);
 
-            ProcessRequest(handler);
-
-            var response = ObjectFactory.GetInstance<IHttpResponse>();
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
-            Assert.That(response.GetHeader("Allow"), Is.EqualTo("DELETE, GET, HEAD, PATCH, PUT"));
+                var response = ObjectFactory.GetInstance<IHttpResponse>();
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
+                Assert.That(response.GetHeader("Allow"), Is.EqualTo("POST"));
+            }
         }
 
         private static void ProcessRequest(IHttpHandler handler)

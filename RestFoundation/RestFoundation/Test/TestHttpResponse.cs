@@ -1,13 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 using System.Web;
 using System.Web.Caching;
 
-namespace RestFoundation.Test.HttpContext
+namespace RestFoundation.Test
 {
-    public sealed class TestHttpResponse : HttpResponseBase
+    internal sealed class TestHttpResponse : HttpResponseBase
     {
         private readonly NameValueCollection m_headers;
         private readonly HttpCookieCollection m_cookies;
@@ -63,6 +64,14 @@ namespace RestFoundation.Test.HttpContext
             get
             {
                 return m_output;
+            }
+        }
+
+        public override HttpCachePolicyBase Cache
+        {
+            get
+            {
+                return base.Cache;
             }
         }
 
@@ -125,6 +134,33 @@ namespace RestFoundation.Test.HttpContext
         {
             m_cookies.Add(cookie);
         }
-    }
 
+        public override void TransmitFile(string filename)
+        {
+        }
+
+        public override void TransmitFile(string filename, long offset, long length)
+        {
+        }
+
+        public override void Write(char ch)
+        {
+            Console.Write(ch);
+        }
+
+        public override void Write(object obj)
+        {
+            Console.Write(obj);
+        }
+
+        public override void Write(string s)
+        {
+            Console.Write(s);
+        }
+
+        public override void Write(char[] buffer, int index, int count)
+        {
+            Console.Write(buffer, index, count);
+        }
+    }
 }
