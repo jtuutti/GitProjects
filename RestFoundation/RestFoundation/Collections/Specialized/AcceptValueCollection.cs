@@ -66,11 +66,7 @@ namespace RestFoundation.Collections.Specialized
         /// <summary>
         /// Gets or sets a value indicating whether, after an add operation, the list should be resorted.
         /// </summary>
-        public bool AutoSort
-        {
-            get;
-            set;
-        }
+        public bool AutoSort { get; set; }
 
         /// <summary>
         /// Gets an array of all accepted type names.
