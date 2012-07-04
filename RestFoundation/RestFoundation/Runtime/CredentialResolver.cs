@@ -42,7 +42,7 @@ namespace RestFoundation.Runtime
 
             string[] credentialTokenItems = credentialToken.Split(':');
 
-            return credentialTokenItems.Length == 2 ? new NetworkCredential(credentialTokenItems[0], credentialTokenItems[1], request.Url.Host) : null;
+            return credentialTokenItems.Length == 2 ? new NetworkCredential(credentialTokenItems[0], credentialTokenItems[1], request.Url.ServiceUrl.ToString()) : null;
         }
     }
 }

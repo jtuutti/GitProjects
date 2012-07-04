@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
+using RestFoundation.Behaviors;
 using RestFoundation.DataFormatters;
 using RestTest.Behaviors;
 using RestTest.ServiceFactories;
@@ -63,12 +66,17 @@ namespace RestTest.App_Start
                         .DoNotValidateRequests();
 
             routeBuilder.MapRestRouteAsync<IIndexService>("async")
-                        .WithBehaviors(new StatisticsBehavior(), new LoggingBehavior());
+                        .WithBehaviors(new BasicAuthorizationBehavior(GetCredentials()), new StatisticsBehavior(), new LoggingBehavior());
 
             routeBuilder.MapRestRoute<IDynamicService>("dynamic");
 
             routeBuilder.MapRestRoute<ITouchMapService>("touch-map")
                         .WithContentTypesRestrictedTo("text/xml", "application/xml", "application/json");
+        }
+
+        private static IEnumerable<NetworkCredential> GetCredentials()
+        {
+            return new[] { new NetworkCredential("admin", "rest") };
         }
     }
 }

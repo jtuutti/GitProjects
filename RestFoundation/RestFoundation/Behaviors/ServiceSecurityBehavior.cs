@@ -35,7 +35,14 @@ namespace RestFoundation.Behaviors
 
             if (!OnMethodAuthorizing(context, service, method))
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden, m_forbiddenMessage);
+                HttpStatusCode statusCode = context.Response.GetStatusCode();
+
+                if (statusCode != HttpStatusCode.Unauthorized && statusCode != HttpStatusCode.Forbidden)
+                {
+                    throw new HttpResponseException(HttpStatusCode.Forbidden, m_forbiddenMessage);
+                }
+
+                throw new HttpResponseException(statusCode, context.Response.GetStatusDescription());
             }
 
             HttpCachePolicy cache = HttpContext.Current.Response.Cache;

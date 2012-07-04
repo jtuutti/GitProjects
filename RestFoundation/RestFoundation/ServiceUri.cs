@@ -10,16 +10,6 @@ namespace RestFoundation.Runtime
     {
         private readonly string m_serviceRelativeUrl;
 
-        public ServiceUri(string baseUrl, string serviceUrl) : base(new Uri(baseUrl, UriKind.Absolute), serviceUrl)
-        {
-            if (String.IsNullOrEmpty(baseUrl)) throw new ArgumentNullException("baseUrl");
-            if (String.IsNullOrEmpty(serviceUrl)) throw new ArgumentNullException("serviceUrl");
-
-            m_serviceRelativeUrl = serviceUrl.TrimStart('~', ' ').TrimEnd('/', ' ');
-
-            ServiceUrl = new Uri(new Uri(baseUrl, UriKind.Absolute), serviceUrl.TrimStart('/', '~', ' '));
-        }
-
         public ServiceUri(Uri currentUri, string serviceUrl) : base(currentUri.ToString(), UriKind.Absolute)
         {
             if (currentUri == null) throw new ArgumentNullException("currentUri");

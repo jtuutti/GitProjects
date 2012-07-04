@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Principal;
+using System.Threading;
 using System.Web;
 using RestFoundation.Collections.Specialized;
 
@@ -56,6 +57,7 @@ namespace RestFoundation.Runtime
             set
             {
                 Context.User = value;
+                Thread.CurrentPrincipal = value;
             }
         }
 

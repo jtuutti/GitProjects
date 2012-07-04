@@ -55,6 +55,7 @@
     <Compile Include="Acl\IPNetwork.cs" />
     <Compile Include="Acl\IPNetworkCollection.cs" />
     <Compile Include="BehaviorBuilder.cs" />
+    <Compile Include="Behaviors\BasicAuthorizationBehavior.cs" />
     <Compile Include="Behaviors\ContentTypeBehavior.cs" />
     <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
     <Compile Include="Behaviors\ServiceSecurityBehavior.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Runtime\AcceptValueOptions.cs" />
     <Compile Include="Runtime\ContextBase.cs" />
     <Compile Include="Runtime\HttpMethodResolver.cs" />
+    <Compile Include="Runtime\NetworkCredentialEqualityComparer.cs" />
     <Compile Include="Runtime\RouteParameter.cs" />
     <Compile Include="Runtime\ServiceBehaviorInvoker.cs" />
     <Compile Include="Runtime\Cache.cs" />
