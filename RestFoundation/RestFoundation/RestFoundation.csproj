@@ -133,6 +133,8 @@
     <Compile Include="RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptions.cs" />
+    <Compile Include="Runtime\AuthorizationHeader.cs" />
+    <Compile Include="Runtime\AuthorizationHeaderParser.cs" />
     <Compile Include="Runtime\AuthorizationManager.cs" />
     <Compile Include="Runtime\ContextBase.cs" />
     <Compile Include="Runtime\HttpMethodResolver.cs" />

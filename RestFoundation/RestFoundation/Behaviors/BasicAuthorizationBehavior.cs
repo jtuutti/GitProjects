@@ -4,13 +4,16 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Principal;
-using System.Text;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Behaviors
 {
     public sealed class BasicAuthorizationBehavior : ServiceSecurityBehavior
     {
+        private const string AuthenticationType = "Basic";
+
         private readonly IAuthorizationManager m_authorizationManager;
+        private readonly AuthorizationHeaderParser m_headerParser;
 
         public BasicAuthorizationBehavior()
         {
@@ -20,72 +23,28 @@ namespace RestFoundation.Behaviors
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No authorization manager could be found");
             }
+
+            m_headerParser = new AuthorizationHeaderParser();
         }
 
         public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
-            Tuple<string, string> requestedCredentials = GetAuthenticationInfo(context.Request);
+            AuthorizationHeader header;
 
-            if (requestedCredentials == null || !m_authorizationManager.ValidateUser(requestedCredentials.Item1, requestedCredentials.Item2))
+            if (!m_headerParser.TryParse(context.Request.Headers.Authorization, context.Request.Headers.ContentCharsetEncoding, out header) ||
+                !AuthenticationType.Equals(header.AuthenticationType, StringComparison.OrdinalIgnoreCase) ||
+                !m_authorizationManager.ValidateUser(header.UserName, header.Password))
             {
-                CreateAuthenticationRequest(context);
+                context.Response.Output.Clear();
+                context.Response.SetHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "{0} realm=\"{1}\"", AuthenticationType, context.Request.Url.ServiceUrl));
+                context.Response.SetStatus(HttpStatusCode.Unauthorized, "Unauthorized");
+
                 return false;
             }
 
-            context.User = new GenericPrincipal(new GenericIdentity(requestedCredentials.Item1, "Basic"),
-                                                m_authorizationManager.GetRoles(requestedCredentials.Item1).ToArray());
+            context.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), m_authorizationManager.GetRoles(header.UserName).ToArray());
 
             return true;
-        }
-
-        private static void CreateAuthenticationRequest(IServiceContext context)
-        {
-            context.Response.SetHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "Basic realm=\"{0}\"", context.Request.Url.ServiceUrl));
-            context.Response.SetStatus(HttpStatusCode.Unauthorized, "Unauthorized");
-        }
-
-        private static Tuple<string, string> GetAuthenticationInfo(IHttpRequest request)
-        {
-            string authorizationHeader = request.Headers.Authorization;
-
-            if (String.IsNullOrEmpty(authorizationHeader))
-            {
-                return null;
-            }
-
-            string[] authorizationTokens = authorizationHeader.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            if (authorizationTokens.Length < 2 || !authorizationTokens[0].Trim().Equals("Basic", StringComparison.OrdinalIgnoreCase))
-            {
-                return null;
-            }
-
-            string credentialToken;
-
-            try
-            {
-                Encoding encoding = request.Headers.ContentCharsetEncoding ?? Encoding.UTF8;
-
-                credentialToken = encoding.GetString(Convert.FromBase64String(authorizationTokens[1].Trim()));
-            }
-            catch (Exception)
-            {
-                credentialToken = null;
-            }
-
-            if (String.IsNullOrEmpty(credentialToken))
-            {
-                return null;
-            }
-
-            string[] credentialTokenItems = credentialToken.Split(':');
-
-            if (credentialTokenItems.Length != 2 || credentialTokenItems[0].Length == 0)
-            {
-                return null;
-            }
-
-            return Tuple.Create(credentialTokenItems[0], credentialTokenItems[1]);
         }
     }
 }
