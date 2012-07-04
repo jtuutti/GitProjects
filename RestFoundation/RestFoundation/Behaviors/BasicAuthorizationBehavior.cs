@@ -1,45 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Principal;
-using RestFoundation.Runtime;
+using System.Text;
 
 namespace RestFoundation.Behaviors
 {
     public sealed class BasicAuthorizationBehavior : ServiceSecurityBehavior
     {
-        private static readonly IEqualityComparer<NetworkCredential> comparer = new NetworkCredentialEqualityComparer();
+        private readonly IAuthorizationManager m_authorizationManager;
 
-        private readonly IEnumerable<NetworkCredential> m_allowedCredentials;
-
-        public BasicAuthorizationBehavior(IEnumerable<NetworkCredential> allowedCredentials)
+        public BasicAuthorizationBehavior()
         {
-            if (allowedCredentials == null) throw new ArgumentNullException("allowedCredentials");
+            m_authorizationManager = Rest.Active.CreateObject<IAuthorizationManager>();
 
-            m_allowedCredentials = allowedCredentials;
+            if (m_authorizationManager == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No authorization manager could be found");
+            }
         }
 
         public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
-            if (context.Request.Credentials == null || String.IsNullOrWhiteSpace(context.Request.Credentials.UserName) ||
-                String.IsNullOrEmpty(context.Request.Credentials.Password))
+            Tuple<string, string> requestedCredentials = GetAuthenticationInfo(context.Request);
+
+            if (requestedCredentials == null || !m_authorizationManager.ValidateUser(requestedCredentials.Item1, requestedCredentials.Item2))
             {
                 CreateAuthenticationRequest(context);
                 return false;
             }
 
-            var requestedCredentials = new NetworkCredential(context.Request.Credentials.UserName, context.Request.Credentials.Password);
-            var allowedCredentials = new HashSet<NetworkCredential>(m_allowedCredentials, comparer);
+            context.User = new GenericPrincipal(new GenericIdentity(requestedCredentials.Item1, "Basic"),
+                                                m_authorizationManager.GetRoles(requestedCredentials.Item1).ToArray());
 
-            if (!allowedCredentials.Contains(requestedCredentials))
-            {
-                CreateAuthenticationRequest(context);
-                return false;
-            }
-
-            context.User = new GenericPrincipal(new GenericIdentity(requestedCredentials.UserName, requestedCredentials.Password), new string[0]);
             return true;
         }
 
@@ -47,6 +42,50 @@ namespace RestFoundation.Behaviors
         {
             context.Response.SetHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "Basic realm=\"{0}\"", context.Request.Url.ServiceUrl));
             context.Response.SetStatus(HttpStatusCode.Unauthorized, "Unauthorized");
+        }
+
+        private static Tuple<string, string> GetAuthenticationInfo(IHttpRequest request)
+        {
+            string authorizationHeader = request.Headers.Authorization;
+
+            if (String.IsNullOrEmpty(authorizationHeader))
+            {
+                return null;
+            }
+
+            string[] authorizationTokens = authorizationHeader.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (authorizationTokens.Length < 2 || !authorizationTokens[0].Trim().Equals("Basic", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            string credentialToken;
+
+            try
+            {
+                Encoding encoding = request.Headers.ContentCharsetEncoding ?? Encoding.UTF8;
+
+                credentialToken = encoding.GetString(Convert.FromBase64String(authorizationTokens[1].Trim()));
+            }
+            catch (Exception)
+            {
+                credentialToken = null;
+            }
+
+            if (String.IsNullOrEmpty(credentialToken))
+            {
+                return null;
+            }
+
+            string[] credentialTokenItems = credentialToken.Split(':');
+
+            if (credentialTokenItems.Length != 2 || credentialTokenItems[0].Length == 0)
+            {
+                return null;
+            }
+
+            return Tuple.Create(credentialTokenItems[0], credentialTokenItems[1]);
         }
     }
 }

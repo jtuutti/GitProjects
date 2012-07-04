@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\ServiceBootstrapper.cs" />
+    <Compile Include="Security\ServiceAuthorizationManager.cs" />
     <Compile Include="Behaviors\LoggingBehavior.cs" />
     <Compile Include="Behaviors\StatisticsBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

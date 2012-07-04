@@ -5,10 +5,6 @@ namespace RestFoundation.UnitTesting
 {
     public class MockHttpRequest : Runtime.HttpRequest
     {
-        public MockHttpRequest(ICredentialResolver credentialResolver) : base(credentialResolver)
-        {
-        }
-
         protected override HttpContextBase Context
         {
             get

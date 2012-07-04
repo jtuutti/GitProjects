@@ -80,8 +80,8 @@
     <Compile Include="DataBinderBuilder.cs" />
     <Compile Include="DataFormatterBuilder.cs" />
     <Compile Include="DataFormatters\MultiPartFormatter.cs" />
+    <Compile Include="IAuthorizationManager.cs" />
     <Compile Include="ICache.cs" />
-    <Compile Include="ICredentialResolver.cs" />
     <Compile Include="IDataBinder.cs" />
     <Compile Include="IHttpMethodResolver.cs" />
     <Compile Include="IHttpResponseOutput.cs" />
@@ -133,6 +133,7 @@
     <Compile Include="RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptions.cs" />
+    <Compile Include="Runtime\AuthorizationManager.cs" />
     <Compile Include="Runtime\ContextBase.cs" />
     <Compile Include="Runtime\HttpMethodResolver.cs" />
     <Compile Include="Runtime\NetworkCredentialEqualityComparer.cs" />
@@ -140,7 +141,6 @@
     <Compile Include="Runtime\ServiceBehaviorInvoker.cs" />
     <Compile Include="Runtime\Cache.cs" />
     <Compile Include="Runtime\CompositeValidationResult.cs" />
-    <Compile Include="Runtime\CredentialResolver.cs" />
     <Compile Include="Runtime\DataBinderRegistry.cs" />
     <Compile Include="Runtime\DelegateObjectActivator.cs" />
     <Compile Include="Runtime\HttpRequestExtensions.cs" />

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Web.Routing;
 using RestFoundation.Collections;
 using RestFoundation.Collections.Concrete;
@@ -13,15 +12,6 @@ namespace RestFoundation.Runtime
         private const string AjaxHeaderName = "X-Requested-With";
         private const string AjaxHeaderValue = "XMLHttpRequest";
         private const string ContextContainerKey = "REST_Context";
-
-        private readonly ICredentialResolver m_credentialResolver;
-
-        public HttpRequest(ICredentialResolver credentialResolver)
-        {
-            if (credentialResolver == null) throw new ArgumentNullException("credentialResolver");
-
-            m_credentialResolver = credentialResolver;
-        }
 
         private HttpRequestContainer ContextContainer
         {
@@ -89,14 +79,6 @@ namespace RestFoundation.Runtime
             get
             {
                 return Context.Request.InputStream;
-            }
-        }
-
-        public NetworkCredential Credentials
-        {
-            get
-            {
-                return m_credentialResolver.GetCredentials(this);
             }
         }
 

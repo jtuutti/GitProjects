@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
 using RestFoundation.Behaviors;
 using RestFoundation.DataFormatters;
+using RestTest.Security;
 using RestTest.Behaviors;
 using RestTest.ServiceFactories;
 using RestTest.StreamCompressors;
@@ -37,8 +36,9 @@ namespace RestTest.App_Start
                             action.WithDefaultConventions();
                         });
 
-            config.For<IServiceFactory>().Use<RestServiceFactory>();
+            config.ForSingletonOf<IAuthorizationManager>().Use<ServiceAuthorizationManager>();
             config.ForSingletonOf<IStreamCompressor>().Use<RestStreamCompressor>();
+            config.For<IServiceFactory>().Use<RestServiceFactory>();
 
             config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestDependency()));
         }
@@ -66,17 +66,12 @@ namespace RestTest.App_Start
                         .DoNotValidateRequests();
 
             routeBuilder.MapRestRouteAsync<IIndexService>("async")
-                        .WithBehaviors(new BasicAuthorizationBehavior(GetCredentials()), new StatisticsBehavior(), new LoggingBehavior());
+                        .WithBehaviors(new BasicAuthorizationBehavior(), new StatisticsBehavior(), new LoggingBehavior());
 
             routeBuilder.MapRestRoute<IDynamicService>("dynamic");
 
             routeBuilder.MapRestRoute<ITouchMapService>("touch-map")
                         .WithContentTypesRestrictedTo("text/xml", "application/xml", "application/json");
-        }
-
-        private static IEnumerable<NetworkCredential> GetCredentials()
-        {
-            return new[] { new NetworkCredential("admin", "rest") };
         }
     }
 }

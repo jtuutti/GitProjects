@@ -46,7 +46,7 @@ namespace RestFoundation.Runtime
 
             if (serviceAsBehavior != null && BehaviorAppliesToMethod(serviceAsBehavior, method.Name))
             {
-                behaviors.Insert(0, serviceAsBehavior);
+                behaviors.Add(serviceAsBehavior);
             }
 
             try

@@ -29,10 +29,23 @@ namespace RestTest.Behaviors
             context.Response.Output.WriteFormat("Relative URL: {0}", context.Request.Url.LocalPath).WriteLine();
             context.Response.Output.WriteFormat("Service absolute URL: {0}", context.Request.Url.ServiceUrl.ToString()).WriteLine();
             context.Response.Output.WriteFormat("Service relative URL: {0}", context.Request.Url.ServiceUrl.LocalPath).WriteLine();
-            context.Response.Output.WriteFormat("Is Authenticated: {0}", context.IsAuthenticated).WriteLine();
             context.Response.Output.WriteFormat("Is Local: {0}", context.Request.IsLocal).WriteLine();
             context.Response.Output.WriteFormat("Is Secure: {0}", context.Request.IsSecure).WriteLine();
             context.Response.Output.WriteFormat("Is AJAX: {0}", context.Request.IsAjax).WriteLine();
+
+            if (context.IsAuthenticated)
+            {
+                context.Response.Output.WriteFormat("Authenticated as: \"{0}\" ({1})", context.User.Identity.Name, context.User.Identity.AuthenticationType).WriteLine();
+
+                if (context.User.IsInRole("administrator"))
+                {
+                    context.Response.Output.WriteLine("-- ADMIN ACCESS --");
+                }
+            }
+            else
+            {
+                context.Response.Output.WriteLine("Not Authenticated");
+            }
 
             context.Response.Output.WriteLine().WriteLine("--- Route Values ---");
 
