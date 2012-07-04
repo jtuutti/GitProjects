@@ -4,7 +4,7 @@ namespace RestTestContracts
 {
     public interface ITouchMapService
     {
-        [Url("", HttpMethod.Get, HttpMethod.Head)]
+        [Url(Url.Root)]
         object Get();
     }
 }

@@ -11,7 +11,7 @@ namespace RestFoundation
             if (urlTemplate == null) throw new ArgumentNullException("urlTemplate");
 
             UrlTemplate = urlTemplate.Trim();
-            HttpMethods = (methods != null && methods.Length > 0) ? methods : new[] { HttpMethod.Get, HttpMethod.Head };
+            HttpMethods = (methods != null && methods.Length > 0) ? methods : null;
 
             if (methods != null && Array.IndexOf(methods, HttpMethod.Options) >= 0)
             {
@@ -19,22 +19,9 @@ namespace RestFoundation
             }
         }
 
-        public int Priority
-        {
-            get;
-            set;
-        }
+        public int Priority { get; set; }
 
-        internal string UrlTemplate
-        {
-            get;
-            private set;
-        }
-
-        internal IEnumerable<HttpMethod> HttpMethods
-        {
-            get;
-            private set;
-        }
+        internal string UrlTemplate { get; private set; }
+        internal IEnumerable<HttpMethod> HttpMethods { get; set; }
     }
 }

@@ -66,7 +66,7 @@ namespace RestFoundation.Runtime
             var serviceContractTypeName = (string) m_routeValues[RouteConstants.ServiceContractType];
             var urlTemplate = (string) m_routeValues[RouteConstants.UrlTemplate];
 
-            if (String.IsNullOrEmpty(serviceUrl) || String.IsNullOrEmpty(serviceContractTypeName) || String.IsNullOrEmpty(urlTemplate))
+            if (String.IsNullOrEmpty(serviceUrl) || String.IsNullOrEmpty(serviceContractTypeName) || urlTemplate == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
             }

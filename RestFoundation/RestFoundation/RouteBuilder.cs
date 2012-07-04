@@ -14,12 +14,15 @@ namespace RestFoundation
 
         private static readonly Type urlAttributeType = typeof(UrlAttribute);
         private readonly RouteCollection m_routes;
+        private readonly IHttpMethodResolver m_httpMethodResolver;
 
-        internal RouteBuilder(RouteCollection routes)
+        internal RouteBuilder(RouteCollection routes, IHttpMethodResolver httpMethodResolver)
         {
             if (routes == null) throw new ArgumentNullException("routes");
+            if (httpMethodResolver == null) throw new ArgumentNullException("httpMethodResolver");
 
             m_routes = routes;
+            m_httpMethodResolver = httpMethodResolver;
         }
 
         public RouteConfiguration MapRestRoute<TContract>(string url)
@@ -40,50 +43,6 @@ namespace RestFoundation
         public RouteConfiguration MapRestRouteAsync(string url, Type serviceContractType)
         {
             return MapRestRoute(url, serviceContractType, true);
-        }
-
-        private RouteConfiguration MapRestRoute(string url, Type serviceContractType, bool isAsync)
-        {
-            if (url == null) throw new ArgumentNullException("url");
-            if (url.Trim().Length == 0) throw new ArgumentException("Route url cannot be null or empty", "url");
-            if (serviceContractType == null) throw new ArgumentNullException("serviceContractType");
-            if (!serviceContractType.IsInterface) throw new ArgumentException("Service contract type must be an interface", "serviceContractType");
-
-            var serviceMethods = serviceContractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                                                    .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);
-
-            List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(serviceContractType, serviceMethods, url);
-            ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(serviceContractType, url), t => methodMetadata, (t, u) => methodMetadata);
-
-            IEnumerable<IRouteHandler> routeHandlers = MapRoutes(methodMetadata, url, serviceContractType, isAsync);
-            return new RouteConfiguration(routeHandlers);
-        }
-
-        private static List<ServiceMethodMetadata> GenerateMethodMetadata(Type serviceContractType, IEnumerable<MethodInfo> methods, string url)
-        {
-            var urlAttributes = new List<ServiceMethodMetadata>();
-
-            foreach (MethodInfo method in methods)
-            {
-                var aclAttribute = (ValidateAclAttribute) (Attribute.GetCustomAttribute(method, typeof(ValidateAclAttribute), false) ??
-                                                           Attribute.GetCustomAttribute(serviceContractType, typeof(ValidateAclAttribute), false));
-
-                var outputCacheAttribute = (OutputCacheAttribute) Attribute.GetCustomAttribute(method, typeof(OutputCacheAttribute), false);
-
-                foreach (UrlAttribute urlAttribute in Attribute.GetCustomAttributes(method, urlAttributeType, false).Cast<UrlAttribute>())
-                {
-                    var methodMetadata = new ServiceMethodMetadata(url, method, urlAttribute, aclAttribute, outputCacheAttribute);
-                    urlAttributes.Add(methodMetadata);
-
-                    var urlMethods = urlAttribute.HttpMethods;
-
-                    HttpMethodRegistry.HttpMethods.AddOrUpdate(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlAttribute.UrlTemplate),
-                                                               template => AddHttpMethods(urlMethods),
-                                                               (template, allowedMethods) => UpdateHttpMethods(allowedMethods, urlMethods));
-                }
-            }
-
-            return urlAttributes;
         }
 
         private static HashSet<HttpMethod> AddHttpMethods(IEnumerable<HttpMethod> urlMethods)
@@ -111,6 +70,54 @@ namespace RestFoundation
         private static string ConcatUrl(string url, string urlTemplate)
         {
             return String.Concat(url.TrimEnd(Slash), Slash, urlTemplate.TrimStart(Slash, Tilda));
+        }
+
+        private RouteConfiguration MapRestRoute(string url, Type serviceContractType, bool isAsync)
+        {
+            if (url == null) throw new ArgumentNullException("url");
+            if (url.Trim().Length == 0) throw new ArgumentException("Route url cannot be null or empty", "url");
+            if (serviceContractType == null) throw new ArgumentNullException("serviceContractType");
+            if (!serviceContractType.IsInterface) throw new ArgumentException("Service contract type must be an interface", "serviceContractType");
+
+            var serviceMethods = serviceContractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                                                    .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);
+
+            List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(serviceContractType, serviceMethods, url);
+            ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(serviceContractType, url), t => methodMetadata, (t, u) => methodMetadata);
+
+            IEnumerable<IRouteHandler> routeHandlers = MapRoutes(methodMetadata, url, serviceContractType, isAsync);
+            return new RouteConfiguration(routeHandlers);
+        }
+
+        private List<ServiceMethodMetadata> GenerateMethodMetadata(Type serviceContractType, IEnumerable<MethodInfo> methods, string url)
+        {
+            var urlAttributes = new List<ServiceMethodMetadata>();
+
+            foreach (MethodInfo method in methods)
+            {
+                var aclAttribute = (ValidateAclAttribute) (Attribute.GetCustomAttribute(method, typeof(ValidateAclAttribute), false) ??
+                                                           Attribute.GetCustomAttribute(serviceContractType, typeof(ValidateAclAttribute), false));
+
+                var outputCacheAttribute = (OutputCacheAttribute) Attribute.GetCustomAttribute(method, typeof(OutputCacheAttribute), false);
+
+                foreach (UrlAttribute urlAttribute in Attribute.GetCustomAttributes(method, urlAttributeType, false).Cast<UrlAttribute>())
+                {
+                    if (urlAttribute.HttpMethods == null)
+                    {
+                        urlAttribute.HttpMethods = m_httpMethodResolver.Resolve(method);
+                    }
+
+                    var methodMetadata = new ServiceMethodMetadata(url, method, urlAttribute, aclAttribute, outputCacheAttribute);
+                    urlAttributes.Add(methodMetadata);
+
+                    var httpMethods = urlAttribute.HttpMethods;
+                    HttpMethodRegistry.HttpMethods.AddOrUpdate(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlAttribute.UrlTemplate),
+                                                               template => AddHttpMethods(httpMethods),
+                                                               (template, allowedMethods) => UpdateHttpMethods(allowedMethods, httpMethods));
+                }
+            }
+
+            return urlAttributes;
         }
 
         private IEnumerable<IRouteHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, string url, Type serviceContractType, bool isAsync)

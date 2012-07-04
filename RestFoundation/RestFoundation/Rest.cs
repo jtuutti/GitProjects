@@ -67,7 +67,7 @@ namespace RestFoundation
 
         public virtual Rest WithRoutes(Action<RouteBuilder> builder)
         {
-            builder(new RouteBuilder(RouteTable.Routes));
+            builder(new RouteBuilder(RouteTable.Routes, Active.CreateObject<IHttpMethodResolver>()));
             return this;
         }
 

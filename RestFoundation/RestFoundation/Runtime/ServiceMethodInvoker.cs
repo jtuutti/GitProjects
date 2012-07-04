@@ -37,11 +37,14 @@ namespace RestFoundation.Runtime
             }
 
             var behaviorInvoker = new ServiceBehaviorInvoker(context, service, method);
-            List<IServiceBehavior> behaviors = ServiceBehaviorRegistry.GetBehaviors(routeHandler);
+
+            List<IServiceBehavior> behaviors = ServiceBehaviorRegistry.GetBehaviors(routeHandler)
+                                                                      .Where(behavior => BehaviorAppliesToMethod(behavior, method.Name))
+                                                                      .ToList();
 
             var serviceAsBehavior = service as IServiceBehavior;
 
-            if (serviceAsBehavior != null)
+            if (serviceAsBehavior != null && BehaviorAppliesToMethod(serviceAsBehavior, method.Name))
             {
                 behaviors.Insert(0, serviceAsBehavior);
             }
@@ -103,6 +106,11 @@ namespace RestFoundation.Runtime
         protected virtual bool InvokeOnExceptionBehaviors(ServiceBehaviorInvoker serviceBehaviorInvoker, IList<IServiceBehavior> behaviors, Exception internalException)
         {
             return serviceBehaviorInvoker.PerformOnExceptionBehaviors(behaviors, internalException);
+        }
+
+        private static bool BehaviorAppliesToMethod(IServiceBehavior behavior, string methodName)
+        {
+            return behavior.AffectedMethods == null || behavior.AffectedMethods.Count == 0 || behavior.AffectedMethods.Contains(methodName);
         }
 
         private static bool IsWrapperException(Exception ex)

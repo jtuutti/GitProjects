@@ -51,9 +51,19 @@ namespace RestFoundation.Test
 
             var urlAttribute = Attribute.GetCustomAttribute(serviceMethod, typeof(UrlAttribute), false) as UrlAttribute;
 
-            if (urlAttribute == null || urlAttribute.HttpMethods == null || urlAttribute.UrlTemplate == null)
+            if (urlAttribute == null || urlAttribute.UrlTemplate == null)
             {
                 throw new ArgumentException("No valid service method provided", "serviceMethodDelegate");
+            }
+
+            if (urlAttribute.HttpMethods == null)
+            {
+                urlAttribute.HttpMethods = Rest.Active.CreateObject<IHttpMethodResolver>().Resolve(serviceMethod);
+
+                if (urlAttribute.HttpMethods == null)
+                {
+                    throw new ArgumentException("No supported HTTP method provided", "serviceMethodDelegate");
+                }
             }
 
             if (httpMethod.HasValue)
@@ -75,9 +85,22 @@ namespace RestFoundation.Test
                 throw new InvalidOperationException("No active routes were found");
             }
 
+            return CreateRequest(relativeUrl, httpMethod.Value, routes);
+        }
+
+        public void Dispose()
+        {
             lock (syncRoot)
             {
-                Context = new TestHttpContext(relativeUrl, httpMethod.Value.ToString().ToUpperInvariant());
+                Context = null;
+            }
+        }
+
+        private static RequestContext CreateRequest(string relativeUrl, HttpMethod httpMethod, RouteCollection routes)
+        {
+            lock (syncRoot)
+            {
+                Context = new TestHttpContext(relativeUrl, httpMethod.ToString().ToUpperInvariant());
 
                 var routeData = routes.GetRouteData(Context);
 
@@ -87,14 +110,6 @@ namespace RestFoundation.Test
                 }
 
                 return new RequestContext(Context, routeData);
-            }
-        }
-
-        public void Dispose()
-        {
-            lock (syncRoot)
-            {
-                Context = null;
             }
         }
     }

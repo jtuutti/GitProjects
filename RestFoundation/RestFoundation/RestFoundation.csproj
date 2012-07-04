@@ -82,6 +82,7 @@
     <Compile Include="ICache.cs" />
     <Compile Include="ICredentialResolver.cs" />
     <Compile Include="IDataBinder.cs" />
+    <Compile Include="IHttpMethodResolver.cs" />
     <Compile Include="IHttpResponseOutput.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IObjectActivator.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptions.cs" />
     <Compile Include="Runtime\ContextBase.cs" />
+    <Compile Include="Runtime\HttpMethodResolver.cs" />
     <Compile Include="Runtime\RouteParameter.cs" />
     <Compile Include="Runtime\ServiceBehaviorInvoker.cs" />
     <Compile Include="Runtime\Cache.cs" />
@@ -246,6 +248,7 @@
     <Compile Include="Test\TestHttpRequest.cs" />
     <Compile Include="Test\RouteValidator.cs" />
     <Compile Include="Test\TestHttpServerUtility.cs" />
+    <Compile Include="Url.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="UrlAttribute.cs" />
     <Compile Include="Runtime\UrlTemplateStandardizer.cs" />
