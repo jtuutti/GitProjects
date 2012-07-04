@@ -67,7 +67,7 @@ namespace RestFoundation.Runtime
         {
             get
             {
-                return ContextContainer.Url ?? (ContextContainer.Url = new ServiceUri(Context.Request.Url, GenerateServiceUrl()));
+                return ContextContainer.Url ?? (ContextContainer.Url = new ServiceUri(Context.Request.Url, Context.Request.ApplicationPath));
             }
         }
 
@@ -153,19 +153,6 @@ namespace RestFoundation.Runtime
             var routeData = RouteTable.Routes.GetRouteData(Context);
 
             return routeData != null ? new ObjectValueCollection(routeData.Values) : new ObjectValueCollection(new RouteValueDictionary());
-        }
-
-        private string GenerateServiceUrl()
-        {
-            var serviceUrl = RouteValues.TryGet(RouteConstants.ServiceUrl) as string;
-            string endpointUrl = Context.Request.AppRelativeCurrentExecutionFilePath;
-
-            if (serviceUrl == null)
-            {
-                return endpointUrl;
-            }
-
-            return endpointUrl.Substring(0, endpointUrl.IndexOf(serviceUrl, StringComparison.OrdinalIgnoreCase) + serviceUrl.Length);
         }
 
         private sealed class HttpRequestContainer
