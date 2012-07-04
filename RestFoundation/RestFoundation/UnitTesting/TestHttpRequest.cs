@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Web;
 
-namespace RestFoundation.Test
+namespace RestFoundation.UnitTesting
 {
     internal sealed class TestHttpRequest : HttpRequestBase
     {

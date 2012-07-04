@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 
-namespace RestFoundation.Test
+namespace RestFoundation.UnitTesting
 {
     internal sealed class TestHttpServerUtility : HttpServerUtilityBase
     {

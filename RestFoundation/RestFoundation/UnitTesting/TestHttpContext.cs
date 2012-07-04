@@ -2,7 +2,7 @@
 using System.Security.Principal;
 using System.Web;
 
-namespace RestFoundation.Test
+namespace RestFoundation.UnitTesting
 {
     internal sealed class TestHttpContext : HttpContextBase
     {

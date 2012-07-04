@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.Routing;
 using NUnit.Framework;
 using RestFoundation.Runtime;
-using RestFoundation.Test;
+using RestFoundation.UnitTesting;
 using RestFoundation.Tests.ServiceContracts;
 using StructureMap;
 

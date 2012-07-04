@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace RestFoundation.Test
+namespace RestFoundation.UnitTesting
 {
     [Serializable]
     public class RouteAssertException : Exception

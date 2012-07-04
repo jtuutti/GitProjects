@@ -2,14 +2,10 @@
 using System.Web;
 using RestFoundation.Runtime;
 
-namespace RestFoundation.Test
+namespace RestFoundation.UnitTesting
 {
-    public class MockServiceContext : ServiceContext
+    public class MockHttpResponseOutput : HttpResponseOutput
     {
-        public MockServiceContext(IHttpRequest request, IHttpResponse response) : base(request, response)
-        {
-        }
-
         protected override HttpContextBase Context
         {
             get

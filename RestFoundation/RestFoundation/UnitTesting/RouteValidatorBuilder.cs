@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace RestFoundation.Test
+namespace RestFoundation.UnitTesting
 {
     public sealed class RouteValidatorBuilder
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Web;
 using System.Web.Caching;
 
-namespace RestFoundation.Test
+namespace RestFoundation.UnitTesting
 {
     internal sealed class TestHttpResponse : HttpResponseBase
     {

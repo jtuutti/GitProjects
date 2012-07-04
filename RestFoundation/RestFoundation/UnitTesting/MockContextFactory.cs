@@ -5,7 +5,7 @@ using System.Net;
 using System.Web;
 using System.Web.Routing;
 
-namespace RestFoundation.Test
+namespace RestFoundation.UnitTesting
 {
     public sealed class MockContextFactory : IDisposable
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using RestFoundation.Test;
+using RestFoundation.UnitTesting;
 using RestFoundation.Tests.ServiceContracts;
 
 namespace RestFoundation.Tests

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Web.Routing;
 using RestFoundation.Runtime;
 
-namespace RestFoundation.Test
+namespace RestFoundation.UnitTesting
 {
     public sealed class RouteValidator<T>
     {

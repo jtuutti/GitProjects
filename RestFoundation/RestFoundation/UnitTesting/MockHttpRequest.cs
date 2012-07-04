@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Web;
-using RestFoundation.Runtime;
 
-namespace RestFoundation.Test
+namespace RestFoundation.UnitTesting
 {
-    public class MockHttpResponseOutput : HttpResponseOutput
+    public class MockHttpRequest : Runtime.HttpRequest
     {
+        public MockHttpRequest(ICredentialResolver credentialResolver) : base(credentialResolver)
+        {
+        }
+
         protected override HttpContextBase Context
         {
             get

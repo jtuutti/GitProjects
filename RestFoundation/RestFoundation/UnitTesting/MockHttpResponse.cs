@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Web;
 
-namespace RestFoundation.Test
+namespace RestFoundation.UnitTesting
 {
-    public class MockHttpRequest : Runtime.HttpRequest
+    public class MockHttpResponse : Runtime.HttpResponse
     {
-        public MockHttpRequest(ICredentialResolver credentialResolver) : base(credentialResolver)
+        public MockHttpResponse(IHttpResponseOutput output) : base(output)
         {
         }
 
