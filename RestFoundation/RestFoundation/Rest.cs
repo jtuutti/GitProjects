@@ -59,9 +59,9 @@ namespace RestFoundation
             return this;
         }
 
-        public virtual Rest WithGlobalBehaviors(Action<BehaviorBuilder> builder)
+        public virtual Rest WithGlobalBehaviors(Action<GlobalBehaviorBuilder> builder)
         {
-            builder(new BehaviorBuilder());
+            builder(new GlobalBehaviorBuilder());
             return this;
         }
 

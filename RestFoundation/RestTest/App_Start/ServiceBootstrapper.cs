@@ -71,6 +71,7 @@ namespace RestTest.App_Start
             routeBuilder.MapRestRoute<IDynamicService>("dynamic");
 
             routeBuilder.MapRestRoute<ITouchMapService>("touch-map")
+                        .WithBehaviors(new HttpsOnlyBehavior())
                         .WithContentTypesRestrictedTo("text/xml", "application/xml", "application/json");
         }
     }

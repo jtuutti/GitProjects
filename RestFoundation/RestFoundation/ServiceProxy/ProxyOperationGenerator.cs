@@ -283,6 +283,23 @@ namespace RestFoundation.ServiceProxy
             return methodAttributes.Select(a => Tuple.Create(a.Name, a.Value)).ToList();
         }
 
+        private static int GetHttpsPort(ServiceMethodMetadata metadata)
+        {
+            var httpsOnlyAttribute = Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyHttpsOnlyAttribute), false) as ProxyHttpsOnlyAttribute;
+
+            if (httpsOnlyAttribute == null && metadata.MethodInfo.DeclaringType != null)
+            {
+                httpsOnlyAttribute = Attribute.GetCustomAttribute(metadata.MethodInfo.DeclaringType, typeof(ProxyHttpsOnlyAttribute), false) as ProxyHttpsOnlyAttribute;
+            }
+
+            if (httpsOnlyAttribute == null || httpsOnlyAttribute.Port <= 0)
+            {
+                return 0;
+            }
+
+            return httpsOnlyAttribute.Port;
+        }
+
         private static bool HasResource(ServiceMethodMetadata metadata, HttpMethod httpMethod)
         {
             if (httpMethod != HttpMethod.Post && httpMethod != HttpMethod.Put && httpMethod != HttpMethod.Patch)
@@ -313,6 +330,7 @@ namespace RestFoundation.ServiceProxy
                                 Description = GetDescription(metadata.MethodInfo),
                                 ResultType = metadata.MethodInfo.ReturnType,
                                 RouteParameters = GetParameters(metadata),
+                                HttpsPort = GetHttpsPort(metadata),
                                 IsIpFiltered = (metadata.Acl != null),
                                 AdditionalHeaders = GetAdditionalHeaders(metadata)
                             };

@@ -6,9 +6,9 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
-    public sealed class BehaviorBuilder
+    public sealed class GlobalBehaviorBuilder
     {
-        internal BehaviorBuilder()
+        internal GlobalBehaviorBuilder()
         {
         }
 

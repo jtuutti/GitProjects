@@ -54,9 +54,10 @@
     <Compile Include="Acl\IPAddressRange.cs" />
     <Compile Include="Acl\IPNetwork.cs" />
     <Compile Include="Acl\IPNetworkCollection.cs" />
-    <Compile Include="BehaviorBuilder.cs" />
+    <Compile Include="GlobalBehaviorBuilder.cs" />
     <Compile Include="Behaviors\BasicAuthorizationBehavior.cs" />
     <Compile Include="Behaviors\ContentTypeBehavior.cs" />
+    <Compile Include="Behaviors\HttpsOnlyBehavior.cs" />
     <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
     <Compile Include="Behaviors\ServiceSecurityBehavior.cs" />
     <Compile Include="BindResourceAttribute.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="Runtime\XmlSerializerRegistry.cs" />
     <Compile Include="ServiceProxy\ProxyAdditionalHeaderAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyHiddenOperation.cs" />
+    <Compile Include="ServiceProxy\ProxyHttpsOnlyAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyOperationDescriptionAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyQueryParameterAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyResourceExampleAttribute.cs" />

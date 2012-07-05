@@ -2,6 +2,7 @@
 <%@ Import Namespace="System.Diagnostics" %>
 <%@ Import Namespace="System.Globalization" %>
 <%@ Import Namespace="System.Net" %>
+<%@ Import Namespace="System.Net.Security" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
 <%@ Import Namespace="RestFoundation.Runtime" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
@@ -130,8 +131,16 @@
             return;
         }
 
+        RemoteCertificateValidationCallback validationCallback = null;
+
+        if (serviceUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        {
+            validationCallback = ServicePointManager.ServerCertificateValidationCallback;
+            ServicePointManager.ServerCertificateValidationCallback = (obj, certificate, chain, errors) => true;
+        }
+
         try
-        {           
+        {
             using (var client = new ProxyWebClient())
             {
                 string data, protocolVersion, responseCode;
@@ -196,6 +205,13 @@
         catch (Exception ex)
         {
             ResponseText.Value = String.Format(CultureInfo.InvariantCulture, "HTTP/1.1: 500 - {0}", ex.Message);
+        }
+        finally
+        {
+            if (validationCallback != null)
+            {
+                ServicePointManager.ServerCertificateValidationCallback = validationCallback;
+            }
         }
     }
 

@@ -23,6 +23,7 @@ namespace RestFoundation.ServiceProxy
         public List<ProxyParameter> RouteParameters { get; set; }
         public Type RequestExampleType { get; set; }
         public Type ResponseExampleType { get; set; }
+        public int HttpsPort { get; set; }
         public bool IsIpFiltered { get; set; }
         public List<Tuple<string, string>> AdditionalHeaders { get; set; }
 
@@ -67,8 +68,19 @@ namespace RestFoundation.ServiceProxy
             }
 
             const char slash = '/';
+            string serviceUrl = context.Request.Url.GetLeftPart(UriPartial.Authority).TrimEnd(slash);
 
-            return Tuple.Create(String.Concat(context.Request.Url.GetLeftPart(UriPartial.Authority), context.Request.ApplicationPath.TrimEnd(slash), slash), urlTemplate);
+            if (HttpsPort > 0)
+            {
+                serviceUrl = Regex.Replace(serviceUrl, "http://", "https://", RegexOptions.IgnoreCase);
+
+                if (HttpsPort != 443)
+                {
+                    serviceUrl += String.Format(CultureInfo.InvariantCulture, ":{0}", HttpsPort);
+                }
+            }
+
+            return Tuple.Create(String.Concat(serviceUrl, context.Request.ApplicationPath.TrimEnd(slash), slash), urlTemplate);
         }
 
         public int CompareTo(ProxyOperation other)

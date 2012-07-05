@@ -22,8 +22,11 @@ namespace RestFoundation.ServiceProxy
             }
 
             WebRequest request = base.GetWebRequest(address);
+
             if (request == null)
+            {
                 return null;
+            }
 
             if (modifiedSince > DateTime.MinValue)
             {
@@ -45,8 +48,11 @@ namespace RestFoundation.ServiceProxy
         protected override WebResponse GetWebResponse(WebRequest request)
         {
             WebResponse response = base.GetWebResponse(request);
+
             if (response == null)
+            {
                 return null;
+            }
 
             WebResponse = new ProxyWebResponse(response);
             return WebResponse;
