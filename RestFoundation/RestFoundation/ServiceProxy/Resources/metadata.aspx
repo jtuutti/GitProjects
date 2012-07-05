@@ -25,7 +25,7 @@
 
         if (operation == null)
         {
-            Response.Redirect("index");
+            Response.Redirect("index?expired=1");
             return;
         }
 
@@ -151,7 +151,7 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="bodyPlaceholder">
     <p><em><%: operation.Description %></em></p>    
-    <p>
+    <div>
         <div>
             <strong>URL Template: </strong>
             <span class="uri-template"><%: operation.UrlTempate %></span>
@@ -160,7 +160,12 @@
             <strong>Sample URL: </strong>
             <span class="uri-template"><%: operation.GenerateSampleUrlParts().Item1 + operation.GenerateSampleUrlParts().Item2 %></span>
         </div>
+    </div>
+    <% if (operation.HttpsPort > 0) { %>
+    <p>
+        <strong>Requires HTTPS</strong>
     </p>
+    <% } %>
     <p>
         <strong>HTTP Method: </strong>
         <span class="method"><%: operation.HttpMethod.ToString().ToUpperInvariant() %></span>

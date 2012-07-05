@@ -15,6 +15,11 @@
 </script>
 
 <asp:Content runat="server" ContentPlaceHolderID="bodyPlaceholder">
+    <% if (Request.QueryString["expired"] == "1") { %>
+    <p class="field-validation-error">
+        <em>Session Expired</em>
+    </p>
+    <% } %>
     <p><em>This page describes the service operations at this endpoint.</em></p>
     <table>
         <thead>

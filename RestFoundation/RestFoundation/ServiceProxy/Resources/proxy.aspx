@@ -30,7 +30,7 @@
 
         if (operation == null)
         {
-            Response.Redirect("index");
+            Response.Redirect("index?expired=1");
             return;
         }
 

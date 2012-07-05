@@ -75,7 +75,7 @@ namespace RestFoundation.ServiceProxy
             return descriptionAttribute != null ? descriptionAttribute.Description : "No description provided";
         }
 
-        private static List<ProxyStatusCode> GetStatusCodes(MethodInfo methodInfo, bool hasResource, bool hasResponse)
+        private static List<ProxyStatusCode> GetStatusCodes(MethodInfo methodInfo, bool hasResource, bool hasResponse, bool requiresHttps)
         {
             var statusAttributes = methodInfo.GetCustomAttributes(typeof(ProxyStatusCodeAttribute), true).Cast<ProxyStatusCodeAttribute>();
             var statusCodes = new List<ProxyStatusCode>();
@@ -99,6 +99,11 @@ namespace RestFoundation.ServiceProxy
             if (!statusCodes.Any(code => code.GetNumericStatusCode() >= 200 && code.GetNumericStatusCode() <= 204))
             {
                 statusCodes.Add(new ProxyStatusCode(HttpStatusCode.OK, "Operation is successful"));
+            }
+
+            if (requiresHttps)
+            {
+                statusCodes.Add(new ProxyStatusCode(HttpStatusCode.Forbidden, "HTTP protocol without SSL is not supported"));
             }
 
             statusCodes.Sort((code1, code2) => code1.CompareTo(code2));
@@ -335,7 +340,7 @@ namespace RestFoundation.ServiceProxy
                                 AdditionalHeaders = GetAdditionalHeaders(metadata)
                             };
 
-            operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, operation.HasResource, operation.HasResponse);
+            operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, operation.HasResource, operation.HasResponse, operation.HttpsPort > 0);
             operation.HasResource = HasResource(metadata, operation.HttpMethod);
 
             Tuple<Type, Type> resourceExampleTypes = GetResourceExampleTypes(metadata.MethodInfo);
