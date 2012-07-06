@@ -54,6 +54,7 @@
     <Compile Include="Acl\IPAddressRange.cs" />
     <Compile Include="Acl\IPNetwork.cs" />
     <Compile Include="Acl\IPNetworkCollection.cs" />
+    <Compile Include="DataFormatters\BsonFormatter.cs" />
     <Compile Include="IRestAsyncHandler.cs" />
     <Compile Include="GlobalBehaviorBuilder.cs" />
     <Compile Include="Behaviors\BasicAuthorizationBehavior.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="OutputCacheAttribute.cs" />
     <Compile Include="Rest.cs" />
     <Compile Include="Results\BinaryResult.cs" />
+    <Compile Include="Results\BsonResult.cs" />
     <Compile Include="Results\ContentResult.cs" />
     <Compile Include="Results\EmptyResult.cs" />
     <Compile Include="Results\FeedResult.cs" />

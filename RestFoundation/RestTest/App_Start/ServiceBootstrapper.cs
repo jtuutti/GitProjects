@@ -55,6 +55,7 @@ namespace RestTest.App_Start
 
         private static void RegisterDataFormatters(DataFormatterBuilder builder)
         {
+            builder.Set("application/bson", new BsonFormatter());
             builder.Set("application/x-www-form-urlencoded", new FormsFormatter());
             builder.Set("multipart/form-data", new MultiPartFormatter());
         }
