@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web;
-using System.Web.Routing;
 
 namespace RestFoundation.Runtime
 {
@@ -19,7 +18,7 @@ namespace RestFoundation.Runtime
             m_parameterBinder = parameterBinder;
         }
 
-        public virtual object Invoke(IRouteHandler routeHandler, IServiceContext context, object service, MethodInfo method)
+        public virtual object Invoke(IRestHandler routeHandler, object service, MethodInfo method)
         {
             if (service == null || method == null)
             {
@@ -31,27 +30,22 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route handler was passed to the service method invoker");
             }
 
-            if (context == null)
+            if (routeHandler.Context == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No service context was passed to the service method invoker");
             }
 
-            var behaviorInvoker = new ServiceBehaviorInvoker(context, service, method);
+            var behaviorInvoker = new ServiceBehaviorInvoker(routeHandler.Context, service, method);
 
             List<IServiceBehavior> behaviors = ServiceBehaviorRegistry.GetBehaviors(routeHandler)
                                                                       .Where(behavior => BehaviorAppliesToMethod(behavior, method.Name))
                                                                       .ToList();
 
-            var serviceAsBehavior = service as IServiceBehavior;
-
-            if (serviceAsBehavior != null && BehaviorAppliesToMethod(serviceAsBehavior, method.Name))
-            {
-                behaviors.Add(serviceAsBehavior);
-            }
+            AddServiceBehaviors(behaviors, service, method.Name);
 
             try
             {
-                return InvokeWithBehaviors(context, behaviorInvoker, behaviors);
+                return InvokeWithBehaviors(routeHandler.Context, behaviorInvoker, behaviors);
             }
             catch (Exception ex)
             {
@@ -116,6 +110,24 @@ namespace RestFoundation.Runtime
         private static bool IsWrapperException(Exception ex)
         {
             return (ex is ServiceRuntimeException || ex is TargetInvocationException || ex is AggregateException) && ex.InnerException != null;
+        }
+
+        private static void AddServiceBehaviors(List<IServiceBehavior> behaviors, object service, string methodName)
+        {
+            var restService = service as IRestService;
+
+            if (restService == null || restService.Behaviors == null)
+            {
+                return;
+            }
+
+            foreach (IServiceBehavior serviceBehavior in restService.Behaviors)
+            {
+                if (BehaviorAppliesToMethod(serviceBehavior, methodName))
+                {
+                    behaviors.Add(serviceBehavior);
+                }
+            }
         }
 
         private object InvokeWithBehaviors(IServiceContext context, ServiceBehaviorInvoker serviceBehaviorInvoker, List<IServiceBehavior> behaviors)

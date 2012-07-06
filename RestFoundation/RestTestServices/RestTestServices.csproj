@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\T3ContextBehavior.cs" />
     <Compile Include="DynamicService.cs" />
     <Compile Include="IndexService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

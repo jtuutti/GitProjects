@@ -54,6 +54,7 @@
     <Compile Include="Acl\IPAddressRange.cs" />
     <Compile Include="Acl\IPNetwork.cs" />
     <Compile Include="Acl\IPNetworkCollection.cs" />
+    <Compile Include="IRestAsyncHandler.cs" />
     <Compile Include="GlobalBehaviorBuilder.cs" />
     <Compile Include="Behaviors\BasicAuthorizationBehavior.cs" />
     <Compile Include="Behaviors\ContentTypeBehavior.cs" />
@@ -89,6 +90,8 @@
     <Compile Include="ILogger.cs" />
     <Compile Include="IObjectActivator.cs" />
     <Compile Include="IParameterBinder.cs" />
+    <Compile Include="IRestHandler.cs" />
+    <Compile Include="IRestService.cs" />
     <Compile Include="IStreamCompressor.cs" />
     <Compile Include="ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
@@ -239,7 +242,10 @@
     <Compile Include="Runtime\ServiceFactory.cs" />
     <Compile Include="Runtime\ServiceContractTypeRegistry.cs" />
     <Compile Include="Results\StatusResult.cs" />
-    <Compile Include="UnitTesting\MockContextFactory.cs" />
+    <Compile Include="UnitTesting\MockHandlerFactory.cs" />
+    <Compile Include="UnitTesting\MockRestAsyncHandler.cs" />
+    <Compile Include="UnitTesting\MockRestHandler.cs" />
+    <Compile Include="UnitTesting\RestExtensions.cs" />
     <Compile Include="UnitTesting\TestHttpCachePolicyBase.cs" />
     <Compile Include="UnitTesting\TestHttpResponse.cs" />
     <Compile Include="UnitTesting\HttpMethodBuilder.cs" />

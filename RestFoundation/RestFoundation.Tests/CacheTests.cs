@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using StructureMap;
+using RestFoundation.UnitTesting;
 
 namespace RestFoundation.Tests
 {
@@ -11,7 +11,7 @@ namespace RestFoundation.Tests
         [TestFixtureSetUp]
         public void Initialize()
         {
-            m_cache = ObjectFactory.GetInstance<ICache>();
+            m_cache = Rest.Configure.GetImplementation<ICache>();
         }
 
         [TestFixtureTearDown]

@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Web.Routing;
 
 namespace RestFoundation.Runtime
 {
     internal static class UnvalidatedHandlerRegistry
     {
-        private static readonly HashSet<IRouteHandler> unvalidatedHandlers = new HashSet<IRouteHandler>();
+        private static readonly HashSet<IRestHandler> unvalidatedHandlers = new HashSet<IRestHandler>();
 
-        public static bool IsUnvalidated(IRouteHandler handler)
+        public static bool IsUnvalidated(IRestHandler handler)
         {
             return unvalidatedHandlers.Contains(handler);
         }
 
-        public static void Add(IRouteHandler handler)
+        public static void Add(IRestHandler handler)
         {
             unvalidatedHandlers.Add(handler);
         }

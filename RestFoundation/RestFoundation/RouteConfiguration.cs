@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Routing;
 using RestFoundation.Behaviors;
 using RestFoundation.DataFormatters;
 using RestFoundation.Runtime;
@@ -10,9 +9,9 @@ namespace RestFoundation
 {
     public sealed class RouteConfiguration
     {
-        private readonly IEnumerable<IRouteHandler> m_routeHandlers;
+        private readonly IEnumerable<IRestHandler> m_routeHandlers;
 
-        internal RouteConfiguration(IEnumerable<IRouteHandler> routeHandlers)
+        internal RouteConfiguration(IEnumerable<IRestHandler> routeHandlers)
         {
             if (routeHandlers == null) throw new ArgumentNullException("routeHandlers");
 
@@ -24,7 +23,7 @@ namespace RestFoundation
             if (contentTypes == null) throw new ArgumentNullException("contentTypes");
             if (contentTypes.Length == 0) throw new ArgumentException("At least one content type must be provided", "contentTypes");
 
-            foreach (IRouteHandler routeHandler in m_routeHandlers)
+            foreach (IRestHandler routeHandler in m_routeHandlers)
             {
                 for (int i = 0; i < contentTypes.Length; i++)
                 {
@@ -51,7 +50,7 @@ namespace RestFoundation
                 throw new InvalidOperationException("Multiple service behaviors of the same type are not allowed for the same route");
             }
 
-            foreach (IRouteHandler routeHandler in m_routeHandlers)
+            foreach (IRestHandler routeHandler in m_routeHandlers)
             {
                 for (int i = 0; i < behaviors.Length; i++)
                 {
@@ -69,7 +68,7 @@ namespace RestFoundation
 
         public RouteConfiguration DoNotValidateRequests()
         {           
-            foreach (IRouteHandler routeHandler in m_routeHandlers)
+            foreach (IRestHandler routeHandler in m_routeHandlers)
             {
                 UnvalidatedHandlerRegistry.Add(routeHandler);
             }

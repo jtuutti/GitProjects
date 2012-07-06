@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using RestFoundation.Behaviors;
 using RestFoundation.UnitTesting;
 using RestFoundation.Tests.ServiceContracts;
 using StructureMap;
@@ -19,8 +20,9 @@ namespace RestFoundation.Tests
             ObjectFactory.AssertConfigurationIsValid();
 
             // Configuring REST foundation
-            Rest.Configure.WithObjectFactory(CreateObjectFactory)
-                          .WithRoutes(RegisterRoutes);
+            Rest.Configure
+                .WithObjectFactory(CreateObjectFactory)
+                .WithRoutes(RegisterRoutes);
         }
 
         private static void ConfigureIoC(ConfigurationExpression config)
@@ -52,7 +54,7 @@ namespace RestFoundation.Tests
 
         private static void RegisterRoutes(RouteBuilder routeBuilder)
         {
-            routeBuilder.MapRestRoute<ITestService>(RelativeUrl);
+            routeBuilder.MapRestRoute<ITestService>(RelativeUrl).WithBehaviors(new HttpsOnlyBehavior());
         }
     }
 }

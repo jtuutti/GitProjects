@@ -9,7 +9,7 @@ namespace RestFoundation.UnitTesting
         {
             get
             {
-                HttpContextBase context = MockContextFactory.Context;
+                HttpContextBase context = MockHandlerFactory.Context;
 
                 if (context == null)
                 {

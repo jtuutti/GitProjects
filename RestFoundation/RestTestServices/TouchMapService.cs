@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using RestFoundation;
-using RestFoundation.Behaviors;
 using RestTestContracts;
 using RestTestContracts.Resources;
+using RestTestServices.Behaviors;
 using RestTestServices.Utilities;
 
 namespace RestTestServices
 {
-    public class TouchMapService : ServiceSecurityBehavior, ITouchMapService
+    public class TouchMapService : ITouchMapService, IRestService
     {
         private static readonly Dictionary<string, string> environments = new Dictionary<string, string>
         {
@@ -25,6 +24,14 @@ namespace RestTestServices
         }; // web.config mocking
 
         public IServiceContext Context { get; set; }
+
+        public IEnumerable<IServiceBehavior> Behaviors
+        {
+            get
+            {
+                yield return new T3ContextBehavior();
+            }
+        }
 
         public object Get()
         {
@@ -57,27 +64,6 @@ namespace RestTestServices
                 var serializer = new XmlSerializer(typeof(TouchMap));
                 return serializer.Deserialize(xmlReader);
             }
-        }
-
-        public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
-        {
-            var sessionInfo = new SessionInfo(context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-ApplicationID"),
-                                              context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-CustomerID"),
-                                              context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-SessionID"),
-                                              context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-CultureCode"),
-                                              context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-Environment"));
-
-            if (String.IsNullOrEmpty(sessionInfo.ApplicationId) ||
-                String.IsNullOrEmpty(sessionInfo.CustomerId) ||
-                String.IsNullOrEmpty(sessionInfo.Environment) ||
-                sessionInfo.SessionId == Guid.Empty)
-            {
-                SetForbiddenErrorMessage("No valid session context found");
-                return false;
-            }
-
-            context.ItemBag.SessionInfo = sessionInfo;
-            return true;
         }
 
         private static string ModifyForEnvironment(string xml, string environment)

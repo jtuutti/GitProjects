@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using RestFoundation.Tests.ServiceContracts;
 using RestFoundation.Tests.Services;
-using StructureMap;
+using RestFoundation.UnitTesting;
 
 namespace RestFoundation.Tests
 {
@@ -13,7 +13,7 @@ namespace RestFoundation.Tests
         [TestFixtureSetUp]
         public void Initialize()
         {
-            m_serviceFactory = ObjectFactory.GetInstance<IServiceFactory>();
+            m_serviceFactory = Rest.Configure.GetImplementation<IServiceFactory>();
         }
 
         [Test]
@@ -25,7 +25,7 @@ namespace RestFoundation.Tests
         [Test]
         public void InstantiateServiceFromContract()
         {
-            var context = ObjectFactory.GetInstance<IServiceContext>();
+            var context = Rest.Configure.GetImplementation<IServiceContext>();
             Assert.That(context, Is.Not.Null);
 
             var service = m_serviceFactory.Create(context, typeof(ITestService)) as ITestService;

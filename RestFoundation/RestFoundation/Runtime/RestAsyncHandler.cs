@@ -11,14 +11,12 @@ using RestFoundation.Results;
 
 namespace RestFoundation.Runtime
 {
-    public sealed class RestAsyncHandler : IRouteHandler, IHttpAsyncHandler
+    public class RestAsyncHandler : IRestAsyncHandler
     {
         private readonly IServiceContext m_serviceContext;
         private readonly IServiceFactory m_serviceFactory;
         private readonly IResultFactory m_resultFactory;
         private readonly IServiceMethodInvoker m_methodInvoker;
-
-        private RouteValueDictionary m_routeValues;
 
         public RestAsyncHandler(IServiceContext serviceContext, IServiceFactory serviceFactory, IServiceMethodInvoker methodInvoker, IResultFactory resultFactory)
         {
@@ -33,6 +31,14 @@ namespace RestFoundation.Runtime
             m_resultFactory = resultFactory;
         }
 
+        public IServiceContext Context
+        {
+            get
+            {
+                return m_serviceContext;
+            }
+        }
+
         public bool IsReusable
         {
             get
@@ -40,6 +46,10 @@ namespace RestFoundation.Runtime
                 return false;
             }
         }
+
+        protected string ServiceUrl { get; set; }
+        protected string ServiceContractTypeName { get; set; }
+        protected string UrlTemplate { get; set; }
 
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
@@ -50,7 +60,19 @@ namespace RestFoundation.Runtime
                 requestContext.HttpContext.Items[ServiceRequestValidator.UnvalidatedHandlerKey] = Boolean.TrueString;
             }
 
-            m_routeValues = requestContext.RouteData.Values;
+            if (requestContext.RouteData == null || requestContext.RouteData.Values == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route data found");
+            }
+
+            ServiceUrl = (string) requestContext.RouteData.Values[RouteConstants.ServiceUrl];
+            ServiceContractTypeName = (string) requestContext.RouteData.Values[RouteConstants.ServiceContractType];
+            UrlTemplate = (string) requestContext.RouteData.Values[RouteConstants.UrlTemplate];
+
+            if (String.IsNullOrEmpty(ServiceUrl) || String.IsNullOrEmpty(ServiceContractTypeName) || UrlTemplate == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
+            }
 
             return this;
         }
@@ -62,27 +84,18 @@ namespace RestFoundation.Runtime
 
         public IAsyncResult BeginProcessRequest(HttpContext context, AsyncCallback cb, object extraData)
         {
-            var serviceUrl = (string) m_routeValues[RouteConstants.ServiceUrl];
-            var serviceContractTypeName = (string) m_routeValues[RouteConstants.ServiceContractType];
-            var urlTemplate = (string) m_routeValues[RouteConstants.UrlTemplate];
-
-            if (String.IsNullOrEmpty(serviceUrl) || String.IsNullOrEmpty(serviceContractTypeName) || urlTemplate == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
-            }
-
-            Type serviceContractType = ServiceContractTypeRegistry.GetType(serviceContractTypeName);
+            Type serviceContractType = ServiceContractTypeRegistry.GetType(ServiceContractTypeName);
 
             if (serviceContractType == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service contract of type '{0}' could not be determined", serviceContractTypeName));
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service contract of type '{0}' could not be determined", ServiceContractTypeName));
             }
 
             HttpMethod httpMethod = m_serviceContext.Request.Method;
 
             if (httpMethod == HttpMethod.Options)
             {
-                HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
+                HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, UrlTemplate));
                 m_serviceContext.Response.SetHeader("Allow", String.Join(", ", allowedHttpMethods.Select(m => m.ToString().ToUpperInvariant()).OrderBy(m => m)));
 
                 return Task<IResult>.Factory.StartNew(() => new EmptyResult()).ContinueWith(action => cb(action));
@@ -97,12 +110,12 @@ namespace RestFoundation.Runtime
 
             if (service == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service with contract of type '{0}' could not be created", serviceContractTypeName));
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service with contract of type '{0}' could not be created", ServiceContractTypeName));
             }
 
             ValidateAclAttribute acl;
             OutputCacheAttribute cache;
-            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, serviceUrl), urlTemplate, httpMethod, out acl, out cache);
+            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, ServiceUrl), UrlTemplate, httpMethod, out acl, out cache);
 
             if (acl != null && context != null)
             {
@@ -114,7 +127,7 @@ namespace RestFoundation.Runtime
             return Task<IResult>.Factory.StartNew(state =>
                                                  {
                                                      HttpContext.Current = ((HttpArguments) state).Context;
-                                                     return m_resultFactory.Create(m_serviceContext, m_methodInvoker.Invoke(this, m_serviceContext, service, method));
+                                                     return m_resultFactory.Create(m_serviceContext, m_methodInvoker.Invoke(this, service, method));
                                                  }, httpArguments)
                                         .ContinueWith(action => cb(action));
         }

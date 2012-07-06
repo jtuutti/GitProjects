@@ -85,7 +85,7 @@ namespace RestFoundation
             List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(serviceContractType, serviceMethods, url);
             ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(serviceContractType, url), t => methodMetadata, (t, u) => methodMetadata);
 
-            IEnumerable<IRouteHandler> routeHandlers = MapRoutes(methodMetadata, url, serviceContractType, isAsync);
+            IEnumerable<IRestHandler> routeHandlers = MapRoutes(methodMetadata, url, serviceContractType, isAsync);
             return new RouteConfiguration(routeHandlers);
         }
 
@@ -120,9 +120,9 @@ namespace RestFoundation
             return urlAttributes;
         }
 
-        private IEnumerable<IRouteHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, string url, Type serviceContractType, bool isAsync)
+        private IEnumerable<IRestHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, string url, Type serviceContractType, bool isAsync)
         {
-            var routeHandlers = new List<IRouteHandler>();
+            var routeHandlers = new List<IRestHandler>();
             var orderedMethodMetadata = methodMetadata.OrderByDescending(m => m.UrlInfo.Priority);
 
             url = url.Trim();
@@ -141,7 +141,7 @@ namespace RestFoundation
                     { RouteConstants.RouteConstraint, new ServiceRouteConstraint(metadata) }
                 };
 
-                var routeHandler = isAsync ? (IRouteHandler) Rest.Active.CreateObject<RestAsyncHandler>() : Rest.Active.CreateObject<RestHandler>();
+                var routeHandler = isAsync ? (IRestHandler) Rest.Active.CreateObject<RestAsyncHandler>() : Rest.Active.CreateObject<RestHandler>();
                 routeHandlers.Add(routeHandler);
 
                 m_routes.Add(new Route(ConcatUrl(url, metadata.UrlInfo.UrlTemplate.Trim()), defaults, constraints, routeHandler));

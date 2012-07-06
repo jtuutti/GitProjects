@@ -74,7 +74,7 @@ namespace RestFoundation.ServiceProxy
             {
                 serviceUrl = Regex.Replace(serviceUrl, "http://", "https://", RegexOptions.IgnoreCase);
 
-                if (HttpsPort != 443)
+                if (HttpsPort != 443 && !serviceUrl.Contains(String.Concat(":", HttpsPort)))
                 {
                     serviceUrl += String.Format(CultureInfo.InvariantCulture, ":{0}", HttpsPort);
                 }

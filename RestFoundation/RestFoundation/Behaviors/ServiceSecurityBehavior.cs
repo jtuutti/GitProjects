@@ -28,11 +28,6 @@ namespace RestFoundation.Behaviors
 
         void ISecureServiceBehavior.OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
-            if (HttpContext.Current == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP context found");
-            }
-
             if (!OnMethodAuthorizing(context, service, method))
             {
                 HttpStatusCode statusCode = context.Response.GetStatusCode();
@@ -45,7 +40,7 @@ namespace RestFoundation.Behaviors
                 throw new HttpResponseException(statusCode, context.Response.GetStatusDescription());
             }
 
-            HttpCachePolicy cache = HttpContext.Current.Response.Cache;
+            HttpCachePolicyBase cache = context.GetHttpContext().Response.Cache;
             cache.SetProxyMaxAge(new TimeSpan(0L));
             cache.AddValidationCallback(CacheValidationHandler, new CacheValidationHandlerData(context, service, method));
         }

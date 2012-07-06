@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Routing;
 using RestFoundation.Behaviors;
 
 namespace RestFoundation.Runtime
@@ -13,11 +12,11 @@ namespace RestFoundation.Runtime
             new ResourceValidationBehavior()
         };
 
-        private static readonly ConcurrentDictionary<IRouteHandler, List<IServiceBehavior>> behaviors = new ConcurrentDictionary<IRouteHandler, List<IServiceBehavior>>();
+        private static readonly ConcurrentDictionary<IRestHandler, List<IServiceBehavior>> behaviors = new ConcurrentDictionary<IRestHandler, List<IServiceBehavior>>();
         private static readonly object globalSyncRoot = new object();
         private static readonly object handlerSyncRoot = new object();
 
-        public static List<IServiceBehavior> GetBehaviors(IRouteHandler routeHandler)
+        public static List<IServiceBehavior> GetBehaviors(IRestHandler routeHandler)
         {
             var allBehaviors = new List<IServiceBehavior>(globalBehaviors);
             List<IServiceBehavior> serviceBehaviors;
@@ -34,7 +33,7 @@ namespace RestFoundation.Runtime
             return allBehaviors;
         }
 
-        public static void AddBehavior(IRouteHandler routeHandler, IServiceBehavior behavior)
+        public static void AddBehavior(IRestHandler routeHandler, IServiceBehavior behavior)
         {
             behaviors.AddOrUpdate(routeHandler,
                                   routeHandlerToAdd =>
