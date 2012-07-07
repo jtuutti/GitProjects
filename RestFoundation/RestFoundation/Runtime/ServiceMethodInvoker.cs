@@ -38,12 +38,51 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No service context was passed to the service method invoker");
             }
 
+            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, method);
+            AddServiceBehaviors(behaviors, service, method.Name);
+
+            return InvokeAndProcessExceptions(handler, service, method, behaviors);
+        }
+
+        private static bool BehaviorAppliesToMethod(IServiceBehavior behavior, string methodName)
+        {
+            return behavior.AffectedMethods == null || behavior.AffectedMethods.Count == 0 || behavior.AffectedMethods.Contains(methodName);
+        }
+
+        private static bool IsWrapperException(Exception ex)
+        {
+            return (ex is ServiceRuntimeException || ex is TargetInvocationException || ex is AggregateException) && ex.InnerException != null;
+        }
+
+        private static List<IServiceBehavior> GetServiceMethodBehaviors(IRestHandler handler, MethodInfo method)
+        {
             List<IServiceBehavior> behaviors = ServiceBehaviorRegistry.GetBehaviors(handler)
                                                                       .Where(behavior => BehaviorAppliesToMethod(behavior, method.Name))
                                                                       .ToList();
 
-            AddServiceBehaviors(behaviors, service, method.Name);
+            return behaviors;
+        }
 
+        private static void AddServiceBehaviors(List<IServiceBehavior> behaviors, object service, string methodName)
+        {
+            var restService = service as IRestService;
+
+            if (restService == null || restService.Behaviors == null)
+            {
+                return;
+            }
+
+            foreach (IServiceBehavior serviceBehavior in restService.Behaviors)
+            {
+                if (BehaviorAppliesToMethod(serviceBehavior, methodName))
+                {
+                    behaviors.Add(serviceBehavior);
+                }
+            }
+        }
+
+        private object InvokeAndProcessExceptions(IRestHandler handler, object service, MethodInfo method, List<IServiceBehavior> behaviors)
+        {
             try
             {
                 return InvokeWithBehaviors(handler.Context, behaviors, service, method);
@@ -64,10 +103,12 @@ namespace RestFoundation.Runtime
 
                 try
                 {
-                    if (m_behaviorInvoker.PerformOnExceptionBehaviors(behaviors, service, method, internalException))
+                    if (!m_behaviorInvoker.PerformOnExceptionBehaviors(behaviors, service, method, internalException))
                     {
-                        throw new ServiceRuntimeException(internalException);
+                        return null;
                     }
+
+                    throw new ServiceRuntimeException(internalException);
                 }
                 catch (Exception innerEx)
                 {
@@ -77,36 +118,6 @@ namespace RestFoundation.Runtime
                     }
 
                     throw new ServiceRuntimeException(innerEx, ex);
-                }
-            }
-
-            return null;
-        }
-
-        private static bool BehaviorAppliesToMethod(IServiceBehavior behavior, string methodName)
-        {
-            return behavior.AffectedMethods == null || behavior.AffectedMethods.Count == 0 || behavior.AffectedMethods.Contains(methodName);
-        }
-
-        private static bool IsWrapperException(Exception ex)
-        {
-            return (ex is ServiceRuntimeException || ex is TargetInvocationException || ex is AggregateException) && ex.InnerException != null;
-        }
-
-        private static void AddServiceBehaviors(List<IServiceBehavior> behaviors, object service, string methodName)
-        {
-            var restService = service as IRestService;
-
-            if (restService == null || restService.Behaviors == null)
-            {
-                return;
-            }
-
-            foreach (IServiceBehavior serviceBehavior in restService.Behaviors)
-            {
-                if (BehaviorAppliesToMethod(serviceBehavior, methodName))
-                {
-                    behaviors.Add(serviceBehavior);
                 }
             }
         }

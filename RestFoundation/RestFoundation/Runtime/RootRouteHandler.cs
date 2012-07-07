@@ -65,23 +65,7 @@ namespace RestFoundation
                 }
             }
 
-            IResult result;
-            
-            try
-            {
-                result = m_resultFactory.Create(m_serviceContext, GetOperations());
-            }
-            catch (HttpResponseException)
-            {
-                throw new HttpResponseException(HttpStatusCode.Forbidden, "The service is configured not to list its contents in the requested format");
-            }
-
-            if (result == null)
-            {
-                return;
-            }
-
-            result.Execute(m_serviceContext);
+            ProcessResult();
         }
 
         private static bool IsInBrowser(HttpRequest request)
@@ -141,6 +125,25 @@ namespace RestFoundation
             }
 
             return operations.ToArray();
+        }
+
+        private void ProcessResult()
+        {
+            IResult result;
+
+            try
+            {
+                result = m_resultFactory.Create(m_serviceContext, GetOperations());
+            }
+            catch (HttpResponseException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden, "The service is configured not to list its contents in the requested format");
+            }
+
+            if (result != null)
+            {
+                result.Execute(m_serviceContext);
+            }
         }
     }
 }
