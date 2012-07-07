@@ -129,11 +129,6 @@ namespace RestFoundation
 
             foreach (ProxyOperation proxyOperation in proxyOperations)
             {
-                if (proxyOperation.IsIpFiltered)
-                {
-                    continue;
-                }
-
                 var sampleUrlParts = proxyOperation.GenerateSampleUrlParts();
 
                 operations.Add(new Operation

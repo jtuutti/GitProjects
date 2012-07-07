@@ -5,7 +5,6 @@ using System.Net;
 using System.Reflection;
 using System.Web;
 using System.Web.Routing;
-using RestFoundation.Acl;
 using RestFoundation.Results;
 
 namespace RestFoundation.Runtime
@@ -95,9 +94,9 @@ namespace RestFoundation.Runtime
                 return;
             }
 
-            if (httpMethod == HttpMethod.Head && context != null)
+            if (httpMethod == HttpMethod.Head)
             {
-                context.Response.SuppressContent = true;
+                m_serviceContext.GetHttpContext().Response.SuppressContent = true;
             }
 
             object service = m_serviceFactory.Create(m_serviceContext, serviceContractType);
@@ -107,37 +106,22 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service with contract of type '{0}' could not be created", ServiceContractTypeName));
             }
 
-            ValidateAclAttribute acl;
-            OutputCacheAttribute cache;
-            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, ServiceUrl), UrlTemplate, httpMethod, out acl, out cache);
-
-            if (acl != null && context != null)
-            {
-                AclValidator.Validate(context, acl.SectionName);
-            }
+            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, ServiceUrl), UrlTemplate, httpMethod);
 
             object result = m_methodInvoker.Invoke(this, service, method);
 
             if (!(result is EmptyResult))
             {
-                ProcessResult(context, httpMethod, result, cache, method.ReturnType);
+                ProcessResult(result, method.ReturnType);
             }
         }
 
-        private void ProcessResult(HttpContext context, HttpMethod httpMethod, object result, OutputCacheAttribute cache, Type methodReturnType)
+        private void ProcessResult(object result, Type methodReturnType)
         {
             IResult httpResult = m_resultFactory.Create(m_serviceContext, result);
 
             if (httpResult != null)
             {
-                if ((httpMethod == HttpMethod.Get || httpMethod == HttpMethod.Head) && cache != null && context != null)
-                {
-                    using (var page = new OutputCachedPage(cache.CacheSettings))
-                    {
-                        page.ProcessRequest(context);
-                    }
-                }
-
                 httpResult.Execute(m_serviceContext);
             }
             else if (m_serviceContext.Response.GetStatusCode() == HttpStatusCode.OK && methodReturnType == typeof(void))

@@ -6,13 +6,12 @@ namespace RestFoundation.Behaviors
 {
     public abstract class ServiceBehavior : IServiceBehavior
     {
-        public virtual ICollection<string> AffectedMethods
+        protected ServiceBehavior()
         {
-            get
-            {
-                return new string[0];
-            }
+            AffectedMethods = new string[0];
         }
+
+        public ICollection<string> AffectedMethods { get; set; }
 
         public virtual bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
         {

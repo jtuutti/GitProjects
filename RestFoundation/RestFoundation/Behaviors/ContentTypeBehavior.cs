@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace RestFoundation.Behaviors
 {
-    internal sealed class ContentTypeBehavior : ServiceBehavior
+    public class ContentTypeBehavior : ServiceBehavior
     {
         private readonly HashSet<string> m_contentTypes;
 

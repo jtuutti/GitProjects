@@ -168,17 +168,13 @@ namespace RestFoundation.UnitTesting
         private MethodInfo GetServiceMethod(RouteData routeData, Type serviceContractType)
         {
             MethodInfo serviceMethod;
+
             try
             {
-                ValidateAclAttribute acl;
-                OutputCacheAttribute cache;
-
                 serviceMethod = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType,
                                                                                     routeData.GetRequiredString(RouteConstants.ServiceUrl)),
                                                                                     routeData.GetRequiredString(RouteConstants.UrlTemplate),
-                                                                                    m_httpMethod,
-                                                                                    out acl,
-                                                                                    out cache);
+                                                                                    m_httpMethod);
             }
             catch (Exception)
             {

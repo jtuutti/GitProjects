@@ -305,6 +305,18 @@ namespace RestFoundation.ServiceProxy
             return httpsOnlyAttribute.Port;
         }
 
+        private static bool GetIsIPFiltered(ServiceMethodMetadata metadata)
+        {
+            var isIPFilteredAttribute = Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyIPFilteredAttribute), false);
+
+            if (isIPFilteredAttribute == null && metadata.MethodInfo.DeclaringType != null)
+            {
+                isIPFilteredAttribute = Attribute.GetCustomAttribute(metadata.MethodInfo.DeclaringType, typeof(ProxyIPFilteredAttribute), false);
+            }
+
+            return isIPFilteredAttribute != null;
+        }
+
         private static bool HasResource(ServiceMethodMetadata metadata, HttpMethod httpMethod)
         {
             if (httpMethod != HttpMethod.Post && httpMethod != HttpMethod.Put && httpMethod != HttpMethod.Patch)
@@ -336,7 +348,7 @@ namespace RestFoundation.ServiceProxy
                                 ResultType = metadata.MethodInfo.ReturnType,
                                 RouteParameters = GetParameters(metadata),
                                 HttpsPort = GetHttpsPort(metadata),
-                                IsIpFiltered = (metadata.Acl != null),
+                                IsIPFiltered = GetIsIPFiltered(metadata),
                                 AdditionalHeaders = GetAdditionalHeaders(metadata)
                             };
 

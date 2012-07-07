@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
-using RestFoundation.Acl;
 using RestFoundation.Results;
 
 namespace RestFoundation.Runtime
@@ -101,9 +100,9 @@ namespace RestFoundation.Runtime
                 return Task<IResult>.Factory.StartNew(() => new EmptyResult()).ContinueWith(action => cb(action));
             }
 
-            if (httpMethod == HttpMethod.Head && context != null)
+            if (httpMethod == HttpMethod.Head)
             {
-                context.Response.SuppressContent = true;
+                m_serviceContext.GetHttpContext().Response.SuppressContent = true;
             }
 
             object service = m_serviceFactory.Create(m_serviceContext, serviceContractType);
@@ -113,16 +112,8 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service with contract of type '{0}' could not be created", ServiceContractTypeName));
             }
 
-            ValidateAclAttribute acl;
-            OutputCacheAttribute cache;
-            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, ServiceUrl), UrlTemplate, httpMethod, out acl, out cache);
-
-            if (acl != null && context != null)
-            {
-                AclValidator.Validate(context, acl.SectionName);
-            }
-
-            var httpArguments = new HttpArguments(HttpContext.Current, httpMethod, cache, method.ReturnType);
+            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, ServiceUrl), UrlTemplate, httpMethod);
+            var httpArguments = new HttpArguments(HttpContext.Current, method.ReturnType);
 
             return Task<IResult>.Factory.StartNew(state =>
                                                  {
@@ -170,14 +161,6 @@ namespace RestFoundation.Runtime
 
             if (result != null)
             {
-                if ((httpArguments.Method == HttpMethod.Get || httpArguments.Method == HttpMethod.Head) && httpArguments.Cache != null && httpArguments.Context != null)
-                {
-                    using (var page = new OutputCachedPage(httpArguments.Cache.CacheSettings))
-                    {
-                        page.ProcessRequest(httpArguments.Context);
-                    }
-                }
-
                 result.Execute(m_serviceContext);
             }
             else if (m_serviceContext.Response.GetStatusCode() == HttpStatusCode.OK && httpArguments.MethodReturnType == typeof(void))
@@ -190,7 +173,7 @@ namespace RestFoundation.Runtime
 
         private sealed class HttpArguments
         {
-            public HttpArguments(HttpContext context, HttpMethod method, OutputCacheAttribute cache, Type methodReturnType)
+            public HttpArguments(HttpContext context, Type methodReturnType)
             {
                 if (methodReturnType == null)
                 {
@@ -198,14 +181,10 @@ namespace RestFoundation.Runtime
                 }
 
                 Context = context;
-                Method = method;
-                Cache = cache;
                 MethodReturnType = methodReturnType;
             }
 
             public HttpContext Context { get; private set; }
-            public HttpMethod Method { get; private set; }
-            public OutputCacheAttribute Cache { get; private set; }
             public Type MethodReturnType { get; private set; }
         }
 

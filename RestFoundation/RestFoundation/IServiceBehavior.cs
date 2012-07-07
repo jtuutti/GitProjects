@@ -6,7 +6,7 @@ namespace RestFoundation
 {
     public interface IServiceBehavior
     {
-        ICollection<string> AffectedMethods { get; }
+        ICollection<string> AffectedMethods { get; set; }
 
         bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource);
         void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object result);

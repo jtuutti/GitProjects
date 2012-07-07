@@ -9,10 +9,8 @@ namespace RestFoundation.Runtime
         private readonly string m_serviceUrl;
         private readonly MethodInfo m_methodInfo;
         private readonly UrlAttribute m_urlInfo;
-        private readonly ValidateAclAttribute m_acl;
-        private readonly OutputCacheAttribute m_outputCache;
 
-        public ServiceMethodMetadata(string serviceUrl, MethodInfo methodInfo, UrlAttribute urlInfo, ValidateAclAttribute acl, OutputCacheAttribute outputCache)
+        public ServiceMethodMetadata(string serviceUrl, MethodInfo methodInfo, UrlAttribute urlInfo)
         {
             if (serviceUrl == null) throw new ArgumentNullException("serviceUrl");
             if (urlInfo == null) throw new ArgumentNullException("urlInfo");
@@ -22,8 +20,6 @@ namespace RestFoundation.Runtime
             m_serviceUrl = serviceUrl.Trim();
             m_methodInfo = methodInfo;
             m_urlInfo = urlInfo;
-            m_acl = acl;
-            m_outputCache = outputCache;
         }
 
         public Guid ServiceMethodId
@@ -55,22 +51,6 @@ namespace RestFoundation.Runtime
             get
             {
                 return m_urlInfo;
-            }
-        }
-
-        public ValidateAclAttribute Acl
-        {
-            get
-            {
-                return m_acl;
-            }
-        }
-
-        public OutputCacheAttribute OutputCache
-        {
-            get
-            {
-                return m_outputCache;
             }
         }
 

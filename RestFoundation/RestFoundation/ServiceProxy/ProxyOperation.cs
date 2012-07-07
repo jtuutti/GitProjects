@@ -24,7 +24,7 @@ namespace RestFoundation.ServiceProxy
         public Type RequestExampleType { get; set; }
         public Type ResponseExampleType { get; set; }
         public int HttpsPort { get; set; }
-        public bool IsIpFiltered { get; set; }
+        public bool IsIPFiltered { get; set; }
         public List<Tuple<string, string>> AdditionalHeaders { get; set; }
 
         public bool HasResponse

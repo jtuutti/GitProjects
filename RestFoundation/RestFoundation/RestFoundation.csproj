@@ -49,11 +49,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Acl\AclValidator.cs" />
     <Compile Include="Acl\IPAddressCollection.cs" />
     <Compile Include="Acl\IPAddressRange.cs" />
     <Compile Include="Acl\IPNetwork.cs" />
     <Compile Include="Acl\IPNetworkCollection.cs" />
+    <Compile Include="Behaviors\AclBehavior.cs" />
+    <Compile Include="Behaviors\OutputCacheBehavior.cs" />
     <Compile Include="DataFormatters\BsonFormatter.cs" />
     <Compile Include="IRestAsyncHandler.cs" />
     <Compile Include="GlobalBehaviorBuilder.cs" />
@@ -124,7 +125,6 @@
     <Compile Include="Odata\RuntimeTypeProvider.cs" />
     <Compile Include="Odata\RuntimeTypeProviderContracts.cs" />
     <Compile Include="Odata\StringConstants.cs" />
-    <Compile Include="OutputCacheAttribute.cs" />
     <Compile Include="Rest.cs" />
     <Compile Include="Results\BinaryResult.cs" />
     <Compile Include="Results\BsonResult.cs" />
@@ -207,6 +207,7 @@
     <Compile Include="Runtime\UploadedFile.cs" />
     <Compile Include="Runtime\XmlSchemaGenerator.cs" />
     <Compile Include="Runtime\XmlSerializerRegistry.cs" />
+    <Compile Include="ServiceProxy\ProxyIPFilteredAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyAdditionalHeaderAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyHiddenOperation.cs" />
     <Compile Include="ServiceProxy\ProxyHttpsOnlyAttribute.cs" />
@@ -267,7 +268,6 @@
     <Compile Include="UrlAttribute.cs" />
     <Compile Include="Runtime\UrlTemplateStandardizer.cs" />
     <Compile Include="ParameterConstraintAttribute.cs" />
-    <Compile Include="ValidateAclAttribute.cs" />
     <Compile Include="ValidateObjectAttribute.cs" />
     <Compile Include="ValidationError.cs" />
   </ItemGroup>

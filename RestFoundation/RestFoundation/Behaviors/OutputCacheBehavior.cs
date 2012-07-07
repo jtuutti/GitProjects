@@ -1,14 +1,16 @@
-﻿using System;
+﻿using System.Reflection;
+using System.Web;
 using System.Web.UI;
+using RestFoundation.Runtime;
 
-namespace RestFoundation
+namespace RestFoundation.Behaviors
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public sealed class OutputCacheAttribute : Attribute
+    public class OutputCacheBehavior : ServiceBehavior
     {
-        public OutputCacheAttribute()
+        public OutputCacheBehavior()
         {
             CacheSettings = new OutputCacheParameters();
+            VaryByParam = "none";
         }
 
         internal OutputCacheParameters CacheSettings { get; private set; }
@@ -94,6 +96,26 @@ namespace RestFoundation
             set
             {
                 CacheSettings.VaryByParam = value;
+            }
+        }
+
+        public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object result)
+        {
+            if (context.Request.Method != HttpMethod.Get && context.Request.Method != HttpMethod.Head)
+            {
+                return;
+            }
+
+            HttpContext httpContext = HttpContext.Current;
+
+            if (httpContext == null)
+            {
+                return;
+            }
+
+            using (var page = new OutputCachedPage(CacheSettings))
+            {
+                page.ProcessRequest(httpContext);
             }
         }
     }

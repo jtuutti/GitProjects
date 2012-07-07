@@ -95,22 +95,13 @@ namespace RestFoundation
 
             foreach (MethodInfo method in methods)
             {
-                var aclAttribute = (ValidateAclAttribute) (Attribute.GetCustomAttribute(method, typeof(ValidateAclAttribute), false) ??
-                                                           Attribute.GetCustomAttribute(serviceContractType, typeof(ValidateAclAttribute), false));
-
-                var outputCacheAttribute = (OutputCacheAttribute) Attribute.GetCustomAttribute(method, typeof(OutputCacheAttribute), false);
-
                 foreach (UrlAttribute urlAttribute in Attribute.GetCustomAttributes(method, urlAttributeType, false).Cast<UrlAttribute>())
                 {
-                    if (urlAttribute.HttpMethods == null)
-                    {
-                        urlAttribute.HttpMethods = m_httpMethodResolver.Resolve(method);
-                    }
+                    var methodMetadata = new ServiceMethodMetadata(url, method, urlAttribute);
+                    var httpMethods = urlAttribute.HttpMethods ?? (urlAttribute.HttpMethods = m_httpMethodResolver.Resolve(method));
 
-                    var methodMetadata = new ServiceMethodMetadata(url, method, urlAttribute, aclAttribute, outputCacheAttribute);
                     urlAttributes.Add(methodMetadata);
 
-                    var httpMethods = urlAttribute.HttpMethods;
                     HttpMethodRegistry.HttpMethods.AddOrUpdate(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlAttribute.UrlTemplate),
                                                                template => AddHttpMethods(httpMethods),
                                                                (template, allowedMethods) => UpdateHttpMethods(allowedMethods, httpMethods));

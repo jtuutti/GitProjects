@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using RestFoundation;
 using RestFoundation.Behaviors;
@@ -8,15 +7,11 @@ namespace RestTest.Behaviors
 {
     public class StatisticsBehavior : ServiceBehavior
     {
-        private static readonly string[] m_affectedMethods = new[] { "Get" };
         private Stopwatch timer;
 
-        public override ICollection<string> AffectedMethods
+        public StatisticsBehavior()
         {
-            get
-            {
-                return m_affectedMethods;
-            }
+            AffectedMethods = new[] { "Get" };
         }
 
         public override bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)

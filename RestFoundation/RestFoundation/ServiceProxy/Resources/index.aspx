@@ -3,14 +3,14 @@
 
 <script runat="server" language="C#">
     private IEnumerable<ProxyOperation> operations;
-    private bool hasIpFilteredOperations;    
+    private bool hasIPFilteredOperations;    
 
     public void Page_Init(object sender, EventArgs e)
     {
         EnableViewState = false;
 
         operations = ProxyOperationGenerator.Generate();
-        hasIpFilteredOperations = operations.Any(o => o.IsIpFiltered);
+        hasIPFilteredOperations = operations.Any(o => o.IsIPFiltered);
     }
 </script>
 
@@ -34,7 +34,7 @@
         <tbody>
             <% foreach (ProxyOperation operation in operations) { %>
             <tr>
-                <td class="<%: operation.IsIpFiltered ? "operation_uri ip-filtered" : "operation_uri" %>"><strong><%: operation.UrlTempate %></strong></td>
+                <td class="<%: operation.IsIPFiltered ? "operation_uri ip-filtered" : "operation_uri" %>"><strong><%: operation.UrlTempate %></strong></td>
                 <td><strong><%: operation.HttpMethod.ToString().ToUpperInvariant() %></strong></td>
                 <td><%: operation.Description %></td>
                 <td class="centered"><a href="<%: operation.MetadataUrl %>" title="View detailed service information">View</a></td>
@@ -44,7 +44,7 @@
             </tr>
             <% } %>
         </tbody>
-        <% if (hasIpFilteredOperations) { %>
+        <% if (hasIPFilteredOperations) { %>
         <tfoot>
         <tr>
             <td colspan="5">
