@@ -6,17 +6,17 @@ using System.Web.Caching;
 
 namespace RestFoundation.Runtime
 {
-   /// <summary>
+    /// <summary>
     /// Represents the default cache implementation that uses ASP .NET cache.
     /// </summary>
-    public class Cache : ICache
+    public class ServiceCache : IServiceCache
     {
-        private readonly System.Web.Caching.Cache cache;
+        private readonly Cache cache;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Cache"/> class.
+        /// Initializes a new instance of the <see cref="ServiceCache"/> class.
         /// </summary>
-        public Cache()
+        public ServiceCache()
         {
             cache = HttpRuntime.Cache; // works in and out of the ASP.NET process
 
@@ -78,7 +78,7 @@ namespace RestFoundation.Runtime
             if (value == null) throw new ArgumentNullException("value");
 
             SerializationValidator.Validate(value);
-            cache.Add(key, value, null, System.Web.Caching.Cache.NoAbsoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
+            cache.Add(key, value, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace RestFoundation.Runtime
             if (value == null) throw new ArgumentNullException("value");
 
             SerializationValidator.Validate(value);
-            cache.Add(key, value, null, absoluteExpiration, System.Web.Caching.Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
+            cache.Add(key, value, null, absoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace RestFoundation.Runtime
             if (value == null) throw new ArgumentNullException("value");
 
             SerializationValidator.Validate(value);
-            cache.Add(key, value, null, System.Web.Caching.Cache.NoAbsoluteExpiration, slidingExpiration, CacheItemPriority.Default, null);
+            cache.Add(key, value, null, Cache.NoAbsoluteExpiration, slidingExpiration, CacheItemPriority.Default, null);
         }
 
         /// <summary>

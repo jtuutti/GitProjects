@@ -6,7 +6,7 @@ using System.Web;
 
 namespace RestFoundation.UnitTesting
 {
-    internal sealed class TestHttpRequest : HttpRequestBase
+    internal sealed class TestHttpRequest : HttpRequestBase, IDisposable
     {
         private readonly string m_httpMethod;
         private readonly string m_executionFilePath;
@@ -19,7 +19,9 @@ namespace RestFoundation.UnitTesting
         private readonly NameValueCollection m_queryString;
         private readonly NameValueCollection m_serverVariables;
         private readonly NameValueCollection m_params;
-        private Stream m_body, m_filter;
+        private readonly Stream m_body;
+        private Stream m_filter;
+        private bool m_isDisposed;
 
         internal TestHttpRequest(string relativeUrl, string httpMethod)
         {
@@ -204,6 +206,18 @@ namespace RestFoundation.UnitTesting
             {
                 return m_params;
             }
+        }
+
+        public void Dispose()
+        {
+            if (m_isDisposed)
+            {
+                return;
+            }
+
+            m_body.Dispose();
+            m_filter.Dispose();
+            m_isDisposed = true;
         }
     }
 }

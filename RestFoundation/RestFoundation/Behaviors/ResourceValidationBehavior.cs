@@ -23,6 +23,8 @@ namespace RestFoundation.Behaviors
 
         public override bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             if (resource == null || m_validator == null)
             {
                 return true;

@@ -10,6 +10,8 @@ namespace RestFoundation.Runtime
 
         protected override bool IsValidRequestString(HttpContext context, string value, RequestValidationSource requestValidationSource, string collectionKey, out int validationFailureIndex)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             if ((context.Items[UnvalidatedHandlerKey] as string) == Boolean.TrueString)
             {
                 validationFailureIndex = 0;

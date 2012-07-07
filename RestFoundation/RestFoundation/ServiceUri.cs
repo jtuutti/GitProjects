@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
+using System.Security;
 using System.Web;
 
 namespace RestFoundation.Runtime
@@ -10,7 +10,7 @@ namespace RestFoundation.Runtime
     {
         private readonly string m_serviceRelativeUrl;
 
-        public ServiceUri(Uri currentUri, string serviceUrl) : base(currentUri.ToString(), UriKind.Absolute)
+        public ServiceUri(Uri currentUri, string serviceUrl) : base(currentUri != null ? currentUri.ToString() : null, UriKind.Absolute)
         {
             if (currentUri == null) throw new ArgumentNullException("currentUri");
             if (String.IsNullOrEmpty(serviceUrl)) throw new ArgumentNullException("serviceUrl");
@@ -22,6 +22,8 @@ namespace RestFoundation.Runtime
 
         protected ServiceUri(SerializationInfo info, StreamingContext context) : base(info, context)
         {
+            if (info == null) throw new ArgumentNullException("info");
+
             string serviceUrl = info.GetString("ServiceUrl");
 
             if (!String.IsNullOrEmpty(serviceUrl))
@@ -56,7 +58,7 @@ namespace RestFoundation.Runtime
 
             string absoluteUrl = VirtualPathUtility.ToAbsolute(baseUrl, m_serviceRelativeUrl);
 
-            if (absoluteUrl.StartsWith("/"))
+            if (absoluteUrl.StartsWith("/", StringComparison.Ordinal))
             {
                 absoluteUrl = String.Concat(GetLeftPart(UriPartial.Authority), absoluteUrl);
             }
@@ -69,9 +71,11 @@ namespace RestFoundation.Runtime
             return absoluteUrl;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, SerializationFormatter = true)] 
+        [SecurityCritical]
         protected new virtual void GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext) 
         {
+            if (serializationInfo == null) throw new ArgumentNullException("serializationInfo");
+
             base.GetObjectData(serializationInfo, streamingContext);
 
             serializationInfo.AddValue("ServiceUrl", ServiceUrl);

@@ -114,6 +114,8 @@ namespace RestFoundation.DataFormatters
         /// </param>
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
+            if (binder == null) throw new ArgumentNullException("binder");
+
             if (m_dictionary.ContainsKey(binder.Name))
             {
                 result = m_dictionary[binder.Name];
@@ -147,6 +149,8 @@ namespace RestFoundation.DataFormatters
         /// </param>
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
+            if (binder == null) throw new ArgumentNullException("binder");
+
             if (!m_dictionary.ContainsKey(binder.Name))
             {
                 m_dictionary.Add(binder.Name, value);
@@ -181,6 +185,8 @@ namespace RestFoundation.DataFormatters
         /// <param name="result">The result of the member invocation.</param>
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
+            if (binder == null) throw new ArgumentNullException("binder");
+
             if (m_dictionary.ContainsKey(binder.Name) && m_dictionary[binder.Name] is Delegate)
             {
                 var del = (Delegate) m_dictionary[binder.Name];
@@ -202,6 +208,8 @@ namespace RestFoundation.DataFormatters
         /// <param name="binder">Provides information about the deletion.</param>
         public override bool TryDeleteMember(DeleteMemberBinder binder)
         {
+            if (binder == null) throw new ArgumentNullException("binder");
+
             if (m_dictionary.ContainsKey(binder.Name))
             {
                 m_dictionary.Remove(binder.Name);

@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Web.Routing;
 
 namespace RestFoundation.ServiceProxy
@@ -20,6 +21,8 @@ namespace RestFoundation.ServiceProxy
 
         public void ProcessRequest(HttpContext context)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             context.Response.RedirectToRoutePermanent("ProxyIndex");
         }
     }

@@ -6,14 +6,7 @@ namespace RestFoundation.DataFormatters
 {
     internal static class DataFormatterRegistry
     {
-        private static readonly ConcurrentDictionary<string, IDataFormatter> contentTypeFormatters = new ConcurrentDictionary<string, IDataFormatter>(StringComparer.OrdinalIgnoreCase);
-
-        static DataFormatterRegistry()
-        {
-            contentTypeFormatters.TryAdd("application/json", new JsonFormatter());
-            contentTypeFormatters.TryAdd("application/xml", new XmlFormatter());
-            contentTypeFormatters.TryAdd("text/xml", new XmlFormatter());
-        }
+        private static readonly ConcurrentDictionary<string, IDataFormatter> contentTypeFormatters = InitializeDefaultFormatters();
 
         public static IDataFormatter GetFormatter(string contentType)
         {
@@ -52,6 +45,16 @@ namespace RestFoundation.DataFormatters
         public static void Clear()
         {
             contentTypeFormatters.Clear();
+        }
+
+        private static ConcurrentDictionary<string, IDataFormatter> InitializeDefaultFormatters()
+        {
+            var defaultFormatters = new ConcurrentDictionary<string, IDataFormatter>(StringComparer.OrdinalIgnoreCase);
+            defaultFormatters.TryAdd("application/json", new JsonFormatter());
+            defaultFormatters.TryAdd("application/xml", new XmlFormatter());
+            defaultFormatters.TryAdd("text/xml", new XmlFormatter());
+
+            return defaultFormatters;
         }
     }
 }

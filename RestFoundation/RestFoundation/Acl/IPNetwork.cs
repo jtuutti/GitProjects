@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -356,23 +357,23 @@ namespace RestFoundation.Acl
         /// <returns>The <see cref="uint"/> value.</returns>
         public static uint ToUint(IPAddress ipaddress)
         {
-            uint? uintIpAddress;
-            InternalToUint(false, ipaddress, out uintIpAddress);
-            return uintIpAddress.HasValue ? uintIpAddress.Value : 0;
+            uint? uintIPAddress;
+            InternalToUint(false, ipaddress, out uintIPAddress);
+            return uintIPAddress.HasValue ? uintIPAddress.Value : 0;
         }
 
         /// <summary>
         /// Tries to convert an IP address to an unsigned integer.
         /// </summary>
         /// <param name="ipaddress">The IP address.</param>
-        /// <param name="uintIpAddress">The <see cref="uint"/> value.</param>
+        /// <param name="uintIPAddress">The <see cref="uint"/> value.</param>
         /// <returns>true if the operation was performed sucessfully; false otherwise.</returns>
-        public static bool TryToUint(IPAddress ipaddress, out uint? uintIpAddress)
+        public static bool TryToUint(IPAddress ipaddress, out uint? uintIPAddress)
         {
-            uint? uintIpAddress2;
-            InternalToUint(true, ipaddress, out uintIpAddress2);
-            bool parsed = (uintIpAddress2 != null);
-            uintIpAddress = uintIpAddress2;
+            uint? uintIPAddress2;
+            InternalToUint(true, ipaddress, out uintIPAddress2);
+            bool parsed = (uintIPAddress2 != null);
+            uintIPAddress = uintIPAddress2;
             return parsed;
         }
 
@@ -662,7 +663,7 @@ namespace RestFoundation.Acl
         public static bool TryGuessCidr(string ip, out byte cidr)
         {
             IPAddress ipaddress;
-            bool parsed = IPAddress.TryParse(string.Format("{0}", ip), out ipaddress);
+            bool parsed = IPAddress.TryParse(String.Format(CultureInfo.InvariantCulture, "{0}", ip), out ipaddress);
 
             if (parsed == false)
             {
@@ -678,13 +679,13 @@ namespace RestFoundation.Acl
                 cidr = 8;
                 return true;
             }
-            
+
             if (uintIPAddress <= 5)
             {
                 cidr = 16;
                 return true;
             }
-            
+
             if (uintIPAddress <= 6)
             {
                 cidr = 24;
@@ -755,13 +756,13 @@ namespace RestFoundation.Acl
             IPAddress startIP;
             if (!IPAddress.TryParse(start, out startIP))
             {
-                throw new ArgumentException("start");
+                throw new ArgumentOutOfRangeException("start");
             }
 
             IPAddress endIP;
             if (!IPAddress.TryParse(end, out endIP))
             {
-                throw new ArgumentException("end");
+                throw new ArgumentOutOfRangeException("end");
             }
 
             var ipnetwork = new IPNetwork(0, 0);
@@ -813,7 +814,7 @@ namespace RestFoundation.Acl
             InternalWideSubnet(false, ipnetworks, out ipn);
             return ipn;
         }
-        
+
         /// <summary>
         /// Determines whether the specified <see cref="IPNetwork"/> instances are considered equal.
         /// </summary>
@@ -821,23 +822,19 @@ namespace RestFoundation.Acl
         /// <returns>true if the specified System.Object is equal to the current System.Object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            var ipNetworkObj = obj as IPNetwork;
+
+            if (ipNetworkObj == null)
             {
                 return false;
             }
 
-            if (!(obj is IPNetwork))
+            if (NetworkAsInt != ipNetworkObj.NetworkAsInt)
             {
                 return false;
             }
 
-            var remote = (IPNetwork)obj;
-            if (NetworkAsInt != remote.NetworkAsInt)
-            {
-                return false;
-            }
-
-            return m_cidr == remote.m_cidr;
+            return m_cidr == ipNetworkObj.m_cidr;
         }
 
         /// <summary>
@@ -846,7 +843,7 @@ namespace RestFoundation.Acl
         /// <returns>A hash code for the current <see cref="IPNetwork"/>.</returns>
         public override int GetHashCode()
         {
-            return String.Format("{0}|{1}|{2}", m_ipaddress.GetHashCode(), NetworkAsInt.GetHashCode(), m_cidr.GetHashCode()).GetHashCode();
+            return String.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", m_ipaddress.GetHashCode(), NetworkAsInt.GetHashCode(), m_cidr.GetHashCode()).GetHashCode();
         }
 
         /// <summary>
@@ -855,9 +852,9 @@ namespace RestFoundation.Acl
         /// <returns>A <see cref="string"/> that represents the current<see cref="IPNetwork"/>.</returns>
         public override string ToString()
         {
-            using (var writer = new StringWriter())
+            using (var writer = new StringWriter(CultureInfo.InvariantCulture))
             {
-                writer.WriteLine("IPNetwork   : {0}", String.Format("{0}/{1}", Network, Cidr));
+                writer.WriteLine("IPNetwork   : {0}", String.Format(CultureInfo.InvariantCulture, "{0}/{1}", Network, Cidr));
                 writer.WriteLine("Network     : {0}", Network);
                 writer.WriteLine("Netmask     : {0}", Netmask);
                 writer.WriteLine("Cidr        : {0}", Cidr);
@@ -882,6 +879,11 @@ namespace RestFoundation.Acl
         /// </returns>
         public int CompareTo(IPNetwork other)
         {
+            if (other == null)
+            {
+                return 1;
+            }
+
             int network = NetworkAsInt.CompareTo(other.NetworkAsInt);
 
             if (network != 0)
@@ -914,7 +916,6 @@ namespace RestFoundation.Acl
 
             if (args.Length == 1)
             {
-
                 if (TryGuessCidr(args[0], out cidr))
                 {
                     InternalParse(tryParse, args[0], cidr, out ipnetwork);
@@ -923,8 +924,9 @@ namespace RestFoundation.Acl
 
                 if (tryParse == false)
                 {
-                    throw new ArgumentException("network");
+                    throw new ArgumentOutOfRangeException("network");
                 }
+
                 ipnetwork = null;
                 return;
             }
@@ -969,7 +971,7 @@ namespace RestFoundation.Acl
             {
                 if (tryParse == false)
                 {
-                    throw new ArgumentException("ipaddress");
+                    throw new ArgumentOutOfRangeException("ipaddress");
                 }
                 ipnetwork = null;
                 return;
@@ -982,7 +984,7 @@ namespace RestFoundation.Acl
             {
                 if (tryParse == false)
                 {
-                    throw new ArgumentException("netmask");
+                    throw new ArgumentOutOfRangeException("netmask");
                 }
                 ipnetwork = null;
                 return;
@@ -1013,14 +1015,14 @@ namespace RestFoundation.Acl
                 return;
             }
 
-            uint uintIpAddress = ToUint(ipaddress);
+            uint uintIPAddress = ToUint(ipaddress);
             byte? cidr2;
             bool parsed = TryToCidr(netmask, out cidr2);
             if (parsed == false)
             {
                 if (tryParse == false)
                 {
-                    throw new ArgumentException("netmask");
+                    throw new ArgumentOutOfRangeException("netmask");
                 }
                 ipnetwork = null;
                 return;
@@ -1028,7 +1030,7 @@ namespace RestFoundation.Acl
 
             byte cidr = cidr2.HasValue ? cidr2.Value : (byte) 0;
 
-            var ipnet = new IPNetwork(uintIpAddress, cidr);
+            var ipnet = new IPNetwork(uintIPAddress, cidr);
             ipnetwork = ipnet;
         }
 
@@ -1051,7 +1053,7 @@ namespace RestFoundation.Acl
             {
                 if (tryParse == false)
                 {
-                    throw new ArgumentException("ipaddress");
+                    throw new ArgumentOutOfRangeException("ipaddress");
                 }
                 ipnetwork = null;
                 return;
@@ -1063,7 +1065,7 @@ namespace RestFoundation.Acl
             {
                 if (tryParse == false)
                 {
-                    throw new ArgumentException("cidr");
+                    throw new ArgumentOutOfRangeException("cidr");
                 }
                 ipnetwork = null;
                 return;
@@ -1098,7 +1100,7 @@ namespace RestFoundation.Acl
             {
                 if (trySubnet == false)
                 {
-                    throw new ArgumentException("cidr");
+                    throw new ArgumentOutOfRangeException("cidr");
                 }
                 ipnetworkCollection = null;
                 return;
@@ -1166,7 +1168,7 @@ namespace RestFoundation.Acl
             }
 
             uint uintSupernet = first.NetworkAsInt;
-            var cidrSupernet = (byte)(first.m_cidr - 1);
+            var cidrSupernet = (byte) (first.m_cidr - 1);
 
             var networkSupernet = new IPNetwork(uintSupernet, cidrSupernet);
 
@@ -1183,7 +1185,7 @@ namespace RestFoundation.Acl
             supernet = networkSupernet;
         }
 
-        private static void InternalToUint(bool tryParse, IPAddress ipaddress, out uint? uintIpAddress)
+        private static void InternalToUint(bool tryParse, IPAddress ipaddress, out uint? uintIPAddress)
         {
             if (ipaddress == null)
             {
@@ -1192,7 +1194,7 @@ namespace RestFoundation.Acl
                     throw new ArgumentNullException("ipaddress");
                 }
 
-                uintIpAddress = null;
+                uintIPAddress = null;
                 return;
             }
 
@@ -1202,16 +1204,16 @@ namespace RestFoundation.Acl
             {
                 if (tryParse == false)
                 {
-                    throw new ArgumentException("bytes");
+                    throw new ArgumentOutOfRangeException("ipaddress");
                 }
 
-                uintIpAddress = null;
+                uintIPAddress = null;
                 return;
             }
 
             Array.Reverse(bytes);
             uint value = BitConverter.ToUInt32(bytes, 0);
-            uintIpAddress = value;
+            uintIPAddress = value;
         }
 
         private static Stack<IPNetwork> List2Stack(List<IPNetwork> list)
@@ -1227,15 +1229,15 @@ namespace RestFoundation.Acl
             ipns.AddRange(array);
             RemoveNull(ipns);
             ipns.Sort((ipn1, ipn2) =>
+                      {
+                          int networkCompare = ipn1.NetworkAsInt.CompareTo(ipn2.NetworkAsInt);
+                          if (networkCompare == 0)
                           {
-                              int networkCompare = ipn1.NetworkAsInt.CompareTo(ipn2.NetworkAsInt);
-                              if (networkCompare == 0)
-                              {
-                                  int cidrCompare = ipn1.m_cidr.CompareTo(ipn2.m_cidr);
-                                  return cidrCompare;
-                              }
-                              return networkCompare;
-                          });
+                              int cidrCompare = ipn1.m_cidr.CompareTo(ipn2.m_cidr);
+                              return cidrCompare;
+                          }
+                          return networkCompare;
+                      });
             ipns.Reverse();
 
             return ipns;
@@ -1265,7 +1267,7 @@ namespace RestFoundation.Acl
             {
                 if (tryWide == false)
                 {
-                    throw new ArgumentException("ipnetworks");
+                    throw new ArgumentOutOfRangeException("ipnetworks");
                 }
 
                 ipnetwork = null;
@@ -1332,7 +1334,7 @@ namespace RestFoundation.Acl
             {
                 if (tryParse == false)
                 {
-                    throw new ArgumentException("netmask");
+                    throw new ArgumentOutOfRangeException("netmask");
                 }
 
                 cidr = null;
@@ -1362,7 +1364,7 @@ namespace RestFoundation.Acl
             {
                 if (tryParse == false)
                 {
-                    throw new ArgumentException("netmask");
+                    throw new ArgumentOutOfRangeException("netmask");
                 }
                 cidr = null;
                 return;
@@ -1398,12 +1400,12 @@ namespace RestFoundation.Acl
             i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
             i = ((i + (i >> 4) & 0xf0f0f0f) * 0x1010101) >> 24;
 
-            return (byte)i;
+            return (byte) i;
         }
 
         private static bool ValidNetmask(uint netmask)
         {
-            long neg = ((~(int)netmask) & 0xffffffff);
+            long neg = ((~(int) netmask) & 0xffffffff);
             bool isNetmask = ((neg + 1) & neg) == 0;
             return isNetmask;
         }

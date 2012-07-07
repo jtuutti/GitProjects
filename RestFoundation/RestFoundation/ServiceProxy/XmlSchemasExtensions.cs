@@ -72,7 +72,7 @@ namespace RestFoundation.ServiceProxy
                 return schemaXml;
             }
 
-            return String.Format("{0}{1}{2}", document.Declaration, Environment.NewLine, document.ToString(SaveOptions.OmitDuplicateNamespaces));
+            return String.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", document.Declaration, Environment.NewLine, document.ToString(SaveOptions.OmitDuplicateNamespaces));
         }
     }
 }

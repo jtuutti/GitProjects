@@ -2,9 +2,9 @@
 {
     internal static class RouteConstants
     {
-        public static readonly string ServiceContractType = "_serviceContractType";
-        public static readonly string ServiceUrl = "_serviceUrl";
-        public static readonly string UrlTemplate = "_urlTemplate";
-        public static readonly string RouteConstraint = "_routeConstraint";
+        public const string ServiceContractType = "_serviceContractType";
+        public const string ServiceUrl = "_serviceUrl";
+        public const string UrlTemplate = "_urlTemplate";
+        public const string RouteConstraint = "_routeConstraint";
     }
 }

@@ -4,36 +4,38 @@ using System.Reflection;
 
 namespace RestFoundation.Runtime
 {
-    public sealed class ServiceBehaviorInvoker
+    public class ServiceBehaviorInvoker
     {
-        internal ServiceBehaviorInvoker(IServiceContext context, object service, MethodInfo method)
+        private readonly IServiceContext m_context;
+
+        public ServiceBehaviorInvoker(IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
+
+            m_context = context;
+        }
+
+        public virtual void PerformOnBindingBehaviors(IList<ISecureServiceBehavior> behaviors, object service, MethodInfo method)
+        {
+            if (behaviors == null) throw new ArgumentNullException("behaviors");
             if (service == null) throw new ArgumentNullException("service");
             if (method == null) throw new ArgumentNullException("method");
 
-            Context = context;
-            Service = service;
-            Method = method;
-        }
-
-        public IServiceContext Context { get; private set; }
-        public object Service { get; private set; }
-        public MethodInfo Method { get; private set; }
-
-        public void PerformOnBindingBehaviors(IList<ISecureServiceBehavior> behaviors)
-        {
             foreach (ISecureServiceBehavior behavior in behaviors)
             {
-                behavior.OnMethodAuthorizing(Context, Service, Method);
+                behavior.OnMethodAuthorizing(m_context, service, method);
             }
         }
 
-        public bool PerformOnExecutingBehaviors(IList<IServiceBehavior> behaviors, object resource)
+        public virtual bool PerformOnExecutingBehaviors(IList<IServiceBehavior> behaviors, object service, MethodInfo method, object resource)
         {
+            if (behaviors == null) throw new ArgumentNullException("behaviors");
+            if (service == null) throw new ArgumentNullException("service");
+            if (method == null) throw new ArgumentNullException("method");
+
             for (int i = 0; i < behaviors.Count; i++)
             {
-                if (!behaviors[i].OnMethodExecuting(Context, Service, Method, resource))
+                if (!behaviors[i].OnMethodExecuting(m_context, service, method, resource))
                 {
                     return false;
                 }
@@ -42,19 +44,27 @@ namespace RestFoundation.Runtime
             return true;
         }
 
-        public void PerformOnExecutedBehaviors(IList<IServiceBehavior> behaviors, object result)
+        public virtual void PerformOnExecutedBehaviors(IList<IServiceBehavior> behaviors, object service, MethodInfo method, object result)
         {
+            if (behaviors == null) throw new ArgumentNullException("behaviors");
+            if (service == null) throw new ArgumentNullException("service");
+            if (method == null) throw new ArgumentNullException("method");
+
             for (int i = behaviors.Count - 1; i >= 0; i--)
             {
-                behaviors[i].OnMethodExecuted(Context, Service, Method, result);
+                behaviors[i].OnMethodExecuted(m_context, service, method, result);
             }
         }
 
-        public bool PerformOnExceptionBehaviors(IList<IServiceBehavior> behaviors, Exception ex)
+        public virtual bool PerformOnExceptionBehaviors(IList<IServiceBehavior> behaviors, object service, MethodInfo method, Exception ex)
         {
+            if (behaviors == null) throw new ArgumentNullException("behaviors");
+            if (service == null) throw new ArgumentNullException("service");
+            if (method == null) throw new ArgumentNullException("method");
+
             for (int i = 0; i < behaviors.Count; i++)
             {
-                if (!behaviors[i].OnMethodException(Context, Service, Method, ex))
+                if (!behaviors[i].OnMethodException(m_context, service, method, ex))
                 {
                     return false;
                 }

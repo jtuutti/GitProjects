@@ -3,7 +3,7 @@
     /// <summary>
     /// Indicates how the accepted values will be searched for the preferred value.
     /// </summary>
-    public enum AcceptValueOptions
+    public enum AcceptValueOptionType
     {
         /// <summary>
         /// Allow unknown values if the wildcard support is allowed

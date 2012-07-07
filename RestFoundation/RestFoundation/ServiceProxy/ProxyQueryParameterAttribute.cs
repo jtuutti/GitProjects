@@ -18,7 +18,7 @@ namespace RestFoundation.ServiceProxy
         public string RegexConstraint { get; set; }
         public string AllowedValues { get; set; }
 
-        internal string Name { get; set; }
-        internal object ExampleValue { get; private set; }
+        public string Name { get; private set; }
+        public object ExampleValue { get; private set; }
     }
 }

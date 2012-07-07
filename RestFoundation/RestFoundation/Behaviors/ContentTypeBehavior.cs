@@ -18,6 +18,8 @@ namespace RestFoundation.Behaviors
 
         public override bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             if (context.Request.Method != HttpMethod.Post && context.Request.Method != HttpMethod.Put && context.Request.Method != HttpMethod.Patch)
             {
                 return true;

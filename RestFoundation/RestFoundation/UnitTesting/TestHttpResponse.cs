@@ -8,15 +8,18 @@ using System.Web.Caching;
 
 namespace RestFoundation.UnitTesting
 {
-    internal sealed class TestHttpResponse : HttpResponseBase
+    internal sealed class TestHttpResponse : HttpResponseBase, IDisposable
     {
+        private readonly TestHttpCachePolicyBase m_cachePolicy;
         private readonly NameValueCollection m_headers;
         private readonly HttpCookieCollection m_cookies;
         private readonly MemoryStream m_outputStream;
         private readonly TextWriter m_output;
+        private bool m_isDisposed;
 
         internal TestHttpResponse()
         {
+            m_cachePolicy = new TestHttpCachePolicyBase();
             m_headers = new NameValueCollection();
             m_cookies = new HttpCookieCollection();
             m_outputStream = new MemoryStream();
@@ -51,6 +54,14 @@ namespace RestFoundation.UnitTesting
             }
         }
 
+        public override HttpCachePolicyBase Cache
+        {
+            get
+            {
+                return m_cachePolicy;
+            }
+        }
+
         public override Stream OutputStream
         {
             get
@@ -64,14 +75,6 @@ namespace RestFoundation.UnitTesting
             get
             {
                 return m_output;
-            }
-        }
-
-        public override HttpCachePolicyBase Cache
-        {
-            get
-            {
-                return base.Cache;
             }
         }
 
@@ -161,6 +164,18 @@ namespace RestFoundation.UnitTesting
         public override void Write(char[] buffer, int index, int count)
         {
             Console.Write(buffer, index, count);
+        }
+
+        public void Dispose()
+        {
+            if (m_isDisposed)
+            {
+                return;
+            }
+
+            m_output.Dispose();
+            m_outputStream.Dispose();
+            m_isDisposed = true;
         }
     }
 }

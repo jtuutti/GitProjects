@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using RestFoundation.Acl;
 
@@ -21,11 +21,13 @@ namespace RestFoundation.Behaviors
 
         public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
-            IEnumerable<IPAddressRange> ranges = IPAddressRange.GetConfiguredRanges(m_sectionName);
+            if (context == null) throw new ArgumentNullException("context");
 
-            if (ranges == null)
+            var ranges = IPAddressRange.GetConfiguredRanges(m_sectionName).ToList();
+
+            if (ranges.Count == 0)
             {
-                return true;
+                return false;
             }
 
             bool isAllowed = false;

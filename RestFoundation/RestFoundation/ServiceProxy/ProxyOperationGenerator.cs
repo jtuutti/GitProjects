@@ -135,12 +135,12 @@ namespace RestFoundation.ServiceProxy
 
                 if (routeParameterAttribute == null)
                 {
-                    routeParameter = new ProxyParameter(parameter.Name.ToLowerInvariant(), GetParameterType(parameter.ParameterType), GetParameterConstraint(parameter), true);
+                    routeParameter = new ProxyParameter(parameter.Name.ToLowerInvariant(), TypeDescriptor.GetTypeName(parameter.ParameterType), GetParameterConstraint(parameter), true);
                 }
                 else
                 {
                     routeParameter = new ProxyParameter(parameter.Name.ToLowerInvariant(),
-                                                        GetParameterType(parameter.ParameterType),
+                                                        TypeDescriptor.GetTypeName(parameter.ParameterType),
                                                         GetParameterConstraint(parameter),
                                                         routeParameterAttribute.ExampleValue,
                                                         routeParameterAttribute.AllowedValues,
@@ -161,7 +161,9 @@ namespace RestFoundation.ServiceProxy
             foreach (ProxyQueryParameterAttribute queryParameterAttribute in queryParameterAttributes)
             {
                 routeParameters.Add(new ProxyParameter(queryParameterAttribute.Name,
-                                                       queryParameterAttribute.ParameterType != null ? GetParameterType(queryParameterAttribute.ParameterType) : GetParameterType(typeof(string)),
+                                                       queryParameterAttribute.ParameterType != null ?
+                                                                                TypeDescriptor.GetTypeName(queryParameterAttribute.ParameterType) :
+                                                                                TypeDescriptor.GetTypeName(typeof(string)),
                                                        queryParameterAttribute.RegexConstraint,
                                                        queryParameterAttribute.ExampleValue,
                                                        queryParameterAttribute.AllowedValues,
@@ -183,87 +185,11 @@ namespace RestFoundation.ServiceProxy
             return Tuple.Create(resourceExampleAttribute.RequestExampleType, resourceExampleAttribute.ResponseExampleType);
         }
 
-        private static string GetParameterType(Type parameterType)
-        {
-            string type;
-
-            if (parameterType == typeof(string))
-            {
-                type = "string";
-            }
-            else if (parameterType == typeof(char) || parameterType == typeof(char?))
-            {
-                type = "char";
-            }
-            else if (parameterType == typeof(bool) || parameterType == typeof(bool?))
-            {
-                type = "boolean";
-            }
-            else if (parameterType == typeof(Decimal) || parameterType == typeof(Decimal?))
-            {
-                type = "decimal";
-            }
-            else if (parameterType == typeof(float) || parameterType == typeof(float?))
-            {
-                type = "float";
-            }
-            else if (parameterType == typeof(double) || parameterType == typeof(double?))
-            {
-                type = "double";
-            }
-            else if (parameterType == typeof(DateTime) || parameterType == typeof(DateTime?))
-            {
-                type = "datetime";
-            }
-            else if (parameterType == typeof(long) || parameterType == typeof(long?))
-            {
-                type = "long";
-            }
-            else if (parameterType == typeof(int) || parameterType == typeof(int?))
-            {
-                type = "int";
-            }
-            else if (parameterType == typeof(short) || parameterType == typeof(short?))
-            {
-                type = "short";
-            }
-            else if (parameterType == typeof(byte) || parameterType == typeof(byte?))
-            {
-                type = "byte";
-            }
-            else if (parameterType == typeof(ulong) || parameterType == typeof(ulong?))
-            {
-                type = "unsignedLong";
-            }
-            else if (parameterType == typeof(uint) || parameterType == typeof(uint?))
-            {
-                type = "unsignedInt";
-            }
-            else if (parameterType == typeof(ushort) || parameterType == typeof(ushort?))
-            {
-                type = "unsignedShort";
-            }
-            else if (parameterType == typeof(Guid) || parameterType == typeof(Guid?))
-            {
-                type = "guid";
-            }
-            else if (parameterType == typeof(Uri))
-            {
-                type = "anyURI";
-            }
-            else
-            {
-                type = "object";
-            }
-
-            return type;
-        }
-
         private static string GetParameterConstraint(ParameterInfo parameter)
         {
             var constraintAttribute = Attribute.GetCustomAttribute(parameter, typeof(ParameterConstraintAttribute), false) as ParameterConstraintAttribute;
 
-            return constraintAttribute != null ? constraintAttribute.Pattern.ToString().TrimStart('^').TrimEnd('$') : null;
+            return constraintAttribute != null ? constraintAttribute.Pattern.TrimStart('^').TrimEnd('$') : null;
         }
 
         private static List<Tuple<string, string>> GetAdditionalHeaders(ServiceMethodMetadata metadata)

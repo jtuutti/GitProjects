@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using RestFoundation.Behaviors;
 using RestFoundation.DataFormatters;
@@ -56,7 +57,9 @@ namespace RestFoundation
 
                     if (contentType == null || DataFormatterRegistry.GetFormatter(contentType) == null)
                     {
-                        throw new InvalidOperationException(String.Format("Content type '{0}' does not have an associated data formatter", contentType ?? "(null)"));
+                        throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
+                                                                          "Content type '{0}' does not have an associated data formatter",
+                                                                          contentType ?? "(null)"));
                     }
                 }
 

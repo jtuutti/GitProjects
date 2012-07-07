@@ -11,7 +11,7 @@ namespace RestFoundation.UnitTesting
                 throw new ArgumentNullException("relativeUrl");
             }
 
-            if (!relativeUrl.TrimStart().StartsWith("~"))
+            if (!relativeUrl.TrimStart().StartsWith("~", StringComparison.Ordinal))
             {
                 throw new ArgumentException("Relative URL must start with the tilde sign: ~", "relativeUrl");
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.ServiceModel.Syndication;
 using System.Xml;
@@ -59,9 +60,9 @@ namespace RestFoundation.Results
             {
                 DateTimeOffset time;
 
-                if (m_xmlStyleDates && text != null && text.EndsWith("Z") && DateTimeOffset.TryParse(text, out time))
+                if (m_xmlStyleDates && text != null && text.EndsWith("Z", StringComparison.Ordinal) && DateTimeOffset.TryParse(text, out time))
                 {
-                    base.WriteString(time.ToString("yyyy-MM-dd'T'HH:mm:sszzz"));
+                    base.WriteString(time.ToString("yyyy-MM-dd'T'HH:mm:sszzz", CultureInfo.InvariantCulture));
                 }
                 else
                 {

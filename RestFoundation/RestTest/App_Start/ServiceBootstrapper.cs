@@ -57,7 +57,7 @@ namespace RestTest.App_Start
         {
             builder.Set("application/bson", new BsonFormatter());
             builder.Set("application/x-www-form-urlencoded", new FormsFormatter());
-            builder.Set("multipart/form-data", new MultiPartFormatter());
+            builder.Set("multipart/form-data", new MultipartFormatter());
         }
 
         private static void RegisterRoutes(RouteBuilder routeBuilder)

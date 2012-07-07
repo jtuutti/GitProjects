@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Reflection;
 using System.Web;
 using System.Web.Hosting;
@@ -14,7 +15,8 @@ namespace RestFoundation.ServiceProxy
                                                                                            BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetField,
                                                                                            null,
                                                                                            null,
-                                                                                           null);
+                                                                                           null,
+                                                                                           CultureInfo.InvariantCulture);
 
             if (environment == null)
             {

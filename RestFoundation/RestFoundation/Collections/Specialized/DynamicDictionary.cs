@@ -31,12 +31,16 @@ namespace RestFoundation.Collections.Specialized
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
+            if (binder == null) throw new ArgumentNullException("binder");
+
             result = m_inner[binder.Name];
             return true;
         }
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
+            if (binder == null) throw new ArgumentNullException("binder");
+
             m_inner[binder.Name] = value;
             return true;
         }

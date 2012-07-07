@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -26,6 +27,7 @@ namespace RestFoundation.Odata
 
         private readonly IMemberNameResolver m_nameResolver;
 
+        [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "This is Microsoft code")]
         static RuntimeTypeProvider()
         {
             moduleBuilder = Thread

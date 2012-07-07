@@ -6,7 +6,7 @@ namespace RestFoundation.UnitTesting
     public class MockRestHandler : RestHandler, IEquatable<MockRestHandler>
     {
         public MockRestHandler() :
-            base(Rest.Active.CreateObject<IServiceContext>(), Rest.Active.CreateObject<IServiceFactory>(),
+            base(Rest.Active.CreateObject<IServiceContext>(), Rest.Active.CreateObject<ServiceMethodLocator>(),
                  Rest.Active.CreateObject<IServiceMethodInvoker>(), Rest.Active.CreateObject<IResultFactory>())
         {
         }

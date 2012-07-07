@@ -115,7 +115,7 @@ namespace RestFoundation.Acl
         /// </returns>
         public bool IsInRange(IPAddress address)
         {
-            if (address.AddressFamily != m_addressFamily)
+            if (address == null || address.AddressFamily != m_addressFamily)
             {
                 return false;
             }

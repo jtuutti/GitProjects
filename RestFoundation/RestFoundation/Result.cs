@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.ServiceModel.Syndication;
@@ -30,7 +31,7 @@ namespace RestFoundation
                 var result = new StatusResult
                              {
                                  StatusCode = HttpStatusCode.NoContent,
-                                 StatusDescription = String.Empty
+                                 StatusDescription = "No Content"
                              };
 
                 return result;
@@ -53,21 +54,21 @@ namespace RestFoundation
 
         public static ContentResult Content(string content)
         {
-            return Content(content, null, true);
+            return Content(content, true, null);
         }
 
         public static ContentResult Content(string content, bool clearOutput)
         {
-            return Content(content, null, clearOutput);
+            return Content(content, clearOutput, null);
         }
 
-        public static ContentResult Content(string content, string contentType, bool clearOutput)
+        public static ContentResult Content(string content, bool clearOutput, string contentType)
         {
             var result = new ContentResult
                          {
                              Content = content,
-                             ContentType = contentType,
-                             ClearOutput = clearOutput
+                             ClearOutput = clearOutput,
+                             ContentType = contentType
                          };
 
             return result;
@@ -77,39 +78,39 @@ namespace RestFoundation
         {
             if (format == null) throw new ArgumentNullException("format");
 
-            return Content(String.Format(format, args), null, true);
+            return Content(String.Format(CultureInfo.InvariantCulture, format, args), true, null);
         }
 
         public static ContentResult ContentFormat(IFormatProvider provider, string format, params object[] args)
         {
             if (format == null) throw new ArgumentNullException("format");
 
-            return Content(String.Format(provider, format, args), null, true);
+            return Content(String.Format(provider, format, args), true, null);
         }
 
         public static BinaryResult Content(byte[] data)
         {
-            return Content(data, null, null, true);
+            return Content(data, true, null, null);
         }
 
         public static BinaryResult Content(byte[] data, bool clearOutput)
         {
-            return Content(data, null, null, clearOutput);
+            return Content(data, clearOutput, null, null);
         }
 
-        public static BinaryResult Content(byte[] data, string contentType, bool clearOutput)
+        public static BinaryResult Content(byte[] data, bool clearOutput, string contentType)
         {
-            return Content(data, contentType, null, clearOutput);
+            return Content(data, clearOutput, contentType, null);
         }
 
-        public static BinaryResult Content(byte[] data, string contentType, string contentDisposition, bool clearOutput)
+        public static BinaryResult Content(byte[] data, bool clearOutput, string contentType, string contentDisposition)
         {
             var result = new BinaryResult
                          {
                              Content = data,
+                             ClearOutput = clearOutput,
                              ContentType = contentType,
-                             ContentDisposition = contentDisposition,
-                             ClearOutput = clearOutput
+                             ContentDisposition = contentDisposition
                          };
 
             return result;
@@ -117,27 +118,27 @@ namespace RestFoundation
 
         public static StreamResult Content(Stream stream)
         {
-            return Content(stream, null, null, true);
+            return Content(stream, true, null, null);
         }
 
         public static StreamResult Content(Stream stream, bool clearOutput)
         {
-            return Content(stream, null, null, clearOutput);
+            return Content(stream, clearOutput, null, null);
         }
 
-        public static StreamResult Content(Stream stream, string contentType, bool clearOutput)
+        public static StreamResult Content(Stream stream, bool clearOutput, string contentType)
         {
-            return Content(stream, contentType, null, clearOutput);
+            return Content(stream, clearOutput, contentType, null);
         }
 
-        public static StreamResult Content(Stream stream, string contentType, string contentDisposition, bool clearOutput)
+        public static StreamResult Content(Stream stream, bool clearOutput, string contentType, string contentDisposition)
         {
             var result = new StreamResult
                          {
                              Stream = stream,
+                             ClearOutput = clearOutput,
                              ContentType = contentType,
-                             ContentDisposition = contentDisposition,
-                             ClearOutput = clearOutput
+                             ContentDisposition = contentDisposition
                          };
 
             return result;
@@ -145,33 +146,33 @@ namespace RestFoundation
 
         public static FilePathResult FilePath(string filePath)
         {
-            return FilePath(filePath, null, null, true, TimeSpan.Zero);
+            return FilePath(filePath, true, null, TimeSpan.Zero, null);
         }
 
         public static FilePathResult FilePath(string filePath, bool clearOutput)
         {
-            return FilePath(filePath, null, null, clearOutput, TimeSpan.Zero);
+            return FilePath(filePath, clearOutput, null, TimeSpan.Zero, null);
         }
 
-        public static FilePathResult FilePath(string filePath, string contentType, bool clearOutput)
+        public static FilePathResult FilePath(string filePath, bool clearOutput, string contentType)
         {
-            return FilePath(filePath, contentType, null, clearOutput, TimeSpan.Zero);
+            return FilePath(filePath, clearOutput, contentType, TimeSpan.Zero, null);
         }
 
-        public static FilePathResult FilePath(string filePath, string contentType, bool clearOutput, TimeSpan maxAge)
+        public static FilePathResult FilePath(string filePath, bool clearOutput, string contentType, TimeSpan maxAge)
         {
-            return FilePath(filePath, contentType, null, clearOutput, maxAge);
+            return FilePath(filePath, clearOutput, contentType, maxAge, null);
         }
 
-        public static FilePathResult FilePath(string filePath, string contentType, string contentDisposition, bool clearOutput, TimeSpan maxAge)
+        public static FilePathResult FilePath(string filePath, bool clearOutput, string contentType, TimeSpan maxAge, string contentDisposition)
         {
             var result = new FilePathResult
                          {
                              FilePath = filePath,
-                             ContentType = contentType,
-                             ContentDisposition = contentDisposition,
                              ClearOutput = clearOutput,
-                             CacheForTimeSpan = maxAge
+                             ContentType = contentType,
+                             CacheForTimeSpan = maxAge,
+                             ContentDisposition = contentDisposition
                          };
 
             return result;
@@ -179,33 +180,33 @@ namespace RestFoundation
 
         public static FileUrlResult FileUrl(string fileUrl)
         {
-            return FileUrl(fileUrl, null, null, true, TimeSpan.Zero);
+            return FileUrl(fileUrl, true, null, TimeSpan.Zero, null);
         }
 
         public static FileUrlResult FileUrl(string fileUrl, bool clearOutput)
         {
-            return FileUrl(fileUrl, null, null, clearOutput, TimeSpan.Zero);
+            return FileUrl(fileUrl, clearOutput, null, TimeSpan.Zero, null);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, string contentType, bool clearOutput)
+        public static FileUrlResult FileUrl(string fileUrl, bool clearOutput, string contentType)
         {
-            return FileUrl(fileUrl, contentType, null, clearOutput, TimeSpan.Zero);
+            return FileUrl(fileUrl, clearOutput, contentType, TimeSpan.Zero, null);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, string contentType, bool clearOutput, bool cacheOutput, TimeSpan maxAge)
+        public static FileUrlResult FileUrl(string fileUrl, bool clearOutput, string contentType, TimeSpan maxAge)
         {
-            return FileUrl(fileUrl, contentType, null, clearOutput, maxAge);
+            return FileUrl(fileUrl, clearOutput, contentType, maxAge, null);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, string contentType, string contentDisposition, bool clearOutput, TimeSpan maxAge)
+        public static FileUrlResult FileUrl(string fileUrl, bool clearOutput, string contentType, TimeSpan maxAge, string contentDisposition)
         {
             var result = new FileUrlResult
                          {
                              FileUrl = fileUrl,
-                             ContentType = contentType,
-                             ContentDisposition = contentDisposition,
                              ClearOutput = clearOutput,
-                             CacheForTimeSpan = maxAge
+                             ContentType = contentType,
+                             CacheForTimeSpan = maxAge,
+                             ContentDisposition = contentDisposition
                          };
 
             return result;

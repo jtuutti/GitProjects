@@ -14,7 +14,7 @@ namespace RestFoundation.ServiceProxy
             Value = value;
         }
 
-        internal string Name { get; private set; }
-        internal string Value { get; private set; }
+        public string Name { get; private set; }
+        public string Value { get; private set; }
     }
 }

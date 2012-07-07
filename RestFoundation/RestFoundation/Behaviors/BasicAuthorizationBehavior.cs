@@ -8,30 +8,33 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation.Behaviors
 {
-    public sealed class BasicAuthorizationBehavior : ServiceSecurityBehavior
+    public class BasicAuthorizationBehavior : ServiceSecurityBehavior
     {
         private const string AuthenticationType = "Basic";
 
         private readonly IAuthorizationManager m_authorizationManager;
-        private readonly AuthorizationHeaderParser m_headerParser;
 
-        public BasicAuthorizationBehavior()
+        public BasicAuthorizationBehavior() : this(Rest.Active.CreateObject<IAuthorizationManager>())
         {
-            m_authorizationManager = Rest.Active.CreateObject<IAuthorizationManager>();
+        }
 
-            if (m_authorizationManager == null)
+        public BasicAuthorizationBehavior(IAuthorizationManager authorizationManager)
+        {
+            if (authorizationManager == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No authorization manager could be found");
             }
 
-            m_headerParser = new AuthorizationHeaderParser();
+            m_authorizationManager = authorizationManager;
         }
 
         public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             AuthorizationHeader header;
 
-            if (!m_headerParser.TryParse(context.Request.Headers.Authorization, context.Request.Headers.ContentCharsetEncoding, out header) ||
+            if (!AuthorizationHeaderParser.TryParse(context.Request.Headers.Authorization, context.Request.Headers.ContentCharsetEncoding, out header) ||
                 !AuthenticationType.Equals(header.AuthenticationType, StringComparison.OrdinalIgnoreCase) ||
                 !m_authorizationManager.ValidateUser(header.UserName, header.Password))
             {

@@ -21,7 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\RestFoundation.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -83,9 +84,9 @@
     <Compile Include="Collections\Specialized\DynamicDictionary.cs" />
     <Compile Include="DataBinderBuilder.cs" />
     <Compile Include="DataFormatterBuilder.cs" />
-    <Compile Include="DataFormatters\MultiPartFormatter.cs" />
+    <Compile Include="DataFormatters\MultipartFormatter.cs" />
     <Compile Include="IAuthorizationManager.cs" />
-    <Compile Include="ICache.cs" />
+    <Compile Include="IServiceCache.cs" />
     <Compile Include="IDataBinder.cs" />
     <Compile Include="IHttpMethodResolver.cs" />
     <Compile Include="IHttpResponseOutput.cs" />
@@ -138,16 +139,17 @@
     <Compile Include="Results\StreamResult.cs" />
     <Compile Include="RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
-    <Compile Include="Runtime\AcceptValueOptions.cs" />
+    <Compile Include="Runtime\AcceptValueOptionType.cs" />
     <Compile Include="Runtime\AuthorizationHeader.cs" />
     <Compile Include="Runtime\AuthorizationHeaderParser.cs" />
     <Compile Include="Runtime\AuthorizationManager.cs" />
     <Compile Include="Runtime\ContextBase.cs" />
     <Compile Include="Runtime\HttpMethodResolver.cs" />
-    <Compile Include="Runtime\NetworkCredentialEqualityComparer.cs" />
+    <Compile Include="Runtime\ServiceMethodLocator.cs" />
+    <Compile Include="Runtime\ServiceMethodLocatorData.cs" />
     <Compile Include="Runtime\RouteParameter.cs" />
     <Compile Include="Runtime\ServiceBehaviorInvoker.cs" />
-    <Compile Include="Runtime\Cache.cs" />
+    <Compile Include="Runtime\ServiceCache.cs" />
     <Compile Include="Runtime\CompositeValidationResult.cs" />
     <Compile Include="Runtime\DataBinderRegistry.cs" />
     <Compile Include="Runtime\DelegateObjectActivator.cs" />
@@ -231,6 +233,7 @@
     </Compile>
     <Compile Include="ServiceProxy\ProxyWebResponse.cs" />
     <Compile Include="ServiceProxy\ResourceOutputFormatter.cs" />
+    <Compile Include="ServiceProxy\TypeDescriptor.cs" />
     <Compile Include="ServiceProxy\XmlSchemasExtensions.cs" />
     <Compile Include="ServiceRuntimeException.cs" />
     <Compile Include="ServiceUri.cs" />

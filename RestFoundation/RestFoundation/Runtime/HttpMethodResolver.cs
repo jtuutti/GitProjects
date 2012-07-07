@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 
 namespace RestFoundation.Runtime
@@ -23,7 +24,8 @@ namespace RestFoundation.Runtime
 
             if (!resolvedMethod.HasValue || resolvedMethod.Value == HttpMethod.Options)
             {
-                throw new InvalidOperationException(String.Format("Method '{0}' of the service contract type '{1}' does not have any HTTP methods defined in the UrlAttribute declaration.",
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
+                                                                 "Method '{0}' of the service contract type '{1}' does not have any HTTP methods defined in the UrlAttribute declaration.",
                                                                   method.DeclaringType != null ? method.DeclaringType.Name : "Unknown",
                                                                   method.Name));
             }

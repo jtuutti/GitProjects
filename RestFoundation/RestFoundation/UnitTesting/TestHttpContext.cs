@@ -1,14 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Security.Principal;
 using System.Web;
 
 namespace RestFoundation.UnitTesting
 {
-    internal sealed class TestHttpContext : HttpContextBase
+    internal sealed class TestHttpContext : HttpContextBase, IDisposable
     {
-        private readonly HttpRequestBase m_request;
-        private readonly HttpResponseBase m_response;
-        private readonly HttpServerUtilityBase m_server;
+        private readonly TestHttpRequest m_request;
+        private readonly TestHttpResponse m_response;
+        private readonly TestHttpServerUtility m_server;
         private readonly IDictionary m_items;
         private IPrincipal m_user;
 
@@ -67,6 +68,12 @@ namespace RestFoundation.UnitTesting
 
         public override void ClearError()
         {
+        }
+
+        public void Dispose()
+        {
+            m_request.Dispose();
+            m_response.Dispose();
         }
     }
 }

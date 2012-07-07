@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using RestFoundation.Runtime;
@@ -101,6 +102,8 @@ namespace RestFoundation.Behaviors
 
         public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object result)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             if (context.Request.Method != HttpMethod.Get && context.Request.Method != HttpMethod.Head)
             {
                 return;

@@ -7,10 +7,13 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation.DataFormatters
 {
-    public class MultiPartFormatter : IDataFormatter
+    public class MultipartFormatter : IDataFormatter
     {
         public object FormatRequest(IServiceContext context, Type objectType)
         {
+            if (context == null) throw new ArgumentNullException("context");
+            if (objectType == null) throw new ArgumentNullException("objectType");
+
             if (objectType != typeof(IEnumerable<IUploadedFile>) && objectType != typeof(ICollection<IUploadedFile>))
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Object type must be IEnumerable<IUploadedFile> or ICollection<IUploadedFile> for the content type");

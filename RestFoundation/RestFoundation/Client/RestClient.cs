@@ -99,6 +99,8 @@ namespace RestFoundation.Client
 
         public RestResource<TOutput> Execute<TInput, TOutput>(Uri url, HttpMethod method, RestResource<TInput> resource)
         {
+            if (resource == null) throw new ArgumentNullException("resource");
+
             return Execute<TInput, TOutput>(url, method, resource, resource.Type);
         }
 

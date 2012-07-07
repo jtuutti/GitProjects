@@ -13,10 +13,13 @@ namespace RestFoundation
         {
             if (pattern == null) throw new ArgumentNullException("pattern");
 
-            Pattern = new Regex(String.Concat(StartPatternSymbol, pattern.TrimStart(StartPatternSymbol).TrimEnd(EndPatternSymbol), EndPatternSymbol),
-                                RegexOptions.CultureInvariant);
+            PatternRegex = new Regex(String.Concat(StartPatternSymbol, pattern.TrimStart(StartPatternSymbol).TrimEnd(EndPatternSymbol), EndPatternSymbol),
+                                     RegexOptions.CultureInvariant);
+            Pattern = pattern;
         }
 
-        internal Regex Pattern { get; private set; }
+        public string Pattern { get; private set; }
+
+        internal Regex PatternRegex { get; private set; }
     }
 }

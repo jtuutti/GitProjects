@@ -3,7 +3,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Reflection;
-using System.Web;
 using System.Web.Routing;
 
 namespace RestFoundation.UnitTesting
@@ -12,7 +11,7 @@ namespace RestFoundation.UnitTesting
     {
         private static readonly object syncRoot = new object();
 
-        internal static HttpContextBase Context { get; private set; }
+        internal static TestHttpContext Context { get; private set; }
 
         public IRestHandler Create<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate)
         {
@@ -46,15 +45,24 @@ namespace RestFoundation.UnitTesting
 
         public void Dispose()
         {
+            if (Context == null)
+            {
+                return;
+            }
+
             lock (syncRoot)
             {
-                Context = null;
+                if (Context != null)
+                {
+                    Context.Dispose();
+                    Context = null;
+                }
             }
         }
 
         private static RequestContext CreateContext<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
         {
-            if (!relativeUrl.StartsWith("~/"))
+            if (!relativeUrl.StartsWith("~/", StringComparison.Ordinal))
             {
                 throw new ArgumentException("Relative URL must start with ~/");
             }
@@ -134,7 +142,7 @@ namespace RestFoundation.UnitTesting
 
                 foreach (var routeParameter in routeData.Values)
                 {
-                    if (routeParameter.Key.StartsWith("_"))
+                    if (routeParameter.Key.StartsWith("_", StringComparison.Ordinal))
                     {
                         continue;
                     }

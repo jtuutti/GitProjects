@@ -13,6 +13,6 @@ namespace RestFoundation.ServiceProxy
         }
 
         public string AllowedValues { get; set; }
-        internal object ExampleValue { get; private set; }
+        public object ExampleValue { get; private set; }
     }
 }

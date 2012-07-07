@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -233,6 +234,7 @@ namespace RestFoundation.Odata.Parser
             throw new InvalidOperationException("Unsupported operation");
         }
 
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "This is Microsoft code")]
         private static Expression GetFunction(string function, Expression left, Expression right)
         {
             if (function == null) throw new ArgumentNullException("function");

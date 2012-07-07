@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security;
@@ -8,6 +9,8 @@ using System.Security;
 namespace RestFoundation
 {
     [Serializable]
+    [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors",
+                     Justification = "This exception is not stand-alone but aggregates other exceptions")]
     public class ServiceRuntimeException : Exception
     {
         private const string DefaultMessage = "A service exception occurred";
@@ -20,6 +23,11 @@ namespace RestFoundation
             {
                 return m_innerExceptions;
             }
+        }
+
+        public ServiceRuntimeException()
+        {
+            m_innerExceptions = new ReadOnlyCollection<Exception>(new Exception[0]);
         }
 
         public ServiceRuntimeException(params Exception[] innerExceptions)

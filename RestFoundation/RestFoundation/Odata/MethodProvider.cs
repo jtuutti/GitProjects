@@ -4,6 +4,7 @@
 // All other rights reserved.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -35,6 +36,7 @@ namespace RestFoundation.Odata
         private static readonly MethodInfo doubleCeilingMethod1;
         private static readonly MethodInfo decimalCeilingMethod1;
 
+        [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "This is Microsoft code")]
         static MethodProvider()
         {
             var stringType = typeof(string);

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Web;
 using System.Web.Routing;
 using RestFoundation.Results;
@@ -12,19 +9,19 @@ namespace RestFoundation.Runtime
     public class RestHandler : IRestHandler
     {
         private readonly IServiceContext m_serviceContext;
-        private readonly IServiceFactory m_serviceFactory;
-        private readonly IResultFactory m_resultFactory;
+        private readonly ServiceMethodLocator m_serviceMethodLocator;
         private readonly IServiceMethodInvoker m_methodInvoker;
+        private readonly IResultFactory m_resultFactory;
 
-        public RestHandler(IServiceContext serviceContext, IServiceFactory serviceFactory, IServiceMethodInvoker methodInvoker, IResultFactory resultFactory)
+        public RestHandler(IServiceContext serviceContext, ServiceMethodLocator serviceMethodLocator, IServiceMethodInvoker methodInvoker, IResultFactory resultFactory)
         {
             if (serviceContext == null) throw new ArgumentNullException("serviceContext");
-            if (serviceFactory == null) throw new ArgumentNullException("serviceFactory");
+            if (serviceMethodLocator == null) throw new ArgumentNullException("serviceMethodLocator");
             if (methodInvoker == null) throw new ArgumentNullException("methodInvoker");
             if (resultFactory == null) throw new ArgumentNullException("resultFactory");
 
             m_serviceContext = serviceContext;
-            m_serviceFactory = serviceFactory;
+            m_serviceMethodLocator = serviceMethodLocator;
             m_methodInvoker = methodInvoker;
             m_resultFactory = resultFactory;
         }
@@ -45,22 +42,22 @@ namespace RestFoundation.Runtime
             }
         }
 
-        protected string ServiceUrl { get; set; }
-        protected string ServiceContractTypeName { get; set; }
-        protected string UrlTemplate { get; set; }
+        public string ServiceUrl { get; protected set; }
+        public string ServiceContractTypeName { get; protected set; }
+        public string UrlTemplate { get; protected set; }
 
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
             if (requestContext == null) throw new ArgumentNullException("requestContext");
 
-            if (UnvalidatedHandlerRegistry.IsUnvalidated(this))
-            {
-                requestContext.HttpContext.Items[ServiceRequestValidator.UnvalidatedHandlerKey] = Boolean.TrueString;
-            }
-
             if (requestContext.RouteData == null || requestContext.RouteData.Values == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route data found");
+            }
+
+            if (UnvalidatedHandlerRegistry.IsUnvalidated(this))
+            {
+                requestContext.HttpContext.Items[ServiceRequestValidator.UnvalidatedHandlerKey] = Boolean.TrueString;
             }
 
             ServiceUrl = (string) requestContext.RouteData.Values[RouteConstants.ServiceUrl];
@@ -77,42 +74,18 @@ namespace RestFoundation.Runtime
 
         public void ProcessRequest(HttpContext context)
         {
-            Type serviceContractType = ServiceContractTypeRegistry.GetType(ServiceContractTypeName);
+            ServiceMethodLocatorData serviceMethodData = m_serviceMethodLocator.Execute(this);
 
-            if (serviceContractType == null)
+            if (serviceMethodData == ServiceMethodLocatorData.Options)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service contract of type '{0}' could not be determined", ServiceContractTypeName));
-            }
-
-            HttpMethod httpMethod = m_serviceContext.Request.Method;
-
-            if (httpMethod == HttpMethod.Options)
-            {
-                HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, UrlTemplate));
-                m_serviceContext.Response.SetHeader("Allow", String.Join(", ", allowedHttpMethods.Select(m => m.ToString().ToUpperInvariant()).OrderBy(m => m)));
-
                 return;
             }
 
-            if (httpMethod == HttpMethod.Head)
-            {
-                m_serviceContext.GetHttpContext().Response.SuppressContent = true;
-            }
-
-            object service = m_serviceFactory.Create(m_serviceContext, serviceContractType);
-
-            if (service == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service with contract of type '{0}' could not be created", ServiceContractTypeName));
-            }
-
-            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, ServiceUrl), UrlTemplate, httpMethod);
-
-            object result = m_methodInvoker.Invoke(this, service, method);
+            object result = m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method);
 
             if (!(result is EmptyResult))
             {
-                ProcessResult(result, method.ReturnType);
+                ProcessResult(result, serviceMethodData.Method.ReturnType);
             }
         }
 

@@ -103,7 +103,7 @@ namespace RestFoundation
 
             var acceptTypeCollection = new AcceptValueCollection(acceptedValue);
 
-            if (acceptTypeCollection.AcceptedNames.Length == 0)
+            if (acceptTypeCollection.AcceptedNames.Count == 0)
             {
                 return false;
             }

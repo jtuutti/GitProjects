@@ -11,7 +11,7 @@ namespace RestFoundation
             typeof(IServiceContext),
             typeof(IHttpRequest),
             typeof(IHttpResponse),
-            typeof(ICache),
+            typeof(IServiceCache),
             typeof(ILogger)
         };
 

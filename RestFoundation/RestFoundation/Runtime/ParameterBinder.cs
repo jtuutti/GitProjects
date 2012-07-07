@@ -15,6 +15,7 @@ namespace RestFoundation.Runtime
         public virtual object BindParameter(IServiceContext context, ParameterInfo parameter, out bool isResource)
         {
             if (context == null) throw new ArgumentNullException("context");
+            if (parameter == null) throw new ArgumentNullException("parameter");
 
             IDataBinder dataBinder = DataBinderRegistry.GetBinder(parameter.ParameterType);
 
@@ -47,6 +48,9 @@ namespace RestFoundation.Runtime
 
         protected virtual object BindRouteValue(ParameterInfo parameter, IObjectValueCollection routeValues)
         {
+            if (parameter == null) throw new ArgumentNullException("parameter");
+            if (routeValues == null) throw new ArgumentNullException("routeValues");
+
             object routeValue = routeValues.TryGet(parameter.Name);
 
             if (routeValue == null)
@@ -66,6 +70,9 @@ namespace RestFoundation.Runtime
 
         protected virtual object BindResourceValue(ParameterInfo parameter, IServiceContext context)
         {
+            if (parameter == null) throw new ArgumentNullException("parameter");
+            if (context == null) throw new ArgumentNullException("context");
+
             IDataFormatter formatter = DataFormatterRegistry.GetFormatter(context.Request.Headers.ContentType);
 
             if (formatter == null)

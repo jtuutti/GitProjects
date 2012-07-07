@@ -352,7 +352,7 @@ namespace RestFoundation.Runtime
 
             if (acceptItem == null || String.IsNullOrWhiteSpace(acceptItem.Item1) || String.IsNullOrWhiteSpace(acceptItem.Item2))
             {
-                throw new InvalidOperationException(String.Format(InvalidValueMessage, "accept"));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, InvalidValueMessage, "accept"));
             }
 
             return acceptItem.Item2;
@@ -369,7 +369,7 @@ namespace RestFoundation.Runtime
             }
             else if (!Single.TryParse(weightItem.Item2, out weight))
             {
-                throw new InvalidOperationException(String.Format(InvalidValueMessage, "weight"));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, InvalidValueMessage, "weight"));
             }
 
             return weight;
@@ -386,7 +386,7 @@ namespace RestFoundation.Runtime
             }
             else if (!Int32.TryParse(levelItem.Item2, out level))
             {
-                throw new InvalidOperationException(String.Format(InvalidValueMessage, "level"));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, InvalidValueMessage, "level"));
             }
 
             return level;

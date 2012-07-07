@@ -24,6 +24,9 @@ namespace RestFoundation.Runtime
 
         public bool Match(HttpContextBase httpContext, Route route, string parameterName, RouteValueDictionary values, RouteDirection routeDirection)
         {
+            if (httpContext == null) throw new ArgumentNullException("httpContext");
+            if (values == null) throw new ArgumentNullException("values");
+
             if (routeDirection != RouteDirection.IncomingRequest)
             {
                 return true;
@@ -75,7 +78,7 @@ namespace RestFoundation.Runtime
 
                 if (constraintAttribute != null)
                 {
-                    routeParameters.Add(methodParameter.Name, new RouteParameter(methodParameter.Name.ToLowerInvariant(), constraintAttribute.Pattern));
+                    routeParameters.Add(methodParameter.Name, new RouteParameter(methodParameter.Name.ToLowerInvariant(), constraintAttribute.PatternRegex));
                 }
                 else
                 {
@@ -111,7 +114,7 @@ namespace RestFoundation.Runtime
         {
             foreach (var value in values)
             {
-                if (value.Key.StartsWith("_"))
+                if (value.Key.StartsWith("_", StringComparison.Ordinal))
                 {
                     continue;
                 }

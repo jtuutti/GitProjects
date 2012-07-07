@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace RestFoundation.Runtime
 {
-    internal sealed class AuthorizationHeaderParser
+    internal static class AuthorizationHeaderParser
     {
         private const string AuthenticationTypeKey = "auth-type";
         private const string AuthenticationCredentialsKey = "auth-credentials";
@@ -17,7 +17,7 @@ namespace RestFoundation.Runtime
 
         private static readonly Regex nameValueSeparatorRegex = new Regex(@"\s+=\s+", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
-        public bool TryParse(string authorizationString, Encoding encoding, out AuthorizationHeader header)
+        public static bool TryParse(string authorizationString, Encoding encoding, out AuthorizationHeader header)
         {
             if (String.IsNullOrWhiteSpace(authorizationString))
             {
@@ -129,7 +129,7 @@ namespace RestFoundation.Runtime
             {
                 string[] parts;
 
-                if (!item.EndsWith(NameValueSeparator))
+                if (!item.EndsWith(NameValueSeparator, StringComparison.Ordinal))
                 {
                     parts = item.Split(new[] { NameValueSeparator }, 2, StringSplitOptions.RemoveEmptyEntries);
                 }

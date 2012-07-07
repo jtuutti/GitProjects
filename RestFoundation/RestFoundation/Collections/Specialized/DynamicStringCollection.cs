@@ -32,6 +32,8 @@ namespace RestFoundation.Collections.Specialized
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
+            if (binder == null) throw new ArgumentNullException("binder");
+
             ICollection<string> values = m_inner.GetValues(binder.Name);
 
             if (binder.Name.IndexOf('_') > 0 && (values == null || values.Count == 0))

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
@@ -10,6 +11,8 @@ namespace RestFoundation.Results
             ClearOutput = true;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays",
+                         Justification = "byte[] is a natural representation of in-memory binary data")]
         public byte[] Content { get; set; }
         public string ContentType { get; set; }
         public string ContentDisposition { get; set; }

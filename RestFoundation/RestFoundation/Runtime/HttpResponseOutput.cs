@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 
 namespace RestFoundation.Runtime
@@ -84,7 +85,7 @@ namespace RestFoundation.Runtime
         {
             if (format == null) throw new ArgumentNullException("format");
 
-            Context.Response.Write(String.Format(format, values));
+            Context.Response.Write(String.Format(CultureInfo.InvariantCulture, format, values));
             return this;
         }
 

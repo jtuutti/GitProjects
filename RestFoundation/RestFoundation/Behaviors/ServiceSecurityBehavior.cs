@@ -28,6 +28,8 @@ namespace RestFoundation.Behaviors
 
         void ISecureServiceBehavior.OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             if (!OnMethodAuthorizing(context, service, method))
             {
                 HttpStatusCode statusCode = context.Response.GetStatusCode();

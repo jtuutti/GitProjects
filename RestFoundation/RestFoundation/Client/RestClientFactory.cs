@@ -33,9 +33,7 @@ namespace RestFoundation.Client
         /// <returns>The created <see cref="IRestClient"/> instance.</returns>
         public static IRestClient Create(TimeSpan connectionTimeout, TimeSpan socketTimeout)
         {
-
-
-            return Create(defaultConnectionTimeout, defaultSocketTimeout, defaultResourceTypes);
+            return Create(connectionTimeout, socketTimeout, defaultResourceTypes);
         }
 
         /// <summary>

@@ -19,13 +19,13 @@ namespace RestFoundation.ServiceProxy
         public string Description { get; set; }
         public bool HasResource { get; set; }
         public Type ResultType { get; set; }
-        public List<ProxyStatusCode> StatusCodes { get; set; }
-        public List<ProxyParameter> RouteParameters { get; set; }
+        public ICollection<ProxyStatusCode> StatusCodes { get; set; }
+        public ICollection<ProxyParameter> RouteParameters { get; set; }
         public Type RequestExampleType { get; set; }
         public Type ResponseExampleType { get; set; }
         public int HttpsPort { get; set; }
         public bool IsIPFiltered { get; set; }
-        public List<Tuple<string, string>> AdditionalHeaders { get; set; }
+        public ICollection<Tuple<string, string>> AdditionalHeaders { get; set; }
 
         public bool HasResponse
         {

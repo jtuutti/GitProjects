@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using RestFoundation.Runtime;
 
@@ -69,9 +70,9 @@ namespace RestFoundation.Collections.Specialized
         public bool AutoSort { get; set; }
 
         /// <summary>
-        /// Gets an array of all accepted type names.
+        /// Gets a collection of all accepted type names.
         /// </summary>
-        public string[] AcceptedNames
+        public ICollection<string> AcceptedNames
         {
             get
             {
@@ -114,18 +115,18 @@ namespace RestFoundation.Collections.Specialized
         /// </returns>
         public bool CanAccept(string name)
         {
-            return CanAccept(name, AcceptValueOptions.None);
+            return CanAccept(name, AcceptValueOptionType.None);
         }
 
         /// <summary>
         /// Returns a value indicating whether the accepted item with the provided name is acceptable.
         /// </summary>
         /// <param name="name">The name of the item to search for</param>
-        /// <param name="options">The value indicating how to match the accepted values.</param>
+        /// <param name="optionType">The value indicating how to match the accepted values.</param>
         /// <returns>
         /// true if the item is acceptable; otherwise, false.
         /// </returns>
-        public bool CanAccept(string name, AcceptValueOptions options)
+        public bool CanAccept(string name, AcceptValueOptionType optionType)
         {
             if (String.IsNullOrWhiteSpace(name))
             {
@@ -139,17 +140,17 @@ namespace RestFoundation.Collections.Specialized
                 return value.CanAccept;
             }
 
-            if (options != AcceptValueOptions.IgnoreWildcards && !m_acceptWildcard)
+            if (optionType != AcceptValueOptionType.IgnoreWildcards && !m_acceptWildcard)
             {
                 string[] valueParts = name.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-                if (valueParts.Length == 2 && FindIndex(item => item.Name.Equals(String.Format("{0}/*", valueParts[0].Trim()))) >= 0)
+                if (valueParts.Length == 2 && FindIndex(item => item.Name.Equals(String.Format(CultureInfo.InvariantCulture, "{0}/*", valueParts[0].Trim()))) >= 0)
                 {
                     return true;
                 }
             }
 
-            return options != AcceptValueOptions.IgnoreWildcards && m_acceptWildcard;
+            return optionType != AcceptValueOptionType.IgnoreWildcards && m_acceptWildcard;
         }
 
         /// <summary>

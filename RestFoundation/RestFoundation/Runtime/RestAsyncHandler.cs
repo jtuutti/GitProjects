@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
@@ -13,19 +10,19 @@ namespace RestFoundation.Runtime
     public class RestAsyncHandler : IRestAsyncHandler
     {
         private readonly IServiceContext m_serviceContext;
-        private readonly IServiceFactory m_serviceFactory;
-        private readonly IResultFactory m_resultFactory;
+        private readonly ServiceMethodLocator m_serviceMethodLocator;
         private readonly IServiceMethodInvoker m_methodInvoker;
+        private readonly IResultFactory m_resultFactory;
 
-        public RestAsyncHandler(IServiceContext serviceContext, IServiceFactory serviceFactory, IServiceMethodInvoker methodInvoker, IResultFactory resultFactory)
+        public RestAsyncHandler(IServiceContext serviceContext, ServiceMethodLocator serviceMethodLocator, IServiceMethodInvoker methodInvoker, IResultFactory resultFactory)
         {
             if (serviceContext == null) throw new ArgumentNullException("serviceContext");
-            if (serviceFactory == null) throw new ArgumentNullException("serviceFactory");
+            if (serviceMethodLocator == null) throw new ArgumentNullException("serviceMethodLocator");
             if (methodInvoker == null) throw new ArgumentNullException("methodInvoker");
             if (resultFactory == null) throw new ArgumentNullException("resultFactory");
 
             m_serviceContext = serviceContext;
-            m_serviceFactory = serviceFactory;
+            m_serviceMethodLocator = serviceMethodLocator;
             m_methodInvoker = methodInvoker;
             m_resultFactory = resultFactory;
         }
@@ -46,9 +43,9 @@ namespace RestFoundation.Runtime
             }
         }
 
-        protected string ServiceUrl { get; set; }
-        protected string ServiceContractTypeName { get; set; }
-        protected string UrlTemplate { get; set; }
+        public string ServiceUrl { get; protected set; }
+        public string ServiceContractTypeName { get; protected set; }
+        public string UrlTemplate { get; protected set; }
 
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
@@ -83,48 +80,30 @@ namespace RestFoundation.Runtime
 
         public IAsyncResult BeginProcessRequest(HttpContext context, AsyncCallback cb, object extraData)
         {
-            Type serviceContractType = ServiceContractTypeRegistry.GetType(ServiceContractTypeName);
+            ServiceMethodLocatorData serviceMethodData = m_serviceMethodLocator.Execute(this);
 
-            if (serviceContractType == null)
+            if (serviceMethodData == ServiceMethodLocatorData.Options)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service contract of type '{0}' could not be determined", ServiceContractTypeName));
-            }
-
-            HttpMethod httpMethod = m_serviceContext.Request.Method;
-
-            if (httpMethod == HttpMethod.Options)
-            {
-                HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, UrlTemplate));
-                m_serviceContext.Response.SetHeader("Allow", String.Join(", ", allowedHttpMethods.Select(m => m.ToString().ToUpperInvariant()).OrderBy(m => m)));
-
                 return Task<IResult>.Factory.StartNew(() => new EmptyResult()).ContinueWith(action => cb(action));
             }
 
-            if (httpMethod == HttpMethod.Head)
-            {
-                m_serviceContext.GetHttpContext().Response.SuppressContent = true;
-            }
-
-            object service = m_serviceFactory.Create(m_serviceContext, serviceContractType);
-
-            if (service == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format("Service with contract of type '{0}' could not be created", ServiceContractTypeName));
-            }
-
-            MethodInfo method = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType, ServiceUrl), UrlTemplate, httpMethod);
-            var httpArguments = new HttpArguments(HttpContext.Current, method.ReturnType);
+            var httpArguments = new HttpArguments(HttpContext.Current, serviceMethodData.Method.ReturnType);
 
             return Task<IResult>.Factory.StartNew(state =>
                                                  {
                                                      HttpContext.Current = ((HttpArguments) state).Context;
-                                                     return m_resultFactory.Create(m_serviceContext, m_methodInvoker.Invoke(this, service, method));
+                                                     return m_resultFactory.Create(m_serviceContext, m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method));
                                                  }, httpArguments)
-                                        .ContinueWith(action => cb(action));
+                                                 .ContinueWith(action => cb(action));
         }
 
         public void EndProcessRequest(IAsyncResult result)
         {
+            if (result == null)
+            {
+                return;
+            }
+
             var task = (Task<IResult>) result;
 
             if (task.IsFaulted && task.Exception != null)

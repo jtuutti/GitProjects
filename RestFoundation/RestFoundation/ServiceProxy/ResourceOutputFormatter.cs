@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -18,7 +19,7 @@ namespace RestFoundation.ServiceProxy
             {
                 XDocument document = XDocument.Parse(input);
 
-                return String.Format("{0}{1}{2}", document.Declaration, Environment.NewLine, document.ToString(SaveOptions.OmitDuplicateNamespaces));
+                return String.Format(CultureInfo.InvariantCulture, "{0}{1}{2}", document.Declaration, Environment.NewLine, document.ToString(SaveOptions.OmitDuplicateNamespaces));
             }
             catch (Exception)
             {
@@ -35,7 +36,7 @@ namespace RestFoundation.ServiceProxy
 
             try
             {
-                if (input.TrimStart().StartsWith("["))
+                if (input.TrimStart().StartsWith("[", StringComparison.Ordinal))
                 {
                     return JArray.Parse(input).ToString(Formatting.Indented);
                 }

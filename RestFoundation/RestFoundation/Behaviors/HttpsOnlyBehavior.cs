@@ -8,6 +8,8 @@ namespace RestFoundation.Behaviors
     {
         public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             if (!String.Equals("https", context.Request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
             {
                 throw new HttpResponseException(HttpStatusCode.Forbidden, "HTTPS required");

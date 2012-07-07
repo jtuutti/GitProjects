@@ -17,7 +17,7 @@ namespace RestFoundation.ServiceProxy
             Condition = condition;
         }
 
-        internal string Condition { get; private set; }
-        internal HttpStatusCode StatusCode { get; private set; }
+        public string Condition { get; private set; }
+        public HttpStatusCode StatusCode { get; private set; }
     }
 }

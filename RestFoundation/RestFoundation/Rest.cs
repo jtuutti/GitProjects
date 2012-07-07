@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Web.Routing;
 using System.Web.Util;
 using RestFoundation.Runtime;
@@ -8,7 +9,7 @@ namespace RestFoundation
 {
     public class Rest
     {
-        protected static readonly object syncRoot = new object();
+        protected static readonly object SyncRoot = new object();
         protected internal static Rest Active = new Rest();
 
         private static bool defaultUrlMapped;
@@ -61,24 +62,32 @@ namespace RestFoundation
 
         public virtual Rest WithGlobalBehaviors(Action<GlobalBehaviorBuilder> builder)
         {
+            if (builder == null) throw new ArgumentNullException("builder");
+
             builder(new GlobalBehaviorBuilder());
             return this;
         }
 
         public virtual Rest WithRoutes(Action<RouteBuilder> builder)
         {
+            if (builder == null) throw new ArgumentNullException("builder");
+
             builder(new RouteBuilder(RouteTable.Routes, Active.CreateObject<IHttpMethodResolver>()));
             return this;
         }
 
         public virtual Rest WithDataFormatters(Action<DataFormatterBuilder> builder)
         {
+            if (builder == null) throw new ArgumentNullException("builder");
+
             builder(new DataFormatterBuilder());
             return this;
         }
 
         public virtual Rest WithDataBinders(Action<DataBinderBuilder> builder)
         {
+            if (builder == null) throw new ArgumentNullException("builder");
+
             builder(new DataBinderBuilder());
             return this;
         }
@@ -118,7 +127,7 @@ namespace RestFoundation
             }
             catch (Exception ex)
             {
-                throw new ObjectActivationException(String.Format("Object of type '{0}' could not be activated.", objectType), ex);
+                throw new ObjectActivationException(String.Format(CultureInfo.InvariantCulture, "Object of type '{0}' could not be activated.", objectType), ex);
             }
         }
 
@@ -132,7 +141,7 @@ namespace RestFoundation
             }
             catch (Exception ex)
             {
-                throw new ObjectActivationException(String.Format("Object of type '{0}' could not be activated.", objectType), ex);
+                throw new ObjectActivationException(String.Format(CultureInfo.InvariantCulture, "Object of type '{0}' could not be activated.", objectType), ex);
             }
         }
 
@@ -150,7 +159,7 @@ namespace RestFoundation
                 throw new InvalidOperationException("No active routing table was found.");
             }
 
-            lock (syncRoot)
+            lock (SyncRoot)
             {
                 if (!defaultUrlMapped)
                 {

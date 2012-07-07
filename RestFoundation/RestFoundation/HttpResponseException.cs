@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using System.Runtime.Serialization;
@@ -6,10 +7,22 @@ using System.Runtime.Serialization;
 namespace RestFoundation
 {
     [Serializable]
+    [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors",
+                     Justification = "Constructors with a nested exception do not make sense since this is a special type of exception for generating HTTP response")]
     public class HttpResponseException : Exception
     {
         public HttpStatusCode StatusCode { get; protected set; }
         public string StatusDescription { get; protected set; }
+
+        public HttpResponseException() :
+            this(HttpStatusCode.InternalServerError, String.Empty)
+        {
+        }
+
+        public HttpResponseException(string statusDescription) :
+            this(HttpStatusCode.InternalServerError, statusDescription)
+        {
+        }
 
         public HttpResponseException(HttpStatusCode statusCode) :
             this(statusCode, String.Empty)

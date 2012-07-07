@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Specialized;
+using System.Globalization;
 
 namespace RestFoundation.Odata.Parser
 {
@@ -39,6 +40,8 @@ namespace RestFoundation.Odata.Parser
 
         public IModelFilter<T> Parse(NameValueCollection queryParameters)
         {
+            if (queryParameters == null) throw new ArgumentNullException("queryParameters");
+
             var orderbyField = queryParameters[StringConstants.OrderByParameter];
             var selects = queryParameters[StringConstants.SelectParameter];
             var filter = queryParameters[StringConstants.FilterParameter];
@@ -50,11 +53,11 @@ namespace RestFoundation.Odata.Parser
             var selectFunction = m_selectExpressionFactory.Create(selects);
 
             var modelFilter = new ModelFilter<T>(
-                filterExpression,
-                selectFunction,
-                sortDescriptions,
-                string.IsNullOrWhiteSpace(skip) ? -1 : Convert.ToInt32(skip),
-                string.IsNullOrWhiteSpace(top) ? -1 : Convert.ToInt32(top));
+                                            filterExpression,
+                                            selectFunction,
+                                            sortDescriptions,
+                                            String.IsNullOrWhiteSpace(skip) ? -1 : Convert.ToInt32(skip, CultureInfo.InvariantCulture),
+                                            String.IsNullOrWhiteSpace(top) ? -1 : Convert.ToInt32(top, CultureInfo.InvariantCulture));
             return modelFilter;
         }
     }

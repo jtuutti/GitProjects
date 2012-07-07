@@ -6,12 +6,12 @@ namespace RestFoundation.Tests
     [TestFixture]
     public class CacheTests
     {
-        private ICache m_cache;
+        private IServiceCache m_cache;
 
         [TestFixtureSetUp]
         public void Initialize()
         {
-            m_cache = Rest.Configure.GetImplementation<ICache>();
+            m_cache = Rest.Configure.GetImplementation<IServiceCache>();
         }
 
         [TestFixtureTearDown]

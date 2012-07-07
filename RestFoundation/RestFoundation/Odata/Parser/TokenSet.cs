@@ -3,6 +3,9 @@
 // Please see http://www.opensource.org/licenses/MS-PL] for details.
 // All other rights reserved.
 
+using System;
+using System.Globalization;
+
 namespace RestFoundation.Odata.Parser
 {
     internal class TokenSet
@@ -20,7 +23,7 @@ namespace RestFoundation.Odata.Parser
 
         public override string ToString()
         {
-            return string.Format("{0} {1} {2}", Left, Operation, Right);
+            return String.Format(CultureInfo.InvariantCulture, "{0} {1} {2}", Left, Operation, Right);
         }
     }
 }

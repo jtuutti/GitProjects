@@ -5,7 +5,7 @@ namespace RestFoundation
     /// <summary>
     /// Defines a cache abstraction.
     /// </summary>
-    public interface ICache
+    public interface IServiceCache
     {
         /// <summary>
         /// Gets a cached value by its key.

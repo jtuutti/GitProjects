@@ -2,14 +2,16 @@
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Runtime.Serialization;
 
 namespace RestFoundation.ServiceProxy
 {
+    [Serializable]
     public sealed class ProxyWebResponse : WebResponse
     {
         private const string ContentEncodingHeader = "Content-Encoding";
 
-        private readonly HttpWebResponse httpResponse;
+        private readonly HttpWebResponse m_httpResponse;
 
         public ProxyWebResponse(WebResponse response)
         {
@@ -18,14 +20,25 @@ namespace RestFoundation.ServiceProxy
             var webResponse = response as HttpWebResponse;
             if (webResponse == null) throw new ArgumentException("Invalid web response provided.", "response");
 
-            httpResponse = webResponse;
+            m_httpResponse = webResponse;
+        }
+
+        private ProxyWebResponse(SerializationInfo serializationInfo, StreamingContext streamingContext)
+            : base(serializationInfo, streamingContext)
+        {
+            var httpResponse = serializationInfo.GetValue("m_httpResponse", typeof(HttpWebResponse)) as HttpWebResponse;
+
+            if (httpResponse != null)
+            {
+                m_httpResponse = httpResponse;
+            }
         }
 
         public Version ProtocolVersion
         {
             get
             {
-                return httpResponse.ProtocolVersion;
+                return m_httpResponse.ProtocolVersion;
             }
         }
 
@@ -33,7 +46,7 @@ namespace RestFoundation.ServiceProxy
         {
             get
             {
-                return httpResponse.StatusCode;
+                return m_httpResponse.StatusCode;
             }
         }
 
@@ -41,7 +54,7 @@ namespace RestFoundation.ServiceProxy
         {
             get
             {
-                return httpResponse.StatusDescription;
+                return m_httpResponse.StatusDescription;
             }
         }
 
@@ -49,11 +62,11 @@ namespace RestFoundation.ServiceProxy
         {
             get
             {
-                return httpResponse.ContentLength;
+                return m_httpResponse.ContentLength;
             }
             set
             {
-                httpResponse.ContentLength = value;
+                m_httpResponse.ContentLength = value;
             }
         }
 
@@ -61,11 +74,11 @@ namespace RestFoundation.ServiceProxy
         {
             get
             {
-                return httpResponse.ContentType;
+                return m_httpResponse.ContentType;
             }
             set
             {
-                httpResponse.ContentType = value;
+                m_httpResponse.ContentType = value;
             }
         }
 
@@ -73,7 +86,7 @@ namespace RestFoundation.ServiceProxy
         {
             get
             {
-                return httpResponse.Headers ?? new WebHeaderCollection();
+                return m_httpResponse.Headers ?? new WebHeaderCollection();
             }
         }
 
@@ -81,7 +94,7 @@ namespace RestFoundation.ServiceProxy
         {
             get
             {
-                return httpResponse.IsFromCache;
+                return m_httpResponse.IsFromCache;
             }
         }
 
@@ -89,7 +102,7 @@ namespace RestFoundation.ServiceProxy
         {
             get
             {
-                return httpResponse.IsMutuallyAuthenticated;
+                return m_httpResponse.IsMutuallyAuthenticated;
             }
         }
 
@@ -97,13 +110,13 @@ namespace RestFoundation.ServiceProxy
         {
             get
             {
-                return httpResponse.ResponseUri;
+                return m_httpResponse.ResponseUri;
             }
         }
 
         public override Stream GetResponseStream()
         {
-            Stream responseStream = httpResponse.GetResponseStream();
+            Stream responseStream = m_httpResponse.GetResponseStream();
             if (responseStream == null) return null;
 
             string encoding = Headers[ContentEncodingHeader];
@@ -123,7 +136,16 @@ namespace RestFoundation.ServiceProxy
 
         public override void Close()
         {
-            httpResponse.Close();
+            m_httpResponse.Close();
+        }
+
+        protected override void GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext)
+        {
+            if (serializationInfo == null) throw new ArgumentNullException("serializationInfo");
+
+            base.GetObjectData(serializationInfo, streamingContext);
+
+            serializationInfo.AddValue("m_httpResponse", m_httpResponse, typeof(HttpWebResponse));
         }
     }
 }

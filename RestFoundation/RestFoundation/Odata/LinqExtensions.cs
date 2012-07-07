@@ -18,7 +18,7 @@ namespace RestFoundation.Odata
 
             return Attribute.IsDefined(type, typeof(CompilerGeneratedAttribute), false)
                 && type.IsGenericType
-                && type.Name.Contains("AnonymousType") && (type.Name.StartsWith("<>") || type.Name.StartsWith("VB$"))
+                && type.Name.Contains("AnonymousType") && (type.Name.StartsWith("<>", StringComparison.Ordinal) || type.Name.StartsWith("VB$", StringComparison.Ordinal))
                 && (type.Attributes & TypeAttributes.NotPublic) == TypeAttributes.NotPublic;
         }
     }

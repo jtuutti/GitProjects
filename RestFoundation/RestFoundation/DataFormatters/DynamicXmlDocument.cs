@@ -26,16 +26,6 @@ namespace RestFoundation.DataFormatters
             elements = new List<XElement> { StripNamespaces(document.Root) };
         }
 
-        private DynamicXDocument(XElement element)
-        {
-            elements = new List<XElement> { element };
-        }
-
-        private DynamicXDocument(IEnumerable<XElement> elements)
-        {
-            this.elements = new List<XElement>(elements);
-        }
-
         /// <summary>
         /// Provides the implementation for operations that get member values. Classes derived from the <see cref="T:System.Dynamic.DynamicObject"/>
         /// class can override this method to specify dynamic behavior for operations such as getting a value for a property.
@@ -55,6 +45,8 @@ namespace RestFoundation.DataFormatters
         /// </param>
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
+            if (binder == null) throw new ArgumentNullException("binder");
+
             result = null;
 
             switch (binder.Name)
@@ -100,8 +92,11 @@ namespace RestFoundation.DataFormatters
         /// <param name="result">The result of the index operation.</param>
         public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
         {
-            var ndx = (int)indexes[0];
-            result = new DynamicXDocument(elements[ndx]);
+            if (binder == null) throw new ArgumentNullException("binder");
+            if (indexes == null) throw new ArgumentNullException("indexes");
+
+            var index = (int) indexes[0];
+            result = new DynamicXDocument(elements[index]);
 
             return true;
         }
@@ -117,12 +112,7 @@ namespace RestFoundation.DataFormatters
         {
             if (elements.Count > 0 && elements[0] != null)
             {
-                if (elements[0].Descendants().Any())
-                {
-                    return elements[0].ToString(SaveOptions.None);
-                }
-
-                return elements[0].Value;
+                return elements[0].Descendants().Any() ? elements[0].ToString(SaveOptions.None) : elements[0].Value;
             }
 
             return String.Empty;
@@ -180,6 +170,16 @@ namespace RestFoundation.DataFormatters
             }
 
             return valueList.ToArray();
+        }
+
+        private DynamicXDocument(XElement element)
+        {
+            elements = new List<XElement> { element };
+        }
+
+        private DynamicXDocument(IEnumerable<XElement> elements)
+        {
+            this.elements = new List<XElement>(elements);
         }
     }
 }

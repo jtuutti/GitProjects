@@ -343,7 +343,7 @@
             }
             catch (Exception)
             {
-                throw new HttpException((int) HttpStatusCode.NotAcceptable, "Unsupported accept charset specified");
+                throw new HttpException((int) HttpStatusCode.NotAcceptable, "The accepted charset provided is not supported");
             }
         }
     }

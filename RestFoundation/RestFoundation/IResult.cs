@@ -2,6 +2,6 @@
 {
     public interface IResult
     {
-        void Execute(IServiceContext Context);
+        void Execute(IServiceContext context);
     }
 }
