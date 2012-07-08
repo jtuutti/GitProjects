@@ -18,11 +18,11 @@ namespace RestFoundation.Behaviors
         }
 
         private const string AuthenticationType = "Digest";
-        private const string UserAddressVariableName = "REMOTE_ADDR";
         private const int DefaultNonceLifeTimeInSeconds = 300;
 
         private readonly IAuthorizationManager m_authorizationManager;
         private readonly MD5Encoder m_encoder;
+        private readonly RijndaelEncryptor m_encryptor;
 
         public TimeSpan NonceLifetime { get; set; }
         public QualityOfProtection Qop { get; set; }
@@ -43,6 +43,7 @@ namespace RestFoundation.Behaviors
 
             m_authorizationManager = authorizationManager;
             m_encoder = new MD5Encoder();
+            m_encryptor = new RijndaelEncryptor();
         }
 
         public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
@@ -78,21 +79,31 @@ namespace RestFoundation.Behaviors
             m_encoder.Dispose();
         }
 
-        private void GenerateAuthenticationHeader(IServiceContext context, bool isStale)
+        private string GenerateNonce(IServiceContext context, string timestamp)
         {
-            string ipAddress = context.Request.ServerVariables.TryGet(UserAddressVariableName);
-
-            if (String.IsNullOrWhiteSpace(ipAddress))
+            if (String.IsNullOrWhiteSpace(context.Request.ServerVariables.RemoteAddress) ||
+                String.IsNullOrWhiteSpace(context.Request.ServerVariables.LocalAddress))
             {
                 throw new HttpResponseException(HttpStatusCode.Forbidden, "Forbidden");
             }
 
+            string nonce = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture,
+                                                          "{0}:{1}:{2}",
+                                                          context.Request.ServerVariables.RemoteAddress,
+                                                          context.Request.ServerVariables.LocalAddress,
+                                                          context.Request.ServerVariables.ServerPort));
+
+            return m_encryptor.Encrypt(String.Format(CultureInfo.InvariantCulture, "{0}:{1}", timestamp, nonce));
+        }
+
+        private void GenerateAuthenticationHeader(IServiceContext context, bool isStale)
+        {
             string timestamp = (DateTime.UtcNow - DateTime.MinValue).TotalMilliseconds.ToString(CultureInfo.InvariantCulture);
 
             var headerBuilder = new StringBuilder();
             headerBuilder.Append(AuthenticationType).Append(' ');
             headerBuilder.AppendFormat(CultureInfo.InvariantCulture, "realm=\"{0}\"", context.Request.Url.ServiceUrl);
-            headerBuilder.AppendFormat(CultureInfo.InvariantCulture, ", nonce=\"{0}\"", GenerateNonce(timestamp, ipAddress));
+            headerBuilder.AppendFormat(CultureInfo.InvariantCulture, ", nonce=\"{0}\"", GenerateNonce(context, timestamp));
 
             if (Qop == QualityOfProtection.Auth)
             {
@@ -109,13 +120,6 @@ namespace RestFoundation.Behaviors
             context.Response.SetStatus(HttpStatusCode.Unauthorized, "Unauthorized");
         }
 
-        private string GenerateNonce(string timestamp, string ipAddress)
-        {
-            string nonce = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}", timestamp, ipAddress));
-
-            return Base64Converter.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}", timestamp, nonce));
-        }
-
         private Tuple<bool, bool> ValidateResponse(IServiceContext context, AuthorizationHeader header)
         {
             if (String.IsNullOrWhiteSpace(header.UserName) || header.Parameters == null)
@@ -123,7 +127,7 @@ namespace RestFoundation.Behaviors
                 return Tuple.Create(false, false);
             }
 
-            string ipAddress = context.Request.ServerVariables.TryGet(UserAddressVariableName);
+            string ipAddress = context.Request.ServerVariables.RemoteAddress;
 
             if (String.IsNullOrWhiteSpace(ipAddress))
             {
@@ -159,7 +163,7 @@ namespace RestFoundation.Behaviors
             }
 
             string nonce = header.Parameters.Get("nonce");           
-            Tuple<bool, bool> nonceValidationResult = ValidateNonce(nonce, ipAddress);
+            Tuple<bool, bool> nonceValidationResult = ValidateNonce(context, nonce);
 
             if (!nonceValidationResult.Item1)
             {
@@ -197,7 +201,7 @@ namespace RestFoundation.Behaviors
             return Tuple.Create(String.Equals(expectedResponse, response, StringComparison.Ordinal), false);
         }
 
-        private Tuple<bool, bool> ValidateNonce(string nonce, string ipAddress)
+        private Tuple<bool, bool> ValidateNonce(IServiceContext context, string nonce)
         {
             if (String.IsNullOrEmpty(nonce))
             {
@@ -208,7 +212,7 @@ namespace RestFoundation.Behaviors
 
             try
             {
-                nonceString = Base64Converter.Decode(nonce);
+                nonceString = m_encryptor.Decrypt(nonce);
             }
             catch (Exception)
             {
@@ -222,7 +226,7 @@ namespace RestFoundation.Behaviors
                 return Tuple.Create(false, false);
             }
 
-            if (!String.Equals(nonce, GenerateNonce(nonceParts[0], ipAddress), StringComparison.Ordinal))
+            if (!String.Equals(nonce, GenerateNonce(context, nonceParts[0]), StringComparison.Ordinal))
             {
                 return Tuple.Create(false, false);
             }
@@ -232,11 +236,16 @@ namespace RestFoundation.Behaviors
 
         private bool IsNonceStale(string timestamp)
         {
+            if (NonceLifetime.TotalSeconds <= 0)
+            {
+                return false;
+            }
+
             double timestampAsDouble;
 
             if (!Double.TryParse(timestamp, NumberStyles.Float, CultureInfo.InvariantCulture, out timestampAsDouble) || timestampAsDouble <= 0)
             {
-                return false;
+                throw new HttpResponseException(HttpStatusCode.Forbidden, "Forbidden");
             }
 
             DateTime nonceLifetime = DateTime.MinValue.AddMilliseconds(timestampAsDouble);

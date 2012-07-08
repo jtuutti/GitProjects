@@ -114,11 +114,11 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public IStringValueCollection ServerVariables
+        public IServerVariableCollection ServerVariables
         {
             get
             {
-                return ContextContainer.ServerVariables ?? (ContextContainer.ServerVariables = new StringValueCollection(Context.Request.ServerVariables));
+                return ContextContainer.ServerVariables ?? (ContextContainer.ServerVariables = new ServerVariableCollection(Context.Request.ServerVariables));
             }
         }
 
@@ -147,7 +147,7 @@ namespace RestFoundation.Runtime
             public IObjectValueCollection RouteValues { get; set; }
             public IHeaderCollection Headers { get; set; }
             public IStringValueCollection QueryString { get; set; }
-            public IStringValueCollection ServerVariables { get; set; }
+            public IServerVariableCollection ServerVariables { get; set; }
             public ICookieValueCollection Cookies { get; set; }
         }
     }

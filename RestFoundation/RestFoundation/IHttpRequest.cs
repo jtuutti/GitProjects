@@ -19,7 +19,7 @@ namespace RestFoundation
         IObjectValueCollection RouteValues { get; }
         IHeaderCollection Headers { get; }
         IStringValueCollection QueryString { get; }
-        IStringValueCollection ServerVariables { get; }
+        IServerVariableCollection ServerVariables { get; }
         ICookieValueCollection Cookies { get; }
     }
 }

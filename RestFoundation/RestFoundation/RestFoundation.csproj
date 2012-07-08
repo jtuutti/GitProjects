@@ -57,6 +57,8 @@
     <Compile Include="Behaviors\AclBehavior.cs" />
     <Compile Include="Behaviors\DigestAuthorizationBehavior.cs" />
     <Compile Include="Behaviors\OutputCacheBehavior.cs" />
+    <Compile Include="Collections\Concrete\ServerVariableCollection.cs" />
+    <Compile Include="Collections\IServerVariableCollection.cs" />
     <Compile Include="DataFormatters\BsonFormatter.cs" />
     <Compile Include="IRestAsyncHandler.cs" />
     <Compile Include="GlobalBehaviorBuilder.cs" />
@@ -144,10 +146,10 @@
     <Compile Include="Runtime\AuthorizationHeader.cs" />
     <Compile Include="Runtime\AuthorizationHeaderParser.cs" />
     <Compile Include="Runtime\AuthorizationManager.cs" />
-    <Compile Include="Runtime\Base64Converter.cs" />
     <Compile Include="Runtime\ContextBase.cs" />
     <Compile Include="Runtime\HttpMethodResolver.cs" />
     <Compile Include="Runtime\MD5Encoder.cs" />
+    <Compile Include="Runtime\RijndealEncryptor.cs" />
     <Compile Include="Runtime\ServiceMethodLocator.cs" />
     <Compile Include="Runtime\ServiceMethodLocatorData.cs" />
     <Compile Include="Runtime\RouteParameter.cs" />

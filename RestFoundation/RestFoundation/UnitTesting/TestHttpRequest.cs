@@ -39,6 +39,8 @@ namespace RestFoundation.UnitTesting
             m_params = new NameValueCollection();
             m_body = new MemoryStream();
             m_filter = new MemoryStream();
+
+            PopulateServerVariables();
         }
 
         public override Encoding ContentEncoding { get; set; }
@@ -218,6 +220,18 @@ namespace RestFoundation.UnitTesting
             m_body.Dispose();
             m_filter.Dispose();
             m_isDisposed = true;
+        }
+
+        private void PopulateServerVariables()
+        {
+            m_serverVariables.Add("APP_POOL_ID", "UnitTests");
+            m_serverVariables.Add("HTTP_VERSION", "HTTP/1.1");
+            m_serverVariables.Add("REMOTE_ADDR", "127.0.0.1");
+            m_serverVariables.Add("REMOTE_HOST", "127.0.0.1");
+            m_serverVariables.Add("REMOTE_PORT", "20040");
+            m_serverVariables.Add("SERVER_NAME", "localhost");
+            m_serverVariables.Add("SERVER_PORT", "80");
+            m_serverVariables.Add("HTTP_USER_AGENT", "Unit Test Runner");
         }
     }
 }

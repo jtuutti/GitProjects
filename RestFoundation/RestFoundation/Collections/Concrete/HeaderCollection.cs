@@ -15,10 +15,6 @@ namespace RestFoundation.Collections.Concrete
     {
         private const string Utf8Charset = "utf-8";
 
-        public HeaderCollection() : this(new NameValueCollection())
-        {
-        }
-
         internal HeaderCollection(NameValueCollection values) : base(values)
         {
             Authorization = TryGet("Authorization");
@@ -88,25 +84,25 @@ namespace RestFoundation.Collections.Concrete
             AcceptEncodings = acceptEncodings.AcceptedNames;
         }
 
-        public string AcceptType { get; private set; }
-        public IEnumerable<string> AcceptTypes { get; private set; }
-        public string AcceptCharset { get; private set; }
-        public IEnumerable<string> AcceptCharsets { get; private set; }
-        public Encoding AcceptCharsetEncoding { get; private set; }
-        public string AcceptEncoding { get; private set; }
-        public IEnumerable<string> AcceptEncodings { get; private set; }
+        public string AcceptType { get; protected set; }
+        public IEnumerable<string> AcceptTypes { get; protected set; }
+        public string AcceptCharset { get; protected set; }
+        public IEnumerable<string> AcceptCharsets { get; protected set; }
+        public Encoding AcceptCharsetEncoding { get; protected set; }
+        public string AcceptEncoding { get; protected set; }
+        public IEnumerable<string> AcceptEncodings { get; protected set; }
 
-        public string ContentType { get; private set; }
-        public string ContentCharset { get; private set; }
-        public Encoding ContentCharsetEncoding { get; private set; }
-        public string ContentLanguage{ get; private set; }
-        public string ContentEncoding{ get; private set; }
-        public int ContentLength { get; private set; }
+        public string ContentType { get; protected set; }
+        public string ContentCharset { get; protected set; }
+        public Encoding ContentCharsetEncoding { get; protected set; }
+        public string ContentLanguage{ get; protected set; }
+        public string ContentEncoding{ get; protected set; }
+        public int ContentLength { get; protected set; }
 
-        public string Authorization { get; private set; }
-        public string Host { get; private set; }
-        public string Referrer { get; private set; }
-        public string UserAgent { get; private set; }
+        public string Authorization { get; protected set; }
+        public string Host { get; protected set; }
+        public string Referrer { get; protected set; }
+        public string UserAgent { get; protected set; }
 
         private int GetContentLength()
         {
