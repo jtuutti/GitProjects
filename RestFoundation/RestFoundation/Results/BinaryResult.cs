@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using RestFoundation.Context;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Results

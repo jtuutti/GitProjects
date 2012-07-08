@@ -1,7 +1,7 @@
 ﻿using System;
 using RestFoundation.Collections.Specialized;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Context
 {
     internal static class HttpRequestExtensions
     {

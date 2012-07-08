@@ -11,8 +11,7 @@ namespace RestFoundation
             typeof(IServiceContext),
             typeof(IHttpRequest),
             typeof(IHttpResponse),
-            typeof(IServiceCache),
-            typeof(ILogger)
+            typeof(IServiceCache)
         };
 
         public static bool IsRestBehavior(this Type type)

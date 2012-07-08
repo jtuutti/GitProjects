@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web;
-using RestFoundation.Runtime;
+using RestFoundation.Context;
 
 namespace RestFoundation.UnitTesting
 {

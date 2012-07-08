@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using RestFoundation.Context;
 using RestFoundation.Results;
-using RestFoundation.Runtime;
 
 namespace RestFoundation.DataFormatters
 {

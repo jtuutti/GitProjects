@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Security
 {
     internal static class AuthorizationHeaderParser
     {

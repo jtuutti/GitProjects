@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System.Security;
 using System.Web;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation
 {
     [Serializable]
     public class ServiceUri : Uri

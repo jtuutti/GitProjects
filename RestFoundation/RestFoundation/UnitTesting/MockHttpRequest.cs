@@ -3,7 +3,7 @@ using System.Web;
 
 namespace RestFoundation.UnitTesting
 {
-    public class MockHttpRequest : Runtime.HttpRequest
+    public class MockHttpRequest : Context.HttpRequest
     {
         protected override HttpContextBase Context
         {

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Routing;
+using RestFoundation.Context;
 
 namespace RestFoundation.Runtime
 {

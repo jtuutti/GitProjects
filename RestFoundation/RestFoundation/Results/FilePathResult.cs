@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using RestFoundation.Context;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Results

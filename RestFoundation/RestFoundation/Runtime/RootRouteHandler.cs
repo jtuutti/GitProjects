@@ -4,7 +4,7 @@ using System.Net;
 using System.Web;
 using System.Web.Routing;
 using RestFoundation.Collections.Specialized;
-using RestFoundation.DataFormatters;
+using RestFoundation.Runtime;
 using RestFoundation.ServiceProxy;
 
 namespace RestFoundation

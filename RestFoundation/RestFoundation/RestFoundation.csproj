@@ -93,7 +93,6 @@
     <Compile Include="IDataBinder.cs" />
     <Compile Include="IHttpMethodResolver.cs" />
     <Compile Include="IHttpResponseOutput.cs" />
-    <Compile Include="ILogger.cs" />
     <Compile Include="IObjectActivator.cs" />
     <Compile Include="IParameterBinder.cs" />
     <Compile Include="IRestHandler.cs" />
@@ -143,35 +142,34 @@
     <Compile Include="RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptionType.cs" />
-    <Compile Include="Runtime\AuthorizationHeader.cs" />
-    <Compile Include="Runtime\AuthorizationHeaderParser.cs" />
-    <Compile Include="Runtime\AuthorizationManager.cs" />
-    <Compile Include="Runtime\ContextBase.cs" />
+    <Compile Include="Security\AuthorizationHeader.cs" />
+    <Compile Include="Security\AuthorizationHeaderParser.cs" />
+    <Compile Include="Security\AuthorizationManager.cs" />
+    <Compile Include="Context\ContextBase.cs" />
     <Compile Include="Runtime\HttpMethodResolver.cs" />
-    <Compile Include="Runtime\MD5Encoder.cs" />
-    <Compile Include="Runtime\RijndealEncryptor.cs" />
+    <Compile Include="Security\MD5Encoder.cs" />
+    <Compile Include="Security\RijndealEncryptor.cs" />
     <Compile Include="Runtime\ServiceMethodLocator.cs" />
     <Compile Include="Runtime\ServiceMethodLocatorData.cs" />
     <Compile Include="Runtime\RouteParameter.cs" />
     <Compile Include="Runtime\ServiceBehaviorInvoker.cs" />
     <Compile Include="Runtime\ServiceCache.cs" />
     <Compile Include="Runtime\CompositeValidationResult.cs" />
-    <Compile Include="Runtime\DataBinderRegistry.cs" />
+    <Compile Include="Runtime\Registries\DataBinderRegistry.cs" />
     <Compile Include="Runtime\DelegateObjectActivator.cs" />
-    <Compile Include="Runtime\HttpRequestExtensions.cs" />
-    <Compile Include="Runtime\HttpResponseOutput.cs" />
+    <Compile Include="Context\HttpRequestExtensions.cs" />
+    <Compile Include="Context\HttpResponseOutput.cs" />
     <Compile Include="Runtime\ServiceRouteConstraint.cs" />
-    <Compile Include="Runtime\Logger.cs" />
     <Compile Include="Runtime\OutputCompressionManager.cs" />
     <Compile Include="Runtime\ParameterBinder.cs" />
     <Compile Include="Runtime\ResourceValidator.cs" />
     <Compile Include="RouteBuilder.cs" />
     <Compile Include="Runtime\SerializationValidator.cs" />
     <Compile Include="Runtime\StreamCompressor.cs" />
-    <Compile Include="Runtime\ServiceContext.cs" />
+    <Compile Include="Context\ServiceContext.cs" />
     <Compile Include="Runtime\ServiceMetadata.cs" />
     <Compile Include="Runtime\ServiceRequestValidator.cs" />
-    <Compile Include="Runtime\HttpContextExtensions.cs" />
+    <Compile Include="Context\HttpContextExtensions.cs" />
     <Compile Include="Runtime\OutputCachedPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -185,7 +183,7 @@
     <Compile Include="Results\RedirectResult.cs" />
     <Compile Include="Behaviors\ServiceBehavior.cs" />
     <Compile Include="DataFormatters\DynamicXmlDocument.cs" />
-    <Compile Include="DataFormatters\DataFormatterRegistry.cs" />
+    <Compile Include="Runtime\Registries\DataFormatterRegistry.cs" />
     <Compile Include="DataFormatters\JsonFormatter.cs" />
     <Compile Include="DataFormatters\XmlFormatter.cs" />
     <Compile Include="HttpResponseModule.cs" />
@@ -193,7 +191,7 @@
     <Compile Include="IServiceBehavior.cs" />
     <Compile Include="IDataFormatter.cs" />
     <Compile Include="IHttpResponse.cs" />
-    <Compile Include="Runtime\ServiceBehaviorRegistry.cs" />
+    <Compile Include="Runtime\Registries\ServiceBehaviorRegistry.cs" />
     <Compile Include="Runtime\ServiceMethodMetadata.cs" />
     <Compile Include="Collections\Specialized\DynamicStringCollection.cs" />
     <Compile Include="Collections\Concrete\CookieValueCollection.cs" />
@@ -203,17 +201,17 @@
     <Compile Include="Collections\IObjectValueCollection.cs" />
     <Compile Include="Collections\IStringValueCollection.cs" />
     <Compile Include="IServiceMethodInvoker.cs" />
-    <Compile Include="Runtime\ServiceMethodRegistry.cs" />
-    <Compile Include="Runtime\HttpMethodRegistry.cs" />
-    <Compile Include="Runtime\HttpRequest.cs" />
-    <Compile Include="Runtime\HttpResponse.cs" />
+    <Compile Include="Runtime\Registries\ServiceMethodRegistry.cs" />
+    <Compile Include="Runtime\Registries\HttpMethodRegistry.cs" />
+    <Compile Include="Context\HttpRequest.cs" />
+    <Compile Include="Context\HttpResponse.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="IHttpRequest.cs" />
-    <Compile Include="Runtime\UnvalidatedHandlerRegistry.cs" />
+    <Compile Include="Runtime\Registries\UnvalidatedHandlerRegistry.cs" />
     <Compile Include="Operation.cs" />
     <Compile Include="Runtime\UploadedFile.cs" />
     <Compile Include="Runtime\XmlSchemaGenerator.cs" />
-    <Compile Include="Runtime\XmlSerializerRegistry.cs" />
+    <Compile Include="Runtime\Registries\XmlSerializerRegistry.cs" />
     <Compile Include="ServiceProxy\ProxyIPFilteredAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyAdditionalHeaderAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyHiddenOperation.cs" />
@@ -251,7 +249,7 @@
     <Compile Include="HttpMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\ServiceFactory.cs" />
-    <Compile Include="Runtime\ServiceContractTypeRegistry.cs" />
+    <Compile Include="Runtime\Registries\ServiceContractTypeRegistry.cs" />
     <Compile Include="Results\StatusResult.cs" />
     <Compile Include="UnitTesting\MockHandlerFactory.cs" />
     <Compile Include="UnitTesting\MockRestAsyncHandler.cs" />
@@ -304,6 +302,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

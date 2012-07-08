@@ -1,5 +1,5 @@
 ﻿using System;
-using RestFoundation.DataFormatters;
+using RestFoundation.Runtime;
 
 namespace RestFoundation
 {

@@ -5,7 +5,7 @@ using RestFoundation.Collections;
 using RestFoundation.Collections.Concrete;
 using RestFoundation.Collections.Specialized;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Context
 {
     public class HttpRequest : ContextBase, IHttpRequest
     {

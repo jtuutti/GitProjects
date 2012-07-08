@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Security
 {
     internal sealed class MD5Encoder : IDisposable
     {

@@ -4,7 +4,7 @@ using System.Threading;
 using System.Web;
 using RestFoundation.Collections.Specialized;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Context
 {
     public class ServiceContext : ContextBase, IServiceContext
     {

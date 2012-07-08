@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Security
 {
     public class AuthorizationManager : IAuthorizationManager
     {

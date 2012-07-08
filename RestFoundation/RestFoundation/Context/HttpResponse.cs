@@ -5,7 +5,7 @@ using System.Web;
 using RestFoundation.Collections;
 using RestFoundation.Collections.Concrete;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Context
 {
     public class HttpResponse : ContextBase, IHttpResponse
     {

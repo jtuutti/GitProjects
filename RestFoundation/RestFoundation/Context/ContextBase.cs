@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Context
 {
     public abstract class ContextBase
     {       

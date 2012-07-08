@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Security
 {
     internal sealed class AuthorizationHeader
     {

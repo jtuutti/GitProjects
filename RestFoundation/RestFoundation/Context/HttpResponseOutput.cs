@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.IO;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Context
 {
     public class HttpResponseOutput : ContextBase, IHttpResponseOutput
     {

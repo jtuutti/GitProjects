@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Context
 {
     internal static class HttpContextExtensions
     {

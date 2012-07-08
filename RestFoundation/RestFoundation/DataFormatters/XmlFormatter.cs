@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Serialization;
+using RestFoundation.Context;
 using RestFoundation.Results;
-using RestFoundation.Runtime;
 
 namespace RestFoundation.DataFormatters
 {

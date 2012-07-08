@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Principal;
-using RestFoundation.Runtime;
+using RestFoundation.Security;
 
 namespace RestFoundation.Behaviors
 {

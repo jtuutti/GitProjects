@@ -3,7 +3,7 @@ using System.Web;
 
 namespace RestFoundation.UnitTesting
 {
-    public class MockHttpResponse : Runtime.HttpResponse
+    public class MockHttpResponse : Context.HttpResponse
     {
         public MockHttpResponse(IHttpResponseOutput output) : base(output)
         {

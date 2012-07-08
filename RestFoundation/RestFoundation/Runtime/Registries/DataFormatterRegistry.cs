@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using RestFoundation.DataFormatters;
 
-namespace RestFoundation.DataFormatters
+namespace RestFoundation.Runtime
 {
     internal static class DataFormatterRegistry
     {
