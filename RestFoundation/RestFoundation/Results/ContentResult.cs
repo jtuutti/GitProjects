@@ -31,7 +31,7 @@ namespace RestFoundation.Results
 
             if (!String.IsNullOrEmpty(ContentType))
             {
-                context.Response.SetHeader("Content-Type", ContentType);
+                context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
             }
             else
             {
@@ -39,7 +39,7 @@ namespace RestFoundation.Results
 
                 if (!String.IsNullOrEmpty(acceptType))
                 {
-                    context.Response.SetHeader("Content-Type", acceptType);
+                    context.Response.SetHeader(context.Response.Headers.ContentType, acceptType);
                 }
             }
 

@@ -10,6 +10,8 @@ namespace RestFoundation
         IHttpResponseOutput Output { get; }
         bool TrySkipIisCustomErrors { get; set; }
 
+        ResponseHeaderNames Headers { get; }
+
         string GetHeader(string headerName);
         void SetHeader(string headerName, string headerValue);
         bool RemoveHeader(string headerName);

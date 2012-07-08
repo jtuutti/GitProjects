@@ -38,7 +38,7 @@ namespace RestFoundation.Results
             }
 
             context.Response.Output.Clear();
-            context.Response.SetHeader("Content-Type", contentType);
+            context.Response.SetHeader(context.Response.Headers.ContentType, contentType);
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
             using (XmlWriter writer = new FeedWriter(context.Response.Output.Writer, XmlStyleDates))

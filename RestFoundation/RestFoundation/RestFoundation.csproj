@@ -60,6 +60,7 @@
     <Compile Include="Collections\Concrete\ServerVariableCollection.cs" />
     <Compile Include="Collections\IServerVariableCollection.cs" />
     <Compile Include="DataFormatters\BsonFormatter.cs" />
+    <Compile Include="ResponseHeaderNames.cs" />
     <Compile Include="IRestAsyncHandler.cs" />
     <Compile Include="GlobalBehaviorBuilder.cs" />
     <Compile Include="Behaviors\BasicAuthorizationBehavior.cs" />

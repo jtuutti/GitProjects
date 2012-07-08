@@ -24,7 +24,7 @@ namespace RestFoundation.Results
             }
 
             context.Response.Output.Clear();
-            context.Response.SetHeader("Content-Type", ContentType);
+            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
             OutputCompressionManager.FilterResponse(context);

@@ -12,7 +12,7 @@ namespace RestFoundation.Results
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            context.Response.SetHeader("Location", RedirectUrl);
+            context.Response.SetHeader(context.Response.Headers.Location, RedirectUrl);
             context.Response.SetStatus(IsPermanent ? HttpStatusCode.MovedPermanently : HttpStatusCode.Redirect);
         }
     }

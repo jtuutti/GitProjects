@@ -10,12 +10,14 @@ namespace RestFoundation.Context
     public class HttpResponse : ContextBase, IHttpResponse
     {
         private readonly IHttpResponseOutput m_output;
+        private readonly ResponseHeaderNames m_headers;
 
         public HttpResponse(IHttpResponseOutput output)
         {
             if (output == null) throw new ArgumentNullException("output");
 
             m_output = output;
+            m_headers = new ResponseHeaderNames();
         }
 
         public IHttpResponseOutput Output
@@ -35,6 +37,14 @@ namespace RestFoundation.Context
             set
             {
                 Context.Response.TrySkipIisCustomErrors = value;
+            }
+        }
+
+        public ResponseHeaderNames Headers
+        {
+            get
+            {
+                return m_headers;
             }
         }
 

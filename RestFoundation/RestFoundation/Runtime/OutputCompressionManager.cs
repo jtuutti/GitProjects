@@ -4,8 +4,6 @@ namespace RestFoundation.Runtime
 {
     internal static class OutputCompressionManager
     {
-        private const string ContentEncodingHeader = "Content-Encoding";
-
         public static void FilterResponse(IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
@@ -22,7 +20,7 @@ namespace RestFoundation.Runtime
 
             if (!String.IsNullOrEmpty(outputEncoding))
             {
-                context.Response.SetHeader(ContentEncodingHeader, outputEncoding);
+                context.Response.SetHeader(context.Response.Headers.ContentEncoding, outputEncoding);
             }
         }
     }
