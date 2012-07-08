@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using RestFoundation.DataFormatters;
 
@@ -21,7 +22,7 @@ namespace RestFoundation.Runtime
             return contentTypeFormatters.TryGetValue(contentType, out formatter) ? formatter : null;
         }
 
-        public static string[] GetContentTypes()
+        public static IList<string> GetContentTypes()
         {
             return contentTypeFormatters.Keys.ToArray();
         }

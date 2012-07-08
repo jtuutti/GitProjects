@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using RestFoundation.Collections.Specialized;
 
@@ -6,20 +7,14 @@ namespace RestFoundation.Runtime
 {
     public class BrowserDetector : IBrowserDetector
     {
+        private const string HtmlContentType = "text/html";
+
         public virtual bool IsBrowserRequest(HttpRequestBase request)
         {
             if (request == null) throw new ArgumentNullException("request");
 
             if (!"GET".Equals(request.HttpMethod, StringComparison.OrdinalIgnoreCase) &&
                 !"HEAD".Equals(request.HttpMethod, StringComparison.OrdinalIgnoreCase))
-            {
-                return false;
-            }
-
-            string browser = request.Browser != null ? request.Browser.Browser : null;
-            string[] acceptTypes = request.AcceptTypes;
-
-            if (String.IsNullOrWhiteSpace(browser) || acceptTypes == null || acceptTypes.Length == 0)
             {
                 return false;
             }
@@ -32,23 +27,22 @@ namespace RestFoundation.Runtime
             }
 
             var acceptTypeCollection = new AcceptValueCollection(acceptedValue);
+            var contentTypes = DataFormatterRegistry.GetContentTypes();
 
-            if (acceptTypeCollection.AcceptedNames.Count == 0)
+            foreach (string acceptedType in acceptTypeCollection.AcceptedNames)
             {
-                return false;
-            }
+                if (String.Equals(HtmlContentType, acceptedType, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
 
-            string[] contentTypes = DataFormatterRegistry.GetContentTypes();
-
-            for (int i = 0; i < contentTypes.Length; i++)
-            {
-                if (String.Equals(contentTypes[i], acceptTypeCollection.GetPreferredName(), StringComparison.OrdinalIgnoreCase))
+                if (contentTypes.Contains(acceptedType, StringComparer.OrdinalIgnoreCase))
                 {
                     return false;
                 }
             }
 
-            return acceptTypeCollection.CanAccept("text/html");
+            return acceptTypeCollection.CanAccept(HtmlContentType);
         }
     }
 }
