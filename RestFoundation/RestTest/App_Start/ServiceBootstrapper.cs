@@ -23,7 +23,7 @@ namespace RestTest.App_Start
             DynamicModuleUtility.RegisterModule(typeof(HttpResponseModule));
 
             // Configuring REST foundation
-            Rest.Configure.WithObjectFactory(CreateObjectFactory)
+            Rest.Configure.WithObjectFactory(CreateObjectFactory, CreateObjectBuilder)
                           .WithDataFormatters(RegisterDataFormatters)
                           .WithRoutes(RegisterRoutes)
                           .EnableServiceProxyUI();
@@ -53,6 +53,11 @@ namespace RestTest.App_Start
             return ObjectFactory.GetInstance(type);
         }
 
+        public static void CreateObjectBuilder(object obj)
+        {
+            ObjectFactory.BuildUp(obj);
+        }
+
         private static void RegisterDataFormatters(DataFormatterBuilder builder)
         {
             builder.Set("application/bson", new BsonFormatter());
@@ -74,6 +79,8 @@ namespace RestTest.App_Start
             routeBuilder.MapRestRoute<ITouchMapService>("touch-map")
                         .WithBehaviors(new HttpsOnlyBehavior())
                         .WithContentTypesRestrictedTo("text/xml", "application/xml", "application/json");
+
+            routeBuilder.MapPageRoute("faq", "~/Views/Faq.aspx");
         }
     }
 }

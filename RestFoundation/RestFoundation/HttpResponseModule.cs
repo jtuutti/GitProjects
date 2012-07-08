@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Web;
+using System.Web.UI;
 
 namespace RestFoundation
 {
@@ -13,12 +14,23 @@ namespace RestFoundation
                 throw new HttpException(500, "Rest Foundation services can only run under the IIS 7+ integrated pipeline mode");
             }
 
+            context.PreRequestHandlerExecute += (sender, args) => IngestPageDependencies(context);
             context.PreSendRequestHeaders += (sender, args) => RemoveServerHeaders(context);
             context.Error += (sender, args) => CompleteRequestOnError(context);
         }
 
         public void Dispose()
         {
+        }
+
+        private static void IngestPageDependencies(HttpApplication context)
+        {
+            var handler = context.Context.CurrentHandler as Page;
+
+            if (handler != null)
+            {
+                Rest.Active.Activator.BuildUp(handler);
+            }
         }
 
         private static void RemoveServerHeaders(HttpApplication context)
@@ -32,7 +44,7 @@ namespace RestFoundation
         {
             Exception exception = context.Server.GetLastError();
 
-            if (exception is HttpUnhandledException && exception.InnerException == null)
+            if (exception is HttpUnhandledException && exception.InnerException != null)
             {
                 exception = exception.InnerException;
             }

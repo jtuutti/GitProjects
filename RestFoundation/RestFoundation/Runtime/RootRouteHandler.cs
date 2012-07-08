@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web;
 using System.Web.Routing;
-using RestFoundation.Collections.Specialized;
-using RestFoundation.Runtime;
 using RestFoundation.ServiceProxy;
 
 namespace RestFoundation
@@ -12,14 +10,17 @@ namespace RestFoundation
     public class RootRouteHandler : IRouteHandler, IHttpHandler
     {
         private readonly IServiceContext m_serviceContext;
+        private readonly IBrowserDetector m_browserDetector;
         private readonly IResultFactory m_resultFactory;
 
-        public RootRouteHandler(IServiceContext serviceContext, IResultFactory resultFactory)
+        public RootRouteHandler(IServiceContext serviceContext, IBrowserDetector browserDetector, IResultFactory resultFactory)
         {
             if (serviceContext == null) throw new ArgumentNullException("serviceContext");
+            if (browserDetector == null) throw new ArgumentNullException("browserDetector");
             if (resultFactory == null) throw new ArgumentNullException("resultFactory");
 
             m_serviceContext = serviceContext;
+            m_browserDetector = browserDetector;
             m_resultFactory = resultFactory;
         }
 
@@ -58,7 +59,7 @@ namespace RestFoundation
                     context.Response.SuppressContent = true;
                 }
 
-                if (Rest.Active.IsServiceProxyInitialized && IsInBrowser(context.Request))
+                if (Rest.Active.IsServiceProxyInitialized && m_browserDetector.IsBrowserRequest(new HttpRequestWrapper(context.Request)))
                 {
                     context.Response.Redirect((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/help/index", false);
                     return;
@@ -66,43 +67,6 @@ namespace RestFoundation
             }
 
             ProcessResult();
-        }
-
-        private static bool IsInBrowser(HttpRequest request)
-        {
-            string browser = request.Browser != null ? request.Browser.Browser : null;
-            string[] acceptTypes = request.AcceptTypes;
-
-            if (String.IsNullOrWhiteSpace(browser) || acceptTypes == null || acceptTypes.Length == 0)
-            {
-                return false;
-            }
-
-            string acceptedValue = request.QueryString["X-Accept-Override"];
-
-            if (String.IsNullOrEmpty(acceptedValue))
-            {
-                acceptedValue = request.Headers.Get("Accept");
-            }
-
-            var acceptTypeCollection = new AcceptValueCollection(acceptedValue);
-
-            if (acceptTypeCollection.AcceptedNames.Count == 0)
-            {
-                return false;
-            }
-
-            string[] contentTypes = DataFormatterRegistry.GetContentTypes();
-
-            for (int i = 0; i < contentTypes.Length; i++)
-            {
-                if (String.Equals(contentTypes[i], acceptTypeCollection.GetPreferredName(), StringComparison.OrdinalIgnoreCase))
-                {
-                    return false;
-                }
-            }
-
-            return acceptTypeCollection.CanAccept("text/html");
         }
 
         private static Operation[] GetOperations()

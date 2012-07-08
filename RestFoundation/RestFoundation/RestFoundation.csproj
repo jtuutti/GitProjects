@@ -60,6 +60,7 @@
     <Compile Include="Collections\Concrete\ServerVariableCollection.cs" />
     <Compile Include="Collections\IServerVariableCollection.cs" />
     <Compile Include="DataFormatters\BsonFormatter.cs" />
+    <Compile Include="IBrowserDetector.cs" />
     <Compile Include="ResponseHeaderNames.cs" />
     <Compile Include="IRestAsyncHandler.cs" />
     <Compile Include="GlobalBehaviorBuilder.cs" />
@@ -143,6 +144,8 @@
     <Compile Include="RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptionType.cs" />
+    <Compile Include="Runtime\BrowserConstraint.cs" />
+    <Compile Include="Runtime\BrowserDetector.cs" />
     <Compile Include="Security\AuthorizationHeader.cs" />
     <Compile Include="Security\AuthorizationHeaderParser.cs" />
     <Compile Include="Security\AuthorizationManager.cs" />

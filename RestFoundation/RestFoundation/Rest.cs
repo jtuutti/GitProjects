@@ -47,14 +47,20 @@ namespace RestFoundation
 
         public virtual Rest WithObjectFactory(Func<Type, object> factory)
         {
+            return WithObjectFactory(factory, obj => {});
+        }
+
+        public virtual Rest WithObjectFactory(Func<Type, object> factory, Action<object> builder)
+        {
             if (factory == null) throw new ArgumentNullException("factory");
+            if (builder == null) throw new ArgumentNullException("builder");
 
             if (Activator != null)
             {
                 throw new InvalidOperationException("An object activator or an object factory has already been assigned.");
             }
 
-            Activator = new DelegateObjectActivator(factory);
+            Activator = new DelegateObjectActivator(factory, builder);
 
             MapDefaultUrl();
             return this;
@@ -72,7 +78,7 @@ namespace RestFoundation
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
-            builder(new RouteBuilder(RouteTable.Routes, Active.CreateObject<IHttpMethodResolver>()));
+            builder(new RouteBuilder(RouteTable.Routes, Active.CreateObject<IHttpMethodResolver>(), Active.CreateObject<IBrowserDetector>()));
             return this;
         }
 

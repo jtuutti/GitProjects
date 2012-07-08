@@ -15,14 +15,17 @@ namespace RestFoundation
         private static readonly Type urlAttributeType = typeof(UrlAttribute);
         private readonly RouteCollection m_routes;
         private readonly IHttpMethodResolver m_httpMethodResolver;
+        private readonly IBrowserDetector m_browserDetector;
 
-        internal RouteBuilder(RouteCollection routes, IHttpMethodResolver httpMethodResolver)
+        internal RouteBuilder(RouteCollection routes, IHttpMethodResolver httpMethodResolver, IBrowserDetector browserDetector)
         {
             if (routes == null) throw new ArgumentNullException("routes");
             if (httpMethodResolver == null) throw new ArgumentNullException("httpMethodResolver");
+            if (browserDetector == null) throw new ArgumentNullException("browserDetector");
 
             m_routes = routes;
             m_httpMethodResolver = httpMethodResolver;
+            m_browserDetector = browserDetector;
         }
 
         public RouteConfiguration MapRestRoute<TContract>(string url)
@@ -43,6 +46,15 @@ namespace RestFoundation
         public RouteConfiguration MapRestRouteAsync(string url, Type serviceContractType)
         {
             return MapRestRoute(url, serviceContractType, true);
+        }
+
+        public RouteBuilder MapPageRoute(string url, string relativePagePath)
+        {
+            if (String.IsNullOrEmpty(url)) throw new ArgumentNullException("url");
+            if (String.IsNullOrEmpty(relativePagePath)) throw new ArgumentNullException("relativePagePath");
+
+            m_routes.MapPageRoute(null, url, relativePagePath);
+            return this;
         }
 
         private static HashSet<HttpMethod> AddHttpMethods(IEnumerable<HttpMethod> urlMethods)
@@ -135,7 +147,17 @@ namespace RestFoundation
                 var routeHandler = isAsync ? (IRestHandler) Rest.Active.CreateObject<RestAsyncHandler>() : Rest.Active.CreateObject<RestHandler>();
                 routeHandlers.Add(routeHandler);
 
-                m_routes.Add(new Route(ConcatUrl(url, metadata.UrlInfo.UrlTemplate.Trim()), defaults, constraints, routeHandler));
+                string serviceUrl = ConcatUrl(url, metadata.UrlInfo.UrlTemplate.Trim());
+
+                if (!String.IsNullOrWhiteSpace(metadata.UrlInfo.WebPageRelativePath))
+                {
+                    m_routes.MapPageRoute(null, serviceUrl, metadata.UrlInfo.WebPageRelativePath.Trim(), false, new RouteValueDictionary(), new RouteValueDictionary
+                    {
+                        { RouteConstants.BrowserConstraint, new BrowserConstraint(m_browserDetector) }
+                    });
+                }
+
+                m_routes.Add(new Route(serviceUrl, defaults, constraints, routeHandler));
             }
 
             return routeHandlers;

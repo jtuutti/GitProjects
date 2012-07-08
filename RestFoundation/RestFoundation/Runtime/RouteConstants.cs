@@ -5,6 +5,7 @@
         public const string ServiceContractType = "_serviceContractType";
         public const string ServiceUrl = "_serviceUrl";
         public const string UrlTemplate = "_urlTemplate";
+        public const string BrowserConstraint = "_browserConstraint";
         public const string RouteConstraint = "_routeConstraint";
     }
 }
