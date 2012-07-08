@@ -65,18 +65,18 @@ namespace RestFoundation.Collections.Concrete
 
         private class ObjectValueEnumerator : IEnumerator<object>
         {
-            private readonly IEnumerator enumerator;
+            private readonly IEnumerator m_enumerator;
 
             public ObjectValueEnumerator(IEnumerator enumerator)
             {
-                this.enumerator = enumerator;
+                m_enumerator = enumerator;
             }
 
             public object Current
             {
                 get
                 {
-                    return enumerator.Current;
+                    return m_enumerator.Current;
                 }
             }
 
@@ -90,12 +90,12 @@ namespace RestFoundation.Collections.Concrete
 
             public bool MoveNext()
             {
-                return enumerator.MoveNext();
+                return m_enumerator.MoveNext();
             }
 
             public void Reset()
             {
-                enumerator.Reset();
+                m_enumerator.Reset();
             }
 
             public void Dispose()

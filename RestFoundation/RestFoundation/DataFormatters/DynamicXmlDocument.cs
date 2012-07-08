@@ -12,7 +12,7 @@ namespace RestFoundation.DataFormatters
     /// </summary>
     public sealed class DynamicXDocument : DynamicObject, IEnumerable
     {
-        private readonly List<XElement> elements;
+        private readonly List<XElement> m_elements;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DynamicXDocument"/> class.
@@ -23,7 +23,7 @@ namespace RestFoundation.DataFormatters
             if (String.IsNullOrWhiteSpace(xml)) throw new ArgumentNullException("xml");
 
             XDocument document = XDocument.Parse(xml);
-            elements = new List<XElement> { StripNamespaces(document.Root) };
+            m_elements = new List<XElement> { StripNamespaces(document.Root) };
         }
 
         /// <summary>
@@ -52,13 +52,13 @@ namespace RestFoundation.DataFormatters
             switch (binder.Name)
             {
                 case "Value":
-                    result = elements[0].Value;
+                    result = m_elements[0].Value;
                     break;
                 case "Count":
-                    result = elements.Count;
+                    result = m_elements.Count;
                     break;
                 default:
-                    List<XElement> items = elements.Descendants(XName.Get(binder.Name)).ToList();
+                    List<XElement> items = m_elements.Descendants(XName.Get(binder.Name)).ToList();
 
                     if (items.Count == 1 && !items[0].HasElements)
                     {
@@ -96,7 +96,7 @@ namespace RestFoundation.DataFormatters
             if (indexes == null) throw new ArgumentNullException("indexes");
 
             var index = (int) indexes[0];
-            result = new DynamicXDocument(elements[index]);
+            result = new DynamicXDocument(m_elements[index]);
 
             return true;
         }
@@ -110,9 +110,9 @@ namespace RestFoundation.DataFormatters
         /// <filterpriority>2</filterpriority>
         public override string ToString()
         {
-            if (elements.Count > 0 && elements[0] != null)
+            if (m_elements.Count > 0 && m_elements[0] != null)
             {
-                return elements[0].Descendants().Any() ? elements[0].ToString(SaveOptions.None) : elements[0].Value;
+                return m_elements[0].Descendants().Any() ? m_elements[0].ToString(SaveOptions.None) : m_elements[0].Value;
             }
 
             return String.Empty;
@@ -127,7 +127,7 @@ namespace RestFoundation.DataFormatters
         /// <filterpriority>2</filterpriority>
         public IEnumerator GetEnumerator()
         {
-            return elements.Select(element => new DynamicXDocument(element)).GetEnumerator();
+            return m_elements.Select(element => new DynamicXDocument(element)).GetEnumerator();
         }
 
         private static XElement StripNamespaces(XElement rootElement)
@@ -174,12 +174,12 @@ namespace RestFoundation.DataFormatters
 
         private DynamicXDocument(XElement element)
         {
-            elements = new List<XElement> { element };
+            m_elements = new List<XElement> { element };
         }
 
         private DynamicXDocument(IEnumerable<XElement> elements)
         {
-            this.elements = new List<XElement>(elements);
+            this.m_elements = new List<XElement>(elements);
         }
     }
 }

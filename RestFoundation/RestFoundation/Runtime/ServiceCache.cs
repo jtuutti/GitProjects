@@ -11,16 +11,16 @@ namespace RestFoundation.Runtime
     /// </summary>
     public class ServiceCache : IServiceCache
     {
-        private readonly Cache cache;
+        private readonly Cache m_cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceCache"/> class.
         /// </summary>
         public ServiceCache()
         {
-            cache = HttpRuntime.Cache; // works in and out of the ASP.NET process
+            m_cache = HttpRuntime.Cache; // works in and out of the ASP.NET process
 
-            if (cache == null)
+            if (m_cache == null)
             {
                 throw new InvalidOperationException("Cache could not be initialized.");
             }
@@ -52,7 +52,7 @@ namespace RestFoundation.Runtime
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
-            return cache.Get(key) != null;
+            return m_cache.Get(key) != null;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace RestFoundation.Runtime
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
-            return cache.Get(key);
+            return m_cache.Get(key);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace RestFoundation.Runtime
             if (value == null) throw new ArgumentNullException("value");
 
             SerializationValidator.Validate(value);
-            cache.Add(key, value, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
+            m_cache.Add(key, value, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace RestFoundation.Runtime
             if (value == null) throw new ArgumentNullException("value");
 
             SerializationValidator.Validate(value);
-            cache.Add(key, value, null, absoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
+            m_cache.Add(key, value, null, absoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace RestFoundation.Runtime
             if (value == null) throw new ArgumentNullException("value");
 
             SerializationValidator.Validate(value);
-            cache.Add(key, value, null, Cache.NoAbsoluteExpiration, slidingExpiration, CacheItemPriority.Default, null);
+            m_cache.Add(key, value, null, Cache.NoAbsoluteExpiration, slidingExpiration, CacheItemPriority.Default, null);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace RestFoundation.Runtime
             if (value == null) throw new ArgumentNullException("value");
 
             SerializationValidator.Validate(value);
-            cache[key] = value;
+            m_cache[key] = value;
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace RestFoundation.Runtime
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
-            return cache.Remove(key) != null;
+            return m_cache.Remove(key) != null;
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         public virtual void Clear()
         {
-            IDictionaryEnumerator enumerator = cache.GetEnumerator();
+            IDictionaryEnumerator enumerator = m_cache.GetEnumerator();
 
             var keys = new HashSet<string>();
 
@@ -153,7 +153,7 @@ namespace RestFoundation.Runtime
 
             foreach (string key in keys)
             {
-                cache.Remove(key);
+                m_cache.Remove(key);
             }
         }
     }

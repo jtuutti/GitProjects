@@ -49,11 +49,6 @@ namespace RestFoundation.Runtime
             return behavior.AffectedMethods == null || behavior.AffectedMethods.Count == 0 || behavior.AffectedMethods.Contains(methodName);
         }
 
-        private static bool IsWrapperException(Exception ex)
-        {
-            return (ex is ServiceRuntimeException || ex is TargetInvocationException || ex is AggregateException) && ex.InnerException != null;
-        }
-
         private static List<IServiceBehavior> GetServiceMethodBehaviors(IRestHandler handler, MethodInfo method)
         {
             List<IServiceBehavior> behaviors = ServiceBehaviorRegistry.GetBehaviors(handler)
@@ -89,35 +84,30 @@ namespace RestFoundation.Runtime
             }
             catch (Exception ex)
             {
-                Exception internalException = IsWrapperException(ex) ? ex.InnerException : ex;
+                Exception unwrappedException = ExceptionUnwrapper.Unwrap(ex);
 
-                if (internalException is HttpResponseException || internalException is HttpRequestValidationException)
+                if (ExceptionUnwrapper.IsDirectResponseException(unwrappedException))
                 {
-                    if (ex == internalException)
+                    if (ex == unwrappedException)
                     {
                         throw;
                     }
 
-                    throw internalException;
+                    throw unwrappedException;
                 }
 
                 try
                 {
-                    if (!m_behaviorInvoker.PerformOnExceptionBehaviors(behaviors, service, method, internalException))
+                    if (!m_behaviorInvoker.PerformOnExceptionBehaviors(behaviors, service, method, unwrappedException))
                     {
                         return null;
                     }
 
-                    throw new ServiceRuntimeException(internalException);
+                    throw new ServiceRuntimeException(unwrappedException);
                 }
                 catch (Exception innerEx)
                 {
-                    if (IsWrapperException(innerEx))
-                    {
-                        throw new ServiceRuntimeException(innerEx.InnerException, ex);
-                    }
-
-                    throw new ServiceRuntimeException(innerEx, ex);
+                    throw new ServiceRuntimeException(ExceptionUnwrapper.Unwrap(innerEx), ex);
                 }
             }
         }

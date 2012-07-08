@@ -6,8 +6,10 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
 {
-    public class StreamResult : IResult
+    public class StreamResult : IResult, IDisposable
     {
+        private bool m_isDisposed;
+
         public StreamResult()
         {
             ClearOutput = true;
@@ -64,6 +66,38 @@ namespace RestFoundation.Results
 
                 Stream.CopyTo(context.Response.Output.Stream);
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);  
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (m_isDisposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                if (Stream != null)
+                {
+                    try
+                    {
+                        Stream.Flush();
+                    }
+                    catch (Exception)
+                    {
+                    }
+
+                    Stream.Dispose();
+                }
+            }
+
+            m_isDisposed = true;   
         }
     }
 }

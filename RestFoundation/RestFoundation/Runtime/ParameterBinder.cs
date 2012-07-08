@@ -88,7 +88,7 @@ namespace RestFoundation.Runtime
             }
             catch (Exception ex)
             {
-                if (ex is HttpResponseException || ex is HttpRequestValidationException)
+                if (ExceptionUnwrapper.IsDirectResponseException(ex))
                 {
                     throw;
                 }

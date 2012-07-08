@@ -12,6 +12,7 @@ namespace RestFoundation.Runtime
         private readonly ServiceMethodLocator m_serviceMethodLocator;
         private readonly IServiceMethodInvoker m_methodInvoker;
         private readonly IResultFactory m_resultFactory;
+        private readonly ResultExecutor m_resultExecutor;
 
         public RestHandler(IServiceContext serviceContext, ServiceMethodLocator serviceMethodLocator, IServiceMethodInvoker methodInvoker, IResultFactory resultFactory)
         {
@@ -24,6 +25,8 @@ namespace RestFoundation.Runtime
             m_serviceMethodLocator = serviceMethodLocator;
             m_methodInvoker = methodInvoker;
             m_resultFactory = resultFactory;
+
+            m_resultExecutor = new ResultExecutor();
         }
 
         public IServiceContext Context
@@ -81,25 +84,12 @@ namespace RestFoundation.Runtime
                 return;
             }
 
-            object result = m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method);
+            object returnedObj = m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method);
+            IResult result = m_resultFactory.Create(m_serviceContext, returnedObj);
 
             if (!(result is EmptyResult))
             {
-                ProcessResult(result, serviceMethodData.Method.ReturnType);
-            }
-        }
-
-        private void ProcessResult(object result, Type methodReturnType)
-        {
-            IResult httpResult = m_resultFactory.Create(m_serviceContext, result);
-
-            if (httpResult != null)
-            {
-                httpResult.Execute(m_serviceContext);
-            }
-            else if (m_serviceContext.Response.GetStatusCode() == HttpStatusCode.OK && methodReturnType == typeof(void))
-            {
-                m_serviceContext.Response.SetStatus(HttpStatusCode.NoContent, "No Content");
+                m_resultExecutor.Execute(m_serviceContext, result, serviceMethodData.Method.ReturnType);
             }
         }
     }

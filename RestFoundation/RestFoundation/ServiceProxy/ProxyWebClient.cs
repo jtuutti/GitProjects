@@ -7,6 +7,8 @@ namespace RestFoundation.ServiceProxy
     {
         private const string IfModifiedSinceHeader = "If-Modified-Since";
 
+        private bool m_isDisposed;
+
         public bool HeadOnly { get; set; }
         public bool Options { get; set; }
         public ProxyWebResponse WebResponse { get; private set; }
@@ -56,6 +58,27 @@ namespace RestFoundation.ServiceProxy
 
             WebResponse = new ProxyWebResponse(response);
             return WebResponse;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (m_isDisposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                var disposableResponse = WebResponse as IDisposable;
+
+                if (disposableResponse != null)
+                {
+                    disposableResponse.Dispose();
+                }
+            }
+
+            base.Dispose(disposing);
+            m_isDisposed = true;
         }
     }
 }

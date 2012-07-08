@@ -13,6 +13,7 @@ namespace RestFoundation.Runtime
         private readonly ServiceMethodLocator m_serviceMethodLocator;
         private readonly IServiceMethodInvoker m_methodInvoker;
         private readonly IResultFactory m_resultFactory;
+        private readonly ResultExecutor m_resultExecutor;
 
         public RestAsyncHandler(IServiceContext serviceContext, ServiceMethodLocator serviceMethodLocator, IServiceMethodInvoker methodInvoker, IResultFactory resultFactory)
         {
@@ -25,6 +26,8 @@ namespace RestFoundation.Runtime
             m_serviceMethodLocator = serviceMethodLocator;
             m_methodInvoker = methodInvoker;
             m_resultFactory = resultFactory;
+
+            m_resultExecutor = new ResultExecutor();
         }
 
         public IServiceContext Context
@@ -84,17 +87,20 @@ namespace RestFoundation.Runtime
 
             if (serviceMethodData == ServiceMethodLocatorData.Options)
             {
-                return Task<IResult>.Factory.StartNew(() => new EmptyResult()).ContinueWith(action => cb(action));
+                return Task<IResult>.Factory.StartNew(state =>
+                                                      {
+                                                          HttpContext.Current = ((HttpArguments) state).Context;
+                                                          return new EmptyResult();
+                                                      }, new HttpArguments(HttpContext.Current, null))
+                                            .ContinueWith(action => cb(action));
             }
 
-            var httpArguments = new HttpArguments(HttpContext.Current, serviceMethodData.Method.ReturnType);
-
             return Task<IResult>.Factory.StartNew(state =>
-                                                 {
-                                                     HttpContext.Current = ((HttpArguments) state).Context;
-                                                     return m_resultFactory.Create(m_serviceContext, m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method));
-                                                 }, httpArguments)
-                                                 .ContinueWith(action => cb(action));
+                                                  {
+                                                      HttpContext.Current = ((HttpArguments) state).Context;
+                                                      return m_resultFactory.Create(m_serviceContext, m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method));
+                                                  }, new HttpArguments(HttpContext.Current, serviceMethodData.Method.ReturnType))
+                                        .ContinueWith(action => cb(action));
         }
 
         public void EndProcessRequest(IAsyncResult result)
@@ -108,16 +114,19 @@ namespace RestFoundation.Runtime
 
             if (task.IsFaulted && task.Exception != null)
             {
-                throw UnwrapFaultException(task);
+                throw UnwrapTaskException(task);
             }
+
+            var httpArguments = (HttpArguments) result.AsyncState;
+            HttpContext.Current = httpArguments.Context;
 
             if (!(task.Result is EmptyResult))
             {
-                ProcessResult(task.Result, (HttpArguments) result.AsyncState);
+                m_resultExecutor.Execute(m_serviceContext, task.Result, httpArguments.MethodReturnType);
             }
         }
 
-        private static Exception UnwrapFaultException(Task<IResult> task)
+        private static Exception UnwrapTaskException(Task<IResult> task)
         {
             AggregateException taskException = task.Exception;
 
@@ -126,26 +135,7 @@ namespace RestFoundation.Runtime
                 return new HttpResponseException(HttpStatusCode.InternalServerError, "HTTP request failed to process");
             }
 
-            if (taskException.InnerException is HttpResponseException || taskException.InnerException is HttpRequestValidationException)
-            {
-                return taskException.InnerException;
-            }
-
-            return taskException;
-        }
-
-        private void ProcessResult(IResult result, HttpArguments httpArguments)
-        {
-            HttpContext.Current = httpArguments.Context;
-
-            if (result != null)
-            {
-                result.Execute(m_serviceContext);
-            }
-            else if (m_serviceContext.Response.GetStatusCode() == HttpStatusCode.OK && httpArguments.MethodReturnType == typeof(void))
-            {
-                m_serviceContext.Response.SetStatus(HttpStatusCode.NoContent, "No Content");
-            }
+            return ExceptionUnwrapper.IsDirectResponseException(taskException.InnerException) ? taskException.InnerException : taskException;
         }
 
         #region HTTP Task Arguments
@@ -154,11 +144,6 @@ namespace RestFoundation.Runtime
         {
             public HttpArguments(HttpContext context, Type methodReturnType)
             {
-                if (methodReturnType == null)
-                {
-                    throw new ArgumentNullException("methodReturnType");
-                }
-
                 Context = context;
                 MethodReturnType = methodReturnType;
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -131,6 +132,8 @@ namespace RestFoundation
             return Content(stream, clearOutput, contentType, null);
         }
 
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
+                         Justification = "The result will be disposed by the REST handler")]
         public static StreamResult Content(Stream stream, bool clearOutput, string contentType, string contentDisposition)
         {
             var result = new StreamResult

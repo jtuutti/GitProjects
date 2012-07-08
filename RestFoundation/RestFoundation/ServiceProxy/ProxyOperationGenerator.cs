@@ -20,7 +20,7 @@ namespace RestFoundation.ServiceProxy
                 return null;
             }
 
-            if (Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyHiddenOperation), false) != null)
+            if (Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyHiddenOperationAttribute), false) != null)
             {
                 return null;
             }
@@ -39,7 +39,7 @@ namespace RestFoundation.ServiceProxy
                     continue;
                 }
 
-                if (Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyHiddenOperation), false) != null)
+                if (Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyHiddenOperationAttribute), false) != null)
                 {
                     continue;
                 }
