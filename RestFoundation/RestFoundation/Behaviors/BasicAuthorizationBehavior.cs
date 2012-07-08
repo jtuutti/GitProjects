@@ -36,18 +36,21 @@ namespace RestFoundation.Behaviors
 
             if (!AuthorizationHeaderParser.TryParse(context.Request.Headers.Authorization, context.Request.Headers.ContentCharsetEncoding, out header) ||
                 !AuthenticationType.Equals(header.AuthenticationType, StringComparison.OrdinalIgnoreCase) ||
-                !m_authorizationManager.ValidateUser(header.UserName, header.Password))
+                !String.Equals(m_authorizationManager.GetPassword(header.UserName), header.Password, StringComparison.Ordinal))
             {
-                context.Response.Output.Clear();
-                context.Response.SetHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "{0} realm=\"{1}\"", AuthenticationType, context.Request.Url.ServiceUrl));
-                context.Response.SetStatus(HttpStatusCode.Unauthorized, "Unauthorized");
-
+                GenerateAuthenticationHeader(context);
                 return false;
             }
 
             context.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), m_authorizationManager.GetRoles(header.UserName).ToArray());
-
             return true;
+        }
+
+        private static void GenerateAuthenticationHeader(IServiceContext context)
+        {
+            context.Response.Output.Clear();
+            context.Response.SetHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "{0} realm=\"{1}\"", AuthenticationType, context.Request.Url.ServiceUrl));
+            context.Response.SetStatus(HttpStatusCode.Unauthorized, "Unauthorized");
         }
     }
 }

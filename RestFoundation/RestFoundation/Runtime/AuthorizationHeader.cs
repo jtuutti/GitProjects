@@ -13,8 +13,6 @@ namespace RestFoundation.Runtime
             AuthenticationType = authenticationType;
             UserName = userName;
             Parameters = parameters;
-
-            Parameters = new NameValueCollection();
         }
 
         public string AuthenticationType { get; private set; }

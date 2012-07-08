@@ -6,9 +6,14 @@ namespace RestTest.Security
 {
     public class ServiceAuthorizationManager : IAuthorizationManager
     {
-        public bool ValidateUser(string userName, string password)
+        public string GetPassword(string userName)
         {
-            return "admin".Equals(userName, StringComparison.OrdinalIgnoreCase) && "Rest".Equals(password);
+            if (String.Equals("admin", userName, StringComparison.OrdinalIgnoreCase))
+            {
+                return "Rest";
+            }
+
+            return null;
         }
 
         public IEnumerable<string> GetRoles(string userName)

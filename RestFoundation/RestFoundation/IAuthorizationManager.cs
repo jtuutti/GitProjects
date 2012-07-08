@@ -4,7 +4,7 @@ namespace RestFoundation
 {
     public interface IAuthorizationManager
     {
-        bool ValidateUser(string userName, string password);
+        string GetPassword(string userName);
         IEnumerable<string> GetRoles(string userName);
     }
 }

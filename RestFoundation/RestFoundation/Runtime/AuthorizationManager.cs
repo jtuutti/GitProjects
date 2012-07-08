@@ -4,9 +4,9 @@ namespace RestFoundation.Runtime
 {
     public class AuthorizationManager : IAuthorizationManager
     {
-        public virtual bool ValidateUser(string userName, string password)
+        public virtual string GetPassword(string userName)
         {
-            return false;
+            return null;
         }
 
         public virtual IEnumerable<string> GetRoles(string userName)

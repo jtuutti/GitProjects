@@ -16,15 +16,15 @@ namespace RestFoundation.Behaviors
 
         internal OutputCacheParameters CacheSettings { get; private set; }
 
-        public int DurationInSeconds
+        public TimeSpan DurationInSeconds
         {
             get
             {
-                return CacheSettings.Duration;
+                return TimeSpan.FromSeconds(CacheSettings.Duration);
             }
             set
             {
-                CacheSettings.Duration = value;
+                CacheSettings.Duration = Convert.ToInt32(value.TotalSeconds);
             }
         }
 
