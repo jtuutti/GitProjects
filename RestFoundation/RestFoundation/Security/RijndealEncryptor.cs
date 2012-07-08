@@ -9,42 +9,34 @@ namespace RestFoundation.Security
     {
         private const string InvalidHashKey = "Invalid hash key provided.";
 
-        private static readonly byte[] hashBuffer = new byte[8];
+        private static readonly byte[] hashBuffer = CreateHashBuffer();
 
-        private readonly byte[] key;
-        private readonly byte[] vector;
-
-        static RijndaelEncryptor()
-        {
-            using (RandomNumberGenerator randomGenerator = RNGCryptoServiceProvider.Create())
-            {
-                randomGenerator.GetBytes(hashBuffer);
-            }
-        }
+        private readonly byte[] m_key;
+        private readonly byte[] m_vector;
 
         public RijndaelEncryptor()
         {
-            key = new byte[32];
-            vector = new byte[16];
+            m_key = new byte[32];
+            m_vector = new byte[16];
 
             using (var sha = new SHA384Managed())
             {
                 byte[] hashArray = sha.ComputeHash(hashBuffer);
 
-                Array.Copy(hashArray, 0, key, 0, 32);
-                Array.Copy(hashArray, 32, vector, 0, 16);
+                Array.Copy(hashArray, 0, m_key, 0, 32);
+                Array.Copy(hashArray, 32, m_vector, 0, 16);
             }
         }
 
         public string Encrypt(string value)
         {
             if (value == null) throw new ArgumentNullException("value");
-            if (key == null) throw new InvalidOperationException(InvalidHashKey);
+            if (m_key == null) throw new InvalidOperationException(InvalidHashKey);
 
             byte[] data = Encoding.UTF8.GetBytes(value);
 
             using (var crypto = new RijndaelManaged())
-            using (var encryptor = crypto.CreateEncryptor(key, vector))
+            using (var encryptor = crypto.CreateEncryptor(m_key, m_vector))
             using (var memoryStream = new MemoryStream())
             {
                 var crptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
@@ -59,12 +51,12 @@ namespace RestFoundation.Security
         public string Decrypt(string encryptedValue)
         {
             if (String.IsNullOrEmpty(encryptedValue)) throw new ArgumentNullException("encryptedValue");
-            if (key == null) throw new InvalidOperationException(InvalidHashKey);
+            if (m_key == null) throw new InvalidOperationException(InvalidHashKey);
 
             byte[] cipher = Convert.FromBase64String(encryptedValue);
 
             using (var crypto = new RijndaelManaged())
-            using (ICryptoTransform encryptor = crypto.CreateDecryptor(key, vector))
+            using (ICryptoTransform encryptor = crypto.CreateDecryptor(m_key, m_vector))
             using (var memoryStream = new MemoryStream(cipher))
             {
                 var crptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Read);
@@ -74,6 +66,18 @@ namespace RestFoundation.Security
 
                 return Encoding.UTF8.GetString(data, 0, dataLength);
             }
+        }
+
+        private static byte[] CreateHashBuffer()
+        {
+            var buffer = new byte[8];
+
+            using (RandomNumberGenerator randomGenerator = RNGCryptoServiceProvider.Create())
+            {
+                randomGenerator.GetBytes(buffer);
+            }
+
+            return buffer;
         }
     }
 }
