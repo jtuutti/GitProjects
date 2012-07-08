@@ -5,26 +5,24 @@
     {
         Response.Clear();
 
-        string format = Request.Params["format"];
+        string contentType = Request.Params["ct"];
 
-        if ("JSON".Equals(format, StringComparison.OrdinalIgnoreCase))
+        if (!String.IsNullOrWhiteSpace(contentType))
         {
-            Response.ContentType = "application/json";
-        }
-        else if ("XML".Equals(format, StringComparison.OrdinalIgnoreCase))
-        {
-            Response.ContentType = "text/xml";
+            Response.ContentType = contentType;
         }
         else
         {
             Response.ContentType = "text/plain";
         }
 
-        string responseText = Request.Params["responseText"];
+        string responseText = Request.Params["txt"];
 
         if (responseText != null)
         {
             Response.Write(Server.UrlDecode(responseText));
         }
+
+        Response.End();
     }
 </script>
