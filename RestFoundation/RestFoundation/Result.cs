@@ -11,14 +11,56 @@ namespace RestFoundation
 {
     public static class Result
     {
-        public static StatusResult Ok
+        public static StatusResult Accepted
         {
             get
             {
                 var result = new StatusResult
                              {
-                                 StatusCode = HttpStatusCode.OK,
-                                 StatusDescription = "OK"
+                                 StatusCode = HttpStatusCode.Accepted,
+                                 StatusDescription = "Accepted"
+                             };
+
+                return result;
+            }
+        }
+
+        public static StatusResult BadRequest
+        {
+            get
+            {
+                var result = new StatusResult
+                             {
+                                 StatusCode = HttpStatusCode.BadRequest,
+                                 StatusDescription = "Bad Request"
+                             };
+
+                return result;
+            }
+        }
+
+        public static StatusResult Conflict
+        {
+            get
+            {
+                var result = new StatusResult
+                             {
+                                 StatusCode = HttpStatusCode.Conflict,
+                                 StatusDescription = "Conflict"
+                             };
+
+                return result;
+            }
+        }
+
+        public static StatusResult Forbidden
+        {
+            get
+            {
+                var result = new StatusResult
+                             {
+                                 StatusCode = HttpStatusCode.Forbidden,
+                                 StatusDescription = "Forbidden"
                              };
 
                 return result;
@@ -47,6 +89,48 @@ namespace RestFoundation
                              {
                                  StatusCode = HttpStatusCode.NotFound,
                                  StatusDescription = "Not Found"
+                             };
+
+                return result;
+            }
+        }
+
+        public static StatusResult NotImplemented
+        {
+            get
+            {
+                var result = new StatusResult
+                             {
+                                 StatusCode = HttpStatusCode.NotImplemented,
+                                 StatusDescription = "Not Implemented"
+                             };
+
+                return result;
+            }
+        }
+
+        public static StatusResult Ok
+        {
+            get
+            {
+                var result = new StatusResult
+                             {
+                                 StatusCode = HttpStatusCode.OK,
+                                 StatusDescription = "OK"
+                             };
+
+                return result;
+            }
+        }
+
+        public static StatusResult ServiceUnavailable
+        {
+            get
+            {
+                var result = new StatusResult
+                             {
+                                 StatusCode = HttpStatusCode.ServiceUnavailable,
+                                 StatusDescription = "Service Unavailable"
                              };
 
                 return result;
@@ -89,22 +173,22 @@ namespace RestFoundation
             return Content(String.Format(provider, format, args), true, null);
         }
 
-        public static BinaryResult Content(byte[] data)
+        public static BinaryResult Binary(byte[] data)
         {
-            return Content(data, true, null, null);
+            return Binary(data, true, null, null);
         }
 
-        public static BinaryResult Content(byte[] data, bool clearOutput)
+        public static BinaryResult Binary(byte[] data, bool clearOutput)
         {
-            return Content(data, clearOutput, null, null);
+            return Binary(data, clearOutput, null, null);
         }
 
-        public static BinaryResult Content(byte[] data, bool clearOutput, string contentType)
+        public static BinaryResult Binary(byte[] data, bool clearOutput, string contentType)
         {
-            return Content(data, clearOutput, contentType, null);
+            return Binary(data, clearOutput, contentType, null);
         }
 
-        public static BinaryResult Content(byte[] data, bool clearOutput, string contentType, string contentDisposition)
+        public static BinaryResult Binary(byte[] data, bool clearOutput, string contentType, string contentDisposition)
         {
             var result = new BinaryResult
                          {
@@ -117,24 +201,24 @@ namespace RestFoundation
             return result;
         }
 
-        public static StreamResult Content(Stream stream)
+        public static StreamResult Stream(Stream stream)
         {
-            return Content(stream, true, null, null);
+            return Stream(stream, true, null, null);
         }
 
-        public static StreamResult Content(Stream stream, bool clearOutput)
+        public static StreamResult Stream(Stream stream, bool clearOutput)
         {
-            return Content(stream, clearOutput, null, null);
+            return Stream(stream, clearOutput, null, null);
         }
 
-        public static StreamResult Content(Stream stream, bool clearOutput, string contentType)
+        public static StreamResult Stream(Stream stream, bool clearOutput, string contentType)
         {
-            return Content(stream, clearOutput, contentType, null);
+            return Stream(stream, clearOutput, contentType, null);
         }
 
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
                          Justification = "The result will be disposed by the REST handler")]
-        public static StreamResult Content(Stream stream, bool clearOutput, string contentType, string contentDisposition)
+        public static StreamResult Stream(Stream stream, bool clearOutput, string contentType, string contentDisposition)
         {
             var result = new StreamResult
                          {
@@ -147,27 +231,27 @@ namespace RestFoundation
             return result;
         }
 
-        public static FilePathResult FilePath(string filePath)
+        public static FilePathResult LocalFile(string filePath)
         {
-            return FilePath(filePath, true, null, TimeSpan.Zero, null);
+            return LocalFile(filePath, true, null, TimeSpan.Zero, null);
         }
 
-        public static FilePathResult FilePath(string filePath, bool clearOutput)
+        public static FilePathResult LocalFile(string filePath, bool clearOutput)
         {
-            return FilePath(filePath, clearOutput, null, TimeSpan.Zero, null);
+            return LocalFile(filePath, clearOutput, null, TimeSpan.Zero, null);
         }
 
-        public static FilePathResult FilePath(string filePath, bool clearOutput, string contentType)
+        public static FilePathResult LocalFile(string filePath, bool clearOutput, string contentType)
         {
-            return FilePath(filePath, clearOutput, contentType, TimeSpan.Zero, null);
+            return LocalFile(filePath, clearOutput, contentType, TimeSpan.Zero, null);
         }
 
-        public static FilePathResult FilePath(string filePath, bool clearOutput, string contentType, TimeSpan maxAge)
+        public static FilePathResult LocalFile(string filePath, bool clearOutput, string contentType, TimeSpan maxAge)
         {
-            return FilePath(filePath, clearOutput, contentType, maxAge, null);
+            return LocalFile(filePath, clearOutput, contentType, maxAge, null);
         }
 
-        public static FilePathResult FilePath(string filePath, bool clearOutput, string contentType, TimeSpan maxAge, string contentDisposition)
+        public static FilePathResult LocalFile(string filePath, bool clearOutput, string contentType, TimeSpan maxAge, string contentDisposition)
         {
             var result = new FilePathResult
                          {
@@ -181,27 +265,27 @@ namespace RestFoundation
             return result;
         }
 
-        public static FileUrlResult FileUrl(string fileUrl)
+        public static FileUrlResult RemoteFile(string fileUrl)
         {
-            return FileUrl(fileUrl, true, null, TimeSpan.Zero, null);
+            return RemoteFile(fileUrl, true, null, TimeSpan.Zero, null);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, bool clearOutput)
+        public static FileUrlResult RemoteFile(string fileUrl, bool clearOutput)
         {
-            return FileUrl(fileUrl, clearOutput, null, TimeSpan.Zero, null);
+            return RemoteFile(fileUrl, clearOutput, null, TimeSpan.Zero, null);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, bool clearOutput, string contentType)
+        public static FileUrlResult RemoteFile(string fileUrl, bool clearOutput, string contentType)
         {
-            return FileUrl(fileUrl, clearOutput, contentType, TimeSpan.Zero, null);
+            return RemoteFile(fileUrl, clearOutput, contentType, TimeSpan.Zero, null);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, bool clearOutput, string contentType, TimeSpan maxAge)
+        public static FileUrlResult RemoteFile(string fileUrl, bool clearOutput, string contentType, TimeSpan maxAge)
         {
-            return FileUrl(fileUrl, clearOutput, contentType, maxAge, null);
+            return RemoteFile(fileUrl, clearOutput, contentType, maxAge, null);
         }
 
-        public static FileUrlResult FileUrl(string fileUrl, bool clearOutput, string contentType, TimeSpan maxAge, string contentDisposition)
+        public static FileUrlResult RemoteFile(string fileUrl, bool clearOutput, string contentType, TimeSpan maxAge, string contentDisposition)
         {
             var result = new FileUrlResult
                          {
@@ -215,17 +299,44 @@ namespace RestFoundation
             return result;
         }
 
-        public static StatusResult SetStatus(HttpStatusCode code)
+        public static IResult Resource(object obj)
         {
-            return SetStatus(code, String.Empty, null);
+            return Resource(obj, HttpStatusCode.OK, "OK", null);
         }
 
-        public static StatusResult SetStatus(HttpStatusCode code, string description)
+        public static IResult Resource(object obj, HttpStatusCode statusCode)
         {
-            return SetStatus(code, description, null);
+            return Resource(obj, statusCode, null, null);
         }
 
-        public static StatusResult SetStatus(HttpStatusCode code, string description, IDictionary<string, string> additionalHeaders)
+        public static IResult Resource(object obj, HttpStatusCode statusCode, string statusDescription)
+        {
+            return Resource(obj, statusCode, statusDescription, null);
+        }
+
+        public static IResult Resource(object obj, HttpStatusCode statusCode, string statusDescription, IDictionary<string, string> additionalHeaders)
+        {
+            var context = Rest.Active.CreateObject<IServiceContext>();
+            var resultFactory = Rest.Active.CreateObject<IResultFactory>();
+
+            IResult statusResult = ResponseStatus(statusCode, statusDescription, additionalHeaders);
+            IResult resourceResult = resultFactory.Create(context, obj);
+
+            statusResult.Execute(context);
+            return resourceResult;
+        }
+
+        public static StatusResult ResponseStatus(HttpStatusCode code)
+        {
+            return ResponseStatus(code, String.Empty, null);
+        }
+
+        public static StatusResult ResponseStatus(HttpStatusCode code, string description)
+        {
+            return ResponseStatus(code, description, null);
+        }
+
+        public static StatusResult ResponseStatus(HttpStatusCode code, string description, IDictionary<string, string> additionalHeaders)
         {
             var result = new StatusResult
                          {

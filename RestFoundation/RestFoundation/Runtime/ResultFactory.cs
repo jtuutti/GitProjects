@@ -28,7 +28,7 @@ namespace RestFoundation.Runtime
             return CreateFormatterResult(context, returnedObj);
         }
 
-        private IResult CreateFormatterResult(IServiceContext context, object returnedObj)
+        private static IResult CreateFormatterResult(IServiceContext context, object returnedObj)
         {
             if (returnedObj.GetType().IsGenericType && returnedObj.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) != null)
             {
@@ -45,7 +45,7 @@ namespace RestFoundation.Runtime
             return formatter.FormatResponse(context, returnedObj);
         }
 
-        private object PerformOdataOperations(IServiceContext context, object returnedObj)
+        private static object PerformOdataOperations(IServiceContext context, object returnedObj)
         {
             object filteredResults;
 

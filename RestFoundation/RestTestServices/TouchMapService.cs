@@ -48,7 +48,7 @@ namespace RestTestServices
             }
             else
             {
-                return Result.SetStatus(HttpStatusCode.NotFound, "Touchmap not found");
+                return Result.ResponseStatus(HttpStatusCode.NotFound, "Touchmap not found");
             }
 
             using (var fileStream = new FileStream(relativePath, FileMode.Open, FileAccess.Read))

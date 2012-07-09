@@ -28,10 +28,10 @@ namespace RestFoundation.Tests.Services
 
         public IResult Post()
         {
-            return Result.SetStatus(HttpStatusCode.Created, "Created", new Dictionary<string, string>
-                                                                       {
-                                                                           { "Location", Context.Request.Url.ServiceUrl + "/1" }
-                                                                       });
+            return Result.ResponseStatus(HttpStatusCode.Created, "Created", new Dictionary<string, string>
+                                                                            {
+                                                                                { "Location", Context.Request.Url.ServiceUrl + "/1" }
+                                                                            });
         }
 
         public IResult Put(int? id)

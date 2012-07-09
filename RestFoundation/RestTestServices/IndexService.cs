@@ -82,7 +82,7 @@ namespace RestTestServices
             return Result.Content("<br/><br/>GET completed", false);
         }
 
-        public Person Post(Person resource)
+        public IResult Post(Person resource)
         {
             if (resource == null)
             {
@@ -91,10 +91,12 @@ namespace RestTestServices
 
             resource.Values = new[] { "New person added" };
 
-            Context.Response.SetHeader("Location", Context.Request.Url.ToAbsoluteUrl("~/home/index/999"));
-            Context.Response.SetStatus(HttpStatusCode.Created, "Person #999 created");
+            var responseHeaders = new Dictionary<string, string>
+            {
+                { "Location", Context.Request.Url.ToAbsoluteUrl("~/home/index/999") }
+            };
 
-            return resource;
+            return Result.Resource(resource, HttpStatusCode.Created, "Person #999 created", responseHeaders);
         }
 
         public Person Put(int? id, Person personToUpdate)
@@ -128,7 +130,7 @@ namespace RestTestServices
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person's name provided");
             }
 
-            return Result.SetStatus(HttpStatusCode.NoContent, String.Format("Person '{0}' deleted", name));
+            return Result.ResponseStatus(HttpStatusCode.NoContent, String.Format("Person '{0}' deleted", name));
         }
     }
 }

@@ -31,7 +31,7 @@ namespace RestTestContracts
         [Url("index")]
         [ProxyStatusCode(HttpStatusCode.Created, "Resource is created")]
         [ProxyResourceExample(RequestExampleType = typeof(PersonExample), ResponseExampleType = typeof(PersonExample))]
-        Person Post(Person resource);
+        IResult Post(Person resource);
 
         [Url("index/{id}")]
         [ProxyStatusCode(HttpStatusCode.OK, "Resource is updated")]
