@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
 using RestFoundation.Behaviors;
 using RestFoundation.DataFormatters;
@@ -19,15 +18,13 @@ namespace RestTest.App_Start
             // StructureMap IoC container configuration
             ObjectFactory.Configure(ConfigureIoC);
 
-            // Registering RestFoundation.HttpResponseModule using WebActivator for a cleaner Web.config file
-            DynamicModuleUtility.RegisterModule(typeof(HttpResponseModule));
-
             // Configuring REST foundation
             Rest.Configure.WithObjectFactory(CreateObjectFactory, CreateObjectBuilder)
                           .WithDataFormatters(RegisterDataFormatters)
                           .WithRoutes(RegisterRoutes)
                           .EnableServiceProxyUI();
         }
+
         private static void ConfigureIoC(ConfigurationExpression config)
         {
             config.Scan(action =>
