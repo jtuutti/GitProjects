@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using RestFoundation.Acl;
+using RestFoundation.Security;
 
 namespace RestFoundation.Behaviors
 {

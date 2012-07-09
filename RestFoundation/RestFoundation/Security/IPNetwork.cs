@@ -5,7 +5,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 
-namespace RestFoundation.Acl
+namespace RestFoundation.Security
 {
     /// <summary>
     /// Represents an IP network including a starting IP and a subnet.

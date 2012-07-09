@@ -50,10 +50,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Acl\IPAddressCollection.cs" />
-    <Compile Include="Acl\IPAddressRange.cs" />
-    <Compile Include="Acl\IPNetwork.cs" />
-    <Compile Include="Acl\IPNetworkCollection.cs" />
+    <Compile Include="Security\IPAddressCollection.cs" />
+    <Compile Include="Security\IPAddressRange.cs" />
+    <Compile Include="Security\IPNetwork.cs" />
+    <Compile Include="Security\IPNetworkCollection.cs" />
     <Compile Include="Behaviors\AclBehavior.cs" />
     <Compile Include="Behaviors\DigestAuthorizationBehavior.cs" />
     <Compile Include="Behaviors\OutputCacheBehavior.cs" />

@@ -5,7 +5,7 @@ using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
 
-namespace RestFoundation.Acl
+namespace RestFoundation.Security
 {
     /// <summary>
     /// Represents an IP address range.

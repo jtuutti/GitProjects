@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 
-namespace RestFoundation.Acl
+namespace RestFoundation.Security
 {
     /// <summary>
     /// Represents an IP address collection

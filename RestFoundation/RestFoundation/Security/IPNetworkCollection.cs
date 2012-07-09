@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace RestFoundation.Acl
+namespace RestFoundation.Security
 {
     /// <summary>
     /// Represents an IP network collection.
