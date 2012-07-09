@@ -10,6 +10,7 @@ namespace RestFoundation.Acl
     /// <summary>
     /// Represents an IP address range.
     /// </summary>
+    [CLSCompliant(false)]
     public sealed class IPAddressRange
     {
         private readonly AddressFamily m_addressFamily;

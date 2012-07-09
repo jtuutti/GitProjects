@@ -7,6 +7,7 @@ namespace RestFoundation.Acl
     /// <summary>
     /// Represents an IP network collection.
     /// </summary>
+    [CLSCompliant(false)]
     public sealed class IPNetworkCollection : IEnumerable<IPNetwork>, IEnumerator<IPNetwork>
     {
         private readonly byte m_cidrSubnet;

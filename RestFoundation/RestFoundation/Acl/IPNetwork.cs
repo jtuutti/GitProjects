@@ -14,6 +14,7 @@ namespace RestFoundation.Acl
     /// Unlike the <see cref="IPAddressRange"/> class, currently this class only works with IPv4.
     /// Use an address range instead of CIDR notation in the configuration file for IPv6 addresses.
     /// </remarks>
+    [CLSCompliant(false)]
     public sealed class IPNetwork : IComparable<IPNetwork>
     {
         private readonly uint m_ipaddress;

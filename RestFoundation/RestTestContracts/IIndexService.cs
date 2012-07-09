@@ -19,7 +19,7 @@ namespace RestTestContracts
         [ProxyHiddenOperation]
         ContentResult File(ICollection<IUploadedFile> files);
 
-        [Url("index/all")]
+        [Url("index/all", "Get, Head")]
         [ProxyOperationDescription("Gets all resources of type 'Index'")]
         [ProxyResourceExample(ResponseExampleType = typeof(PersonArrayExample))]
         IQueryable<Person> GetAll();
