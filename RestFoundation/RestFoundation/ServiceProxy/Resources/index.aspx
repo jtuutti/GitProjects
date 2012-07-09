@@ -2,14 +2,41 @@
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
 
 <script runat="server" language="C#">
-    private IEnumerable<ProxyOperation> operations;
-    private bool hasIPFilteredOperations;    
+    private List<ProxyOperation> operations;
+    private bool hasIPFilteredOperations;
 
     public void Page_Init(object sender, EventArgs e)
     {
         EnableViewState = false;
 
-        operations = ProxyOperationGenerator.Generate();
+        operations = ProxyOperationGenerator.Generate().ToList();
+
+        string previousUrlTemplate = null;
+        int originalIndex = -1;
+        
+        for (int i = 0; i < operations.Count; i++)
+        {
+            if (originalIndex < 0 && i > 0)
+            {
+                previousUrlTemplate = operations[i - 1].UrlTempate;
+            }
+
+            if (previousUrlTemplate == operations[i].UrlTempate)
+            {
+                if (originalIndex < 0)
+                {
+                    originalIndex = i - 1;
+                }
+
+                operations[i].UrlTempate = String.Empty;
+                operations[originalIndex].RepeatedTemplateCount++;
+            }
+            else
+            {
+                originalIndex = -1;
+            }
+        }
+
         hasIPFilteredOperations = operations.Any(o => o.IsIPFiltered);
     }
 </script>
@@ -34,7 +61,11 @@
         <tbody>
             <% foreach (ProxyOperation operation in operations) { %>
             <tr>
-                <td class="<%: operation.IsIPFiltered ? "operation_uri ip-filtered" : "operation_uri" %>"><strong><%: operation.UrlTempate %></strong></td>
+                <% if (!String.IsNullOrEmpty(operation.UrlTempate)) { %>
+                    <td class="<%: operation.IsIPFiltered ? "operation_uri ip-filtered" : "operation_uri" %>" rowspan="<%: operation.RepeatedTemplateCount + 1 %>">
+                        <strong><%: operation.UrlTempate %></strong>
+                    </td>
+                <% } %>
                 <td><strong><%: operation.HttpMethod.ToString().ToUpperInvariant() %></strong></td>
                 <td><%: operation.Description %></td>
                 <td class="centered"><a href="<%: operation.MetadataUrl %>" title="View detailed service information">View</a></td>

@@ -58,7 +58,7 @@
         input[type=text]{font-family:Tahoma;font-size:1.2em;width:650px;border:1px solid #999}
         textarea{font-family:Tahoma;font-size:1.2em;width:100%;height:200px;border:1px solid #999;padding:2px}
         .schemaSection{padding-top:20px}
-        .operation_uri,.operation_uri-custom{white-space:nowrap}
+        .operation_uri,.operation_uri-custom{white-space:nowrap;vertical-align:middle}
         .operation_uri-custom a:link,.operation_uri-custom a:visited,.operation_uri-custom a:active{color:#036}
         .additionalSchemaSection{padding-top:10px}
         .ip-filtered,.error-response-code{color:maroon}

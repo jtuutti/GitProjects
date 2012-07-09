@@ -26,6 +26,7 @@ namespace RestFoundation.ServiceProxy
         public int HttpsPort { get; set; }
         public bool IsIPFiltered { get; set; }
         public ICollection<Tuple<string, string>> AdditionalHeaders { get; set; }
+        public int RepeatedTemplateCount { get; set; }
 
         public bool HasResponse
         {
