@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using RestFoundation.Behaviors;
-using RestFoundation.DataFormatters;
 using RestFoundation.Runtime;
 
 namespace RestFoundation

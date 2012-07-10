@@ -47,6 +47,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -56,6 +57,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataFormatters\DataContractJsonFormatter.cs" />
+    <Compile Include="DataFormatters\DataContractXmlFormatter.cs" />
+    <Compile Include="Results\DataContractJsonResult.cs" />
+    <Compile Include="Results\DataContractXmlResult.cs" />
     <Compile Include="Security\IPAddressCollection.cs" />
     <Compile Include="Security\IPAddressRange.cs" />
     <Compile Include="Security\IPNetwork.cs" />

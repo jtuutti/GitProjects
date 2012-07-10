@@ -2,16 +2,18 @@
 using System.Globalization;
 using System.Web.Routing;
 using System.Web.Util;
+using RestFoundation.DataFormatters;
 using RestFoundation.Runtime;
 using RestFoundation.ServiceProxy;
 
 namespace RestFoundation
 {
-    public class Rest
+    public sealed class Rest
     {
-        protected static readonly object SyncRoot = new object();
-        protected internal static Rest Active = new Rest();
+        internal static readonly Rest Active = new Rest();
 
+        private static readonly object syncRoot = new object();
+        private static readonly object formatterSyncRoot = new object();
         private static bool defaultUrlMapped;
 
         public static Rest Configure
@@ -27,10 +29,22 @@ namespace RestFoundation
             }
         }
 
-        public IObjectActivator Activator { get; protected set; }
-        protected internal bool IsServiceProxyInitialized { get; protected set; }
+        public IObjectActivator Activator { get; private set; }
+        internal bool IsServiceProxyInitialized { get; private set; }
 
-        public virtual Rest WithObjectActivator(IObjectActivator activator)
+        public Rest UseDataContractSerializers()
+        {
+            lock (formatterSyncRoot)
+            {
+                DataFormatterRegistry.SetFormatter("application/json", new DataContractJsonFormatter());
+                DataFormatterRegistry.SetFormatter("application/xml", new DataContractXmlFormatter());
+                DataFormatterRegistry.SetFormatter("text/xml", new DataContractXmlFormatter());
+            }
+
+            return this;
+        }
+
+        public Rest WithObjectActivator(IObjectActivator activator)
         {
             if (activator == null) throw new ArgumentNullException("activator");
 
@@ -45,12 +59,12 @@ namespace RestFoundation
             return this;
         }
 
-        public virtual Rest WithObjectFactory(Func<Type, object> factory)
+        public Rest WithObjectFactory(Func<Type, object> factory)
         {
             return WithObjectFactory(factory, obj => {});
         }
 
-        public virtual Rest WithObjectFactory(Func<Type, object> factory, Action<object> builder)
+        public Rest WithObjectFactory(Func<Type, object> factory, Action<object> builder)
         {
             if (factory == null) throw new ArgumentNullException("factory");
             if (builder == null) throw new ArgumentNullException("builder");
@@ -66,7 +80,7 @@ namespace RestFoundation
             return this;
         }
 
-        public virtual Rest WithGlobalBehaviors(Action<GlobalBehaviorBuilder> builder)
+        public Rest WithGlobalBehaviors(Action<GlobalBehaviorBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
@@ -74,7 +88,7 @@ namespace RestFoundation
             return this;
         }
 
-        public virtual Rest WithRoutes(Action<RouteBuilder> builder)
+        public Rest WithRoutes(Action<RouteBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
@@ -82,7 +96,7 @@ namespace RestFoundation
             return this;
         }
 
-        public virtual Rest WithDataFormatters(Action<DataFormatterBuilder> builder)
+        public Rest WithDataFormatters(Action<DataFormatterBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
@@ -90,7 +104,7 @@ namespace RestFoundation
             return this;
         }
 
-        public virtual Rest WithDataBinders(Action<DataBinderBuilder> builder)
+        public Rest WithDataBinders(Action<DataBinderBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
@@ -98,7 +112,7 @@ namespace RestFoundation
             return this;
         }
 
-        public virtual Rest EnableServiceProxyUI()
+        public Rest EnableServiceProxyUI()
         {
             if (IsServiceProxyInitialized)
             {
@@ -151,13 +165,8 @@ namespace RestFoundation
             }
         }
 
-        protected void MapDefaultUrl()
+        private static void MapDefaultUrl()
         {
-            if (defaultUrlMapped)
-            {
-                return;
-            }
-
             RouteCollection routes = RouteTable.Routes;
 
             if (routes == null)
@@ -165,7 +174,12 @@ namespace RestFoundation
                 throw new InvalidOperationException("No active routing table was found.");
             }
 
-            lock (SyncRoot)
+            if (defaultUrlMapped)
+            {
+                return;
+            }
+
+            lock (syncRoot)
             {
                 if (!defaultUrlMapped)
                 {
