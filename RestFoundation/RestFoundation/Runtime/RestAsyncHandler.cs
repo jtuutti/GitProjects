@@ -10,24 +10,28 @@ namespace RestFoundation.Runtime
     public class RestAsyncHandler : IRestAsyncHandler
     {
         private readonly IServiceContext m_serviceContext;
-        private readonly ServiceMethodLocator m_serviceMethodLocator;
+        private readonly IServiceMethodLocator m_serviceMethodLocator;
         private readonly IServiceMethodInvoker m_methodInvoker;
         private readonly IResultFactory m_resultFactory;
-        private readonly ResultExecutor m_resultExecutor;
+        private readonly IResultExecutor m_resultExecutor;
 
-        public RestAsyncHandler(IServiceContext serviceContext, ServiceMethodLocator serviceMethodLocator, IServiceMethodInvoker methodInvoker, IResultFactory resultFactory)
+        public RestAsyncHandler(IServiceContext serviceContext,
+                                IServiceMethodLocator serviceMethodLocator,
+                                IServiceMethodInvoker methodInvoker,
+                                IResultFactory resultFactory,
+                                IResultExecutor resultExecutor)
         {
             if (serviceContext == null) throw new ArgumentNullException("serviceContext");
             if (serviceMethodLocator == null) throw new ArgumentNullException("serviceMethodLocator");
             if (methodInvoker == null) throw new ArgumentNullException("methodInvoker");
             if (resultFactory == null) throw new ArgumentNullException("resultFactory");
+            if (resultExecutor == null) throw new ArgumentNullException("resultExecutor");
 
             m_serviceContext = serviceContext;
             m_serviceMethodLocator = serviceMethodLocator;
             m_methodInvoker = methodInvoker;
             m_resultFactory = resultFactory;
-
-            m_resultExecutor = new ResultExecutor();
+            m_resultExecutor = resultExecutor;
         }
 
         public IServiceContext Context

@@ -3,16 +3,18 @@ using System.Net;
 
 namespace RestFoundation.Runtime
 {
-    internal sealed class ResultExecutor
+    public class ResultExecutor : IResultExecutor
     {
-        public void Execute(IServiceContext context, IResult result, Type returnType)
+        public virtual void Execute(IServiceContext context, IResult result, Type methodReturnType)
         {
+            if (context == null) throw new ArgumentNullException("context");
+
             if (result != null)
             {
                 result.Execute(context);
                 DisposeIfNecessary(result);
             }
-            else if (context.Response.GetStatusCode() == HttpStatusCode.OK && returnType == typeof(void))
+            else if (context.Response.GetStatusCode() == HttpStatusCode.OK && methodReturnType == typeof(void))
             {
                 context.Response.SetStatus(HttpStatusCode.NoContent, "No Content");
             }

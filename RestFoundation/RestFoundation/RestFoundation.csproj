@@ -59,8 +59,10 @@
   <ItemGroup>
     <Compile Include="DataFormatters\DataContractJsonFormatter.cs" />
     <Compile Include="DataFormatters\DataContractXmlFormatter.cs" />
+    <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="Results\DataContractJsonResult.cs" />
     <Compile Include="Results\DataContractXmlResult.cs" />
+    <Compile Include="IResultExecutor.cs" />
     <Compile Include="Security\IPAddressCollection.cs" />
     <Compile Include="Security\IPAddressRange.cs" />
     <Compile Include="Security\IPNetwork.cs" />

@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace RestFoundation.Runtime
 {
-    public class ServiceMethodLocator
+    public class ServiceMethodLocator : IServiceMethodLocator
     {
         private readonly IServiceContext m_serviceContext;
         private readonly IServiceFactory m_serviceFactory;
