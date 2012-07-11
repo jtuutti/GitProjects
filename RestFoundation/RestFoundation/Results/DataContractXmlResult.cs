@@ -4,17 +4,9 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
 {
-    public class DataContractXmlResult : IResult
+    public class DataContractXmlResult : XmlResult
     {
-        public DataContractXmlResult()
-        {
-            ContentType = "application/xml";
-        }
-
-        public object Content { get; set; }
-        public string ContentType { get; set; }
-
-        public virtual void Execute(IServiceContext context)
+        public override void Execute(IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
 

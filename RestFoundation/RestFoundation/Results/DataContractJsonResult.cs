@@ -4,17 +4,9 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
 {
-    public class DataContractJsonResult : IResult
+    public class DataContractJsonResult : JsonResult
     {
-        public DataContractJsonResult()
-        {
-            ContentType = "application/json";
-        }
-
-        public object Content { get; set; }
-        public string ContentType { get; set; }
-
-        public virtual void Execute(IServiceContext context)
+        public override void Execute(IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
 

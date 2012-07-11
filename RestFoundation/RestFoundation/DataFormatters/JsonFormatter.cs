@@ -36,13 +36,19 @@ namespace RestFoundation.DataFormatters
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            var result = new JsonResult
-                         {
-                             Content = obj,
-                             ContentType = context.Request.GetPreferredAcceptType()
-                         };
+            if (!String.IsNullOrEmpty(context.Request.QueryString.TryGet("callback")))
+            {
+                return new JsonPResult
+                {
+                    Content = obj
+                };
+            }
 
-            return result;
+            return new JsonResult
+            {
+                Content = obj,
+                ContentType = context.Request.GetPreferredAcceptType()
+            };
         }
     }
 }

@@ -4,6 +4,6 @@ namespace RestFoundation
 {
     public static class ServiceAssembly
     {
-        public readonly static Assembly Executing = typeof(ServiceAssembly).Assembly;
+        public static readonly Assembly Executing = typeof(ServiceAssembly).Assembly;
     }
 }

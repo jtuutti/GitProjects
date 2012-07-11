@@ -44,13 +44,11 @@ namespace RestFoundation.DataFormatters
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            var result = new XmlResult
-                         {
-                             Content = obj,
-                             ContentType = context.Request.GetPreferredAcceptType()
-                         };
-
-            return result;
+            return new XmlResult
+            {
+                Content = obj,
+                ContentType = context.Request.GetPreferredAcceptType()
+            };
         }
     }
 }

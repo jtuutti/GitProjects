@@ -371,5 +371,53 @@ namespace RestFoundation
 
             return result;
         }
+
+        public static JsonResult Json(object obj)
+        {
+            if (Rest.Active.DataContractSerializers)
+            {
+                return new DataContractJsonResult
+                {
+                    Content = obj
+                };
+            }
+
+            return new JsonResult
+            {
+                Content = obj
+            };
+        }
+
+        public static JsonPResult JsonP(object obj)
+        {
+            return JsonP(obj, null);
+        }
+
+        public static JsonPResult JsonP(object obj, string callback)
+        {
+            var result = new JsonPResult
+            {
+                Content = obj,
+                Callback = callback
+            };
+
+            return result;
+        }
+
+        public static XmlResult Xml(object obj)
+        {
+            if (Rest.Active.DataContractSerializers)
+            {
+                return new DataContractXmlResult
+                {
+                    Content = obj
+                };
+            }
+
+            return new XmlResult
+            {
+                Content = obj
+            };
+        }
     }
 }

@@ -35,12 +35,10 @@ namespace RestFoundation.DataFormatters
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            var result = new BsonResult
-                         {
-                             Content = obj
-                         };
-
-            return result;
+            return new BsonResult
+            {
+                Content = obj
+            };
         }
     }
 }

@@ -31,6 +31,7 @@ namespace RestFoundation
 
         public IObjectActivator Activator { get; private set; }
         internal bool IsServiceProxyInitialized { get; private set; }
+        internal bool DataContractSerializers { get; private set; }
 
         public Rest UseDataContractSerializers()
         {
@@ -39,6 +40,8 @@ namespace RestFoundation
                 DataFormatterRegistry.SetFormatter("application/json", new DataContractJsonFormatter());
                 DataFormatterRegistry.SetFormatter("application/xml", new DataContractXmlFormatter());
                 DataFormatterRegistry.SetFormatter("text/xml", new DataContractXmlFormatter());
+
+                DataContractSerializers = true;
             }
 
             return this;
