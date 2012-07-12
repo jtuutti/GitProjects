@@ -102,7 +102,8 @@ namespace RestFoundation.Runtime
             return Task<IResult>.Factory.StartNew(state =>
                                                   {
                                                       HttpContext.Current = ((HttpArguments) state).Context;
-                                                      return m_resultFactory.Create(m_serviceContext, m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method));
+                                                      object returnedObj = m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method);
+                                                      return serviceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(m_serviceContext, returnedObj) : null;
                                                   }, new HttpArguments(HttpContext.Current, serviceMethodData.Method.ReturnType))
                                         .ContinueWith(action => cb(action));
         }
