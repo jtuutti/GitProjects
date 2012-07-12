@@ -4,6 +4,7 @@ using System.Text;
 using System.Web;
 using RestFoundation.Collections;
 using RestFoundation.Collections.Concrete;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Context
 {
@@ -59,6 +60,11 @@ namespace RestFoundation.Context
         {
             if (headerName == null) throw new ArgumentNullException("headerName");
             if (headerValue == null) throw new ArgumentNullException("headerValue");
+
+            if (!HeaderNameValidator.IsValid(headerName))
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, "HTTP headers cannot be empty or have whitespace in the name");
+            }
 
             if (Context.Response.Headers[headerName] != null)
             {

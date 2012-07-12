@@ -56,11 +56,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviors\ResponseHeaderBehavior.cs" />
     <Compile Include="DataFormatters\JsonPFormatter.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="IResultExecutor.cs" />
     <Compile Include="Results\JsonPResult.cs" />
+    <Compile Include="Runtime\HeaderNameValidator.cs" />
     <Compile Include="Security\IPAddressCollection.cs" />
     <Compile Include="Security\IPAddressRange.cs" />
     <Compile Include="Security\IPNetwork.cs" />

@@ -31,7 +31,7 @@ namespace RestFoundation.Collections.Concrete
 
             string contentCharset;
 
-            if (!String.IsNullOrEmpty(ContentType))
+            if (!String.IsNullOrEmpty(ContentType) && ContentType.IndexOf('*') < 0)
             {
                 contentCharset = contentTypes.GetPreferredValues(ContentType)
                                              .Where(v => v.Charset != null)

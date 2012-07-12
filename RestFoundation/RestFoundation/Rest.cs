@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Web.Routing;
 using System.Web.Util;
@@ -30,6 +31,7 @@ namespace RestFoundation
 
         public IObjectActivator Activator { get; private set; }
         internal bool IsServiceProxyInitialized { get; private set; }
+        internal IDictionary<string, string> ResponseHeaders { get; private set; }
 
         public Rest WithObjectActivator(IObjectActivator activator)
         {
@@ -96,6 +98,33 @@ namespace RestFoundation
             if (builder == null) throw new ArgumentNullException("builder");
 
             builder(new DataBinderBuilder());
+            return this;
+        }
+
+        public Rest WithResponseHeader(string headerName, string headerValue)
+        {
+            if (String.IsNullOrEmpty(headerName)) throw new ArgumentNullException("headerName");
+            if (String.IsNullOrEmpty(headerValue)) throw new ArgumentNullException("headerValue");
+
+            return WithResponseHeaders(new Dictionary<string, string> { { headerName, headerValue } });
+        }
+
+        public Rest WithResponseHeaders(IDictionary<string, string> responseHeaders)
+        {
+            if (responseHeaders == null) throw new ArgumentNullException("responseHeaders");
+
+            if (ResponseHeaders != null)
+            {
+                foreach (KeyValuePair<string, string> header in responseHeaders)
+                {
+                    ResponseHeaders.Add(header);
+                }
+            }
+            else
+            {
+                ResponseHeaders = new SortedDictionary<string, string>(responseHeaders, StringComparer.OrdinalIgnoreCase);
+            }
+
             return this;
         }
 

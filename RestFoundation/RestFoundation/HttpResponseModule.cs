@@ -2,6 +2,7 @@
 using System.Net;
 using System.Web;
 using System.Web.UI;
+using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
@@ -17,6 +18,7 @@ namespace RestFoundation
             context.PreRequestHandlerExecute += (sender, args) => IngestPageDependencies(context);
             context.PreSendRequestHeaders += (sender, args) => RemoveServerHeaders(context);
             context.Error += (sender, args) => CompleteRequestOnError(context);
+            context.EndRequest += (sender, args) => SetResponseHeaders(context);
         }
 
         public void Dispose()
@@ -85,6 +87,24 @@ namespace RestFoundation
             }
             catch (Exception)
             {
+            }
+        }
+
+        private static void SetResponseHeaders(HttpApplication context)
+        {
+            if (Rest.Active.ResponseHeaders == null || Rest.Active.ResponseHeaders.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var header in Rest.Active.ResponseHeaders)
+            {
+                if (!HeaderNameValidator.IsValid(header.Key))
+                {
+                    throw new HttpResponseException(HttpStatusCode.InternalServerError, "HTTP headers cannot be empty or have whitespace in the name");
+                }
+
+                context.Response.Headers.Add(header.Key, header.Value);
             }
         }
     }
