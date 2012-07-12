@@ -374,14 +374,6 @@ namespace RestFoundation
 
         public static JsonResult Json(object obj)
         {
-            if (Rest.Active.DataContractSerializers)
-            {
-                return new DataContractJsonResult
-                {
-                    Content = obj
-                };
-            }
-
             return new JsonResult
             {
                 Content = obj
@@ -406,14 +398,6 @@ namespace RestFoundation
 
         public static XmlResult Xml(object obj)
         {
-            if (Rest.Active.DataContractSerializers)
-            {
-                return new DataContractXmlResult
-                {
-                    Content = obj
-                };
-            }
-
             return new XmlResult
             {
                 Content = obj

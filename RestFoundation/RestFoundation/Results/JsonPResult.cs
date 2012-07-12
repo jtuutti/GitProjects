@@ -17,17 +17,11 @@ namespace RestFoundation.Results
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            if (Content == null)
+            if (String.IsNullOrEmpty(Callback))
             {
-                return;
+                Callback = "jsonpCallback";
             }
-
-            if (Callback == null)
-            {
-                Callback = context.Request.QueryBag.Callback;
-            }
-
-            if (Callback == null || !methodNamePattern.IsMatch(Callback))
+            else if (!methodNamePattern.IsMatch(Callback))
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid JSONP callback method provided");
             }
@@ -40,7 +34,7 @@ namespace RestFoundation.Results
 
             context.Response.Output.Write(Callback)
                                    .Write("(")
-                                   .Write(JsonConvert.SerializeObject(Content))
+                                   .Write(Content != null ? JsonConvert.SerializeObject(Content) : "null")
                                    .Write(");");
         }
     }

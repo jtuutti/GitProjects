@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Serialization;
-using RestFoundation.Context;
+using Newtonsoft.Json;
 using RestFoundation.Results;
 
 namespace RestFoundation.DataFormatters
 {
-    public class DataContractXmlFormatter : IDataFormatter
+    public class JsonPFormatter : IDataFormatter
     {
         public virtual object FormatRequest(IServiceContext context, Type objectType)
         {
@@ -18,19 +17,28 @@ namespace RestFoundation.DataFormatters
                 context.Request.Body.Seek(0, SeekOrigin.Begin);
             }
 
-            var serializer = new DataContractSerializer(objectType);
+            using (var streamReader = new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding))
+            {
+                var serializer = new JsonSerializer();
+                var reader = new JsonTextReader(streamReader);
 
-            return serializer.ReadObject(context.Request.Body);
+                if (objectType == typeof(object))
+                {
+                    return serializer.Deserialize(reader);
+                }
+
+                return serializer.Deserialize(reader, objectType);
+            }
         }
 
         public virtual IResult FormatResponse(IServiceContext context, object obj)
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            return new DataContractXmlResult
+            return new JsonPResult
             {
-                Content = obj,
-                ContentType = context.Request.GetPreferredAcceptType()
+                Callback = context.Request.QueryString.TryGet("callback"),
+                Content = obj
             };
         }
     }

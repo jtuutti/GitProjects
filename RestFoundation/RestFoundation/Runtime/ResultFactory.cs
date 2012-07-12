@@ -13,11 +13,6 @@ namespace RestFoundation.Runtime
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            if (returnedObj == null)
-            {
-                return null;
-            }
-
             var result = returnedObj as IResult;
 
             if (result != null)
@@ -30,7 +25,7 @@ namespace RestFoundation.Runtime
 
         private static IResult CreateFormatterResult(IServiceContext context, object returnedObj)
         {
-            if (returnedObj.GetType().IsGenericType && returnedObj.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) != null)
+            if (returnedObj != null && returnedObj.GetType().IsGenericType && returnedObj.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) != null)
             {
                 returnedObj = PerformOdataOperations(context, returnedObj);
             }

@@ -13,7 +13,6 @@ namespace RestFoundation
         internal static readonly Rest Active = new Rest();
 
         private static readonly object syncRoot = new object();
-        private static readonly object formatterSyncRoot = new object();
         private static bool defaultUrlMapped;
 
         public static Rest Configure
@@ -31,21 +30,6 @@ namespace RestFoundation
 
         public IObjectActivator Activator { get; private set; }
         internal bool IsServiceProxyInitialized { get; private set; }
-        internal bool DataContractSerializers { get; private set; }
-
-        public Rest UseDataContractSerializers()
-        {
-            lock (formatterSyncRoot)
-            {
-                DataFormatterRegistry.SetFormatter("application/json", new DataContractJsonFormatter());
-                DataFormatterRegistry.SetFormatter("application/xml", new DataContractXmlFormatter());
-                DataFormatterRegistry.SetFormatter("text/xml", new DataContractXmlFormatter());
-
-                DataContractSerializers = true;
-            }
-
-            return this;
-        }
 
         public Rest WithObjectActivator(IObjectActivator activator)
         {
@@ -112,6 +96,14 @@ namespace RestFoundation
             if (builder == null) throw new ArgumentNullException("builder");
 
             builder(new DataBinderBuilder());
+            return this;
+        }
+
+        public Rest EnableJsonPSupport()
+        {
+            DataFormatterRegistry.SetFormatter("application/javascript", new JsonPFormatter());
+            DataFormatterRegistry.SetFormatter("text/javascript", new JsonPFormatter());
+
             return this;
         }
 

@@ -22,6 +22,7 @@ namespace RestTest.App_Start
             Rest.Configure.WithObjectFactory(CreateObjectFactory, CreateObjectBuilder)
                           .WithDataFormatters(RegisterDataFormatters)
                           .WithRoutes(RegisterRoutes)
+                          .EnableJsonPSupport()
                           .EnableServiceProxyUI();
         }
 

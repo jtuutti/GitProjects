@@ -36,14 +36,6 @@ namespace RestFoundation.DataFormatters
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            if (!String.IsNullOrEmpty(context.Request.QueryString.TryGet("callback")))
-            {
-                return new JsonPResult
-                {
-                    Content = obj
-                };
-            }
-
             return new JsonResult
             {
                 Content = obj,

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using RestFoundation.Runtime;
@@ -22,16 +23,17 @@ namespace RestFoundation.Results
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            if (Content == null)
-            {
-                return;
-            }
-
             context.Response.Output.Clear();
             context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
             OutputCompressionManager.FilterResponse(context);
+
+            if (Content == null)
+            {
+                SerializeNullObject(context.Response);
+                return;
+            }
 
             if (Attribute.GetCustomAttribute(Content.GetType(), typeof(CompilerGeneratedAttribute), false) != null)
             {
@@ -54,7 +56,7 @@ namespace RestFoundation.Results
 
         private static void SerializeAnonymousType(IHttpResponse response, object obj)
         {
-            var xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj), "Object");
+            var xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj), "complexType");
 
             var xmlWriter = new XmlTextWriter(response.Output.Writer)
             {
@@ -63,6 +65,22 @@ namespace RestFoundation.Results
 
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteRaw(xmlDocument.OuterXml);
+            xmlWriter.Flush();
+        }
+
+        private static void SerializeNullObject(IHttpResponse response)
+        {
+            var xmlWriter = new XmlTextWriter(response.Output.Writer)
+            {
+                Formatting = Formatting.None,
+            };
+
+            xmlWriter.WriteStartDocument();
+            xmlWriter.WriteStartElement("anyType");
+            xmlWriter.WriteAttributeString("xmlns", "xsi", "http://www.w3.org/2000/xmlns/", XmlSchema.InstanceNamespace);
+            xmlWriter.WriteAttributeString("xsi", "nil", XmlSchema.InstanceNamespace, "true");
+            xmlWriter.WriteEndElement();
+            xmlWriter.WriteEndDocument();
             xmlWriter.Flush();
         }
     }

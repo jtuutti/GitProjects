@@ -18,11 +18,6 @@ namespace RestFoundation.Results
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            if (Content == null)
-            {
-                return;
-            }
-
             context.Response.Output.Clear();
             context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
