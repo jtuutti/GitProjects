@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Web.Routing;
 using System.Web.Util;
-using RestFoundation.DataFormatters;
+using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.ServiceProxy;
@@ -86,19 +86,19 @@ namespace RestFoundation
             return this;
         }
 
-        public Rest WithDataFormatters(Action<DataFormatterBuilder> builder)
+        public Rest WithContentTypeFormatters(Action<ContentTypeFormatterBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
-            builder(new DataFormatterBuilder());
+            builder(new ContentTypeFormatterBuilder());
             return this;
         }
 
-        public Rest WithDataBinders(Action<DataBinderBuilder> builder)
+        public Rest WithObjectTypeBinders(Action<ObjectTypeBinderBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
-            builder(new DataBinderBuilder());
+            builder(new ObjectTypeBinderBuilder());
             return this;
         }
 
@@ -131,8 +131,8 @@ namespace RestFoundation
 
         public Rest EnableJsonPSupport()
         {
-            DataFormatterRegistry.SetFormatter("application/javascript", new JsonPFormatter());
-            DataFormatterRegistry.SetFormatter("text/javascript", new JsonPFormatter());
+            ContentTypeFormatterRegistry.SetFormatter("application/javascript", new JsonPFormatter());
+            ContentTypeFormatterRegistry.SetFormatter("text/javascript", new JsonPFormatter());
 
             return this;
         }

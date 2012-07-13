@@ -54,7 +54,7 @@ namespace RestFoundation
                 {
                     string contentType = contentTypes[i];
 
-                    if (contentType == null || DataFormatterRegistry.GetFormatter(contentType) == null)
+                    if (contentType == null || ContentTypeFormatterRegistry.GetFormatter(contentType) == null)
                     {
                         throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
                                                                           "Content type '{0}' does not have an associated data formatter",

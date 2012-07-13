@@ -9,15 +9,15 @@ namespace RestFoundation.Runtime
     public class ServiceMethodInvoker : IServiceMethodInvoker
     {
         private readonly ServiceBehaviorInvoker m_behaviorInvoker;
-        private readonly IParameterBinder m_parameterBinder;
+        private readonly IParameterValueFactory m_parameterValueFactory;
 
-        public ServiceMethodInvoker(ServiceBehaviorInvoker behaviorInvoker, IParameterBinder parameterBinder)
+        public ServiceMethodInvoker(ServiceBehaviorInvoker behaviorInvoker, IParameterValueFactory parameterValueFactory)
         {
             if (behaviorInvoker == null) throw new ArgumentNullException("behaviorInvoker");
-            if (parameterBinder == null) throw new ArgumentNullException("parameterBinder");
+            if (parameterValueFactory == null) throw new ArgumentNullException("parameterValueFactory");
 
             m_behaviorInvoker = behaviorInvoker;
-            m_parameterBinder = parameterBinder;
+            m_parameterValueFactory = parameterValueFactory;
         }
 
         public virtual object Invoke(IRestHandler handler, object service, MethodInfo method)
@@ -137,7 +137,7 @@ namespace RestFoundation.Runtime
             foreach (ParameterInfo parameter in method.GetParameters())
             {
                 bool isResource;
-                object argumentValue = m_parameterBinder.BindParameter(context, parameter, out isResource);
+                object argumentValue = m_parameterValueFactory.CreateValue(context, parameter, out isResource);
 
                 if (isResource)
                 {

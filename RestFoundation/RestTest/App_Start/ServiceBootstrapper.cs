@@ -1,7 +1,7 @@
 ﻿using System;
 using RestFoundation;
 using RestFoundation.Behaviors;
-using RestFoundation.DataFormatters;
+using RestFoundation.Formatters;
 using RestTest.Security;
 using RestTest.Behaviors;
 using RestTest.ServiceFactories;
@@ -20,7 +20,7 @@ namespace RestTest.App_Start
 
             // Configuring REST foundation
             Rest.Configure.WithObjectFactory(CreateObjectFactory, CreateObjectBuilder)
-                          .WithDataFormatters(RegisterDataFormatters)
+                          .WithContentTypeFormatters(RegisterFormatters)
                           .WithRoutes(RegisterRoutes)
                           .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
                           .EnableJsonPSupport()
@@ -57,7 +57,7 @@ namespace RestTest.App_Start
             ObjectFactory.BuildUp(obj);
         }
 
-        private static void RegisterDataFormatters(DataFormatterBuilder builder)
+        private static void RegisterFormatters(ContentTypeFormatterBuilder builder)
         {
             builder.Set("application/bson", new BsonFormatter());
             builder.Set("application/x-www-form-urlencoded", new FormsFormatter());

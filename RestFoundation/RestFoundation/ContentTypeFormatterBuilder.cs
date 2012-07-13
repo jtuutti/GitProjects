@@ -3,37 +3,37 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
-    public sealed class DataFormatterBuilder
+    public sealed class ContentTypeFormatterBuilder
     {
-        internal DataFormatterBuilder()
+        internal ContentTypeFormatterBuilder()
         {
         }
 
-        public IDataFormatter Get(string contentType)
+        public IContentTypeFormatter Get(string contentType)
         {
             if (String.IsNullOrEmpty(contentType)) throw new ArgumentNullException("contentType");
 
-            return DataFormatterRegistry.GetFormatter(contentType);
+            return ContentTypeFormatterRegistry.GetFormatter(contentType);
         }
 
-        public void Set(string contentType, IDataFormatter formatter)
+        public void Set(string contentType, IContentTypeFormatter formatter)
         {
             if (formatter == null) throw new ArgumentNullException("formatter");
             if (String.IsNullOrEmpty(contentType)) throw new ArgumentNullException("contentType");
 
-            DataFormatterRegistry.SetFormatter(contentType, formatter);
+            ContentTypeFormatterRegistry.SetFormatter(contentType, formatter);
         }
 
         public bool Remove(string contentType)
         {
             if (String.IsNullOrEmpty(contentType)) throw new ArgumentNullException("contentType");
 
-            return DataFormatterRegistry.RemoveFormatter(contentType);
+            return ContentTypeFormatterRegistry.RemoveFormatter(contentType);
         }
 
         public void Clear()
         {
-            DataFormatterRegistry.Clear();
+            ContentTypeFormatterRegistry.Clear();
         }
     }
 }

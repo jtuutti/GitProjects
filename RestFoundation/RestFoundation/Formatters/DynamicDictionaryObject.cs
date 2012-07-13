@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 
-namespace RestFoundation.DataFormatters
+namespace RestFoundation.Formatters
 {
     public sealed class DynamicDictionaryObject : DynamicObject
     {

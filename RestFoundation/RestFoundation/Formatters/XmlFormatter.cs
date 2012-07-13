@@ -4,9 +4,9 @@ using System.Xml.Serialization;
 using RestFoundation.Context;
 using RestFoundation.Results;
 
-namespace RestFoundation.DataFormatters
+namespace RestFoundation.Formatters
 {
-    public class XmlFormatter : IDataFormatter
+    public class XmlFormatter : IContentTypeFormatter
     {
         public virtual object FormatRequest(IServiceContext context, Type objectType)
         {

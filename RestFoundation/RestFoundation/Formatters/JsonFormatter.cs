@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using RestFoundation.Context;
 using RestFoundation.Results;
 
-namespace RestFoundation.DataFormatters
+namespace RestFoundation.Formatters
 {
-    public class JsonPFormatter : IDataFormatter
+    public class JsonFormatter : IContentTypeFormatter
     {
         public virtual object FormatRequest(IServiceContext context, Type objectType)
         {
@@ -35,10 +36,10 @@ namespace RestFoundation.DataFormatters
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            return new JsonPResult
+            return new JsonResult
             {
-                Callback = context.Request.QueryString.TryGet("callback"),
-                Content = obj
+                Content = obj,
+                ContentType = context.Request.GetPreferredAcceptType()
             };
         }
     }

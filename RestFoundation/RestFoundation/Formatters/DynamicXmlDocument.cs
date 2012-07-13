@@ -5,7 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace RestFoundation.DataFormatters
+namespace RestFoundation.Formatters
 {
     /// <summary>
     /// Represents a dynamic XML document.

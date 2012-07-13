@@ -8,9 +8,9 @@ using System.Runtime.Serialization;
 using System.Web;
 using RestFoundation.Runtime;
 
-namespace RestFoundation.DataFormatters
+namespace RestFoundation.Formatters
 {
-    public class FormsFormatter : IDataFormatter
+    public class FormsFormatter : IContentTypeFormatter
     {
         public virtual object FormatRequest(IServiceContext context, Type objectType)
         {

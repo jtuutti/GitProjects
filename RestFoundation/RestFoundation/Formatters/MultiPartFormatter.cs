@@ -5,9 +5,9 @@ using System.Net;
 using System.Web;
 using RestFoundation.Runtime;
 
-namespace RestFoundation.DataFormatters
+namespace RestFoundation.Formatters
 {
-    public class MultipartFormatter : IDataFormatter
+    public class MultipartFormatter : IContentTypeFormatter
     {
         public object FormatRequest(IServiceContext context, Type objectType)
         {

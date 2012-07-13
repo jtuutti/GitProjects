@@ -30,7 +30,7 @@ namespace RestFoundation.Runtime
                 returnedObj = PerformOdataOperations(context, returnedObj);
             }
 
-            IDataFormatter formatter = DataFormatterRegistry.GetFormatter(context.Request.GetPreferredAcceptType());
+            IContentTypeFormatter formatter = ContentTypeFormatterRegistry.GetFormatter(context.Request.GetPreferredAcceptType());
 
             if (formatter == null)
             {

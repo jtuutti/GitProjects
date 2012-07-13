@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
-using RestFoundation.DataFormatters;
+using RestFoundation.Formatters;
 
 namespace RestFoundation.Client.Serializers
 {

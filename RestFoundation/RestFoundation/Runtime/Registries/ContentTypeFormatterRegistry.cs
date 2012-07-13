@@ -2,22 +2,22 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using RestFoundation.DataFormatters;
+using RestFoundation.Formatters;
 
 namespace RestFoundation.Runtime
 {
-    internal static class DataFormatterRegistry
+    internal static class ContentTypeFormatterRegistry
     {
-        private static readonly ConcurrentDictionary<string, IDataFormatter> contentTypeFormatters = InitializeDefaultFormatters();
+        private static readonly ConcurrentDictionary<string, IContentTypeFormatter> contentTypeFormatters = InitializeDefaultFormatters();
 
-        public static IDataFormatter GetFormatter(string contentType)
+        public static IContentTypeFormatter GetFormatter(string contentType)
         {
             if (String.IsNullOrWhiteSpace(contentType))
             {
                 return null;
             }
 
-            IDataFormatter formatter;
+            IContentTypeFormatter formatter;
 
             return contentTypeFormatters.TryGetValue(contentType, out formatter) ? formatter : null;
         }
@@ -27,7 +27,7 @@ namespace RestFoundation.Runtime
             return contentTypeFormatters.Keys.ToArray();
         }
 
-        public static void SetFormatter(string contentType, IDataFormatter formatter)
+        public static void SetFormatter(string contentType, IContentTypeFormatter formatter)
         {
             contentTypeFormatters.AddOrUpdate(contentType, type => formatter, (type, previousFormatter) => formatter);
         }
@@ -39,7 +39,7 @@ namespace RestFoundation.Runtime
                 return false;
             }
 
-            IDataFormatter formatter;
+            IContentTypeFormatter formatter;
 
             return contentTypeFormatters.TryRemove(contentType, out formatter);
         }
@@ -49,9 +49,9 @@ namespace RestFoundation.Runtime
             contentTypeFormatters.Clear();
         }
 
-        private static ConcurrentDictionary<string, IDataFormatter> InitializeDefaultFormatters()
+        private static ConcurrentDictionary<string, IContentTypeFormatter> InitializeDefaultFormatters()
         {
-            var defaultFormatters = new ConcurrentDictionary<string, IDataFormatter>(StringComparer.OrdinalIgnoreCase);
+            var defaultFormatters = new ConcurrentDictionary<string, IContentTypeFormatter>(StringComparer.OrdinalIgnoreCase);
             defaultFormatters.TryAdd("application/json", new JsonFormatter());
             defaultFormatters.TryAdd("application/xml", new XmlFormatter());
             defaultFormatters.TryAdd("text/xml", new XmlFormatter());

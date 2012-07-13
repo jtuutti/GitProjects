@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
-using RestFoundation.Context;
+using Newtonsoft.Json.Bson;
 using RestFoundation.Results;
 
-namespace RestFoundation.DataFormatters
+namespace RestFoundation.Formatters
 {
-    public class JsonFormatter : IDataFormatter
+    public class BsonFormatter : IContentTypeFormatter
     {
         public virtual object FormatRequest(IServiceContext context, Type objectType)
         {
@@ -18,10 +18,9 @@ namespace RestFoundation.DataFormatters
                 context.Request.Body.Seek(0, SeekOrigin.Begin);
             }
 
-            using (var streamReader = new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding))
+            using (var reader = new BsonReader(context.Request.Body))
             {
                 var serializer = new JsonSerializer();
-                var reader = new JsonTextReader(streamReader);
 
                 if (objectType == typeof(object))
                 {
@@ -36,10 +35,9 @@ namespace RestFoundation.DataFormatters
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            return new JsonResult
+            return new BsonResult
             {
-                Content = obj,
-                ContentType = context.Request.GetPreferredAcceptType()
+                Content = obj
             };
         }
     }

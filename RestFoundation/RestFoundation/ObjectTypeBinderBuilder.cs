@@ -3,37 +3,37 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
-    public sealed class DataBinderBuilder
+    public sealed class ObjectTypeBinderBuilder
     {
-        internal DataBinderBuilder()
+        internal ObjectTypeBinderBuilder()
         {
         }
 
-        public IDataBinder Get(Type objectType)
+        public IObjectTypeBinder Get(Type objectType)
         {
             if (objectType == null) throw new ArgumentNullException("objectType");
 
-            return DataBinderRegistry.GetBinder(objectType);
+            return ObjectTypeBinderRegistry.GetBinder(objectType);
         }
 
-        public void Set(Type objectType, IDataBinder binder)
+        public void Set(Type objectType, IObjectTypeBinder binder)
         {
             if (objectType == null) throw new ArgumentNullException("objectType");
             if (binder == null) throw new ArgumentNullException("binder");
 
-            DataBinderRegistry.SetBinder(objectType, binder);
+            ObjectTypeBinderRegistry.SetBinder(objectType, binder);
         }
 
         public bool Remove(Type objectType)
         {
             if (objectType == null) throw new ArgumentNullException("objectType");
 
-            return DataBinderRegistry.RemoveBinder(objectType);
+            return ObjectTypeBinderRegistry.RemoveBinder(objectType);
         }
 
         public void Clear()
         {
-            DataBinderRegistry.ClearBinders();
+            ObjectTypeBinderRegistry.ClearBinders();
         }
     }
 }

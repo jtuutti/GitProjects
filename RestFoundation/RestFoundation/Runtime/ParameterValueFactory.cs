@@ -7,24 +7,24 @@ using RestFoundation.Collections;
 
 namespace RestFoundation.Runtime
 {
-    public class ParameterBinder : IParameterBinder
+    public class ParameterValueFactory : IParameterValueFactory
     {
         protected const string ResourceParameterName = "resource";
 
-        public virtual object BindParameter(IServiceContext context, ParameterInfo parameter, out bool isResource)
+        public virtual object CreateValue(IServiceContext context, ParameterInfo parameter, out bool isResource)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (parameter == null) throw new ArgumentNullException("parameter");
 
-            IDataBinder dataBinder = DataBinderRegistry.GetBinder(parameter.ParameterType);
+            IObjectTypeBinder objectTypeBinder = ObjectTypeBinderRegistry.GetBinder(parameter.ParameterType);
 
-            if (dataBinder != null)
+            if (objectTypeBinder != null)
             {
                 isResource = false;
-                return dataBinder.Bind(context, parameter.Name);
+                return objectTypeBinder.Bind(context, parameter.ParameterType, parameter.Name);
             }
 
-            object routeValue = BindRouteValue(parameter, context.Request.RouteValues);
+            object routeValue = CreateRouteValue(parameter, context.Request.RouteValues);
 
             if (routeValue != null)
             {
@@ -38,14 +38,14 @@ namespace RestFoundation.Runtime
                 parameter.ParameterType == typeof(IEnumerable<IUploadedFile>) || parameter.ParameterType == typeof(ICollection<IUploadedFile>))
             {
                 isResource = true;
-                return BindResourceValue(parameter, context);
+                return CreateResourceValue(parameter, context);
             }
 
             isResource = false;
             return null;
         }
 
-        protected virtual object BindRouteValue(ParameterInfo parameter, IObjectValueCollection routeValues)
+        protected virtual object CreateRouteValue(ParameterInfo parameter, IObjectValueCollection routeValues)
         {
             if (parameter == null) throw new ArgumentNullException("parameter");
             if (routeValues == null) throw new ArgumentNullException("routeValues");
@@ -67,12 +67,12 @@ namespace RestFoundation.Runtime
             return value;
         }
 
-        protected virtual object BindResourceValue(ParameterInfo parameter, IServiceContext context)
+        protected virtual object CreateResourceValue(ParameterInfo parameter, IServiceContext context)
         {
             if (parameter == null) throw new ArgumentNullException("parameter");
             if (context == null) throw new ArgumentNullException("context");
 
-            IDataFormatter formatter = DataFormatterRegistry.GetFormatter(context.Request.Headers.ContentType);
+            IContentTypeFormatter formatter = ContentTypeFormatterRegistry.GetFormatter(context.Request.Headers.ContentType);
 
             if (formatter == null)
             {
