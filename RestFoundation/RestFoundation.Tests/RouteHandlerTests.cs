@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 using NUnit.Framework;
-using RestFoundation.Runtime;
+using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.ServiceContracts;
 using RestFoundation.UnitTesting;
 

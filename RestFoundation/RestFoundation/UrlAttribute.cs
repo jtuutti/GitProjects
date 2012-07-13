@@ -41,7 +41,7 @@ namespace RestFoundation
         public int Priority { get; set; }
         public string UrlTemplate { get; private set; }
         public IEnumerable<HttpMethod> HttpMethods { get; internal set; }
-        public string WebPageRelativePath { get; set; }
+        public string WebPageUrl { get; set; }
 
         private static List<HttpMethod> ParseHttpMethodsString(string[] httpMethodArray)
         {

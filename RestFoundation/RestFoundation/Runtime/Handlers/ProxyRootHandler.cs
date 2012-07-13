@@ -2,7 +2,7 @@
 using System.Web;
 using System.Web.Routing;
 
-namespace RestFoundation.ServiceProxy
+namespace RestFoundation.Runtime.Handlers
 {
     internal sealed class ProxyRootHandler : IRouteHandler, IHttpHandler
     {

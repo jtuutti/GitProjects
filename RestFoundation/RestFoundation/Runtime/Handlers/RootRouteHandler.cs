@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Routing;
 using RestFoundation.ServiceProxy;
 
-namespace RestFoundation
+namespace RestFoundation.Runtime.Handlers
 {
     public class RootRouteHandler : IRouteHandler, IHttpHandler
     {

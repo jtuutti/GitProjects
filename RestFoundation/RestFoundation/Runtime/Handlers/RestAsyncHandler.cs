@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Routing;
 using RestFoundation.Results;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Runtime.Handlers
 {
     public class RestAsyncHandler : IRestAsyncHandler
     {

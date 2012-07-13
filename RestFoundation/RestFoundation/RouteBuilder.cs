@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Routing;
 using RestFoundation.Runtime;
+using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation
 {
@@ -149,18 +150,38 @@ namespace RestFoundation
 
                 string serviceUrl = ConcatUrl(url, metadata.UrlInfo.UrlTemplate.Trim());
 
-                if (!String.IsNullOrWhiteSpace(metadata.UrlInfo.WebPageRelativePath))
+                if (!String.IsNullOrWhiteSpace(metadata.UrlInfo.WebPageUrl))
                 {
-                    m_routes.MapPageRoute(null, serviceUrl, metadata.UrlInfo.WebPageRelativePath.Trim(), false, new RouteValueDictionary(), new RouteValueDictionary
-                    {
-                        { RouteConstants.BrowserConstraint, new BrowserConstraint(m_browserDetector) }
-                    });
+                    SetBrowserRoutes(serviceUrl, metadata);
                 }
 
                 m_routes.Add(new Route(serviceUrl, defaults, constraints, routeHandler));
             }
 
             return routeHandlers;
+        }
+
+        private void SetBrowserRoutes(string serviceUrl, ServiceMethodMetadata metadata)
+        {
+            string externalUrl = metadata.UrlInfo.WebPageUrl.Trim();
+
+            var constraints = new RouteValueDictionary
+            {
+                { RouteConstants.BrowserConstraint, new BrowserConstraint(m_browserDetector) }
+            };
+
+            if (externalUrl.StartsWith("~/", StringComparison.Ordinal) && externalUrl.EndsWith(".aspx", StringComparison.OrdinalIgnoreCase))
+            {
+                m_routes.MapPageRoute(null, serviceUrl, externalUrl, false, new RouteValueDictionary(), constraints);
+                return;
+            }
+
+            var defaults = new RouteValueDictionary
+            {
+                { RouteConstants.WebPageUrl, externalUrl }
+            };
+
+            m_routes.Add(new Route(serviceUrl, defaults, constraints, new BrowserRedirectHandler()));
         }
     }
 }

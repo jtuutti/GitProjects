@@ -5,6 +5,7 @@ using System.Web.Routing;
 using System.Web.Util;
 using RestFoundation.DataFormatters;
 using RestFoundation.Runtime;
+using RestFoundation.Runtime.Handlers;
 using RestFoundation.ServiceProxy;
 
 namespace RestFoundation

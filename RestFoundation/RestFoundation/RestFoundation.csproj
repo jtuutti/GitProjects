@@ -61,6 +61,7 @@
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="IResultExecutor.cs" />
     <Compile Include="Results\JsonPResult.cs" />
+    <Compile Include="Runtime\Handlers\BrowserRedirectHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
     <Compile Include="Security\IPAddressCollection.cs" />
     <Compile Include="Security\IPAddressRange.cs" />
@@ -194,7 +195,7 @@
     <Compile Include="Runtime\ResultFactory.cs" />
     <Compile Include="IResult.cs" />
     <Compile Include="IResultFactory.cs" />
-    <Compile Include="Runtime\RestAsyncHandler.cs" />
+    <Compile Include="Runtime\Handlers\RestAsyncHandler.cs" />
     <Compile Include="DataFormatters\DynamicDictionaryObject.cs" />
     <Compile Include="DataFormatters\FormsFormatter.cs" />
     <Compile Include="Result.cs" />
@@ -237,7 +238,7 @@
     <Compile Include="ServiceProxy\ProxyOperationDescriptionAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyQueryParameterAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyResourceExampleAttribute.cs" />
-    <Compile Include="ServiceProxy\ProxyRootHandler.cs" />
+    <Compile Include="Runtime\Handlers\ProxyRootHandler.cs" />
     <Compile Include="ServiceProxy\ProxyRouteParameterAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyStatusCodeAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyParameter.cs" />
@@ -247,7 +248,7 @@
     <Compile Include="ServiceProxy\IResourceExample.cs" />
     <Compile Include="ServiceProxy\ProxyFile.cs" />
     <Compile Include="ServiceProxy\ProxyPathProvider.cs" />
-    <Compile Include="Runtime\RootRouteHandler.cs" />
+    <Compile Include="Runtime\Handlers\RootRouteHandler.cs" />
     <Compile Include="Runtime\XmlConvert.cs" />
     <Compile Include="ServiceProxy\ProxyWebClient.cs">
       <SubType>Component</SubType>
@@ -263,7 +264,7 @@
     <Compile Include="Runtime\ServiceMethodInvoker.cs" />
     <Compile Include="Runtime\RouteConstants.cs" />
     <Compile Include="Runtime\RouteMetadata.cs" />
-    <Compile Include="Runtime\RestHandler.cs" />
+    <Compile Include="Runtime\Handlers\RestHandler.cs" />
     <Compile Include="HttpMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\ServiceFactory.cs" />
