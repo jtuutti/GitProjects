@@ -5,12 +5,12 @@ using System.Dynamic;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace RestFoundation.Formatters
+namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Represents a dynamic XML document.
     /// </summary>
-    public sealed class DynamicXDocument : DynamicObject, IEnumerable
+    public class DynamicXDocument : DynamicObject, IEnumerable
     {
         private readonly List<XElement> m_elements;
 
@@ -179,7 +179,7 @@ namespace RestFoundation.Formatters
 
         private DynamicXDocument(IEnumerable<XElement> elements)
         {
-            this.m_elements = new List<XElement>(elements);
+            m_elements = new List<XElement>(elements);
         }
     }
 }

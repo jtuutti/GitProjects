@@ -36,7 +36,7 @@ namespace RestTestContracts
         [Url("index/{id}")]
         [ProxyStatusCode(HttpStatusCode.OK, "Resource is updated")]
         [ProxyResourceExample(RequestExampleType = typeof(PersonExample), ResponseExampleType = typeof(PersonExample))]
-        Person Put([ParameterConstraint(@"\d{1,3}"), ProxyRouteParameter(1)] int? id, [BindResource] Person personToUpdate);
+        Person Put([ParameterConstraint(@"\d{1,3}"), ProxyRouteParameter(1)] int? id, [ResourceParameter] Person personToUpdate);
 
         [Url("index/{id}")]
         [ProxyStatusCode(HttpStatusCode.OK, "Resource is partially updated")]

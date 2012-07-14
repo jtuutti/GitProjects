@@ -5,7 +5,7 @@ using RestTestContracts.Resources;
 
 namespace RestTestServices.Behaviors
 {
-    public class T3ContextBehavior : ServiceSecurityBehavior
+    public class T3ContextBehavior : SecureServiceBehavior
     {
         public override bool OnMethodAuthorizing(RestFoundation.IServiceContext context, object service, MethodInfo method)
         {

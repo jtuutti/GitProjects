@@ -182,10 +182,5 @@ namespace RestFoundation.Context
                 }
             }
         }
-
-        public void TransmitFile(string filePath)
-        {
-            Context.Response.TransmitFile(filePath);
-        }
     }
 }

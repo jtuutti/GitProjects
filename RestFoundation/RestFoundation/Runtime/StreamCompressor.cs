@@ -5,6 +5,9 @@ using System.IO.Compression;
 
 namespace RestFoundation.Runtime
 {
+    /// <summary>
+    /// Represents the default stream compressor that supports GZip and Deflate.
+    /// </summary>
     public class StreamCompressor : IStreamCompressor
     {
         private const string Deflate = "deflate";
@@ -13,6 +16,14 @@ namespace RestFoundation.Runtime
         private const string XGzip = "x-gzip";
         private const string AllEncodings = "*";
 
+        /// <summary>
+        /// Returns a stream instance that compresses the data of the original output stream along
+        /// with the chosen output encoding.
+        /// </summary>
+        /// <param name="output">The output stream to compress.</param>
+        /// <param name="acceptedEncodings">A sequence of accepted encodings.</param>
+        /// <param name="outputEncoding">The chosen output encoding.</param>
+        /// <returns>The compressed stream.</returns>
         public virtual Stream Compress(Stream output, IEnumerable<string> acceptedEncodings, out string outputEncoding)
         {
             if (output == null || acceptedEncodings == null || output is DeflateStream || output is GZipStream)

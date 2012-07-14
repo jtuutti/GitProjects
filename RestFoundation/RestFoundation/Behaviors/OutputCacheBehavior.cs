@@ -6,8 +6,14 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation.Behaviors
 {
+    /// <summary>
+    /// Represents an output cache behavior for a service or a service method.
+    /// </summary>
     public class OutputCacheBehavior : ServiceBehavior
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OutputCacheBehavior"/> class.
+        /// </summary>
         public OutputCacheBehavior()
         {
             CacheSettings = new OutputCacheParameters();
@@ -16,6 +22,9 @@ namespace RestFoundation.Behaviors
 
         internal OutputCacheParameters CacheSettings { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the amount of time that a cache entry is to remain in the output cache.
+        /// </summary>
         public TimeSpan DurationInSeconds
         {
             get
@@ -28,6 +37,9 @@ namespace RestFoundation.Behaviors
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value that determines the location of the cache entry.
+        /// </summary>
         public OutputCacheLocation Location
         {
             get
@@ -40,6 +52,9 @@ namespace RestFoundation.Behaviors
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value that determines whether HTTP cache-control: no-store directive is set.
+        /// </summary>
         public bool NoStore
         {
             get
@@ -52,6 +67,9 @@ namespace RestFoundation.Behaviors
             }
         }
 
+        /// <summary>
+        /// Gets or sets a comma delimited set of character sets (content encodings) used to vary the cache entry.
+        /// </summary>
         public string VaryByContentEncoding
         {
             get
@@ -64,6 +82,9 @@ namespace RestFoundation.Behaviors
             }
         }
 
+        /// <summary>
+        /// Gets or sets a comma delimited set of custom strings used to vary the cache entry.
+        /// </summary>
         public string VaryByCustom
         {
             get
@@ -76,6 +97,9 @@ namespace RestFoundation.Behaviors
             }
         }
 
+        /// <summary>
+        /// Gets or sets a comma delimited set of HTTP header names associated with the request used to vary the cache entry.
+        /// </summary>
         public string VaryByHeader
         {
             get
@@ -88,6 +112,9 @@ namespace RestFoundation.Behaviors
             }
         }
 
+        /// <summary>
+        /// Gets or sets a comma delimited set of query string or form POST parameters used to vary the cache entry.
+        /// </summary>
         public string VaryByParam
         {
             get
@@ -100,7 +127,14 @@ namespace RestFoundation.Behaviors
             }
         }
 
-        public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object result)
+        /// <summary>
+        /// Called after a service method is executed.
+        /// </summary>
+        /// <param name="context">The service context.</param>
+        /// <param name="service">The service object.</param>
+        /// <param name="method">The service method.</param>
+        /// <param name="returnedObj">The service method returned object.</param>
+        public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object returnedObj)
         {
             if (context == null) throw new ArgumentNullException("context");
 

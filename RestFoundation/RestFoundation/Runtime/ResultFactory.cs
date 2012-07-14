@@ -7,9 +7,20 @@ using RestFoundation.Odata;
 
 namespace RestFoundation.Runtime
 {
+    /// <summary>
+    /// Represents the default result factory that converts POCO objects into
+    /// results using content type formatters.
+    /// </summary>
     public class ResultFactory : IResultFactory
     {
-        public virtual IResult Create(IServiceContext context, object returnedObj)
+        /// <summary>
+        /// Creates an <see cref="IResult"/> instance from a POCO object returned by
+        /// the service method.
+        /// </summary>
+        /// <param name="returnedObj">The returned object.</param>
+        /// <param name="context">The service context.</param>
+        /// <returns>The created result instance.</returns>
+        public virtual IResult Create(object returnedObj, IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
 

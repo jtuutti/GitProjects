@@ -1,74 +1,32 @@
 ﻿using System;
 using System.IO;
-using System.Net;
-using RestFoundation.Context;
-using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
 {
-    public class FilePathResult : IResult
+    /// <summary>
+    /// Represents a local file path result.
+    /// </summary>
+    public class FilePathResult : FileResultBase
     {
-        public FilePathResult()
-        {
-            ClearOutput = true;
-        }
-
+        /// <summary>
+        /// Gets or sets the local file path.
+        /// </summary>
         public string FilePath { get; set; }
-        public string ContentType { get; set; }
-        public string ContentDisposition { get; set; }
-        public TimeSpan CacheForTimeSpan { get; set; }
-        public bool ClearOutput { get; set; }
 
-        public virtual void Execute(IServiceContext context)
+        /// <summary>
+        /// Gets the <see cref="FileInfo"/> instance using the service context.
+        /// </summary>
+        /// <param name="context">The service context.</param>
+        /// <returns>The file info instance.</returns>
+        protected override FileInfo GetFile(IServiceContext context)
         {
-            if (context == null) throw new ArgumentNullException("context");
-
-            if (FilePath == null)
+            if (String.IsNullOrWhiteSpace(FilePath))
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No valid file path provided");
+                return null;
             }
 
             var file = new FileInfo(FilePath);
-
-            if (!file.Exists)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No valid file path provided");
-            }
-
-            if (ClearOutput)
-            {
-                context.Response.Output.Clear();
-            }
-
-            if (!String.IsNullOrEmpty(ContentType))
-            {
-                context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
-            }
-            else
-            {
-                string acceptType = context.Request.GetPreferredAcceptType();
-
-                if (!String.IsNullOrEmpty(acceptType))
-                {
-                    context.Response.SetHeader(context.Response.Headers.ContentType, acceptType);
-                }
-            }
-
-            if (!String.IsNullOrEmpty(ContentDisposition))
-            {
-                context.Response.SetHeader(context.Response.Headers.ContentDisposition, ContentType);
-            }
-
-            context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
-
-            OutputCompressionManager.FilterResponse(context);
-
-            if (CacheForTimeSpan > TimeSpan.Zero)
-            {
-                context.Response.SetFileDependencies(file.FullName, CacheForTimeSpan);
-            }
-
-            context.Response.TransmitFile(file.FullName);
+            return file.Exists ? file : null;
         }
     }
 }

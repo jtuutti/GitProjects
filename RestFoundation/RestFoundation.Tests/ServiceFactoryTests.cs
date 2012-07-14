@@ -28,7 +28,7 @@ namespace RestFoundation.Tests
             var context = Rest.Configure.GetImplementation<IServiceContext>();
             Assert.That(context, Is.Not.Null);
 
-            var service = m_serviceFactory.Create(context, typeof(ITestService)) as ITestService;
+            var service = m_serviceFactory.Create(typeof(ITestService), context) as ITestService;
             Assert.That(service, Is.Not.Null);
 
             var serviceImpl = (TestService) service;

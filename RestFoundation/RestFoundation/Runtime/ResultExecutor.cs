@@ -3,9 +3,18 @@ using System.Net;
 
 namespace RestFoundation.Runtime
 {
+    /// <summary>
+    /// Represents the default result executor.
+    /// </summary>
     public class ResultExecutor : IResultExecutor
     {
-        public virtual void Execute(IServiceContext context, IResult result, Type methodReturnType)
+        /// <summary>
+        /// Executes the result in the provided service context.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <param name="methodReturnType">The service method return type.</param>
+        /// <param name="context">The service context.</param>
+        public virtual void Execute(IResult result, Type methodReturnType, IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
 

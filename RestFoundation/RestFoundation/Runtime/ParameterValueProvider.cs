@@ -7,11 +7,28 @@ using RestFoundation.Collections;
 
 namespace RestFoundation.Runtime
 {
-    public class ParameterValueFactory : IParameterValueFactory
+    /// <summary>
+    /// Represents the default parameter value provider that tries to bind a value
+    /// using an associated object type binder. If no binder is associated with the
+    /// parameter type, a route value is used. If a parameter is named "resource" or
+    /// is decorated with the <see cref="ResourceParameterAttribute"/>, a content
+    /// type formatter is used to bind the data.
+    /// </summary>
+    public class ParameterValueProvider : IParameterValueProvider
     {
         protected const string ResourceParameterName = "resource";
 
-        public virtual object CreateValue(IServiceContext context, ParameterInfo parameter, out bool isResource)
+        /// <summary>
+        /// Creates a parameter value based on the routing and HTTP data.
+        /// </summary>
+        /// <param name="parameter">The service method parameters.</param>
+        /// <param name="context">The service context.</param>
+        /// <param name="isResource">
+        /// true if the parameter represents a REST resource; false otherwise. Only 1 resource per
+        /// service method is allowed.
+        /// </param>
+        /// <returns>The created parameter value.</returns>
+        public virtual object CreateValue(ParameterInfo parameter, IServiceContext context, out bool isResource)
         {
             if (context == null) throw new ArgumentNullException("context");
             if (parameter == null) throw new ArgumentNullException("parameter");
@@ -21,7 +38,7 @@ namespace RestFoundation.Runtime
             if (objectTypeBinder != null)
             {
                 isResource = false;
-                return objectTypeBinder.Bind(context, parameter.ParameterType, parameter.Name);
+                return objectTypeBinder.Bind(parameter.ParameterType, parameter.Name, context);
             }
 
             object routeValue = CreateRouteValue(parameter, context.Request.RouteValues);
@@ -34,7 +51,7 @@ namespace RestFoundation.Runtime
 
             if ((context.Request.Method == HttpMethod.Post || context.Request.Method == HttpMethod.Put || context.Request.Method == HttpMethod.Patch) &&
                 String.Equals(ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase) ||
-                Attribute.GetCustomAttribute(parameter, typeof(BindResourceAttribute), false) != null ||
+                Attribute.GetCustomAttribute(parameter, typeof(ResourceParameterAttribute), false) != null ||
                 parameter.ParameterType == typeof(IEnumerable<IUploadedFile>) || parameter.ParameterType == typeof(ICollection<IUploadedFile>))
             {
                 isResource = true;

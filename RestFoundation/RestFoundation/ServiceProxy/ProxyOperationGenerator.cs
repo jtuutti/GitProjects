@@ -257,7 +257,7 @@ namespace RestFoundation.ServiceProxy
                 return true;
             }
 
-            return methodParameters.Any(p => Attribute.GetCustomAttribute(p, typeof(BindResourceAttribute), false) != null);
+            return methodParameters.Any(p => Attribute.GetCustomAttribute(p, typeof(ResourceParameterAttribute), false) != null);
         }
 
         private static ProxyOperation GenerateProxyOperation(ServiceMethodMetadata metadata)

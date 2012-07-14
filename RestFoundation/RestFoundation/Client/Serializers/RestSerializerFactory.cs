@@ -2,6 +2,9 @@
 
 namespace RestFoundation.Client.Serializers
 {
+    /// <summary>
+    /// Represents a REST serializer factory that supports JSON and XML.
+    /// </summary>
     public class RestSerializerFactory : IRestSerializerFactory
     {
         public IRestSerializer Create(Type objectType, RestResourceType resourceType)

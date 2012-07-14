@@ -60,7 +60,7 @@ namespace RestTest.Behaviors
             return true;
         }
 
-        public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object result)
+        public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object returnedObj)
         {
             timer.Stop();
 

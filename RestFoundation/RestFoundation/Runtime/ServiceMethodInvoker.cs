@@ -6,21 +6,36 @@ using System.Reflection;
 
 namespace RestFoundation.Runtime
 {
+    /// <summary>
+    /// Represents the service method invoker.
+    /// </summary>
     public class ServiceMethodInvoker : IServiceMethodInvoker
     {
         private readonly ServiceBehaviorInvoker m_behaviorInvoker;
-        private readonly IParameterValueFactory m_parameterValueFactory;
+        private readonly IParameterValueProvider m_parameterValueProvider;
 
-        public ServiceMethodInvoker(ServiceBehaviorInvoker behaviorInvoker, IParameterValueFactory parameterValueFactory)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceMethodInvoker"/> class.
+        /// </summary>
+        /// <param name="behaviorInvoker">The service behavior invoker.</param>
+        /// <param name="parameterValueProvider">The parameter value provider.</param>
+        public ServiceMethodInvoker(ServiceBehaviorInvoker behaviorInvoker, IParameterValueProvider parameterValueProvider)
         {
             if (behaviorInvoker == null) throw new ArgumentNullException("behaviorInvoker");
-            if (parameterValueFactory == null) throw new ArgumentNullException("parameterValueFactory");
+            if (parameterValueProvider == null) throw new ArgumentNullException("parameterValueProvider");
 
             m_behaviorInvoker = behaviorInvoker;
-            m_parameterValueFactory = parameterValueFactory;
+            m_parameterValueProvider = parameterValueProvider;
         }
 
-        public virtual object Invoke(IRestHandler handler, object service, MethodInfo method)
+        /// <summary>
+        /// Invokes the service method.
+        /// </summary>
+        /// <param name="method">The service method.</param>
+        /// <param name="service">The service instance.</param>
+        /// <param name="handler">The REST handler associated with the HTTP request.</param>
+        /// <returns>The return value of the executed service method.</returns>
+        public virtual object Invoke(MethodInfo method, object service, IRestHandler handler)
         {
             if (service == null || method == null)
             {
@@ -113,7 +128,7 @@ namespace RestFoundation.Runtime
 
         private object InvokeWithBehaviors(IServiceContext context, List<IServiceBehavior> behaviors, object service, MethodInfo method)
         {
-            m_behaviorInvoker.PerformOnBindingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList(), service, method);
+            m_behaviorInvoker.PerformOnAuthorizingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList(), service, method);
 
             object resource;
             object[] methodArguments = GenerateMethodArguments(context, method, out resource);
@@ -137,7 +152,7 @@ namespace RestFoundation.Runtime
             foreach (ParameterInfo parameter in method.GetParameters())
             {
                 bool isResource;
-                object argumentValue = m_parameterValueFactory.CreateValue(context, parameter, out isResource);
+                object argumentValue = m_parameterValueProvider.CreateValue(parameter, context, out isResource);
 
                 if (isResource)
                 {

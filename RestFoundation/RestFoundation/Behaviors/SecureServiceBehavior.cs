@@ -5,22 +5,40 @@ using System.Web;
 
 namespace RestFoundation.Behaviors
 {
-    public abstract class ServiceSecurityBehavior : ServiceBehavior, ISecureServiceBehavior
+    /// <summary>
+    /// The base secure service behavior class. It is highly recommended to inherit this class
+    /// instead of implementing the <see cref="ISecureServiceBehavior"/> interface to avoid
+    /// output caching security problems.
+    /// </summary>
+    public abstract class SecureServiceBehavior : ServiceBehavior, ISecureServiceBehavior
     {
         private const string DefaultForbiddenMessage = "Forbidden";
 
         private string m_forbiddenMessage;
 
-        protected ServiceSecurityBehavior()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SecureServiceBehavior"/> class.
+        /// </summary>
+        protected SecureServiceBehavior()
         {
             m_forbiddenMessage = DefaultForbiddenMessage;
         }
 
+        /// <summary>
+        /// Called during the authorization process before a service method or behavior is executed.
+        /// </summary>
+        /// <param name="context">The service context.</param>
+        /// <param name="service">The service object.</param>
+        /// <param name="method">The service method.</param>
         public virtual bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
             return false;
         }
 
+        /// <summary>
+        /// Sets an error message in the case of a security exception.
+        /// </summary>
+        /// <param name="message">The error message.</param>
         protected void SetForbiddenErrorMessage(string message)
         {
             m_forbiddenMessage = message ?? DefaultForbiddenMessage;

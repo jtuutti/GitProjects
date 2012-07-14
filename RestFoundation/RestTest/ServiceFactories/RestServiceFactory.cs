@@ -30,7 +30,7 @@ namespace RestTest.ServiceFactories
             }
         }
 
-        public object Create(IServiceContext context, Type serviceContractType)
+        public object Create(Type serviceContractType, IServiceContext context)
         {
             return serviceContainer.TryGetInstance(serviceContractType);
         }

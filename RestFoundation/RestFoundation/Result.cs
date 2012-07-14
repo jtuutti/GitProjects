@@ -258,7 +258,7 @@ namespace RestFoundation
                              FilePath = filePath,
                              ClearOutput = clearOutput,
                              ContentType = contentType,
-                             CacheForTimeSpan = maxAge,
+                             CacheDuration = maxAge,
                              ContentDisposition = contentDisposition
                          };
 
@@ -292,7 +292,7 @@ namespace RestFoundation
                              FileUrl = fileUrl,
                              ClearOutput = clearOutput,
                              ContentType = contentType,
-                             CacheForTimeSpan = maxAge,
+                             CacheDuration = maxAge,
                              ContentDisposition = contentDisposition
                          };
 
@@ -314,13 +314,13 @@ namespace RestFoundation
             return Resource(obj, statusCode, statusDescription, null);
         }
 
-        public static IResult Resource(object obj, HttpStatusCode statusCode, string statusDescription, IDictionary<string, string> additionalHeaders)
+        public static IResult Resource(object obj, HttpStatusCode statusCode, string statusDescription, IDictionary<string, string> responseHeaders)
         {
             var context = Rest.Active.CreateObject<IServiceContext>();
             var resultFactory = Rest.Active.CreateObject<IResultFactory>();
 
-            IResult statusResult = ResponseStatus(statusCode, statusDescription, additionalHeaders);
-            IResult resourceResult = resultFactory.Create(context, obj);
+            IResult statusResult = ResponseStatus(statusCode, statusDescription, responseHeaders);
+            IResult resourceResult = resultFactory.Create(obj, context);
 
             statusResult.Execute(context);
             return resourceResult;
@@ -336,7 +336,7 @@ namespace RestFoundation
             return ResponseStatus(code, description, null);
         }
 
-        public static StatusResult ResponseStatus(HttpStatusCode code, string description, IDictionary<string, string> additionalHeaders)
+        public static StatusResult ResponseStatus(HttpStatusCode code, string description, IDictionary<string, string> responseHeaders)
         {
             var result = new StatusResult
                          {
@@ -344,11 +344,11 @@ namespace RestFoundation
                              StatusDescription = description
                          };
 
-            if (additionalHeaders != null)
+            if (responseHeaders != null)
             {
-                foreach (var header in additionalHeaders)
+                foreach (var header in responseHeaders)
                 {
-                    result.AdditionalHeaders[header.Key] = header.Value;
+                    result.ResponseHeaders[header.Key] = header.Value;
                 }
             }
 

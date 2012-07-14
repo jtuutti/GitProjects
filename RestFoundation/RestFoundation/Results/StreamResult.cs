@@ -6,20 +6,45 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
 {
+    /// <summary>
+    /// Represents a stream data result.
+    /// </summary>
     public class StreamResult : IResult, IDisposable
     {
         private bool m_isDisposed;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StreamResult"/> class.
+        /// </summary>
         public StreamResult()
         {
             ClearOutput = true;
         }
 
+        /// <summary>
+        /// Gets or sets the input data stream.
+        /// </summary>
         public Stream Stream { get; set; }
+
+        /// <summary>
+        /// Gets or sets the content type.
+        /// </summary>
         public string ContentType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Content-Disposition HTTP response header value.
+        /// </summary>
         public string ContentDisposition { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the response output should be cleared.
+        /// </summary>
         public bool ClearOutput { get; set; }
 
+        /// <summary>
+        /// Executes the result against the provided service context.
+        /// </summary>
+        /// <param name="context">The service context.</param>
         public virtual void Execute(IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
@@ -68,12 +93,22 @@ namespace RestFoundation.Results
             }
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);  
         }
 
+        /// <summary>
+        /// Releases the unmanaged resources used by the <see cref="StreamResult"/> and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources; false to release only unmanaged resources.
+        /// </param>
         protected virtual void Dispose(bool disposing)
         {
             if (m_isDisposed)

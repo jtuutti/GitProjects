@@ -31,6 +31,5 @@ namespace RestFoundation
         void SetFileDependencies(string filePath);
         void SetFileDependencies(string filePath, TimeSpan maxAge);
         void SetFileDependencies(string filePath, HttpCacheability cacheability, TimeSpan maxAge);
-        void TransmitFile(string filePath);
     }
 }

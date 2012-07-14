@@ -55,10 +55,10 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviors\ResponseHeaderBehavior.cs" />
     <Compile Include="Formatters\JsonPFormatter.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="IResultExecutor.cs" />
+    <Compile Include="Results\FileResultBase.cs" />
     <Compile Include="Results\JsonPResult.cs" />
     <Compile Include="Runtime\Handlers\BrowserRedirectHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
@@ -80,8 +80,8 @@
     <Compile Include="Behaviors\ContentTypeBehavior.cs" />
     <Compile Include="Behaviors\HttpsOnlyBehavior.cs" />
     <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
-    <Compile Include="Behaviors\ServiceSecurityBehavior.cs" />
-    <Compile Include="BindResourceAttribute.cs" />
+    <Compile Include="Behaviors\SecureServiceBehavior.cs" />
+    <Compile Include="ResourceParameterAttribute.cs" />
     <Compile Include="Client\RestClientExtensions.cs" />
     <Compile Include="Client\RestClientFactory.cs" />
     <Compile Include="Client\IRestSerializerFactory.cs" />
@@ -108,7 +108,7 @@
     <Compile Include="IHttpMethodResolver.cs" />
     <Compile Include="IHttpResponseOutput.cs" />
     <Compile Include="IObjectActivator.cs" />
-    <Compile Include="IParameterValueFactory.cs" />
+    <Compile Include="IParameterValueProvider.cs" />
     <Compile Include="IRestHandler.cs" />
     <Compile Include="IRestService.cs" />
     <Compile Include="IStreamCompressor.cs" />
@@ -179,7 +179,7 @@
     <Compile Include="Context\HttpResponseOutput.cs" />
     <Compile Include="Runtime\ServiceRouteConstraint.cs" />
     <Compile Include="Runtime\OutputCompressionManager.cs" />
-    <Compile Include="Runtime\ParameterValueFactory.cs" />
+    <Compile Include="Runtime\ParameterValueProvider.cs" />
     <Compile Include="Runtime\ResourceValidator.cs" />
     <Compile Include="RouteBuilder.cs" />
     <Compile Include="Runtime\SerializationValidator.cs" />
@@ -195,12 +195,12 @@
     <Compile Include="IResult.cs" />
     <Compile Include="IResultFactory.cs" />
     <Compile Include="Runtime\Handlers\RestAsyncHandler.cs" />
-    <Compile Include="Formatters\DynamicDictionaryObject.cs" />
+    <Compile Include="Runtime\DynamicDictionaryObject.cs" />
     <Compile Include="Formatters\FormsFormatter.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Results\RedirectResult.cs" />
     <Compile Include="Behaviors\ServiceBehavior.cs" />
-    <Compile Include="Formatters\DynamicXmlDocument.cs" />
+    <Compile Include="Runtime\DynamicXmlDocument.cs" />
     <Compile Include="Runtime\Registries\ContentTypeFormatterRegistry.cs" />
     <Compile Include="Formatters\JsonFormatter.cs" />
     <Compile Include="Formatters\XmlFormatter.cs" />

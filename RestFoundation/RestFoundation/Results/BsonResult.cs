@@ -5,16 +5,33 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
 {
+    /// <summary>
+    /// Represents a BSON result.
+    /// </summary>
     public class BsonResult : IResult
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BsonResult"/> class.
+        /// </summary>
         public BsonResult()
         {
             ContentType = "application/bson";
         }
 
+        /// <summary>
+        /// Gets or sets the object to serialize to BSON.
+        /// </summary>
         public object Content { get; set; }
+
+        /// <summary>
+        /// Gets or sets the content type.
+        /// </summary>
         public string ContentType { get; set; }
 
+        /// <summary>
+        /// Executes the result against the provided service context.
+        /// </summary>
+        /// <param name="context">The service context.</param>
         public virtual void Execute(IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");

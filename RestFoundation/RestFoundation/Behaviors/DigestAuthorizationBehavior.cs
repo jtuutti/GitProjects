@@ -9,11 +9,24 @@ using RestFoundation.Security;
 
 namespace RestFoundation.Behaviors
 {
-    public sealed class DigestAuthorizationBehavior : ServiceSecurityBehavior, IDisposable
+    /// <summary>
+    /// Represents a basic authorization secure behavior for a service or a service method.
+    /// </summary>
+    public class DigestAuthorizationBehavior : SecureServiceBehavior, IDisposable
     {
+        /// <summary>
+        /// Contains the quality of protection values for digest authentication.
+        /// </summary>
         public enum QualityOfProtection
         {
+            /// <summary>
+            /// None
+            /// </summary>
             None,
+
+            /// <summary>
+            /// Auth
+            /// </summary>
             Auth
         }
 
@@ -24,13 +37,27 @@ namespace RestFoundation.Behaviors
         private readonly MD5Encoder m_encoder;
         private readonly RijndaelEncryptor m_encryptor;
 
+        /// <summary>
+        /// Gets the nonce lifetime.
+        /// </summary>
         public TimeSpan NonceLifetime { get; set; }
+
+        /// <summary>
+        /// Gets the quality of protection value.
+        /// </summary>
         public QualityOfProtection Qop { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DigestAuthorizationBehavior"/> class.
+        /// </summary>
         public DigestAuthorizationBehavior() : this(Rest.Active.CreateObject<IAuthorizationManager>())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DigestAuthorizationBehavior"/> class.
+        /// </summary>
+        /// <param name="authorizationManager">The authorization manager.</param>
         public DigestAuthorizationBehavior(IAuthorizationManager authorizationManager)
         {
             if (authorizationManager == null)
@@ -46,6 +73,12 @@ namespace RestFoundation.Behaviors
             m_encryptor = new RijndaelEncryptor();
         }
 
+        /// <summary>
+        /// Called during the authorization process before a service method or behavior is executed.
+        /// </summary>
+        /// <param name="context">The service context.</param>
+        /// <param name="service">The service object.</param>
+        /// <param name="method">The service method.</param>
         public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
             if (context == null)
@@ -73,7 +106,11 @@ namespace RestFoundation.Behaviors
             context.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), m_authorizationManager.GetRoles(header.UserName).ToArray());
             return true;
         }
-        
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
             m_encoder.Dispose();

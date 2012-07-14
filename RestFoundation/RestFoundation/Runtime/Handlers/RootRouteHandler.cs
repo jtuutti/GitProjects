@@ -7,12 +7,21 @@ using RestFoundation.ServiceProxy;
 
 namespace RestFoundation.Runtime.Handlers
 {
+    /// <summary>
+    /// Represents a service root route handler.
+    /// </summary>
     public class RootRouteHandler : IRouteHandler, IHttpHandler
     {
         private readonly IServiceContext m_serviceContext;
         private readonly IBrowserDetector m_browserDetector;
         private readonly IResultFactory m_resultFactory;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RootRouteHandler"/> class.
+        /// </summary>
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="browserDetector">The browser detector.</param>
+        /// <param name="resultFactory">The service method result factory.</param>
         public RootRouteHandler(IServiceContext serviceContext, IBrowserDetector browserDetector, IResultFactory resultFactory)
         {
             if (serviceContext == null) throw new ArgumentNullException("serviceContext");
@@ -24,6 +33,12 @@ namespace RestFoundation.Runtime.Handlers
             m_resultFactory = resultFactory;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether another request can use the <see cref="T:System.Web.IHttpHandler"/> instance.
+        /// </summary>
+        /// <returns>
+        /// true if the <see cref="T:System.Web.IHttpHandler"/> instance is reusable; otherwise, false.
+        /// </returns>
         public bool IsReusable
         {
             get
@@ -32,6 +47,13 @@ namespace RestFoundation.Runtime.Handlers
             }
         }
 
+        /// <summary>
+        /// Provides the object that processes the request.
+        /// </summary>
+        /// <returns>
+        /// An object that processes the request.
+        /// </returns>
+        /// <param name="requestContext">An object that encapsulates information about the request.</param>
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
             if (requestContext == null) throw new ArgumentNullException("requestContext");
@@ -39,6 +61,14 @@ namespace RestFoundation.Runtime.Handlers
             return this;
         }
 
+        /// <summary>
+        /// Enables processing of HTTP Web requests by a custom HttpHandler that implements the <see cref="T:System.Web.IHttpHandler"/>
+        /// interface.
+        /// </summary>
+        /// <param name="context">
+        /// An <see cref="T:System.Web.HttpContext"/> object that provides references to the intrinsic server objects
+        /// (for example, Request, Response, Session, and Server) used to service HTTP requests.
+        /// </param>
         public void ProcessRequest(HttpContext context)
         {
             if (m_serviceContext.Request.Method == HttpMethod.Options)
@@ -97,7 +127,7 @@ namespace RestFoundation.Runtime.Handlers
 
             try
             {
-                result = m_resultFactory.Create(m_serviceContext, GetOperations());
+                result = m_resultFactory.Create(GetOperations(), m_serviceContext);
             }
             catch (HttpResponseException)
             {

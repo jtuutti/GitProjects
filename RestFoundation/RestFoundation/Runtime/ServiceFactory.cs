@@ -4,7 +4,7 @@ namespace RestFoundation.Runtime
 {
     public class ServiceFactory : IServiceFactory
     {
-        public virtual object Create(IServiceContext context, Type serviceContractType)
+        public virtual object Create(Type serviceContractType, IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");
 

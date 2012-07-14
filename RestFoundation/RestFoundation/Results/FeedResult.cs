@@ -6,14 +6,46 @@ using System.Xml;
 
 namespace RestFoundation.Results
 {
+    /// <summary>
+    /// Represents an RSS/Atom feed result.
+    /// </summary>
     public class FeedResult : IResult
     {
-        public enum SyndicationFormat { Atom, Rss }
+        /// <summary>
+        /// Defines a syndication format.
+        /// </summary>
+        public enum SyndicationFormat
+        {
+            /// <summary>
+            /// Atom
+            /// </summary>
+            Atom,
 
+            /// <summary>
+            /// RSS
+            /// </summary>
+            Rss
+        }
+
+        /// <summary>
+        /// Gets or sets the feed instance.
+        /// </summary>
         public SyndicationFeed Feed { get; set; }
+
+        /// <summary>
+        /// Gets or sets the syndication format.
+        /// </summary>
         public SyndicationFormat Format { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether dates should be in the XML (ISO 8601) format.
+        /// </summary>
         public bool XmlStyleDates { get; set; }
 
+        /// <summary>
+        /// Executes the result against the provided service context.
+        /// </summary>
+        /// <param name="context">The service context.</param>
         public virtual void Execute(IServiceContext context)
         {
             if (context == null) throw new ArgumentNullException("context");

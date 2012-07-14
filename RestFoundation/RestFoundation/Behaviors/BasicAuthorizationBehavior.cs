@@ -8,16 +8,26 @@ using RestFoundation.Security;
 
 namespace RestFoundation.Behaviors
 {
-    public class BasicAuthorizationBehavior : ServiceSecurityBehavior
+    /// <summary>
+    /// Represents a basic authorization secure behavior for a service or a service method.
+    /// </summary>
+    public class BasicAuthorizationBehavior : SecureServiceBehavior
     {
         private const string AuthenticationType = "Basic";
 
         private readonly IAuthorizationManager m_authorizationManager;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasicAuthorizationBehavior"/> class.
+        /// </summary>
         public BasicAuthorizationBehavior() : this(Rest.Active.CreateObject<IAuthorizationManager>())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasicAuthorizationBehavior"/> class.
+        /// </summary>
+        /// <param name="authorizationManager">The authorization manager.</param>
         public BasicAuthorizationBehavior(IAuthorizationManager authorizationManager)
         {
             if (authorizationManager == null)
@@ -28,6 +38,12 @@ namespace RestFoundation.Behaviors
             m_authorizationManager = authorizationManager;
         }
 
+        /// <summary>
+        /// Called during the authorization process before a service method or behavior is executed.
+        /// </summary>
+        /// <param name="context">The service context.</param>
+        /// <param name="service">The service object.</param>
+        /// <param name="method">The service method.</param>
         public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
             if (context == null) throw new ArgumentNullException("context");

@@ -11,10 +11,10 @@ namespace RestFoundation
         /// <summary>
         /// Binds data from an HTTP route, query string or message to a service method parameter.
         /// </summary>
-        /// <param name="context">The service context.</param>
         /// <param name="objectType">The binded object type.</param>
         /// <param name="name">The service method parameter name.</param>
+        /// <param name="context">The service context.</param>
         /// <returns>The object instance with the data or null.</returns>
-        object Bind(IServiceContext context, Type objectType, string name);
+        object Bind(Type objectType, string name, IServiceContext context);
     }
 }

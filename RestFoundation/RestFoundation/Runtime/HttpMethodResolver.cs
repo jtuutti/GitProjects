@@ -5,8 +5,18 @@ using System.Reflection;
 
 namespace RestFoundation.Runtime
 {
+    /// <summary>
+    /// Represents the default HTTP method resolver. It uses the property values of the <see cref="UrlAttribute"/>
+    /// as well as the name of the method to resolve the supported HTTP methods.
+    /// </summary>
     public class HttpMethodResolver : IHttpMethodResolver
     {
+        /// <summary>
+        /// Returns a sequence of HTTP methods supported by the service method.
+        /// </summary>
+        /// <param name="method">The service method.</param>
+        /// <returns>A sequence of HTTP methods.</returns>
+        /// <exception cref="InvalidOperationException">If the HTTP method could not be resolved.</exception>
         public IEnumerable<HttpMethod> Resolve(MethodInfo method)
         {
             if (method == null) throw new ArgumentNullException("method");

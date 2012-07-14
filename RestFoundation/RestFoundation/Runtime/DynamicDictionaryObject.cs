@@ -4,7 +4,10 @@ using System.Dynamic;
 
 namespace RestFoundation.Formatters
 {
-    public sealed class DynamicDictionaryObject : DynamicObject
+    /// <summary>
+    /// Represents a dynamic dictionary object.
+    /// </summary>
+    public class DynamicDictionaryObject : DynamicObject
     {
         private readonly IDictionary<string, object> m_dictionary;
 
