@@ -274,6 +274,7 @@
     <Compile Include="UnitTesting\MockRestAsyncHandler.cs" />
     <Compile Include="UnitTesting\MockRestHandler.cs" />
     <Compile Include="UnitTesting\RestExtensions.cs" />
+    <Compile Include="UnitTesting\TestHttpApplication.cs" />
     <Compile Include="UnitTesting\TestHttpCachePolicyBase.cs" />
     <Compile Include="UnitTesting\TestHttpResponse.cs" />
     <Compile Include="UnitTesting\HttpMethodBuilder.cs" />

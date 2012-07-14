@@ -7,6 +7,7 @@ namespace RestFoundation.UnitTesting
 {
     internal sealed class TestHttpContext : HttpContextBase, IDisposable
     {
+        private readonly HttpApplication m_application;
         private readonly TestHttpRequest m_request;
         private readonly TestHttpResponse m_response;
         private readonly TestHttpServerUtility m_server;
@@ -15,11 +16,20 @@ namespace RestFoundation.UnitTesting
 
         internal TestHttpContext(string relativeUrl, string httpMethod)
         {
+            m_application = new TestHttpApplication();
             m_request = new TestHttpRequest(relativeUrl, httpMethod);
             m_response = new TestHttpResponse();
             m_server = new TestHttpServerUtility(relativeUrl);
             m_items = new Hashtable();
             m_user = new GenericPrincipal(new GenericIdentity("Test"), new[] { "Tester" });
+        }
+
+        public override HttpApplication ApplicationInstance
+        {
+            get
+            {
+                return m_application;
+            }
         }
 
         public override HttpRequestBase Request
