@@ -6,10 +6,12 @@ using System.Web.Util;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
-using RestFoundation.ServiceProxy;
 
 namespace RestFoundation
 {
+    /// <summary>
+    /// Represents the REST Framework configuration class.
+    /// </summary>
     public sealed class Rest
     {
         internal static readonly Rest Active = new Rest();
@@ -17,6 +19,9 @@ namespace RestFoundation
         private static readonly object syncRoot = new object();
         private static bool defaultUrlMapped;
 
+        /// <summary>
+        /// Gets the configuration object instance.
+        /// </summary>
         public static Rest Configure
         {
             get
@@ -30,10 +35,25 @@ namespace RestFoundation
             }
         }
 
+        /// <summary>
+        /// Gets the object activator instance.
+        /// </summary>
         public IObjectActivator Activator { get; private set; }
-        internal bool IsServiceProxyInitialized { get; private set; }
+
+        /// <summary>
+        /// Gets the JQuery URL used by the service help and proxy interface.
+        /// </summary>
+        public string JQueryUrl { get; internal set; }
+
+        internal bool IsServiceProxyInitialized { get; set; }
+        internal string ServiceProxyRelativeUrl { get; set; }
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
 
+        /// <summary>
+        /// Sets an object activator for the configuration.
+        /// </summary>
+        /// <param name="activator">The object activator implementation.</param>
+        /// <returns>The configuration object.</returns>
         public Rest WithObjectActivator(IObjectActivator activator)
         {
             if (activator == null) throw new ArgumentNullException("activator");
@@ -49,11 +69,23 @@ namespace RestFoundation
             return this;
         }
 
+        /// <summary>
+        /// Sets an object activator for the configuration that uses the provided factory delegate to create objects.
+        /// </summary>
+        /// <param name="factory">The object activator implementation.</param>
+        /// <returns>The configuration object.</returns>
         public Rest WithObjectFactory(Func<Type, object> factory)
         {
             return WithObjectFactory(factory, obj => {});
         }
 
+        /// <summary>
+        /// Sets an object activator for the configuration that uses the provided factory delegate to create objects
+        /// and the builder delegate to build up existing objects with property injection dependencies.
+        /// </summary>
+        /// <param name="factory">The object factory delegate.</param>
+        /// <param name="builder">The object build up delegate.</param>
+        /// <returns>The configuration object.</returns>
         public Rest WithObjectFactory(Func<Type, object> factory, Action<object> builder)
         {
             if (factory == null) throw new ArgumentNullException("factory");
@@ -70,6 +102,11 @@ namespace RestFoundation
             return this;
         }
 
+        /// <summary>
+        /// Calls the provided global behavior builder delegate to set or remove behaviors global to all services.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The configuration object.</returns>
         public Rest WithGlobalBehaviors(Action<GlobalBehaviorBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
@@ -78,6 +115,11 @@ namespace RestFoundation
             return this;
         }
 
+        /// <summary>
+        /// Calls the provided routing builder delegate to set up URL routes to services.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The configuration object.</returns>
         public Rest WithRoutes(Action<RouteBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
@@ -86,6 +128,11 @@ namespace RestFoundation
             return this;
         }
 
+        /// <summary>
+        /// Calls the provided content type formatter builder delegate to set or remove content type formatters.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The configuration object.</returns>
         public Rest WithContentTypeFormatters(Action<ContentTypeFormatterBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
@@ -94,6 +141,11 @@ namespace RestFoundation
             return this;
         }
 
+        /// <summary>
+        /// Calls the provided object type binder builder delegate to set or remove object type binders.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        /// <returns>The configuration object.</returns>
         public Rest WithObjectTypeBinders(Action<ObjectTypeBinderBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
@@ -102,14 +154,34 @@ namespace RestFoundation
             return this;
         }
 
+        /// <summary>
+        /// Adds the provided header to all HTTP responses.
+        /// </summary>
+        /// <param name="headerName">The header name.</param>
+        /// <param name="headerValue">The header value.</param>
+        /// <returns>The configuration object.</returns>
         public Rest WithResponseHeader(string headerName, string headerValue)
         {
             if (String.IsNullOrEmpty(headerName)) throw new ArgumentNullException("headerName");
             if (String.IsNullOrEmpty(headerValue)) throw new ArgumentNullException("headerValue");
 
-            return WithResponseHeaders(new Dictionary<string, string> { { headerName, headerValue } });
+            if (ResponseHeaders == null)
+            {
+                ResponseHeaders = new SortedDictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { headerName, headerValue }
+                };
+            }
+
+            ResponseHeaders[headerName] = headerValue;
+            return this;
         }
 
+        /// <summary>
+        /// Adds the provided response headers to all HTTP responses.
+        /// </summary>
+        /// <param name="responseHeaders">A dictionary of header names and values.</param>
+        /// <returns>The configuration object.</returns>
         public Rest WithResponseHeaders(IDictionary<string, string> responseHeaders)
         {
             if (responseHeaders == null) throw new ArgumentNullException("responseHeaders");
@@ -118,7 +190,7 @@ namespace RestFoundation
             {
                 foreach (KeyValuePair<string, string> header in responseHeaders)
                 {
-                    ResponseHeaders.Add(header);
+                    ResponseHeaders[header.Key] = header.Value;
                 }
             }
             else
@@ -129,6 +201,10 @@ namespace RestFoundation
             return this;
         }
 
+        /// <summary>
+        /// Adds content type formatters for the JSONP support.
+        /// </summary>
+        /// <returns>The configuration object.</returns>
         public Rest EnableJsonPSupport()
         {
             ContentTypeFormatterRegistry.SetFormatter("application/javascript", new JsonPFormatter());
@@ -137,23 +213,16 @@ namespace RestFoundation
             return this;
         }
 
-        public Rest EnableServiceProxyUI()
+        /// <summary>
+        /// Calls the provided service proxy configuration object to set up service help and proxy UI for the services.
+        /// </summary>
+        /// <param name="configuration">The service help and proxy configuration.</param>
+        /// <returns>The configuration object.</returns>
+        public Rest ConfigureServiceHelpAndProxy(Action<ServiceProxyConfiguration> configuration)
         {
-            if (IsServiceProxyInitialized)
-            {
-                throw new InvalidOperationException("Service proxy UI is already enabled.");
-            }
+            if (configuration == null) throw new ArgumentNullException("configuration");
 
-            ProxyPathProvider.AppInitialize();
-
-            RouteTable.Routes.MapPageRoute("ProxyIndex", "help/index", "~/index.aspx");
-            RouteTable.Routes.MapPageRoute(String.Empty, "help/metadata", "~/metadata.aspx");
-            RouteTable.Routes.MapPageRoute(String.Empty, "help/output", "~/output.aspx");
-            RouteTable.Routes.MapPageRoute(String.Empty, "help/proxy", "~/proxy.aspx");
-            RouteTable.Routes.Add(new Route("help", new ProxyRootHandler()));
-
-            IsServiceProxyInitialized = true;
-
+            configuration(new ServiceProxyConfiguration());
             return this;
         }
 

@@ -89,9 +89,12 @@ namespace RestFoundation.Runtime.Handlers
                     context.Response.SuppressContent = true;
                 }
 
-                if (Rest.Active.IsServiceProxyInitialized && m_browserDetector.IsBrowserRequest(new HttpRequestWrapper(context.Request)))
+                if (Rest.Active.IsServiceProxyInitialized && !String.IsNullOrWhiteSpace(Rest.Active.ServiceProxyRelativeUrl) &&
+                    m_browserDetector.IsBrowserRequest(new HttpRequestWrapper(context.Request)))
                 {
-                    context.Response.Redirect((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/') + "/help/index", false);
+                    string rootUrl = String.Concat((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/'), "/", Rest.Active.ServiceProxyRelativeUrl, "/index");
+                    context.Response.Redirect(rootUrl, false);
+
                     return;
                 }
             }

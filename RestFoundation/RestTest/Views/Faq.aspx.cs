@@ -7,13 +7,39 @@ namespace RestTest.Views
 {
     public partial class Faq : Page
     {
-        public IServiceContext ServiceContext { get; set; }
+        private readonly IServiceContext m_serviceContext;
+
+        // An empty protected or public constructor is required by the ASP .NET to initalize Web Forms pages
+        protected Faq()
+        {
+        }
+
+        public Faq(IServiceContext serviceContext)
+        {
+            m_serviceContext = serviceContext;
+        }
+
+        public IServiceContext ServiceContext
+        {
+            get
+            {
+                return m_serviceContext;
+            }
+        }
+
+        public IHttpRequest ServiceRequest { get; set; }
+        public IHttpResponse ServiceResponse { get; set; }
 
         protected void Page_Init(object sender, EventArgs e)
         {
             if (ServiceContext == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "Dependency injection failed");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, "Constructor dependency injection failed");
+            }
+
+            if (ServiceRequest == null || ServiceResponse == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, "Property dependency injection failed");
             }
         }
 

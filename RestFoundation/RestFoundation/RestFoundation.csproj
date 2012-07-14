@@ -230,6 +230,7 @@
     <Compile Include="Runtime\UploadedFile.cs" />
     <Compile Include="Runtime\XmlSchemaGenerator.cs" />
     <Compile Include="Runtime\Registries\XmlSerializerRegistry.cs" />
+    <Compile Include="ServiceProxyConfiguration.cs" />
     <Compile Include="ServiceProxy\ProxyIPFilteredAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyAdditionalHeaderAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyHiddenOperationAttribute.cs" />

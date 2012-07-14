@@ -70,6 +70,7 @@
     <Content Include="App_Data\AlphaMedia\Mobile\en-US\TouchMap.xml" />
     <Content Include="App_Data\sample.txt" />
     <Content Include="Views\Faq.aspx" />
+    <Content Include="Views\FaqHeader.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -94,6 +95,13 @@
     </Compile>
     <Compile Include="Views\Faq.aspx.designer.cs">
       <DependentUpon>Faq.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FaqHeader.ascx.cs">
+      <DependentUpon>FaqHeader.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\FaqHeader.ascx.designer.cs">
+      <DependentUpon>FaqHeader.ascx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

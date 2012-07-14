@@ -1,13 +1,22 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
+    /// <summary>
+    /// Represents an HTTP module required by the REST foundation.
+    /// </summary>
     public sealed class HttpResponseModule : IHttpModule
     {
+        /// <summary>
+        /// Initializes a module and prepares it to handle requests.
+        /// </summary>
+        /// <param name="context">An <see cref="T:System.Web.HttpApplication"/> that provides access to the methods, properties, and events common to all application objects within an ASP.NET application </param>
         public void Init(HttpApplication context)
         {
             if (!HttpRuntime.UsingIntegratedPipeline)
@@ -21,6 +30,9 @@ namespace RestFoundation
             context.EndRequest += (sender, args) => SetResponseHeaders(context);
         }
 
+        /// <summary>
+        /// Disposes of the resources (other than memory) used by the module that implements <see cref="T:System.Web.IHttpModule"/>.
+        /// </summary>
         public void Dispose()
         {
         }
@@ -31,7 +43,50 @@ namespace RestFoundation
 
             if (handler != null)
             {
-                Rest.Active.Activator.BuildUp(handler);
+                InjectControlDependencies(handler);
+
+                handler.PreInit += (s, e) => InitializeChildControls(handler);
+            }
+        }
+
+        private static void InjectControlDependencies(Control control)
+        {
+            Type controlType = control.GetType().BaseType;
+
+            if (controlType != null)
+            {
+                ConstructorInfo constructor = (from ctor in controlType.GetConstructors()
+                                               let parameterLength = ctor.GetParameters().Length
+                                               where parameterLength > 0
+                                               orderby parameterLength descending
+                                               select ctor).FirstOrDefault();
+
+                if (constructor != null)
+                {
+                    CallPageInjectionConstructor(control, constructor);
+                }
+            }
+
+            Rest.Active.Activator.BuildUp(control);
+        }
+
+        private static void CallPageInjectionConstructor(Control control, ConstructorInfo constructor)
+        {
+            var parameters = from parameter in constructor.GetParameters()
+                             let parameterType = parameter.ParameterType
+                             select Rest.Active.CreateObject(parameterType);
+
+            constructor.Invoke(control, parameters.ToArray());
+        }
+
+        private static void InitializeChildControls(Control control)
+        {
+            var childControls = control.Controls.OfType<UserControl>();
+
+            foreach (var childControl in childControls)
+            {
+                InjectControlDependencies(childControl);
+                InitializeChildControls(childControl);
             }
         }
 

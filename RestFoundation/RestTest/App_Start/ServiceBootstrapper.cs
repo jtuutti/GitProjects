@@ -22,9 +22,10 @@ namespace RestTest.App_Start
             Rest.Configure.WithObjectFactory(CreateObjectFactory, CreateObjectBuilder)
                           .WithContentTypeFormatters(RegisterFormatters)
                           .WithRoutes(RegisterRoutes)
-                          .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
                           .EnableJsonPSupport()
-                          .EnableServiceProxyUI();
+                          .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
+                          .WithResponseHeader("X-Service-Version", "1.0")
+                          .ConfigureServiceHelpAndProxy(c => c.Enable());
         }
 
         private static void ConfigureIoC(ConfigurationExpression config)
