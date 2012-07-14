@@ -100,6 +100,11 @@ namespace RestFoundation.Runtime.Handlers
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route data found");
             }
 
+            if (!HttpResponseModule.IsLoaded(requestContext.HttpContext))
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP response module found");
+            }
+
             if (UnvalidatedHandlerRegistry.IsUnvalidated(this))
             {
                 requestContext.HttpContext.Items[ServiceRequestValidator.UnvalidatedHandlerKey] = Boolean.TrueString;

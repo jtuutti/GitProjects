@@ -37,15 +37,7 @@ namespace RestFoundation.Behaviors
         private readonly MD5Encoder m_encoder;
         private readonly RijndaelEncryptor m_encryptor;
 
-        /// <summary>
-        /// Gets the nonce lifetime.
-        /// </summary>
-        public TimeSpan NonceLifetime { get; set; }
-
-        /// <summary>
-        /// Gets the quality of protection value.
-        /// </summary>
-        public QualityOfProtection Qop { get; set; }
+        private bool m_isDisposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DigestAuthorizationBehavior"/> class.
@@ -72,6 +64,16 @@ namespace RestFoundation.Behaviors
             m_encoder = new MD5Encoder();
             m_encryptor = new RijndaelEncryptor();
         }
+
+        /// <summary>
+        /// Gets the nonce lifetime.
+        /// </summary>
+        public TimeSpan NonceLifetime { get; set; }
+
+        /// <summary>
+        /// Gets the quality of protection value.
+        /// </summary>
+        public QualityOfProtection Qop { get; set; }
 
         /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
@@ -113,7 +115,29 @@ namespace RestFoundation.Behaviors
         /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
-            m_encoder.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases the unmanaged resources used by the <see cref="DigestAuthorizationBehavior"/> and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources; false to release only unmanaged resources.
+        /// </param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (m_isDisposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                m_encoder.Dispose();
+            }
+
+            m_isDisposed = true;
         }
 
         private string GenerateNonce(IServiceContext context, string timestamp)

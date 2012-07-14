@@ -37,6 +37,23 @@ namespace RestFoundation
         {
         }
 
+        internal static bool IsLoaded(HttpContextBase context)
+        {
+            if (context == null) throw new ArgumentNullException("context");
+
+            HttpModuleCollection modules = context.ApplicationInstance.Modules;
+
+            for (int i = modules.Count - 1; i >= 0; i--)
+            {
+                if (modules.Get(i) is HttpResponseModule)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static void IngestPageDependencies(HttpApplication context)
         {
             var handler = context.Context.CurrentHandler as Page;
