@@ -60,7 +60,17 @@ namespace RestTestServices
             return Result.Feed(feed, feedFormat);
         }
 
-        public ContentResult File(ICollection<IUploadedFile> files)
+        public FileResultBase FileDownload()
+        {
+            return new FilePathResult
+            {
+                FilePath = @"D:\american_pie_5.avi",
+                ContentType = "video/x-ms-wmv",
+                ContentDisposition = "attachment; filename=movie.avi"
+            };
+        }
+
+        public ContentResult FileUpload(ICollection<IUploadedFile> files)
         {
             if (files == null || files.Count == 0)
             {

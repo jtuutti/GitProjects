@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.IO;
 using System.Net;
 using System.ServiceModel.Syndication;
 using RestFoundation.Results;
@@ -173,92 +171,22 @@ namespace RestFoundation
             return Content(String.Format(provider, format, args), true, null);
         }
 
-        public static BinaryResult Binary(byte[] data)
-        {
-            return Binary(data, true, null, null);
-        }
-
-        public static BinaryResult Binary(byte[] data, bool clearOutput)
-        {
-            return Binary(data, clearOutput, null, null);
-        }
-
-        public static BinaryResult Binary(byte[] data, bool clearOutput, string contentType)
-        {
-            return Binary(data, clearOutput, contentType, null);
-        }
-
-        public static BinaryResult Binary(byte[] data, bool clearOutput, string contentType, string contentDisposition)
-        {
-            var result = new BinaryResult
-                         {
-                             Content = data,
-                             ClearOutput = clearOutput,
-                             ContentType = contentType,
-                             ContentDisposition = contentDisposition
-                         };
-
-            return result;
-        }
-
-        public static StreamResult Stream(Stream stream)
-        {
-            return Stream(stream, true, null, null);
-        }
-
-        public static StreamResult Stream(Stream stream, bool clearOutput)
-        {
-            return Stream(stream, clearOutput, null, null);
-        }
-
-        public static StreamResult Stream(Stream stream, bool clearOutput, string contentType)
-        {
-            return Stream(stream, clearOutput, contentType, null);
-        }
-
-        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
-                         Justification = "The result will be disposed by the REST handler")]
-        public static StreamResult Stream(Stream stream, bool clearOutput, string contentType, string contentDisposition)
-        {
-            var result = new StreamResult
-                         {
-                             Stream = stream,
-                             ClearOutput = clearOutput,
-                             ContentType = contentType,
-                             ContentDisposition = contentDisposition
-                         };
-
-            return result;
-        }
-
         public static FilePathResult LocalFile(string filePath)
         {
-            return LocalFile(filePath, true, null, TimeSpan.Zero, null);
+            return LocalFile(filePath, null, null);
         }
 
-        public static FilePathResult LocalFile(string filePath, bool clearOutput)
+        public static FilePathResult LocalFile(string filePath, string contentType)
         {
-            return LocalFile(filePath, clearOutput, null, TimeSpan.Zero, null);
+            return LocalFile(filePath, contentType, null);
         }
 
-        public static FilePathResult LocalFile(string filePath, bool clearOutput, string contentType)
-        {
-            return LocalFile(filePath, clearOutput, contentType, TimeSpan.Zero, null);
-        }
-
-        public static FilePathResult LocalFile(string filePath, bool clearOutput, string contentType, TimeSpan maxAge)
-        {
-            return LocalFile(filePath, clearOutput, contentType, maxAge, null);
-        }
-
-        public static FilePathResult LocalFile(string filePath, bool clearOutput, string contentType, TimeSpan maxAge, string contentDisposition)
+        public static FilePathResult LocalFile(string filePath, string contentType, string contentDisposition)
         {
             var result = new FilePathResult
                          {
                              FilePath = filePath,
-                             ClearOutput = clearOutput,
                              ContentType = contentType,
-                             CacheDuration = maxAge,
                              ContentDisposition = contentDisposition
                          };
 
@@ -267,32 +195,20 @@ namespace RestFoundation
 
         public static FileUrlResult RemoteFile(string fileUrl)
         {
-            return RemoteFile(fileUrl, true, null, TimeSpan.Zero, null);
+            return RemoteFile(fileUrl, null, null);
         }
 
-        public static FileUrlResult RemoteFile(string fileUrl, bool clearOutput)
+        public static FileUrlResult RemoteFile(string fileUrl, string contentType)
         {
-            return RemoteFile(fileUrl, clearOutput, null, TimeSpan.Zero, null);
+            return RemoteFile(fileUrl, contentType, null);
         }
 
-        public static FileUrlResult RemoteFile(string fileUrl, bool clearOutput, string contentType)
-        {
-            return RemoteFile(fileUrl, clearOutput, contentType, TimeSpan.Zero, null);
-        }
-
-        public static FileUrlResult RemoteFile(string fileUrl, bool clearOutput, string contentType, TimeSpan maxAge)
-        {
-            return RemoteFile(fileUrl, clearOutput, contentType, maxAge, null);
-        }
-
-        public static FileUrlResult RemoteFile(string fileUrl, bool clearOutput, string contentType, TimeSpan maxAge, string contentDisposition)
+        public static FileUrlResult RemoteFile(string fileUrl, string contentType, string contentDisposition)
         {
             var result = new FileUrlResult
                          {
                              FileUrl = fileUrl,
-                             ClearOutput = clearOutput,
                              ContentType = contentType,
-                             CacheDuration = maxAge,
                              ContentDisposition = contentDisposition
                          };
 

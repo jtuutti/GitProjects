@@ -143,7 +143,6 @@
     <Compile Include="Odata\RuntimeTypeProviderContracts.cs" />
     <Compile Include="Odata\StringConstants.cs" />
     <Compile Include="Rest.cs" />
-    <Compile Include="Results\BinaryResult.cs" />
     <Compile Include="Results\BsonResult.cs" />
     <Compile Include="Results\ContentResult.cs" />
     <Compile Include="Results\EmptyResult.cs" />
@@ -152,7 +151,6 @@
     <Compile Include="Results\FileUrlResult.cs" />
     <Compile Include="Results\FilePathResult.cs" />
     <Compile Include="Results\JsonResult.cs" />
-    <Compile Include="Results\StreamResult.cs" />
     <Compile Include="RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptionType.cs" />

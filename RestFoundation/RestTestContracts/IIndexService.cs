@@ -15,9 +15,13 @@ namespace RestTestContracts
         [ProxyHiddenOperation]
         FeedResult Feed(string format);
 
+        [Url("index/download", HttpMethod.Get)]
+        [ProxyHiddenOperation]
+        FileResultBase FileDownload();
+
         [Url("index/upload", HttpMethod.Post)]
         [ProxyHiddenOperation]
-        ContentResult File(ICollection<IUploadedFile> files);
+        ContentResult FileUpload(ICollection<IUploadedFile> files);
 
         [Url("index/all", "Get, Head")]
         [ProxyOperationDescription("Gets all resources of type 'Index'")]

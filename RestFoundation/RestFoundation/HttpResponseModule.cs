@@ -27,7 +27,7 @@ namespace RestFoundation
             context.PreRequestHandlerExecute += (sender, args) => IngestPageDependencies(context);
             context.PreSendRequestHeaders += (sender, args) => RemoveServerHeaders(context);
             context.Error += (sender, args) => CompleteRequestOnError(context);
-            context.EndRequest += (sender, args) => SetResponseHeaders(context);
+            context.PostRequestHandlerExecute += (sender, args) => SetResponseHeaders(context);
         }
 
         /// <summary>

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using RestFoundation.Context;
-using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
 {
@@ -12,14 +14,6 @@ namespace RestFoundation.Results
     public abstract class FileResultBase : IResult
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileResultBase"/> class.
-        /// </summary>
-        protected FileResultBase()
-        {
-            ClearOutput = true;
-        }
-
-        /// <summary>
         /// Gets or sets the content type.
         /// </summary>
         public string ContentType { get; set; }
@@ -28,17 +22,6 @@ namespace RestFoundation.Results
         /// Gets or sets the Content-Disposition HTTP response header value.
         /// </summary>
         public string ContentDisposition { get; set; }
-
-        /// <summary>
-        /// Gets or sets the amount of time that a cache entry is to remain in the output cache.
-        /// <see cref="TimeSpan.Zero"/> means no caching should occur.
-        /// </summary>
-        public TimeSpan CacheDuration { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the response output should be cleared.
-        /// </summary>
-        public bool ClearOutput { get; set; }
 
         /// <summary>
         /// Executes the result against the provided service context.
@@ -55,24 +38,21 @@ namespace RestFoundation.Results
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No valid file path/URL provided");
             }
 
-            if (ClearOutput)
-            {
-                context.Response.Output.Clear();
-            }
+            context.GetHttpContext().Response.BufferOutput = false;
+            context.Response.Output.Clear();
+            context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
+            context.Response.SetHeader("Accept-Ranges", "bytes");
+            context.Response.SetHeader("Content-Length", file.Length.ToString(CultureInfo.InvariantCulture));
+            context.Response.SetHeader("ETag", GenerateETag(file));
 
             SetContentType(context);
 
             if (!String.IsNullOrEmpty(ContentDisposition))
             {
-                context.Response.SetHeader(context.Response.Headers.ContentDisposition, ContentType);
+                context.Response.SetHeader(context.Response.Headers.ContentDisposition, ContentDisposition);
             }
 
-            context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
-
-            OutputCompressionManager.FilterResponse(context);
-
-            context.Response.SetFileDependencies(file.FullName, CacheDuration);
-            TransmitFile(context, file.FullName);
+            TransmitFile(context, file);
         }
 
         /// <summary>
@@ -81,14 +61,6 @@ namespace RestFoundation.Results
         /// <param name="context">The service context.</param>
         /// <returns>The file info instance.</returns>
         protected abstract FileInfo GetFile(IServiceContext context);
-
-        private static void TransmitFile(IServiceContext context, string filePath)
-        {
-            if (context == null) throw new ArgumentNullException("context");
-            if (filePath == null) throw new ArgumentNullException("filePath");
-
-            context.GetHttpContext().Response.TransmitFile(filePath);
-        }
 
         private void SetContentType(IServiceContext context)
         {
@@ -104,6 +76,74 @@ namespace RestFoundation.Results
                 {
                     context.Response.SetHeader(context.Response.Headers.ContentType, acceptType);
                 }
+            }
+        }
+
+        private static void TransmitFile(IServiceContext context, FileInfo file)
+        {
+            var buffer = new byte[4096];
+
+            using (var stream = file.OpenRead())
+            {
+                CreateRangeOutput(context, stream);
+
+                while (context.GetHttpContext().Response.IsClientConnected && stream.Read(buffer, 0, buffer.Length) > 0)
+                {
+                    context.Response.Output.Stream.Write(buffer, 0, buffer.Length);                   
+                    context.Response.Output.Flush();
+                }
+            }
+        }
+
+        private static void CreateRangeOutput(IServiceContext context, FileStream stream)
+        {
+            string rangeValue = context.Request.Headers.TryGet("Range");
+
+            if (String.IsNullOrEmpty(rangeValue) || rangeValue.IndexOf("bytes=", StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                return;
+            }
+
+            long start;
+            string[] ranges = rangeValue.Substring(rangeValue.IndexOf("bytes=", StringComparison.OrdinalIgnoreCase) + 6).Split('-');
+
+            if (!Int64.TryParse(ranges[0], out start))
+            {
+                return;
+            }
+
+            long end;
+
+            if (ranges.Length < 2 || !Int64.TryParse(ranges[1], out end))
+            {
+                end = stream.Length - 1;
+            }
+
+            if (start < 0 || end >= stream.Length || start > end)
+            {
+                context.Response.SetHeader("Content-Range", String.Format(CultureInfo.InvariantCulture, "bytes */{0}", stream.Length));
+                throw new HttpResponseException(HttpStatusCode.RequestedRangeNotSatisfiable, "Range not satisfiable");
+            }
+
+            if (start > 0)
+            {
+                stream.Seek(start, SeekOrigin.Begin);
+            }
+
+            context.Response.SetHeader("Content-Length", (end - start + 1).ToString(CultureInfo.InvariantCulture));
+            context.Response.SetHeader("Content-Range", String.Format(CultureInfo.InvariantCulture, "bytes {0}-{1}/{2}", start, end, stream.Length));
+            context.Response.SetStatus(HttpStatusCode.PartialContent, "Partial content");
+        }
+
+        private static string GenerateETag(FileInfo file)
+        {
+            string fileData = String.Format(CultureInfo.CurrentCulture, "{0}:{1}", file.FullName, file.LastWriteTimeUtc.Ticks);
+
+            using (var hasher = new MD5CryptoServiceProvider())
+            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(fileData)))
+            {
+                var hash = hasher.ComputeHash(stream);
+                return String.Concat("\"", Convert.ToBase64String(hash).TrimEnd('='), "\"");
             }
         }
     }
