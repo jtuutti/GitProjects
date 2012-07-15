@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.ServiceModel.Syndication;
 using System.Xml;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
 {
@@ -72,6 +73,8 @@ namespace RestFoundation.Results
             context.Response.Output.Clear();
             context.Response.SetHeader(context.Response.Headers.ContentType, contentType);
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
+
+            OutputCompressionManager.FilterResponse(context);
 
             using (XmlWriter writer = new FeedWriter(context.Response.Output.Writer, XmlStyleDates))
             {
