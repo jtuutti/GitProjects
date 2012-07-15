@@ -2,7 +2,7 @@
 
 namespace RestFoundation.Runtime
 {
-    public struct ServiceMetadata : IEquatable<ServiceMetadata>
+    internal struct ServiceMetadata : IEquatable<ServiceMetadata>
     {
         private readonly Type m_type;
         private readonly string m_url;

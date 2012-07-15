@@ -6,9 +6,9 @@ using RestFoundation.Results;
 namespace RestFoundation.Formatters
 {
     /// <summary>
-    /// Represents a JSONP content type formatter.
+    /// Represents a JSONP content formatter.
     /// </summary>
-    public class JsonPFormatter : IContentTypeFormatter
+    public class JsonPFormatter : IContentFormatter
     {
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.

@@ -6,13 +6,27 @@ using System.Xml.Serialization;
 
 namespace RestFoundation.Runtime
 {
+    /// <summary>
+    /// Represents an XML object converter.
+    /// </summary>
     public static class XmlConvert
     {
+        /// <summary>
+        /// Converts an object into XML.
+        /// </summary>
+        /// <param name="obj">The object to serialize.</param>
+        /// <returns>The <see cref="String"/> value containing the serialized object.</returns>
         public static string SerializeObject(object obj)
         {
             return SerializeObject(obj, Formatting.None);
         }
 
+        /// <summary>
+        /// Converts an object into XML with the provided formatting options.
+        /// </summary>
+        /// <param name="obj">The object to serialize.</param>
+        /// <param name="formatting">The object containing XML serialization formatting options.</param>
+        /// <returns>The <see cref="String"/> value containing the serialized object.</returns>
         public static string SerializeObject(object obj, Formatting formatting)
         {
             if (obj == null)

@@ -7,12 +7,30 @@ using System.Xml.Serialization;
 
 namespace RestFoundation.Runtime
 {
+    /// <summary>
+    /// Represents an XML schema generator.
+    /// </summary>
     public static class XmlSchemaGenerator
     {
+        /// <summary>
+        /// Returns generated XML schemas for the provided object type.
+        /// </summary>
+        /// <typeparam name="T">The object type.</typeparam>
+        /// <returns>XML schemas for the object.</returns>
         public static XmlSchemas Generate<T>()
             where T : class
         {
-            Type objectType = typeof(T);
+            return Generate(typeof(T));
+        }
+
+        /// <summary>
+        /// Returns generated XML schemas for the provided object type.
+        /// </summary>
+        /// <param name="objectType">The object type.</param>
+        /// <returns>XML schemas for the object.</returns>
+        public static XmlSchemas Generate(Type objectType)
+        {
+            if (objectType == null) throw new ArgumentNullException("objectType");
 
             var schemas = new XmlSchemas();
 

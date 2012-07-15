@@ -6,7 +6,7 @@ namespace RestFoundation
     /// Defines a binder for service method parameters of a specific object type.
     /// The type is specified during the binder registration through a <see cref="Rest"/> instance.
     /// </summary>
-    public interface IObjectTypeBinder
+    public interface ITypeBinder
     {
         /// <summary>
         /// Binds data from an HTTP route, query string or message to a service method parameter.

@@ -9,7 +9,7 @@ namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Represents the default result factory that converts POCO objects into
-    /// results using content type formatters.
+    /// results using content formatters.
     /// </summary>
     public class ResultFactory : IResultFactory
     {
@@ -41,7 +41,7 @@ namespace RestFoundation.Runtime
                 returnedObj = PerformOdataOperations(context, returnedObj);
             }
 
-            IContentTypeFormatter formatter = ContentTypeFormatterRegistry.GetFormatter(context.Request.GetPreferredAcceptType());
+            IContentFormatter formatter = ContentFormatterRegistry.GetFormatter(context.Request.GetPreferredAcceptType());
 
             if (formatter == null)
             {

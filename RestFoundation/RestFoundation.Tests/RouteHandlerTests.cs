@@ -199,7 +199,7 @@ namespace RestFoundation.Tests
 
                 Assert.That(handler.Context.Response, Is.Not.Null);
                 Assert.That(handler.Context.Response.GetStatusCode(), Is.EqualTo(HttpStatusCode.Created));
-                Assert.That(handler.Context.Response.GetHeader("Location"), Is.EqualTo(String.Concat(handler.Context.Request.Url.ServiceUrl, "/1")));
+                Assert.That(handler.Context.Response.GetHeader("Location"), Is.EqualTo(String.Concat(handler.Context.Request.Url.OperationUrl, "/1")));
             }
         }
 
@@ -224,7 +224,7 @@ namespace RestFoundation.Tests
 
                 Assert.That(handler.Context.Response, Is.Not.Null);
                 Assert.That(handler.Context.Response.GetStatusCode(), Is.EqualTo(HttpStatusCode.Created));
-                Assert.That(handler.Context.Response.GetHeader("Location"), Is.EqualTo(String.Concat(handler.Context.Request.Url.ServiceUrl, "/1")));
+                Assert.That(handler.Context.Response.GetHeader("Location"), Is.EqualTo(String.Concat(handler.Context.Request.Url.OperationUrl, "/1")));
             }
         }
 
@@ -249,7 +249,7 @@ namespace RestFoundation.Tests
 
                 Assert.That(handler.Context.Response, Is.Not.Null);
                 Assert.That(handler.Context.Response.GetStatusCode(), Is.EqualTo(HttpStatusCode.Created));
-                Assert.That(handler.Context.Response.GetHeader("Location"), Is.EqualTo(String.Concat(handler.Context.Request.Url.ServiceUrl, "/1")));
+                Assert.That(handler.Context.Response.GetHeader("Location"), Is.EqualTo(String.Concat(handler.Context.Request.Url.OperationUrl, "/1")));
             }
         }
 

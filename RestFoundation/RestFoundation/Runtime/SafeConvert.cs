@@ -4,8 +4,21 @@ using System.Globalization;
 
 namespace RestFoundation.Runtime
 {
+    /// <summary>
+    /// Represent a safe type converter.
+    /// </summary>
     public static class SafeConvert
     {
+        /// <summary>
+        /// Returns a value indicating whether the provided value could be changed to the specified
+        /// conversion type.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="conversionType">The conversion type.</param>
+        /// <param name="changedValue">
+        /// The value casted into the conversion type, or null if the type could not be changed.
+        /// </param>
+        /// <returns>The changed value</returns>
         public static bool TryChangeType(object value, Type conversionType, out object changedValue)
         {
             if (value == null)

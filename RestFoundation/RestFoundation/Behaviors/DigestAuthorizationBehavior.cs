@@ -163,7 +163,7 @@ namespace RestFoundation.Behaviors
 
             var headerBuilder = new StringBuilder();
             headerBuilder.Append(AuthenticationType).Append(' ');
-            headerBuilder.AppendFormat(CultureInfo.InvariantCulture, "realm=\"{0}\"", context.Request.Url.ServiceUrl);
+            headerBuilder.AppendFormat(CultureInfo.InvariantCulture, "realm=\"{0}\"", context.Request.Url.OperationUrl);
             headerBuilder.AppendFormat(CultureInfo.InvariantCulture, ", nonce=\"{0}\"", GenerateNonce(context, timestamp));
 
             if (Qop == QualityOfProtection.Auth)

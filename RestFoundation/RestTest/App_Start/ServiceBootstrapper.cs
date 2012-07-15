@@ -20,7 +20,7 @@ namespace RestTest.App_Start
 
             // Configuring REST foundation
             Rest.Configure.WithObjectFactory(CreateObjectFactory, CreateObjectBuilder)
-                          .WithContentTypeFormatters(RegisterFormatters)
+                          .WithContentFormatters(RegisterFormatters)
                           .WithRoutes(RegisterRoutes)
                           .EnableJsonPSupport()
                           .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
@@ -32,7 +32,7 @@ namespace RestTest.App_Start
         {
             config.Scan(action =>
                         {
-                            action.Assembly(ServiceAssembly.Executing);
+                            action.Assembly(Rest.FoundationAssembly);
                             action.WithDefaultConventions();
                         });
 
@@ -58,7 +58,7 @@ namespace RestTest.App_Start
             ObjectFactory.BuildUp(obj);
         }
 
-        private static void RegisterFormatters(ContentTypeFormatterBuilder builder)
+        private static void RegisterFormatters(ContentFormatterBuilder builder)
         {
             builder.Set("application/bson", new BsonFormatter());
             builder.Set("application/x-www-form-urlencoded", new FormsFormatter());

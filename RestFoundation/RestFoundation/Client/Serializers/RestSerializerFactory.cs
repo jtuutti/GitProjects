@@ -7,6 +7,12 @@ namespace RestFoundation.Client.Serializers
     /// </summary>
     public class RestSerializerFactory : IRestSerializerFactory
     {
+        /// <summary>
+        /// Creates a serializer instance based on the object type and the REST resource type.
+        /// </summary>
+        /// <param name="objectType">The object type.</param>
+        /// <param name="resourceType">The resource type.</param>
+        /// <returns>The serializer instance.</returns>
         public IRestSerializer Create(Type objectType, RestResourceType resourceType)
         {
             if (objectType == null) throw new ArgumentNullException("objectType");

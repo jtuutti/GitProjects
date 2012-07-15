@@ -7,9 +7,9 @@ using RestFoundation.Results;
 namespace RestFoundation.Formatters
 {
     /// <summary>
-    /// Represents a BSON content type formatter.
+    /// Represents a BSON content formatter.
     /// </summary>
-    public class BsonFormatter : IContentTypeFormatter
+    public class BsonFormatter : IContentFormatter
     {
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.

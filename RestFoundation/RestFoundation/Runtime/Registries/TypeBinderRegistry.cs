@@ -3,23 +3,23 @@ using System.Collections.Concurrent;
 
 namespace RestFoundation.Runtime
 {
-    internal static class ObjectTypeBinderRegistry
+    internal static class TypeBinderRegistry
     {
-        private static readonly ConcurrentDictionary<Type, IObjectTypeBinder> binders = new ConcurrentDictionary<Type, IObjectTypeBinder>();
+        private static readonly ConcurrentDictionary<Type, ITypeBinder> binders = new ConcurrentDictionary<Type, ITypeBinder>();
 
-        public static IObjectTypeBinder GetBinder(Type objectType)
+        public static ITypeBinder GetBinder(Type objectType)
         {
             if (objectType == null)
             {
                 return null;
             }
 
-            IObjectTypeBinder binder;
+            ITypeBinder binder;
 
             return binders.TryGetValue(objectType, out binder) ? binder : null;
         }
 
-        public static void SetBinder(Type objectType, IObjectTypeBinder binder)
+        public static void SetBinder(Type objectType, ITypeBinder binder)
         {
             binders.AddOrUpdate(objectType, type => binder, (type, previousFormatter) => binder);
         }
@@ -31,7 +31,7 @@ namespace RestFoundation.Runtime
                 return false;
             }
 
-            IObjectTypeBinder binder;
+            ITypeBinder binder;
 
             return binders.TryRemove(objectType, out binder);
         }

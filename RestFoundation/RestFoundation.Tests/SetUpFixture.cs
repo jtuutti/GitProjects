@@ -29,7 +29,7 @@ namespace RestFoundation.Tests
         {
             config.Scan(action =>
                         {
-                            action.Assembly(ServiceAssembly.Executing);
+                            action.Assembly(Rest.FoundationAssembly);
                             action.TheCallingAssembly();
                             action.WithDefaultConventions();
                         });

@@ -30,7 +30,7 @@ namespace RestFoundation.Tests.Services
         {
             return Result.ResponseStatus(HttpStatusCode.Created, "Created", new Dictionary<string, string>
                                                                             {
-                                                                                { "Location", Context.Request.Url.ServiceUrl + "/1" }
+                                                                                { "Location", Context.Request.Url.OperationUrl + "/1" }
                                                                             });
         }
 

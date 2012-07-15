@@ -22,7 +22,7 @@ namespace RestTestServices.Behaviors
                 return false;
             }
 
-            context.ItemBag.SessionInfo = sessionInfo;
+            context.HttpItemBag.SessionInfo = sessionInfo;
             return true;
         }
     }

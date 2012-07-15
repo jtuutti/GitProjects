@@ -8,9 +8,9 @@ using RestFoundation.Runtime;
 namespace RestFoundation.Formatters
 {
     /// <summary>
-    /// Represents an XML content type formatter.
+    /// Represents an XML content formatter.
     /// </summary>
-    public class XmlFormatter : IContentTypeFormatter
+    public class XmlFormatter : IContentFormatter
     {
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.

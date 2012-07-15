@@ -4,6 +4,9 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
+    /// <summary>
+    /// Defines type extensions designed to simpify IoC registrations.
+    /// </summary>
     public static class TypeExtensions
     {
         private static readonly HashSet<Type> dependencyTypes = new HashSet<Type>
@@ -14,6 +17,13 @@ namespace RestFoundation
             typeof(IServiceCache)
         };
 
+        /// <summary>
+        /// Returns a value indicating whether the type represents a REST Foundation behavior.
+        /// </summary>
+        /// <param name="type">The object type.</param>
+        /// <returns>
+        /// true if the type contains REST Foundation behavior, false otherwise.
+        /// </returns>
         public static bool IsRestBehavior(this Type type)
         {
             if (type == null)
@@ -24,6 +34,14 @@ namespace RestFoundation
             return typeof(IServiceBehavior).IsAssignableFrom(type);
         }
 
+        /// <summary>
+        /// Returns a value indicating whether the type represents a REST Foundation dependency.
+        /// Dependencies include service context, HTTP request and response and cache objects.
+        /// </summary>
+        /// <param name="type">The object type.</param>
+        /// <returns>
+        /// true if the type is REST Foundation dependency, false otherwise.
+        /// </returns>
         public static bool IsRestDependency(this Type type)
         {
             if (type == null)
@@ -34,6 +52,13 @@ namespace RestFoundation
             return type.IsInterface && dependencyTypes.Contains(type);
         }
 
+        /// <summary>
+        /// Returns a value indicating whether the type is a REST Foundation service contract interface.
+        /// </summary>
+        /// <param name="type">The object type.</param>
+        /// <returns>
+        /// true if the type is a service contract, false otherwise.
+        /// </returns>
         public static bool IsRestContract(this Type type)
         {
             if (type == null)
@@ -44,7 +69,14 @@ namespace RestFoundation
             return ServiceContractTypeRegistry.IsServiceContract(type);
         }
 
-        public static bool IsRestImplementation(this Type type)
+        /// <summary>
+        /// Returns a value indicating whether the type is a REST Foundation service implementation.
+        /// </summary>
+        /// <param name="type">The object type.</param>
+        /// <returns>
+        /// true if the type is a service implementation, false otherwise.
+        /// </returns>
+        public static bool IsRestService(this Type type)
         {
             if (type == null)
             {

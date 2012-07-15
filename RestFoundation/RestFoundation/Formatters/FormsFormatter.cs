@@ -13,7 +13,7 @@ namespace RestFoundation.Formatters
     /// <summary>
     /// Represents an HTTP form data formatter.
     /// </summary>
-    public class FormsFormatter : IContentTypeFormatter
+    public class FormsFormatter : IContentFormatter
     {
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.

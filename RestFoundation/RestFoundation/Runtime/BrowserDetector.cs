@@ -42,7 +42,7 @@ namespace RestFoundation.Runtime
             }
 
             var acceptTypeCollection = new AcceptValueCollection(acceptedValue);
-            var contentTypes = ContentTypeFormatterRegistry.GetContentTypes();
+            var contentTypes = ContentFormatterRegistry.GetContentTypes();
 
             foreach (string acceptedType in acceptTypeCollection.AcceptedNames)
             {

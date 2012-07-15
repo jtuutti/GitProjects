@@ -6,6 +6,21 @@
     public class ResponseHeaderNames
     {
         /// <summary>
+        /// Accept-Ranges
+        /// </summary>
+        public readonly string AcceptRanges = "Accept-Ranges";
+
+        /// <summary>
+        /// Content-Length
+        /// </summary>
+        public readonly string ContentLength = "Content-Length";
+
+        /// <summary>
+        /// Content-Range
+        /// </summary>
+        public readonly string ContentRange = "Content-Range";
+
+        /// <summary>
         /// Content-Type
         /// </summary>
         public readonly string ContentType = "Content-Type";

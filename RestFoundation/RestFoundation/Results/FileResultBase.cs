@@ -4,7 +4,6 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using RestFoundation.Context;
 
 namespace RestFoundation.Results
 {
@@ -13,6 +12,14 @@ namespace RestFoundation.Results
     /// </summary>
     public abstract class FileResultBase : IResult
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
+        /// </summary>
+        protected FileResultBase()
+        {
+            ContentType = "application/octet-stream";
+        }
+
         /// <summary>
         /// Gets or sets the content type.
         /// </summary>
@@ -38,14 +45,13 @@ namespace RestFoundation.Results
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No valid file path/URL provided");
             }
 
-            context.GetHttpContext().Response.BufferOutput = false;
+            context.Response.Output.Buffer = false;
             context.Response.Output.Clear();
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
-            context.Response.SetHeader("Accept-Ranges", "bytes");
-            context.Response.SetHeader("Content-Length", file.Length.ToString(CultureInfo.InvariantCulture));
-            context.Response.SetHeader("ETag", GenerateETag(file));
-
-            SetContentType(context);
+            context.Response.SetHeader(context.Response.Headers.AcceptRanges, "bytes");
+            context.Response.SetHeader(context.Response.Headers.ContentLength, file.Length.ToString(CultureInfo.InvariantCulture));
+            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
+            context.Response.SetHeader(context.Response.Headers.ETag, GenerateETag(file));
 
             if (!String.IsNullOrEmpty(ContentDisposition))
             {
@@ -61,23 +67,6 @@ namespace RestFoundation.Results
         /// <param name="context">The service context.</param>
         /// <returns>The file info instance.</returns>
         protected abstract FileInfo GetFile(IServiceContext context);
-
-        private void SetContentType(IServiceContext context)
-        {
-            if (!String.IsNullOrEmpty(ContentType))
-            {
-                context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
-            }
-            else
-            {
-                string acceptType = context.Request.GetPreferredAcceptType();
-
-                if (!String.IsNullOrEmpty(acceptType))
-                {
-                    context.Response.SetHeader(context.Response.Headers.ContentType, acceptType);
-                }
-            }
-        }
 
         private static void TransmitFile(IServiceContext context, FileInfo file)
         {
@@ -121,7 +110,7 @@ namespace RestFoundation.Results
 
             if (start < 0 || end >= stream.Length || start > end)
             {
-                context.Response.SetHeader("Content-Range", String.Format(CultureInfo.InvariantCulture, "bytes */{0}", stream.Length));
+                context.Response.SetHeader(context.Response.Headers.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes */{0}", stream.Length));
                 throw new HttpResponseException(HttpStatusCode.RequestedRangeNotSatisfiable, "Range not satisfiable");
             }
 
@@ -130,8 +119,8 @@ namespace RestFoundation.Results
                 stream.Seek(start, SeekOrigin.Begin);
             }
 
-            context.Response.SetHeader("Content-Length", (end - start + 1).ToString(CultureInfo.InvariantCulture));
-            context.Response.SetHeader("Content-Range", String.Format(CultureInfo.InvariantCulture, "bytes {0}-{1}/{2}", start, end, stream.Length));
+            context.Response.SetHeader(context.Response.Headers.ContentLength, (end - start + 1).ToString(CultureInfo.InvariantCulture));
+            context.Response.SetHeader(context.Response.Headers.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes {0}-{1}/{2}", start, end, stream.Length));
             context.Response.SetStatus(HttpStatusCode.PartialContent, "Partial content");
         }
 

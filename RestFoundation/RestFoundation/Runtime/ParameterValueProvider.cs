@@ -9,13 +9,16 @@ namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Represents the default parameter value provider that tries to bind a value
-    /// using an associated object type binder. If no binder is associated with the
-    /// parameter type, a route value is used. If a parameter is named "resource" or
-    /// is decorated with the <see cref="ResourceParameterAttribute"/>, a content
-    /// type formatter is used to bind the data.
+    /// using an associated type binder. If no binder is associated with the parameter
+    /// type, a route value is used. If a parameter is named "resource" or is
+    /// decorated with the <see cref="ResourceParameterAttribute"/>, a content
+    /// formatter is used to bind the data.
     /// </summary>
     public class ParameterValueProvider : IParameterValueProvider
     {
+        /// <summary>
+        /// Gets the resource parameter name.
+        /// </summary>
         protected const string ResourceParameterName = "resource";
 
         /// <summary>
@@ -33,15 +36,15 @@ namespace RestFoundation.Runtime
             if (context == null) throw new ArgumentNullException("context");
             if (parameter == null) throw new ArgumentNullException("parameter");
 
-            IObjectTypeBinder objectTypeBinder = ObjectTypeBinderRegistry.GetBinder(parameter.ParameterType);
+            ITypeBinder typeBinder = TypeBinderRegistry.GetBinder(parameter.ParameterType);
 
-            if (objectTypeBinder != null)
+            if (typeBinder != null)
             {
                 isResource = false;
-                return objectTypeBinder.Bind(parameter.ParameterType, parameter.Name, context);
+                return typeBinder.Bind(parameter.ParameterType, parameter.Name, context);
             }
 
-            object routeValue = CreateRouteValue(parameter, context.Request.RouteValues);
+            object routeValue = TryGetRouteValue(parameter, context.Request.RouteValues);
 
             if (routeValue != null)
             {
@@ -55,14 +58,20 @@ namespace RestFoundation.Runtime
                 parameter.ParameterType == typeof(IEnumerable<IUploadedFile>) || parameter.ParameterType == typeof(ICollection<IUploadedFile>))
             {
                 isResource = true;
-                return CreateResourceValue(parameter, context);
+                return GetResourceValue(parameter, context);
             }
 
             isResource = false;
             return null;
         }
 
-        protected virtual object CreateRouteValue(ParameterInfo parameter, IObjectValueCollection routeValues)
+        /// <summary>
+        /// Returns a route value for the service method parameter or null.
+        /// </summary>
+        /// <param name="parameter">The service method parameter.</param>
+        /// <param name="routeValues">The collection of route values.</param>
+        /// <returns>The route value or null.</returns>
+        protected virtual object TryGetRouteValue(ParameterInfo parameter, IObjectValueCollection routeValues)
         {
             if (parameter == null) throw new ArgumentNullException("parameter");
             if (routeValues == null) throw new ArgumentNullException("routeValues");
@@ -84,12 +93,18 @@ namespace RestFoundation.Runtime
             return value;
         }
 
-        protected virtual object CreateResourceValue(ParameterInfo parameter, IServiceContext context)
+        /// <summary>
+        /// Gets the resource value for the service method parameter.
+        /// </summary>
+        /// <param name="parameter">The service method parameter.</param>
+        /// <param name="context">The service context.</param>
+        /// <returns>The resource value.</returns>
+        protected virtual object GetResourceValue(ParameterInfo parameter, IServiceContext context)
         {
             if (parameter == null) throw new ArgumentNullException("parameter");
             if (context == null) throw new ArgumentNullException("context");
 
-            IContentTypeFormatter formatter = ContentTypeFormatterRegistry.GetFormatter(context.Request.Headers.ContentType);
+            IContentFormatter formatter = ContentFormatterRegistry.GetFormatter(context.Request.Headers.ContentType);
 
             if (formatter == null)
             {

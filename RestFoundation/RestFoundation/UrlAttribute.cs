@@ -5,22 +5,39 @@ using System.Linq;
 
 namespace RestFoundation
 {
+    /// <summary>
+    /// Represents URL metadata associated with the service methods.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
     public sealed class UrlAttribute : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UrlAttribute"/> class with the url template
+        /// and HTTP methods.
+        /// </summary>
+        /// <param name="urlTemplate">The URL template.</param>
+        /// <param name="httpMethods">An array of HTTP methods.</param>
+        /// <exception cref="InvalidOperationException">If the OPTIONS HTTP method is provided explicitly.</exception>
         public UrlAttribute(string urlTemplate, params HttpMethod[] httpMethods)
         {
             if (urlTemplate == null) throw new ArgumentNullException("urlTemplate");
-
-            UrlTemplate = urlTemplate.Trim();
-            HttpMethods = (httpMethods != null && httpMethods.Length > 0) ? httpMethods.Distinct() : null;
 
             if (httpMethods != null && Array.IndexOf(httpMethods, HttpMethod.Options) >= 0)
             {
                 throw new InvalidOperationException("HTTP method OPTIONS cannot be manually defined on a service method");
             }
+
+            UrlTemplate = urlTemplate.Trim();
+            HttpMethods = (httpMethods != null && httpMethods.Length > 0) ? httpMethods.Distinct() : null;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UrlAttribute"/> class with the url template
+        /// and HTTP methods.
+        /// </summary>
+        /// <param name="urlTemplate">The URL template.</param>
+        /// <param name="httpMethods">An comma separated list of HTTP methods as a <see cref="String"/>.</param>
+        /// <exception cref="InvalidOperationException">If the OPTIONS HTTP method is provided explicitly.</exception>
         public UrlAttribute(string urlTemplate, string httpMethods)
         {
             if (urlTemplate == null) throw new ArgumentNullException("urlTemplate");
@@ -38,9 +55,27 @@ namespace RestFoundation
             HttpMethods = (httpMethodList.Count > 0) ? httpMethodList : null;
         }
 
+        /// <summary>
+        /// Gets or sets the URL priority. A larger priority puts the URL route higher in the route collection.
+        /// 0 is the default priority.
+        /// </summary>
         public int Priority { get; set; }
+
+        /// <summary>
+        /// Gets the URL template.
+        /// </summary>
         public string UrlTemplate { get; private set; }
+
+        /// <summary>
+        /// Get a sequence of allowed HTTP methods.
+        /// </summary>
         public IEnumerable<HttpMethod> HttpMethods { get; internal set; }
+
+        /// <summary>
+        /// Gets or sets the supporting web page URL. It can be a virtual path to an existing
+        /// web forms page in the project or an external URL. This parameter is only used for
+        /// service methods that are called through the HTTP GET or HEAD methods.
+        /// </summary>
         public string WebPageUrl { get; set; }
 
         private static List<HttpMethod> ParseHttpMethodsString(string[] httpMethodArray)

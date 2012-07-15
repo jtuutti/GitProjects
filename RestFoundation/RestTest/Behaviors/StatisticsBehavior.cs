@@ -22,8 +22,8 @@ namespace RestTest.Behaviors
             context.Response.Output.WriteFormat("Method: {0}", method.Name).WriteLine();
             context.Response.Output.WriteFormat("Full URL: {0}", context.Request.Url.ToString()).WriteLine();
             context.Response.Output.WriteFormat("Relative URL: {0}", context.Request.Url.LocalPath).WriteLine();
-            context.Response.Output.WriteFormat("Service absolute URL: {0}", context.Request.Url.ServiceUrl.ToString()).WriteLine();
-            context.Response.Output.WriteFormat("Service relative URL: {0}", context.Request.Url.ServiceUrl.LocalPath).WriteLine();
+            context.Response.Output.WriteFormat("Service absolute URL: {0}", context.Request.Url.OperationUrl.ToString()).WriteLine();
+            context.Response.Output.WriteFormat("Service relative URL: {0}", context.Request.Url.OperationUrl.LocalPath).WriteLine();
             context.Response.Output.WriteFormat("Is Local: {0}", context.Request.IsLocal).WriteLine();
             context.Response.Output.WriteFormat("Is Secure: {0}", context.Request.IsSecure).WriteLine();
             context.Response.Output.WriteFormat("Is AJAX: {0}", context.Request.IsAjax).WriteLine();

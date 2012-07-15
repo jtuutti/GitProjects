@@ -3,10 +3,10 @@
 namespace RestFoundation
 {
     /// <summary>
-    /// Defines a content type formatter responsible for serializing and deserializing strongly typed objects
+    /// Defines a content formatter responsible for serializing and deserializing strongly typed objects
     /// based on the HTTP message body data and associated the content type.
     /// </summary>
-    public interface IContentTypeFormatter
+    public interface IContentFormatter
     {
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.

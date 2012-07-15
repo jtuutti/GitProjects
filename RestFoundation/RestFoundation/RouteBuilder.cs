@@ -8,6 +8,9 @@ using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation
 {
+    /// <summary>
+    /// Represents a route builder.
+    /// </summary>
     public sealed class RouteBuilder
     {
         private const char Slash = '/';
@@ -29,26 +32,62 @@ namespace RestFoundation
             m_browserDetector = browserDetector;
         }
 
+        /// <summary>
+        /// Maps a REST service to the provided relative URL.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="url">The relative URL.</param>
+        /// <returns>The route builder.</returns>
         public RouteConfiguration MapRestRoute<TContract>(string url)
         {
             return MapRestRoute(url, typeof(TContract), false);
         }
 
-        public RouteConfiguration MapRestRoute(string url, Type serviceContractType)
+        /// <summary>
+        /// Maps a REST service to the provided relative URL.
+        /// </summary>
+        /// <param name="url">The relative URL.</param>
+        /// <param name="contractType">The service contract type.</param>
+        /// <returns>The route builder.</returns>
+        public RouteConfiguration MapRestRoute(string url, Type contractType)
         {
-            return MapRestRoute(url, serviceContractType, false);
+            return MapRestRoute(url, contractType, false);
         }
 
+        /// <summary>
+        /// Maps a REST service to the provided relative URL. An asynchrounous
+        /// REST handler will be used. It is only recommended to map asynchronous
+        /// routes for services that perform heavy operations that can block
+        /// the worker process or run out of the ASP .NET thread pool.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="url">The relative URL.</param>
+        /// <returns>The route builder.</returns>
         public RouteConfiguration MapRestRouteAsync<TContract>(string url)
         {
             return MapRestRoute(url, typeof(TContract), true);
         }
 
-        public RouteConfiguration MapRestRouteAsync(string url, Type serviceContractType)
+        /// <summary>
+        /// Maps a REST service to the provided relative URL. An asynchrounous
+        /// REST handler will be used. It is only recommended to map asynchronous
+        /// routes for services that perform heavy operations that can block
+        /// the worker process or run out of the ASP .NET thread pool.
+        /// </summary>
+        /// <param name="url">The relative URL.</param>
+        /// <param name="contractType">The service contract type.</param>
+        /// <returns>The route builder.</returns>
+        public RouteConfiguration MapRestRouteAsync(string url, Type contractType)
         {
-            return MapRestRoute(url, serviceContractType, true);
+            return MapRestRoute(url, contractType, true);
         }
 
+        /// <summary>
+        /// Maps a web forms .ASPX page to a route.
+        /// </summary>
+        /// <param name="url">The relative URL.</param>
+        /// <param name="relativePagePath">A relative path to the .ASPX page.</param>
+        /// <returns></returns>
         public RouteBuilder MapPageRoute(string url, string relativePagePath)
         {
             if (String.IsNullOrEmpty(url)) throw new ArgumentNullException("url");
@@ -85,20 +124,20 @@ namespace RestFoundation
             return String.Concat(url.TrimEnd(Slash), Slash, urlTemplate.TrimStart(Slash, Tilda));
         }
 
-        private RouteConfiguration MapRestRoute(string url, Type serviceContractType, bool isAsync)
+        private RouteConfiguration MapRestRoute(string url, Type contractType, bool isAsync)
         {
             if (url == null) throw new ArgumentNullException("url");
             if (url.Trim().Length == 0) throw new ArgumentException("Route url cannot be null or empty", "url");
-            if (serviceContractType == null) throw new ArgumentNullException("serviceContractType");
-            if (!serviceContractType.IsInterface) throw new ArgumentException("Service contract type must be an interface", "serviceContractType");
+            if (contractType == null) throw new ArgumentNullException("contractType");
+            if (!contractType.IsInterface) throw new ArgumentException("Service contract type must be an interface", "contractType");
 
-            var serviceMethods = serviceContractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
+            var serviceMethods = contractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
                                                     .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);
 
-            List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(serviceContractType, serviceMethods, url);
-            ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(serviceContractType, url), t => methodMetadata, (t, u) => methodMetadata);
+            List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(contractType, serviceMethods, url);
+            ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, url), t => methodMetadata, (t, u) => methodMetadata);
 
-            IEnumerable<IRestHandler> routeHandlers = MapRoutes(methodMetadata, url, serviceContractType, isAsync);
+            IEnumerable<IRestHandler> routeHandlers = MapRoutes(methodMetadata, url, contractType, isAsync);
             return new RouteConfiguration(routeHandlers);
         }
 

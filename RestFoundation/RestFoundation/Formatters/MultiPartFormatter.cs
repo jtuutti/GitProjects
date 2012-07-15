@@ -8,9 +8,9 @@ using RestFoundation.Runtime;
 namespace RestFoundation.Formatters
 {
     /// <summary>
-    /// Represents a multi-part content type formatter for uploading files over HTTP.
+    /// Represents a multi-part content formatter for uploading files over HTTP.
     /// </summary>
-    public class MultipartFormatter : IContentTypeFormatter
+    public class MultipartFormatter : IContentFormatter
     {
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.

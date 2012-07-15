@@ -35,7 +35,7 @@ namespace RestTestServices
 
         public object Get()
         {
-            var sessionInfo = (SessionInfo) Context.ItemBag.SessionInfo;
+            var sessionInfo = (SessionInfo) Context.HttpItemBag.SessionInfo;
 
             string relativePath = Context.MapPath(String.Format(@"~\App_Data\{0}\{1}\{2}\TouchMap.xml",
                                                   sessionInfo.CustomerId,

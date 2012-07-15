@@ -6,11 +6,19 @@ using RestFoundation.Collections.Specialized;
 
 namespace RestFoundation.Context
 {
+    /// <summary>
+    /// Represents a service context.
+    /// </summary>
     public class ServiceContext : ContextBase, IServiceContext
     {
         private readonly IHttpRequest m_request;
         private readonly IHttpResponse m_response;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceContext"/> class.
+        /// </summary>
+        /// <param name="request">The current HTTP request.</param>
+        /// <param name="response">The current HTTP response.</param>
         public ServiceContext(IHttpRequest request, IHttpResponse response)
         {
             if (request == null) throw new ArgumentNullException("request");
@@ -20,6 +28,9 @@ namespace RestFoundation.Context
             m_response = response;
         }
 
+        /// <summary>
+        /// Gets the current HTTP request.
+        /// </summary>
         public IHttpRequest Request
         {
             get
@@ -28,6 +39,9 @@ namespace RestFoundation.Context
             }
         }
 
+        /// <summary>
+        /// Gets the current HTTP response.
+        /// </summary>
         public IHttpResponse Response
         {
             get
@@ -36,6 +50,9 @@ namespace RestFoundation.Context
             }
         }
 
+        /// <summary>
+        /// Gets or sets a time span before a service times out.
+        /// </summary>
         public TimeSpan ServiceTimeout
         {
             get
@@ -48,6 +65,9 @@ namespace RestFoundation.Context
             }
         }
 
+        /// <summary>
+        /// Gets or sets security information for the current HTTP request.
+        /// </summary>
         public IPrincipal User
         {
             get
@@ -61,6 +81,9 @@ namespace RestFoundation.Context
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether there is an authenticated user associated with the HTTP request.
+        /// </summary>
         public bool IsAuthenticated
         {
             get
@@ -69,7 +92,10 @@ namespace RestFoundation.Context
             }
         }
 
-        public dynamic ItemBag
+        /// <summary>
+        /// Gets the dynamic HTTP context item dictionary.
+        /// </summary>
+        public dynamic HttpItemBag
         {
             get
             {
@@ -77,11 +103,20 @@ namespace RestFoundation.Context
             }
         }
 
-        public string MapPath(string filePath)
+        /// <summary>
+        /// Returns the physical path associated to the virtual path of the file.
+        /// </summary>
+        /// <param name="relativePath">The relative virtual path to the file.</param>
+        /// <returns>The physical file path.</returns>
+        public string MapPath(string relativePath)
         {
-            return Context.Server.MapPath(filePath);
+            return Context.Server.MapPath(relativePath);
         }
 
+        /// <summary>
+        /// Gets the underlying <see cref="HttpContextBase"/> instance that may provide additional functionality.
+        /// </summary>
+        /// <returns>The underlying HTTP context instance.</returns>
         public HttpContextBase GetHttpContext()
         {
             return Context;

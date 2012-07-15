@@ -7,6 +7,9 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
+    /// <summary>
+    /// Represents a route configuration.
+    /// </summary>
     public sealed class RouteConfiguration
     {
         private readonly IEnumerable<IRestHandler> m_routeHandlers;
@@ -18,6 +21,11 @@ namespace RestFoundation
             m_routeHandlers = routeHandlers;
         }
 
+        /// <summary>
+        /// Adds behaviors to the current route.
+        /// </summary>
+        /// <param name="behaviors">An array of behavior instances.</param>
+        /// <returns>The route configuration.</returns>
         public RouteConfiguration WithBehaviors(params IServiceBehavior[] behaviors)
         {
             if (behaviors == null) throw new ArgumentNullException("behaviors");
@@ -43,6 +51,11 @@ namespace RestFoundation
             return this;
         }
 
+        /// <summary>
+        /// Sets allowed content types for the current route.
+        /// </summary>
+        /// <param name="contentTypes">An array of allowed content types.</param>
+        /// <returns>The route configuration.</returns>
         public RouteConfiguration WithContentTypesRestrictedTo(params string[] contentTypes)
         {
             if (contentTypes == null) throw new ArgumentNullException("contentTypes");
@@ -54,7 +67,7 @@ namespace RestFoundation
                 {
                     string contentType = contentTypes[i];
 
-                    if (contentType == null || ContentTypeFormatterRegistry.GetFormatter(contentType) == null)
+                    if (contentType == null || ContentFormatterRegistry.GetFormatter(contentType) == null)
                     {
                         throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
                                                                           "Content type '{0}' does not have an associated data formatter",
@@ -68,6 +81,12 @@ namespace RestFoundation
             return this;
         }
 
+        /// <summary>
+        /// Specifies a Web.Config name-value section that contains an ACL list of allowed IPs.
+        /// All other IPs will be blocked for the current route.
+        /// </summary>
+        /// <param name="nameValueSectionName">The section name.</param>
+        /// <returns>The route configuration.</returns>
         public RouteConfiguration WithIPsRestrictedBySection(string nameValueSectionName)
         {
             if (String.IsNullOrEmpty(nameValueSectionName)) throw new ArgumentNullException("nameValueSectionName");
@@ -80,6 +99,10 @@ namespace RestFoundation
             return this;
         }
 
+        /// <summary>
+        /// Skip HTTP request validation that checks query string, form data and cookies for dangerous characters for the current route.
+        /// </summary>
+        /// <returns>The route configuration.</returns>
         public RouteConfiguration DoNotValidateRequests()
         {           
             foreach (IRestHandler routeHandler in m_routeHandlers)

@@ -78,6 +78,8 @@ namespace RestFoundation.UnitTesting
             }
         }
 
+        public override bool BufferOutput { get; set; }
+
         public override void AddHeader(string name, string value)
         {
             m_headers.Add(name, value);

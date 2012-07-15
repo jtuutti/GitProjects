@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using System.Web.Routing;
 using System.Web.Util;
 using RestFoundation.Formatters;
@@ -32,6 +33,17 @@ namespace RestFoundation
                 }
 
                 return Active;
+            }
+        }
+
+        /// <summary>
+        /// Gets the REST Foundation assembly instance for IoC support.
+        /// </summary>
+        public static Assembly FoundationAssembly
+        {
+            get
+            {
+                return typeof(Rest).Assembly;
             }
         }
 
@@ -129,28 +141,28 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Calls the provided content type formatter builder delegate to set or remove content type formatters.
+        /// Calls the provided content formatter builder delegate to set or remove content formatters.
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The configuration object.</returns>
-        public Rest WithContentTypeFormatters(Action<ContentTypeFormatterBuilder> builder)
+        public Rest WithContentFormatters(Action<ContentFormatterBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
-            builder(new ContentTypeFormatterBuilder());
+            builder(new ContentFormatterBuilder());
             return this;
         }
 
         /// <summary>
-        /// Calls the provided object type binder builder delegate to set or remove object type binders.
+        /// Calls the provided type binder builder delegate to set or remove type binders.
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The configuration object.</returns>
-        public Rest WithObjectTypeBinders(Action<ObjectTypeBinderBuilder> builder)
+        public Rest WithTypeBinders(Action<TypeBinderBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
-            builder(new ObjectTypeBinderBuilder());
+            builder(new TypeBinderBuilder());
             return this;
         }
 
@@ -202,13 +214,13 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Adds content type formatters for the JSONP support.
+        /// Adds content formatters for the JSONP support.
         /// </summary>
         /// <returns>The configuration object.</returns>
         public Rest EnableJsonPSupport()
         {
-            ContentTypeFormatterRegistry.SetFormatter("application/javascript", new JsonPFormatter());
-            ContentTypeFormatterRegistry.SetFormatter("text/javascript", new JsonPFormatter());
+            ContentFormatterRegistry.SetFormatter("application/javascript", new JsonPFormatter());
+            ContentFormatterRegistry.SetFormatter("text/javascript", new JsonPFormatter());
 
             return this;
         }

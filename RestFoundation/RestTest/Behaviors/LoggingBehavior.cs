@@ -8,7 +8,7 @@ namespace RestTest.Behaviors
     {
         public override bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
         {
-            context.ItemBag.LoggingEnabled = true;
+            context.HttpItemBag.LoggingEnabled = true;
             context.Response.Output.WriteFormat("Action '{0}' executing", method.Name).WriteLine(2);
 
             return true;

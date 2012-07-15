@@ -6,10 +6,14 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using RestFoundation.Collections.Specialized;
 
 namespace RestFoundation.Collections.Concrete
 {
+    /// <summary>
+    /// Represents an HTTP header collection.
+    /// </summary>
     [DebuggerDisplay("Count = {Count}")]
     public class HeaderCollection : StringValueCollection, IHeaderCollection
     {
@@ -24,18 +28,144 @@ namespace RestFoundation.Collections.Concrete
 
             ContentLength = GetContentLength();
             ContentEncoding = TryGet("Content-Encoding");
-            ContentLanguage = TryGet("Content-Language");
 
             var contentTypes = new AcceptValueCollection(TryGet("Content-Type"));
             ContentType = contentTypes.GetPreferredName();
+            SetContentCharset(contentTypes);
+            SetContentLanguage();
 
+            SetAcceptValues();
+            SetAcceptCharsets();
+            SetAcceptEncodings();
+            SetAcceptLanguages();
+        }
+
+        /// <summary>
+        /// Gets the Accept-Type header value.
+        /// </summary>
+        public string AcceptType { get; protected set; }
+
+        /// <summary>
+        /// Gets the Accept-Type header values as a sequence in the order of preference.
+        /// </summary>
+        public IEnumerable<string> AcceptTypes { get; protected set; }
+
+        /// <summary>
+        /// Gets the Accept-Charset header value.
+        /// </summary>
+        public string AcceptCharset { get; protected set; }
+
+        /// <summary>
+        /// Gets the Accept-Charset header values as a sequence in the order of preference.
+        /// </summary>
+        public IEnumerable<string> AcceptCharsets { get; protected set; }
+
+        /// <summary>
+        /// Gets the Accept-Charset header value as an <see cref="Encoding"/> object.
+        /// </summary>
+        public Encoding AcceptCharsetEncoding { get; protected set; }
+
+        /// <summary>
+        /// Gets the Accept-Encoding header value.
+        /// </summary>
+        public string AcceptEncoding { get; protected set; }
+
+        /// <summary>
+        /// Gets the Accept-Encoding header values as a sequence in the order of preference.
+        /// </summary>
+        public IEnumerable<string> AcceptEncodings { get; protected set; }
+
+        /// <summary>
+        /// Gets the Accept-Language header value.
+        /// </summary>
+        public string AcceptLanguage { get; protected set; }
+
+        /// <summary>
+        /// Gets the Accept-Language header values as a sequence in the order of preference.
+        /// </summary>
+        public IEnumerable<string> AcceptLanguages { get; protected set; }
+
+        /// <summary>
+        /// Gets the Accept-Language header value as a <see cref="CultureInfo"/> object.
+        /// </summary>
+        public CultureInfo AcceptLanguageCulture { get; protected set; }
+
+        /// <summary>
+        /// Gets the Content-Type header value.
+        /// </summary>
+        public string ContentType { get; protected set; }
+
+        /// <summary>
+        /// Gets the charset part of the Content-Type header value.
+        /// </summary>
+        public string ContentCharset { get; protected set; }
+
+        /// <summary>
+        /// Gets the charset part of the Content-Type header value as an <see cref="Encoding"/> object.
+        /// </summary>
+        public Encoding ContentCharsetEncoding { get; protected set; }
+
+        /// <summary>
+        /// Gets the Content-Language header value.
+        /// </summary>
+        public string ContentLanguage{ get; protected set; }
+
+        /// <summary>
+        /// Gets the Content-Language header value as a <see cref="CultureInfo"/> object.
+        /// </summary>
+        public CultureInfo ContentLanguageCulture { get; protected set; }
+
+        /// <summary>
+        /// Gets the Content-Encoding header value.
+        /// </summary>
+        public string ContentEncoding{ get; protected set; }
+
+        /// <summary>
+        /// Gets the Content-Length header value.
+        /// </summary>
+        public int ContentLength { get; protected set; }
+
+        /// <summary>
+        /// Gets the Authorization header value.
+        /// </summary>
+        public string Authorization { get; protected set; }
+
+        /// <summary>
+        /// Gets the Host header value.
+        /// </summary>
+        public string Host { get; protected set; }
+
+        /// <summary>
+        /// Gets the Referrer header value.
+        /// </summary>
+        public string Referrer { get; protected set; }
+
+        /// <summary>
+        /// Gets the User-Agent header value.
+        /// </summary>
+        public string UserAgent { get; protected set; }
+
+        private int GetContentLength()
+        {
+            int contentLength;
+
+            if (!Int32.TryParse(TryGet("Content-Length"), NumberStyles.Integer, CultureInfo.InvariantCulture, out contentLength) || contentLength < 0)
+            {
+                contentLength = 0;
+            }
+
+            return contentLength;
+        }
+
+        private void SetContentCharset(AcceptValueCollection contentTypes)
+        {
             string contentCharset;
 
             if (!String.IsNullOrEmpty(ContentType) && ContentType.IndexOf('*') < 0)
             {
                 contentCharset = contentTypes.GetPreferredValues(ContentType)
-                                             .Where(v => v.Charset != null)
-                                             .Select(v => v.Charset).FirstOrDefault() ?? Utf8Charset;
+                                     .Where(v => v.Charset != null)
+                                     .Select(v => v.Charset).FirstOrDefault() ?? Utf8Charset;
             }
             else
             {
@@ -51,12 +181,35 @@ namespace RestFoundation.Collections.Concrete
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "The content charset provided is not supported");
             }
+        }
 
+        private void SetContentLanguage()
+        {
+            ContentLanguage = TryGet("Content-Language");
+
+            if (!String.IsNullOrEmpty(ContentLanguage))
+            {
+                try
+                {
+                    ContentLanguageCulture = new CultureInfo(ContentLanguage);
+                }
+                catch (Exception)
+                {
+                    throw new HttpResponseException(HttpStatusCode.BadRequest, "The content language provided is not supported");
+                }
+            }
+        }
+
+        private void SetAcceptValues()
+        {
             var acceptValues = new AcceptValueCollection(TryGet("Accept"));
             AcceptType = acceptValues.GetPreferredName();
             AcceptTypes = acceptValues.AcceptedNames;
+        }
 
-            var acceptCharsets = new AcceptValueCollection(TryGet("Accept-Charset"));                     
+        private void SetAcceptCharsets()
+        {
+            var acceptCharsets = new AcceptValueCollection(TryGet("Accept-Charset"));
             string acceptCharset = acceptCharsets.GetPreferredName();
 
             if (!String.IsNullOrEmpty(acceptCharset))
@@ -78,42 +231,40 @@ namespace RestFoundation.Collections.Concrete
             {
                 throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No accepted charset was provided in the Accept-Charset header");
             }
+        }
 
+        private void SetAcceptEncodings()
+        {
             var acceptEncodings = new AcceptValueCollection(TryGet("Accept-Encoding"));
             AcceptEncoding = acceptEncodings.GetPreferredName();
             AcceptEncodings = acceptEncodings.AcceptedNames;
         }
 
-        public string AcceptType { get; protected set; }
-        public IEnumerable<string> AcceptTypes { get; protected set; }
-        public string AcceptCharset { get; protected set; }
-        public IEnumerable<string> AcceptCharsets { get; protected set; }
-        public Encoding AcceptCharsetEncoding { get; protected set; }
-        public string AcceptEncoding { get; protected set; }
-        public IEnumerable<string> AcceptEncodings { get; protected set; }
-
-        public string ContentType { get; protected set; }
-        public string ContentCharset { get; protected set; }
-        public Encoding ContentCharsetEncoding { get; protected set; }
-        public string ContentLanguage{ get; protected set; }
-        public string ContentEncoding{ get; protected set; }
-        public int ContentLength { get; protected set; }
-
-        public string Authorization { get; protected set; }
-        public string Host { get; protected set; }
-        public string Referrer { get; protected set; }
-        public string UserAgent { get; protected set; }
-
-        private int GetContentLength()
+        private void SetAcceptLanguages()
         {
-            int contentLength;
+            var acceptLanguages = new AcceptValueCollection(TryGet("Accept-Language"));
+            AcceptLanguage = acceptLanguages.GetPreferredName();
+            AcceptLanguages = acceptLanguages.AcceptedNames;
 
-            if (!Int32.TryParse(TryGet("Content-Length"), NumberStyles.Integer, CultureInfo.InvariantCulture, out contentLength) || contentLength < 0)
+            if (String.IsNullOrEmpty(AcceptLanguage))
             {
-                contentLength = 0;
+                return;
             }
 
-            return contentLength;
+            if (AcceptLanguage == "*")
+            {
+                AcceptLanguageCulture = Thread.CurrentThread.CurrentCulture;
+                return;
+            }
+
+            try
+            {
+                AcceptLanguageCulture = new CultureInfo(AcceptLanguage);
+            }
+            catch (Exception)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, "The accepted language provided in the Accept-Language header is not supported");
+            }
         }
     }
 }

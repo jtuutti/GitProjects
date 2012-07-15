@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using RestFoundation.Runtime;
@@ -39,11 +37,6 @@ namespace RestFoundation.Results
         public SyndicationFormat Format { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether dates should be in the XML (ISO 8601) format.
-        /// </summary>
-        public bool XmlStyleDates { get; set; }
-
-        /// <summary>
         /// Executes the result against the provided service context.
         /// </summary>
         /// <param name="context">The service context.</param>
@@ -76,33 +69,9 @@ namespace RestFoundation.Results
 
             OutputCompressionManager.FilterResponse(context);
 
-            using (XmlWriter writer = new FeedWriter(context.Response.Output.Writer, XmlStyleDates))
+            using (XmlWriter writer = new XmlTextWriter(context.Response.Output.Writer))
             {
                 formatter.WriteTo(writer);
-            }
-        }
-
-        private sealed class FeedWriter : XmlTextWriter
-        {
-            private readonly bool m_xmlStyleDates;
-
-            public FeedWriter(TextWriter writer, bool xmlStyleDates) : base(writer)
-            {
-                m_xmlStyleDates = xmlStyleDates;
-            }
-
-            public override void WriteString(string text)
-            {
-                DateTimeOffset time;
-
-                if (m_xmlStyleDates && text != null && text.EndsWith("Z", StringComparison.Ordinal) && DateTimeOffset.TryParse(text, out time))
-                {
-                    base.WriteString(time.ToString("yyyy-MM-dd'T'HH:mm:sszzz", CultureInfo.InvariantCulture));
-                }
-                else
-                {
-                    base.WriteString(text);
-                }
             }
         }
     }
