@@ -18,7 +18,7 @@ namespace RestFoundation
         /// Returns a value indicating whether the provided key is found in the cache.
         /// </summary>
         /// <param name="key">The cache key.</param>
-        /// <returns>true if the key was found; false otherwise.</returns>
+        /// <returns>true if the key was found; otherwise, false.</returns>
         bool Contains(string key);
 
         /// <summary>

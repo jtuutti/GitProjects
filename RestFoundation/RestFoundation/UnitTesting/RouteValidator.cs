@@ -7,7 +7,7 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation.UnitTesting
 {
-    public sealed class RouteValidator<T>
+    internal sealed class RouteValidator<T>
     {
         private readonly HttpMethod m_httpMethod;
         private readonly string m_relativeUrl;

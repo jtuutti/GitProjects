@@ -13,7 +13,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="request">The HTTP request.</param>
         /// <returns>
-        /// true if the HTTP request came from a web browser, false otherwise.
+        /// true if the HTTP request came from a web browser; otherwise, false.
         /// </returns>
         bool IsBrowserRequest(HttpRequestBase request);
     }

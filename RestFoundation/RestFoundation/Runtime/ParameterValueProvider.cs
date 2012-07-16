@@ -27,7 +27,7 @@ namespace RestFoundation.Runtime
         /// <param name="parameter">The service method parameters.</param>
         /// <param name="context">The service context.</param>
         /// <param name="isResource">
-        /// true if the parameter represents a REST resource; false otherwise. Only 1 resource per
+        /// true if the parameter represents a REST resource; otherwise, false. Only 1 resource per
         /// service method is allowed.
         /// </param>
         /// <returns>The created parameter value.</returns>

@@ -100,7 +100,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="address">An IP address to check.</param>
         /// <returns>
-        /// true if the provided address is in the current IP range; false otherwise.
+        /// true if the provided address is in the current IP range; otherwise, false.
         /// </returns>
         public bool IsInRange(string address)
         {
@@ -112,7 +112,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="address">An IP address to check.</param>
         /// <returns>
-        /// true if the provided address is in the current IP range; false otherwise.
+        /// true if the provided address is in the current IP range; otherwise, false.
         /// </returns>
         public bool IsInRange(IPAddress address)
         {

@@ -19,7 +19,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         /// <param name="resource">The resource.</param>
         /// <param name="errors">The collection of errors.</param>
-        /// <returns>true if the resource is valid, false otherwise.</returns>
+        /// <returns>true if the resource is valid; otherwise, false.</returns>
         public virtual bool IsValid(object resource, out ICollection<ValidationError> errors)
         {
             if (resource == null || resource is DynamicObject || resource is JObject)

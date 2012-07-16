@@ -22,7 +22,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         /// <param name="request">The HTTP request.</param>
         /// <returns>
-        /// true if the HTTP request came from a web browser, false otherwise.
+        /// true if the HTTP request came from a web browser; otherwise, false.
         /// </returns>
         public virtual bool IsBrowserRequest(HttpRequestBase request)
         {

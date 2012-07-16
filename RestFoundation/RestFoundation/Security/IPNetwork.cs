@@ -201,7 +201,7 @@ namespace RestFoundation.Security
         /// <param name="ipaddress">The address.</param>
         /// <param name="netmask">The netmask.</param>
         /// <param name="ipnetwork">The network object.</param>
-        /// <returns>true if the address was parsed sucessfully; false otherwise.</returns>
+        /// <returns>true if the address was parsed sucessfully; otherwise, false.</returns>
         public static bool TryParse(string ipaddress, string netmask, out IPNetwork ipnetwork)
         {
             IPNetwork ipnetwork2;
@@ -217,7 +217,7 @@ namespace RestFoundation.Security
         /// <param name="ipaddress">The address.</param>
         /// <param name="cidr">The CIDR byte.</param>
         /// <param name="ipnetwork">The network object.</param>
-        /// <returns>true if the address was parsed sucessfully; false otherwise.</returns>
+        /// <returns>true if the address was parsed sucessfully; otherwise, false.</returns>
         public static bool TryParse(string ipaddress, byte cidr, out IPNetwork ipnetwork)
         {
             IPNetwork ipnetwork2;
@@ -232,7 +232,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="network">The network string.</param>
         /// <param name="ipnetwork">The network object.</param>
-        /// <returns>true if the address was parsed sucessfully; false otherwise.</returns>
+        /// <returns>true if the address was parsed sucessfully; otherwise, false.</returns>
         public static bool TryParse(string network, out IPNetwork ipnetwork)
         {
             IPNetwork ipnetwork2;
@@ -248,7 +248,7 @@ namespace RestFoundation.Security
         /// <param name="ipaddress">The address.</param>
         /// <param name="netmask">The netmask.</param>
         /// <param name="ipnetwork">The network object.</param>
-        /// <returns>true if the address was parsed sucessfully; false otherwise.</returns>
+        /// <returns>true if the address was parsed sucessfully; otherwise, false.</returns>
         public static bool TryParse(IPAddress ipaddress, IPAddress netmask, out IPNetwork ipnetwork)
         {
             IPNetwork ipnetwork2;
@@ -275,7 +275,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="ipnetworks">An array of networks.</param>
         /// <param name="supernet">An array of super networks.</param>
-        /// <returns>true if the operation was performed sucessfully; false otherwise.</returns>
+        /// <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
         public static bool TrySupernet(IPNetwork[] ipnetworks, out IPNetwork[] supernet)
         {
             bool supernetted = InternalSupernet(true, ipnetworks, out supernet);
@@ -288,7 +288,7 @@ namespace RestFoundation.Security
         /// <param name="trySupernet">A value indicating whether to try to get the supernet.</param>
         /// <param name="ipnetworks">An array of networks.</param>
         /// <param name="supernet">An array of super networks.</param>
-        /// <returns>true if the operation was performed sucessfully; false otherwise.</returns>
+        /// <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
         public static bool InternalSupernet(bool trySupernet, IPNetwork[] ipnetworks, out IPNetwork[] supernet)
         {
 
@@ -368,7 +368,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="ipaddress">The IP address.</param>
         /// <param name="uintIPAddress">The <see cref="uint"/> value.</param>
-        /// <returns>true if the operation was performed sucessfully; false otherwise.</returns>
+        /// <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
         public static bool TryToUint(IPAddress ipaddress, out uint? uintIPAddress)
         {
             uint? uintIPAddress2;
@@ -395,7 +395,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="netmask">The net mask.</param>
         /// <param name="cidr">The CIDR byte.</param>
-        /// <returns>true if the operation was performed sucessfully; false otherwise.</returns>
+        /// <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
         public static bool TryToCidr(IPAddress netmask, out byte? cidr)
         {
             byte? cidr2;
@@ -422,7 +422,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="cidr">The CIDR byte.</param>
         /// <param name="netmask">The net mask.</param>
-        /// <returns>true if the operation was performed sucessfully; false otherwise.</returns>
+        /// <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
         public static bool TryToNetmask(byte cidr, out IPAddress netmask)
         {
 
@@ -462,7 +462,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="cidr">The CIDR byte.</param>
         /// <param name="uintNetmask">The <see cref="uint"/> value.</param>
-        /// <returns>true if the operation was performed sucessfully; false otherwise.</returns>
+        /// <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
         public static bool TryToUint(byte cidr, out uint? uintNetmask)
         {
             uint? uintNetmask2;
@@ -507,7 +507,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="network">The network.</param>
         /// <param name="ipaddress">The IP address.</param>
-        /// <returns>true if the network contains the IP address; false otherwise.</returns>
+        /// <returns>true if the network contains the IP address; otherwise, false.</returns>
         public static bool Contains(IPNetwork network, IPAddress ipaddress)
         {
             if (network == null)
@@ -534,7 +534,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="network">The network.</param>
         /// <param name="network2">The sub-network.</param>
-        /// <returns>true if the network contains the IP addresses in the sub-network; false otherwise.</returns>
+        /// <returns>true if the network contains the IP addresses in the sub-network; otherwise, false.</returns>
         public static bool Contains(IPNetwork network, IPNetwork network2)
         {
 
@@ -564,7 +564,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="network">The first network.</param>
         /// <param name="network2">The second network.</param>
-        /// <returns>true if there is overlap in addresses; false otherwise.</returns>
+        /// <returns>true if there is overlap in addresses; otherwise, false.</returns>
         public static bool Overlap(IPNetwork network, IPNetwork network2)
         {
             if (network == null)
@@ -610,7 +610,7 @@ namespace RestFoundation.Security
         /// <param name="network">The network.</param>
         /// <param name="cidr">The CIDR byte.</param>
         /// <param name="ipnetworkCollection">The subnet.</param>
-        /// <returns>true if the subnet was calculated successfully; false otherwise.</returns>
+        /// <returns>true if the subnet was calculated successfully; otherwise, false.</returns>
         public static bool TrySubnet(IPNetwork network, byte cidr, out IPNetworkCollection ipnetworkCollection)
         {
             IPNetworkCollection inc;
@@ -645,7 +645,7 @@ namespace RestFoundation.Security
         /// <param name="network1">The first network.</param>
         /// <param name="network2">The second network.</param>
         /// <param name="supernet">The supernet.</param>
-        /// <returns>true if the supernet exists; false otherwise.</returns>
+        /// <returns>true if the supernet exists; otherwise, false.</returns>
         public static bool TrySupernet(IPNetwork network1, IPNetwork network2, out IPNetwork supernet)
         {
             IPNetwork outSupernet;
@@ -660,7 +660,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="ip">A <see cref="string"/> IP notation.</param>
         /// <param name="cidr">The CIDR byte.</param>
-        /// <returns>True if the CIDR was guessed correctly; false otherwise.</returns>
+        /// <returns>True if the CIDR was guessed correctly; otherwise, false.</returns>
         public static bool TryGuessCidr(string ip, out byte cidr)
         {
             IPAddress ipaddress;
@@ -703,7 +703,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="sidr">A <see cref="string"/> CIDR notation.</param>
         /// <param name="cidr">The CIDR byte.</param>
-        /// <returns>True if the CIDR was parsed correctly; false otherwise.</returns>
+        /// <returns>True if the CIDR was parsed correctly; otherwise, false.</returns>
         public static bool TryParseCidr(string sidr, out byte? cidr)
         {
             byte b;
@@ -788,7 +788,7 @@ namespace RestFoundation.Security
         /// </summary>
         /// <param name="ipnetworks">An array of networks.</param>
         /// <param name="ipnetwork">The <see cref="IPNetwork"/> instance that spans the provided addresses.</param>
-        /// <returns>true if wide subnet was calculated successfully; false otherwise.</returns>
+        /// <returns>true if wide subnet was calculated successfully; otherwise, false.</returns>
         public static bool TryWideSubnet(IPNetwork[] ipnetworks, out IPNetwork ipnetwork)
         {
             IPNetwork ipn;

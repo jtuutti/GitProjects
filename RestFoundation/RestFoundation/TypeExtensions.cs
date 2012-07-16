@@ -22,7 +22,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="type">The object type.</param>
         /// <returns>
-        /// true if the type contains REST Foundation behavior, false otherwise.
+        /// true if the type contains REST Foundation behavior; otherwise, false.
         /// </returns>
         public static bool IsRestBehavior(this Type type)
         {
@@ -40,7 +40,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="type">The object type.</param>
         /// <returns>
-        /// true if the type is REST Foundation dependency, false otherwise.
+        /// true if the type is REST Foundation dependency; otherwise, false.
         /// </returns>
         public static bool IsRestDependency(this Type type)
         {
@@ -57,7 +57,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="type">The object type.</param>
         /// <returns>
-        /// true if the type is a service contract, false otherwise.
+        /// true if the type is a service contract; otherwise, false.
         /// </returns>
         public static bool IsRestContract(this Type type)
         {
@@ -74,7 +74,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="type">The object type.</param>
         /// <returns>
-        /// true if the type is a service implementation, false otherwise.
+        /// true if the type is a service implementation; otherwise, false.
         /// </returns>
         public static bool IsRestService(this Type type)
         {

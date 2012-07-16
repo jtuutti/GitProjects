@@ -13,7 +13,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="resource">The resource.</param>
         /// <param name="errors">The collection of errors.</param>
-        /// <returns>true if the resource is valid, false otherwise.</returns>
+        /// <returns>true if the resource is valid; otherwise, false.</returns>
         bool IsValid(object resource, out ICollection<ValidationError> errors);
     }
 }

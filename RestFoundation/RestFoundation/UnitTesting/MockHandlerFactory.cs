@@ -7,17 +7,35 @@ using System.Web.Routing;
 
 namespace RestFoundation.UnitTesting
 {
+    /// <summary>
+    /// Represents a mock handler factory.
+    /// </summary>
     public sealed class MockHandlerFactory : IDisposable
     {
         private static readonly object syncRoot = new object();
 
         internal static TestHttpContext Context { get; private set; }
 
+        /// <summary>
+        /// Creates a REST handler that executes that provided service method at the specified relative URL.
+        /// </summary>
+        /// <typeparam name="T">The service contract type.</typeparam>
+        /// <param name="relativeUrl">The relative URL.</param>
+        /// <param name="serviceMethodDelegate">The service method delegate.</param>
+        /// <returns>The REST handler./</returns>
         public IRestHandler Create<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate)
         {
             return Create(relativeUrl, serviceMethodDelegate, null);
         }
 
+        /// <summary>
+        /// Creates a REST handler that executes that provided service method at the specified relative URL.
+        /// </summary>
+        /// <typeparam name="T">The service contract type.</typeparam>
+        /// <param name="relativeUrl">The relative URL.</param>
+        /// <param name="serviceMethodDelegate">The service method delegate.</param>
+        /// <param name="httpMethod">The HTTP method.</param>
+        /// <returns>The REST handler./</returns>
         public IRestHandler Create<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
         {
             if (serviceMethodDelegate == null) throw new ArgumentNullException("serviceMethodDelegate");
@@ -28,11 +46,26 @@ namespace RestFoundation.UnitTesting
             return new MockRestHandler().GetHttpHandler(requestContext) as IRestHandler;
         }
 
+        /// <summary>
+        /// Creates an asyncronous REST handler that executes that provided service method at the specified relative URL.
+        /// </summary>
+        /// <typeparam name="T">The service contract type.</typeparam>
+        /// <param name="relativeUrl">The relative URL.</param>
+        /// <param name="serviceMethodDelegate">The service method delegate.</param>
+        /// <returns>The asynchronous REST handler./</returns>
         public IRestAsyncHandler CreateAsync<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate)
         {
             return CreateAsync(relativeUrl, serviceMethodDelegate, null);
         }
 
+        /// <summary>
+        /// Creates an asyncronous REST handler that executes that provided service method at the specified relative URL.
+        /// </summary>
+        /// <typeparam name="T">The service contract type.</typeparam>
+        /// <param name="relativeUrl">The relative URL.</param>
+        /// <param name="serviceMethodDelegate">The service method delegate.</param>
+        /// <param name="httpMethod">The HTTP method.</param>
+        /// <returns>The asynchronous REST handler./</returns>
         public IRestAsyncHandler CreateAsync<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
         {
             if (serviceMethodDelegate == null) throw new ArgumentNullException("serviceMethodDelegate");
@@ -43,6 +76,10 @@ namespace RestFoundation.UnitTesting
             return new MockRestAsyncHandler().GetHttpHandler(requestContext) as IRestAsyncHandler;
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
             if (Context == null)
@@ -52,11 +89,13 @@ namespace RestFoundation.UnitTesting
 
             lock (syncRoot)
             {
-                if (Context != null)
+                if (Context == null)
                 {
-                    Context.Dispose();
-                    Context = null;
+                    return;
                 }
+
+                Context.Dispose();
+                Context = null;
             }
         }
 
