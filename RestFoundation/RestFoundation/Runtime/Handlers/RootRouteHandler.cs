@@ -109,7 +109,7 @@ namespace RestFoundation.Runtime.Handlers
 
         private static Operation[] GetOperations()
         {
-            IEnumerable<ProxyOperation> proxyOperations = ProxyOperationGenerator.Generate();
+            IEnumerable<ProxyOperation> proxyOperations = ProxyOperationGenerator.GetAll();
 
             var operations = new List<Operation>();
 

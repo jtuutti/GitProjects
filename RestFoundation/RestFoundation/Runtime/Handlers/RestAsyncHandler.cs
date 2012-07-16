@@ -153,20 +153,11 @@ namespace RestFoundation.Runtime.Handlers
 
             if (serviceMethodData == ServiceMethodLocatorData.Options)
             {
-                return Task<IResult>.Factory.StartNew(state =>
-                                                      {
-                                                          HttpContext.Current = ((HttpArguments) state).Context;
-                                                          return new EmptyResult();
-                                                      }, new HttpArguments(HttpContext.Current, null))
+                return Task<IResult>.Factory.StartNew(ReturnEmptyResult, new HttpArguments(HttpContext.Current, null))
                                             .ContinueWith(action => cb(action));
             }
 
-            return Task<IResult>.Factory.StartNew(state =>
-                                                  {
-                                                      HttpContext.Current = ((HttpArguments) state).Context;
-                                                      object returnedObj = m_methodInvoker.Invoke(serviceMethodData.Method, serviceMethodData.Service, this);
-                                                      return serviceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, m_serviceContext) : null;
-                                                  }, new HttpArguments(HttpContext.Current, serviceMethodData.Method.ReturnType))
+            return Task<IResult>.Factory.StartNew(ExecuteServiceMethod, new HttpArguments(HttpContext.Current, serviceMethodData))
                                         .ContinueWith(action => cb(action));
         }
 
@@ -193,7 +184,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (!(task.Result is EmptyResult))
             {
-                m_resultExecutor.Execute(task.Result, httpArguments.MethodReturnType, m_serviceContext);
+                m_resultExecutor.Execute(task.Result, httpArguments.ServiceMethodData.Method.ReturnType, m_serviceContext);
             }
         }
 
@@ -209,18 +200,35 @@ namespace RestFoundation.Runtime.Handlers
             return ExceptionUnwrapper.IsDirectResponseException(taskException.InnerException) ? taskException.InnerException : taskException;
         }
 
+        private static IResult ReturnEmptyResult(object state)
+        {
+            HttpContext.Current = ((HttpArguments) state).Context;
+
+            return new EmptyResult();
+        }
+
+        private IResult ExecuteServiceMethod(object state)
+        {
+            var httpArguments = (HttpArguments) state;
+
+            HttpContext.Current = httpArguments.Context;
+            object returnedObj = m_methodInvoker.Invoke(httpArguments.ServiceMethodData.Method, httpArguments.ServiceMethodData.Service, this);
+
+            return httpArguments.ServiceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, m_serviceContext) : null;
+        }
+
         #region HTTP Task Arguments
 
         private sealed class HttpArguments
         {
-            public HttpArguments(HttpContext context, Type methodReturnType)
+            public HttpArguments(HttpContext context, ServiceMethodLocatorData serviceMethodData)
             {
                 Context = context;
-                MethodReturnType = methodReturnType;
+                ServiceMethodData = serviceMethodData;
             }
 
             public HttpContext Context { get; private set; }
-            public Type MethodReturnType { get; private set; }
+            public ServiceMethodLocatorData ServiceMethodData { get; private set; }
         }
 
         #endregion

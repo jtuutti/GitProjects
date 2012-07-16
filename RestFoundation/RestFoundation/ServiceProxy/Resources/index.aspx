@@ -5,11 +5,11 @@
     private List<ProxyOperation> operations;
     private bool hasIPFilteredOperations;
 
-    public void Page_Init(object sender, EventArgs e)
+    protected void Page_Init(object sender, EventArgs e)
     {
         EnableViewState = false;
 
-        operations = ProxyOperationGenerator.Generate().ToList();
+        operations = ProxyOperationGenerator.GetAll().ToList();
 
         string previousUrlTemplate = null;
         int originalIndex = -1;

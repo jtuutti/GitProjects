@@ -7,10 +7,18 @@ using RestFoundation.Runtime;
 
 namespace RestFoundation.ServiceProxy
 {
+    /// <summary>
+    /// Represents a proxy operation generator class.
+    /// </summary>
     public static class ProxyOperationGenerator
     {
         private const string UrlSeparator = "/";
 
+        /// <summary>
+        /// Gets a proxy operation by the ID.
+        /// </summary>
+        /// <param name="operationId">The proxy operation ID.</param>
+        /// <returns>The proxy operation instance.</returns>
         public static ProxyOperation Get(Guid operationId)
         {
             ServiceMethodMetadata metadata = ServiceMethodRegistry.ServiceMethods.SelectMany(m => m.Value).FirstOrDefault(m => m.ServiceMethodId == operationId);
@@ -28,7 +36,11 @@ namespace RestFoundation.ServiceProxy
             return GenerateProxyOperation(metadata);
         }
 
-        public static IEnumerable<ProxyOperation> Generate()
+        /// <summary>
+        /// Gets all proxy operations associated with the service URL.
+        /// </summary>
+        /// <returns>A sequence of proxy operation.</returns>
+        public static IEnumerable<ProxyOperation> GetAll()
         {
             var operations = new SortedSet<ProxyOperation>();
 

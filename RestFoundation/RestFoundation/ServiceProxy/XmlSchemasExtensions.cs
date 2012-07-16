@@ -12,10 +12,18 @@ using System.Xml.Serialization;
 
 namespace RestFoundation.ServiceProxy
 {
+    /// <summary>
+    /// Contains extensions for the <see cref="XmlSchemas"/> class.
+    /// </summary>
     public static class XmlSchemasExtensions
     {
         private static readonly Regex arrayPattern = new Regex("ArrayOf([A-Za-z0-9_]+)", RegexOptions.Compiled);
 
+        /// <summary>
+        /// Serializes schemas into a list of <see cref="string"/> objects.
+        /// </summary>
+        /// <param name="schemas">The schema colleciton.</param>
+        /// <returns>A list of stringified schemas.</returns>
         public static IList<string> Serialize(this XmlSchemas schemas)
         {
             if (schemas == null)

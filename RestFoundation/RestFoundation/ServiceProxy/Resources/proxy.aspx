@@ -18,7 +18,7 @@
     private Guid operationId;
     private string serviceUrl;
 
-    public void Page_Init(object sender, EventArgs e)
+    protected void Page_Init(object sender, EventArgs e)
     {
         if (!Guid.TryParse(Request.QueryString["oid"], out operationId) || operationId == Guid.Empty)
         {
@@ -69,24 +69,24 @@
 
         if (operation.HasResource && operation.RequestExampleType != null)
         {
-            IResourceExample requestExample;
+            IResourceExampleBuilder requestExampleBuilder;
 
             try
             {
-                requestExample = Activator.CreateInstance(operation.RequestExampleType) as IResourceExample;
+                requestExampleBuilder = Activator.CreateInstance(operation.RequestExampleType) as IResourceExampleBuilder;
             }
             catch (Exception)
             {
-                requestExample = null;
+                requestExampleBuilder = null;
             }
 
-            if (requestExample != null)
+            if (requestExampleBuilder != null)
             {
                 object requestObj;
 
                 try
                 {
-                    requestObj = requestExample.Create();
+                    requestObj = requestExampleBuilder.BuildInstance();
                 }
                 catch (Exception)
                 {
@@ -122,7 +122,7 @@
         }
     }
 
-    public void Page_Load(object sender, EventArgs e)
+    protected void Page_Load(object sender, EventArgs e)
     {
         ViewResponse.Visible = false;
 

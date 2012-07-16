@@ -9,7 +9,7 @@
     private string requestJsonExample, requestXmlExample, responseJsonExample, responseXmlExample;
     private IList<string> requestXmlSchemas, responseXmlSchemas;
     
-    public void Page_Init(object sender, EventArgs e)
+    protected void Page_Init(object sender, EventArgs e)
     {
         EnableViewState = false;
 
@@ -31,24 +31,24 @@
 
         if (operation.HasResource && operation.RequestExampleType != null)
         {
-            IResourceExample requestExample;
+            IResourceExampleBuilder requestExampleBuilder;
 
             try
             {
-                requestExample = Activator.CreateInstance(operation.RequestExampleType) as IResourceExample;
+                requestExampleBuilder = Activator.CreateInstance(operation.RequestExampleType) as IResourceExampleBuilder;
             }
             catch (Exception)
             {
-                requestExample = null;
+                requestExampleBuilder = null;
             }
 
-            if (requestExample != null)
+            if (requestExampleBuilder != null)
             {
                 object requestObj;
 
                 try
                 {
-                    requestObj = requestExample.Create();
+                    requestObj = requestExampleBuilder.BuildInstance();
                 }
                 catch (Exception)
                 {
@@ -78,7 +78,7 @@
                 
                 if (requestXmlExample != null)
                 {
-                    XmlSchemas schemas = requestExample.GetSchemas();
+                    XmlSchemas schemas = requestExampleBuilder.BuildSchemas();
 
                     if (schemas != null && schemas.Count > 0)
                     {
@@ -90,24 +90,24 @@
 
         if (operation.HasResponse && operation.ResponseExampleType != null)
         {
-            IResourceExample responseExample;
+            IResourceExampleBuilder responseExampleBuilder;
 
             try
             {
-                responseExample = Activator.CreateInstance(operation.ResponseExampleType) as IResourceExample;
+                responseExampleBuilder = Activator.CreateInstance(operation.ResponseExampleType) as IResourceExampleBuilder;
             }
             catch (Exception)
             {
-                responseExample = null;
+                responseExampleBuilder = null;
             }
 
-            if (responseExample != null)
+            if (responseExampleBuilder != null)
             {
                 object responseObj;
 
                 try
                 {
-                    responseObj = responseExample.Create();
+                    responseObj = responseExampleBuilder.BuildInstance();
                 }
                 catch (Exception)
                 {
@@ -137,7 +137,7 @@
 
                 if (responseXmlExample != null)
                 {
-                    XmlSchemas schemas = responseExample.GetSchemas();
+                    XmlSchemas schemas = responseExampleBuilder.BuildSchemas();
 
                     if (schemas != null && schemas.Count > 0)
                     {

@@ -3,7 +3,7 @@
 <%@ Import Namespace="RestFoundation.Security" %>
 
 <script runat="server" language="C#">
-    public void Page_Init(object sender, EventArgs e)
+    protected void Page_Init(object sender, EventArgs e)
     {
         List<IPAddressRange> ranges = IPAddressRange.GetConfiguredRanges("serviceProxyAcl").ToList();
 

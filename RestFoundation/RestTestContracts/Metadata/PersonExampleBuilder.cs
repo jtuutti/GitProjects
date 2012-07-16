@@ -5,9 +5,9 @@ using RestTestContracts.Resources;
 
 namespace RestTestContracts.Metadata
 {
-    public class PersonExample : IResourceExample
+    public class PersonExampleBuilder : IResourceExampleBuilder
     {
-        public object Create()
+        public object BuildInstance()
         {
             return new Person
             {
@@ -17,7 +17,7 @@ namespace RestTestContracts.Metadata
             };
         }
 
-        public XmlSchemas GetSchemas()
+        public XmlSchemas BuildSchemas()
         {
             return XmlSchemaGenerator.Generate<Person>();
         }

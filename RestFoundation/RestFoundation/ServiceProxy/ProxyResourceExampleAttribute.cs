@@ -43,7 +43,7 @@ namespace RestFoundation.ServiceProxy
                 throw new ArgumentNullException("value");
             }
 
-            if (!value.IsClass || value.IsAbstract || !typeof(IResourceExample).IsAssignableFrom(value))
+            if (!value.IsClass || value.IsAbstract || !typeof(IResourceExampleBuilder).IsAssignableFrom(value))
             {
                 throw new ArgumentException("A resource example type must be a class implementing the RestFoundation.ServiceProxy.IResourceExample interface");
             }

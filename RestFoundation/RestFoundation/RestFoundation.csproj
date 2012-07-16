@@ -243,7 +243,7 @@
     <Compile Include="ServiceProxy\ProxyOperation.cs" />
     <Compile Include="ServiceProxy\ProxyOperationGenerator.cs" />
     <Compile Include="ServiceProxy\ProxyStatusCode.cs" />
-    <Compile Include="ServiceProxy\IResourceExample.cs" />
+    <Compile Include="ServiceProxy\IResourceExampleBuilder.cs" />
     <Compile Include="ServiceProxy\ProxyFile.cs" />
     <Compile Include="ServiceProxy\ProxyPathProvider.cs" />
     <Compile Include="Runtime\Handlers\RootRouteHandler.cs" />
@@ -295,24 +295,16 @@
     <Compile Include="ValidationError.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ServiceProxy\Resources\index.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="ServiceProxy\Resources\index.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ServiceProxy\Resources\help.master">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="ServiceProxy\Resources\help.master" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ServiceProxy\Resources\metadata.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="ServiceProxy\Resources\metadata.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ServiceProxy\Resources\proxy.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="ServiceProxy\Resources\proxy.aspx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ServiceProxy\Resources\output.aspx">

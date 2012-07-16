@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" %>
 
 <script runat="server" language="C#">
-    public void Page_Init(object sender, EventArgs e)
+    protected void Page_Init(object sender, EventArgs e)
     {
         Response.Clear();
 

@@ -6,6 +6,9 @@ using System.Web.Hosting;
 
 namespace RestFoundation.ServiceProxy
 {
+    /// <summary>
+    /// Represents a virtual service proxy file.
+    /// </summary>
     public sealed class ProxyFile : VirtualFile
     {
         private static readonly Dictionary<string, string> resourceMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -19,6 +22,11 @@ namespace RestFoundation.ServiceProxy
 
         private readonly string m_fileName;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProxyFile"/> class.
+        /// </summary>
+        /// <param name="virtualPath">The virtual path.</param>
+        /// <param name="fileName">The file name.</param>
         public ProxyFile(string virtualPath, string fileName) : base(virtualPath)
         {
             if (virtualPath == null) throw new ArgumentNullException("virtualPath");
@@ -36,6 +44,12 @@ namespace RestFoundation.ServiceProxy
             }
         }
 
+        /// <summary>
+        /// When overridden in a derived class, returns a read-only stream to the virtual resource.
+        /// </summary>
+        /// <returns>
+        /// A read-only stream to the virtual file.
+        /// </returns>
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
                          Justification = "The stream is returned to the outer scope and cannot be closed in this method")]
         public override Stream Open()

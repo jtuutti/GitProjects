@@ -85,23 +85,22 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Represents an operator semantically equivalent to the <see cref="Equals(object)"/> method.
+        /// Compares two <see cref="ValidationError"/> objects for equality.
         /// </summary>
-        /// <param name="left">The first validation error object to compare.</param>
-        /// <param name="right">The second validation error object to compare.</param>
-        /// <returns></returns>
+        /// <param name="left">The first object</param>
+        /// <param name="right">The second object</param>
+        /// <returns>true if both objects are equivalent; otherwise, false.</returns>
         public static bool operator ==(ValidationError left, ValidationError right)
         {
             return left.Equals(right);
         }
 
         /// <summary>
-        /// Represents an operator semantically equivalent to the <see cref="Equals(object)"/> method,
-        /// but the returned value is negated.
+        /// Compares two <see cref="ValidationError"/> objects for inequality.
         /// </summary>
-        /// <param name="left">The first validation error object to compare.</param>
-        /// <param name="right">The second validation error object to compare.</param>
-        /// <returns></returns>
+        /// <param name="left">The first object</param>
+        /// <param name="right">The second object</param>
+        /// <returns>true if both objects are not equivalent; otherwise, false.</returns>
         public static bool operator !=(ValidationError left, ValidationError right)
         {
             return !left.Equals(right);
