@@ -174,7 +174,7 @@
             <span class="method"><%: operation.SupportedHttpMethods %></span>
         <% } %>
     </p>
-    <% if (operation.SupportOdata) { %>
+    <% if (operation.SupportsOdata) { %>
     <p>
         This operation supports <a href="http://www.odata.org" target="_blank" title="OData">OData</a> URL conventions.
     </p>

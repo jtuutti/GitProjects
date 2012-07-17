@@ -25,7 +25,7 @@ namespace RestTestContracts
 
         [Url("index/all", "Get, Head")]
         [ProxyOperationDescription("Gets all resources of type 'Index'")]
-        [ProxyResourceExample(ResponseExampleType = typeof(PersonArrayExampleBuilder))]
+        [ProxyResourceExample(ResponseBuilderType = typeof(PersonArrayExampleBuilder))]
         IQueryable<Person> GetAll();
 
         [Url("index/{id}")]
@@ -34,17 +34,17 @@ namespace RestTestContracts
 
         [Url("index")]
         [ProxyStatusCode(HttpStatusCode.Created, "Resource is created")]
-        [ProxyResourceExample(RequestExampleType = typeof(PersonExampleBuilder), ResponseExampleType = typeof(PersonExampleBuilder))]
+        [ProxyResourceExample(RequestBuilderType = typeof(PersonExampleBuilder), ResponseBuilderType = typeof(PersonExampleBuilder))]
         object Post(Person resource);
 
         [Url("index/{id}")]
         [ProxyStatusCode(HttpStatusCode.OK, "Resource is updated")]
-        [ProxyResourceExample(RequestExampleType = typeof(PersonExampleBuilder), ResponseExampleType = typeof(PersonExampleBuilder))]
+        [ProxyResourceExample(RequestBuilderType = typeof(PersonExampleBuilder), ResponseBuilderType = typeof(PersonExampleBuilder))]
         Person Put([ParameterConstraint(@"\d{1,3}"), ProxyRouteParameter(1)] int? id, [ResourceParameter] Person personToUpdate);
 
         [Url("index/{id}")]
         [ProxyStatusCode(HttpStatusCode.OK, "Resource is partially updated")]
-        [ProxyResourceExample(RequestExampleType = typeof(PersonExampleBuilder), ResponseExampleType = typeof(PersonExampleBuilder))]
+        [ProxyResourceExample(RequestBuilderType = typeof(PersonExampleBuilder), ResponseBuilderType = typeof(PersonExampleBuilder))]
         Person Patch([ParameterConstraint(@"\d{1,3}"), ProxyRouteParameter(1)] int? id, Person resource);
 
         [Url("index/{name}")]

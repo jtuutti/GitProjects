@@ -125,11 +125,11 @@ namespace RestFoundation.ServiceProxy
         }
 
         /// <summary>
-        /// Compares whether the first <see cref="ProxyStatusCode"/> is less than the second.
+        /// Compares two <see cref="ProxyStatusCode"/> objects for inequality.
         /// </summary>
         /// <param name="left">The first object</param>
         /// <param name="right">The second object</param>
-        /// <returns>true if the first object is less than the second; otherwise, false.</returns>
+        /// <returns>true if both objects are not equivalent; otherwise, false.</returns>
         public static bool operator !=(ProxyStatusCode left, ProxyStatusCode right)
         {
             return !left.Equals(right);

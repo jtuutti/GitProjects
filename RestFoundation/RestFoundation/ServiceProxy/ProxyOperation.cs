@@ -8,26 +8,99 @@ using RestFoundation.Results;
 
 namespace RestFoundation.ServiceProxy
 {
+    /// <summary>
+    /// Represents a service proxy operation.
+    /// </summary>
     public sealed class ProxyOperation : IComparable<ProxyOperation>
     {
-        public string ServiceUrl { get; set; }
-        public string UrlTempate { get; set; }
-        public string MetadataUrl { get; set; }
-        public string ProxyUrl { get; set; }
-        public HttpMethod HttpMethod { get; set; }
-        public string SupportedHttpMethods { get; set; }
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the operation has a response.
+        /// </summary>
         public bool HasResource { get; set; }
-        public Type ResultType { get; set; }
-        public ICollection<ProxyStatusCode> StatusCodes { get; set; }
-        public ICollection<ProxyParameter> RouteParameters { get; set; }
-        public Type RequestExampleType { get; set; }
-        public Type ResponseExampleType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the HTTP method.
+        /// </summary>
+        public HttpMethod HttpMethod { get; set; }
+
+        /// <summary>
+        /// Gets or sets the HTTPS port, if applicable.
+        /// </summary>
         public int HttpsPort { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the operation is IP filtered.
+        /// </summary>
         public bool IsIPFiltered { get; set; }
-        public ICollection<Tuple<string, string>> AdditionalHeaders { get; set; }
+
+        /// <summary>
+        /// Gets the metadata URL.
+        /// </summary>
+        public string MetadataUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the service proxy UI URL.
+        /// </summary>
+        public string ProxyUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value how many times the current template is repeated in the list.
+        /// </summary>
         public int RepeatedTemplateCount { get; set; }
 
+        /// <summary>
+        /// Gets or sets the HTTP request resource example type or null.
+        /// </summary>
+        public Type RequestExampleType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the HTTP response resource example type or null.
+        /// </summary>
+        public Type ResponseExampleType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the result type.
+        /// </summary>
+        public Type ResultType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the service URL.
+        /// </summary>
+        public string ServiceUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets a comma separated list of supported HTTP methods.
+        /// </summary>
+        public string SupportedHttpMethods { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL template.
+        /// </summary>
+        public string UrlTempate { get; set; }
+
+        /// <summary>
+        /// Gets or sets a collection of additional headers.
+        /// </summary>
+        public ICollection<Tuple<string, string>> AdditionalHeaders { get; set; }
+
+        /// <summary>
+        /// Gets or sets a collection of route parameters.
+        /// </summary>
+        public ICollection<ProxyParameter> RouteParameters { get; set; }
+
+        /// <summary>
+        /// Gets or sets a collection of possible HTTP status codes.
+        /// </summary>
+        public ICollection<ProxyStatusCode> StatusCodes { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the operation has a response.
+        /// </summary>
         public bool HasResponse
         {
             get
@@ -36,7 +109,10 @@ namespace RestFoundation.ServiceProxy
             }
         }
 
-        public bool SupportOdata
+        /// <summary>
+        /// Gets a value indicating whether the operation supports OData queries.
+        /// </summary>
+        public bool SupportsOdata
         {
             get
             {
@@ -44,6 +120,10 @@ namespace RestFoundation.ServiceProxy
             }
         }
 
+        /// <summary>
+        /// Gets sample URL parts - the service part and the operation part.
+        /// </summary>
+        /// <returns>A tuple with sample URL parts.</returns>
         public Tuple<string, string> GenerateSampleUrlParts()
         {
             HttpContext context = HttpContext.Current;
@@ -84,6 +164,11 @@ namespace RestFoundation.ServiceProxy
             return Tuple.Create(String.Concat(serviceUrl, context.Request.ApplicationPath.TrimEnd(slash), slash), urlTemplate);
         }
 
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <returns>A value that indicates the relative order of the objects being compared.</returns>
+        /// <param name="other">An object to compare with this object.</param>
         public int CompareTo(ProxyOperation other)
         {
             if (other == null)

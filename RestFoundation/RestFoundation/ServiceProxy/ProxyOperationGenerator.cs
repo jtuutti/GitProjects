@@ -194,7 +194,7 @@ namespace RestFoundation.ServiceProxy
                 return new Tuple<Type, Type>(null, null);
             }
 
-            return Tuple.Create(resourceExampleAttribute.RequestExampleType, resourceExampleAttribute.ResponseExampleType);
+            return Tuple.Create(resourceExampleAttribute.RequestBuilderType, resourceExampleAttribute.ResponseBuilderType);
         }
 
         private static string GetParameterConstraint(ParameterInfo parameter)
