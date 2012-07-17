@@ -80,7 +80,6 @@ namespace RestTest.App_Start
             routeBuilder.MapRestRoute<ITouchMapService>("touch-map")
                         .WithBehaviors(new HttpsOnlyBehavior());
 
-
             routeBuilder.MapPageRoute("faq", "~/Views/Faq.aspx");
         }
     }
