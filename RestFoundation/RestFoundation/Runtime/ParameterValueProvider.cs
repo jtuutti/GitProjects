@@ -54,10 +54,7 @@ namespace RestFoundation.Runtime
                 return routeValue;
             }
 
-            if ((context.Request.Method == HttpMethod.Post || context.Request.Method == HttpMethod.Put || context.Request.Method == HttpMethod.Patch) &&
-                String.Equals(ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase) ||
-                Attribute.GetCustomAttribute(parameter, typeof(ResourceParameterAttribute), false) != null ||
-                parameter.ParameterType == typeof(IEnumerable<IUploadedFile>) || parameter.ParameterType == typeof(ICollection<IUploadedFile>))
+            if (IsResourceParameter(parameter, context))
             {
                 isResource = true;
                 return GetResourceValue(parameter, handler);
@@ -106,8 +103,10 @@ namespace RestFoundation.Runtime
             if (parameter == null) throw new ArgumentNullException("parameter");
             if (handler == null) throw new ArgumentNullException("handler");
 
-            IContentFormatter formatter = ContentFormatterRegistry.GetHandlerFormatter(handler, handler.Context.Request.Headers.ContentType) ??
-                                          ContentFormatterRegistry.GetFormatter(handler.Context.Request.Headers.ContentType);
+            string contentType = handler.Context.Request.Headers.ContentType;
+
+            IContentFormatter formatter = ContentFormatterRegistry.GetHandlerFormatter(handler, contentType) ??
+                                          ContentFormatterRegistry.GetFormatter(contentType);
 
             if (formatter == null || formatter is BlockContentFormatter)
             {
@@ -138,6 +137,31 @@ namespace RestFoundation.Runtime
             }
 
             return argumentValue;
+        }
+
+        private static bool IsResourceParameter(ParameterInfo parameter, IServiceContext context)
+        {
+            if (context.Request.Method != HttpMethod.Post && context.Request.Method != HttpMethod.Put && context.Request.Method != HttpMethod.Patch)
+            {
+                return false;
+            }
+
+            if (String.Equals(ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (Attribute.GetCustomAttribute(parameter, typeof(ResourceParameterAttribute), false) != null)
+            {
+                return true;
+            }
+
+            if (parameter.ParameterType == typeof(IEnumerable<IUploadedFile>) || parameter.ParameterType == typeof(ICollection<IUploadedFile>))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
