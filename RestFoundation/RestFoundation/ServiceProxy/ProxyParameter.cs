@@ -8,7 +8,7 @@ namespace RestFoundation.ServiceProxy
     public struct ProxyParameter : IEquatable<ProxyParameter>
     {
         private readonly string m_name;
-        private readonly string m_type;
+        private readonly string m_parameterType;
         private readonly string m_constraint;
         private readonly object m_exampleValue;
         private readonly string m_allowedValues;
@@ -18,10 +18,10 @@ namespace RestFoundation.ServiceProxy
         /// Initializes a new instance of the <see cref="ProxyParameter"/> class.
         /// </summary>
         /// <param name="name">The parameter name.</param>
-        /// <param name="type">The parameter type.</param>
+        /// <param name="parameterType">The parameter type.</param>
         /// <param name="constraint">The paramater regular expression contraint.</param>
         /// <param name="isRouteParameter">The value indicating whether the parameter is a route parameter.</param>
-        public ProxyParameter(string name, string type, string constraint, bool isRouteParameter) : this(name, type, constraint, null, null, isRouteParameter)
+        public ProxyParameter(string name, string parameterType, string constraint, bool isRouteParameter) : this(name, parameterType, constraint, null, null, isRouteParameter)
         {
         }
 
@@ -29,18 +29,18 @@ namespace RestFoundation.ServiceProxy
         /// Initializes a new instance of the <see cref="ProxyParameter"/> class.
         /// </summary>
         /// <param name="name">The parameter name.</param>
-        /// <param name="type">The parameter type.</param>
+        /// <param name="parameterType">The parameter type.</param>
         /// <param name="constraint">The paramater regular expression contraint.</param>
         /// <param name="exampleValue">An example parameter value.</param>
         /// <param name="allowedValues">A comma separated list of all allowed parameter values, if applicable.</param>
         /// <param name="isRouteParameter">The value indicating whether the parameter is a route parameter.</param>
-        public ProxyParameter(string name, string type, string constraint, object exampleValue, string allowedValues, bool isRouteParameter)
+        public ProxyParameter(string name, string parameterType, string constraint, object exampleValue, string allowedValues, bool isRouteParameter)
         {
             if (String.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-            if (String.IsNullOrEmpty(type)) throw new ArgumentNullException("type");
+            if (String.IsNullOrEmpty(parameterType)) throw new ArgumentNullException("parameterType");
 
             m_name = name;
-            m_type = type;
+            m_parameterType = parameterType;
             m_constraint = constraint;
             m_exampleValue = exampleValue;
             m_allowedValues = allowedValues;
@@ -61,16 +61,16 @@ namespace RestFoundation.ServiceProxy
         /// <summary>
         /// Gets the parameter type.
         /// </summary>
-        public string Type
+        public string ParameterType
         {
             get
             {
-                return m_type;
+                return m_parameterType;
             }
         }
 
         /// <summary>
-        /// Gets the parameter constraint.
+        /// Gets the parameter regular expression constraint.
         /// </summary>
         public string Constraint
         {

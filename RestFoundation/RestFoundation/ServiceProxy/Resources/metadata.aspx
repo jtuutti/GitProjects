@@ -193,7 +193,7 @@
     <tr>
         <td><%: "{" + routeParameter.Name + "}" %></td>
         <td><%: routeParameter.IsRouteParameter ? "N" : "Y" %></td>
-        <td><%: routeParameter.Type %></td>
+        <td><%: routeParameter.ParameterType %></td>
         <td><%: routeParameter.Constraint ?? String.Empty %></td>
         <td><%: routeParameter.AllowedValues ?? String.Empty %></td>
         <td><%: routeParameter.ExampleValue ?? String.Empty %></td>
