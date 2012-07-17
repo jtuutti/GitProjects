@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using RestFoundation.Behaviors;
+using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 
 namespace RestFoundation
@@ -19,6 +19,44 @@ namespace RestFoundation
             if (routeHandlers == null) throw new ArgumentNullException("routeHandlers");
 
             m_routeHandlers = routeHandlers;
+        }
+
+        /// <summary>
+        /// Prevents a provided content type from being supported by the service through the current route.
+        /// </summary>
+        /// <param name="contentType">The content type.</param>
+        /// <returns>The route configuration.</returns>
+        public RouteConfiguration BlockContentType(string contentType)
+        {
+            if (String.IsNullOrEmpty(contentType)) throw new ArgumentNullException("contentType");
+
+            var blockFormatter = new BlockContentFormatter();
+
+            foreach (IRestHandler routeHandler in m_routeHandlers)
+            {
+                ContentFormatterRegistry.AddHandlerFormatter(routeHandler, contentType, blockFormatter);
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets a route specific formatter for the provided content type.
+        /// </summary>
+        /// <param name="contentType">The content type.</param>
+        /// <param name="formatter">The content formatter.</param>
+        /// <returns>The route configuration.</returns>
+        public RouteConfiguration SetContentFormatter(string contentType, IContentFormatter formatter)
+        {
+            if (String.IsNullOrEmpty(contentType)) throw new ArgumentNullException("contentType");
+            if (formatter == null) throw new ArgumentNullException("formatter");
+
+            foreach (IRestHandler routeHandler in m_routeHandlers)
+            {
+                ContentFormatterRegistry.AddHandlerFormatter(routeHandler, contentType, formatter);
+            }
+
+            return this;
         }
 
         /// <summary>
@@ -46,36 +84,6 @@ namespace RestFoundation
                         ServiceBehaviorRegistry.AddBehavior(routeHandler, behaviors[i]);
                     }
                 }
-            }
-
-            return this;
-        }
-
-        /// <summary>
-        /// Sets allowed content types for the current route.
-        /// </summary>
-        /// <param name="contentTypes">An array of allowed content types.</param>
-        /// <returns>The route configuration.</returns>
-        public RouteConfiguration WithContentTypesRestrictedTo(params string[] contentTypes)
-        {
-            if (contentTypes == null) throw new ArgumentNullException("contentTypes");
-            if (contentTypes.Length == 0) throw new ArgumentException("At least one content type must be provided", "contentTypes");
-
-            foreach (IRestHandler routeHandler in m_routeHandlers)
-            {
-                for (int i = 0; i < contentTypes.Length; i++)
-                {
-                    string contentType = contentTypes[i];
-
-                    if (contentType == null || ContentFormatterRegistry.GetFormatter(contentType) == null)
-                    {
-                        throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
-                                                                          "Content type '{0}' does not have an associated data formatter",
-                                                                          contentType ?? "(null)"));
-                    }
-                }
-
-                ServiceBehaviorRegistry.AddBehavior(routeHandler, new ContentTypeBehavior(contentTypes));
             }
 
             return this;

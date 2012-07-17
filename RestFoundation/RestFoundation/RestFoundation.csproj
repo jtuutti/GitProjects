@@ -22,7 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\RestFoundation.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
     <DocumentationFile>bin\Debug\RestFoundation.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -55,6 +55,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Formatters\BlockContentFormatter.cs" />
     <Compile Include="Formatters\JsonPFormatter.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="IResultExecutor.cs" />
@@ -77,7 +78,6 @@
     <Compile Include="IRestAsyncHandler.cs" />
     <Compile Include="GlobalBehaviorBuilder.cs" />
     <Compile Include="Behaviors\BasicAuthorizationBehavior.cs" />
-    <Compile Include="Behaviors\ContentTypeBehavior.cs" />
     <Compile Include="Behaviors\HttpsOnlyBehavior.cs" />
     <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
     <Compile Include="Behaviors\SecureServiceBehavior.cs" />

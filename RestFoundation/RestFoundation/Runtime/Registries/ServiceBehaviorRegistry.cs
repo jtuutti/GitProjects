@@ -12,16 +12,16 @@ namespace RestFoundation.Runtime
             new ResourceValidationBehavior()
         };
 
-        private static readonly ConcurrentDictionary<IRestHandler, List<IServiceBehavior>> behaviors = new ConcurrentDictionary<IRestHandler, List<IServiceBehavior>>();
+        private static readonly ConcurrentDictionary<IRestHandler, List<IServiceBehavior>> handlerBehaviors = new ConcurrentDictionary<IRestHandler, List<IServiceBehavior>>();
         private static readonly object globalSyncRoot = new object();
         private static readonly object handlerSyncRoot = new object();
 
-        public static List<IServiceBehavior> GetBehaviors(IRestHandler routeHandler)
+        public static List<IServiceBehavior> GetBehaviors(IRestHandler handler)
         {
             var allBehaviors = new List<IServiceBehavior>(globalBehaviors);
             List<IServiceBehavior> serviceBehaviors;
 
-            if (behaviors.TryGetValue(routeHandler, out serviceBehaviors))
+            if (handlerBehaviors.TryGetValue(handler, out serviceBehaviors))
             {
                 foreach (IServiceBehavior serviceBehavior in serviceBehaviors)
                 {
@@ -33,32 +33,32 @@ namespace RestFoundation.Runtime
             return allBehaviors;
         }
 
-        public static void AddBehavior(IRestHandler routeHandler, IServiceBehavior behavior)
+        public static void AddBehavior(IRestHandler handler, IServiceBehavior behavior)
         {
-            behaviors.AddOrUpdate(routeHandler,
-                                  routeHandlerToAdd =>
-                                  {
-                                      var behaviorsToAdd = new List<IServiceBehavior>
-                                                           {
-                                                               behavior
-                                                           };
+            handlerBehaviors.AddOrUpdate(handler,
+                                         handlerToAdd =>
+                                         {
+                                             var behaviorsToAdd = new List<IServiceBehavior>
+                                             {
+                                                 behavior
+                                             };
 
-                                      return behaviorsToAdd;
-                                  },
-                                  (routeHandlerToUpdate, behaviorsToUpdate) =>
-                                  {
-                                      lock (handlerSyncRoot)
-                                      {
-                                          if (behaviorsToUpdate.Contains(behavior, ServiceBehaviorEqualityComparer.Default))
-                                          {
-                                              behaviorsToUpdate.RemoveAll(b => b.GetType() == behavior.GetType());
-                                          }
+                                             return behaviorsToAdd;
+                                         },
+                                         (handlerToUpdate, behaviorsToUpdate) =>
+                                         {
+                                             lock (handlerSyncRoot)
+                                             {
+                                                 if (behaviorsToUpdate.Contains(behavior, ServiceBehaviorEqualityComparer.Default))
+                                                 {
+                                                     behaviorsToUpdate.RemoveAll(b => b.GetType() == behavior.GetType());
+                                                 }
 
-                                          behaviorsToUpdate.Add(behavior);
-                                      }
+                                                 behaviorsToUpdate.Add(behavior);
+                                             }
 
-                                      return behaviorsToUpdate;
-                                  });
+                                             return behaviorsToUpdate;
+                                         });
         }
 
         public static void AddGlobalBehavior(IServiceBehavior behavior)

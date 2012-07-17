@@ -14,6 +14,8 @@ namespace RestFoundation.UnitTesting
         private readonly IDictionary m_items;
         private IPrincipal m_user;
 
+        private bool m_isDisposed;
+
         internal TestHttpContext(string relativeUrl, string httpMethod)
         {
             m_application = new TestHttpApplication();
@@ -82,8 +84,16 @@ namespace RestFoundation.UnitTesting
 
         public void Dispose()
         {
+            if (m_isDisposed)
+            {
+                return;
+            }
+
+            m_application.Dispose();
             m_request.Dispose();
             m_response.Dispose();
+
+            m_isDisposed = true;
         }
     }
 }

@@ -18,11 +18,11 @@ namespace RestFoundation.Runtime
         /// the service method.
         /// </summary>
         /// <param name="returnedObj">The returned object.</param>
-        /// <param name="context">The service context.</param>
+        /// <param name="handler">The REST handler.</param>
         /// <returns>The created result instance.</returns>
-        public virtual IResult Create(object returnedObj, IServiceContext context)
+        public virtual IResult Create(object returnedObj, IRestHandler handler)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (handler == null) throw new ArgumentNullException("handler");
 
             var result = returnedObj as IResult;
 
@@ -31,33 +31,34 @@ namespace RestFoundation.Runtime
                 return result;
             }
 
-            return CreateFormatterResult(context, returnedObj);
+            return CreateFormatterResult(returnedObj, handler);
         }
 
-        private static IResult CreateFormatterResult(IServiceContext context, object returnedObj)
+        private static IResult CreateFormatterResult(object returnedObj, IRestHandler handler)
         {
             if (returnedObj != null && returnedObj.GetType().IsGenericType && returnedObj.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) != null)
             {
-                returnedObj = PerformOdataOperations(context, returnedObj);
+                returnedObj = PerformOdataOperations(returnedObj, handler.Context.Request);
             }
 
-            IContentFormatter formatter = ContentFormatterRegistry.GetFormatter(context.Request.GetPreferredAcceptType());
+            IContentFormatter formatter = ContentFormatterRegistry.GetHandlerFormatter(handler, handler.Context.Request.Headers.ContentType) ??
+                                          ContentFormatterRegistry.GetFormatter(handler.Context.Request.GetPreferredAcceptType());
 
             if (formatter == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported content type was provided in the Accept or the Content-Type header");
             }
 
-            return formatter.FormatResponse(context, returnedObj);
+            return formatter.FormatResponse(handler.Context, returnedObj);
         }
 
-        private static object PerformOdataOperations(IServiceContext context, object returnedObj)
+        private static object PerformOdataOperations(object returnedObj, IHttpRequest request)
         {
             object filteredResults;
 
             try
             {
-                filteredResults = QueryableHelper.Filter(returnedObj, context.Request.QueryString.ToNameValueCollection());
+                filteredResults = QueryableHelper.Filter(returnedObj, request.QueryString.ToNameValueCollection());
             }
             catch (Exception)
             {

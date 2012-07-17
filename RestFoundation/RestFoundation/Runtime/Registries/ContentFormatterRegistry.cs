@@ -9,6 +9,7 @@ namespace RestFoundation.Runtime
     internal static class ContentFormatterRegistry
     {
         private static readonly ConcurrentDictionary<string, IContentFormatter> contentFormatters = InitializeDefaultFormatters();
+        private static readonly ConcurrentDictionary<IRestHandler, Dictionary<string, IContentFormatter>> handlerContentFormatters = new ConcurrentDictionary<IRestHandler, Dictionary<string, IContentFormatter>>();
 
         public static IContentFormatter GetFormatter(string contentType)
         {
@@ -47,6 +48,40 @@ namespace RestFoundation.Runtime
         public static void Clear()
         {
             contentFormatters.Clear();
+        }
+
+        public static IContentFormatter GetHandlerFormatter(IRestHandler handler, string contentType)
+        {
+            Dictionary<string, IContentFormatter> handlerFormatters;
+
+            if (!handlerContentFormatters.TryGetValue(handler, out handlerFormatters))
+            {
+                return null;
+            }
+
+            IContentFormatter formatter;
+
+            return handlerFormatters.TryGetValue(contentType, out formatter) ? formatter : null;
+        }
+
+        public static void AddHandlerFormatter(IRestHandler handler, string contentType, IContentFormatter formatter)
+        {
+            handlerContentFormatters.AddOrUpdate(handler,
+                                                 handlerToAdd =>
+                                                 {
+                                                     var formattersToAdd = new Dictionary<string, IContentFormatter>(StringComparer.OrdinalIgnoreCase)
+                                                     {
+                                                         { contentType, formatter }
+                                                     };
+
+                                                     return formattersToAdd;
+                                                 },
+                                                 (handlerToUpdate, formattersToUpdate) =>
+                                                 {
+                                                     formattersToUpdate[contentType] = formatter;
+
+                                                     return formattersToUpdate;
+                                                 });
         }
 
         private static ConcurrentDictionary<string, IContentFormatter> InitializeDefaultFormatters()

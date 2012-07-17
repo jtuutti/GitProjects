@@ -92,7 +92,7 @@ namespace RestTestServices
             return Result.Content("<br/><br/>GET completed", false);
         }
 
-        public IResult Post(Person resource)
+        public object Post(Person resource)
         {
             if (resource == null)
             {
@@ -101,12 +101,11 @@ namespace RestTestServices
 
             resource.Values = new[] { "New person added" };
 
-            var responseHeaders = new Dictionary<string, string>
-            {
-                { "Location", Context.Request.Url.ToAbsoluteUrl("~/home/index/999") }
-            };
 
-            return Result.Resource(resource, HttpStatusCode.Created, "Person #999 created", responseHeaders);
+            Context.Response.SetHeader("Location", Context.Request.Url.ToAbsoluteUrl("~/home/index/999"));
+            Context.Response.SetStatus(HttpStatusCode.Created, "Person #999 created");
+
+            return resource;
         }
 
         public Person Put(int? id, Person personToUpdate)

@@ -12,12 +12,12 @@ namespace RestFoundation
         /// Creates a parameter value based on the routing and HTTP data.
         /// </summary>
         /// <param name="parameter">The service method parameters.</param>
-        /// <param name="context">The service context.</param>
+        /// <param name="handler">The REST handler associated with the HTTP request.</param>
         /// <param name="isResource">
         /// true if the parameter represents a REST resource; otherwise, false. Only 1 resource per
         /// service method is allowed.
         /// </param>
         /// <returns>The created parameter value.</returns>
-        object CreateValue(ParameterInfo parameter, IServiceContext context, out bool isResource);
+        object CreateValue(ParameterInfo parameter, IRestHandler handler, out bool isResource);
     }
 }

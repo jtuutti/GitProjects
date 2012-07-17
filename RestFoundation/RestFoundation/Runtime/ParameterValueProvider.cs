@@ -4,6 +4,7 @@ using System.Net;
 using System.Reflection;
 using System.Web;
 using RestFoundation.Collections;
+using RestFoundation.Formatters;
 
 namespace RestFoundation.Runtime
 {
@@ -25,17 +26,18 @@ namespace RestFoundation.Runtime
         /// Creates a parameter value based on the routing and HTTP data.
         /// </summary>
         /// <param name="parameter">The service method parameters.</param>
-        /// <param name="context">The service context.</param>
+        /// <param name="handler">The REST handler associated with the HTTP request.</param>
         /// <param name="isResource">
         /// true if the parameter represents a REST resource; otherwise, false. Only 1 resource per
         /// service method is allowed.
         /// </param>
         /// <returns>The created parameter value.</returns>
-        public virtual object CreateValue(ParameterInfo parameter, IServiceContext context, out bool isResource)
+        public virtual object CreateValue(ParameterInfo parameter, IRestHandler handler, out bool isResource)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (handler == null) throw new ArgumentNullException("handler");
             if (parameter == null) throw new ArgumentNullException("parameter");
 
+            IServiceContext context = handler.Context;
             ITypeBinder typeBinder = TypeBinderRegistry.GetBinder(parameter.ParameterType);
 
             if (typeBinder != null)
@@ -58,7 +60,7 @@ namespace RestFoundation.Runtime
                 parameter.ParameterType == typeof(IEnumerable<IUploadedFile>) || parameter.ParameterType == typeof(ICollection<IUploadedFile>))
             {
                 isResource = true;
-                return GetResourceValue(parameter, context);
+                return GetResourceValue(parameter, handler);
             }
 
             isResource = false;
@@ -97,16 +99,17 @@ namespace RestFoundation.Runtime
         /// Gets the resource value for the service method parameter.
         /// </summary>
         /// <param name="parameter">The service method parameter.</param>
-        /// <param name="context">The service context.</param>
+        /// <param name="handler">The REST handler.</param>
         /// <returns>The resource value.</returns>
-        protected virtual object GetResourceValue(ParameterInfo parameter, IServiceContext context)
+        protected virtual object GetResourceValue(ParameterInfo parameter, IRestHandler handler)
         {
             if (parameter == null) throw new ArgumentNullException("parameter");
-            if (context == null) throw new ArgumentNullException("context");
+            if (handler == null) throw new ArgumentNullException("handler");
 
-            IContentFormatter formatter = ContentFormatterRegistry.GetFormatter(context.Request.Headers.ContentType);
+            IContentFormatter formatter = ContentFormatterRegistry.GetHandlerFormatter(handler, handler.Context.Request.Headers.ContentType) ??
+                                          ContentFormatterRegistry.GetFormatter(handler.Context.Request.Headers.ContentType);
 
-            if (formatter == null)
+            if (formatter == null || formatter is BlockContentFormatter)
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Unsupported content type provided");
             }
@@ -115,7 +118,7 @@ namespace RestFoundation.Runtime
 
             try
             {
-                argumentValue = formatter.FormatRequest(context, parameter.ParameterType);
+                argumentValue = formatter.FormatRequest(handler.Context, parameter.ParameterType);
             }
             catch (Exception ex)
             {

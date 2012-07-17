@@ -285,59 +285,6 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Returns a resource result for a POCO object returned from the service method.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <returns>The resource result.</returns>
-        public static IResult Resource(object obj)
-        {
-            return Resource(obj, HttpStatusCode.OK, "OK", null);
-        }
-
-        /// <summary>
-        /// Returns a resource result for a POCO object returned from the service method.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="statusCode">The HTTP status code.</param>
-        /// <returns>The resource result.</returns>
-        public static IResult Resource(object obj, HttpStatusCode statusCode)
-        {
-            return Resource(obj, statusCode, null, null);
-        }
-
-        /// <summary>
-        /// Returns a resource result for a POCO object returned from the service method.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="statusCode">The HTTP status code.</param>
-        /// <param name="statusDescription">The HTTP status description.</param>
-        /// <returns>The resource result.</returns>
-        public static IResult Resource(object obj, HttpStatusCode statusCode, string statusDescription)
-        {
-            return Resource(obj, statusCode, statusDescription, null);
-        }
-
-        /// <summary>
-        /// Returns a resource result for a POCO object returned from the service method.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="statusCode">The HTTP status code.</param>
-        /// <param name="statusDescription">The HTTP status description.</param>
-        /// <param name="responseHeaders">A dictionary of response headers.</param>
-        /// <returns>The resource result.</returns>
-        public static IResult Resource(object obj, HttpStatusCode statusCode, string statusDescription, IDictionary<string, string> responseHeaders)
-        {
-            var context = Rest.Active.CreateObject<IServiceContext>();
-            var resultFactory = Rest.Active.CreateObject<IResultFactory>();
-
-            IResult statusResult = ResponseStatus(statusCode, statusDescription, responseHeaders);
-            IResult resourceResult = resultFactory.Create(obj, context);
-
-            statusResult.Execute(context);
-            return resourceResult;
-        }
-
-        /// <summary>
         /// Returns the response status result.
         /// </summary>
         /// <param name="code">The HTTP status code.</param>

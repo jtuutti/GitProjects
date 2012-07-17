@@ -53,9 +53,9 @@ namespace RestFoundation.Runtime
             }
 
             List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, method);
-            AddServiceBehaviors(behaviors, service, method.Name);
+            AddServiceBehaviors(method.Name, service, behaviors);
 
-            return InvokeAndProcessExceptions(handler, service, method, behaviors);
+            return InvokeAndProcessExceptions(method, service, behaviors, handler);
         }
 
         private static bool BehaviorAppliesToMethod(IServiceBehavior behavior, string methodName)
@@ -72,7 +72,7 @@ namespace RestFoundation.Runtime
             return behaviors;
         }
 
-        private static void AddServiceBehaviors(List<IServiceBehavior> behaviors, object service, string methodName)
+        private static void AddServiceBehaviors(string methodName, object service, List<IServiceBehavior> behaviors)
         {
             var restService = service as IRestService;
 
@@ -90,11 +90,11 @@ namespace RestFoundation.Runtime
             }
         }
 
-        private object InvokeAndProcessExceptions(IRestHandler handler, object service, MethodInfo method, List<IServiceBehavior> behaviors)
+        private object InvokeAndProcessExceptions(MethodInfo method, object service, List<IServiceBehavior> behaviors, IRestHandler handler)
         {
             try
             {
-                return InvokeWithBehaviors(handler.Context, behaviors, service, method);
+                return InvokeWithBehaviors(method, service, behaviors, handler);
             }
             catch (Exception ex)
             {
@@ -126,12 +126,12 @@ namespace RestFoundation.Runtime
             }
         }
 
-        private object InvokeWithBehaviors(IServiceContext context, List<IServiceBehavior> behaviors, object service, MethodInfo method)
+        private object InvokeWithBehaviors(MethodInfo method, object service, List<IServiceBehavior> behaviors, IRestHandler handler)
         {
             m_behaviorInvoker.PerformOnAuthorizingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList(), service, method);
 
             object resource;
-            object[] methodArguments = GenerateMethodArguments(context, method, out resource);
+            object[] methodArguments = GenerateMethodArguments(method, handler, out resource);
 
             if (!m_behaviorInvoker.PerformOnExecutingBehaviors(behaviors, service, method, resource))
             {
@@ -144,7 +144,7 @@ namespace RestFoundation.Runtime
             return result;
         }
 
-        private object[] GenerateMethodArguments(IServiceContext context, MethodInfo method, out object resource)
+        private object[] GenerateMethodArguments(MethodInfo method, IRestHandler handler, out object resource)
         {
             var methodArguments = new List<object>();
             resource = null;
@@ -152,7 +152,7 @@ namespace RestFoundation.Runtime
             foreach (ParameterInfo parameter in method.GetParameters())
             {
                 bool isResource;
-                object argumentValue = m_parameterValueProvider.CreateValue(parameter, context, out isResource);
+                object argumentValue = m_parameterValueProvider.CreateValue(parameter, handler, out isResource);
 
                 if (isResource)
                 {

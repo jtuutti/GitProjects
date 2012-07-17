@@ -74,11 +74,12 @@ namespace RestTest.App_Start
             routeBuilder.MapRestRouteAsync<IIndexService>("async")
                         .WithBehaviors(new BasicAuthorizationBehavior(), new StatisticsBehavior(), new LoggingBehavior());
 
-            routeBuilder.MapRestRoute<IDynamicService>("dynamic");
+            routeBuilder.MapRestRoute<IDynamicService>("dynamic")
+                        .BlockContentType("application/x-www-form-urlencoded");
 
             routeBuilder.MapRestRoute<ITouchMapService>("touch-map")
-                        .WithBehaviors(new HttpsOnlyBehavior())
-                        .WithContentTypesRestrictedTo("text/xml", "application/xml", "application/json");
+                        .WithBehaviors(new HttpsOnlyBehavior());
+
 
             routeBuilder.MapPageRoute("faq", "~/Views/Faq.aspx");
         }

@@ -10,7 +10,7 @@ namespace RestFoundation.Runtime.Handlers
     /// <summary>
     /// Represents a service root route handler.
     /// </summary>
-    public class RootRouteHandler : IRouteHandler, IHttpHandler
+    public class RootRouteHandler : IRestHandler
     {
         private readonly IServiceContext m_serviceContext;
         private readonly IBrowserDetector m_browserDetector;
@@ -34,6 +34,17 @@ namespace RestFoundation.Runtime.Handlers
         }
 
         /// <summary>
+        /// Gets the service context.
+        /// </summary>
+        public IServiceContext Context
+        {
+            get
+            {
+                return m_serviceContext;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether another request can use the <see cref="T:System.Web.IHttpHandler"/> instance.
         /// </summary>
         /// <returns>
@@ -44,6 +55,39 @@ namespace RestFoundation.Runtime.Handlers
             get
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets the service URL.
+        /// </summary>
+        public string ServiceUrl
+        {
+            get
+            {
+                return String.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Gets a fully qualified name of the interface type defining the service contract.
+        /// </summary>
+        public string ServiceContractTypeName
+        {
+            get
+            {
+                throw new NotSupportedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets a relative URL template.
+        /// </summary>
+        public string UrlTemplate
+        {
+            get
+            {
+                throw new NotSupportedException();
             }
         }
 
@@ -135,7 +179,7 @@ namespace RestFoundation.Runtime.Handlers
 
             try
             {
-                result = m_resultFactory.Create(GetOperations(), m_serviceContext);
+                result = m_resultFactory.Create(GetOperations(), this);
             }
             catch (HttpResponseException)
             {

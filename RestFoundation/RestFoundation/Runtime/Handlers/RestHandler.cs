@@ -140,7 +140,7 @@ namespace RestFoundation.Runtime.Handlers
             }
 
             object returnedObj = m_methodInvoker.Invoke(serviceMethodData.Method, serviceMethodData.Service, this);
-            IResult result = serviceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, m_serviceContext) : null;
+            IResult result = serviceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, this) : null;
 
             if (!(result is EmptyResult))
             {
