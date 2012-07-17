@@ -46,6 +46,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -56,9 +57,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Formatters\BlockContentFormatter.cs" />
+    <Compile Include="Formatters\DataContractJsonFormatter.cs" />
+    <Compile Include="Formatters\DataContractXmlFormatter.cs" />
     <Compile Include="Formatters\JsonPFormatter.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="IResultExecutor.cs" />
+    <Compile Include="Results\DataContractJsonResult.cs" />
+    <Compile Include="Results\DataContractXmlResult.cs" />
     <Compile Include="Results\FileResultBase.cs" />
     <Compile Include="Results\JsonPResult.cs" />
     <Compile Include="Runtime\Handlers\BrowserRedirectHandler.cs" />

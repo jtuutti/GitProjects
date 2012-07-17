@@ -41,7 +41,7 @@ namespace RestFoundation.Runtime
                 returnedObj = PerformOdataOperations(returnedObj, handler.Context.Request);
             }
 
-            IContentFormatter formatter = ContentFormatterRegistry.GetHandlerFormatter(handler, handler.Context.Request.Headers.ContentType) ??
+            IContentFormatter formatter = ContentFormatterRegistry.GetHandlerFormatter(handler, handler.Context.Request.GetPreferredAcceptType()) ??
                                           ContentFormatterRegistry.GetFormatter(handler.Context.Request.GetPreferredAcceptType());
 
             if (formatter == null)
