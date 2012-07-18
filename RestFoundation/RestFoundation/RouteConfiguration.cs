@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RestFoundation.Behaviors;
+using RestFoundation.DataFormatters;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 
@@ -90,7 +91,23 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Specifies a Web.Config name-value section that contains an ACL list of allowed IPs.
+        /// Uses WCF-style data contract serializers to format and output the resources for the current route.
+        /// </summary>
+        /// <returns>The route configuration.</returns>
+        public RouteConfiguration WithDataContractFormatters()
+        {
+            foreach (IRestHandler routeHandler in m_routeHandlers)
+            {
+                ContentFormatterRegistry.AddHandlerFormatter(routeHandler, "application/json", new DataContractJsonFormatter());
+                ContentFormatterRegistry.AddHandlerFormatter(routeHandler, "application/xml", new DataContractXmlFormatter());
+                ContentFormatterRegistry.AddHandlerFormatter(routeHandler, "text/xml", new DataContractXmlFormatter());
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Specifies a Web.config name-value section that contains an ACL list of allowed IPs.
         /// All other IPs will be blocked for the current route.
         /// </summary>
         /// <param name="nameValueSectionName">The section name.</param>
