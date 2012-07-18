@@ -6,7 +6,7 @@
 
 <script runat="server" language="C#">
     private ProxyOperation operation;
-    private string requestJsonExample, requestXmlExample, responseJsonExample, responseXmlExample;
+    private string requestJsonExample, requestXmlExample, responseJsonExample, responseXmlExample, authentication;
     private IList<string> requestXmlSchemas, responseXmlSchemas;
     
     protected void Page_Init(object sender, EventArgs e)
@@ -202,6 +202,21 @@
     </table>
     <% } %>
     <% if (operation.AdditionalHeaders.Count > 0) { %>
+    <%
+        var authorizationHeader = operation.AdditionalHeaders.FirstOrDefault(h => String.Equals("Authorization", h.Item1, StringComparison.OrdinalIgnoreCase));
+
+        if (authorizationHeader != null) {
+            if (authorizationHeader.Item2.StartsWith("Basic", StringComparison.OrdinalIgnoreCase)) {
+                authentication = "basic";
+            }
+            else if (authorizationHeader.Item2.StartsWith("Digest", StringComparison.OrdinalIgnoreCase)) {
+                authentication = "digest";
+            }
+        }
+    %>
+    <% if (!String.IsNullOrWhiteSpace(authentication)) { %>
+        <p><strong>This operation requires <%: authentication %> authentication.</strong></p>
+    <% } %>
     <table class="parameters">
     <tr>
         <th>Header Name</th>

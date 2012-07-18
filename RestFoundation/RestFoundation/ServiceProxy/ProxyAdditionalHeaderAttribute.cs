@@ -32,5 +32,10 @@ namespace RestFoundation.ServiceProxy
         /// Gets the header value.
         /// </summary>
         public string Value { get; private set; }
+
+        /// <summary>
+        /// Gets or sets an optional service relative URL specific for the header.
+        /// </summary>
+        public string ServiceRelativeUrl { get; set; }
     }
 }

@@ -78,6 +78,7 @@ namespace RestTest.App_Start
                         .BlockContentType("application/x-www-form-urlencoded");
 
             routeBuilder.MapRestRoute<ITouchMapService>("touch-map")
+                        .WithDataContractFormatters()
                         .WithBehaviors(new HttpsOnlyBehavior());
 
             routeBuilder.MapPageRoute("faq", "~/Views/Faq.aspx");

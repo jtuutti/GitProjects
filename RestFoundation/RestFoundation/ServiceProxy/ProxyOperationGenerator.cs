@@ -147,7 +147,10 @@ namespace RestFoundation.ServiceProxy
 
                 if (routeParameterAttribute == null)
                 {
-                    routeParameter = new ProxyParameter(parameter.Name.ToLowerInvariant(), TypeDescriptor.GetTypeName(parameter.ParameterType), GetParameterConstraint(parameter), true);
+                    routeParameter = new ProxyParameter(parameter.Name.ToLowerInvariant(),
+                                                        TypeDescriptor.GetTypeName(parameter.ParameterType),
+                                                        GetParameterConstraint(parameter),
+                                                        true);
                 }
                 else
                 {
@@ -204,16 +207,26 @@ namespace RestFoundation.ServiceProxy
             return constraintAttribute != null ? constraintAttribute.Pattern.TrimStart('^').TrimEnd('$') : null;
         }
 
-        private static List<Tuple<string, string>> GetAdditionalHeaders(ServiceMethodMetadata metadata)
+        private static List<Tuple<string, string>> GetAdditionalHeaders(ServiceMethodMetadata metadata, string serviceUrl)
         {
-            List<ProxyAdditionalHeaderAttribute> methodAttributes = metadata.MethodInfo.GetCustomAttributes(typeof(ProxyAdditionalHeaderAttribute), false).Cast<ProxyAdditionalHeaderAttribute>().ToList();
+            List<ProxyAdditionalHeaderAttribute> methodAttributes = metadata.MethodInfo.GetCustomAttributes(typeof(ProxyAdditionalHeaderAttribute), false)
+                                                                                       .Cast<ProxyAdditionalHeaderAttribute>().ToList();
 
             if (metadata.MethodInfo.DeclaringType != null)
             {
-                IEnumerable<ProxyAdditionalHeaderAttribute> contractAttributes = metadata.MethodInfo.DeclaringType.GetCustomAttributes(typeof(ProxyAdditionalHeaderAttribute), false).Cast<ProxyAdditionalHeaderAttribute>();
+                IEnumerable<ProxyAdditionalHeaderAttribute> contractAttributes = metadata.MethodInfo
+                                                                                         .DeclaringType
+                                                                                         .GetCustomAttributes(typeof(ProxyAdditionalHeaderAttribute), false)
+                                                                                         .Cast<ProxyAdditionalHeaderAttribute>();
 
                 foreach (ProxyAdditionalHeaderAttribute contractAttribute in contractAttributes)
                 {
+                    if (!String.IsNullOrEmpty(contractAttribute.ServiceRelativeUrl) &&
+                        !contractAttribute.ServiceRelativeUrl.Trim().TrimStart('~', '/').Equals(serviceUrl, StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
                     if (!methodAttributes.Any(a => String.Equals(contractAttribute.Name, a.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         methodAttributes.Add(contractAttribute);
@@ -287,7 +300,7 @@ namespace RestFoundation.ServiceProxy
                                 RouteParameters = GetParameters(metadata),
                                 HttpsPort = GetHttpsPort(metadata),
                                 IsIPFiltered = GetIsIPFiltered(metadata),
-                                AdditionalHeaders = GetAdditionalHeaders(metadata)
+                                AdditionalHeaders = GetAdditionalHeaders(metadata, metadata.ServiceUrl)
                             };
 
             operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, operation.HasResource, operation.HasResponse, operation.HttpsPort > 0);

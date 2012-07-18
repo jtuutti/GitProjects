@@ -306,7 +306,9 @@
     <EmbeddedResource Include="ServiceProxy\Resources\help.master" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ServiceProxy\Resources\metadata.aspx" />
+    <EmbeddedResource Include="ServiceProxy\Resources\metadata.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ServiceProxy\Resources\proxy.aspx" />

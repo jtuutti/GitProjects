@@ -9,6 +9,7 @@ using RestTestContracts.Resources;
 
 namespace RestTestContracts
 {
+    [ProxyAdditionalHeader("Authorization", "Basic YWRtaW46UmVzdA==", ServiceRelativeUrl = "~/async")]
     public interface IIndexService
     {
         [Url("index/feed.{format}", HttpMethod.Get, HttpMethod.Head)]
