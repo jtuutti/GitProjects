@@ -42,7 +42,7 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="DigestAuthorizationBehavior"/> class.
         /// </summary>
-        public DigestAuthorizationBehavior() : this(Rest.Active.CreateObject<IAuthorizationManager>())
+        public DigestAuthorizationBehavior() : this(Rest.Active.DependencyResolver.Resolve<IAuthorizationManager>())
         {
         }
 

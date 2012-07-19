@@ -20,7 +20,7 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BasicAuthorizationBehavior"/> class.
         /// </summary>
-        public BasicAuthorizationBehavior() : this(Rest.Active.CreateObject<IAuthorizationManager>())
+        public BasicAuthorizationBehavior() : this(Rest.Active.DependencyResolver.Resolve<IAuthorizationManager>())
         {
         }
 

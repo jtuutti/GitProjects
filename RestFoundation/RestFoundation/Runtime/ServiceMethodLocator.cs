@@ -13,20 +13,16 @@ namespace RestFoundation.Runtime
     public class ServiceMethodLocator : IServiceMethodLocator
     {
         private readonly IServiceContext m_serviceContext;
-        private readonly IServiceFactory m_serviceFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceMethodLocator"/> class.
         /// </summary>
         /// <param name="serviceContext">The service context.</param>
-        /// <param name="serviceFactory">The service factory.</param>
-        public ServiceMethodLocator(IServiceContext serviceContext, IServiceFactory serviceFactory)
+        public ServiceMethodLocator(IServiceContext serviceContext)
         {
             if (serviceContext == null) throw new ArgumentNullException("serviceContext");
-            if (serviceFactory == null) throw new ArgumentNullException("serviceFactory");
 
             m_serviceContext = serviceContext;
-            m_serviceFactory = serviceFactory;
         }
 
         /// <summary>
@@ -86,9 +82,9 @@ namespace RestFoundation.Runtime
             return method;
         }
 
-        private object InitializeService(Type serviceContractType)
+        private static object InitializeService(Type serviceContractType)
         {
-            object service = m_serviceFactory.Create(serviceContractType, m_serviceContext);
+            object service = Rest.Active.DependencyResolver.Resolve(serviceContractType);
 
             if (service == null)
             {

@@ -8,7 +8,7 @@ namespace RestFoundation.Runtime
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            var streamCompressor = Rest.Active.CreateObject<IStreamCompressor>();
+            var streamCompressor = Rest.Active.DependencyResolver.Resolve<IStreamCompressor>();
 
             if (streamCompressor == null)
             {

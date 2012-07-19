@@ -1,9 +1,8 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RestFoundation.Behaviors;
-using RestFoundation.UnitTesting;
 using RestFoundation.Tests.ServiceContracts;
-using StructureMap;
+using RestFoundation.Tests.Services;
+using StructureMap.Configuration.DSL;
 
 namespace RestFoundation.Tests
 {
@@ -15,41 +14,14 @@ namespace RestFoundation.Tests
         [SetUp]
         public void Setup()
         {
-            // StructureMap IoC container configuration
-            ObjectFactory.Configure(ConfigureIoC);
-            ObjectFactory.AssertConfigurationIsValid();
-
             // Configuring REST foundation
-            Rest.Configure
-                .WithObjectFactory(CreateObjectFactory)
-                .WithRoutes(RegisterRoutes);
+            Rest.Active.ConfigureMocksWithStructureMap(RegisterDependencies)
+                       .WithRoutes(RegisterRoutes);
         }
 
-        private static void ConfigureIoC(ConfigurationExpression config)
+        private static void RegisterDependencies(Registry registry)
         {
-            config.Scan(action =>
-                        {
-                            action.Assembly(Rest.FoundationAssembly);
-                            action.TheCallingAssembly();
-                            action.WithDefaultConventions();
-                        });
-
-            config.For<IServiceContext>().Use<MockServiceContext>();
-            config.For<IHttpRequest>().Use<MockHttpRequest>();
-            config.For<IHttpResponse>().Use<MockHttpResponse>();
-            config.For<IHttpResponseOutput>().Use<MockHttpResponseOutput>();
-
-            config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestDependency()));
-        }
-
-        private static object CreateObjectFactory(Type type)
-        {
-            if (type.IsInterface || type.IsAbstract)
-            {
-                return ObjectFactory.TryGetInstance(type);
-            }
-
-            return ObjectFactory.GetInstance(type);
+            registry.For<ITestService>().Use<TestService>();
         }
 
         private static void RegisterRoutes(RouteBuilder routeBuilder)

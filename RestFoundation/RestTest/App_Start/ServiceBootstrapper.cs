@@ -1,13 +1,11 @@
-﻿using System;
-using RestFoundation;
+﻿using RestFoundation;
 using RestFoundation.Behaviors;
 using RestFoundation.Formatters;
 using RestTest.Security;
 using RestTest.Behaviors;
-using RestTest.ServiceFactories;
 using RestTest.StreamCompressors;
 using RestTestContracts;
-using StructureMap;
+using StructureMap.Configuration.DSL;
 
 namespace RestTest.App_Start
 {
@@ -15,47 +13,26 @@ namespace RestTest.App_Start
     {
         public static void RegisterDependencies()
         {
-            // StructureMap IoC container configuration
-            ObjectFactory.Configure(ConfigureIoC);
-
-            // Configuring REST foundation
-            Rest.Configure.WithObjectFactory(CreateObjectFactory, CreateObjectBuilder)
-                          .WithContentFormatters(RegisterFormatters)
-                          .WithRoutes(RegisterRoutes)
-                          .EnableJsonPSupport()
-                          .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
-                          .WithResponseHeader("X-Service-Version", "1.0")
-                          .ConfigureServiceHelpAndProxy(c => c.Enable());
+            Rest.Active.ConfigureWithStructureMap(RegisterDependencies)
+                       .WithContentFormatters(RegisterFormatters)
+                       .WithRoutes(RegisterRoutes)
+                       .EnableJsonPSupport()
+                       .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
+                       .WithResponseHeader("X-Service-Version", "1.0")
+                       .ConfigureServiceHelpAndProxy(c => c.Enable());
         }
 
-        private static void ConfigureIoC(ConfigurationExpression config)
+        private static void RegisterDependencies(Registry registry)
         {
-            config.Scan(action =>
-                        {
-                            action.Assembly(Rest.FoundationAssembly);
-                            action.WithDefaultConventions();
-                        });
+            registry.ForSingletonOf<IAuthorizationManager>().Use<ServiceAuthorizationManager>();
+            registry.ForSingletonOf<IStreamCompressor>().Use<RestStreamCompressor>();
 
-            config.ForSingletonOf<IAuthorizationManager>().Use<ServiceAuthorizationManager>();
-            config.ForSingletonOf<IStreamCompressor>().Use<RestStreamCompressor>();
-            config.For<IServiceFactory>().Use<RestServiceFactory>();
-
-            config.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestDependency()));
-        }
-
-        private static object CreateObjectFactory(Type type)
-        {
-            if (type.IsInterface || type.IsAbstract)
+            registry.Scan(action =>
             {
-                return ObjectFactory.TryGetInstance(type);
-            }
-
-            return ObjectFactory.GetInstance(type);
-        }
-
-        public static void CreateObjectBuilder(object obj)
-        {
-            ObjectFactory.BuildUp(obj);
+                action.Assembly("RestTestContracts");
+                action.Assembly("RestTestServices");
+                action.WithDefaultConventions();
+            });
         }
 
         private static void RegisterFormatters(ContentFormatterBuilder builder)

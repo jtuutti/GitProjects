@@ -3,6 +3,8 @@
 <%@ Import Namespace="RestFoundation.Security" %>
 
 <script runat="server" language="C#">
+    private string jqueryUrl = Rest.Active.JQueryUrl;    
+
     protected void Page_Init(object sender, EventArgs e)
     {
         List<IPAddressRange> ranges = IPAddressRange.GetConfiguredRanges("serviceProxyAcl").ToList();
@@ -31,6 +33,7 @@
             Response.End();
         }
     }
+
 </script>
 
 <!DOCTYPE html>
@@ -85,8 +88,8 @@
         #HeaderTitle,#ResponseHeader{float:left}
         #ResponseHeightControls a,#SessionPersistence{margin-left:10px}
     </style>
-    <% if (!String.IsNullOrEmpty(Rest.Configure.JQueryUrl)) { %>
-    <script type="text/javascript" src="<%: Rest.Configure.JQueryUrl.Trim() %>"></script>
+    <% if (!String.IsNullOrEmpty(jqueryUrl)) { %>
+    <script type="text/javascript" src="<%: jqueryUrl.Trim() %>"></script>
     <% } else { %>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
     <% } %>

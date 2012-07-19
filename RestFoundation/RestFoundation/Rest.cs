@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.ComponentModel;
 using System.Reflection;
 using System.Web.Routing;
 using System.Web.Util;
+using RestFoundation.DependencyInjection;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
@@ -15,25 +16,21 @@ namespace RestFoundation
     /// </summary>
     public sealed class Rest
     {
-        internal static readonly Rest Active = new Rest();
+        /// <summary>
+        /// Gets the REST IoC container key.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public const string RestKey = "_rest";
 
         private static readonly object syncRoot = new object();
-        private static bool defaultUrlMapped;
 
         /// <summary>
-        /// Gets the configuration object instance.
+        /// Gets the active REST Foundation configuration.
         /// </summary>
-        public static Rest Configure
+        public static Rest Active
         {
-            get
-            {
-                if (!(RequestValidator.Current is ServiceRequestValidator))
-                {
-                    RequestValidator.Current = new ServiceRequestValidator();
-                }
-
-                return Active;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -48,9 +45,9 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Gets the object activator instance.
+        /// Gets the dependency resolver.
         /// </summary>
-        public IObjectActivator Activator { get; private set; }
+        public IDependencyResolver DependencyResolver { get; private set; }
 
         /// <summary>
         /// Gets the JQuery URL used by the service help and proxy interface.
@@ -62,56 +59,39 @@ namespace RestFoundation
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
 
         /// <summary>
-        /// Sets an object activator for the configuration.
+        /// Configures the REST Foundation with the provided <see cref="IDependencyRegistry"/> object.
         /// </summary>
-        /// <param name="activator">The object activator implementation.</param>
+        /// <param name="resolver">The dependency resolver.</param>
         /// <returns>The configuration object.</returns>
-        public Rest WithObjectActivator(IObjectActivator activator)
+        /// <exception cref="InvalidOperationException">If the REST foundation has already been configured.</exception>
+        public static Rest Configure(IDependencyResolver resolver)
         {
-            if (activator == null) throw new ArgumentNullException("activator");
+            if (resolver == null) throw new ArgumentNullException("resolver");
 
-            if (Activator != null)
+            if (Active != null)
             {
-                throw new InvalidOperationException("An object activator or an object factory has already been assigned.");
+                throw new InvalidOperationException("REST Foundation has already been configured.");
             }
 
-            Activator = activator;
-
-            MapDefaultUrl();
-            return this;
-        }
-
-        /// <summary>
-        /// Sets an object activator for the configuration that uses the provided factory delegate to create objects.
-        /// </summary>
-        /// <param name="factory">The object activator implementation.</param>
-        /// <returns>The configuration object.</returns>
-        public Rest WithObjectFactory(Func<Type, object> factory)
-        {
-            return WithObjectFactory(factory, obj => {});
-        }
-
-        /// <summary>
-        /// Sets an object activator for the configuration that uses the provided factory delegate to create objects
-        /// and the builder delegate to build up existing objects with property injection dependencies.
-        /// </summary>
-        /// <param name="factory">The object factory delegate.</param>
-        /// <param name="builder">The object build up delegate.</param>
-        /// <returns>The configuration object.</returns>
-        public Rest WithObjectFactory(Func<Type, object> factory, Action<object> builder)
-        {
-            if (factory == null) throw new ArgumentNullException("factory");
-            if (builder == null) throw new ArgumentNullException("builder");
-
-            if (Activator != null)
+            lock (syncRoot)
             {
-                throw new InvalidOperationException("An object activator or an object factory has already been assigned.");
+                if (Active != null)
+                {
+                    throw new InvalidOperationException("REST Foundation has already been configured.");
+                }
+
+                RouteCollection routes = RouteTable.Routes;
+                routes.Add(new Route(String.Empty, resolver.Resolve<RootRouteHandler>()));
+
+                RequestValidator.Current = new ServiceRequestValidator();
+
+                Active = new Rest
+                {
+                    DependencyResolver = resolver
+                };
+
+                return Active;
             }
-
-            Activator = new DelegateObjectActivator(factory, builder);
-
-            MapDefaultUrl();
-            return this;
         }
 
         /// <summary>
@@ -136,7 +116,7 @@ namespace RestFoundation
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
-            builder(new RouteBuilder(RouteTable.Routes, Active.CreateObject<IHttpMethodResolver>(), Active.CreateObject<IBrowserDetector>()));
+            builder(new RouteBuilder(RouteTable.Routes, DependencyResolver.Resolve<IHttpMethodResolver>(), DependencyResolver.Resolve<IBrowserDetector>()));
             return this;
         }
 
@@ -236,63 +216,6 @@ namespace RestFoundation
 
             configuration(new ServiceProxyConfiguration());
             return this;
-        }
-
-        internal object CreateObject(Type objectType)
-        {
-            if (objectType == null) throw new ArgumentNullException("objectType");
-
-            if (Activator == null)
-            {
-                throw new ObjectActivationException("No object activator or factory has been assigned.");
-            }
-
-            try
-            {
-                return Activator.Create(objectType);
-            }
-            catch (Exception ex)
-            {
-                throw new ObjectActivationException(String.Format(CultureInfo.InvariantCulture, "Object of type '{0}' could not be activated.", objectType), ex);
-            }
-        }
-
-        internal T CreateObject<T>()
-        {
-            Type objectType = typeof(T);
-
-            try
-            {
-                return (T) CreateObject(objectType);
-            }
-            catch (Exception ex)
-            {
-                throw new ObjectActivationException(String.Format(CultureInfo.InvariantCulture, "Object of type '{0}' could not be activated.", objectType), ex);
-            }
-        }
-
-        private static void MapDefaultUrl()
-        {
-            RouteCollection routes = RouteTable.Routes;
-
-            if (routes == null)
-            {
-                throw new InvalidOperationException("No active routing table was found.");
-            }
-
-            if (defaultUrlMapped)
-            {
-                return;
-            }
-
-            lock (syncRoot)
-            {
-                if (!defaultUrlMapped)
-                {
-                    routes.Add(new Route(String.Empty, Active.CreateObject<RootRouteHandler>()));
-                    defaultUrlMapped = true;
-                }
-            }
         }
     }
 }
