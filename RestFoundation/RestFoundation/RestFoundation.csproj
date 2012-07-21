@@ -108,6 +108,8 @@
     <Compile Include="Collections\IHeaderCollection.cs" />
     <Compile Include="Collections\Specialized\AcceptValueCollection.cs" />
     <Compile Include="Collections\Specialized\DynamicDictionary.cs" />
+    <Compile Include="ServiceProxy\AuthenticationType.cs" />
+    <Compile Include="ServiceProxy\ProxyAuthenticationAttribute.cs" />
     <Compile Include="TypeBinderBuilder.cs" />
     <Compile Include="ContentFormatterBuilder.cs" />
     <Compile Include="Formatters\MultipartFormatter.cs" />
@@ -314,7 +316,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ServiceProxy\Resources\proxy.aspx" />
+    <EmbeddedResource Include="ServiceProxy\Resources\proxy.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ServiceProxy\Resources\output.aspx">

@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Globalization;
+using Microsoft.Practices.Unity;
 using RestFoundation.DependencyInjection;
-using RestFoundation.StructureMap.Properties;
-using StructureMap.Configuration.DSL;
-using StructureMap.Pipeline;
+using RestFoundation.Unity.Properties;
 
-namespace RestFoundation.StructureMap
+namespace RestFoundation.Unity
 {
-    public sealed class DependencyRegistry : IDependencyRegistry
+    public sealed class DependencyRegistry : IDependencyRegistry, IDisposable
     {
-        private readonly Registry m_registry;
+        private readonly IUnityContainer m_container;
 
-        public DependencyRegistry(Registry registry)
+        public DependencyRegistry(IUnityContainer container)
         {
-            if (registry == null) throw new ArgumentNullException("registry");
+            if (container == null) throw new ArgumentNullException("container");
 
-            m_registry = registry;
+            m_container = container;
         }
 
         public void Register(Type abstractionType, Type implementationType, DependencyLifetime lifetime, string key)
@@ -35,12 +34,7 @@ namespace RestFoundation.StructureMap
 
             try
             {
-                ConfiguredInstance instance = m_registry.For(abstractionType).LifecycleIs(GetLifecycle(lifetime)).Use(implementationType);
-
-                if (key != null)
-                {
-                    instance.Named(key);
-                }
+                m_container.RegisterType(abstractionType, implementationType, key, GetLifetimeManager(lifetime));
             }
             catch (Exception ex)
             {
@@ -48,9 +42,14 @@ namespace RestFoundation.StructureMap
             }
         }
 
-        private static ILifecycle GetLifecycle(DependencyLifetime lifetime)
+        private static LifetimeManager GetLifetimeManager(DependencyLifetime lifetime)
         {
-            return lifetime == DependencyLifetime.Singleton ? (ILifecycle) new SingletonLifecycle() : new UniquePerRequestLifecycle();
+            return lifetime == DependencyLifetime.Singleton ? (LifetimeManager) new ContainerControlledLifetimeManager() : new PerResolveLifetimeManager();
+        }
+
+        public void Dispose()
+        {
+            m_container.Dispose();
         }
     }
 }

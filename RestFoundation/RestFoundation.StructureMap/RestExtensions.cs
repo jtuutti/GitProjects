@@ -65,7 +65,7 @@ namespace RestFoundation
 
             foreach (var dependency in dependencyManager.Dependencies)
             {
-                dependencyRegistry.Register(dependency.Key, dependency.Value.Item1, dependency.Value.Item2, Rest.RestKey);
+                dependencyRegistry.Register(dependency.Key, dependency.Value.Item1, dependency.Value.Item2, null);
             }
         }
     }

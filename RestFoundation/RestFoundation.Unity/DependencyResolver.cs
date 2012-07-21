@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
+using Microsoft.Practices.Unity;
 using RestFoundation.DependencyInjection;
-using RestFoundation.StructureMap.Properties;
-using StructureMap;
+using RestFoundation.Unity.Properties;
 
-namespace RestFoundation.StructureMap
+namespace RestFoundation.Unity
 {
     public sealed class DependencyResolver : IDependencyResolver, IDisposable
     {
-        public readonly IContainer m_container;
+        private readonly IUnityContainer m_container;
 
-        public DependencyResolver(IContainer container)
+        public DependencyResolver(IUnityContainer container)
         {
             if (container == null) throw new ArgumentNullException("container");
 
@@ -25,7 +24,17 @@ namespace RestFoundation.StructureMap
 
             try
             {
-                return (type.IsInterface || type.IsAbstract) ? m_container.TryGetInstance(type) : m_container.GetInstance(type);
+                if (!type.IsInterface && !type.IsAbstract)
+                {
+                    return m_container.Resolve(type);
+                }
+
+                if (m_container.IsRegistered(type))
+                {
+                    return m_container.Resolve(type);
+                }
+
+                return null;
             }
             catch (Exception ex)
             {
@@ -39,7 +48,17 @@ namespace RestFoundation.StructureMap
 
             try
             {
-                return (type.IsInterface || type.IsAbstract) ? m_container.TryGetInstance<T>() : m_container.GetInstance<T>();
+                if (!type.IsInterface && !type.IsAbstract)
+                {
+                    return m_container.Resolve<T>();
+                }
+
+                if (m_container.IsRegistered<T>())
+                {
+                    return m_container.Resolve<T>();
+                }
+
+                return default(T);
             }
             catch (Exception ex)
             {
@@ -53,7 +72,17 @@ namespace RestFoundation.StructureMap
 
             try
             {
-                return (type.IsInterface || type.IsAbstract) ? m_container.TryGetInstance(type, key) : m_container.GetInstance(type, key);
+                if (!type.IsInterface && !type.IsAbstract)
+                {
+                    return m_container.Resolve(type, key);
+                }
+
+                if (m_container.IsRegistered(type, key))
+                {
+                    return m_container.Resolve(type, key);
+                }
+
+                return null;
             }
             catch (Exception ex)
             {
@@ -67,7 +96,17 @@ namespace RestFoundation.StructureMap
 
             try
             {
-                return (type.IsInterface || type.IsAbstract) ? m_container.TryGetInstance<T>(key) : m_container.GetInstance<T>(key);
+                if (!type.IsInterface && !type.IsAbstract)
+                {
+                    return m_container.Resolve<T>(key);
+                }
+
+                if (m_container.IsRegistered<T>(key))
+                {
+                    return m_container.Resolve<T>(key);
+                }
+
+                return default(T);
             }
             catch (Exception ex)
             {
@@ -81,7 +120,7 @@ namespace RestFoundation.StructureMap
 
             try
             {
-                return m_container.GetAllInstances(type).Cast<object>();
+                return m_container.ResolveAll(type);
             }
             catch (Exception ex)
             {
@@ -93,7 +132,7 @@ namespace RestFoundation.StructureMap
         {
             try
             {
-                return m_container.GetAllInstances<T>();
+                return m_container.ResolveAll<T>();
             }
             catch (Exception ex)
             {

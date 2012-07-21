@@ -1,10 +1,13 @@
-﻿using RestFoundation;
+﻿using Microsoft.Practices.Unity;
+using RestFoundation;
 using RestFoundation.Behaviors;
 using RestFoundation.Formatters;
+using RestFoundation.Unity;
 using RestTest.Security;
 using RestTest.Behaviors;
 using RestTest.StreamCompressors;
 using RestTestContracts;
+using RestTestServices;
 using StructureMap.Configuration.DSL;
 
 namespace RestTest.App_Start
@@ -20,6 +23,16 @@ namespace RestTest.App_Start
                        .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
                        .WithResponseHeader("X-Service-Version", "1.0")
                        .ConfigureServiceHelpAndProxy(c => c.Enable());
+        }
+
+        private static void RegisterDependencies(IUnityContainer container)
+        {
+            container.RegisterType<IAuthorizationManager, ServiceAuthorizationManager>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IStreamCompressor, RestStreamCompressor>(new ContainerControlledLifetimeManager());
+
+            container.RegisterType<IIndexService, IndexService>(new InjectionProperty("Context", container.Resolve<IServiceContext>()));
+            container.RegisterType<IDynamicService, DynamicService>();
+            container.RegisterType<ITouchMapService, TouchMapService>(new InjectionProperty("Context", container.Resolve<IServiceContext>()));
         }
 
         private static void RegisterDependencies(Registry registry)
@@ -49,7 +62,7 @@ namespace RestTest.App_Start
                         .DoNotValidateRequests();
 
             routeBuilder.MapRestRouteAsync<IIndexService>("async")
-                        .WithBehaviors(new BasicAuthorizationBehavior(), new StatisticsBehavior(), new LoggingBehavior());
+                        .WithBehaviors(new DigestAuthorizationBehavior(), new StatisticsBehavior(), new LoggingBehavior());
 
             routeBuilder.MapRestRoute<IDynamicService>("dynamic")
                         .BlockContentType("application/x-www-form-urlencoded");

@@ -42,6 +42,10 @@
       <HintPath>..\Dependencies\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\IoC\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -110,6 +114,10 @@
     <ProjectReference Include="..\RestFoundation.StructureMap\RestFoundation.StructureMap.csproj">
       <Project>{9E87CB04-44C4-407B-A3ED-E62F6E1FDED6}</Project>
       <Name>RestFoundation.StructureMap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RestFoundation.Unity\RestFoundation.Unity.csproj">
+      <Project>{0808EC14-97D5-48E7-94D7-B099210EF246}</Project>
+      <Name>RestFoundation.Unity</Name>
     </ProjectReference>
     <ProjectReference Include="..\RestFoundation\RestFoundation.csproj">
       <Project>{ED6954C7-884B-42CD-B216-9FDEAA110707}</Project>

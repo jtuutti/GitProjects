@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{479B67
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestFoundation.StructureMap", "RestFoundation.StructureMap\RestFoundation.StructureMap.csproj", "{9E87CB04-44C4-407B-A3ED-E62F6E1FDED6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestFoundation.Unity", "RestFoundation.Unity\RestFoundation.Unity.csproj", "{0808EC14-97D5-48E7-94D7-B099210EF246}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{9E87CB04-44C4-407B-A3ED-E62F6E1FDED6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E87CB04-44C4-407B-A3ED-E62F6E1FDED6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E87CB04-44C4-407B-A3ED-E62F6E1FDED6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0808EC14-97D5-48E7-94D7-B099210EF246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0808EC14-97D5-48E7-94D7-B099210EF246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0808EC14-97D5-48E7-94D7-B099210EF246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0808EC14-97D5-48E7-94D7-B099210EF246}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

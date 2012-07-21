@@ -166,6 +166,11 @@
         <strong>Requires HTTPS</strong>
     </p>
     <% } %>
+    <% if (operation.Credentials != null) { %>
+    <p>
+        <strong>Authentication: </strong><span><%: operation.Credentials.Item1.ToString() %></span>
+    </p>
+    <% } %>
     <p>
         <strong>HTTP Method: </strong>
         <span class="method"><%: operation.HttpMethod.ToString().ToUpperInvariant() %></span>

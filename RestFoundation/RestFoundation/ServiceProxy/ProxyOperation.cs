@@ -84,6 +84,11 @@ namespace RestFoundation.ServiceProxy
         public string UrlTempate { get; set; }
 
         /// <summary>
+        /// Gets or sets authentication type and default credentials.
+        /// </summary>
+        public Tuple<AuthenticationType, string> Credentials { get; set; }
+
+        /// <summary>
         /// Gets or sets a collection of additional headers.
         /// </summary>
         public ICollection<Tuple<string, string>> AdditionalHeaders { get; set; }

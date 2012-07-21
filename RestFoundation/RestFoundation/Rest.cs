@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Reflection;
 using System.Web.Routing;
 using System.Web.Util;
@@ -16,12 +15,6 @@ namespace RestFoundation
     /// </summary>
     public sealed class Rest
     {
-        /// <summary>
-        /// Gets the REST IoC container key.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public const string RestKey = "_rest";
-
         private static readonly object syncRoot = new object();
 
         /// <summary>
