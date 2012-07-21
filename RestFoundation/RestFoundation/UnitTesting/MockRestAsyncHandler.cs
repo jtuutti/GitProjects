@@ -12,9 +12,9 @@ namespace RestFoundation.UnitTesting
         /// Initializes a new instance of the <see cref="MockRestAsyncHandler"/> class.
         /// </summary>
         public MockRestAsyncHandler() :
-            base(Rest.Active.DependencyResolver.Resolve<IServiceContext>(), Rest.Active.DependencyResolver.Resolve<IServiceMethodLocator>(),
-                 Rest.Active.DependencyResolver.Resolve<IServiceMethodInvoker>(), Rest.Active.DependencyResolver.Resolve<IResultFactory>(),
-                 Rest.Active.DependencyResolver.Resolve<IResultExecutor>())
+            base(Rest.Active.ServiceLocator.GetService<IServiceContext>(), Rest.Active.ServiceLocator.GetService<IServiceMethodLocator>(),
+                 Rest.Active.ServiceLocator.GetService<IServiceMethodInvoker>(), Rest.Active.ServiceLocator.GetService<IResultFactory>(),
+                 Rest.Active.ServiceLocator.GetService<IResultExecutor>())
         {
         }
 

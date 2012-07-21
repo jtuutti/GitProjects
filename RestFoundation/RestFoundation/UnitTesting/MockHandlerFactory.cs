@@ -136,7 +136,7 @@ namespace RestFoundation.UnitTesting
 
             if (urlAttribute.HttpMethods == null)
             {
-                urlAttribute.HttpMethods = Rest.Active.DependencyResolver.Resolve<IHttpMethodResolver>().Resolve(serviceMethod);
+                urlAttribute.HttpMethods = Rest.Active.ServiceLocator.GetService<IHttpMethodResolver>().Resolve(serviceMethod);
 
                 if (urlAttribute.HttpMethods == null)
                 {

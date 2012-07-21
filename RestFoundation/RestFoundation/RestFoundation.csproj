@@ -56,8 +56,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyInjection\IDependencyRegistry.cs" />
-    <Compile Include="DependencyInjection\IDependencyResolver.cs" />
     <Compile Include="Formatters\BlockContentFormatter.cs" />
     <Compile Include="Formatters\DataContractJsonFormatter.cs" />
     <Compile Include="Formatters\DataContractXmlFormatter.cs" />
@@ -69,10 +67,8 @@
     <Compile Include="Results\DataContractXmlResult.cs" />
     <Compile Include="Results\FileResultBase.cs" />
     <Compile Include="Results\JsonPResult.cs" />
-    <Compile Include="DependencyInjection\DependencyLifetime.cs" />
     <Compile Include="Runtime\Handlers\BrowserRedirectHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
-    <Compile Include="DependencyInjection\DependencyManager.cs" />
     <Compile Include="Security\IPAddressCollection.cs" />
     <Compile Include="Security\IPAddressRange.cs" />
     <Compile Include="Security\IPNetwork.cs" />
@@ -109,6 +105,9 @@
     <Compile Include="Collections\IHeaderCollection.cs" />
     <Compile Include="Collections\Specialized\AcceptValueCollection.cs" />
     <Compile Include="Collections\Specialized\DynamicDictionary.cs" />
+    <Compile Include="ServiceLocation\IServiceLocator.cs" />
+    <Compile Include="ServiceLocation\ServiceContainer.cs" />
+    <Compile Include="ServiceLocation\ServiceActivationException.cs" />
     <Compile Include="ServiceProxy\AuthenticationType.cs" />
     <Compile Include="ServiceProxy\ProxyAuthenticationAttribute.cs" />
     <Compile Include="TypeBinderBuilder.cs" />
@@ -127,7 +126,6 @@
     <Compile Include="IServiceContext.cs" />
     <Compile Include="IResourceValidator.cs" />
     <Compile Include="IUploadedFile.cs" />
-    <Compile Include="DependencyInjection\DependencyInjectionException.cs" />
     <Compile Include="Odata\IModelFilter.cs" />
     <Compile Include="Odata\IRuntimeTypeProvider.cs" />
     <Compile Include="Odata\LinqExtensions.cs" />

@@ -10,7 +10,7 @@ namespace RestFoundation.Tests
         [TestFixtureSetUp]
         public void Initialize()
         {
-            m_cache = Rest.Active.DependencyResolver.Resolve<IServiceCache>();
+            m_cache = Rest.Active.ServiceLocator.GetService<IServiceCache>();
         }
 
         [TestFixtureTearDown]

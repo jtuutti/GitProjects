@@ -84,7 +84,7 @@ namespace RestFoundation.Runtime
 
         private static object InitializeService(Type serviceContractType)
         {
-            object service = Rest.Active.DependencyResolver.Resolve(serviceContractType);
+            object service = Rest.Active.ServiceLocator.GetService(serviceContractType);
 
             if (service == null)
             {

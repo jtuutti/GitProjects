@@ -1,0 +1,33 @@
+﻿using System;
+using System.Globalization;
+using Microsoft.Practices.Unity;
+using RestFoundation.ServiceLocation;
+using RestFoundation.Unity.Properties;
+
+namespace RestFoundation.Unity
+{
+    internal static class RestConfigurator
+    {
+        public static Rest Configure(Action<IUnityContainer> registrationBuilder, bool mockContext)
+        {
+            try
+            {
+                var container = new UnityContainer();
+
+                var serviceBuilder = new ServiceBuilder(container);
+                serviceBuilder.Build(mockContext);
+
+                if (registrationBuilder != null)
+                {
+                    registrationBuilder(container);
+                }
+
+                return Rest.Configure(new ServiceLocator(container));
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyRegistrationError, ex.Message), ex);
+            }
+        }
+    }
+}

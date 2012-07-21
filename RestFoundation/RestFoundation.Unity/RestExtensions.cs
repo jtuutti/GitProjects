@@ -1,63 +1,33 @@
 ﻿using System;
-using System.Globalization;
 using Microsoft.Practices.Unity;
-using RestFoundation.DependencyInjection;
-using RestFoundation.Unity.Properties;
+using RestFoundation.Unity;
 
-namespace RestFoundation.Unity
+namespace RestFoundation
 {
+    /// <summary>
+    /// Defines extensions for a <see cref="Rest"/> object to configure REST Foundation to use a Unity container.
+    /// </summary>
     public static class RestExtensions
     {
+        /// <summary>
+        /// Configures REST Foundation to use a Unity container.
+        /// </summary>
+        /// <param name="restConfiguration">The REST configuration object.</param>
+        /// <returns>The configuration object.</returns>
         public static Rest ConfigureWithUnity(this Rest restConfiguration)
         {
-            return Configure(null, false);
+            return RestConfigurator.Configure(null, false);
         }
 
+        /// <summary>
+        /// Configures REST Foundation to use a Unity container.
+        /// </summary>
+        /// <param name="restConfiguration">The REST configuration object.</param>
+        /// <param name="registrationBuilder">A delegate to specify additional service dependencies.</param>
+        /// <returns>The configuration object.</returns>
         public static Rest ConfigureWithUnity(this Rest restConfiguration, Action<IUnityContainer> registrationBuilder)
         {
-            return Configure(registrationBuilder, false);
-        }
-
-        public static Rest ConfigureMocksWithUnity(this Rest restConfiguration)
-        {
-            return Configure(null, true);
-        }
-
-        public static Rest ConfigureMocksWithUnity(this Rest restConfiguration, Action<IUnityContainer> registrationBuilder)
-        {
-            return Configure(registrationBuilder, true);
-        }
-
-        private static Rest Configure(Action<IUnityContainer> registrationBuilder, bool mockContext)
-        {
-            try
-            {
-                var container = new UnityContainer();
-
-                RegisterDependencies(container, mockContext);
-
-                if (registrationBuilder != null)
-                {
-                    registrationBuilder(container);
-                }
-
-                return Rest.Configure(new DependencyResolver(container));
-            }
-            catch (Exception ex)
-            {
-                throw new DependencyInjectionException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyRegistrationError, ex.Message), ex);
-            }
-        }
-
-        private static void RegisterDependencies(IUnityContainer container, bool mockContext)
-        {
-            var dependencyManager = new DependencyManager(mockContext);
-            var dependencyRegistry = new DependencyRegistry(container);
-
-            foreach (var dependency in dependencyManager.Dependencies)
-            {
-                dependencyRegistry.Register(dependency.Key, dependency.Value.Item1, dependency.Value.Item2, null);
-            }
+            return RestConfigurator.Configure(registrationBuilder, false);
         }
     }
 }

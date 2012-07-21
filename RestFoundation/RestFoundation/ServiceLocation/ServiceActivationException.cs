@@ -1,41 +1,41 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace RestFoundation.DependencyInjection
+namespace RestFoundation.ServiceLocation
 {
     /// <summary>
-    /// Represents a dependency injection exception.
+    /// Represents an exception that gets thrown if service location results in an error.
     /// </summary>
     [Serializable]
-    public class DependencyInjectionException : Exception
+    public class ServiceActivationException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DependencyInjectionException"/> class.
+        /// Initializes a new instance of the <see cref="ServiceActivationException"/> class.
         /// </summary>
-        public DependencyInjectionException()
+        public ServiceActivationException()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DependencyInjectionException"/> class with the provided message.
+        /// Initializes a new instance of the <see cref="ServiceActivationException"/> class with the provided message.
         /// </summary>
         /// <param name="message">The exception message.</param>
-        public DependencyInjectionException(string message) : base(message)
+        public ServiceActivationException(string message) : base(message)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DependencyInjectionException"/> class with the provided message
+        /// Initializes a new instance of the <see cref="ServiceActivationException"/> class with the provided message
         /// and a reference to the exception that is the cause of the current exception.
         /// </summary>
         /// <param name="message">The exception message.</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference.</param>
-        public DependencyInjectionException(string message, Exception innerException) : base(message, innerException)
+        public ServiceActivationException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DependencyInjectionException"/> class with serialized data.
+        /// Initializes a new instance of the <see cref="ServiceActivationException"/> class with serialized data.
         /// </summary>
         /// <param name="info">
         /// The <see cref="SerializationInfo"/> that holds the serialized object data about the exception being thrown.
@@ -46,7 +46,7 @@ namespace RestFoundation.DependencyInjection
         /// <exception cref="SerializationException">
         /// The class name is null or <see cref="System.Exception.HResult"/> is zero (0).
         /// </exception>
-        protected DependencyInjectionException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected ServiceActivationException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

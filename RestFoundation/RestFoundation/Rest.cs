@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Routing;
 using System.Web.Util;
-using RestFoundation.DependencyInjection;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
+using RestFoundation.ServiceLocation;
 
 namespace RestFoundation
 {
@@ -38,9 +38,9 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Gets the dependency resolver.
+        /// Gets the service locator.
         /// </summary>
-        public IDependencyResolver DependencyResolver { get; private set; }
+        public IServiceLocator ServiceLocator { get; private set; }
 
         /// <summary>
         /// Gets the JQuery URL used by the service help and proxy interface.
@@ -52,12 +52,12 @@ namespace RestFoundation
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
 
         /// <summary>
-        /// Configures the REST Foundation with the provided <see cref="IDependencyRegistry"/> object.
+        /// Configures the REST Foundation with the provided <see cref="IServiceLocator"/>.
         /// </summary>
         /// <param name="resolver">The dependency resolver.</param>
         /// <returns>The configuration object.</returns>
         /// <exception cref="InvalidOperationException">If the REST foundation has already been configured.</exception>
-        public static Rest Configure(IDependencyResolver resolver)
+        public static Rest Configure(IServiceLocator resolver)
         {
             if (resolver == null) throw new ArgumentNullException("resolver");
 
@@ -74,13 +74,13 @@ namespace RestFoundation
                 }
 
                 RouteCollection routes = RouteTable.Routes;
-                routes.Add(new Route(String.Empty, resolver.Resolve<RootRouteHandler>()));
+                routes.Add(new Route(String.Empty, resolver.GetService<RootRouteHandler>()));
 
                 RequestValidator.Current = new ServiceRequestValidator();
 
                 Active = new Rest
                 {
-                    DependencyResolver = resolver
+                    ServiceLocator = resolver
                 };
 
                 return Active;
@@ -109,7 +109,7 @@ namespace RestFoundation
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
-            builder(new RouteBuilder(RouteTable.Routes, DependencyResolver.Resolve<IHttpMethodResolver>(), DependencyResolver.Resolve<IBrowserDetector>()));
+            builder(new RouteBuilder(RouteTable.Routes, ServiceLocator.GetService<IHttpMethodResolver>(), ServiceLocator.GetService<IBrowserDetector>()));
             return this;
         }
 

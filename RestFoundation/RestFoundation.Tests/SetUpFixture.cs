@@ -2,6 +2,7 @@
 using RestFoundation.Behaviors;
 using RestFoundation.Tests.ServiceContracts;
 using RestFoundation.Tests.Services;
+using RestFoundation.UnitTesting;
 using StructureMap.Configuration.DSL;
 
 namespace RestFoundation.Tests

@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\RestFoundation.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <DocumentationFile>bin\Debug\RestFoundation.StructureMap.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\RestFoundation.StructureMap.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="StructureMap">
@@ -42,15 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyRegistry.cs" />
-    <Compile Include="DependencyResolver.cs" />
+    <Compile Include="MockExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RestConfigurator.cs" />
     <Compile Include="RestExtensions.cs" />
+    <Compile Include="ServiceLocator.cs" />
+    <Compile Include="ServiceBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestFoundation\RestFoundation.csproj">

@@ -184,7 +184,7 @@ namespace RestFoundation
                     { RouteConstants.RouteConstraint, new ServiceRouteConstraint(metadata) }
                 };
 
-                var routeHandler = isAsync ? (IRestHandler) Rest.Active.DependencyResolver.Resolve<RestAsyncHandler>() : Rest.Active.DependencyResolver.Resolve<RestHandler>();
+                var routeHandler = isAsync ? (IRestHandler) Rest.Active.ServiceLocator.GetService<RestAsyncHandler>() : Rest.Active.ServiceLocator.GetService<RestHandler>();
                 routeHandlers.Add(routeHandler);
 
                 string serviceUrl = ConcatUrl(url, metadata.UrlInfo.UrlTemplate.Trim());

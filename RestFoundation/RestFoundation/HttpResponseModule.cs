@@ -135,14 +135,14 @@ namespace RestFoundation
                 }
             }
 
-            Rest.Active.DependencyResolver.BuildUp(control);
+            Rest.Active.ServiceLocator.BuildUp(control);
         }
 
         private static void CallPageInjectionConstructor(Control control, ConstructorInfo constructor)
         {
             var parameters = from parameter in constructor.GetParameters()
                              let parameterType = parameter.ParameterType
-                             select Rest.Active.DependencyResolver.Resolve(parameterType);
+                             select Rest.Active.ServiceLocator.GetService(parameterType);
 
             constructor.Invoke(control, parameters.ToArray());
         }
