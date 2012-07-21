@@ -249,7 +249,7 @@
     {
         ProxyWebResponse response = client.WebResponse;
 
-        return response != null ? String.Format(CultureInfo.InvariantCulture, "{0} - {1}", (int)response.StatusCode, response.StatusDescription) : null;
+        return response != null ? String.Format(CultureInfo.InvariantCulture, "{0} - {1}", (int) response.StatusCode, DecodeHttpStatus(response.StatusCode, response.StatusDescription)) : null;
     }
 
     private static string GetHttpError(WebException ex)
@@ -258,17 +258,35 @@
 
         if (webResponse != null)
         {
-            return String.Format(CultureInfo.InvariantCulture, "HTTP/{0}: {1} - {2}", webResponse.ProtocolVersion, (int) webResponse.StatusCode, webResponse.StatusDescription);
+            return String.Format(CultureInfo.InvariantCulture,
+                                 "HTTP/{0}: {1} - {2}",
+                                 webResponse.ProtocolVersion,
+                                 (int) webResponse.StatusCode,
+                                 DecodeHttpStatus(webResponse.StatusCode, webResponse.StatusDescription));
         }
 
         var httpResponse = ex.Response as HttpWebResponse;
 
         if (httpResponse != null)
         {
-            return String.Format(CultureInfo.InvariantCulture, "HTTP/{0}: {1} - {2}", httpResponse.ProtocolVersion, (int)httpResponse.StatusCode, httpResponse.StatusDescription);
+            return String.Format(CultureInfo.InvariantCulture,
+                                 "HTTP/{0}: {1} - {2}",
+                                 httpResponse.ProtocolVersion,
+                                 (int) httpResponse.StatusCode,
+                                 DecodeHttpStatus(httpResponse.StatusCode, httpResponse.StatusDescription));
         }
 
         return ex.Message;
+    }
+
+    private static string DecodeHttpStatus(HttpStatusCode statusCode, string statusDescription)
+    {
+        if (String.IsNullOrEmpty(statusDescription))
+        {
+            return Regex.Replace(statusCode.ToString(), "([a-z])([A-Z])", "$1 $2");
+        }
+
+        return HttpUtility.HtmlDecode(statusDescription);
     }
 
     private static string FormatBody(string data, string contentType)
