@@ -62,6 +62,7 @@
     <Compile Include="Formatters\DataContractJsonFormatter.cs" />
     <Compile Include="Formatters\DataContractXmlFormatter.cs" />
     <Compile Include="Formatters\JsonPFormatter.cs" />
+    <Compile Include="IAuthenticationBehavior.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="IResultExecutor.cs" />
     <Compile Include="Results\DataContractJsonResult.cs" />

@@ -12,7 +12,7 @@ namespace RestFoundation.Behaviors
     /// <summary>
     /// Represents a basic authorization secure behavior for a service or a service method.
     /// </summary>
-    public class DigestAuthorizationBehavior : SecureServiceBehavior, IDisposable
+    public class DigestAuthorizationBehavior : SecureServiceBehavior, IAuthenticationBehavior, IDisposable
     {
         /// <summary>
         /// Contains the quality of protection values for digest authentication.

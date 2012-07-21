@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using RestFoundation.Behaviors;
@@ -29,6 +30,8 @@ namespace RestFoundation.Runtime
                     allBehaviors.Add(serviceBehavior);
                 }
             }
+
+            PrioritizeAuthenticationBehavior(allBehaviors);
 
             return allBehaviors;
         }
@@ -87,15 +90,47 @@ namespace RestFoundation.Runtime
             globalBehaviors.Clear();
         }
 
-        private static void TryRemoveBehavior(IServiceBehavior behavior, List<IServiceBehavior> serviceBehaviors)
+        private static void TryRemoveBehavior(IServiceBehavior behavior, List<IServiceBehavior> behaviors)
         {
-            for (int i = serviceBehaviors.Count - 1; i >= 0; i--)
+            for (int i = behaviors.Count - 1; i >= 0; i--)
             {
-                if (ServiceBehaviorEqualityComparer.Default.Equals(behavior, serviceBehaviors[i]))
+                if (ServiceBehaviorEqualityComparer.Default.Equals(behavior, behaviors[i]))
                 {
-                    serviceBehaviors.RemoveAt(i);
+                    behaviors.RemoveAt(i);
                 }
             }
+        }
+
+        private static void PrioritizeAuthenticationBehavior(List<IServiceBehavior> behaviors)
+        {
+            int authBehaviorIndex = behaviors.FindIndex(b => b is IAuthenticationBehavior);
+
+            if (authBehaviorIndex < 0)
+            {
+                return;
+            }
+
+            int lastAuthBehaviorIndex = behaviors.FindLastIndex(b => b is IAuthenticationBehavior);
+
+            if (authBehaviorIndex != lastAuthBehaviorIndex)
+            {
+                throw new InvalidOperationException("Only a single authentication behavior can be associated with a service method. That includes global behaviors.");
+            }
+
+            if (authBehaviorIndex == 0)
+            {
+                return;
+            }
+
+            var authBehavior = behaviors[authBehaviorIndex] as IAuthenticationBehavior;
+
+            if (authBehavior == null)
+            {
+                return;
+            }
+
+            behaviors.RemoveAt(authBehaviorIndex);
+            behaviors.Insert(0, authBehavior);
         }
 
         #region Equality Comparer

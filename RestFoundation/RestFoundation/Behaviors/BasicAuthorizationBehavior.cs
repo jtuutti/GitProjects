@@ -11,7 +11,7 @@ namespace RestFoundation.Behaviors
     /// <summary>
     /// Represents a basic authorization secure behavior for a service or a service method.
     /// </summary>
-    public class BasicAuthorizationBehavior : SecureServiceBehavior
+    public class BasicAuthorizationBehavior : SecureServiceBehavior, IAuthenticationBehavior
     {
         private const string AuthenticationType = "Basic";
 
