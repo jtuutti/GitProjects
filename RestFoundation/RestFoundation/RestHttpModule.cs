@@ -11,7 +11,7 @@ namespace RestFoundation
     /// <summary>
     /// Represents an HTTP module required by the REST foundation.
     /// </summary>
-    public sealed class HttpResponseModule : IHttpModule
+    public sealed class RestHttpModule : IHttpModule
     {
         /// <summary>
         /// Initializes a module and prepares it to handle requests.
@@ -48,7 +48,7 @@ namespace RestFoundation
 
             for (int i = modules.Count - 1; i >= 0; i--)
             {
-                if (modules.Get(i) is HttpResponseModule)
+                if (modules.Get(i) is RestHttpModule)
                 {
                     return true;
                 }

@@ -11,7 +11,7 @@ namespace RestFoundation.UnitTesting
 
             if (addMethod != null)
             {
-                addMethod.Invoke(Modules, new object[] { "HttpResponseModule", new HttpResponseModule() });
+                addMethod.Invoke(Modules, new object[] { "RestModule", new RestHttpModule() });
             }
         }
     }
