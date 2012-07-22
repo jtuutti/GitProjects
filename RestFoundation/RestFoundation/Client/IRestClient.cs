@@ -43,7 +43,12 @@ namespace RestFoundation.Client
         bool SupportsEncoding { get; set; }
 
         /// <summary>
-        /// Gets or sets authentication credentials for the Authorization HTTP header.
+        /// Gets or sets the authentication type.
+        /// </summary>
+        string AuthenticationType { get; set; }
+
+        /// <summary>
+        /// Gets or sets authentication credentials.
         /// </summary>
         NetworkCredential Credentials { get; set; }
 

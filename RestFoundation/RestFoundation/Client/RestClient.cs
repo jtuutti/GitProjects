@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -15,7 +14,6 @@ namespace RestFoundation.Client
     {
         private const int MinErrorCode = 400;
         private const string InvalidAsyncResult = "Invalid asynchronous result was provided.";
-        private const string AuthorizationHeader = "Authorization";
         private const string ContentEncodingHeader = "Content-Encoding";
 
         private readonly IRestSerializerFactory m_factory;
@@ -35,6 +33,7 @@ namespace RestFoundation.Client
         public bool PerformRedirects { get; set; }
         public bool AllowCookies { get; set; }
         public NetworkCredential Credentials { get; set; }
+        public string AuthenticationType { get; set; }
         public string ProxyUrl { get; set; }
         public bool SupportsEncoding { get; set; }
 
@@ -223,39 +222,10 @@ namespace RestFoundation.Client
             return mimeType;
         }
 
-        private void AddAuthorizationHeader(NameValueCollection headers, Uri url)
-        {
-            NetworkCredential networkCredentials = Credentials.GetCredential(url, "Basic");
-
-            if (headers.Get(AuthorizationHeader) != null)
-            {
-                headers.Remove(AuthorizationHeader);
-            }
-
-            if (String.IsNullOrEmpty(networkCredentials.UserName))
-            {
-                throw new InvalidOperationException("Username for basic authentication cannot be null or empty.");
-            }
-
-            if (String.IsNullOrEmpty(networkCredentials.Password))
-            {
-                throw new InvalidOperationException("Password for basic authentication cannot be null or empty.");
-            }
-
-            string encodedCredentials = Convert.ToBase64String(Encoding.UTF8.GetBytes(String.Concat(networkCredentials.UserName, ":", networkCredentials.Password)));
-
-            headers.Add(AuthorizationHeader, String.Concat("Basic ", encodedCredentials));
-        }
-
         private HttpWebRequest CreateRequest(Uri url, HttpMethod method, RestResource resource)
         {
             if (ConnectionTimeout.TotalMilliseconds <= 0) throw new TimeoutException("Connection timeout is invalid.");
             if (SocketTimeout.TotalMilliseconds <= 0) throw new TimeoutException("Socket timeout is invalid.");
-
-            if (Credentials != null)
-            {
-                AddAuthorizationHeader(resource.Headers, url);
-            }
 
             var request = (HttpWebRequest) WebRequest.Create(url);
             request.KeepAlive = true;
@@ -265,12 +235,34 @@ namespace RestFoundation.Client
             request.ReadWriteTimeout = Convert.ToInt32(SocketTimeout.TotalMilliseconds);
             request.Headers.Add(resource.Headers);
 
+            if (Credentials != null)
+            {
+                SetCredentials(url);
+            }
+
             if (!String.IsNullOrWhiteSpace(ProxyUrl))
             {
                 request.Proxy = new WebProxy(ProxyUrl);
             }
 
             return request;
+        }
+
+        private void SetCredentials(Uri url)
+        {
+            String authenticationType = !String.IsNullOrEmpty(AuthenticationType) ? AuthenticationType : "Basic";
+            Uri domainUrl;
+
+            var credentialCache = new CredentialCache();
+
+            if (Uri.TryCreate(Credentials.Domain, UriKind.RelativeOrAbsolute, out domainUrl))
+            {
+                credentialCache.Add(domainUrl, authenticationType, Credentials);
+            }
+            else
+            {
+                credentialCache.Add(url, authenticationType, Credentials);
+            }
         }
 
         private RestResource<T> ProcessResponse<T>(WebRequest request, RestResourceType outputType)
