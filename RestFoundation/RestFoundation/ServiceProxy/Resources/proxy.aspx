@@ -34,6 +34,12 @@
             return;
         }
 
+        if (!Request.IsLocal || String.Equals(Request.Url.Host, "localhost", StringComparison.OrdinalIgnoreCase) ||
+            String.Equals(Request.Url.Host, "127.0.0.1"))
+        {
+            ConnectToProxy.Visible = false;
+        }
+
         Tuple<string, string> urlParts = operation.GenerateSampleUrlParts();
         serviceUrl = urlParts.Item1;
         OperationUrl.Value = urlParts.Item2;
@@ -164,6 +170,13 @@
                     };
 
                     client.Credentials = cachedCredentials;
+                }
+                
+                int proxyPort;
+
+                if (ConnectToProxy.Visible && Int32.TryParse(ProxyPort.Value, out proxyPort))
+                {
+                    client.Proxy = new WebProxy("127.0.0.1", proxyPort);
                 }
 
                 AddHeaders(client);
@@ -419,29 +432,51 @@
 
         client.Headers[UserAgentHeader] = UserAgent;
 
-        if (String.IsNullOrWhiteSpace(client.Headers[AcceptHeader]))
-        {
-            SetMimeTypeForHeader(client, AcceptHeader);
-        }
-
-        if (String.IsNullOrWhiteSpace(client.Headers[ContentTypeHeader]))
-        {
-            if ("POST".Equals(HttpMethod.Value) || "PUT".Equals(HttpMethod.Value) || "PATCH".Equals(HttpMethod.Value))
-            {
-                SetMimeTypeForHeader(client, ContentTypeHeader);
-            }
-        }
+        SetAcceptHeader(client);
+        SetContentTypeHeader(client);
     }
 
-    private void SetMimeTypeForHeader(ProxyWebClient client, string headerName)
+    private void SetAcceptHeader(ProxyWebClient client)
     {
+        if (!String.IsNullOrWhiteSpace(client.Headers[AcceptHeader]))
+        {
+            return;
+        }
+
         if ("XML".Equals(ResourceFormat.Text))
         {
-            client.Headers[headerName] = "text/xml; charset=utf-8";
+            client.Headers[AcceptHeader] = "text/xml";
         }
         else if ("JSON".Equals(ResourceFormat.Text))
         {
-            client.Headers[headerName] = "application/json; charset=utf-8";
+            client.Headers[AcceptHeader] = "application/json";
+        }
+
+        if (String.IsNullOrWhiteSpace(client.Headers[AcceptCharsetHeader]))
+        {
+            client.Headers[AcceptCharsetHeader] = "utf-8";
+        }
+    }
+
+    private void SetContentTypeHeader(ProxyWebClient client)
+    {
+        if (!String.IsNullOrWhiteSpace(client.Headers[ContentTypeHeader]))
+        {
+            return;
+        }
+
+        if (!"POST".Equals(HttpMethod.Value) && !"PUT".Equals(HttpMethod.Value) && !"PATCH".Equals(HttpMethod.Value))
+        {
+            return;
+        }
+
+        if ("XML".Equals(ResourceFormat.Text))
+        {
+            client.Headers[ContentTypeHeader] = "text/xml; charset=utf-8";
+        }
+        else if ("JSON".Equals(ResourceFormat.Text))
+        {
+            client.Headers[ContentTypeHeader] = "application/json; charset=utf-8";
         }
     }
 
@@ -569,6 +604,10 @@
                 <option>HEAD</option>
                 <option>OPTIONS</option>
             </select>
+            <span id="ConnectToProxy" runat="server">
+                <span>Proxy port:</span>
+                <input type="text" id="ProxyPort" runat="server" />
+            </span>
             <asp:Button runat="server" ID="Execute" Text="Execute" />
             <input type="button" runat="server" id="Reload" value="Reload" />
         </div>

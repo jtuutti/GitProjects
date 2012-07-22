@@ -6,7 +6,7 @@ namespace RestFoundation.ServiceLocation
     /// <summary>
     /// Defines a service locator to retrieve services from an IoC container.
     /// </summary>
-    public interface IServiceLocator : IServiceProvider
+    public interface IServiceLocator : IServiceProvider, IDisposable
     {
         /// <summary>
         /// Gets the service object of the specified type.

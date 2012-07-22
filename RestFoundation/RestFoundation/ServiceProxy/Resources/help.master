@@ -61,6 +61,7 @@
         select{font-family:Tahoma;font-size:13px}
         input[type=text]{font-family:Tahoma;font-size:1.2em;width:650px;border:1px solid #999}
         input[type=text].empty{font-family:Tahoma;font-size:1.2em;width:650px;border:1px solid #f00}
+        input[type=text]#ProxyPort{width:50px}
         input[type=password]{font-family:Tahoma;font-size:1.2em;width:650px;border:1px solid #999}
         input[type=password].empty{font-family:Tahoma;font-size:1.2em;width:650px;border:1px solid #f00}
         textarea{font-family:Tahoma;font-size:1.2em;width:100%;height:200px;border:1px solid #999;padding:2px}
