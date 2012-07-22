@@ -11,6 +11,11 @@ namespace RestFoundation.StructureMap
     {
         public static Rest Configure(Action<Registry> registrationBuilder, bool mockContext)
         {
+            return Rest.Configure(CreateServiceLocator(registrationBuilder, mockContext));
+        }
+
+        public static IServiceLocator CreateServiceLocator(Action<Registry> registrationBuilder, bool mockContext)
+        {
             try
             {
                 var registry = new Registry();
@@ -31,7 +36,7 @@ namespace RestFoundation.StructureMap
                 container.AssertConfigurationIsValid();
 #endif
 
-                return Rest.Configure(new ServiceLocator(container));
+                return new ServiceLocator(container);
             }
             catch (Exception ex)
             {

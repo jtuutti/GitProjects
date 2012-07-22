@@ -30,9 +30,9 @@ namespace RestTest.App_Start
             container.RegisterType<IAuthorizationManager, ServiceAuthorizationManager>(new ContainerControlledLifetimeManager());
             container.RegisterType<IStreamCompressor, RestStreamCompressor>(new ContainerControlledLifetimeManager());
 
-            container.RegisterType<IIndexService, IndexService>(new InjectionProperty("Context", container.Resolve<IServiceContext>()));
+            container.RegisterType<IIndexService, IndexService>(new InjectionProperty("Context"));
             container.RegisterType<IDynamicService, DynamicService>();
-            container.RegisterType<ITouchMapService, TouchMapService>(new InjectionProperty("Context", container.Resolve<IServiceContext>()));
+            container.RegisterType<ITouchMapService, TouchMapService>(new InjectionProperty("Context"));
         }
 
         private static void RegisterDependencies(Registry registry)

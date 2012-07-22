@@ -10,6 +10,11 @@ namespace RestFoundation.Unity
     {
         public static Rest Configure(Action<IUnityContainer> registrationBuilder, bool mockContext)
         {
+            return Rest.Configure(CreateServiceLocator(registrationBuilder, mockContext));
+        }
+
+        public static IServiceLocator CreateServiceLocator(Action<IUnityContainer> registrationBuilder, bool mockContext)
+        {
             try
             {
                 var container = new UnityContainer();
@@ -22,7 +27,7 @@ namespace RestFoundation.Unity
                     registrationBuilder(container);
                 }
 
-                return Rest.Configure(new ServiceLocator(container));
+                return new ServiceLocator(container);
             }
             catch (Exception ex)
             {
