@@ -9,7 +9,7 @@ using RestFoundation.Runtime.Handlers;
 namespace RestFoundation
 {
     /// <summary>
-    /// Represents a route builder.
+    /// Represents a route builder for the specified relative URL.
     /// </summary>
     public sealed class RouteBuilder
     {
@@ -17,84 +17,73 @@ namespace RestFoundation
         private const char Tilda = '~';
 
         private static readonly Type urlAttributeType = typeof(UrlAttribute);
+
+        private readonly string m_relativeUrl;
         private readonly RouteCollection m_routes;
         private readonly IHttpMethodResolver m_httpMethodResolver;
         private readonly IBrowserDetector m_browserDetector;
+        private readonly bool m_asynchronously;
 
-        internal RouteBuilder(RouteCollection routes, IHttpMethodResolver httpMethodResolver, IBrowserDetector browserDetector)
+        internal RouteBuilder(string relativeUrl, RouteCollection routes, IHttpMethodResolver httpMethodResolver, IBrowserDetector browserDetector, bool asynchronously)
         {
+            if (String.IsNullOrEmpty(relativeUrl)) throw new ArgumentNullException("relativeUrl");
             if (routes == null) throw new ArgumentNullException("routes");
             if (httpMethodResolver == null) throw new ArgumentNullException("httpMethodResolver");
             if (browserDetector == null) throw new ArgumentNullException("browserDetector");
 
+            m_relativeUrl = relativeUrl;
             m_routes = routes;
             m_httpMethodResolver = httpMethodResolver;
             m_browserDetector = browserDetector;
+            m_asynchronously = asynchronously;
         }
 
         /// <summary>
-        /// Maps a REST service to the provided relative URL.
+        /// Specifies that the URL should be mapped to the service using an asynchronous REST HTTP handler.
+        /// It is only recommended to use asynchronous handlers for services that perform heavy operations
+        /// that can block the worker process or cause the server to run out of the ASP .NET thread pool.
+        /// This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
+        /// make web forms pages asynchronous.
         /// </summary>
-        /// <typeparam name="TContract">The service contract type.</typeparam>
-        /// <param name="url">The relative URL.</param>
         /// <returns>The route builder.</returns>
-        public RouteConfiguration MapRestRoute<TContract>(string url)
+        public RouteBuilder WithAsyncHandler()
         {
-            return MapRestRoute(url, typeof(TContract), false);
+            return new RouteBuilder(m_relativeUrl, m_routes, m_httpMethodResolver, m_browserDetector, true);
         }
 
         /// <summary>
-        /// Maps a REST service to the provided relative URL.
+        /// Maps the relative URL to a service contract.
         /// </summary>
-        /// <param name="url">The relative URL.</param>
-        /// <param name="contractType">The service contract type.</param>
-        /// <returns>The route builder.</returns>
-        public RouteConfiguration MapRestRoute(string url, Type contractType)
+        /// <param name="contractType">The service contract type./</param>
+        /// <returns>The route configuration.</returns>
+        /// <exception cref="ArgumentException">If the service contract type is not an interface.</exception>
+        public RouteConfiguration ToServiceContract(Type contractType)
         {
-            return MapRestRoute(url, contractType, false);
+            if (contractType == null) throw new ArgumentNullException("contractType");
+
+            return MapUrl(m_relativeUrl, contractType, m_asynchronously);
         }
 
         /// <summary>
-        /// Maps a REST service to the provided relative URL. An asynchrounous
-        /// REST handler will be used. It is only recommended to map asynchronous
-        /// routes for services that perform heavy operations that can block
-        /// the worker process or run out of the ASP .NET thread pool.
+        /// Maps the relative URL to a service contract.
         /// </summary>
-        /// <typeparam name="TContract">The service contract type.</typeparam>
-        /// <param name="url">The relative URL.</param>
-        /// <returns>The route builder.</returns>
-        public RouteConfiguration MapRestRouteAsync<TContract>(string url)
+        /// <typeparam name="T">The service contract type.</typeparam>
+        /// <returns>The route configuration.</returns>
+        /// <exception cref="ArgumentException">If the service contract type is not an interface.</exception>
+        public RouteConfiguration ToServiceContract<T>()
         {
-            return MapRestRoute(url, typeof(TContract), true);
+            return MapUrl(m_relativeUrl, typeof(T), m_asynchronously);
         }
 
         /// <summary>
-        /// Maps a REST service to the provided relative URL. An asynchrounous
-        /// REST handler will be used. It is only recommended to map asynchronous
-        /// routes for services that perform heavy operations that can block
-        /// the worker process or run out of the ASP .NET thread pool.
+        /// Maps the relative URL to a web forms page.
         /// </summary>
-        /// <param name="url">The relative URL.</param>
-        /// <param name="contractType">The service contract type.</param>
-        /// <returns>The route builder.</returns>
-        public RouteConfiguration MapRestRouteAsync(string url, Type contractType)
+        /// <param name="virtualPageUrl">A virtual URL to the ASPX file.</param>
+        public void ToWebFormsPage(string virtualPageUrl)
         {
-            return MapRestRoute(url, contractType, true);
-        }
+            if (String.IsNullOrEmpty(virtualPageUrl)) throw new ArgumentNullException("virtualPageUrl");
 
-        /// <summary>
-        /// Maps a web forms .ASPX page to a route.
-        /// </summary>
-        /// <param name="url">The relative URL.</param>
-        /// <param name="relativePagePath">A relative path to the .ASPX page.</param>
-        /// <returns></returns>
-        public RouteBuilder MapPageRoute(string url, string relativePagePath)
-        {
-            if (String.IsNullOrEmpty(url)) throw new ArgumentNullException("url");
-            if (String.IsNullOrEmpty(relativePagePath)) throw new ArgumentNullException("relativePagePath");
-
-            m_routes.MapPageRoute(null, url, relativePagePath);
-            return this;
+            m_routes.MapPageRoute(null, m_relativeUrl, virtualPageUrl);
         }
 
         private static HashSet<HttpMethod> AddHttpMethods(IEnumerable<HttpMethod> urlMethods)
@@ -124,7 +113,7 @@ namespace RestFoundation
             return String.Concat(url.TrimEnd(Slash), Slash, urlTemplate.TrimStart(Slash, Tilda));
         }
 
-        private RouteConfiguration MapRestRoute(string url, Type contractType, bool isAsync)
+        private RouteConfiguration MapUrl(string url, Type contractType, bool isAsync)
         {
             if (url == null) throw new ArgumentNullException("url");
             if (url.Trim().Length == 0) throw new ArgumentException("Route url cannot be null or empty", "url");
@@ -132,7 +121,7 @@ namespace RestFoundation
             if (!contractType.IsInterface) throw new ArgumentException("Service contract type must be an interface", "contractType");
 
             var serviceMethods = contractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                                                    .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);
+                                             .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);
 
             List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(contractType, serviceMethods, url);
             ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, url), t => methodMetadata, (t, u) => methodMetadata);

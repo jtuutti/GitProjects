@@ -67,6 +67,7 @@
     <Compile Include="Results\DataContractXmlResult.cs" />
     <Compile Include="Results\FileResultBase.cs" />
     <Compile Include="Results\JsonPResult.cs" />
+    <Compile Include="RouteBuilder.cs" />
     <Compile Include="Runtime\Handlers\BrowserRedirectHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
     <Compile Include="Security\IPAddressCollection.cs" />
@@ -187,7 +188,7 @@
     <Compile Include="Runtime\OutputCompressionManager.cs" />
     <Compile Include="Runtime\ParameterValueProvider.cs" />
     <Compile Include="Runtime\ResourceValidator.cs" />
-    <Compile Include="RouteBuilder.cs" />
+    <Compile Include="UrlBuilder.cs" />
     <Compile Include="Runtime\SerializationValidator.cs" />
     <Compile Include="Runtime\StreamCompressor.cs" />
     <Compile Include="Context\ServiceContext.cs" />

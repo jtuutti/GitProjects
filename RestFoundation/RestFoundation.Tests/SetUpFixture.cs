@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using RestFoundation.Behaviors;
 using RestFoundation.Tests.ServiceContracts;
 using RestFoundation.Tests.Services;
 using RestFoundation.UnitTesting;
@@ -17,7 +16,7 @@ namespace RestFoundation.Tests
         {
             // Configuring REST foundation
             Rest.Active.ConfigureMocksWithStructureMap(RegisterDependencies)
-                       .WithRoutes(RegisterRoutes);
+                       .WithUrls(RegisterUrls);
         }
 
         private static void RegisterDependencies(Registry registry)
@@ -25,9 +24,9 @@ namespace RestFoundation.Tests
             registry.For<ITestService>().Use<TestService>();
         }
 
-        private static void RegisterRoutes(RouteBuilder routeBuilder)
+        private static void RegisterUrls(UrlBuilder urlBuilder)
         {
-            routeBuilder.MapRestRoute<ITestService>(RelativeUrl).WithBehaviors(new HttpsOnlyBehavior());
+            urlBuilder.MapUrl(RelativeUrl).ToServiceContract<ITestService>();
         }
     }
 }

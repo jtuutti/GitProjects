@@ -101,15 +101,15 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Calls the provided routing builder delegate to set up URL routes to services.
+        /// Calls the provided URL builder delegate to set up URL routes to services and web form pages.
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The configuration object.</returns>
-        public Rest WithRoutes(Action<RouteBuilder> builder)
+        public Rest WithUrls(Action<UrlBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
-            builder(new RouteBuilder(RouteTable.Routes, ServiceLocator.GetService<IHttpMethodResolver>(), ServiceLocator.GetService<IBrowserDetector>()));
+            builder(new UrlBuilder(RouteTable.Routes, ServiceLocator.GetService<IHttpMethodResolver>(), ServiceLocator.GetService<IBrowserDetector>()));
             return this;
         }
 

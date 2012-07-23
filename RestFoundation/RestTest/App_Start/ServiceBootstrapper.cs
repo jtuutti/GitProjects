@@ -17,8 +17,8 @@ namespace RestTest.App_Start
         public static void RegisterDependencies()
         {
             Rest.Active.ConfigureWithStructureMap(RegisterDependencies)
+                       .WithUrls(RegisterUrls)
                        .WithContentFormatters(RegisterFormatters)
-                       .WithRoutes(RegisterRoutes)
                        .EnableJsonPSupport()
                        .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
                        .WithResponseHeader("X-Service-Version", "1.0")
@@ -55,23 +55,29 @@ namespace RestTest.App_Start
             builder.Set("multipart/form-data", new MultipartFormatter());
         }
 
-        private static void RegisterRoutes(RouteBuilder routeBuilder)
+        private static void RegisterUrls(UrlBuilder urlBuilder)
         {
-            routeBuilder.MapRestRoute<IIndexService>("home")
-                        .WithBehaviors(new StatisticsBehavior(), new LoggingBehavior())
-                        .DoNotValidateRequests();
+            urlBuilder.MapUrl("home")
+                      .ToServiceContract<IIndexService>()
+                      .WithBehaviors(new StatisticsBehavior(), new LoggingBehavior())
+                      .DoNotValidateRequests();
 
-            routeBuilder.MapRestRouteAsync<IIndexService>("async")
-                        .WithBehaviors(new DigestAuthorizationBehavior(), new StatisticsBehavior(), new LoggingBehavior());
+            urlBuilder.MapUrl("async")
+                      .WithAsyncHandler()
+                      .ToServiceContract<IIndexService>()
+                      .WithBehaviors(new DigestAuthorizationBehavior(), new StatisticsBehavior(), new LoggingBehavior());
 
-            routeBuilder.MapRestRoute<IDynamicService>("dynamic")
-                        .BlockContentType("application/x-www-form-urlencoded");
+            urlBuilder.MapUrl("dynamic")
+                      .ToServiceContract<IDynamicService>()
+                      .BlockContentType("application/x-www-form-urlencoded");
 
-            routeBuilder.MapRestRoute<ITouchMapService>("touch-map")
-                        .WithDataContractFormatters()
-                        .WithBehaviors(new HttpsOnlyBehavior());
+            urlBuilder.MapUrl("touch-map")
+                      .ToServiceContract<ITouchMapService>()
+                      .WithDataContractFormatters()
+                      .WithBehaviors(new HttpsOnlyBehavior());
 
-            routeBuilder.MapPageRoute("faq", "~/Views/Faq.aspx");
+            urlBuilder.MapUrl("faq")
+                      .ToWebFormsPage("~/Views/Faq.aspx");
         }
     }
 }
