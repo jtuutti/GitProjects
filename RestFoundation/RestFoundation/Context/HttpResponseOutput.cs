@@ -86,7 +86,7 @@ namespace RestFoundation.Context
         /// <returns>The response output object.</returns>
         public IHttpResponseOutput Write(string value)
         {
-            Context.Response.Write(value);
+            Writer.Write(value);
             return this;
         }
 
@@ -97,7 +97,7 @@ namespace RestFoundation.Context
         /// <returns>The response output object.</returns>
         public IHttpResponseOutput Write(object obj)
         {
-            Context.Response.Write(obj);
+            Writer.Write(obj);
             return this;
         }
 
@@ -107,7 +107,7 @@ namespace RestFoundation.Context
         /// <returns>The response output object.</returns>
         public IHttpResponseOutput WriteLine()
         {
-            Context.Response.Write(LineBreak);
+            Writer.Write(LineBreak);
             return this;
         }
 
@@ -118,8 +118,8 @@ namespace RestFoundation.Context
         /// <returns>The response output object.</returns>
         public IHttpResponseOutput WriteLine(string value)
         {
-            Context.Response.Write(value);
-            Context.Response.Write(LineBreak);
+            Writer.Write(value);
+            Writer.Write(LineBreak);
             return this;
         }
 
@@ -149,7 +149,7 @@ namespace RestFoundation.Context
         {
             if (format == null) throw new ArgumentNullException("format");
 
-            Context.Response.Write(String.Format(CultureInfo.InvariantCulture, format, values));
+            Writer.Write(String.Format(CultureInfo.InvariantCulture, format, values));
             return this;
         }
 
@@ -165,7 +165,7 @@ namespace RestFoundation.Context
         {
             if (format == null) throw new ArgumentNullException("format");
 
-            Context.Response.Write(String.Format(provider, format, values));
+            Writer.Write(String.Format(provider, format, values));
             return this;
         }
     }
