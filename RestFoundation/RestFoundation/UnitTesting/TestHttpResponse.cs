@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using System.Web;
@@ -14,7 +15,8 @@ namespace RestFoundation.UnitTesting
         private readonly NameValueCollection m_headers;
         private readonly HttpCookieCollection m_cookies;
         private readonly MemoryStream m_outputStream;
-        private readonly TextWriter m_output;
+        private readonly StreamWriter m_output;
+        private Stream m_filter;
         private bool m_isDisposed;
 
         internal TestHttpResponse()
@@ -24,6 +26,9 @@ namespace RestFoundation.UnitTesting
             m_cookies = new HttpCookieCollection();
             m_outputStream = new MemoryStream();
             m_output = new StreamWriter(m_outputStream, Encoding.UTF8);
+            m_filter = new MemoryStream();
+
+            m_output.AutoFlush = true;
 
             StatusCode = 200;
             StatusDescription = "OK";
@@ -75,6 +80,18 @@ namespace RestFoundation.UnitTesting
             get
             {
                 return m_output;
+            }
+        }
+
+        public override Stream Filter
+        {
+            get
+            {
+                return m_filter;
+            }
+            set
+            {
+                m_filter = value;
             }
         }
 
@@ -168,6 +185,8 @@ namespace RestFoundation.UnitTesting
             Console.Write(buffer, index, count);
         }
 
+        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "m_output",
+                         Justification = "Disposing the stream will close the writer")]
         public void Dispose()
         {
             if (m_isDisposed)
@@ -175,8 +194,9 @@ namespace RestFoundation.UnitTesting
                 return;
             }
 
-            m_output.Dispose();
             m_outputStream.Dispose();
+            m_filter.Dispose();
+
             m_isDisposed = true;
         }
     }

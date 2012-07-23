@@ -10,14 +10,6 @@ namespace RestFoundation.Results
     public class DataContractJsonResult : IResult
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataContractJsonResult"/> class.
-        /// </summary>
-        public DataContractJsonResult()
-        {
-            ContentType = "application/json";
-        }
-
-        /// <summary>
         /// Gets or sets the object to serialize to XML.
         /// </summary>
         public object Content { get; set; }
@@ -36,7 +28,7 @@ namespace RestFoundation.Results
             if (context == null) throw new ArgumentNullException("context");
 
             context.Response.Output.Clear();
-            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
+            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType ?? "application/json");
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
             OutputCompressionManager.FilterResponse(context);

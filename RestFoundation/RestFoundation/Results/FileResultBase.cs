@@ -13,14 +13,6 @@ namespace RestFoundation.Results
     public abstract class FileResultBase : IResult
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:System.Object"/> class.
-        /// </summary>
-        protected FileResultBase()
-        {
-            ContentType = "application/octet-stream";
-        }
-
-        /// <summary>
         /// Gets or sets the content type.
         /// </summary>
         public string ContentType { get; set; }
@@ -50,7 +42,7 @@ namespace RestFoundation.Results
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
             context.Response.SetHeader(context.Response.Headers.AcceptRanges, "bytes");
             context.Response.SetHeader(context.Response.Headers.ContentLength, file.Length.ToString(CultureInfo.InvariantCulture));
-            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
+            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType ?? "application/octet-stream");
             context.Response.SetHeader(context.Response.Headers.ETag, GenerateETag(file));
 
             if (!String.IsNullOrEmpty(ContentDisposition))

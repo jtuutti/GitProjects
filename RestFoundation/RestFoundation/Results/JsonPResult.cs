@@ -14,14 +14,6 @@ namespace RestFoundation.Results
         private static readonly Regex methodNamePattern = new Regex("^[A-Za-z_][A-Za-z0-9_]*$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="JsonPResult"/> class.
-        /// </summary>
-        public JsonPResult()
-        {
-            ContentType = "application/javascript";
-        }
-
-        /// <summary>
         /// Gets or sets the object to serialize to JSONP/JavaScript function.
         /// </summary>
         public object Content { get; set; }
@@ -55,7 +47,7 @@ namespace RestFoundation.Results
             }
 
             context.Response.Output.Clear();
-            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
+            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType ?? "application/javascript");
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
             OutputCompressionManager.FilterResponse(context);

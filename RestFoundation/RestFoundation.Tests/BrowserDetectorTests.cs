@@ -5,6 +5,7 @@ using RestFoundation.UnitTesting;
 
 namespace RestFoundation.Tests
 {
+    [TestFixture]
     public class BrowserDetectorTests
     {
         private IBrowserDetector m_browserDetector;
