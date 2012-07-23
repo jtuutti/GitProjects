@@ -10,9 +10,17 @@ namespace RestFoundation.Results
     public class RedirectResult : IResult
     {
         /// <summary>
-        /// Gets or sets a value indicating whether the redirect is permanent.
+        /// Initializes a new instance of the <see cref="RedirectResult"/> class.
         /// </summary>
-        public bool IsPermanent { get; set; }
+        public RedirectResult()
+        {
+            RedirectType = RedirectType.Found;
+        }
+
+        /// <summary>
+        /// Gets or sets the redirect type.
+        /// </summary>
+        public RedirectType RedirectType { get; set; }
 
         /// <summary>
         /// Gets or sets a redirect URL.
@@ -27,8 +35,11 @@ namespace RestFoundation.Results
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            context.Response.SetHeader(context.Response.Headers.Location, RedirectUrl);
-            context.Response.SetStatus(IsPermanent ? HttpStatusCode.MovedPermanently : HttpStatusCode.Redirect);
+            if (!String.IsNullOrWhiteSpace(RedirectUrl))
+            {
+                context.Response.SetHeader(context.Response.Headers.Location, RedirectUrl);
+                context.Response.SetStatus((HttpStatusCode) (int) RedirectType);
+            }
         }
     }
 }

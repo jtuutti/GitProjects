@@ -67,6 +67,7 @@
     <Compile Include="Results\DataContractXmlResult.cs" />
     <Compile Include="Results\FileResultBase.cs" />
     <Compile Include="Results\JsonPResult.cs" />
+    <Compile Include="Results\RedirectType.cs" />
     <Compile Include="RouteBuilder.cs" />
     <Compile Include="Runtime\Handlers\BrowserRedirectHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
