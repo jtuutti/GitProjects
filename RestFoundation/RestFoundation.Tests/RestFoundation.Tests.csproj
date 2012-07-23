@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authorization\TestAuthorizationManager.cs" />
+    <Compile Include="BrowserDetectorTests.cs" />
     <Compile Include="CacheTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteHandlerTests.cs" />
