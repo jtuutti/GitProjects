@@ -3,7 +3,7 @@
 namespace RestFoundation
 {
     /// <summary>
-    /// Defines a service method parameter value provider that orchestrates content formatters,
+    /// Defines a service method parameter value provider that orchestrates media type formatters,
     /// object binders, route and HTTP request data to populate service method parameter values.
     /// </summary>
     public interface IParameterValueProvider

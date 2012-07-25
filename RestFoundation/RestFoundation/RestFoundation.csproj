@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\AjaxOnlyBehavior.cs" />
-    <Compile Include="Formatters\BlockContentFormatter.cs" />
+    <Compile Include="Formatters\BlockFormatter.cs" />
     <Compile Include="Formatters\DataContractJsonFormatter.cs" />
     <Compile Include="Formatters\DataContractXmlFormatter.cs" />
     <Compile Include="Formatters\JsonPFormatter.cs" />
@@ -114,7 +114,7 @@
     <Compile Include="ServiceProxy\AuthenticationType.cs" />
     <Compile Include="ServiceProxy\ProxyAuthenticationAttribute.cs" />
     <Compile Include="TypeBinderBuilder.cs" />
-    <Compile Include="ContentFormatterBuilder.cs" />
+    <Compile Include="MediaTypeFormatterBuilder.cs" />
     <Compile Include="Formatters\MultipartFormatter.cs" />
     <Compile Include="IAuthorizationManager.cs" />
     <Compile Include="IServiceCache.cs" />
@@ -210,13 +210,13 @@
     <Compile Include="Results\RedirectResult.cs" />
     <Compile Include="Behaviors\ServiceBehavior.cs" />
     <Compile Include="Runtime\DynamicXmlDocument.cs" />
-    <Compile Include="Runtime\Registries\ContentFormatterRegistry.cs" />
+    <Compile Include="Runtime\Registries\MediaTypeFormatterRegistry.cs" />
     <Compile Include="Formatters\JsonFormatter.cs" />
     <Compile Include="Formatters\XmlFormatter.cs" />
     <Compile Include="RestHttpModule.cs" />
     <Compile Include="HttpResponseException.cs" />
     <Compile Include="IServiceBehavior.cs" />
-    <Compile Include="IContentFormatter.cs" />
+    <Compile Include="IMediaTypeFormatter.cs" />
     <Compile Include="IHttpResponse.cs" />
     <Compile Include="Runtime\Registries\ServiceBehaviorRegistry.cs" />
     <Compile Include="Runtime\ServiceMethodMetadata.cs" />

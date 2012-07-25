@@ -6,9 +6,9 @@ using RestFoundation.Results;
 namespace RestFoundation.Formatters
 {
     /// <summary>
-    /// Represents a JSONP content formatter.
+    /// Represents a JSONP media type formatter.
     /// </summary>
-    public class JsonPFormatter : IContentFormatter
+    public class JsonPFormatter : IMediaTypeFormatter
     {
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.
@@ -42,7 +42,7 @@ namespace RestFoundation.Formatters
         }
 
         /// <summary>
-        /// Serializes the object instance into the HTTP response stream using the accepted content type.
+        /// Serializes the object instance into the HTTP response stream using the accepted media type.
         /// </summary>
         /// <param name="context">The service context.</param>
         /// <param name="obj">The object to serialize.</param>

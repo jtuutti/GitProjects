@@ -18,7 +18,7 @@ namespace RestTest.App_Start
         {
             Rest.Active.ConfigureWithStructureMap(RegisterDependencies)
                        .WithUrls(RegisterUrls)
-                       .WithContentFormatters(RegisterFormatters)
+                       .WithMediaTypeFormatters(RegisterFormatters)
                        .EnableJsonPSupport()
                        .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
                        .WithResponseHeader("X-Service-Version", "1.0")
@@ -48,7 +48,7 @@ namespace RestTest.App_Start
             });
         }
 
-        private static void RegisterFormatters(ContentFormatterBuilder builder)
+        private static void RegisterFormatters(MediaTypeFormatterBuilder builder)
         {
             builder.Set("application/bson", new BsonFormatter());
             builder.Set("application/x-www-form-urlencoded", new FormsFormatter());
@@ -69,7 +69,7 @@ namespace RestTest.App_Start
 
             urlBuilder.MapUrl("dynamic")
                       .ToServiceContract<IDynamicService>()
-                      .BlockContentType("application/x-www-form-urlencoded");
+                      .BlockMediaType("application/x-www-form-urlencoded");
 
             urlBuilder.MapUrl("touch-map")
                       .ToServiceContract<ITouchMapService>()

@@ -114,15 +114,15 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Calls the provided content formatter builder delegate to set or remove content formatters.
+        /// Calls the provided media type formatter builder delegate to set or remove formatters.
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns>The configuration object.</returns>
-        public Rest WithContentFormatters(Action<ContentFormatterBuilder> builder)
+        public Rest WithMediaTypeFormatters(Action<MediaTypeFormatterBuilder> builder)
         {
             if (builder == null) throw new ArgumentNullException("builder");
 
-            builder(new ContentFormatterBuilder());
+            builder(new MediaTypeFormatterBuilder());
             return this;
         }
 
@@ -187,13 +187,13 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Adds content formatters for the JSONP support.
+        /// Adds media type formatters for the JSONP support.
         /// </summary>
         /// <returns>The configuration object.</returns>
         public Rest EnableJsonPSupport()
         {
-            ContentFormatterRegistry.SetFormatter("application/javascript", new JsonPFormatter());
-            ContentFormatterRegistry.SetFormatter("text/javascript", new JsonPFormatter());
+            MediaTypeFormatterRegistry.SetFormatter("application/javascript", new JsonPFormatter());
+            MediaTypeFormatterRegistry.SetFormatter("text/javascript", new JsonPFormatter());
 
             return this;
         }

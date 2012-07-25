@@ -42,7 +42,7 @@ namespace RestFoundation.Runtime
             }
 
             var acceptTypeCollection = new AcceptValueCollection(acceptedValue);
-            var contentTypes = ContentFormatterRegistry.GetContentTypes();
+            var mediaTypes = MediaTypeFormatterRegistry.GetMediaTypes();
 
             foreach (string acceptedType in acceptTypeCollection.AcceptedNames)
             {
@@ -51,7 +51,7 @@ namespace RestFoundation.Runtime
                     return true;
                 }
 
-                if (contentTypes.Contains(acceptedType, StringComparer.OrdinalIgnoreCase))
+                if (mediaTypes.Contains(acceptedType, StringComparer.OrdinalIgnoreCase))
                 {
                     return false;
                 }

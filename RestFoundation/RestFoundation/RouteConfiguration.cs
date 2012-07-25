@@ -23,38 +23,38 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Prevents a provided content type from being supported by the service through the current route.
+        /// Prevents a provided media type from being supported by the service through the current route.
         /// </summary>
-        /// <param name="contentType">The content type.</param>
+        /// <param name="mediaType">The media type.</param>
         /// <returns>The route configuration.</returns>
-        public RouteConfiguration BlockContentType(string contentType)
+        public RouteConfiguration BlockMediaType(string mediaType)
         {
-            if (String.IsNullOrEmpty(contentType)) throw new ArgumentNullException("contentType");
+            if (String.IsNullOrEmpty(mediaType)) throw new ArgumentNullException("mediaType");
 
-            var blockFormatter = new BlockContentFormatter();
+            var blockFormatter = new BlockFormatter();
 
             foreach (IRestHandler routeHandler in m_routeHandlers)
             {
-                ContentFormatterRegistry.AddHandlerFormatter(routeHandler, contentType, blockFormatter);
+                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, mediaType, blockFormatter);
             }
 
             return this;
         }
 
         /// <summary>
-        /// Sets a route specific formatter for the provided content type.
+        /// Sets a route specific formatter for the provided media type.
         /// </summary>
-        /// <param name="contentType">The content type.</param>
-        /// <param name="formatter">The content formatter.</param>
+        /// <param name="mediaType">The media type.</param>
+        /// <param name="formatter">The media formatter.</param>
         /// <returns>The route configuration.</returns>
-        public RouteConfiguration SetContentFormatter(string contentType, IContentFormatter formatter)
+        public RouteConfiguration SetMediaTypeFormatter(string mediaType, IMediaTypeFormatter formatter)
         {
-            if (String.IsNullOrEmpty(contentType)) throw new ArgumentNullException("contentType");
+            if (String.IsNullOrEmpty(mediaType)) throw new ArgumentNullException("mediaType");
             if (formatter == null) throw new ArgumentNullException("formatter");
 
             foreach (IRestHandler routeHandler in m_routeHandlers)
             {
-                ContentFormatterRegistry.AddHandlerFormatter(routeHandler, contentType, formatter);
+                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, mediaType, formatter);
             }
 
             return this;
@@ -98,9 +98,9 @@ namespace RestFoundation
         {
             foreach (IRestHandler routeHandler in m_routeHandlers)
             {
-                ContentFormatterRegistry.AddHandlerFormatter(routeHandler, "application/json", new DataContractJsonFormatter());
-                ContentFormatterRegistry.AddHandlerFormatter(routeHandler, "application/xml", new DataContractXmlFormatter());
-                ContentFormatterRegistry.AddHandlerFormatter(routeHandler, "text/xml", new DataContractXmlFormatter());
+                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, "application/json", new DataContractJsonFormatter());
+                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, "application/xml", new DataContractXmlFormatter());
+                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, "text/xml", new DataContractXmlFormatter());
             }
 
             return this;

@@ -9,7 +9,7 @@ namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Represents the default result factory that converts POCO objects into
-    /// results using content formatters.
+    /// results using the registered media type formatters.
     /// </summary>
     public class ResultFactory : IResultFactory
     {
@@ -43,12 +43,12 @@ namespace RestFoundation.Runtime
 
             string acceptType = handler.Context.Request.GetPreferredAcceptType();
 
-            IContentFormatter formatter = ContentFormatterRegistry.GetHandlerFormatter(handler, acceptType) ??
-                                          ContentFormatterRegistry.GetFormatter(acceptType);
+            IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, acceptType) ??
+                                          MediaTypeFormatterRegistry.GetFormatter(acceptType);
 
             if (formatter == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported content type was provided in the Accept or the Content-Type header");
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported media type was provided in the Accept or the Content-Type header");
             }
 
             return formatter.FormatResponse(handler.Context, returnedObj);

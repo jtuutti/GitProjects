@@ -105,12 +105,12 @@ namespace RestFoundation.Runtime
 
             string contentType = handler.Context.Request.Headers.ContentType;
 
-            IContentFormatter formatter = ContentFormatterRegistry.GetHandlerFormatter(handler, contentType) ??
-                                          ContentFormatterRegistry.GetFormatter(contentType);
+            IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, contentType) ??
+                                            MediaTypeFormatterRegistry.GetFormatter(contentType);
 
-            if (formatter == null || formatter is BlockContentFormatter)
+            if (formatter == null || formatter is BlockFormatter)
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Unsupported content type provided");
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Unsupported media type provided");
             }
 
             object argumentValue;

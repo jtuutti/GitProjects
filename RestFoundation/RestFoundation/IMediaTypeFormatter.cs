@@ -3,10 +3,10 @@
 namespace RestFoundation
 {
     /// <summary>
-    /// Defines a content formatter responsible for serializing and deserializing strongly typed objects
-    /// based on the HTTP message body data and associated the content type.
+    /// Defines a formatter responsible for serializing and deserializing strongly typed objects
+    /// based on the HTTP message body data and associated the media type.
     /// </summary>
-    public interface IContentFormatter
+    public interface IMediaTypeFormatter
     {
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.
@@ -18,7 +18,7 @@ namespace RestFoundation
         object FormatRequest(IServiceContext context, Type objectType);
 
         /// <summary>
-        /// Serializes the object instance into the HTTP response stream using the accepted content type.
+        /// Serializes the object instance into the HTTP response stream using the accepted media type.
         /// </summary>
         /// <param name="context">The service context.</param>
         /// <param name="obj">The object to serialize.</param>

@@ -9,7 +9,7 @@ namespace RestFoundation.DataFormatters
     /// <summary>
     /// Represents a data contract serializer based JSON formatter.
     /// </summary>
-    public class DataContractJsonFormatter : IContentFormatter
+    public class DataContractJsonFormatter : IMediaTypeFormatter
     {
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.
@@ -34,7 +34,7 @@ namespace RestFoundation.DataFormatters
         }
 
         /// <summary>
-        /// Serializes the object instance into the HTTP response stream using the accepted content type.
+        /// Serializes the object instance into the HTTP response stream using the accepted media type.
         /// </summary>
         /// <param name="context">The service context.</param>
         /// <param name="obj">The object to serialize.</param>

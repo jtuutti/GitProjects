@@ -11,11 +11,11 @@ namespace RestFoundation.Runtime
     {
         private static readonly ConcurrentDictionary<Type, XmlSerializer> serializers = new ConcurrentDictionary<Type, XmlSerializer>();
 
-        public static XmlSerializer Get(Type contentType)
+        public static XmlSerializer Get(Type objectType)
         {
-            if (contentType == null) throw new ArgumentNullException("contentType");
+            if (objectType == null) throw new ArgumentNullException("objectType");
 
-            return serializers.GetOrAdd(contentType, type  => type.IsArray ? GetSerializerForArray(type) : new XmlSerializer(type));
+            return serializers.GetOrAdd(objectType, type  => type.IsArray ? GetSerializerForArray(type) : new XmlSerializer(type));
         }
 
         private static XmlSerializer GetSerializerForArray(Type objectType)

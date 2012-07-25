@@ -100,12 +100,12 @@ namespace RestFoundation.ServiceProxy
             if (hasResource)
             {
                 statusCodes.Add(new ProxyStatusCode(HttpStatusCode.BadRequest, "Resource body is invalid"));
-                statusCodes.Add(new ProxyStatusCode(HttpStatusCode.UnsupportedMediaType, "Content type is not supported"));
+                statusCodes.Add(new ProxyStatusCode(HttpStatusCode.UnsupportedMediaType, "Media type is not supported"));
             }
 
             if (hasResponse)
             {
-                statusCodes.Add(new ProxyStatusCode(HttpStatusCode.NotAcceptable, "Resulting content type is not accepted by the client"));
+                statusCodes.Add(new ProxyStatusCode(HttpStatusCode.NotAcceptable, "Resulting media type is not accepted by the client"));
             }
 
             if (!statusCodes.Any(code => code.GetNumericStatusCode() >= 200 && code.GetNumericStatusCode() <= 204))

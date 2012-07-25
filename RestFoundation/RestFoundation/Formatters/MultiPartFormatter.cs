@@ -8,9 +8,9 @@ using RestFoundation.Runtime;
 namespace RestFoundation.Formatters
 {
     /// <summary>
-    /// Represents a multi-part content formatter for uploading files over HTTP.
+    /// Represents a multi-part media type formatter for uploading files over HTTP.
     /// </summary>
-    public class MultipartFormatter : IContentFormatter
+    public class MultipartFormatter : IMediaTypeFormatter
     {
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.
@@ -26,7 +26,7 @@ namespace RestFoundation.Formatters
 
             if (objectType != typeof(IEnumerable<IUploadedFile>) && objectType != typeof(ICollection<IUploadedFile>))
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Object type must be IEnumerable<IUploadedFile> or ICollection<IUploadedFile> for the content type");
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Object type must be IEnumerable<IUploadedFile> or ICollection<IUploadedFile> for the media type");
             }
 
             var fileList = new List<IUploadedFile>();
@@ -41,7 +41,7 @@ namespace RestFoundation.Formatters
         }
 
         /// <summary>
-        /// Serializes the object instance into the HTTP response stream using the accepted content type.
+        /// Serializes the object instance into the HTTP response stream using the accepted media type.
         /// </summary>
         /// <param name="context">The service context.</param>
         /// <param name="obj">The object to serialize.</param>
@@ -49,7 +49,7 @@ namespace RestFoundation.Formatters
         /// <exception cref="HttpResponseException">If the object cannot be serialized.</exception>
         public virtual IResult FormatResponse(IServiceContext context, object obj)
         {
-            throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported content type was provided in the Accept or the Content-Type header");
+            throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported media type was provided in the Accept or the Content-Type header");
         }
     }
 }
