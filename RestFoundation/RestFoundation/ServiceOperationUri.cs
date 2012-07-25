@@ -81,7 +81,7 @@ namespace RestFoundation
                 baseUrl = VirtualPathUtility.Combine("~", baseUrl);
             }
 
-            string absoluteUrl = VirtualPathUtility.ToAbsolute(baseUrl, m_relativeUrl);
+            string absoluteUrl = !String.IsNullOrEmpty(m_relativeUrl) ? VirtualPathUtility.ToAbsolute(baseUrl, m_relativeUrl) : VirtualPathUtility.ToAbsolute(baseUrl);
 
             if (absoluteUrl.StartsWith("/", StringComparison.Ordinal))
             {
