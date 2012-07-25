@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using RestFoundation.Behaviors;
-using RestFoundation.DataFormatters;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 

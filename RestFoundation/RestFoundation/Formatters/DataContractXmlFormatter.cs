@@ -1,16 +1,35 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization;
-using RestFoundation.Context;
 using RestFoundation.Results;
 
-namespace RestFoundation.DataFormatters
+namespace RestFoundation.Formatters
 {
     /// <summary>
     /// Represents a data contract serializer based XML formatter.
     /// </summary>
     public class DataContractXmlFormatter : IMediaTypeFormatter
     {
+        private readonly IContentNegotiator m_contentNegotiator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataContractXmlFormatter"/> class with the provided content negotiator.
+        /// </summary>
+        public DataContractXmlFormatter() : this(Rest.Active.ServiceLocator.GetService<IContentNegotiator>())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataContractXmlFormatter"/> class.
+        /// </summary>
+        /// <param name="contentNegotiator">The content negotiator.</param>
+        public DataContractXmlFormatter(IContentNegotiator contentNegotiator)
+        {
+            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
+
+            m_contentNegotiator = contentNegotiator;
+        }
+
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.
         /// </summary>
@@ -47,7 +66,7 @@ namespace RestFoundation.DataFormatters
             return new DataContractXmlResult
             {
                 Content = obj,
-                ContentType = context.Request.GetPreferredAcceptType()
+                ContentType = m_contentNegotiator.GetPreferredMediaType(context.Request)
             };
         }
     }

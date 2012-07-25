@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
-using RestFoundation.Context;
 using RestFoundation.Results;
 
 namespace RestFoundation.Formatters
@@ -11,6 +10,26 @@ namespace RestFoundation.Formatters
     /// </summary>
     public class JsonFormatter : IMediaTypeFormatter
     {
+        private readonly IContentNegotiator m_contentNegotiator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonFormatter"/> class with the provided content negotiator.
+        /// </summary>
+        public JsonFormatter() : this(Rest.Active.ServiceLocator.GetService<IContentNegotiator>())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonFormatter"/> class.
+        /// </summary>
+        /// <param name="contentNegotiator">The content negotiator.</param>
+        public JsonFormatter(IContentNegotiator contentNegotiator)
+        {
+            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
+
+            m_contentNegotiator = contentNegotiator;
+        }
+
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.
         /// </summary>
@@ -56,7 +75,7 @@ namespace RestFoundation.Formatters
             return new JsonResult
             {
                 Content = obj,
-                ContentType = context.Request.GetPreferredAcceptType()
+                ContentType = m_contentNegotiator.GetPreferredMediaType(context.Request)
             };
         }
     }

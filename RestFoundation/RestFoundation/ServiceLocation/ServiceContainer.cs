@@ -29,7 +29,7 @@ namespace RestFoundation.ServiceLocation
             m_singletonServices = new Dictionary<Type, Type>
             {
                 { typeof(IAuthorizationManager), typeof(AuthorizationManager) },
-                { typeof(IBrowserDetector), typeof(BrowserDetector) },
+                { typeof(IContentNegotiator), typeof(ContentNegotiator) },
                 { typeof(IHttpMethodResolver), typeof(HttpMethodResolver) },
                 { typeof(IParameterValueProvider), typeof(ParameterValueProvider) },
                 { typeof(IResourceValidator), typeof(ResourceValidator) },

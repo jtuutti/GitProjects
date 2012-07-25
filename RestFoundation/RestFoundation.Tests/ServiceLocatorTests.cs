@@ -21,7 +21,7 @@ namespace RestFoundation.Tests
             using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(false))
             {
                 TestSingleton<IAuthorizationManager>(serviceLocator);
-                TestSingleton<IBrowserDetector>(serviceLocator);
+                TestSingleton<IContentNegotiator>(serviceLocator);
                 TestSingleton<IHttpMethodResolver>(serviceLocator);
                 TestSingleton<IParameterValueProvider>(serviceLocator);
                 TestSingleton<IResourceValidator>(serviceLocator);
@@ -47,7 +47,7 @@ namespace RestFoundation.Tests
             using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(false))
             {
                 TestImplementation<IAuthorizationManager, AuthorizationManager>(serviceLocator);
-                TestImplementation<IBrowserDetector, BrowserDetector>(serviceLocator);
+                TestImplementation<IContentNegotiator, ContentNegotiator>(serviceLocator);
                 TestImplementation<IHttpMethodResolver, HttpMethodResolver>(serviceLocator);
                 TestImplementation<IParameterValueProvider, ParameterValueProvider>(serviceLocator);
                 TestImplementation<IResourceValidator, ResourceValidator>(serviceLocator);
@@ -127,7 +127,7 @@ namespace RestFoundation.Tests
             using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForUnity(false))
             {
                 TestSingleton<IAuthorizationManager>(serviceLocator);
-                TestSingleton<IBrowserDetector>(serviceLocator);
+                TestSingleton<IContentNegotiator>(serviceLocator);
                 TestSingleton<IHttpMethodResolver>(serviceLocator);
                 TestSingleton<IParameterValueProvider>(serviceLocator);
                 TestSingleton<IResourceValidator>(serviceLocator);
@@ -153,7 +153,7 @@ namespace RestFoundation.Tests
             using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForUnity(false))
             {
                 TestImplementation<IAuthorizationManager, AuthorizationManager>(serviceLocator);
-                TestImplementation<IBrowserDetector, BrowserDetector>(serviceLocator);
+                TestImplementation<IContentNegotiator, ContentNegotiator>(serviceLocator);
                 TestImplementation<IHttpMethodResolver, HttpMethodResolver>(serviceLocator);
                 TestImplementation<IParameterValueProvider, ParameterValueProvider>(serviceLocator);
                 TestImplementation<IResourceValidator, ResourceValidator>(serviceLocator);
@@ -235,6 +235,7 @@ namespace RestFoundation.Tests
         }
 
         public static TAbstraction TestImplementation<TAbstraction, TImplementation>(IServiceLocator serviceLocator)
+            where TImplementation : TAbstraction
         {
             var service = serviceLocator.GetService<TAbstraction>();
 

@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authorization\TestAuthorizationManager.cs" />
-    <Compile Include="BrowserDetectorTests.cs" />
+    <Compile Include="ContentNegotiatorTests.cs" />
     <Compile Include="CacheTests.cs" />
     <Compile Include="JsonPContentTests.cs" />
     <Compile Include="JsonFormatterTests.cs" />

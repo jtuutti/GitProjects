@@ -6,13 +6,13 @@ namespace RestFoundation.Runtime
 {
     internal sealed class BrowserConstraint : IRouteConstraint
     {
-        private readonly IBrowserDetector m_browserDetector;
+        private readonly IContentNegotiator m_contentNegotiator;
 
-        public BrowserConstraint(IBrowserDetector browserDetector)
+        public BrowserConstraint(IContentNegotiator contentNegotiator)
         {
-            if (browserDetector == null) throw new ArgumentNullException("browserDetector");
+            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
 
-            m_browserDetector = browserDetector;
+            m_contentNegotiator = contentNegotiator;
         }
 
         public bool Match(HttpContextBase httpContext, Route route, string parameterName, RouteValueDictionary values, RouteDirection routeDirection)
@@ -24,7 +24,7 @@ namespace RestFoundation.Runtime
                 return true;
             }
 
-            return m_browserDetector.IsBrowserRequest(httpContext.Request);
+            return m_contentNegotiator.IsBrowserRequest(httpContext.Request);
         }
     }
 }

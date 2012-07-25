@@ -13,23 +13,23 @@ namespace RestFoundation.Runtime.Handlers
     public class RootRouteHandler : IRestHandler
     {
         private readonly IServiceContext m_serviceContext;
-        private readonly IBrowserDetector m_browserDetector;
+        private readonly IContentNegotiator m_contentNegotiator;
         private readonly IResultFactory m_resultFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RootRouteHandler"/> class.
         /// </summary>
         /// <param name="serviceContext">The service context.</param>
-        /// <param name="browserDetector">The browser detector.</param>
+        /// <param name="contentNegotiator">The content negotiator.</param>
         /// <param name="resultFactory">The service method result factory.</param>
-        public RootRouteHandler(IServiceContext serviceContext, IBrowserDetector browserDetector, IResultFactory resultFactory)
+        public RootRouteHandler(IServiceContext serviceContext, IContentNegotiator contentNegotiator, IResultFactory resultFactory)
         {
             if (serviceContext == null) throw new ArgumentNullException("serviceContext");
-            if (browserDetector == null) throw new ArgumentNullException("browserDetector");
+            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
             if (resultFactory == null) throw new ArgumentNullException("resultFactory");
 
             m_serviceContext = serviceContext;
-            m_browserDetector = browserDetector;
+            m_contentNegotiator = contentNegotiator;
             m_resultFactory = resultFactory;
         }
 
@@ -139,7 +139,7 @@ namespace RestFoundation.Runtime.Handlers
                 }
 
                 if (Rest.Active.IsServiceProxyInitialized && !String.IsNullOrWhiteSpace(Rest.Active.ServiceProxyRelativeUrl) &&
-                    m_browserDetector.IsBrowserRequest(new HttpRequestWrapper(context.Request)))
+                    m_contentNegotiator.IsBrowserRequest(new HttpRequestWrapper(context.Request)))
                 {
                     string rootUrl = String.Concat((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/'), "/", Rest.Active.ServiceProxyRelativeUrl, "/index");
                     context.Response.Redirect(rootUrl, false);

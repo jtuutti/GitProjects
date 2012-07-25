@@ -21,20 +21,20 @@ namespace RestFoundation
         private readonly string m_relativeUrl;
         private readonly RouteCollection m_routes;
         private readonly IHttpMethodResolver m_httpMethodResolver;
-        private readonly IBrowserDetector m_browserDetector;
+        private readonly IContentNegotiator m_contentNegotiator;
         private readonly bool m_asynchronously;
 
-        internal RouteBuilder(string relativeUrl, RouteCollection routes, IHttpMethodResolver httpMethodResolver, IBrowserDetector browserDetector, bool asynchronously)
+        internal RouteBuilder(string relativeUrl, RouteCollection routes, IHttpMethodResolver httpMethodResolver, IContentNegotiator contentNegotiator, bool asynchronously)
         {
             if (String.IsNullOrEmpty(relativeUrl)) throw new ArgumentNullException("relativeUrl");
             if (routes == null) throw new ArgumentNullException("routes");
             if (httpMethodResolver == null) throw new ArgumentNullException("httpMethodResolver");
-            if (browserDetector == null) throw new ArgumentNullException("browserDetector");
+            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
 
             m_relativeUrl = relativeUrl;
             m_routes = routes;
             m_httpMethodResolver = httpMethodResolver;
-            m_browserDetector = browserDetector;
+            m_contentNegotiator = contentNegotiator;
             m_asynchronously = asynchronously;
         }
 
@@ -48,7 +48,7 @@ namespace RestFoundation
         /// <returns>The route builder.</returns>
         public RouteBuilder WithAsyncHandler()
         {
-            return new RouteBuilder(m_relativeUrl, m_routes, m_httpMethodResolver, m_browserDetector, true);
+            return new RouteBuilder(m_relativeUrl, m_routes, m_httpMethodResolver, m_contentNegotiator, true);
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace RestFoundation
 
             var constraints = new RouteValueDictionary
             {
-                { RouteConstants.BrowserConstraint, new BrowserConstraint(m_browserDetector) }
+                { RouteConstants.BrowserConstraint, new BrowserConstraint(m_contentNegotiator) }
             };
 
             if (externalUrl.StartsWith("~/", StringComparison.Ordinal) && externalUrl.EndsWith(".aspx", StringComparison.OrdinalIgnoreCase))

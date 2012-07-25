@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using RestFoundation.Context;
 using RestFoundation.Odata;
 
 namespace RestFoundation.Runtime
@@ -13,6 +12,19 @@ namespace RestFoundation.Runtime
     /// </summary>
     public class ResultFactory : IResultFactory
     {
+        private readonly IContentNegotiator m_contentNegotiator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResultFactory"/> class with the provided content negotiator.
+        /// </summary>
+        /// <param name="contentNegotiator">The content negotiator.</param>
+        public ResultFactory(IContentNegotiator contentNegotiator)
+        {
+            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
+
+            m_contentNegotiator = contentNegotiator;
+        }
+
         /// <summary>
         /// Creates an <see cref="IResult"/> instance from a POCO object returned by
         /// the service method.
@@ -32,26 +44,6 @@ namespace RestFoundation.Runtime
             }
 
             return CreateFormatterResult(returnedObj, handler);
-        }
-
-        private static IResult CreateFormatterResult(object returnedObj, IRestHandler handler)
-        {
-            if (returnedObj != null && returnedObj.GetType().IsGenericType && returnedObj.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) != null)
-            {
-                returnedObj = PerformOdataOperations(returnedObj, handler.Context.Request);
-            }
-
-            string acceptType = handler.Context.Request.GetPreferredAcceptType();
-
-            IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, acceptType) ??
-                                          MediaTypeFormatterRegistry.GetFormatter(acceptType);
-
-            if (formatter == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported media type was provided in the Accept or the Content-Type header");
-            }
-
-            return formatter.FormatResponse(handler.Context, returnedObj);
         }
 
         private static object PerformOdataOperations(object returnedObj, IHttpRequest request)
@@ -86,6 +78,26 @@ namespace RestFoundation.Runtime
             }
 
             return filteredResultListType.GetMethod("ToArray").Invoke(filteredResultList, null);
+        }
+
+        private IResult CreateFormatterResult(object returnedObj, IRestHandler handler)
+        {
+            if (returnedObj != null && returnedObj.GetType().IsGenericType && returnedObj.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) != null)
+            {
+                returnedObj = PerformOdataOperations(returnedObj, handler.Context.Request);
+            }
+
+            string acceptType = m_contentNegotiator.GetPreferredMediaType(handler.Context.Request);
+
+            IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, acceptType) ??
+                                          MediaTypeFormatterRegistry.GetFormatter(acceptType);
+
+            if (formatter == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported media type was provided in the Accept or the Content-Type header");
+            }
+
+            return formatter.FormatResponse(handler.Context, returnedObj);
         }
     }
 }

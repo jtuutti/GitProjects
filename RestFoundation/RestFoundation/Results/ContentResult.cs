@@ -1,5 +1,4 @@
 ﻿using System;
-using RestFoundation.Context;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
@@ -9,11 +8,24 @@ namespace RestFoundation.Results
     /// </summary>
     public class ContentResult : IResult
     {
+        private readonly IContentNegotiator m_contentNegotiator;
+
         /// <summary>
         /// Initializes the new instance of the <see cref="ContentResult"/> class.
         /// </summary>
-        public ContentResult()
+        public ContentResult() : this(Rest.Active.ServiceLocator.GetService<IContentNegotiator>()) 
         {
+        }
+
+        /// <summary>
+        /// Initializes the new instance of the <see cref="ContentResult"/> class with the provided content negotiator.
+        /// </summary>
+        /// <param name="contentNegotiator">The content negotiator.</param>
+        public ContentResult(IContentNegotiator contentNegotiator)
+        {
+            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
+
+            m_contentNegotiator = contentNegotiator;
             ClearOutput = true;
         }
 
@@ -66,7 +78,7 @@ namespace RestFoundation.Results
             }
             else
             {
-                string acceptType = context.Request.GetPreferredAcceptType();
+                string acceptType = m_contentNegotiator.GetPreferredMediaType(context.Request);
 
                 if (!String.IsNullOrEmpty(acceptType))
                 {

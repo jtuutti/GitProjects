@@ -49,6 +49,7 @@ namespace RestFoundation
 
         internal bool IsServiceProxyInitialized { get; set; }
         internal string ServiceProxyRelativeUrl { get; set; }
+        internal string DefaultMediaType { get; private set; }
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
 
         /// <summary>
@@ -88,6 +89,44 @@ namespace RestFoundation
         }
 
         /// <summary>
+        /// Calls the provided service proxy configuration object to set up service help and proxy UI for the services.
+        /// </summary>
+        /// <param name="configuration">The service help and proxy configuration.</param>
+        /// <returns>The configuration object.</returns>
+        public Rest ConfigureServiceHelpAndProxy(Action<ServiceProxyConfiguration> configuration)
+        {
+            if (configuration == null) throw new ArgumentNullException("configuration");
+
+            configuration(new ServiceProxyConfiguration());
+            return this;
+        }
+
+        /// <summary>
+        /// Adds media type formatters for the JSONP support.
+        /// </summary>
+        /// <returns>The configuration object.</returns>
+        public Rest EnableJsonPSupport()
+        {
+            MediaTypeFormatterRegistry.SetFormatter("application/javascript", new JsonPFormatter());
+            MediaTypeFormatterRegistry.SetFormatter("text/javascript", new JsonPFormatter());
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the default media type in case the Accept HTTP header is not provided.
+        /// </summary>
+        /// <param name="mediaType">The media type.</param>
+        /// <returns>The configuration object.</returns>
+        public Rest WithDefaultMediaType(string mediaType)
+        {
+            if (String.IsNullOrEmpty(mediaType)) throw new ArgumentNullException("mediaType");
+
+            DefaultMediaType = mediaType;
+            return this;
+        }
+
+        /// <summary>
         /// Calls the provided global behavior builder delegate to set or remove behaviors global to all services.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -101,19 +140,6 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Calls the provided URL builder delegate to set up URL routes to services and web form pages.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <returns>The configuration object.</returns>
-        public Rest WithUrls(Action<UrlBuilder> builder)
-        {
-            if (builder == null) throw new ArgumentNullException("builder");
-
-            builder(new UrlBuilder(RouteTable.Routes, ServiceLocator.GetService<IHttpMethodResolver>(), ServiceLocator.GetService<IBrowserDetector>()));
-            return this;
-        }
-
-        /// <summary>
         /// Calls the provided media type formatter builder delegate to set or remove formatters.
         /// </summary>
         /// <param name="builder">The builder.</param>
@@ -123,19 +149,6 @@ namespace RestFoundation
             if (builder == null) throw new ArgumentNullException("builder");
 
             builder(new MediaTypeFormatterBuilder());
-            return this;
-        }
-
-        /// <summary>
-        /// Calls the provided type binder builder delegate to set or remove type binders.
-        /// </summary>
-        /// <param name="builder">The builder.</param>
-        /// <returns>The configuration object.</returns>
-        public Rest WithTypeBinders(Action<TypeBinderBuilder> builder)
-        {
-            if (builder == null) throw new ArgumentNullException("builder");
-
-            builder(new TypeBinderBuilder());
             return this;
         }
 
@@ -187,27 +200,28 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Adds media type formatters for the JSONP support.
+        /// Calls the provided type binder builder delegate to set or remove type binders.
         /// </summary>
+        /// <param name="builder">The builder.</param>
         /// <returns>The configuration object.</returns>
-        public Rest EnableJsonPSupport()
+        public Rest WithTypeBinders(Action<TypeBinderBuilder> builder)
         {
-            MediaTypeFormatterRegistry.SetFormatter("application/javascript", new JsonPFormatter());
-            MediaTypeFormatterRegistry.SetFormatter("text/javascript", new JsonPFormatter());
+            if (builder == null) throw new ArgumentNullException("builder");
 
+            builder(new TypeBinderBuilder());
             return this;
         }
 
         /// <summary>
-        /// Calls the provided service proxy configuration object to set up service help and proxy UI for the services.
+        /// Calls the provided URL builder delegate to set up URL routes to services and web form pages.
         /// </summary>
-        /// <param name="configuration">The service help and proxy configuration.</param>
+        /// <param name="builder">The builder.</param>
         /// <returns>The configuration object.</returns>
-        public Rest ConfigureServiceHelpAndProxy(Action<ServiceProxyConfiguration> configuration)
+        public Rest WithUrls(Action<UrlBuilder> builder)
         {
-            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (builder == null) throw new ArgumentNullException("builder");
 
-            configuration(new ServiceProxyConfiguration());
+            builder(new UrlBuilder(RouteTable.Routes, ServiceLocator.GetService<IHttpMethodResolver>(), ServiceLocator.GetService<IContentNegotiator>()));
             return this;
         }
     }

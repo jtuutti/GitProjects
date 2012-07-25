@@ -62,6 +62,7 @@
     <Compile Include="Formatters\DataContractXmlFormatter.cs" />
     <Compile Include="Formatters\JsonPFormatter.cs" />
     <Compile Include="IAuthenticationBehavior.cs" />
+    <Compile Include="IContentNegotiator.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="IResultExecutor.cs" />
     <Compile Include="Results\DataContractJsonResult.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Results\JsonPResult.cs" />
     <Compile Include="Results\RedirectType.cs" />
     <Compile Include="RouteBuilder.cs" />
+    <Compile Include="Runtime\ContentNegotiator.cs" />
     <Compile Include="Runtime\Handlers\BrowserRedirectHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
     <Compile Include="Security\IPAddressCollection.cs" />
@@ -82,7 +84,6 @@
     <Compile Include="Collections\Concrete\ServerVariableCollection.cs" />
     <Compile Include="Collections\IServerVariableCollection.cs" />
     <Compile Include="Formatters\BsonFormatter.cs" />
-    <Compile Include="IBrowserDetector.cs" />
     <Compile Include="ResponseHeaderNames.cs" />
     <Compile Include="IRestAsyncHandler.cs" />
     <Compile Include="GlobalBehaviorBuilder.cs" />
@@ -167,7 +168,6 @@
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptionType.cs" />
     <Compile Include="Runtime\BrowserConstraint.cs" />
-    <Compile Include="Runtime\BrowserDetector.cs" />
     <Compile Include="Runtime\ExceptionUnwrapper.cs" />
     <Compile Include="Runtime\ResultExecutor.cs" />
     <Compile Include="Security\AuthorizationHeader.cs" />
@@ -184,7 +184,6 @@
     <Compile Include="Runtime\ServiceCache.cs" />
     <Compile Include="Runtime\CompositeValidationResult.cs" />
     <Compile Include="Runtime\Registries\TypeBinderRegistry.cs" />
-    <Compile Include="Context\HttpRequestExtensions.cs" />
     <Compile Include="Context\HttpResponseOutput.cs" />
     <Compile Include="Runtime\ServiceRouteConstraint.cs" />
     <Compile Include="Runtime\OutputCompressionManager.cs" />
