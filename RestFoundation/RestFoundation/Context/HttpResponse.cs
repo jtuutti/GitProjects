@@ -91,11 +91,6 @@ namespace RestFoundation.Context
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "HTTP headers cannot be empty or have whitespace in the name");
             }
 
-            if (Context.Response.Headers[headerName] != null)
-            {
-                Context.Response.Headers.Remove(headerName);
-            }
-
             Context.Response.AppendHeader(headerName, headerValue);
         }
 

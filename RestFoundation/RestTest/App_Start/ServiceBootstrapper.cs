@@ -1,4 +1,5 @@
 ﻿using Microsoft.Practices.Unity;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
 using RestFoundation.Behaviors;
 using RestFoundation.Formatters;
@@ -16,6 +17,8 @@ namespace RestTest.App_Start
     {
         public static void RegisterDependencies()
         {
+            DynamicModuleUtility.RegisterModule(typeof(RestHttpModule));
+
             Rest.Active.ConfigureWithStructureMap(RegisterDependencies)
                        .WithUrls(RegisterUrls)
                        .WithMediaTypeFormatters(RegisterFormatters)

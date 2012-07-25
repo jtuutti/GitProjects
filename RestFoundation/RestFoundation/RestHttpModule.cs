@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -19,7 +20,11 @@ namespace RestFoundation
         /// <param name="context">An <see cref="T:System.Web.HttpApplication"/> that provides access to the methods, properties, and events common to all application objects within an ASP.NET application </param>
         public void Init(HttpApplication context)
         {
-            if (!HttpRuntime.UsingIntegratedPipeline)
+            if (context == null) throw new ArgumentNullException("context");
+
+            string processName = Process.GetCurrentProcess().ProcessName;
+
+            if (String.Equals("w3wp", processName) && !HttpRuntime.UsingIntegratedPipeline)
             {
                 throw new HttpException(500, "Rest Foundation services can only run under the IIS 7+ integrated pipeline mode");
             }
@@ -160,6 +165,11 @@ namespace RestFoundation
 
         private static void RemoveServerHeaders(HttpApplication context)
         {
+            if (!HttpRuntime.UsingIntegratedPipeline)
+            {
+                return;
+            }
+
             context.Response.Headers.Remove("Server");
             context.Response.Headers.Remove("X-AspNet-Version");
             context.Response.Headers.Remove("X-Powered-By");
@@ -179,7 +189,7 @@ namespace RestFoundation
                     throw new HttpResponseException(HttpStatusCode.InternalServerError, "HTTP headers cannot be empty or have whitespace in the name");
                 }
 
-                context.Response.Headers.Add(header.Key, header.Value);
+                context.Response.AppendHeader(header.Key, header.Value);
             }
         }
     }
