@@ -20,7 +20,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         /// <param name="request">The HTTP request.</param>
         /// <returns>A <see cref="string"/> containing the preferred media type.</returns>
-        public string GetPreferredMediaType(IHttpRequest request)
+        public virtual string GetPreferredMediaType(IHttpRequest request)
         {
             if (request == null) throw new ArgumentNullException("request");
 
@@ -66,7 +66,7 @@ namespace RestFoundation.Runtime
         /// <returns>
         /// true if the HTTP request came from a web browser; otherwise, false.
         /// </returns>
-        public bool IsBrowserRequest(HttpRequestBase request)
+        public virtual bool IsBrowserRequest(HttpRequestBase request)
         {
             if (request == null) throw new ArgumentNullException("request");
 
