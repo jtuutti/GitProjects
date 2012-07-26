@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -14,20 +13,24 @@ namespace RestFoundation
     /// </summary>
     public sealed class RestHttpModule : IHttpModule
     {
+        private bool m_integratedPipeline;
+
+        internal static bool IsInitialized { get; set; }
+
         /// <summary>
         /// Initializes a module and prepares it to handle requests.
         /// </summary>
-        /// <param name="context">An <see cref="T:System.Web.HttpApplication"/> that provides access to the methods, properties, and events common to all application objects within an ASP.NET application </param>
+        /// <param name="context">
+        /// An <see cref="T:System.Web.HttpApplication"/> that provides access to the methods, properties, and events common to all
+        /// application objects within an ASP.NET application.
+        /// </param>
         public void Init(HttpApplication context)
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            string processName = Process.GetCurrentProcess().ProcessName;
+            IsInitialized = true;
 
-            if (String.Equals("w3wp", processName) && !HttpRuntime.UsingIntegratedPipeline)
-            {
-                throw new HttpException(500, "Rest Foundation services can only run under the IIS 7+ integrated pipeline mode");
-            }
+            m_integratedPipeline = HttpRuntime.UsingIntegratedPipeline;
 
             context.Error += (sender, args) => CompleteRequestOnError(context);
             context.PreRequestHandlerExecute += (sender, args) => IngestPageDependencies(context);
@@ -43,23 +46,6 @@ namespace RestFoundation
         /// </summary>
         public void Dispose()
         {
-        }
-
-        internal static bool IsLoaded(HttpContextBase context)
-        {
-            if (context == null) throw new ArgumentNullException("context");
-
-            HttpModuleCollection modules = context.ApplicationInstance.Modules;
-
-            for (int i = modules.Count - 1; i >= 0; i--)
-            {
-                if (modules.Get(i) is RestHttpModule)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         private static void CompleteRequestOnError(HttpApplication context)
@@ -163,18 +149,6 @@ namespace RestFoundation
             }
         }
 
-        private static void RemoveServerHeaders(HttpApplication context)
-        {
-            if (!HttpRuntime.UsingIntegratedPipeline)
-            {
-                return;
-            }
-
-            context.Response.Headers.Remove("Server");
-            context.Response.Headers.Remove("X-AspNet-Version");
-            context.Response.Headers.Remove("X-Powered-By");
-        }
-
         private static void SetResponseHeaders(HttpApplication context)
         {
             if (Rest.Active.ResponseHeaders == null || Rest.Active.ResponseHeaders.Count == 0)
@@ -191,6 +165,18 @@ namespace RestFoundation
 
                 context.Response.AppendHeader(header.Key, header.Value);
             }
+        }
+
+        private void RemoveServerHeaders(HttpApplication context)
+        {
+            if (!m_integratedPipeline)
+            {
+                return;
+            }
+
+            context.Response.Headers.Remove("Server");
+            context.Response.Headers.Remove("X-AspNet-Version");
+            context.Response.Headers.Remove("X-Powered-By");
         }
     }
 }

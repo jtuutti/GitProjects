@@ -102,9 +102,9 @@ namespace RestFoundation.Runtime.Handlers
         {
             if (requestContext == null) throw new ArgumentNullException("requestContext");
 
-            if (!RestHttpModule.IsLoaded(requestContext.HttpContext))
+            if (!RestHttpModule.IsInitialized)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP response module found");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No REST HTTP module found");
             }
 
             return this;

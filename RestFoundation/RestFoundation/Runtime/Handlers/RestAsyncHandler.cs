@@ -106,9 +106,9 @@ namespace RestFoundation.Runtime.Handlers
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route data found");
             }
 
-            if (!RestHttpModule.IsLoaded(requestContext.HttpContext))
+            if (!RestHttpModule.IsInitialized)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No HTTP response module found");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No REST HTTP module found");
             }
 
             ServiceUrl = (string) requestContext.RouteData.Values[RouteConstants.ServiceUrl];

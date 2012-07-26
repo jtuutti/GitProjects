@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Web;
+﻿using System.Web;
 
 namespace RestFoundation.UnitTesting
 {
@@ -7,12 +6,7 @@ namespace RestFoundation.UnitTesting
     {
         public TestHttpApplication()
         {
-            MethodInfo addMethod = Modules.GetType().GetMethod("AddModule", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            if (addMethod != null)
-            {
-                addMethod.Invoke(Modules, new object[] { "RestModule", new RestHttpModule() });
-            }
+            RestHttpModule.IsInitialized = true;
         }
     }
 }
