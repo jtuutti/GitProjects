@@ -17,7 +17,7 @@ namespace RestFoundation.Runtime
         /// <param name="method">The service method.</param>
         /// <returns>A sequence of HTTP methods.</returns>
         /// <exception cref="InvalidOperationException">If the HTTP method could not be resolved.</exception>
-        public IEnumerable<HttpMethod> Resolve(MethodInfo method)
+        public virtual IEnumerable<HttpMethod> Resolve(MethodInfo method)
         {
             if (method == null) throw new ArgumentNullException("method");
 
