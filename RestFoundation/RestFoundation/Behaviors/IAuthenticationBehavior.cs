@@ -1,4 +1,4 @@
-﻿namespace RestFoundation
+﻿namespace RestFoundation.Behaviors
 {
     /// <summary>
     /// Defines a special case of a <see cref="ISecureServiceBehavior"/> that must be invoked

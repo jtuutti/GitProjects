@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using RestFoundation.Behaviors;
 
 namespace RestFoundation.Runtime
 {
@@ -47,8 +48,8 @@ namespace RestFoundation.Runtime
         /// <param name="service">The service instance.</param>
         /// <param name="method">The service method.</param>
         /// <param name="resource">The input resource for the service method.</param>
-        /// <returns>true to execute the service method; false to stop the request.</returns>
-        public virtual bool PerformOnExecutingBehaviors(IList<IServiceBehavior> behaviors, object service, MethodInfo method, object resource)
+        /// <returns>A service method action.</returns>
+        public virtual BehaviorMethodAction PerformOnExecutingBehaviors(IList<IServiceBehavior> behaviors, object service, MethodInfo method, object resource)
         {
             if (behaviors == null) throw new ArgumentNullException("behaviors");
             if (service == null) throw new ArgumentNullException("service");
@@ -56,13 +57,13 @@ namespace RestFoundation.Runtime
 
             for (int i = 0; i < behaviors.Count; i++)
             {
-                if (!behaviors[i].OnMethodExecuting(m_context, service, method, resource))
+                if (behaviors[i].OnMethodExecuting(m_context, service, method, resource) == BehaviorMethodAction.Stop)
                 {
-                    return false;
+                    return BehaviorMethodAction.Stop;
                 }
             }
 
-            return true;
+            return BehaviorMethodAction.Execute;
         }
 
         /// <summary>
@@ -91,8 +92,8 @@ namespace RestFoundation.Runtime
         /// <param name="service">The service instance.</param>
         /// <param name="method">The service method.</param>
         /// <param name="ex">The exception.</param>
-        /// <returns>true for the exception to bubble up, false to handle the exception and return null.</returns>
-        public virtual bool PerformOnExceptionBehaviors(IList<IServiceBehavior> behaviors, object service, MethodInfo method, Exception ex)
+        /// <returns>A service method exception action.</returns>
+        public virtual BehaviorExceptionAction PerformOnExceptionBehaviors(IList<IServiceBehavior> behaviors, object service, MethodInfo method, Exception ex)
         {
             if (behaviors == null) throw new ArgumentNullException("behaviors");
             if (service == null) throw new ArgumentNullException("service");
@@ -100,13 +101,13 @@ namespace RestFoundation.Runtime
 
             for (int i = 0; i < behaviors.Count; i++)
             {
-                if (!behaviors[i].OnMethodException(m_context, service, method, ex))
+                if (behaviors[i].OnMethodException(m_context, service, method, ex) == BehaviorExceptionAction.Handle)
                 {
-                    return false;
+                    return BehaviorExceptionAction.Handle;
                 }
             }
 
-            return true;
+            return BehaviorExceptionAction.BubbleUp;
         }
     }
 }

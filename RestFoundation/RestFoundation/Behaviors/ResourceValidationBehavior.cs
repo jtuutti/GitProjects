@@ -40,13 +40,13 @@ namespace RestFoundation.Behaviors
         /// <param name="method">The service method.</param>
         /// <param name="resource">The resource parameter value, if applicable, or null.</param>
         /// <returns>true to execute the service method; false to stop the request.</returns>
-        public override bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
+        public override BehaviorMethodAction OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
         {
             if (context == null) throw new ArgumentNullException("context");
 
             if (resource == null || m_validator == null)
             {
-                return true;
+                return BehaviorMethodAction.Execute;
             }
 
             ICollection<ValidationError> validationErrors;
@@ -56,7 +56,7 @@ namespace RestFoundation.Behaviors
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Resource validation failed");
             }
 
-            return true;
+            return BehaviorMethodAction.Execute;
         }
     }
 }

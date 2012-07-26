@@ -156,11 +156,11 @@ namespace RestFoundation.ServiceProxy
             const char slash = '/';
             string serviceUrl = context.Request.Url.GetLeftPart(UriPartial.Authority).TrimEnd(slash);
 
-            if (HttpsPort > 0)
+            if (HttpsPort > 0 && !Regex.IsMatch(serviceUrl, ":[0-9]+"))
             {
                 serviceUrl = Regex.Replace(serviceUrl, "http://", "https://", RegexOptions.IgnoreCase);
 
-                if (HttpsPort != 443 && !serviceUrl.Contains(String.Concat(":", HttpsPort)))
+                if (HttpsPort != 443)
                 {
                     serviceUrl += String.Format(CultureInfo.InvariantCulture, ":{0}", HttpsPort);
                 }

@@ -30,9 +30,10 @@ namespace RestFoundation.Behaviors
         /// <param name="context">The service context.</param>
         /// <param name="service">The service object.</param>
         /// <param name="method">The service method.</param>
-        public virtual bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
+        /// <returns>A service method action.</returns>
+        public virtual BehaviorMethodAction OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
-            return false;
+            return BehaviorMethodAction.Stop;
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace RestFoundation.Behaviors
         {
             if (context == null) throw new ArgumentNullException("context");
 
-            if (!OnMethodAuthorizing(context, service, method))
+            if (OnMethodAuthorizing(context, service, method) == BehaviorMethodAction.Stop)
             {
                 HttpStatusCode statusCode = context.Response.GetStatusCode();
 
@@ -75,7 +76,7 @@ namespace RestFoundation.Behaviors
                 return;
             }
 
-            if (!OnMethodAuthorizing(handlerData.Context, handlerData.Service, handlerData.Method))
+            if (OnMethodAuthorizing(handlerData.Context, handlerData.Service, handlerData.Method) == BehaviorMethodAction.Stop)
             {
                 validationStatus = HttpValidationStatus.IgnoreThisRequest;
                 return;

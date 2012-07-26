@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using RestFoundation.Behaviors;
 using RestFoundation.Runtime;
 
 namespace RestFoundation

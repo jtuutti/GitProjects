@@ -81,7 +81,8 @@ namespace RestFoundation.Behaviors
         /// <param name="context">The service context.</param>
         /// <param name="service">The service object.</param>
         /// <param name="method">The service method.</param>
-        public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
+        /// <returns>A service method action.</returns>
+        public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
             if (context == null)
             {
@@ -94,7 +95,7 @@ namespace RestFoundation.Behaviors
                 !AuthenticationType.Equals(header.AuthenticationType, StringComparison.OrdinalIgnoreCase))
             {
                 GenerateAuthenticationHeader(context, false);
-                return false;
+                return BehaviorMethodAction.Stop;
             }
 
             Tuple<bool, bool> responseValidationResult = ValidateResponse(context, header);
@@ -102,11 +103,11 @@ namespace RestFoundation.Behaviors
             if (!responseValidationResult.Item1)
             {
                 GenerateAuthenticationHeader(context, responseValidationResult.Item2);
-                return false;
+                return BehaviorMethodAction.Stop;
             }
 
             context.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), m_authorizationManager.GetRoles(header.UserName).ToArray());
-            return true;
+            return BehaviorMethodAction.Execute;
         }
 
         /// <summary>

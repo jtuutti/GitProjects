@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using RestFoundation;
 using RestFoundation.Behaviors;
@@ -11,10 +12,14 @@ namespace RestTest.Behaviors
 
         public StatisticsBehavior()
         {
-            AffectedMethods = new[] { "Get" };
         }
 
-        public override bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
+        public override bool AppliesTo(Type serviceType, MethodInfo method)
+        {
+            return method.Name.Equals("Get");
+        }
+
+        public override BehaviorMethodAction OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
         {
             timer = Stopwatch.StartNew();
 
@@ -57,7 +62,8 @@ namespace RestTest.Behaviors
             }
 
             context.Response.Output.WriteLine();
-            return true;
+
+            return BehaviorMethodAction.Execute;
         }
 
         public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object returnedObj)

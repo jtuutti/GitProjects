@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RestFoundation.Behaviors;
 using RestFoundation.Runtime;
 
 namespace RestFoundation

@@ -6,12 +6,12 @@ namespace RestTest.Behaviors
 {
     public class LoggingBehavior : ServiceBehavior
     {
-        public override bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
+        public override BehaviorMethodAction OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
         {
             context.HttpItemBag.LoggingEnabled = true;
             context.Response.Output.WriteFormat("Action '{0}' executing", method.Name).WriteLine(2);
 
-            return true;
+            return BehaviorMethodAction.Execute;
         }
 
         public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object returnedObj)

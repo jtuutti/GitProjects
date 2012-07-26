@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 
-namespace RestFoundation
+namespace RestFoundation.Behaviors
 {
     /// <summary>
     /// Defines a service behavior.
@@ -10,11 +9,13 @@ namespace RestFoundation
     public interface IServiceBehavior
     {
         /// <summary>
-        /// Gets or sets a collection of service method names to apply the behavior to.
-        /// If a null or empty collection is returned, the behavior will be applied to all
-        /// service methods.
+        /// Returns a value indicating whether to apply the behavior to the provided method of the specified
+        /// service type.
         /// </summary>
-        ICollection<string> AffectedMethods { get; set; }
+        /// <param name="serviceType">The service type.</param>
+        /// <param name="method">The service method.</param>
+        /// <returns>true to apply the behavior; false to bypass.</returns>
+        bool AppliesTo(Type serviceType, MethodInfo method);
 
         /// <summary>
         /// Called before a service method is executed.
@@ -23,8 +24,8 @@ namespace RestFoundation
         /// <param name="service">The service object.</param>
         /// <param name="method">The service method.</param>
         /// <param name="resource">The resource parameter value, if applicable, or null.</param>
-        /// <returns>true to execute the service method; false to stop the request.</returns>
-        bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource);
+        /// <returns>A service method action.</returns>
+        BehaviorMethodAction OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource);
 
         /// <summary>
         /// Called after a service method is executed.
@@ -44,7 +45,7 @@ namespace RestFoundation
         /// <param name="service">The service object.</param>
         /// <param name="method">The service method.</param>
         /// <param name="ex">The exception.</param>
-        /// <returns>true for the exception to bubble up, false to handle the exception and return null.</returns>
-        bool OnMethodException(IServiceContext context, object service, MethodInfo method, Exception ex);
+        /// <returns>A service method exception action.</returns>
+        BehaviorExceptionAction OnMethodException(IServiceContext context, object service, MethodInfo method, Exception ex);
     }
 }

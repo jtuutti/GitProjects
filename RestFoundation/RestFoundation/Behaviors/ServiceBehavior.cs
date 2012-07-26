@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace RestFoundation.Behaviors
@@ -10,19 +9,16 @@ namespace RestFoundation.Behaviors
     public abstract class ServiceBehavior : IServiceBehavior
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceBehavior"/> class.
+        /// Returns a value indicating whether to apply the behavior to the provided method of the specified
+        /// service type.
         /// </summary>
-        protected ServiceBehavior()
+        /// <param name="serviceType">The service type.</param>
+        /// <param name="method">The service method.</param>
+        /// <returns>true to apply the behavior; false to bypass.</returns>
+        public virtual bool AppliesTo(Type serviceType, MethodInfo method)
         {
-            AffectedMethods = new string[0];
+            return true;
         }
-
-        /// <summary>
-        /// Gets or sets a collection of service method names to apply the behavior to.
-        /// If a null or empty collection is returned, the behavior will be applied to all
-        /// service methods.
-        /// </summary>
-        public ICollection<string> AffectedMethods { get; set; }
 
         /// <summary>
         /// Called before a service method is executed.
@@ -31,10 +27,10 @@ namespace RestFoundation.Behaviors
         /// <param name="service">The service object.</param>
         /// <param name="method">The service method.</param>
         /// <param name="resource">The resource parameter value, if applicable, or null.</param>
-        /// <returns>true to execute the service method; false to stop the request.</returns>
-        public virtual bool OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
+        /// <returns>A service method action.</returns>
+        public virtual BehaviorMethodAction OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
         {
-            return true;
+            return BehaviorMethodAction.Execute;
         }
 
         /// <summary>
@@ -57,10 +53,10 @@ namespace RestFoundation.Behaviors
         /// <param name="service">The service object.</param>
         /// <param name="method">The service method.</param>
         /// <param name="ex">The exception.</param>
-        /// <returns>true for the exception to bubble up, false to handle the exception and return null.</returns>
-        public virtual bool OnMethodException(IServiceContext context, object service, MethodInfo method, Exception ex)
+        /// <returns>A service method exception action.</returns>
+        public virtual BehaviorExceptionAction OnMethodException(IServiceContext context, object service, MethodInfo method, Exception ex)
         {
-            return true;
+            return BehaviorExceptionAction.BubbleUp;
         }
     }
 }

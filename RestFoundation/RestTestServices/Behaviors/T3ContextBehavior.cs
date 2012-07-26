@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using RestFoundation;
 using RestFoundation.Behaviors;
 using RestTestContracts.Resources;
 
@@ -7,7 +8,7 @@ namespace RestTestServices.Behaviors
 {
     public class T3ContextBehavior : SecureServiceBehavior
     {
-        public override bool OnMethodAuthorizing(RestFoundation.IServiceContext context, object service, MethodInfo method)
+        public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
             var sessionInfo = new SessionInfo(context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-ApplicationID"),
                                               context.Request.Headers.TryGet("X-SpeechCycle-SmartCare-CustomerID"),
@@ -19,11 +20,11 @@ namespace RestTestServices.Behaviors
                 String.IsNullOrEmpty(sessionInfo.Environment) || sessionInfo.SessionId == Guid.Empty)
             {
                 SetForbiddenErrorMessage("No valid session context found");
-                return false;
+                return BehaviorMethodAction.Stop;
             }
 
             context.HttpItemBag.SessionInfo = sessionInfo;
-            return true;
+            return BehaviorMethodAction.Execute;
         }
     }
 }

@@ -56,12 +56,14 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\BehaviorMethodAction.cs" />
     <Compile Include="Behaviors\AjaxOnlyBehavior.cs" />
+    <Compile Include="Behaviors\BehaviorExceptionAction.cs" />
     <Compile Include="Formatters\BlockFormatter.cs" />
     <Compile Include="Formatters\DataContractJsonFormatter.cs" />
     <Compile Include="Formatters\DataContractXmlFormatter.cs" />
     <Compile Include="Formatters\JsonPFormatter.cs" />
-    <Compile Include="IAuthenticationBehavior.cs" />
+    <Compile Include="Behaviors\IAuthenticationBehavior.cs" />
     <Compile Include="IContentNegotiator.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="IResultExecutor.cs" />
@@ -126,7 +128,7 @@
     <Compile Include="IRestHandler.cs" />
     <Compile Include="IRestService.cs" />
     <Compile Include="IStreamCompressor.cs" />
-    <Compile Include="ISecureServiceBehavior.cs" />
+    <Compile Include="Behaviors\ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
     <Compile Include="IResourceValidator.cs" />
     <Compile Include="IUploadedFile.cs" />
@@ -214,7 +216,7 @@
     <Compile Include="Formatters\XmlFormatter.cs" />
     <Compile Include="RestHttpModule.cs" />
     <Compile Include="HttpResponseException.cs" />
-    <Compile Include="IServiceBehavior.cs" />
+    <Compile Include="Behaviors\IServiceBehavior.cs" />
     <Compile Include="IMediaTypeFormatter.cs" />
     <Compile Include="IHttpResponse.cs" />
     <Compile Include="Runtime\Registries\ServiceBehaviorRegistry.cs" />

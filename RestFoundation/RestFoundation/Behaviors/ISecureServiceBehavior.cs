@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace RestFoundation
+namespace RestFoundation.Behaviors
 {
     /// <summary>
     /// Defines a secure service behavior.

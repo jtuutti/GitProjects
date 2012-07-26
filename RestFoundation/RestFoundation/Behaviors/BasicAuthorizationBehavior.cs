@@ -44,7 +44,8 @@ namespace RestFoundation.Behaviors
         /// <param name="context">The service context.</param>
         /// <param name="service">The service object.</param>
         /// <param name="method">The service method.</param>
-        public override bool OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
+        /// <returns>A service method action.</returns>
+        public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
             if (context == null) throw new ArgumentNullException("context");
 
@@ -55,11 +56,11 @@ namespace RestFoundation.Behaviors
                 !String.Equals(m_authorizationManager.GetPassword(header.UserName), header.Password, StringComparison.Ordinal))
             {
                 GenerateAuthenticationHeader(context);
-                return false;
+                return BehaviorMethodAction.Stop;
             }
 
             context.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), m_authorizationManager.GetRoles(header.UserName).ToArray());
-            return true;
+            return BehaviorMethodAction.Execute;
         }
 
         private static void GenerateAuthenticationHeader(IServiceContext context)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using RestFoundation.Behaviors;
 
 namespace RestFoundation.Runtime
 {
@@ -52,27 +53,22 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "No service context was passed to the service method invoker");
             }
 
-            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, method);
-            AddServiceBehaviors(method.Name, service, behaviors);
+            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, method, service);
+            AddServiceBehaviors(method, service, behaviors);
 
             return InvokeAndProcessExceptions(method, service, behaviors, handler);
         }
 
-        private static bool BehaviorAppliesToMethod(IServiceBehavior behavior, string methodName)
-        {
-            return behavior.AffectedMethods == null || behavior.AffectedMethods.Count == 0 || behavior.AffectedMethods.Contains(methodName);
-        }
-
-        private static List<IServiceBehavior> GetServiceMethodBehaviors(IRestHandler handler, MethodInfo method)
+        private static List<IServiceBehavior> GetServiceMethodBehaviors(IRestHandler handler, MethodInfo method, object service)
         {
             List<IServiceBehavior> behaviors = ServiceBehaviorRegistry.GetBehaviors(handler)
-                                                                      .Where(behavior => BehaviorAppliesToMethod(behavior, method.Name))
+                                                                      .Where(behavior => behavior.AppliesTo(service.GetType(), method))
                                                                       .ToList();
 
             return behaviors;
         }
 
-        private static void AddServiceBehaviors(string methodName, object service, List<IServiceBehavior> behaviors)
+        private static void AddServiceBehaviors(MethodInfo method, object service, List<IServiceBehavior> behaviors)
         {
             var restService = service as IRestService;
 
@@ -83,7 +79,7 @@ namespace RestFoundation.Runtime
 
             foreach (IServiceBehavior serviceBehavior in restService.Behaviors)
             {
-                if (BehaviorAppliesToMethod(serviceBehavior, methodName))
+                if (serviceBehavior.AppliesTo(service.GetType(), method))
                 {
                     behaviors.Add(serviceBehavior);
                 }
@@ -112,7 +108,7 @@ namespace RestFoundation.Runtime
 
                 try
                 {
-                    if (!m_behaviorInvoker.PerformOnExceptionBehaviors(behaviors, service, method, unwrappedException))
+                    if (m_behaviorInvoker.PerformOnExceptionBehaviors(behaviors, service, method, unwrappedException) == BehaviorExceptionAction.Handle)
                     {
                         return null;
                     }
@@ -133,7 +129,7 @@ namespace RestFoundation.Runtime
             object resource;
             object[] methodArguments = GenerateMethodArguments(method, handler, out resource);
 
-            if (!m_behaviorInvoker.PerformOnExecutingBehaviors(behaviors, service, method, resource))
+            if (m_behaviorInvoker.PerformOnExecutingBehaviors(behaviors, service, method, resource) == BehaviorMethodAction.Stop)
             {
                 return null;
             }
