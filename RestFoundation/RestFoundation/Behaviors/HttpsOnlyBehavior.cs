@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Reflection;
 
 namespace RestFoundation.Behaviors
@@ -23,7 +22,8 @@ namespace RestFoundation.Behaviors
 
             if (!String.Equals("https", context.Request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden, "HTTPS required");
+                SetForbiddenErrorMessage("HTTPS required");
+                return BehaviorMethodAction.Stop;
             }
 
             return BehaviorMethodAction.Execute;
