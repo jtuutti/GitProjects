@@ -17,7 +17,10 @@ namespace RestFoundation.Collections.Concrete
 
         internal CookieValueCollection(HttpCookieCollection values)
         {
-            if (values == null) throw new ArgumentNullException("values");
+            if (values == null)
+            {
+                throw new ArgumentNullException("values");
+            }
 
             m_values = values;
         }
@@ -64,10 +67,17 @@ namespace RestFoundation.Collections.Concrete
         /// <exception cref="ArgumentOutOfRangeException">If the key is not a part of the collection.</exception>
         public HttpCookie Get(string key)
         {
-            if (key == null) throw new ArgumentNullException("key");
+            if (key == null)
+            {
+                throw new ArgumentNullException("key");
+            }
 
             HttpCookie value = TryGet(key);
-            if (value == null) throw new ArgumentOutOfRangeException("key", "Invalid key provided");
+
+            if (value == null)
+            {
+                throw new ArgumentOutOfRangeException("key", "Invalid key provided");
+            }
 
             return value;
         }
@@ -79,7 +89,10 @@ namespace RestFoundation.Collections.Concrete
         /// <returns>The corresponding value.</returns>
         public HttpCookie TryGet(string key)
         {
-            if (key == null) throw new ArgumentNullException("key");
+            if (key == null)
+            {
+                throw new ArgumentNullException("key");
+            }
 
             return m_values.Get(key);
         }

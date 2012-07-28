@@ -14,22 +14,6 @@ namespace RestFoundation.Behaviors
     /// </summary>
     public class DigestAuthorizationBehavior : SecureServiceBehavior, IAuthenticationBehavior, IDisposable
     {
-        /// <summary>
-        /// Contains the quality of protection values for digest authentication.
-        /// </summary>
-        public enum QualityOfProtection
-        {
-            /// <summary>
-            /// None
-            /// </summary>
-            None,
-
-            /// <summary>
-            /// Auth
-            /// </summary>
-            Auth
-        }
-
         private const string AuthenticationType = "Digest";
         private const int DefaultNonceLifeTimeInSeconds = 300;
 
@@ -66,12 +50,28 @@ namespace RestFoundation.Behaviors
         }
 
         /// <summary>
-        /// Gets the nonce lifetime.
+        /// Contains the quality of protection values for digest authentication.
+        /// </summary>
+        public enum QualityOfProtection
+        {
+            /// <summary>
+            /// None
+            /// </summary>
+            None,
+
+            /// <summary>
+            /// Auth
+            /// </summary>
+            Auth
+        }
+
+        /// <summary>
+        /// Gets or sets the nonce lifetime.
         /// </summary>
         public TimeSpan NonceLifetime { get; set; }
 
         /// <summary>
-        /// Gets the quality of protection value.
+        /// Gets or sets the quality of protection value.
         /// </summary>
         public QualityOfProtection Qop { get; set; }
 

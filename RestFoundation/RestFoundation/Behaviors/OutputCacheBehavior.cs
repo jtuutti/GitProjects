@@ -20,8 +20,6 @@ namespace RestFoundation.Behaviors
             VaryByParam = "none";
         }
 
-        internal OutputCacheParameters CacheSettings { get; private set; }
-
         /// <summary>
         /// Gets or sets the amount of time that a cache entry is to remain in the output cache.
         /// </summary>
@@ -53,7 +51,7 @@ namespace RestFoundation.Behaviors
         }
 
         /// <summary>
-        /// Gets or sets a value that determines whether HTTP cache-control: no-store directive is set.
+        /// Gets or sets a value indicating whether HTTP cache-control: no-store directive is set.
         /// </summary>
         public bool NoStore
         {
@@ -74,7 +72,7 @@ namespace RestFoundation.Behaviors
         {
             get
             {
-                return (CacheSettings.VaryByContentEncoding ?? string.Empty);
+                return CacheSettings.VaryByContentEncoding ?? String.Empty;
             }
             set
             {
@@ -89,7 +87,7 @@ namespace RestFoundation.Behaviors
         {
             get
             {
-                return (CacheSettings.VaryByCustom ?? string.Empty);
+                return CacheSettings.VaryByCustom ?? String.Empty;
             }
             set
             {
@@ -104,7 +102,7 @@ namespace RestFoundation.Behaviors
         {
             get
             {
-                return (CacheSettings.VaryByHeader ?? string.Empty);
+                return CacheSettings.VaryByHeader ?? String.Empty;
             }
             set
             {
@@ -119,13 +117,15 @@ namespace RestFoundation.Behaviors
         {
             get
             {
-                return (CacheSettings.VaryByParam ?? string.Empty);
+                return CacheSettings.VaryByParam ?? String.Empty;
             }
             set
             {
                 CacheSettings.VaryByParam = value;
             }
         }
+
+        internal OutputCacheParameters CacheSettings { get; private set; }
 
         /// <summary>
         /// Called after a service method is executed.
@@ -136,7 +136,10 @@ namespace RestFoundation.Behaviors
         /// <param name="returnedObj">The service method returned object.</param>
         public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object returnedObj)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             if (context.Request.Method != HttpMethod.Get && context.Request.Method != HttpMethod.Head)
             {

@@ -90,7 +90,7 @@ namespace RestFoundation
 
             if (urlParts.Length > 1)
             {
-                absoluteUrl += ("?" + urlParts[1]);
+                absoluteUrl += "?" + urlParts[1];
             }
 
             return absoluteUrl;

@@ -37,17 +37,17 @@ namespace RestFoundation.Behaviors
         }
 
         /// <summary>
-        /// Sets an error message in the case of a security exception.
+        /// Called during the authorization process before a service method or behavior is executed.
         /// </summary>
-        /// <param name="message">The error message.</param>
-        protected void SetForbiddenErrorMessage(string message)
-        {
-            m_forbiddenMessage = message ?? DefaultForbiddenMessage;
-        }
-
+        /// <param name="context">The service context.</param>
+        /// <param name="service">The service object.</param>
+        /// <param name="method">The service method.</param>
         void ISecureServiceBehavior.OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             if (OnMethodAuthorizing(context, service, method) == BehaviorMethodAction.Stop)
             {
@@ -64,6 +64,15 @@ namespace RestFoundation.Behaviors
             HttpCachePolicyBase cache = context.GetHttpContext().Response.Cache;
             cache.SetProxyMaxAge(new TimeSpan(0L));
             cache.AddValidationCallback(CacheValidationHandler, new CacheValidationHandlerData(context, service, method));
+        }
+
+        /// <summary>
+        /// Sets an error message in the case of a security exception.
+        /// </summary>
+        /// <param name="message">The error message.</param>
+        protected void SetForbiddenErrorMessage(string message)
+        {
+            m_forbiddenMessage = message ?? DefaultForbiddenMessage;
         }
 
         private void CacheValidationHandler(HttpContext context, object data, ref HttpValidationStatus validationStatus)

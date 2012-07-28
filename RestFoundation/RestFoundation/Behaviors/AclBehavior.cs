@@ -35,7 +35,10 @@ namespace RestFoundation.Behaviors
         /// <returns>A service method action.</returns>
         public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             var ranges = IPAddressRange.GetConfiguredRanges(m_sectionName).ToList();
 

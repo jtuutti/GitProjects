@@ -114,6 +114,28 @@ namespace RestFoundation.ServiceProxy
         }
 
         /// <summary>
+        /// Compares two <see cref="ProxyParameter"/> objects for equality.
+        /// </summary>
+        /// <param name="left">The first object</param>
+        /// <param name="right">The second object</param>
+        /// <returns>true if both objects are equivalent; otherwise, false.</returns>
+        public static bool operator ==(ProxyParameter left, ProxyParameter right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Compares two <see cref="ProxyParameter"/> objects for inequality.
+        /// </summary>
+        /// <param name="left">The first object</param>
+        /// <param name="right">The second object</param>
+        /// <returns>true if both objects are not equivalent; otherwise, false.</returns>
+        public static bool operator !=(ProxyParameter left, ProxyParameter right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <returns>
@@ -150,28 +172,6 @@ namespace RestFoundation.ServiceProxy
         public override int GetHashCode()
         {
             return m_name.GetHashCode();
-        }
-
-        /// <summary>
-        /// Compares two <see cref="ProxyParameter"/> objects for equality.
-        /// </summary>
-        /// <param name="left">The first object</param>
-        /// <param name="right">The second object</param>
-        /// <returns>true if both objects are equivalent; otherwise, false.</returns>
-        public static bool operator ==(ProxyParameter left, ProxyParameter right)
-        {
-            return left.Equals(right);
-        }
-
-        /// <summary>
-        /// Compares two <see cref="ProxyParameter"/> objects for inequality.
-        /// </summary>
-        /// <param name="left">The first object</param>
-        /// <param name="right">The second object</param>
-        /// <returns>true if both objects are not equivalent; otherwise, false.</returns>
-        public static bool operator !=(ProxyParameter left, ProxyParameter right)
-        {
-            return !left.Equals(right);
         }
     }
 }

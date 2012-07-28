@@ -53,6 +53,16 @@ namespace RestFoundation.Runtime
                 return m_urlInfo;
             }
         }
+        
+        public static bool operator ==(ServiceMethodMetadata left, ServiceMethodMetadata right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ServiceMethodMetadata left, ServiceMethodMetadata right)
+        {
+            return !left.Equals(right);
+        }
 
         public bool Equals(ServiceMethodMetadata other)
         {
@@ -71,16 +81,6 @@ namespace RestFoundation.Runtime
             {
                 return (m_urlInfo.GetHashCode() * 397) ^ m_methodInfo.GetHashCode();
             }
-        }
-
-        public static bool operator ==(ServiceMethodMetadata left, ServiceMethodMetadata right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(ServiceMethodMetadata left, ServiceMethodMetadata right)
-        {
-            return !left.Equals(right);
         }
     }
 }

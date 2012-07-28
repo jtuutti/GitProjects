@@ -153,8 +153,8 @@ namespace RestFoundation.ServiceProxy
                 }
             }
 
-            const char slash = '/';
-            string serviceUrl = context.Request.Url.GetLeftPart(UriPartial.Authority).TrimEnd(slash);
+            const char Slash = '/';
+            string serviceUrl = context.Request.Url.GetLeftPart(UriPartial.Authority).TrimEnd(Slash);
 
             if (HttpsPort > 0 && !Regex.IsMatch(serviceUrl, ":[0-9]+"))
             {
@@ -166,7 +166,7 @@ namespace RestFoundation.ServiceProxy
                 }
             }
 
-            return Tuple.Create(String.Concat(serviceUrl, context.Request.ApplicationPath.TrimEnd(slash), slash), urlTemplate);
+            return Tuple.Create(String.Concat(serviceUrl, context.Request.ApplicationPath.TrimEnd(Slash), Slash), urlTemplate);
         }
 
         /// <summary>

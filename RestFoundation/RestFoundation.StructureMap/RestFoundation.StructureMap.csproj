@@ -55,6 +55,7 @@
     <Compile Include="RestExtensions.cs" />
     <Compile Include="ServiceLocator.cs" />
     <Compile Include="ServiceBuilder.cs" />
+    <Compile Include="StructureMapExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestFoundation\RestFoundation.csproj">

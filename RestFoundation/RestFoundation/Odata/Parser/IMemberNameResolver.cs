@@ -17,7 +17,10 @@ namespace RestFoundation.Odata.Parser
     {
         public string ResolveName(MemberInfo member)
         {
-            if (member == null) throw new ArgumentNullException("member");
+            if (member == null)
+            {
+                throw new ArgumentNullException("member");
+            }
 
             throw new NotImplementedException();
         }

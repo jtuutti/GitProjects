@@ -37,7 +37,7 @@ namespace RestFoundation.Client
         string ProxyUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets a <see cref="bool"/> value indicating whether the client should support HTTP encoding.
+        /// Gets or sets a value indicating whether the client should support HTTP encoding.
         /// GZIP and Deflate compression algorithms are currently supported.
         /// </summary>
         bool SupportsEncoding { get; set; }

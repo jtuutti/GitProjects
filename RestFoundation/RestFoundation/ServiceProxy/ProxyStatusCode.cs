@@ -47,6 +47,50 @@ namespace RestFoundation.ServiceProxy
         }
 
         /// <summary>
+        /// Compares two <see cref="ProxyStatusCode"/> objects for equality.
+        /// </summary>
+        /// <param name="left">The first object</param>
+        /// <param name="right">The second object</param>
+        /// <returns>true if both objects are equivalent; otherwise, false.</returns>
+        public static bool operator ==(ProxyStatusCode left, ProxyStatusCode right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Compares two <see cref="ProxyStatusCode"/> objects for inequality.
+        /// </summary>
+        /// <param name="left">The first object</param>
+        /// <param name="right">The second object</param>
+        /// <returns>true if both objects are not equivalent; otherwise, false.</returns>
+        public static bool operator !=(ProxyStatusCode left, ProxyStatusCode right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
+        /// Compares whether the first <see cref="ProxyStatusCode"/> is less than the second.
+        /// </summary>
+        /// <param name="left">The first object</param>
+        /// <param name="right">The second object</param>
+        /// <returns>true if the first object is less than the second; otherwise, false.</returns>
+        public static bool operator <(ProxyStatusCode left, ProxyStatusCode right)
+        {
+            return left.CompareTo(right) < 0;
+        }
+
+        /// <summary>
+        /// Compares whether the first <see cref="ProxyStatusCode"/> is greater than the second.
+        /// </summary>
+        /// <param name="left">The first object</param>
+        /// <param name="right">The second object</param>
+        /// <returns>true if the first object is greater than the second; otherwise, false.</returns>
+        public static bool operator >(ProxyStatusCode left, ProxyStatusCode right)
+        {
+            return left.CompareTo(right) > 0;
+        }
+
+        /// <summary>
         /// Gets a numeric HTTP status code.
         /// </summary>
         public int GetNumericStatusCode()
@@ -111,49 +155,6 @@ namespace RestFoundation.ServiceProxy
             {
                 return (m_statusCode.GetHashCode() * 397) ^ m_condition.GetHashCode();
             }
-        }
-
-        /// <summary>
-        /// Compares two <see cref="ProxyStatusCode"/> objects for equality.
-        /// </summary>
-        /// <param name="left">The first object</param>
-        /// <param name="right">The second object</param>
-        /// <returns>true if both objects are equivalent; otherwise, false.</returns>
-        public static bool operator ==(ProxyStatusCode left, ProxyStatusCode right)
-        {
-            return left.Equals(right);
-        }
-
-        /// <summary>
-        /// Compares two <see cref="ProxyStatusCode"/> objects for inequality.
-        /// </summary>
-        /// <param name="left">The first object</param>
-        /// <param name="right">The second object</param>
-        /// <returns>true if both objects are not equivalent; otherwise, false.</returns>
-        public static bool operator !=(ProxyStatusCode left, ProxyStatusCode right)
-        {
-            return !left.Equals(right);
-        }
-        /// <summary>
-        /// Compares whether the first <see cref="ProxyStatusCode"/> is less than the second.
-        /// </summary>
-        /// <param name="left">The first object</param>
-        /// <param name="right">The second object</param>
-        /// <returns>true if the first object is less than the second; otherwise, false.</returns>
-        public static bool operator <(ProxyStatusCode left, ProxyStatusCode right)
-        {
-            return left.CompareTo(right) < 0;
-        }
-
-        /// <summary>
-        /// Compares whether the first <see cref="ProxyStatusCode"/> is greater than the second.
-        /// </summary>
-        /// <param name="left">The first object</param>
-        /// <param name="right">The second object</param>
-        /// <returns>true if the first object is greater than the second; otherwise, false.</returns>
-        public static bool operator >(ProxyStatusCode left, ProxyStatusCode right)
-        {
-            return left.CompareTo(right) > 0;
         }
     }
 }

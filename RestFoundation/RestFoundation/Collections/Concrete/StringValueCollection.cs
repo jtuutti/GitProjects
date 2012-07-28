@@ -17,7 +17,10 @@ namespace RestFoundation.Collections.Concrete
 
         internal StringValueCollection(NameValueCollection values)
         {
-            if (values == null) throw new ArgumentNullException("values");
+            if (values == null)
+            {
+                throw new ArgumentNullException("values");
+            }
 
             m_values = values;
         }
@@ -65,7 +68,11 @@ namespace RestFoundation.Collections.Concrete
         public string Get(string key)
         {
             string value = TryGet(key);
-            if (value == null) throw new ArgumentOutOfRangeException("key", "Invalid key provided");
+
+            if (value == null)
+            {
+                throw new ArgumentOutOfRangeException("key", "Invalid key provided");
+            }
 
             return value;
         }
@@ -87,7 +94,10 @@ namespace RestFoundation.Collections.Concrete
         /// <returns>The collection of values for the key.</returns>
         public ICollection<string> GetValues(string key)
         {
-            if (key == null) throw new ArgumentNullException("key");
+            if (key == null)
+            {
+                throw new ArgumentNullException("key");
+            }
 
             return m_values.GetValues(key);
         }

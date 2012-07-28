@@ -19,7 +19,10 @@ namespace RestFoundation.Runtime.Handlers
 
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
-            if (requestContext == null) throw new ArgumentNullException("requestContext");
+            if (requestContext == null)
+            {
+                throw new ArgumentNullException("requestContext");
+            }
 
             m_webPageUrl = requestContext.RouteData.Values[RouteConstants.WebPageUrl] as string;
 
@@ -28,7 +31,10 @@ namespace RestFoundation.Runtime.Handlers
 
         public void ProcessRequest(HttpContext context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             if (String.IsNullOrWhiteSpace(m_webPageUrl))
             {

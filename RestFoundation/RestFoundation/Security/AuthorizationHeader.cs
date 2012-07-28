@@ -7,8 +7,15 @@ namespace RestFoundation.Security
     {
         public AuthorizationHeader(string authenticationType, string userName, NameValueCollection parameters)
         {
-            if (String.IsNullOrEmpty(userName)) throw new ArgumentNullException("userName");
-            if (parameters == null) throw new ArgumentNullException("parameters");
+            if (String.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentNullException("userName");
+            }
+
+            if (parameters == null)
+            {
+                throw new ArgumentNullException("parameters");
+            }
 
             AuthenticationType = authenticationType;
             UserName = userName;

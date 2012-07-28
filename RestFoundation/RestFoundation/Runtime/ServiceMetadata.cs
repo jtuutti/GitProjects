@@ -32,6 +32,16 @@ namespace RestFoundation.Runtime
             }
         }
 
+        public static bool operator ==(ServiceMetadata left, ServiceMetadata right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ServiceMetadata left, ServiceMetadata right)
+        {
+            return !left.Equals(right);
+        }
+
         public bool Equals(ServiceMetadata other)
         {
             return other.m_type == m_type && Equals(other.m_url, m_url);
@@ -50,16 +60,6 @@ namespace RestFoundation.Runtime
             {
                 return (m_type.GetHashCode() * 397) ^ m_url.GetHashCode();
             }
-        }
-
-        public static bool operator ==(ServiceMetadata left, ServiceMetadata right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(ServiceMetadata left, ServiceMetadata right)
-        {
-            return !left.Equals(right);
         }
     }
 }

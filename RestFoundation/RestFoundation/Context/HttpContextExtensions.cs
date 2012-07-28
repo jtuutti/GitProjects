@@ -11,7 +11,10 @@ namespace RestFoundation.Context
 
         public static HttpMethod GetOverriddenHttpMethod(this HttpContextBase context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             string httpMethodString;
 

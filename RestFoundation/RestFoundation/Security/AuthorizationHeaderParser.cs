@@ -114,14 +114,14 @@ namespace RestFoundation.Security
             return Tuple.Create(credentialItems[0], credentialItems[1]);
         }
 
-        private static IDictionary<string, string> ParseAuthorizationItems(String authorizationString)
+        private static IDictionary<string, string> ParseAuthorizationItems(string authorizationString)
         {
             string[] items = nameValueSeparatorRegex.Replace(authorizationString, NameValueSeparator)
-                                                           .Split(new[]
-                                                                  {
-                                                                      AuthorizationSeparator,
-                                                                      AuthorizationItemSeparator
-                                                                  }, StringSplitOptions.RemoveEmptyEntries);
+                                                    .Split(new[]
+                                                            {
+                                                                AuthorizationSeparator,
+                                                                AuthorizationItemSeparator
+                                                            }, StringSplitOptions.RemoveEmptyEntries);
 
             var itemDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 

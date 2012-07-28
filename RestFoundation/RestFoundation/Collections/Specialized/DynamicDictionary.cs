@@ -26,7 +26,10 @@ namespace RestFoundation.Collections.Specialized
         /// <param name="dictionary">The static dictionary to convert to dynamic.</param>
         public DynamicDictionary(IDictionary dictionary)
         {
-            if (dictionary == null) throw new ArgumentNullException("dictionary");
+            if (dictionary == null)
+            {
+                throw new ArgumentNullException("dictionary");
+            }
 
             m_inner = dictionary;
         }
@@ -51,7 +54,10 @@ namespace RestFoundation.Collections.Specialized
         /// <param name="result">The result of the get operation.</param>
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if (binder == null) throw new ArgumentNullException("binder");
+            if (binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
 
             result = m_inner[binder.Name];
             return true;
@@ -69,7 +75,10 @@ namespace RestFoundation.Collections.Specialized
         /// <param name="value">The value to set to the member</param>
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            if (binder == null) throw new ArgumentNullException("binder");
+            if (binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
 
             m_inner[binder.Name] = value;
             return true;

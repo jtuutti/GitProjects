@@ -55,26 +55,6 @@ namespace RestFoundation.Security
             }
         }
 
-        /// <summary>
-        /// Gets the current IP network in the collection.
-        /// </summary>
-        public IPNetwork this[double i]
-        {
-            get
-            {
-                if (i >= Count)
-                {
-                    throw new ArgumentOutOfRangeException("i");
-                }
-
-                double size = Count;
-                var increment = (int)((Broadcast - Network) / size);
-                var uintNetwork = (uint)(Network + ((increment + 1) * i));
-                var ipn = new IPNetwork(uintNetwork, m_cidrSubnet);
-                return ipn;
-            }
-        }
-
         object IEnumerator.Current
         {
             get
@@ -104,6 +84,26 @@ namespace RestFoundation.Security
             get
             {
                 return IPNetwork.ToUint(m_ipnetwork.Network);
+            }
+        }
+
+        /// <summary>
+        /// Gets the current IP network in the collection.
+        /// </summary>
+        public IPNetwork this[double i]
+        {
+            get
+            {
+                if (i >= Count)
+                {
+                    throw new ArgumentOutOfRangeException("i");
+                }
+
+                double size = Count;
+                var increment = (int)((Broadcast - Network) / size);
+                var uintNetwork = (uint)(Network + ((increment + 1) * i));
+                var ipn = new IPNetwork(uintNetwork, m_cidrSubnet);
+                return ipn;
             }
         }
 

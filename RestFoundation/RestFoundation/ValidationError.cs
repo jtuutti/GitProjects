@@ -44,6 +44,28 @@ namespace RestFoundation
         }
 
         /// <summary>
+        /// Compares two <see cref="ValidationError"/> objects for equality.
+        /// </summary>
+        /// <param name="left">The first object</param>
+        /// <param name="right">The second object</param>
+        /// <returns>true if both objects are equivalent; otherwise, false.</returns>
+        public static bool operator ==(ValidationError left, ValidationError right)
+        {
+            return left.Equals(right);
+        }
+
+        /// <summary>
+        /// Compares two <see cref="ValidationError"/> objects for inequality.
+        /// </summary>
+        /// <param name="left">The first object</param>
+        /// <param name="right">The second object</param>
+        /// <returns>true if both objects are not equivalent; otherwise, false.</returns>
+        public static bool operator !=(ValidationError left, ValidationError right)
+        {
+            return !left.Equals(right);
+        }
+
+        /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <returns>
@@ -64,7 +86,10 @@ namespace RestFoundation
         /// <param name="obj">Another object to compare to. </param><filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
 
             return obj is ValidationError && Equals((ValidationError) obj);
         }
@@ -82,28 +107,6 @@ namespace RestFoundation
             {
                 return ((m_propertyName != null ? m_propertyName.GetHashCode() : 0) * 397) ^ (m_message != null ? m_message.GetHashCode() : 0);
             }
-        }
-
-        /// <summary>
-        /// Compares two <see cref="ValidationError"/> objects for equality.
-        /// </summary>
-        /// <param name="left">The first object</param>
-        /// <param name="right">The second object</param>
-        /// <returns>true if both objects are equivalent; otherwise, false.</returns>
-        public static bool operator ==(ValidationError left, ValidationError right)
-        {
-            return left.Equals(right);
-        }
-
-        /// <summary>
-        /// Compares two <see cref="ValidationError"/> objects for inequality.
-        /// </summary>
-        /// <param name="left">The first object</param>
-        /// <param name="right">The second object</param>
-        /// <returns>true if both objects are not equivalent; otherwise, false.</returns>
-        public static bool operator !=(ValidationError left, ValidationError right)
-        {
-            return !left.Equals(right);
         }
     }
 }

@@ -42,6 +42,16 @@ namespace RestFoundation.Runtime
             }
         }
 
+        public static bool operator ==(RouteMetadata left, RouteMetadata right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(RouteMetadata left, RouteMetadata right)
+        {
+            return !left.Equals(right);
+        }
+
         public bool Equals(RouteMetadata other)
         {
             return Equals(other.m_typeName, m_typeName) && Equals(other.m_standardizedUrlTemplate, m_standardizedUrlTemplate);
@@ -59,16 +69,6 @@ namespace RestFoundation.Runtime
             {
                 return (m_typeName.GetHashCode() * 397) ^ m_standardizedUrlTemplate.GetHashCode();
             }
-        }
-
-        public static bool operator ==(RouteMetadata left, RouteMetadata right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(RouteMetadata left, RouteMetadata right)
-        {
-            return !left.Equals(right);
         }
     }
 }

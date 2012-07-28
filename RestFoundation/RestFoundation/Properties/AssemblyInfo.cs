@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion("1.0.0.0")]
@@ -15,3 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
 [assembly: Guid("afa35ccc-3f07-4e8e-ae8c-72036701a11a")]
+[assembly: NeutralResourcesLanguage("en-US")]

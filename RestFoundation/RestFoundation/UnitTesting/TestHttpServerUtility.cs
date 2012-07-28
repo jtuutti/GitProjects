@@ -10,7 +10,10 @@ namespace RestFoundation.UnitTesting
 
         internal TestHttpServerUtility(string relativeUrl)
         {
-            if (relativeUrl == null) throw new ArgumentNullException("relativeUrl");
+            if (relativeUrl == null)
+            {
+                throw new ArgumentNullException("relativeUrl");
+            }
 
             m_relativeUrl = relativeUrl.TrimStart('~', '/', ' ');
             m_scriptTimeout = 60;

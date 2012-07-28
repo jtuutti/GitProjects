@@ -26,6 +26,16 @@ namespace RestFoundation.Runtime
             m_elements = new List<XElement> { StripNamespaces(document.Root) };
         }
 
+        private DynamicXDocument(XElement element)
+        {
+            m_elements = new List<XElement> { element };
+        }
+
+        private DynamicXDocument(IEnumerable<XElement> elements)
+        {
+            m_elements = new List<XElement>(elements);
+        }
+
         /// <summary>
         /// Provides the implementation for operations that get member values. Classes derived from the <see cref="T:System.Dynamic.DynamicObject"/>
         /// class can override this method to specify dynamic behavior for operations such as getting a value for a property.
@@ -170,16 +180,6 @@ namespace RestFoundation.Runtime
             }
 
             return valueList.ToArray();
-        }
-
-        private DynamicXDocument(XElement element)
-        {
-            m_elements = new List<XElement> { element };
-        }
-
-        private DynamicXDocument(IEnumerable<XElement> elements)
-        {
-            m_elements = new List<XElement>(elements);
         }
     }
 }

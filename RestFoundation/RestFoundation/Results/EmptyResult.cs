@@ -14,7 +14,10 @@ namespace RestFoundation.Results
         /// <param name="context">The service context.</param>
         public void Execute(IServiceContext context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
         }
     }
 }

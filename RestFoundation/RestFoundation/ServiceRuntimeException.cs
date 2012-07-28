@@ -22,17 +22,6 @@ namespace RestFoundation
         private readonly ReadOnlyCollection<Exception> m_innerExceptions;
 
         /// <summary>
-        /// Gets a sequence of inner exception.
-        /// </summary>
-        public IEnumerable<Exception> InnerExceptions
-        {
-            get
-            {
-                return m_innerExceptions;
-            }
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ServiceRuntimeException"/> class.
         /// </summary>
         public ServiceRuntimeException()
@@ -102,6 +91,17 @@ namespace RestFoundation
             else
             {
                 m_innerExceptions = new ReadOnlyCollection<Exception>(new Exception[0]);
+            }
+        }
+
+        /// <summary>
+        /// Gets a sequence of inner exception.
+        /// </summary>
+        public IEnumerable<Exception> InnerExceptions
+        {
+            get
+            {
+                return m_innerExceptions;
             }
         }
 

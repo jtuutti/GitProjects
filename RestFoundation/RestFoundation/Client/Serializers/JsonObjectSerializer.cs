@@ -20,7 +20,10 @@ namespace RestFoundation.Client.Serializers
         /// <returns>A value containing the serialized object length.</returns>
         public int GetContentLength(object obj)
         {
-            if (obj == null) return 0;
+            if (obj == null)
+            {
+                return 0;
+            }
 
             if (m_serializedObject != null && ReferenceEquals(obj, m_reference))
             {
@@ -40,8 +43,15 @@ namespace RestFoundation.Client.Serializers
         /// <param name="obj">The object to serialize.</param>
         public void Serialize(Stream stream, object obj)
         {
-            if (stream == null) throw new ArgumentNullException("stream");
-            if (obj == null) return;
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream");
+            }
+
+            if (obj == null)
+            {
+                return;
+            }
 
             if (m_serializedObject == null || !ReferenceEquals(obj, m_reference))
             {
@@ -60,7 +70,10 @@ namespace RestFoundation.Client.Serializers
         /// <returns>The deserialized object.</returns>
         public T Deserialize<T>(Stream stream)
         {
-            if (stream == null) throw new ArgumentNullException("stream");
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream");
+            }
 
             using (var streamReader = new StreamReader(stream, Encoding.UTF8))
             {

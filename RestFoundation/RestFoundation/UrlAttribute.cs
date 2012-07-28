@@ -20,7 +20,10 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">If the OPTIONS HTTP method is provided explicitly.</exception>
         public UrlAttribute(string urlTemplate, params HttpMethod[] httpMethods)
         {
-            if (urlTemplate == null) throw new ArgumentNullException("urlTemplate");
+            if (urlTemplate == null)
+            {
+                throw new ArgumentNullException("urlTemplate");
+            }
 
             if (httpMethods != null && Array.IndexOf(httpMethods, HttpMethod.Options) >= 0)
             {
@@ -40,7 +43,10 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">If the OPTIONS HTTP method is provided explicitly.</exception>
         public UrlAttribute(string urlTemplate, string httpMethods)
         {
-            if (urlTemplate == null) throw new ArgumentNullException("urlTemplate");
+            if (urlTemplate == null)
+            {
+                throw new ArgumentNullException("urlTemplate");
+            }
 
             UrlTemplate = urlTemplate.Trim();
 

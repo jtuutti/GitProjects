@@ -41,7 +41,10 @@ namespace RestFoundation.ServiceProxy
 
         public static string GetTypeName(Type type)
         {
-            if (type == null) throw new ArgumentNullException("type");
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
 
             string typeName;
             return types.TryGetValue(type, out typeName) ? typeName : "object";

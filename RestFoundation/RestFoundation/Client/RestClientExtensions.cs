@@ -22,7 +22,10 @@ namespace RestFoundation.Client
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
         public static void Get(this IRestClient client, Uri url)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
 
             client.Execute(url, HttpMethod.Get);
         }
@@ -39,7 +42,10 @@ namespace RestFoundation.Client
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
         public static void Get(this IRestClient client, Uri url, NameValueCollection headers)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
 
             client.Execute(url, HttpMethod.Get, headers);
         }
@@ -59,7 +65,10 @@ namespace RestFoundation.Client
         /// <exception cref="InvalidOperationException">If a resource object is not serializable.</exception>
         public static RestResource<TOutput> Get<TOutput>(this IRestClient client, Uri url, RestResourceType outputType)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
 
             return client.Execute<TOutput>(url, HttpMethod.Get, outputType);
         }
@@ -80,7 +89,10 @@ namespace RestFoundation.Client
         /// <exception cref="InvalidOperationException">If a resource object is not serializable.</exception>
         public static RestResource<TOutput> Get<TOutput>(this IRestClient client, Uri url, RestResourceType outputType, NameValueCollection headers)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
 
             return client.Execute<TOutput>(url, HttpMethod.Get, outputType, headers);
         }
@@ -102,7 +114,10 @@ namespace RestFoundation.Client
         /// <exception cref="ArgumentException">If the resource body is null.</exception>
         public static RestResource<TOutput> Post<TInput, TOutput>(this IRestClient client, Uri url, RestResource<TInput> resource)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
 
             return client.Execute<TInput, TOutput>(url, HttpMethod.Post, resource);
         }
@@ -125,7 +140,10 @@ namespace RestFoundation.Client
         /// <exception cref="ArgumentException">If the resource body is null.</exception>
         public static RestResource<TOutput> Post<TInput, TOutput>(this IRestClient client, Uri url, RestResource<TInput> resource, RestResourceType outputType)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
 
             return client.Execute<TInput, TOutput>(url, HttpMethod.Post, resource, outputType);
         }
@@ -147,7 +165,10 @@ namespace RestFoundation.Client
         /// <exception cref="ArgumentException">If the resource body is null.</exception>
         public static RestResource<TOutput> Put<TInput, TOutput>(this IRestClient client, Uri url, RestResource<TInput> resource)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
 
             return client.Execute<TInput, TOutput>(url, HttpMethod.Put, resource);
         }
@@ -170,7 +191,10 @@ namespace RestFoundation.Client
         /// <exception cref="ArgumentException">If the resource body is null.</exception>
         public static RestResource<TOutput> Put<TInput, TOutput>(this IRestClient client, Uri url, RestResource<TInput> resource, RestResourceType outputType)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
 
             return client.Execute<TInput, TOutput>(url, HttpMethod.Put, resource, outputType);
         }
@@ -186,7 +210,10 @@ namespace RestFoundation.Client
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
         public static void Delete(this IRestClient client, Uri url)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
 
             client.Execute(url, HttpMethod.Delete);
         }
@@ -203,7 +230,10 @@ namespace RestFoundation.Client
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
         public static void Delete(this IRestClient client, Uri url, NameValueCollection headers)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
 
             client.Execute(url, HttpMethod.Delete, headers);
         }

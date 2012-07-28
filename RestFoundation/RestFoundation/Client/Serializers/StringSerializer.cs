@@ -16,8 +16,15 @@ namespace RestFoundation.Client.Serializers
         /// <returns>A value containing the serialized object length.</returns>
         public int GetContentLength(object obj)
         {
-            if (obj == null) return 0;
-            if (!(obj is String)) throw new ArgumentOutOfRangeException("obj");
+            if (obj == null)
+            {
+                return 0;
+            }
+
+            if (!(obj is string))
+            {
+                throw new ArgumentOutOfRangeException("obj");
+            }
 
             return obj.ToString().Length;
         }
@@ -29,9 +36,20 @@ namespace RestFoundation.Client.Serializers
         /// <param name="obj">The object to serialize.</param>
         public void Serialize(Stream stream, object obj)
         {
-            if (stream == null) throw new ArgumentNullException("stream");
-            if (obj == null) return;
-            if (!(obj is String)) throw new ArgumentOutOfRangeException("obj");
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream");
+            }
+
+            if (obj == null)
+            {
+                return;
+            }
+
+            if (!(obj is string))
+            {
+                throw new ArgumentOutOfRangeException("obj");
+            }
 
             byte[] data = Encoding.UTF8.GetBytes(obj.ToString());
             stream.Write(data, 0, data.Length);
@@ -45,8 +63,15 @@ namespace RestFoundation.Client.Serializers
         /// <returns>The deserialized object.</returns>
         public T Deserialize<T>(Stream stream)
         {
-            if (stream == null) throw new ArgumentNullException("stream");
-            if (typeof(T) != typeof(String)) throw new InvalidOperationException("The output type is not a String.");
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream");
+            }
+
+            if (typeof(T) != typeof(string))
+            {
+                throw new InvalidOperationException("The output type is not a String.");
+            }
 
             using (var reader = new StreamReader(stream, Encoding.UTF8))
             {

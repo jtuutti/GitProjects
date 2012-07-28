@@ -108,7 +108,7 @@ namespace RestFoundation.Collections.Concrete
         /// <summary>
         /// Gets the Content-Language header value.
         /// </summary>
-        public string ContentLanguage{ get; protected set; }
+        public string ContentLanguage { get; protected set; }
 
         /// <summary>
         /// Gets the Content-Language header value as a <see cref="CultureInfo"/> object.
@@ -118,7 +118,7 @@ namespace RestFoundation.Collections.Concrete
         /// <summary>
         /// Gets the Content-Encoding header value.
         /// </summary>
-        public string ContentEncoding{ get; protected set; }
+        public string ContentEncoding { get; protected set; }
 
         /// <summary>
         /// Gets the Content-Length header value.

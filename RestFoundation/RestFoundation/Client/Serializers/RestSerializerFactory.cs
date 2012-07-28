@@ -15,9 +15,15 @@ namespace RestFoundation.Client.Serializers
         /// <returns>The serializer instance.</returns>
         public IRestSerializer Create(Type objectType, RestResourceType resourceType)
         {
-            if (objectType == null) throw new ArgumentNullException("objectType");
+            if (objectType == null)
+            {
+                throw new ArgumentNullException("objectType");
+            }
 
-            if (objectType == typeof(String)) return new StringSerializer();
+            if (objectType == typeof(string))
+            {
+                return new StringSerializer();
+            }
 
             switch (resourceType)
             {

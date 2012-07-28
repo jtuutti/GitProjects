@@ -21,8 +21,15 @@ namespace RestFoundation.Client
 
         internal RestClient(IRestSerializerFactory factory, IDictionary<RestResourceType, string> resourceMap)
         {
-            if (factory == null) throw new ArgumentNullException("factory");
-            if (resourceMap == null) throw new ArgumentNullException("resourceMap");
+            if (factory == null)
+            {
+                throw new ArgumentNullException("factory");
+            }
+
+            if (resourceMap == null)
+            {
+                throw new ArgumentNullException("resourceMap");
+            }
 
             m_factory = factory;
             m_httpResourceMap = resourceMap;
@@ -60,9 +67,20 @@ namespace RestFoundation.Client
 
         public void Execute<TInput>(Uri url, HttpMethod method, RestResource<TInput> resource)
         {
-            if (url == null) throw new ArgumentNullException("url");
-            if (resource == null) throw new ArgumentNullException("resource");
-            if (ReferenceEquals(resource.Body, null)) throw new ArgumentException("Resource body cannot be null", "resource");
+            if (url == null)
+            {
+                throw new ArgumentNullException("url");
+            }
+
+            if (resource == null)
+            {
+                throw new ArgumentNullException("resource");
+            }
+
+            if (ReferenceEquals(resource.Body, null))
+            {
+                throw new ArgumentException("Resource body cannot be null", "resource");
+            }
 
             var request = CreateRequest(url, method, resource);
             request.ContentType = GetMimeType(resource.Type);
@@ -98,16 +116,30 @@ namespace RestFoundation.Client
 
         public RestResource<TOutput> Execute<TInput, TOutput>(Uri url, HttpMethod method, RestResource<TInput> resource)
         {
-            if (resource == null) throw new ArgumentNullException("resource");
+            if (resource == null)
+            {
+                throw new ArgumentNullException("resource");
+            }
 
             return Execute<TInput, TOutput>(url, method, resource, resource.Type);
         }
 
         public RestResource<TOutput> Execute<TInput, TOutput>(Uri url, HttpMethod method, RestResource<TInput> resource, RestResourceType outputType)
         {
-            if (url == null) throw new ArgumentNullException("url");
-            if (resource == null) throw new ArgumentNullException("resource");
-            if (ReferenceEquals(resource.Body, null)) throw new ArgumentException("Resource body cannot be null", "resource");
+            if (url == null)
+            {
+                throw new ArgumentNullException("url");
+            }
+
+            if (resource == null)
+            {
+                throw new ArgumentNullException("resource");
+            }
+
+            if (ReferenceEquals(resource.Body, null))
+            {
+                throw new ArgumentException("Resource body cannot be null", "resource");
+            }
 
             var request = CreateRequest(url, method, resource);
             request.ContentType = GetMimeType(resource.Type);
@@ -150,7 +182,16 @@ namespace RestFoundation.Client
         public RestResource<TOutput> EndExecute<TOutput>(IAsyncResult result)
         {
             var task = result as Task<RestResource<TOutput>>;
-            if (task == null) throw new InvalidOperationException(InvalidAsyncResult);
+
+            if (task == null)
+            {
+                throw new InvalidOperationException(InvalidAsyncResult);
+            }
+
+            if (task.IsFaulted && task.Exception != null)
+            {
+                throw task.Exception;
+            }
 
             return task.Result;
         }
@@ -160,7 +201,11 @@ namespace RestFoundation.Client
             foreach (string key in headers.AllKeys)
             {
                 string value = headers.Get(key);
-                if (value == null) continue;
+
+                if (value == null)
+                {
+                    continue;
+                }
 
                 if (String.Equals(key.Trim(), "accept", StringComparison.OrdinalIgnoreCase))
                 {
@@ -224,8 +269,15 @@ namespace RestFoundation.Client
 
         private HttpWebRequest CreateRequest(Uri url, HttpMethod method, RestResource resource)
         {
-            if (ConnectionTimeout.TotalMilliseconds <= 0) throw new TimeoutException("Connection timeout is invalid.");
-            if (SocketTimeout.TotalMilliseconds <= 0) throw new TimeoutException("Socket timeout is invalid.");
+            if (ConnectionTimeout.TotalMilliseconds <= 0)
+            {
+                throw new TimeoutException("Connection timeout is invalid.");
+            }
+
+            if (SocketTimeout.TotalMilliseconds <= 0)
+            {
+                throw new TimeoutException("Socket timeout is invalid.");
+            }
 
             var request = (HttpWebRequest) WebRequest.Create(url);
             request.KeepAlive = true;
@@ -250,7 +302,7 @@ namespace RestFoundation.Client
 
         private void SetCredentials(Uri url)
         {
-            String authenticationType = !String.IsNullOrEmpty(AuthenticationType) ? AuthenticationType : "Basic";
+            string authenticationType = !String.IsNullOrEmpty(AuthenticationType) ? AuthenticationType : "Basic";
             Uri domainUrl;
 
             var credentialCache = new CredentialCache();

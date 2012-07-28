@@ -9,7 +9,10 @@ namespace RestFoundation.Runtime
 
         public static string Standardize(string urlTemplate)
         {
-            if (String.IsNullOrEmpty(urlTemplate)) return urlTemplate;
+            if (String.IsNullOrEmpty(urlTemplate))
+            {
+                return urlTemplate;
+            }
 
             int parameterNumber = 0;
             return routeParameterRegex.Replace(urlTemplate, match => String.Concat("{p", parameterNumber++ + "}"));

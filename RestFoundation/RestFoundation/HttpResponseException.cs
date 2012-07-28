@@ -16,16 +16,6 @@ namespace RestFoundation
     public sealed class HttpResponseException : Exception
     {
         /// <summary>
-        /// Gets the associated HTTP status code.
-        /// </summary>
-        public HttpStatusCode StatusCode { get; private set; }
-
-        /// <summary>
-        /// Gets the associated HTTP status description.
-        /// </summary>
-        public string StatusDescription { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="HttpResponseException"/> class.
         /// </summary>
         public HttpResponseException() : this(HttpStatusCode.InternalServerError, String.Empty)
@@ -52,6 +42,8 @@ namespace RestFoundation
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpResponseException"/> class with the HTTP status code and description.
         /// </summary>
+        /// <param name="statusCode">The status code.</param>
+        /// <param name="statusDescription">The status description.</param>
         public HttpResponseException(HttpStatusCode statusCode, string statusDescription) :
             base(String.Format(CultureInfo.InvariantCulture, "Http Status Exception: ({0}) {1}", (int) statusCode, statusDescription ?? String.Empty))
         {
@@ -64,6 +56,16 @@ namespace RestFoundation
             StatusCode = (HttpStatusCode) info.GetInt32("statusCode");
             StatusDescription = info.GetString("statusDescription");
         }
+
+        /// <summary>
+        /// Gets the associated HTTP status code.
+        /// </summary>
+        public HttpStatusCode StatusCode { get; private set; }
+
+        /// <summary>
+        /// Gets the associated HTTP status description.
+        /// </summary>
+        public string StatusDescription { get; private set; }
 
         /// <summary>
         /// Sets the <see cref="SerializationInfo"/> with information about the exception.

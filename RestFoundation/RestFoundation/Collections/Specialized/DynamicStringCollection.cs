@@ -27,7 +27,10 @@ namespace RestFoundation.Collections.Specialized
         /// <param name="collection">The static string value collection to convert to dynamic.</param>
         public DynamicStringCollection(IStringValueCollection collection)
         {
-            if (collection == null) throw new ArgumentNullException("collection");
+            if (collection == null)
+            {
+                throw new ArgumentNullException("collection");
+            }
 
             m_inner = collection;
         }
@@ -52,7 +55,10 @@ namespace RestFoundation.Collections.Specialized
         /// <param name="result">The result of the get operation.</param>
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if (binder == null) throw new ArgumentNullException("binder");
+            if (binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
 
             ICollection<string> values = m_inner.GetValues(binder.Name);
 

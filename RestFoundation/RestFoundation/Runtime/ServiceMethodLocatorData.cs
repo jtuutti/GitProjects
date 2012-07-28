@@ -13,10 +13,6 @@ namespace RestFoundation.Runtime
         /// </summary>
         public static readonly ServiceMethodLocatorData Options = new ServiceMethodLocatorData();
 
-        private ServiceMethodLocatorData()
-        {
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceMethodLocatorData"/> class.
         /// </summary>
@@ -29,6 +25,10 @@ namespace RestFoundation.Runtime
 
             Service = service;
             Method = method;
+        }
+
+        private ServiceMethodLocatorData()
+        {
         }
 
         /// <summary>

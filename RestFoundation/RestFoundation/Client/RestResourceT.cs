@@ -6,11 +6,11 @@ namespace RestFoundation.Client
     /// Represents a REST HTTP resource with a body.
     /// This type of resource is commonly used for POST and PUT operations.
     /// </summary>
-    /// <typeparamref name="T">The resource body object type.</typeparamref>
+    /// <typeparam name="T">The resource body object type.</typeparam>
     public class RestResource<T> : RestResource
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RestResource"/> class.
+        /// Initializes a new instance of the <see cref="RestResource{T}"/> class.
         /// </summary>
         /// <param name="type">The resource type.</param>
         public RestResource(RestResourceType type) : base(type)
@@ -18,7 +18,7 @@ namespace RestFoundation.Client
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RestResource"/> class.
+        /// Initializes a new instance of the <see cref="RestResource{T}"/> class.
         /// </summary>
         /// <param name="type">The resource type.</param>
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
@@ -31,6 +31,12 @@ namespace RestFoundation.Client
         /// </summary>
         public T Body { get; set; }
 
-        internal override object ResourceBody { get { return Body; } }
+        internal override object ResourceBody
+        {
+            get
+            {
+                return Body;
+            }
+        }
     }
 }

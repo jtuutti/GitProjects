@@ -10,14 +10,20 @@ namespace RestFoundation.Runtime
 
         public BrowserConstraint(IContentNegotiator contentNegotiator)
         {
-            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
+            if (contentNegotiator == null)
+            {
+                throw new ArgumentNullException("contentNegotiator");
+            }
 
             m_contentNegotiator = contentNegotiator;
         }
 
         public bool Match(HttpContextBase httpContext, Route route, string parameterName, RouteValueDictionary values, RouteDirection routeDirection)
         {
-            if (httpContext == null) throw new ArgumentNullException("httpContext");
+            if (httpContext == null)
+            {
+                throw new ArgumentNullException("httpContext");
+            }
 
             if (routeDirection != RouteDirection.IncomingRequest)
             {

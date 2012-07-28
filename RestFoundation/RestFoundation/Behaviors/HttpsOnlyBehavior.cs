@@ -18,11 +18,14 @@ namespace RestFoundation.Behaviors
         /// <returns>A service method action.</returns>
         public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             if (!String.Equals("https", context.Request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
             {
-                SetForbiddenErrorMessage("HTTPS required");
+                SetForbiddenErrorMessage(RestResources.HttpsRequiredStatusDescription);
                 return BehaviorMethodAction.Stop;
             }
 

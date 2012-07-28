@@ -12,8 +12,10 @@ namespace RestFoundation.UnitTesting
         /// Initializes a new instance of the <see cref="MockRestHandler"/> class.
         /// </summary>
         public MockRestHandler() :
-            base(Rest.Active.ServiceLocator.GetService<IServiceContext>(), Rest.Active.ServiceLocator.GetService<IServiceMethodLocator>(),
-                 Rest.Active.ServiceLocator.GetService<IServiceMethodInvoker>(), Rest.Active.ServiceLocator.GetService<IResultFactory>(),
+            base(Rest.Active.ServiceLocator.GetService<IServiceContext>(),
+                 Rest.Active.ServiceLocator.GetService<IServiceMethodLocator>(),
+                 Rest.Active.ServiceLocator.GetService<IServiceMethodInvoker>(),
+                 Rest.Active.ServiceLocator.GetService<IResultFactory>(),
                  Rest.Active.ServiceLocator.GetService<IResultExecutor>())
         {
         }
@@ -61,7 +63,7 @@ namespace RestFoundation.UnitTesting
         {
             unchecked
             {
-                int result = (ServiceUrl != null ? ServiceUrl.GetHashCode() : 0);
+                int result = ServiceUrl != null ? ServiceUrl.GetHashCode() : 0;
                 result = (result * 397) ^ (ServiceContractTypeName != null ? ServiceContractTypeName.GetHashCode() : 0);
                 result = (result * 397) ^ (UrlTemplate != null ? UrlTemplate.GetHashCode() : 0);
                 return result;

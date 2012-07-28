@@ -36,7 +36,10 @@ namespace RestFoundation
         /// <exception cref="ArgumentException">If the relative URL contains invalid characters.</exception>
         public ServiceProxyConfiguration EnableWithRelativeUrl(string relativeUrl)
         {
-            if (relativeUrl == null) throw new ArgumentNullException("relativeUrl");
+            if (relativeUrl == null)
+            {
+                throw new ArgumentNullException("relativeUrl");
+            }
 
             if (Rest.Active.IsServiceProxyInitialized)
             {
@@ -75,7 +78,10 @@ namespace RestFoundation
         /// <returns>The configuration object.</returns>
         public ServiceProxyConfiguration SetJQueryUrl(Uri url)
         {
-            if (url == null) throw new ArgumentNullException("url");
+            if (url == null)
+            {
+                throw new ArgumentNullException("url");
+            }
 
             Rest.Active.JQueryUrl = url.ToString();
             return this;

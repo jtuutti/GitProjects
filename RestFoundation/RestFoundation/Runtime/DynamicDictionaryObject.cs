@@ -12,6 +12,14 @@ namespace RestFoundation.Formatters
         private readonly IDictionary<string, object> m_dictionary;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DynamicDictionaryObject"/> class.
+        /// </summary>
+        public DynamicDictionaryObject()
+        {
+            m_dictionary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
         /// Gets a count of properties.
         /// </summary>
         public int Count
@@ -20,14 +28,6 @@ namespace RestFoundation.Formatters
             {
                 return m_dictionary.Keys.Count;
             }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DynamicDictionaryObject"/> class.
-        /// </summary>
-        public DynamicDictionaryObject()
-        {
-            m_dictionary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>

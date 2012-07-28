@@ -27,7 +27,10 @@ namespace RestFoundation.Behaviors
         /// <param name="validator">The resource validator.</param>
         public ResourceValidationBehavior(IResourceValidator validator)
         {
-            if (validator == null) throw new ArgumentNullException("validator");
+            if (validator == null)
+            {
+                throw new ArgumentNullException("validator");
+            }
 
             m_validator = validator;
         }
@@ -42,7 +45,10 @@ namespace RestFoundation.Behaviors
         /// <returns>true to execute the service method; false to stop the request.</returns>
         public override BehaviorMethodAction OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             if (resource == null || m_validator == null)
             {

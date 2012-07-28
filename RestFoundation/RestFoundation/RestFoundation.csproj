@@ -67,6 +67,11 @@
     <Compile Include="IContentNegotiator.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="IResultExecutor.cs" />
+    <Compile Include="RestResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RestResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Results\DataContractJsonResult.cs" />
     <Compile Include="Results\DataContractXmlResult.cs" />
     <Compile Include="Results\FileResultBase.cs" />
@@ -304,6 +309,10 @@
     <Compile Include="ValidationError.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="RestResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RestResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="ServiceProxy\Resources\index.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>

@@ -6,7 +6,10 @@ namespace RestFoundation.Runtime
     {
         public static void FilterResponse(IServiceContext context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             var streamCompressor = Rest.Active.ServiceLocator.GetService<IStreamCompressor>();
 

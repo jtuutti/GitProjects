@@ -35,7 +35,10 @@ namespace RestFoundation.Security
         /// </param>
         public IPAddressRange(IPNetwork cidr)
         {
-            if (cidr == null) throw new ArgumentNullException("cidr");
+            if (cidr == null)
+            {
+                throw new ArgumentNullException("cidr");
+            }
 
             m_addressFamily = cidr.FirstUsable.AddressFamily;
             m_lowerBytes = cidr.FirstUsable.GetAddressBytes();
@@ -49,8 +52,15 @@ namespace RestFoundation.Security
         /// <param name="upper">An IP address to become the upper range bound.</param>
         public IPAddressRange(IPAddress lower, IPAddress upper)
         {
-            if (lower == null) throw new ArgumentNullException("lower");
-            if (upper == null) throw new ArgumentNullException("upper");
+            if (lower == null)
+            {
+                throw new ArgumentNullException("lower");
+            }
+
+            if (upper == null)
+            {
+                throw new ArgumentNullException("upper");
+            }
 
             if (!Equals(lower.AddressFamily, upper.AddressFamily))
             {
@@ -69,7 +79,10 @@ namespace RestFoundation.Security
         /// <returns>A sequence of IP ranges.</returns>
         public static IEnumerable<IPAddressRange> GetConfiguredRanges(string sectionName)
         {
-            if (String.IsNullOrEmpty(sectionName)) throw new ArgumentNullException("sectionName");
+            if (String.IsNullOrEmpty(sectionName))
+            {
+                throw new ArgumentNullException("sectionName");
+            }
 
             var section = ConfigurationManager.GetSection(sectionName) as NameValueCollection;
 
@@ -81,7 +94,11 @@ namespace RestFoundation.Security
             for (int i = 0; i < section.Count; i++)
             {
                 string[] values = section.GetValues(i);
-                if (values == null) continue;
+
+                if (values == null)
+                {
+                    continue;
+                }
 
                 foreach (string value in values)
                 {
@@ -131,8 +148,8 @@ namespace RestFoundation.Security
                     return false;
                 }
 
-                lowerBoundary &= (addressBytes[i] == m_lowerBytes[i]);
-                upperBoundary &= (addressBytes[i] == m_upperBytes[i]);
+                lowerBoundary &= addressBytes[i] == m_lowerBytes[i];
+                upperBoundary &= addressBytes[i] == m_upperBytes[i];
             }
 
             return true;
@@ -140,7 +157,10 @@ namespace RestFoundation.Security
 
         private static IPAddressRange CreateIPRange(string addressString)
         {
-            if (String.IsNullOrWhiteSpace(addressString)) return null;
+            if (String.IsNullOrWhiteSpace(addressString))
+            {
+                return null;
+            }
 
             if (addressString.Contains("/"))
             {

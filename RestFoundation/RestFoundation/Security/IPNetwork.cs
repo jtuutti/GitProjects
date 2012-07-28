@@ -38,7 +38,6 @@ namespace RestFoundation.Security
         {
             get
             {
-
                 return ToIPAddress(BroadcastAsInt);
             }
         }
@@ -85,7 +84,6 @@ namespace RestFoundation.Security
         {
             get
             {
-
                 return ToIPAddress(NetworkAsInt);
             }
         }
@@ -206,7 +204,7 @@ namespace RestFoundation.Security
         {
             IPNetwork ipnetwork2;
             InternalParse(true, ipaddress, netmask, out ipnetwork2);
-            bool parsed = (ipnetwork2 != null);
+            bool parsed = ipnetwork2 != null;
             ipnetwork = ipnetwork2;
             return parsed;
         }
@@ -222,7 +220,7 @@ namespace RestFoundation.Security
         {
             IPNetwork ipnetwork2;
             InternalParse(true, ipaddress, cidr, out ipnetwork2);
-            bool parsed = (ipnetwork2 != null);
+            bool parsed = ipnetwork2 != null;
             ipnetwork = ipnetwork2;
             return parsed;
         }
@@ -237,7 +235,7 @@ namespace RestFoundation.Security
         {
             IPNetwork ipnetwork2;
             InternalParse(true, network, out ipnetwork2);
-            bool parsed = (ipnetwork2 != null);
+            bool parsed = ipnetwork2 != null;
             ipnetwork = ipnetwork2;
             return parsed;
         }
@@ -253,7 +251,7 @@ namespace RestFoundation.Security
         {
             IPNetwork ipnetwork2;
             InternalParse(true, ipaddress, netmask, out ipnetwork2);
-            bool parsed = (ipnetwork2 != null);
+            bool parsed = ipnetwork2 != null;
             ipnetwork = ipnetwork2;
             return parsed;
         }
@@ -291,7 +289,6 @@ namespace RestFoundation.Security
         /// <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
         public static bool InternalSupernet(bool trySupernet, IPNetwork[] ipnetworks, out IPNetwork[] supernet)
         {
-
             if (ipnetworks == null)
             {
                 if (trySupernet == false)
@@ -345,8 +342,8 @@ namespace RestFoundation.Security
                 previousCount = currentCount;
                 currentCount = supernetted.Count;
                 current = List2Stack(supernetted);
-
             }
+
             supernet = supernetted.ToArray();
             return true;
         }
@@ -373,7 +370,7 @@ namespace RestFoundation.Security
         {
             uint? uintIPAddress2;
             InternalToUint(true, ipaddress, out uintIPAddress2);
-            bool parsed = (uintIPAddress2 != null);
+            bool parsed = uintIPAddress2 != null;
             uintIPAddress = uintIPAddress2;
             return parsed;
         }
@@ -400,7 +397,7 @@ namespace RestFoundation.Security
         {
             byte? cidr2;
             InternalToCidr(true, netmask, out cidr2);
-            bool parsed = (cidr2 != null);
+            bool parsed = cidr2 != null;
             cidr = cidr2;
             return parsed;
         }
@@ -425,10 +422,9 @@ namespace RestFoundation.Security
         /// <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
         public static bool TryToNetmask(byte cidr, out IPAddress netmask)
         {
-
             IPAddress netmask2;
             InternalToNetmask(true, cidr, out netmask2);
-            bool parsed = (netmask2 != null);
+            bool parsed = netmask2 != null;
             netmask = netmask2;
             return parsed;
         }
@@ -467,7 +463,7 @@ namespace RestFoundation.Security
         {
             uint? uintNetmask2;
             InternalToUint(true, cidr, out uintNetmask2);
-            bool parsed = (uintNetmask2 != null);
+            bool parsed = uintNetmask2 != null;
             uintNetmask = uintNetmask2;
             return parsed;
         }
@@ -524,7 +520,7 @@ namespace RestFoundation.Security
             uint uintBroadcast = network.BroadcastAsInt;
             uint uintAddress = ToUint(ipaddress);
 
-            bool contains = (uintAddress >= uintNetwork && uintAddress <= uintBroadcast);
+            bool contains = uintAddress >= uintNetwork && uintAddress <= uintBroadcast;
 
             return contains;
         }
@@ -537,7 +533,6 @@ namespace RestFoundation.Security
         /// <returns>true if the network contains the IP addresses in the sub-network; otherwise, false.</returns>
         public static bool Contains(IPNetwork network, IPNetwork network2)
         {
-
             if (network == null)
             {
                 throw new ArgumentNullException("network");
@@ -554,7 +549,7 @@ namespace RestFoundation.Security
             uint uintFirst = network2.NetworkAsInt;
             uint uintLast = network2.BroadcastAsInt;
 
-            bool contains = (uintFirst >= uintNetwork && uintLast <= uintBroadcast);
+            bool contains = uintFirst >= uintNetwork && uintLast <= uintBroadcast;
 
             return contains;
         }
@@ -650,7 +645,7 @@ namespace RestFoundation.Security
         {
             IPNetwork outSupernet;
             InternalSupernet(true, network1, network2, out outSupernet);
-            bool parsed = (outSupernet != null);
+            bool parsed = outSupernet != null;
             supernet = outSupernet;
             return parsed;
         }
@@ -695,7 +690,6 @@ namespace RestFoundation.Security
 
             cidr = 0;
             return false;
-
         }
 
         /// <summary>
@@ -823,19 +817,19 @@ namespace RestFoundation.Security
         /// <returns>true if the specified System.Object is equal to the current System.Object; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
-            var ipNetworkObj = obj as IPNetwork;
+            var ipNetwork = obj as IPNetwork;
 
-            if (ipNetworkObj == null)
+            if (ipNetwork == null)
             {
                 return false;
             }
 
-            if (NetworkAsInt != ipNetworkObj.NetworkAsInt)
+            if (NetworkAsInt != ipNetwork.NetworkAsInt)
             {
                 return false;
             }
 
-            return m_cidr == ipNetworkObj.m_cidr;
+            return m_cidr == ipNetwork.m_cidr;
         }
 
         /// <summary>
@@ -908,7 +902,7 @@ namespace RestFoundation.Security
                 return;
             }
 
-            network = Regex.Replace(network, @"[^0-9\.\/\s]+", "");
+            network = Regex.Replace(network, @"[^0-9\.\/\s]+", String.Empty);
             network = Regex.Replace(network, @"\s{2,}", " ");
             network = network.Trim();
 
@@ -1131,7 +1125,6 @@ namespace RestFoundation.Security
                 supernet = null;
                 return;
             }
-
 
             if (Contains(network1, network2))
             {
@@ -1406,7 +1399,7 @@ namespace RestFoundation.Security
 
         private static bool ValidNetmask(uint netmask)
         {
-            long neg = ((~(int) netmask) & 0xffffffff);
+            long neg = (~(int) netmask) & 0xffffffff;
             bool isNetmask = ((neg + 1) & neg) == 0;
             return isNetmask;
         }

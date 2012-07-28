@@ -24,8 +24,15 @@ namespace RestFoundation.Client
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
         public RestResource(RestResourceType type, NameValueCollection headers)
         {
-            if (!Enum.IsDefined(typeof(RestResourceType), type)) throw new ArgumentOutOfRangeException("type");
-            if (headers == null) throw new ArgumentNullException("headers");
+            if (!Enum.IsDefined(typeof(RestResourceType), type))
+            {
+                throw new ArgumentOutOfRangeException("type");
+            }
+
+            if (headers == null)
+            {
+                throw new ArgumentNullException("headers");
+            }
 
             Type = type;
             Headers = headers;
@@ -46,6 +53,12 @@ namespace RestFoundation.Client
         /// </summary>
         public NameValueCollection Headers { get; protected set; }
 
-        internal virtual object ResourceBody { get { return null; } }
+        internal virtual object ResourceBody
+        {
+            get
+            {
+                return null;
+            }
+        }
     }
 }

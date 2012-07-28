@@ -21,7 +21,10 @@ namespace System.ComponentModel.DataAnnotations
         /// <param name="validationContext">The context information about the validation operation.</param>
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            if (validationContext == null) throw new ArgumentNullException("validationContext");
+            if (validationContext == null)
+            {
+                throw new ArgumentNullException("validationContext");
+            }
 
             var results = new List<ValidationResult>();
             var context = new ValidationContext(value, null, null);

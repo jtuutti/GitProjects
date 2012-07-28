@@ -16,7 +16,10 @@ namespace RestFoundation.Collections.Concrete
 
         internal ObjectValueCollection(IDictionary<string, object> values)
         {
-            if (values == null) throw new ArgumentNullException("values");
+            if (values == null)
+            {
+                throw new ArgumentNullException("values");
+            }
 
             m_values = values;
         }
@@ -64,7 +67,11 @@ namespace RestFoundation.Collections.Concrete
         public object Get(string key)
         {
             object value = TryGet(key);
-            if (value == null) throw new ArgumentOutOfRangeException("key", "Invalid key provided");
+
+            if (value == null)
+            {
+                throw new ArgumentOutOfRangeException("key", "Invalid key provided");
+            }
 
             return value;
         }
