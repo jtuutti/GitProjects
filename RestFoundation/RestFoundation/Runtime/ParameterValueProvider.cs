@@ -34,8 +34,15 @@ namespace RestFoundation.Runtime
         /// <returns>The created parameter value.</returns>
         public virtual object CreateValue(ParameterInfo parameter, IRestHandler handler, out bool isResource)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
-            if (parameter == null) throw new ArgumentNullException("parameter");
+            if (handler == null)
+            {
+                throw new ArgumentNullException("handler");
+            }
+
+            if (parameter == null)
+            {
+                throw new ArgumentNullException("parameter");
+            }
 
             IServiceContext context = handler.Context;
             ITypeBinder typeBinder = TypeBinderRegistry.GetBinder(parameter.ParameterType);
@@ -72,8 +79,15 @@ namespace RestFoundation.Runtime
         /// <returns>The route value or null.</returns>
         protected virtual object TryGetRouteValue(ParameterInfo parameter, IObjectValueCollection routeValues)
         {
-            if (parameter == null) throw new ArgumentNullException("parameter");
-            if (routeValues == null) throw new ArgumentNullException("routeValues");
+            if (parameter == null)
+            {
+                throw new ArgumentNullException("parameter");
+            }
+
+            if (routeValues == null)
+            {
+                throw new ArgumentNullException("routeValues");
+            }
 
             object routeValue = routeValues.TryGet(parameter.Name);
 
@@ -100,8 +114,15 @@ namespace RestFoundation.Runtime
         /// <returns>The resource value.</returns>
         protected virtual object GetResourceValue(ParameterInfo parameter, IRestHandler handler)
         {
-            if (parameter == null) throw new ArgumentNullException("parameter");
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (parameter == null)
+            {
+                throw new ArgumentNullException("parameter");
+            }
+
+            if (handler == null)
+            {
+                throw new ArgumentNullException("handler");
+            }
 
             string contentType = handler.Context.Request.Headers.ContentType;
 

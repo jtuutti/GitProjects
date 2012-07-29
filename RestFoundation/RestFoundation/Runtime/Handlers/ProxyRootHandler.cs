@@ -21,7 +21,10 @@ namespace RestFoundation.Runtime.Handlers
 
         public void ProcessRequest(HttpContext context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             context.Response.RedirectToRoutePermanent("ProxyIndex");
         }

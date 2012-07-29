@@ -20,15 +20,24 @@ namespace RestFoundation.Runtime
         /// <param name="xml">A <see cref="string"/> containing the XML.</param>
         public DynamicXDocument(string xml)
         {
-            if (String.IsNullOrWhiteSpace(xml)) throw new ArgumentNullException("xml");
+            if (String.IsNullOrWhiteSpace(xml))
+            {
+                throw new ArgumentNullException("xml");
+            }
 
             XDocument document = XDocument.Parse(xml);
-            m_elements = new List<XElement> { StripNamespaces(document.Root) };
+            m_elements = new List<XElement>
+            {
+                StripNamespaces(document.Root)
+            };
         }
 
         private DynamicXDocument(XElement element)
         {
-            m_elements = new List<XElement> { element };
+            m_elements = new List<XElement>
+            {
+                element
+            };
         }
 
         private DynamicXDocument(IEnumerable<XElement> elements)
@@ -55,7 +64,10 @@ namespace RestFoundation.Runtime
         /// </param>
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if (binder == null) throw new ArgumentNullException("binder");
+            if (binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
 
             result = null;
 
@@ -72,7 +84,7 @@ namespace RestFoundation.Runtime
 
                     if (items.Count == 1 && !items[0].HasElements)
                     {
-                        result = items[0].Value;                           
+                        result = items[0].Value;
                     }
                     else if (items.Count > 0)
                     {
@@ -102,8 +114,15 @@ namespace RestFoundation.Runtime
         /// <param name="result">The result of the index operation.</param>
         public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
         {
-            if (binder == null) throw new ArgumentNullException("binder");
-            if (indexes == null) throw new ArgumentNullException("indexes");
+            if (binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
+
+            if (indexes == null)
+            {
+                throw new ArgumentNullException("indexes");
+            }
 
             var index = (int) indexes[0];
             result = new DynamicXDocument(m_elements[index]);
@@ -151,13 +170,16 @@ namespace RestFoundation.Runtime
 
                 bool hasDefinedNamespaces = element.Attributes().Any(attribute => attribute.IsNamespaceDeclaration ||
                                                                                   (attribute.Name.Namespace != XNamespace.None && attribute.Name.Namespace != XNamespace.Xml));
-                if (!hasDefinedNamespaces) continue;
+                if (!hasDefinedNamespaces)
+                {
+                    continue;
+                }
 
                 IEnumerable<XAttribute> attributes = element.Attributes().Where(attribute => !attribute.IsNamespaceDeclaration)
-                                                                         .Select(attribute =>
-                                                                                 attribute.Name.Namespace != XNamespace.None && attribute.Name.Namespace != XNamespace.Xml
-                                                                                     ? new XAttribute(XNamespace.None.GetName(attribute.Name.LocalName), attribute.Value)
-                                                                                     : attribute);
+                                                            .Select(attribute =>
+                                                                    attribute.Name.Namespace != XNamespace.None && attribute.Name.Namespace != XNamespace.Xml
+                                                                        ? new XAttribute(XNamespace.None.GetName(attribute.Name.LocalName), attribute.Value)
+                                                                        : attribute);
 
                 element.ReplaceAttributes(attributes);
             }

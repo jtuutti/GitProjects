@@ -147,7 +147,10 @@ namespace RestFoundation.Context
         /// <returns>The response output object.</returns>
         public IHttpResponseOutput WriteFormat(string format, params object[] values)
         {
-            if (format == null) throw new ArgumentNullException("format");
+            if (format == null)
+            {
+                throw new ArgumentNullException("format");
+            }
 
             Writer.Write(String.Format(CultureInfo.InvariantCulture, format, values));
             return this;
@@ -163,7 +166,10 @@ namespace RestFoundation.Context
         /// <returns>The response output object.</returns>
         public IHttpResponseOutput WriteFormat(IFormatProvider provider, string format, params object[] values)
         {
-            if (format == null) throw new ArgumentNullException("format");
+            if (format == null)
+            {
+                throw new ArgumentNullException("format");
+            }
 
             Writer.Write(String.Format(provider, format, values));
             return this;

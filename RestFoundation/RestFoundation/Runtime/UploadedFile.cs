@@ -10,7 +10,10 @@ namespace RestFoundation.Runtime
 
         public UploadedFile(HttpPostedFileBase file)
         {
-            if (file == null) throw new ArgumentNullException("file");
+            if (file == null)
+            {
+                throw new ArgumentNullException("file");
+            }
 
             m_file = file;
         }
@@ -49,7 +52,10 @@ namespace RestFoundation.Runtime
 
         public void SaveAs(string fileName)
         {
-            if (fileName == null) throw new ArgumentNullException("fileName");
+            if (fileName == null)
+            {
+                throw new ArgumentNullException("fileName");
+            }
 
             if (fileName.Trim().Length == 0)
             {

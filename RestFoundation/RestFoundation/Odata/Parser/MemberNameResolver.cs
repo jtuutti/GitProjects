@@ -23,7 +23,10 @@ namespace RestFoundation.Odata.Parser
 
         private static string ResolveNameInternal(MemberInfo member)
         {
-            if (member == null) throw new ArgumentNullException("member");
+            if (member == null)
+            {
+                throw new ArgumentNullException("member");
+            }
 
             var jsonProperty = member.GetCustomAttributes(typeof(JsonPropertyAttribute), true)
                 .OfType<JsonPropertyAttribute>()

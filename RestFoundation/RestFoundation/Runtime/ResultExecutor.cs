@@ -16,7 +16,10 @@ namespace RestFoundation.Runtime
         /// <param name="context">The service context.</param>
         public virtual void Execute(IResult result, Type methodReturnType, IServiceContext context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             if (result != null)
             {

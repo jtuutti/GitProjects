@@ -22,7 +22,10 @@ namespace RestFoundation.Runtime
         /// <returns>A <see cref="string"/> containing the preferred media type.</returns>
         public virtual string GetPreferredMediaType(IHttpRequest request)
         {
-            if (request == null) throw new ArgumentNullException("request");
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
 
             string acceptValue = request.QueryString.TryGet(AcceptOverrideQuery);
 
@@ -68,7 +71,10 @@ namespace RestFoundation.Runtime
         /// </returns>
         public virtual bool IsBrowserRequest(HttpRequestBase request)
         {
-            if (request == null) throw new ArgumentNullException("request");
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
 
             if (!"GET".Equals(request.HttpMethod, StringComparison.OrdinalIgnoreCase) &&
                 !"HEAD".Equals(request.HttpMethod, StringComparison.OrdinalIgnoreCase))

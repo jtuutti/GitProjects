@@ -96,7 +96,10 @@ namespace RestFoundation.Odata.Parser
 
         public static TokenSet GetArithmeticToken(this string expression)
         {
-            if (expression == null) throw new ArgumentNullException("expression");
+            if (expression == null)
+            {
+                throw new ArgumentNullException("expression");
+            }
 
             var cleanMatch = expression.EnclosedMatch();
 
@@ -127,7 +130,10 @@ namespace RestFoundation.Odata.Parser
 
         private static int GetArithmeticOperationIndex(IList<string> blocks)
         {
-            if (blocks == null) throw new ArgumentNullException("blocks");
+            if (blocks == null)
+            {
+                throw new ArgumentNullException("blocks");
+            }
 
             var openGroups = 0;
             var operationIndex = -1;
@@ -149,7 +155,10 @@ namespace RestFoundation.Odata.Parser
 
         private static bool HasOrphanedOpenParenthesis(string expression)
         {
-            if (expression == null) throw new ArgumentNullException("expression");
+            if (expression == null)
+            {
+                throw new ArgumentNullException("expression");
+            }
 
             var opens = new List<int>();
             var closes = new List<int>();

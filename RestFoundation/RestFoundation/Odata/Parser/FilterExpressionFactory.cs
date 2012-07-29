@@ -45,7 +45,10 @@ namespace RestFoundation.Odata.Parser
 
         private static TokenSet GetFunctionTokens(string filter)
         {
-            if (filter == null) throw new ArgumentNullException("filter");
+            if (filter == null)
+            {
+                throw new ArgumentNullException("filter");
+            }
 
             var functionMatch = functionRx.Match(filter);
             if (!functionMatch.Success)
@@ -75,9 +78,13 @@ namespace RestFoundation.Odata.Parser
 
         private static string[] GetConstructorTokens(string filter)
         {
-            if (filter == null) throw new ArgumentNullException("filter");
+            if (filter == null)
+            {
+                throw new ArgumentNullException("filter");
+            }
 
             var constructorMatch = newRx.Match(filter);
+
             if (!constructorMatch.Success)
             {
                 return null;
@@ -91,7 +98,10 @@ namespace RestFoundation.Odata.Parser
 
         private static Type GetFunctionParameterType(string operation)
         {
-            if (operation == null) throw new ArgumentNullException("operation");
+            if (operation == null)
+            {
+                throw new ArgumentNullException("operation");
+            }
 
             switch (operation.ToLowerInvariant())
             {
@@ -104,7 +114,10 @@ namespace RestFoundation.Odata.Parser
 
         private static Expression GetPropertyExpression<T>(string propertyToken, ParameterExpression parameter)
         {
-            if (parameter == null) throw new ArgumentNullException("parameter");
+            if (parameter == null)
+            {
+                throw new ArgumentNullException("parameter");
+            }
 
             if (!propertyToken.IsImpliedBoolean())
             {
@@ -147,6 +160,7 @@ namespace RestFoundation.Odata.Parser
             }
 
             var property = GetPropertyExpression<T>(set.Left, parameter) ?? GetPropertyExpression<T>(set.Right, parameter);
+
             if (property != null)
             {
                 return property.Type;
@@ -159,8 +173,15 @@ namespace RestFoundation.Odata.Parser
 
         private static Expression GetOperation(string token, Expression left, Expression right)
         {
-            if (left == null) throw new ArgumentNullException("left");
-            if (right == null) throw new ArgumentNullException("right");
+            if (left == null)
+            {
+                throw new ArgumentNullException("left");
+            }
+
+            if (right == null)
+            {
+                throw new ArgumentNullException("right");
+            }
 
             token = token.ToLowerInvariant();
 
@@ -174,9 +195,20 @@ namespace RestFoundation.Odata.Parser
 
         private static Expression GetLeftRightOperation(string token, Expression left, Expression right)
         {
-            if (token == null) throw new ArgumentNullException("token");
-            if (left == null) throw new ArgumentNullException("left");
-            if (right == null) throw new ArgumentNullException("right");
+            if (token == null)
+            {
+                throw new ArgumentNullException("token");
+            }
+
+            if (left == null)
+            {
+                throw new ArgumentNullException("left");
+            }
+
+            if (right == null)
+            {
+                throw new ArgumentNullException("right");
+            }
 
             switch (token.ToLowerInvariant())
             {
@@ -222,8 +254,15 @@ namespace RestFoundation.Odata.Parser
 
         private static Expression GetRightOperation(string token, Expression right)
         {
-            if (token == null) throw new ArgumentNullException("token");
-            if (right == null) throw new ArgumentNullException("right");
+            if (token == null)
+            {
+                throw new ArgumentNullException("token");
+            }
+
+            if (right == null)
+            {
+                throw new ArgumentNullException("right");
+            }
 
             switch (token.ToLowerInvariant())
             {
@@ -237,7 +276,10 @@ namespace RestFoundation.Odata.Parser
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "This is Microsoft code")]
         private static Expression GetFunction(string function, Expression left, Expression right)
         {
-            if (function == null) throw new ArgumentNullException("function");
+            if (function == null)
+            {
+                throw new ArgumentNullException("function");
+            }
 
             switch (function.ToLowerInvariant())
             {
@@ -284,7 +326,10 @@ namespace RestFoundation.Odata.Parser
 
         private static Expression GetKnownConstant(string token, Type type, IFormatProvider formatProvider)
         {
-            if (token == null) throw new ArgumentNullException("token");
+            if (token == null)
+            {
+                throw new ArgumentNullException("token");
+            }
 
             if (string.Equals(token, "null", StringComparison.OrdinalIgnoreCase))
             {
@@ -332,7 +377,10 @@ namespace RestFoundation.Odata.Parser
 
         private static MethodInfo ResolveParseMethod(Type type)
         {
-            if (type == null) throw new ArgumentNullException("type");
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
 
             return type.GetMethods(BindingFlags.Static | BindingFlags.Public)
                 .Where(x => x.Name == "Parse" && x.GetParameters().Length == 2)
@@ -396,7 +444,10 @@ namespace RestFoundation.Odata.Parser
 
         private Expression GetTokenExpression<T>(ParameterExpression parameter, Type type, IFormatProvider formatProvider, IEnumerable<TokenSet> tokens)
         {
-            if (tokens == null) throw new ArgumentNullException("tokens");
+            if (tokens == null)
+            {
+                throw new ArgumentNullException("tokens");
+            }
 
             string combiner = null;
             Expression existing = null;
@@ -445,9 +496,13 @@ namespace RestFoundation.Odata.Parser
 
         private Expression GetArithmeticExpression<T>(string filter, ParameterExpression parameter, Type type, IFormatProvider formatProvider)
         {
-            if (filter == null) throw new ArgumentNullException("filter");
+            if (filter == null)
+            {
+                throw new ArgumentNullException("filter");
+            }
 
             var arithmeticToken = filter.GetArithmeticToken();
+
             if (arithmeticToken == null)
             {
                 return null;
@@ -464,7 +519,10 @@ namespace RestFoundation.Odata.Parser
 
         private Expression GetConstructorExpression<T>(string filter, ParameterExpression parameter, Type resultType, IFormatProvider formatProvider)
         {
-            if (filter == null) throw new ArgumentNullException("filter");
+            if (filter == null)
+            {
+                throw new ArgumentNullException("filter");
+            }
 
             var newMatch = newRx.Match(filter);
             if (newMatch.Success)
@@ -512,9 +570,13 @@ namespace RestFoundation.Odata.Parser
 
         private Expression GetFunctionExpression<T>(string filter, ParameterExpression parameter, Type type, IFormatProvider formatProvider)
         {
-            if (filter == null) throw new ArgumentNullException("filter");
+            if (filter == null)
+            {
+                throw new ArgumentNullException("filter");
+            }
 
             var functionTokens = GetFunctionTokens(filter);
+
             if (functionTokens == null)
             {
                 return null;

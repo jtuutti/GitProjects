@@ -60,7 +60,10 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">If the REST foundation has already been configured.</exception>
         public static Rest Configure(IServiceLocator resolver)
         {
-            if (resolver == null) throw new ArgumentNullException("resolver");
+            if (resolver == null)
+            {
+                throw new ArgumentNullException("resolver");
+            }
 
             if (Active != null)
             {
@@ -95,7 +98,10 @@ namespace RestFoundation
         /// <returns>The configuration object.</returns>
         public Rest ConfigureServiceHelpAndProxy(Action<ServiceProxyConfiguration> configuration)
         {
-            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (configuration == null)
+            {
+                throw new ArgumentNullException("configuration");
+            }
 
             configuration(new ServiceProxyConfiguration());
             return this;
@@ -120,7 +126,10 @@ namespace RestFoundation
         /// <returns>The configuration object.</returns>
         public Rest WithDefaultMediaType(string mediaType)
         {
-            if (String.IsNullOrEmpty(mediaType)) throw new ArgumentNullException("mediaType");
+            if (String.IsNullOrEmpty(mediaType))
+            {
+                throw new ArgumentNullException("mediaType");
+            }
 
             DefaultMediaType = mediaType;
             return this;
@@ -133,7 +142,10 @@ namespace RestFoundation
         /// <returns>The configuration object.</returns>
         public Rest WithGlobalBehaviors(Action<GlobalBehaviorBuilder> builder)
         {
-            if (builder == null) throw new ArgumentNullException("builder");
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
 
             builder(new GlobalBehaviorBuilder());
             return this;
@@ -146,7 +158,10 @@ namespace RestFoundation
         /// <returns>The configuration object.</returns>
         public Rest WithMediaTypeFormatters(Action<MediaTypeFormatterBuilder> builder)
         {
-            if (builder == null) throw new ArgumentNullException("builder");
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
 
             builder(new MediaTypeFormatterBuilder());
             return this;
@@ -160,8 +175,15 @@ namespace RestFoundation
         /// <returns>The configuration object.</returns>
         public Rest WithResponseHeader(string headerName, string headerValue)
         {
-            if (String.IsNullOrEmpty(headerName)) throw new ArgumentNullException("headerName");
-            if (String.IsNullOrEmpty(headerValue)) throw new ArgumentNullException("headerValue");
+            if (String.IsNullOrEmpty(headerName))
+            {
+                throw new ArgumentNullException("headerName");
+            }
+
+            if (headerValue == null)
+            {
+                throw new ArgumentNullException("headerValue");
+            }
 
             if (ResponseHeaders == null)
             {
@@ -182,7 +204,10 @@ namespace RestFoundation
         /// <returns>The configuration object.</returns>
         public Rest WithResponseHeaders(IDictionary<string, string> responseHeaders)
         {
-            if (responseHeaders == null) throw new ArgumentNullException("responseHeaders");
+            if (responseHeaders == null)
+            {
+                throw new ArgumentNullException("responseHeaders");
+            }
 
             if (ResponseHeaders != null)
             {
@@ -206,7 +231,10 @@ namespace RestFoundation
         /// <returns>The configuration object.</returns>
         public Rest WithTypeBinders(Action<TypeBinderBuilder> builder)
         {
-            if (builder == null) throw new ArgumentNullException("builder");
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
 
             builder(new TypeBinderBuilder());
             return this;
@@ -219,7 +247,10 @@ namespace RestFoundation
         /// <returns>The configuration object.</returns>
         public Rest WithUrls(Action<UrlBuilder> builder)
         {
-            if (builder == null) throw new ArgumentNullException("builder");
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
 
             builder(new UrlBuilder(RouteTable.Routes, ServiceLocator.GetService<IHttpMethodResolver>(), ServiceLocator.GetService<IContentNegotiator>()));
             return this;

@@ -20,8 +20,15 @@ namespace RestFoundation.Formatters
         /// <exception cref="HttpResponseException">If the object cannot be deserialized.</exception>
         public virtual object FormatRequest(IServiceContext context, Type objectType)
         {
-            if (context == null) throw new ArgumentNullException("context");
-            if (objectType == null) throw new ArgumentNullException("objectType");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (objectType == null)
+            {
+                throw new ArgumentNullException("objectType");
+            }
 
             if (context.Request.Body.CanSeek)
             {
@@ -50,7 +57,10 @@ namespace RestFoundation.Formatters
         /// <exception cref="HttpResponseException">If the object cannot be serialized.</exception>
         public virtual IResult FormatResponse(IServiceContext context, object obj)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             return new BsonResult
             {

@@ -81,6 +81,7 @@
     <Compile Include="Runtime\ContentNegotiator.cs" />
     <Compile Include="Runtime\Handlers\BrowserRedirectHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
+    <Compile Include="IServiceBehaviorInvoker.cs" />
     <Compile Include="Security\IPAddressCollection.cs" />
     <Compile Include="Security\IPAddressRange.cs" />
     <Compile Include="Security\IPNetwork.cs" />

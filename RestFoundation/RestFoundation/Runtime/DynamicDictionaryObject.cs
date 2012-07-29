@@ -37,7 +37,10 @@ namespace RestFoundation.Formatters
         /// <returns><see langword="true"/> if the object contains the property; <see langword="false"/> otherwise.</returns>
         public bool Contains(string propertyName)
         {
-            if (String.IsNullOrWhiteSpace(propertyName)) throw new ArgumentNullException("propertyName");
+            if (String.IsNullOrWhiteSpace(propertyName))
+            {
+                throw new ArgumentNullException("propertyName");
+            }
 
             return m_dictionary.ContainsKey(propertyName);
         }
@@ -50,8 +53,15 @@ namespace RestFoundation.Formatters
         /// <returns><see langword="true"/> if the property did not exist and was added; <see langword="false"/> otherwise.</returns>
         public bool Add(string propertyName, object value)
         {
-            if (String.IsNullOrWhiteSpace(propertyName)) throw new ArgumentNullException("propertyName");
-            if (m_dictionary.ContainsKey(propertyName)) return false;
+            if (String.IsNullOrWhiteSpace(propertyName))
+            {
+                throw new ArgumentNullException("propertyName");
+            }
+
+            if (m_dictionary.ContainsKey(propertyName))
+            {
+                return false;
+            }
 
             m_dictionary.Add(propertyName, value);
             return true;
@@ -64,8 +74,15 @@ namespace RestFoundation.Formatters
         /// <returns><see langword="true"/> if the property was removed; <see langword="false"/> otherwise.</returns>
         public bool Remove(string propertyName)
         {
-            if (String.IsNullOrWhiteSpace(propertyName)) throw new ArgumentNullException("propertyName");
-            if (!m_dictionary.ContainsKey(propertyName)) return false;
+            if (String.IsNullOrWhiteSpace(propertyName))
+            {
+                throw new ArgumentNullException("propertyName");
+            }
+
+            if (!m_dictionary.ContainsKey(propertyName))
+            {
+                return false;
+            }
 
             m_dictionary.Remove(propertyName);
             return true;
@@ -117,7 +134,10 @@ namespace RestFoundation.Formatters
         /// </param>
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            if (binder == null) throw new ArgumentNullException("binder");
+            if (binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
 
             if (m_dictionary.ContainsKey(binder.Name))
             {
@@ -152,7 +172,10 @@ namespace RestFoundation.Formatters
         /// </param>
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            if (binder == null) throw new ArgumentNullException("binder");
+            if (binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
 
             if (!m_dictionary.ContainsKey(binder.Name))
             {
@@ -188,7 +211,10 @@ namespace RestFoundation.Formatters
         /// <param name="result">The result of the member invocation.</param>
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            if (binder == null) throw new ArgumentNullException("binder");
+            if (binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
 
             if (m_dictionary.ContainsKey(binder.Name) && m_dictionary[binder.Name] is Delegate)
             {
@@ -211,7 +237,10 @@ namespace RestFoundation.Formatters
         /// <param name="binder">Provides information about the deletion.</param>
         public override bool TryDeleteMember(DeleteMemberBinder binder)
         {
-            if (binder == null) throw new ArgumentNullException("binder");
+            if (binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
 
             if (m_dictionary.ContainsKey(binder.Name))
             {

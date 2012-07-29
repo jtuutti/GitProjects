@@ -20,7 +20,10 @@ namespace RestFoundation.Runtime
         /// <param name="contentNegotiator">The content negotiator.</param>
         public ResultFactory(IContentNegotiator contentNegotiator)
         {
-            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
+            if (contentNegotiator == null)
+            {
+                throw new ArgumentNullException("contentNegotiator");
+            }
 
             m_contentNegotiator = contentNegotiator;
         }
@@ -34,7 +37,10 @@ namespace RestFoundation.Runtime
         /// <returns>The created result instance.</returns>
         public virtual IResult Create(object returnedObj, IRestHandler handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null)
+            {
+                throw new ArgumentNullException("handler");
+            }
 
             var result = returnedObj as IResult;
 

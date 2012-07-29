@@ -23,7 +23,10 @@ namespace RestFoundation.Results
         /// <param name="contentNegotiator">The content negotiator.</param>
         public ContentResult(IContentNegotiator contentNegotiator)
         {
-            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
+            if (contentNegotiator == null)
+            {
+                throw new ArgumentNullException("contentNegotiator");
+            }
 
             m_contentNegotiator = contentNegotiator;
             ClearOutput = true;
@@ -50,7 +53,10 @@ namespace RestFoundation.Results
         /// <param name="context">The service context.</param>
         public virtual void Execute(IServiceContext context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             if (Content == null)
             {

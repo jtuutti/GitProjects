@@ -36,8 +36,15 @@ namespace RestFoundation.ServiceProxy
         /// <param name="isRouteParameter">The value indicating whether the parameter is a route parameter.</param>
         public ProxyParameter(string name, string parameterType, string constraint, object exampleValue, string allowedValues, bool isRouteParameter)
         {
-            if (String.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-            if (String.IsNullOrEmpty(parameterType)) throw new ArgumentNullException("parameterType");
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            if (String.IsNullOrEmpty(parameterType))
+            {
+                throw new ArgumentNullException("parameterType");
+            }
 
             m_name = name;
             m_parameterType = parameterType;
@@ -157,7 +164,10 @@ namespace RestFoundation.ServiceProxy
         /// <filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
 
             return obj is ProxyParameter && Equals((ProxyParameter) obj);
         }

@@ -18,7 +18,10 @@ namespace RestFoundation
         /// <param name="pattern">The regular expression pattern to match.</param>
         public ParameterConstraintAttribute(string pattern)
         {
-            if (pattern == null) throw new ArgumentNullException("pattern");
+            if (pattern == null)
+            {
+                throw new ArgumentNullException("pattern");
+            }
 
             PatternRegex = new Regex(String.Concat(StartPatternSymbol, pattern.TrimStart(StartPatternSymbol).TrimEnd(EndPatternSymbol), EndPatternSymbol),
                                      RegexOptions.CultureInvariant);

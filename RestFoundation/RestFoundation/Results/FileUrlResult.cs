@@ -20,7 +20,10 @@ namespace RestFoundation.Results
         /// <returns>The file info instance.</returns>
         protected override FileInfo GetFile(IServiceContext context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             if (String.IsNullOrWhiteSpace(FileUrl))
             {

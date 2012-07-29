@@ -21,8 +21,15 @@ namespace RestFoundation.Context
         /// <param name="response">The current HTTP response.</param>
         public ServiceContext(IHttpRequest request, IHttpResponse response)
         {
-            if (request == null) throw new ArgumentNullException("request");
-            if (response == null) throw new ArgumentNullException("response");
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
+            if (response == null)
+            {
+                throw new ArgumentNullException("response");
+            }
 
             m_request = request;
             m_response = response;

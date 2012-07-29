@@ -8,11 +8,11 @@ using RestFoundation.Behaviors;
 namespace RestFoundation.Runtime
 {
     /// <summary>
-    /// Represents the service method invoker.
+    /// Represents a service method invoker.
     /// </summary>
     public class ServiceMethodInvoker : IServiceMethodInvoker
     {
-        private readonly ServiceBehaviorInvoker m_behaviorInvoker;
+        private readonly IServiceBehaviorInvoker m_behaviorInvoker;
         private readonly IParameterValueProvider m_parameterValueProvider;
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         /// <param name="behaviorInvoker">The service behavior invoker.</param>
         /// <param name="parameterValueProvider">The parameter value provider.</param>
-        public ServiceMethodInvoker(ServiceBehaviorInvoker behaviorInvoker, IParameterValueProvider parameterValueProvider)
+        public ServiceMethodInvoker(IServiceBehaviorInvoker behaviorInvoker, IParameterValueProvider parameterValueProvider)
         {
             if (behaviorInvoker == null) throw new ArgumentNullException("behaviorInvoker");
             if (parameterValueProvider == null) throw new ArgumentNullException("parameterValueProvider");
@@ -108,7 +108,7 @@ namespace RestFoundation.Runtime
 
                 try
                 {
-                    if (m_behaviorInvoker.PerformOnExceptionBehaviors(behaviors, service, method, unwrappedException) == BehaviorExceptionAction.Handle)
+                    if (m_behaviorInvoker.InvokeOnExceptionBehaviors(behaviors, service, method, unwrappedException) == BehaviorExceptionAction.Handle)
                     {
                         return null;
                     }
@@ -124,18 +124,18 @@ namespace RestFoundation.Runtime
 
         private object InvokeWithBehaviors(MethodInfo method, object service, List<IServiceBehavior> behaviors, IRestHandler handler)
         {
-            m_behaviorInvoker.PerformOnAuthorizingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList(), service, method);
+            m_behaviorInvoker.InvokeOnAuthorizingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList(), service, method);
 
             object resource;
             object[] methodArguments = GenerateMethodArguments(method, handler, out resource);
 
-            if (m_behaviorInvoker.PerformOnExecutingBehaviors(behaviors, service, method, resource) == BehaviorMethodAction.Stop)
+            if (m_behaviorInvoker.InvokeOnExecutingBehaviors(behaviors, service, method, resource) == BehaviorMethodAction.Stop)
             {
                 return null;
             }
 
             object result = method.Invoke(service, methodArguments);
-            m_behaviorInvoker.PerformOnExecutedBehaviors(behaviors, service, method, result);
+            m_behaviorInvoker.InvokeOnExecutedBehaviors(behaviors, service, method, result);
 
             return result;
         }

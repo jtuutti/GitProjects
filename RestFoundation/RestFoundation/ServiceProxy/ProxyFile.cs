@@ -29,9 +29,20 @@ namespace RestFoundation.ServiceProxy
         /// <param name="fileName">The file name.</param>
         public ProxyFile(string virtualPath, string fileName) : base(virtualPath)
         {
-            if (virtualPath == null) throw new ArgumentNullException("virtualPath");
-            if (fileName == null) throw new ArgumentNullException("fileName");
-            if (!resourceMap.ContainsKey(fileName)) throw new ArgumentOutOfRangeException("fileName");
+            if (virtualPath == null)
+            {
+                throw new ArgumentNullException("virtualPath");
+            }
+
+            if (fileName == null)
+            {
+                throw new ArgumentNullException("fileName");
+            }
+
+            if (!resourceMap.ContainsKey(fileName))
+            {
+                throw new ArgumentOutOfRangeException("fileName");
+            }
 
             m_fileName = fileName;
         }

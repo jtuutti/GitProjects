@@ -3,7 +3,7 @@
 namespace RestFoundation
 {
     /// <summary>
-    /// Defines a located service method invoker.
+    /// Defines a service method invoker.
     /// </summary>
     public interface IServiceMethodInvoker
     {

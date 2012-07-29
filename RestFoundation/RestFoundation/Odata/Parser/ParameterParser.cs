@@ -29,9 +29,20 @@ namespace RestFoundation.Odata.Parser
             ISortExpressionFactory sortExpressionFactory,
             ISelectExpressionFactory<T> selectExpressionFactory)
         {
-            if (filterExpressionFactory == null) throw new ArgumentNullException("filterExpressionFactory");
-            if (sortExpressionFactory == null) throw new ArgumentNullException("sortExpressionFactory");
-            if (selectExpressionFactory == null) throw new ArgumentNullException("selectExpressionFactory");
+            if (filterExpressionFactory == null)
+            {
+                throw new ArgumentNullException("filterExpressionFactory");
+            }
+            
+            if (sortExpressionFactory == null)
+            {
+                throw new ArgumentNullException("sortExpressionFactory");
+            }
+            
+            if (selectExpressionFactory == null)
+            {
+                throw new ArgumentNullException("selectExpressionFactory");
+            }
 
             m_filterExpressionFactory = filterExpressionFactory;
             m_sortExpressionFactory = sortExpressionFactory;
@@ -40,7 +51,10 @@ namespace RestFoundation.Odata.Parser
 
         public IModelFilter<T> Parse(NameValueCollection queryParameters)
         {
-            if (queryParameters == null) throw new ArgumentNullException("queryParameters");
+            if (queryParameters == null)
+            {
+                throw new ArgumentNullException("queryParameters");
+            }
 
             var orderbyField = queryParameters[StringConstants.OrderByParameter];
             var selects = queryParameters[StringConstants.SelectParameter];

@@ -18,7 +18,10 @@ namespace RestFoundation.ServiceProxy
         /// <param name="condition">The condition when the status code may occur.</param>
         public ProxyStatusCode(HttpStatusCode statusCode, string condition)
         {
-            if (String.IsNullOrEmpty(condition)) throw new ArgumentNullException("condition");
+            if (String.IsNullOrEmpty(condition))
+            {
+                throw new ArgumentNullException("condition");
+            }
 
             m_statusCode = statusCode;
             m_condition = condition;
@@ -137,7 +140,10 @@ namespace RestFoundation.ServiceProxy
         /// <filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
 
             return obj is ProxyStatusCode && Equals((ProxyStatusCode) obj);
         }

@@ -20,7 +20,10 @@ namespace RestFoundation.Context
         /// <param name="output">The HTTP response output.</param>
         public HttpResponse(IHttpResponseOutput output)
         {
-            if (output == null) throw new ArgumentNullException("output");
+            if (output == null)
+            {
+                throw new ArgumentNullException("output");
+            }
 
             m_output = output;
             m_headers = new ResponseHeaderNames();
@@ -71,7 +74,10 @@ namespace RestFoundation.Context
         /// <returns>The header value.</returns>
         public string GetHeader(string headerName)
         {
-            if (headerName == null) throw new ArgumentNullException("headerName");
+            if (String.IsNullOrEmpty(headerName))
+            {
+                throw new ArgumentNullException("headerName");
+            }
 
             return Context.Response.Headers.Get(headerName);
         }
@@ -83,8 +89,15 @@ namespace RestFoundation.Context
         /// <param name="headerValue">The header value.</param>
         public void SetHeader(string headerName, string headerValue)
         {
-            if (headerName == null) throw new ArgumentNullException("headerName");
-            if (headerValue == null) throw new ArgumentNullException("headerValue");
+            if (String.IsNullOrEmpty(headerName))
+            {
+                throw new ArgumentNullException("headerName");
+            }
+
+            if (headerValue == null)
+            {
+                throw new ArgumentNullException("headerValue");
+            }
 
             if (!HeaderNameValidator.IsValid(headerName))
             {
@@ -104,7 +117,10 @@ namespace RestFoundation.Context
         /// </returns>
         public bool RemoveHeader(string headerName)
         {
-            if (headerName == null) throw new ArgumentNullException("headerName");
+            if (headerName == null)
+            {
+                throw new ArgumentNullException("headerName");
+            }
 
             if (Array.IndexOf(Context.Response.Headers.AllKeys, headerName) < 0)
             {
@@ -129,7 +145,10 @@ namespace RestFoundation.Context
         /// <param name="encoding">The encoding.</param>
         public void SetCharsetEncoding(Encoding encoding)
         {
-            if (encoding == null) throw new ArgumentNullException("encoding");
+            if (encoding == null)
+            {
+                throw new ArgumentNullException("encoding");
+            }
 
             Context.Response.ContentEncoding = encoding;
         }
@@ -179,7 +198,10 @@ namespace RestFoundation.Context
         /// <returns>The cookie object.</returns>
         public HttpCookie GetCookie(string cookieName)
         {
-            if (cookieName == null) throw new ArgumentNullException("cookieName");
+            if (String.IsNullOrEmpty(cookieName))
+            {
+                throw new ArgumentNullException("cookieName");
+            }
 
             return Context.Response.Cookies.Get(cookieName);
         }
@@ -190,7 +212,10 @@ namespace RestFoundation.Context
         /// <param name="cookie">The cookie object.</param>
         public void SetCookie(HttpCookie cookie)
         {
-            if (cookie == null) throw new ArgumentNullException("cookie");
+            if (cookie == null)
+            {
+                throw new ArgumentNullException("cookie");
+            }
 
             Context.Response.SetCookie(cookie);
         }
@@ -201,7 +226,10 @@ namespace RestFoundation.Context
         /// <param name="cookie">The cookie object.</param>
         public void ExpireCookie(HttpCookie cookie)
         {
-            if (cookie == null) throw new ArgumentNullException("cookie");
+            if (cookie == null)
+            {
+                throw new ArgumentNullException("cookie");
+            }
 
             cookie.Expires = DateTime.Now.AddDays(-1);
             Context.Response.SetCookie(cookie);
@@ -237,7 +265,10 @@ namespace RestFoundation.Context
         /// <param name="maxAge">The time span before the cache expires.</param>
         public void SetFileDependencies(string filePath, HttpCacheability cacheability, TimeSpan maxAge)
         {
-            if (String.IsNullOrEmpty(filePath)) throw new ArgumentNullException("filePath");
+            if (String.IsNullOrEmpty(filePath))
+            {
+                throw new ArgumentNullException("filePath");
+            }
 
             Context.Response.AddFileDependency(filePath);
             Context.Response.Cache.SetCacheability(cacheability);

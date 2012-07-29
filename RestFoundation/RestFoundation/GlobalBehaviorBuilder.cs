@@ -22,7 +22,10 @@ namespace RestFoundation
         /// <param name="behaviors">An array of behavior instances.</param>
         public void AddGlobalBehaviors(params IServiceBehavior[] behaviors)
         {
-            if (behaviors == null) throw new ArgumentNullException("behaviors");
+            if (behaviors == null)
+            {
+                throw new ArgumentNullException("behaviors");
+            }
 
             if (behaviors.GroupBy(s => s.GetType()).Max(g => g.Count()) > 1)
             {
@@ -51,7 +54,10 @@ namespace RestFoundation
         /// <returns>true if the behavior was removed; false if the behavior instance had not been registered</returns>
         public bool RemoveGlobalBehavior(IServiceBehavior behavior)
         {
-            if (behavior == null) throw new ArgumentNullException("behavior");
+            if (behavior == null)
+            {
+                throw new ArgumentNullException("behavior");
+            }
 
             return ServiceBehaviorRegistry.RemoveGlobalBehavior(behavior);
         }

@@ -22,10 +22,17 @@ namespace RestFoundation.ServiceProxy
         /// <param name="response">The web response.</param>
         public ProxyWebResponse(WebResponse response)
         {
-            if (response == null) throw new ArgumentNullException("response");
+            if (response == null)
+            {
+                throw new ArgumentNullException("response");
+            }
 
             var webResponse = response as HttpWebResponse;
-            if (webResponse == null) throw new ArgumentException("Invalid web response provided.", "response");
+
+            if (webResponse == null)
+            {
+                throw new ArgumentException("Invalid web response provided.", "response");
+            }
 
             m_httpResponse = webResponse;
         }
@@ -175,7 +182,11 @@ namespace RestFoundation.ServiceProxy
         public override Stream GetResponseStream()
         {
             Stream responseStream = m_httpResponse.GetResponseStream();
-            if (responseStream == null) return null;
+
+            if (responseStream == null)
+            {
+                return null;
+            }
 
             string encoding = Headers[ContentEncodingHeader];
 
@@ -207,7 +218,10 @@ namespace RestFoundation.ServiceProxy
         /// <param name="streamingContext">A <see cref="StreamingContext"/> that specifies the destination for this serialization.</param>
         protected override void GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext)
         {
-            if (serializationInfo == null) throw new ArgumentNullException("serializationInfo");
+            if (serializationInfo == null)
+            {
+                throw new ArgumentNullException("serializationInfo");
+            }
 
             base.GetObjectData(serializationInfo, streamingContext);
 

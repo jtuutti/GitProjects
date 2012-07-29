@@ -25,7 +25,10 @@ namespace RestFoundation.Results
         /// <param name="context">The service context.</param>
         public virtual void Execute(IServiceContext context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             context.Response.Output.Clear();
             context.Response.SetHeader(context.Response.Headers.ContentType, ContentType ?? "application/xml");

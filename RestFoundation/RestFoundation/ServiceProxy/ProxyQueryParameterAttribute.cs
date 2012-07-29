@@ -16,8 +16,15 @@ namespace RestFoundation.ServiceProxy
         /// <param name="exampleValue">An example parameter value.</param>
         public ProxyQueryParameterAttribute(string name, object exampleValue)
         {
-            if (String.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-            if (exampleValue == null) throw new ArgumentNullException("exampleValue");
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            if (exampleValue == null)
+            {
+                throw new ArgumentNullException("exampleValue");
+            }
 
             Name = name;
             ExampleValue = exampleValue;

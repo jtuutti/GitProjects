@@ -30,8 +30,15 @@ namespace RestFoundation.Security
 
         public string Encrypt(string value)
         {
-            if (value == null) throw new ArgumentNullException("value");
-            if (m_key == null) throw new InvalidOperationException(InvalidHashKey);
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            if (m_key == null)
+            {
+                throw new InvalidOperationException(InvalidHashKey);
+            }
 
             byte[] data = Encoding.UTF8.GetBytes(value);
 
@@ -50,8 +57,15 @@ namespace RestFoundation.Security
 
         public string Decrypt(string encryptedValue)
         {
-            if (String.IsNullOrEmpty(encryptedValue)) throw new ArgumentNullException("encryptedValue");
-            if (m_key == null) throw new InvalidOperationException(InvalidHashKey);
+            if (String.IsNullOrEmpty(encryptedValue))
+            {
+                throw new ArgumentNullException("encryptedValue");
+            }
+
+            if (m_key == null)
+            {
+                throw new InvalidOperationException(InvalidHashKey);
+            }
 
             byte[] cipher = Convert.FromBase64String(encryptedValue);
 

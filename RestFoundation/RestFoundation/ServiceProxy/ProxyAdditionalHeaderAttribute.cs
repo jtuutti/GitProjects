@@ -16,8 +16,15 @@ namespace RestFoundation.ServiceProxy
         /// <param name="value">The header value.</param>
         public ProxyAdditionalHeaderAttribute(string name, string value)
         {
-            if (String.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
-            if (value == null) throw new ArgumentNullException("value");
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
 
             Name = name;
             Value = value;

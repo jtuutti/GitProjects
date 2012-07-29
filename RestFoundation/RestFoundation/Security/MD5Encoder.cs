@@ -17,7 +17,10 @@ namespace RestFoundation.Security
 
         public string Encode(string value)
         {
-            if (value == null) throw new ArgumentNullException("value");
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
 
             return ConvertToHexString(m_hash.ComputeHash(Encoding.UTF8.GetBytes(value)));
         }

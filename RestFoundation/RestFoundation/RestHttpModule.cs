@@ -26,7 +26,10 @@ namespace RestFoundation
         /// </param>
         public void Init(HttpApplication context)
         {
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
 
             IsInitialized = true;
 

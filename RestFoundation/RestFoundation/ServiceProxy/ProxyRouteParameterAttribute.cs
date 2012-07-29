@@ -15,7 +15,10 @@ namespace RestFoundation.ServiceProxy
         /// <param name="exampleValue">An example parameter value.</param>
         public ProxyRouteParameterAttribute(object exampleValue)
         {
-            if (exampleValue == null) throw new ArgumentNullException("exampleValue");
+            if (exampleValue == null)
+            {
+                throw new ArgumentNullException("exampleValue");
+            }
 
             ExampleValue = exampleValue;
         }

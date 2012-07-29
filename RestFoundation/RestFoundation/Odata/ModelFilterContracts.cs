@@ -12,7 +12,10 @@ namespace RestFoundation.Odata
     {
         public IEnumerable<object> Filter(IEnumerable<T> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
 
             throw new NotImplementedException();
         }

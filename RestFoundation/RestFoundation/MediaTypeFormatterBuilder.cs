@@ -19,7 +19,10 @@ namespace RestFoundation
         /// <returns>The associated media type formatter or null.</returns>
         public IMediaTypeFormatter Get(string mediaType)
         {
-            if (String.IsNullOrEmpty(mediaType)) throw new ArgumentNullException("mediaType");
+            if (String.IsNullOrEmpty(mediaType))
+            {
+                throw new ArgumentNullException("mediaType");
+            }
 
             return MediaTypeFormatterRegistry.GetFormatter(mediaType);
         }
@@ -31,8 +34,15 @@ namespace RestFoundation
         /// <param name="formatter">The media type formatter.</param>
         public void Set(string mediaType, IMediaTypeFormatter formatter)
         {
-            if (formatter == null) throw new ArgumentNullException("formatter");
-            if (String.IsNullOrEmpty(mediaType)) throw new ArgumentNullException("mediaType");
+            if (formatter == null)
+            {
+                throw new ArgumentNullException("formatter");
+            }
+
+            if (String.IsNullOrEmpty(mediaType))
+            {
+                throw new ArgumentNullException("mediaType");
+            }
 
             MediaTypeFormatterRegistry.SetFormatter(mediaType, formatter);
         }
@@ -47,7 +57,10 @@ namespace RestFoundation
         /// </returns>
         public bool Remove(string mediaType)
         {
-            if (String.IsNullOrEmpty(mediaType)) throw new ArgumentNullException("mediaType");
+            if (String.IsNullOrEmpty(mediaType))
+            {
+                throw new ArgumentNullException("mediaType");
+            }
 
             return MediaTypeFormatterRegistry.RemoveFormatter(mediaType);
         }

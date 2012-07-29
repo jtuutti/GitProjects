@@ -9,7 +9,10 @@ namespace RestFoundation.Odata
     {
         public static object Filter(object source, NameValueCollection query)
         {
-            if (source == null) throw new ArgumentNullException("source");
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
 
             if (!source.GetType().IsGenericType || source.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) == null)
             {
@@ -20,11 +23,9 @@ namespace RestFoundation.Odata
             Type parserType = typeof(ParameterParser<>).MakeGenericType(modelType);
 
             object parser = Activator.CreateInstance(parserType);
-            
             object filter = parserType.GetMethod("Parse").Invoke(parser, new object[] { query });
-            if (filter == null) return source;
 
-            return filter.GetType().GetMethod("Filter").Invoke(filter, new[] { source });
+            return filter != null ? filter.GetType().GetMethod("Filter").Invoke(filter, new[] { source }) : source;
         }
     }
 }

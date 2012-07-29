@@ -19,7 +19,10 @@ namespace RestFoundation.Runtime
         /// <exception cref="InvalidOperationException">If the HTTP method could not be resolved.</exception>
         public virtual IEnumerable<HttpMethod> Resolve(MethodInfo method)
         {
-            if (method == null) throw new ArgumentNullException("method");
+            if (method == null)
+            {
+                throw new ArgumentNullException("method");
+            }
 
             HttpMethod? resolvedMethod = null;
 

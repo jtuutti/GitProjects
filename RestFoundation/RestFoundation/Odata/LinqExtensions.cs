@@ -14,12 +14,15 @@ namespace RestFoundation.Odata
     {
         public static bool IsAnonymousType(this Type type)
         {
-            if (type == null) throw new ArgumentNullException("type");
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
 
-            return Attribute.IsDefined(type, typeof(CompilerGeneratedAttribute), false)
-                && type.IsGenericType
-                && type.Name.Contains("AnonymousType") && (type.Name.StartsWith("<>", StringComparison.Ordinal) || type.Name.StartsWith("VB$", StringComparison.Ordinal))
-                && (type.Attributes & TypeAttributes.NotPublic) == TypeAttributes.NotPublic;
+            return Attribute.IsDefined(type, typeof(CompilerGeneratedAttribute), false) &&
+                   type.IsGenericType &&
+                   type.Name.Contains("AnonymousType") && (type.Name.StartsWith("<>", StringComparison.Ordinal) || type.Name.StartsWith("VB$", StringComparison.Ordinal)) &&
+                   (type.Attributes & TypeAttributes.NotPublic) == TypeAttributes.NotPublic;
         }
     }
 }
