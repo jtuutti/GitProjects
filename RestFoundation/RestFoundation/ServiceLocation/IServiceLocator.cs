@@ -38,11 +38,5 @@ namespace RestFoundation.ServiceLocation
         /// </returns>
         /// <filterpriority>2</filterpriority>
         IEnumerable<T> GetServices<T>();
-
-        /// <summary>
-        /// Takes an already constructed object and injects service dependencies into its properties.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        void BuildUp(object obj);
     }
 }

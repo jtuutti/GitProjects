@@ -8,24 +8,17 @@ namespace RestFoundation.Unity
 {
     internal static class RestConfigurator
     {
-        public static Rest Configure(Action<IUnityContainer> registrationBuilder, bool mockContext)
+        public static Rest Configure(IUnityContainer container, bool mockContext)
         {
-            return Rest.Configure(CreateServiceLocator(registrationBuilder, mockContext));
+            return Rest.Configure(CreateServiceLocator(container, mockContext));
         }
 
-        public static IServiceLocator CreateServiceLocator(Action<IUnityContainer> registrationBuilder, bool mockContext)
+        public static IServiceLocator CreateServiceLocator(IUnityContainer container, bool mockContext)
         {
             try
             {
-                var container = new UnityContainer();
-
                 var serviceBuilder = new ServiceBuilder(container);
                 serviceBuilder.Build(mockContext);
-
-                if (registrationBuilder != null)
-                {
-                    registrationBuilder(container);
-                }
 
                 return new ServiceLocator(container);
             }

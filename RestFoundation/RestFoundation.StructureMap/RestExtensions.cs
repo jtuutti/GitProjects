@@ -1,6 +1,6 @@
 ﻿using System;
 using RestFoundation.StructureMap;
-using StructureMap.Configuration.DSL;
+using StructureMap;
 
 namespace RestFoundation
 {
@@ -10,24 +10,19 @@ namespace RestFoundation
     public static class RestExtensions
     {
         /// <summary>
-        /// Configures REST Foundation to use a StructureMap container.
+        /// Configures REST Foundation with the provided StructureMap container.
         /// </summary>
         /// <param name="restConfiguration">The REST configuration object.</param>
+        /// <param name="container">The StructureMap container.</param>
         /// <returns>The configuration object.</returns>
-        public static Rest ConfigureWithStructureMap(this Rest restConfiguration)
+        public static Rest ConfigureWithStructureMap(this Rest restConfiguration, IContainer container)
         {
-            return RestConfigurator.Configure(null, false);
-        }
+            if (container == null)
+            {
+                throw new ArgumentNullException("container");
+            }
 
-        /// <summary>
-        /// Configures REST Foundation to use a StructureMap container.
-        /// </summary>
-        /// <param name="restConfiguration">The REST configuration object.</param>
-        /// <param name="registrationBuilder">A delegate to specify additional service dependencies.</param>
-        /// <returns>The configuration object.</returns>
-        public static Rest ConfigureWithStructureMap(this Rest restConfiguration, Action<Registry> registrationBuilder)
-        {
-            return RestConfigurator.Configure(registrationBuilder, false);
+            return RestConfigurator.Configure(container, false);
         }
     }
 }

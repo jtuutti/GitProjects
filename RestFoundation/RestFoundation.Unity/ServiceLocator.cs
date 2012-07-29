@@ -10,7 +10,7 @@ namespace RestFoundation.Unity
     /// <summary>
     /// Represents a service locator that abstracts a Unity container.
     /// </summary>
-    public sealed class ServiceLocator : IServiceLocator, IDisposable
+    public sealed class ServiceLocator : IServiceLocator
     {
         private readonly IUnityContainer m_container;
 
@@ -103,7 +103,16 @@ namespace RestFoundation.Unity
 
             try
             {
-                return m_container.ResolveAll(serviceType);
+                var services = new List<object>(m_container.ResolveAll(serviceType));
+                
+                object defaultService = GetService(serviceType); // by default Unity does not return unnamed instances
+
+                if (defaultService != null && !services.Contains(defaultService))
+                {
+                    services.Insert(0, defaultService);
+                }
+
+                return services;
             }
             catch (Exception ex)
             {
@@ -123,29 +132,20 @@ namespace RestFoundation.Unity
         {
             try
             {
-                return m_container.ResolveAll<T>();
+                var services = new List<T>(m_container.ResolveAll<T>());
+
+                var defaultService = GetService<T>(); // by default Unity does not return unnamed instances
+
+                if (!Equals(defaultService, default(T)) && !services.Contains(defaultService))
+                {
+                    services.Insert(0, defaultService);
+                }
+
+                return services;
             }
             catch (Exception ex)
             {
                 throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyResolutionError, ex.Message), ex);
-            }
-        }
-
-        /// <summary>
-        /// Takes an already constructed object and injects service dependencies into its properties.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        public void BuildUp(object obj)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-
-            try
-            {
-                m_container.BuildUp(obj);
-            }
-            catch (Exception ex)
-            {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyBuildUpError, ex.Message), ex);
             }
         }
 

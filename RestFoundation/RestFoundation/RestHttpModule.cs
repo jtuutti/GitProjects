@@ -125,8 +125,6 @@ namespace RestFoundation
                     CallPageInjectionConstructor(control, constructor);
                 }
             }
-
-            Rest.Active.ServiceLocator.BuildUp(control);
         }
 
         private static void CallPageInjectionConstructor(Control control, ConstructorInfo constructor)

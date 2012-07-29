@@ -27,19 +27,11 @@ namespace RestTest.Views
             }
         }
 
-        public IHttpRequest ServiceRequest { get; set; }
-        public IHttpResponse ServiceResponse { get; set; }
-
         protected void Page_Init(object sender, EventArgs e)
         {
             if (ServiceContext == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, "Constructor dependency injection failed");
-            }
-
-            if (ServiceRequest == null || ServiceResponse == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "Property dependency injection failed");
             }
         }
 

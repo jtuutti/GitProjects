@@ -11,7 +11,7 @@ namespace RestFoundation.StructureMap
     /// <summary>
     /// Represents a service locator that abstracts a StructureMap container.
     /// </summary>
-    public sealed class ServiceLocator : IServiceLocator, IDisposable
+    public sealed class ServiceLocator : IServiceLocator
     {
         private readonly IContainer m_container;
 

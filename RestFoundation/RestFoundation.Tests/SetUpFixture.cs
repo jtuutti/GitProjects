@@ -2,7 +2,7 @@
 using RestFoundation.Tests.ServiceContracts;
 using RestFoundation.Tests.Services;
 using RestFoundation.UnitTesting;
-using StructureMap.Configuration.DSL;
+using StructureMap;
 
 namespace RestFoundation.Tests
 {
@@ -15,13 +15,17 @@ namespace RestFoundation.Tests
         public void Setup()
         {
             // Configuring REST foundation
-            Rest.Active.ConfigureMocksWithStructureMap(RegisterDependencies)
+            Rest.Active.ConfigureMocksWithStructureMap(CreateContainerWithDependencies())
                        .WithUrls(RegisterUrls);
         }
 
-        private static void RegisterDependencies(Registry registry)
+        private static IContainer CreateContainerWithDependencies()
         {
-            registry.For<ITestService>().Use<TestService>();
+            return new Container(registry =>
+            {
+                registry.For<ITestService>().Use<TestService>();
+                registry.SetAllProperties(convention => convention.TypeMatches(type => type == typeof(IServiceContext)));
+            });
         }
 
         private static void RegisterUrls(UrlBuilder urlBuilder)

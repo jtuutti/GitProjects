@@ -1,15 +1,16 @@
-﻿using Microsoft.Practices.Unity;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Practices.Unity;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
 using RestFoundation.Behaviors;
 using RestFoundation.Formatters;
-using RestFoundation.Unity;
 using RestTest.Security;
 using RestTest.Behaviors;
 using RestTest.StreamCompressors;
 using RestTestContracts;
 using RestTestServices;
-using StructureMap.Configuration.DSL;
+using StructureMap;
 
 namespace RestTest.App_Start
 {
@@ -19,7 +20,7 @@ namespace RestTest.App_Start
         {
             DynamicModuleUtility.RegisterModule(typeof(RestHttpModule));
 
-            Rest.Active.ConfigureWithStructureMap(RegisterDependencies)
+            Rest.Active.ConfigureWithStructureMap(CreateStructureMapContainer())
                        .WithUrls(RegisterUrls)
                        .WithMediaTypeFormatters(RegisterFormatters)
                        .EnableJsonPSupport()
@@ -28,26 +29,41 @@ namespace RestTest.App_Start
                        .ConfigureServiceHelpAndProxy(c => c.Enable());
         }
 
-        private static void RegisterDependencies(IUnityContainer container)
+        private static IUnityContainer CreateUnityContainer()
         {
+            var container = new UnityContainer();
             container.RegisterType<IAuthorizationManager, ServiceAuthorizationManager>(new ContainerControlledLifetimeManager());
             container.RegisterType<IStreamCompressor, RestStreamCompressor>(new ContainerControlledLifetimeManager());
-
             container.RegisterType<IIndexService, IndexService>(new InjectionProperty("Context"));
             container.RegisterType<IDynamicService, DynamicService>();
             container.RegisterType<ITouchMapService, TouchMapService>(new InjectionProperty("Context"));
+
+            return container;
         }
 
-        private static void RegisterDependencies(Registry registry)
+        private static IContainer CreateStructureMapContainer()
         {
-            registry.ForSingletonOf<IAuthorizationManager>().Use<ServiceAuthorizationManager>();
-            registry.ForSingletonOf<IStreamCompressor>().Use<RestStreamCompressor>();
-
-            registry.Scan(action =>
+            return new Container(registry =>
             {
-                action.Assembly("RestTestContracts");
-                action.Assembly("RestTestServices");
-                action.WithDefaultConventions();
+                registry.ForSingletonOf<IAuthorizationManager>().Use<ServiceAuthorizationManager>();
+                registry.ForSingletonOf<IStreamCompressor>().Use<RestStreamCompressor>();
+
+                registry.Scan(scanner =>
+                {
+                    scanner.Assembly("RestTestContracts");
+                    scanner.Assembly("RestTestServices");
+                    scanner.WithDefaultConventions();
+                });
+
+                var propertyInjectedTypes = new List<Type>
+                {
+                    typeof(IHttpRequest),
+                    typeof(IHttpResponse),
+                    typeof(IServiceCache),
+                    typeof(IServiceContext)
+                };
+
+                registry.SetAllProperties(convention => convention.TypeMatches(propertyInjectedTypes.Contains));
             });
         }
 

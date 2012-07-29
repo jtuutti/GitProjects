@@ -3,34 +3,22 @@ using System.Globalization;
 using RestFoundation.ServiceLocation;
 using RestFoundation.StructureMap.Properties;
 using StructureMap;
-using StructureMap.Configuration.DSL;
 
 namespace RestFoundation.StructureMap
 {
     internal static class RestConfigurator
     {
-        public static Rest Configure(Action<Registry> registrationBuilder, bool mockContext)
+        public static Rest Configure(IContainer container, bool mockContext)
         {
-            return Rest.Configure(CreateServiceLocator(registrationBuilder, mockContext));
+            return Rest.Configure(CreateServiceLocator(container, mockContext));
         }
 
-        public static IServiceLocator CreateServiceLocator(Action<Registry> registrationBuilder, bool mockContext)
+        public static IServiceLocator CreateServiceLocator(IContainer container, bool mockContext)
         {
             try
             {
-                var registry = new Registry();
-
-                var serviceBuilder = new ServiceBuilder(registry);
+                var serviceBuilder = new ServiceBuilder(container);
                 serviceBuilder.Build(mockContext);
-
-                registry.SetAllProperties(convention => convention.TypeMatches(type => type.IsRestDependency()));
-
-                if (registrationBuilder != null)
-                {
-                    registrationBuilder(registry);
-                }
-
-                var container = new Container(registry);
 
 #if DEBUG
                 container.AssertConfigurationIsValid();

@@ -52,6 +52,11 @@ namespace RestFoundation.Unity
                 throw new ArgumentException(Resources.BadImplementationType, "implementationType");
             }
 
+            if (m_container.IsRegistered(abstractionType))
+            {
+                return;
+            }
+
             try
             {
                 m_container.RegisterType(abstractionType, implementationType, GetLifetimeManager(isSingleton));

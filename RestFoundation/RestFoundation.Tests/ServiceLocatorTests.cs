@@ -9,6 +9,7 @@ using RestFoundation.ServiceLocation;
 using RestFoundation.Tests.ServiceContracts;
 using RestFoundation.Tests.Services;
 using RestFoundation.UnitTesting;
+using StructureMap;
 
 namespace RestFoundation.Tests
 {
@@ -69,10 +70,9 @@ namespace RestFoundation.Tests
         [Test]
         public void StructureMap_TestInjectedImplementation()
         {
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(builder =>
-            {
-                builder.For<IAuthorizationManager>().Transient().Use<TestAuthorizationManager>();
-            }, false))
+            var container = new Container(registry => registry.For<IAuthorizationManager>().Use<TestAuthorizationManager>());
+
+            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(container, false))
             {
                 TestTransient<IAuthorizationManager>(serviceLocator);
                 TestImplementation<IAuthorizationManager, TestAuthorizationManager>(serviceLocator);
@@ -92,27 +92,27 @@ namespace RestFoundation.Tests
         [Test]
         public void StructureMap_TestServiceResolution()
         {
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(builder =>
-            {
-                builder.For<ITestService>().Use<TestService>();
-            }, true))
+            var container = new Container(registry => registry.For<ITestService>().Use<TestService>());
+
+            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(container, true))
             {
                 TestTransient<ITestService>(serviceLocator);
-                TestImplementation<ITestService, TestService>(serviceLocator);
+
+                var service = (TestService) TestImplementation<ITestService, TestService>(serviceLocator);
+                Assert.That(service.Context, Is.Not.Null, "StructureMap did not inject REST dependencies as properties");
             }
         }
 
         [Test]
         public void StructureMap_TestServiceResolutionRegisteredByConvention()
         {
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(builder =>
+            var container = new Container(registry => registry.Scan(action =>
             {
-                builder.Scan(x =>
-                {
-                    x.TheCallingAssembly();
-                    x.WithDefaultConventions();
-                });
-            }, true))
+                action.TheCallingAssembly();
+                action.WithDefaultConventions();
+            }));
+
+            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(container, true))
             {
                 TestTransient<ITestService>(serviceLocator);
 
@@ -175,10 +175,10 @@ namespace RestFoundation.Tests
         [Test]
         public void Unity_TestInjectedImplementation()
         {
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForUnity(builder =>
-            {
-                builder.RegisterType<IAuthorizationManager, TestAuthorizationManager>(new TransientLifetimeManager());
-            }, false))
+            var container = new UnityContainer();
+            container.RegisterType<IAuthorizationManager, TestAuthorizationManager>(new TransientLifetimeManager());
+
+            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForUnity(container, false))
             {
                 TestTransient<IAuthorizationManager>(serviceLocator);
                 TestImplementation<IAuthorizationManager, TestAuthorizationManager>(serviceLocator);
@@ -198,10 +198,10 @@ namespace RestFoundation.Tests
         [Test]
         public void Unity_TestServiceResolution()
         {
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForUnity(builder =>
-            {
-                builder.RegisterType<ITestService, TestService>(new InjectionProperty("Context")); // property injection can only be specified manually for Unity
-            }, true))
+            var container = new UnityContainer();
+            container.RegisterType<ITestService, TestService>(new InjectionProperty("Context")); // property injection can only be specified manually for Unity
+
+            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForUnity(container, true))
             {
                 TestTransient<ITestService>(serviceLocator);
 

@@ -2,20 +2,20 @@
 using System.Globalization;
 using RestFoundation.ServiceLocation;
 using RestFoundation.StructureMap.Properties;
-using StructureMap.Configuration.DSL;
+using StructureMap;
 using StructureMap.Pipeline;
 
 namespace RestFoundation.StructureMap
 {
     internal sealed class ServiceBuilder
     {
-        private readonly Registry m_registry;
+        private readonly IContainer m_container;
 
-        public ServiceBuilder(Registry registry)
+        public ServiceBuilder(IContainer container)
         {
-            if (registry == null) throw new ArgumentNullException("registry");
+            if (container == null) throw new ArgumentNullException("container");
 
-            m_registry = registry;
+            m_container = container;
         }
 
         public void Build(bool mockContext)
@@ -58,9 +58,14 @@ namespace RestFoundation.StructureMap
                 throw new ArgumentException(Resources.BadImplementationType, "implementationType");
             }
 
+            if (m_container.IsRegistered(abstractionType))
+            {
+                return;
+            }
+
             try
             {
-                m_registry.For(abstractionType).LifecycleIs(GetLifecycle(isSingleton)).Use(implementationType);
+                m_container.Configure(configure => configure.For(abstractionType).LifecycleIs(GetLifecycle(isSingleton)).Use(implementationType));
             }
             catch (Exception ex)
             {
