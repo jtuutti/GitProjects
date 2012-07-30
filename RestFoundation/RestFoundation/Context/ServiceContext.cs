@@ -13,13 +13,15 @@ namespace RestFoundation.Context
     {
         private readonly IHttpRequest m_request;
         private readonly IHttpResponse m_response;
+        private readonly IServiceCache m_cache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceContext"/> class.
         /// </summary>
         /// <param name="request">The current HTTP request.</param>
         /// <param name="response">The current HTTP response.</param>
-        public ServiceContext(IHttpRequest request, IHttpResponse response)
+        /// <param name="cache">The service cache.</param>
+        public ServiceContext(IHttpRequest request, IHttpResponse response, IServiceCache cache)
         {
             if (request == null)
             {
@@ -33,6 +35,7 @@ namespace RestFoundation.Context
 
             m_request = request;
             m_response = response;
+            m_cache = cache;
         }
 
         /// <summary>
@@ -54,6 +57,17 @@ namespace RestFoundation.Context
             get
             {
                 return m_response;
+            }
+        }
+
+        /// <summary>
+        /// Gets the service cache.
+        /// </summary>
+        public IServiceCache Cache
+        {
+            get
+            {
+                return m_cache;
             }
         }
 

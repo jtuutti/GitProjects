@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Practices.Unity;
+﻿using Microsoft.Practices.Unity;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
 using RestFoundation.Behaviors;
@@ -55,15 +53,7 @@ namespace RestTest.App_Start
                     scanner.WithDefaultConventions();
                 });
 
-                var propertyInjectedTypes = new List<Type>
-                {
-                    typeof(IHttpRequest),
-                    typeof(IHttpResponse),
-                    typeof(IServiceCache),
-                    typeof(IServiceContext)
-                };
-
-                registry.SetAllProperties(convention => convention.TypeMatches(propertyInjectedTypes.Contains));
+                registry.SetAllProperties(convention => convention.TypeMatches(Rest.ServiceContextTypes.Contains));
             });
         }
 

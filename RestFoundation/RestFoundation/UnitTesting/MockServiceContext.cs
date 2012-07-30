@@ -14,7 +14,8 @@ namespace RestFoundation.UnitTesting
         /// </summary>
         /// <param name="request">The HTTP request.</param>
         /// <param name="response">The HTTP response.</param>
-        public MockServiceContext(IHttpRequest request, IHttpResponse response) : base(request, response)
+        /// <param name="cache">The service cache.</param>
+        public MockServiceContext(IHttpRequest request, IHttpResponse response, IServiceCache cache) : base(request, response, cache)
         {
         }
 

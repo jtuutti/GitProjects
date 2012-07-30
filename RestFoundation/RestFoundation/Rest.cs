@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Web.Routing;
 using System.Web.Util;
@@ -15,16 +16,21 @@ namespace RestFoundation
     /// </summary>
     public sealed class Rest
     {
-        private static readonly object syncRoot = new object();
+        private readonly static object syncRoot = new object();
+
+        private readonly static ICollection<Type> serviceContextTypes = new ReadOnlyCollection<Type>(new[]
+        {
+            typeof(IServiceContext),
+            typeof(IHttpRequest),
+            typeof(IHttpResponse),
+            typeof(IHttpResponseOutput),
+            typeof(IServiceCache)
+        });
 
         /// <summary>
         /// Gets the active REST Foundation configuration.
         /// </summary>
-        public static Rest Active
-        {
-            get;
-            private set;
-        }
+        public static Rest Active { get; private set; }
 
         /// <summary>
         /// Gets the REST Foundation assembly instance for IoC support.
@@ -34,6 +40,17 @@ namespace RestFoundation
             get
             {
                 return typeof(Rest).Assembly;
+            }
+        }
+
+        /// <summary>
+        /// Gets the service context dependent types.
+        /// </summary>
+        public static ICollection<Type> ServiceContextTypes
+        {
+            get
+            {
+                return serviceContextTypes;
             }
         }
 

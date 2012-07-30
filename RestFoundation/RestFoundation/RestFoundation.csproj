@@ -302,7 +302,6 @@
     <Compile Include="UnitTesting\RouteValidator.cs" />
     <Compile Include="UnitTesting\TestHttpServerUtility.cs" />
     <Compile Include="Url.cs" />
-    <Compile Include="TypeExtensions.cs" />
     <Compile Include="UrlAttribute.cs" />
     <Compile Include="Runtime\UrlTemplateStandardizer.cs" />
     <Compile Include="ParameterConstraintAttribute.cs" />

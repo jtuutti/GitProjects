@@ -20,6 +20,11 @@ namespace RestFoundation
         IHttpResponse Response { get; }
 
         /// <summary>
+        /// Gets the service cache.
+        /// </summary>
+        IServiceCache Cache { get; }
+
+        /// <summary>
         /// Gets or sets a time span before a service times out.
         /// </summary>
         TimeSpan ServiceTimeout { get; set; }
