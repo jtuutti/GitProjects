@@ -314,6 +314,14 @@ namespace RestFoundation.Runtime.Handlers
                 m_timer = InitializeTimer(timeoutInMilliseconds);
             }
 
+            ~CancellationOperation()
+            {
+                if (!m_isDisposed)
+                {
+                    m_timer.Dispose();
+                }
+            }
+
             public bool IsCancelled
             {
                 get
@@ -349,14 +357,6 @@ namespace RestFoundation.Runtime.Handlers
                     {
                     }
                 }, null, timeoutInMilliseconds, Timeout.Infinite);
-            }
-
-            ~CancellationOperation()
-            {
-                if (!m_isDisposed)
-                {
-                    m_timer.Dispose();
-                }
             }
         }
 

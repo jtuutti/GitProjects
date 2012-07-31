@@ -16,9 +16,9 @@ namespace RestFoundation
     /// </summary>
     public sealed class Rest
     {
-        private readonly static object syncRoot = new object();
+        private static readonly object syncRoot = new object();
 
-        private readonly static ICollection<Type> serviceContextTypes = new ReadOnlyCollection<Type>(new[]
+        private static readonly ICollection<Type> serviceContextTypes = new ReadOnlyCollection<Type>(new[]
         {
             typeof(IServiceContext),
             typeof(IHttpRequest),
