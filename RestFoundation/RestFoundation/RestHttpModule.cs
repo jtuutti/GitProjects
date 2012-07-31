@@ -78,9 +78,16 @@ namespace RestFoundation
 
             var httpException = exception as HttpException;
 
-            if (httpException != null && httpException.Message.Contains("A potentially dangerous Request.Path value was detected from the client"))
+            if (httpException != null)
             {
-                SetResponseStatus(context, HttpStatusCode.Forbidden, "A potentially dangerous value was found in the HTTP request");
+                if (httpException.Message.Contains("A potentially dangerous Request.Path value was detected from the client"))
+                {
+                    SetResponseStatus(context, HttpStatusCode.Forbidden, "A potentially dangerous value was found in the HTTP request");
+                }
+                else if (httpException.Message.Contains("Request timed out"))
+                {
+                    SetResponseStatus(context, HttpStatusCode.ServiceUnavailable, "Service timed out");
+                }
             }
         }
 

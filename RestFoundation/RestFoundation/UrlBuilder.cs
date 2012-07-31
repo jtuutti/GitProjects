@@ -46,7 +46,7 @@ namespace RestFoundation
                 throw new ArgumentNullException("url");
             }
 
-            return new RouteBuilder(url, m_routes, m_httpMethodResolver, m_contentNegotiator, false);
+            return new RouteBuilder(url, m_routes, m_httpMethodResolver, m_contentNegotiator, null);
         }
     }
 }

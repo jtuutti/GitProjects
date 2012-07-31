@@ -22,20 +22,20 @@ namespace RestFoundation
         private readonly RouteCollection m_routes;
         private readonly IHttpMethodResolver m_httpMethodResolver;
         private readonly IContentNegotiator m_contentNegotiator;
-        private readonly bool m_asynchronously;
+        private readonly TimeSpan? m_asyncTimeout;
 
-        internal RouteBuilder(string relativeUrl, RouteCollection routes, IHttpMethodResolver httpMethodResolver, IContentNegotiator contentNegotiator, bool asynchronously)
+        internal RouteBuilder(string relativeUrl, RouteCollection routes, IHttpMethodResolver httpMethodResolver, IContentNegotiator contentNegotiator, TimeSpan? asyncTimeout)
         {
             if (String.IsNullOrEmpty(relativeUrl)) throw new ArgumentNullException("relativeUrl");
             if (routes == null) throw new ArgumentNullException("routes");
             if (httpMethodResolver == null) throw new ArgumentNullException("httpMethodResolver");
             if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
 
-            m_relativeUrl = relativeUrl;
+            m_relativeUrl = relativeUrl.Trim();
             m_routes = routes;
             m_httpMethodResolver = httpMethodResolver;
             m_contentNegotiator = contentNegotiator;
-            m_asynchronously = asynchronously;
+            m_asyncTimeout = asyncTimeout;
         }
 
         /// <summary>
@@ -48,7 +48,42 @@ namespace RestFoundation
         /// <returns>The route builder.</returns>
         public RouteBuilder WithAsyncHandler()
         {
-            return new RouteBuilder(m_relativeUrl, m_routes, m_httpMethodResolver, m_contentNegotiator, true);
+            return new RouteBuilder(m_relativeUrl, m_routes, m_httpMethodResolver, m_contentNegotiator, TimeSpan.Zero);
+        }
+
+        /// <summary>
+        /// Specifies that the URL should be mapped to the service using an asynchronous REST HTTP handler.
+        /// It is only recommended to use asynchronous handlers for services that perform heavy operations
+        /// that can block the worker process or cause the server to run out of the ASP .NET thread pool.
+        /// This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
+        /// make web forms pages asynchronous. In case of a time out, it may take additional time to cancel the operation.
+        /// </summary>
+        /// <param name="timeout">The async service method timeout.</param>
+        /// <returns>The route builder.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">If the timeout is less than 1 second.</exception>
+        public RouteBuilder WithAsyncHandler(TimeSpan timeout)
+        {
+            if (timeout.TotalMilliseconds < RestAsyncCancellableHandler.MinTimeoutInMilliseconds)
+            {
+                throw new ArgumentOutOfRangeException("timeout", timeout.TotalSeconds, "Asynchronous service method timeout cannot be less than 1 second.");
+            }
+
+            return new RouteBuilder(m_relativeUrl, m_routes, m_httpMethodResolver, m_contentNegotiator, timeout);
+        }
+
+        /// <summary>
+        /// Specifies that the URL should be mapped to the service using an asynchronous REST HTTP handler.
+        /// It is only recommended to use asynchronous handlers for services that perform heavy operations
+        /// that can block the worker process or cause the server to run out of the ASP .NET thread pool.
+        /// This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
+        /// make web forms pages asynchronous. In case of a time out, it may take additional time to cancel the operation.
+        /// </summary>
+        /// <param name="timeoutInMilliseconds">The async service method timeout in milliseconds.</param>
+        /// <returns>The route builder.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">If the timeout is less than 1 second.</exception>
+        public RouteBuilder WithAsyncHandler(int timeoutInMilliseconds)
+        {
+            return WithAsyncHandler(TimeSpan.FromMilliseconds(timeoutInMilliseconds));
         }
 
         /// <summary>
@@ -61,7 +96,7 @@ namespace RestFoundation
         {
             if (contractType == null) throw new ArgumentNullException("contractType");
 
-            return MapUrl(m_relativeUrl, contractType, m_asynchronously);
+            return MapUrl(contractType);
         }
 
         /// <summary>
@@ -72,7 +107,7 @@ namespace RestFoundation
         /// <exception cref="ArgumentException">If the service contract type is not an interface.</exception>
         public RouteConfiguration ToServiceContract<T>()
         {
-            return MapUrl(m_relativeUrl, typeof(T), m_asynchronously);
+            return MapUrl(typeof(T));
         }
 
         /// <summary>
@@ -113,20 +148,18 @@ namespace RestFoundation
             return String.Concat(url.TrimEnd(Slash), Slash, urlTemplate.TrimStart(Slash, Tilda));
         }
 
-        private RouteConfiguration MapUrl(string url, Type contractType, bool isAsync)
+        private RouteConfiguration MapUrl(Type contractType)
         {
-            if (url == null) throw new ArgumentNullException("url");
-            if (url.Trim().Length == 0) throw new ArgumentException("Route url cannot be null or empty", "url");
             if (contractType == null) throw new ArgumentNullException("contractType");
             if (!contractType.IsInterface) throw new ArgumentException("Service contract type must be an interface", "contractType");
 
             var serviceMethods = contractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
                                              .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);
 
-            List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(contractType, serviceMethods, url);
-            ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, url), t => methodMetadata, (t, u) => methodMetadata);
+            List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(contractType, serviceMethods, m_relativeUrl);
+            ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, m_relativeUrl), t => methodMetadata, (t, u) => methodMetadata);
 
-            IEnumerable<IRestHandler> routeHandlers = MapRoutes(methodMetadata, url, contractType, isAsync);
+            IEnumerable<IRestHandler> routeHandlers = MapRoutes(methodMetadata, contractType);
             return new RouteConfiguration(routeHandlers);
         }
 
@@ -152,19 +185,45 @@ namespace RestFoundation
             return urlAttributes;
         }
 
-        private IEnumerable<IRestHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, string url, Type serviceContractType, bool isAsync)
+        private IRestHandler CreateRouteHandler()
+        {
+            IRestHandler routeHandler;
+
+            if (m_asyncTimeout.HasValue)
+            {
+                if (m_asyncTimeout.Value.TotalMilliseconds >= RestAsyncCancellableHandler.MinTimeoutInMilliseconds)
+                {
+                    routeHandler = Rest.Active.ServiceLocator.GetService<RestAsyncCancellableHandler>();
+                    ((RestAsyncCancellableHandler) routeHandler).AsyncTimeout = m_asyncTimeout.Value;
+                }
+                else if (m_asyncTimeout.Value == TimeSpan.Zero)
+                {
+                    routeHandler = Rest.Active.ServiceLocator.GetService<RestAsyncHandler>();
+                }
+                else
+                {
+                    throw new InvalidOperationException("Invalid asynchronous service method timeout provided.");
+                }
+            }
+            else
+            {
+                routeHandler = Rest.Active.ServiceLocator.GetService<RestHandler>();
+            }
+
+            return routeHandler;
+        }
+
+        private IEnumerable<IRestHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, Type serviceContractType)
         {
             var routeHandlers = new List<IRestHandler>();
             var orderedMethodMetadata = methodMetadata.OrderByDescending(m => m.UrlInfo.Priority);
-
-            url = url.Trim();
 
             foreach (ServiceMethodMetadata metadata in orderedMethodMetadata)
             {
                 var defaults = new RouteValueDictionary
                                    {
                                        { RouteConstants.ServiceContractType, serviceContractType.AssemblyQualifiedName },
-                                       { RouteConstants.ServiceUrl, url },
+                                       { RouteConstants.ServiceUrl, m_relativeUrl },
                                        { RouteConstants.UrlTemplate, metadata.UrlInfo.UrlTemplate.Trim() }
                                    };
 
@@ -173,10 +232,10 @@ namespace RestFoundation
                     { RouteConstants.RouteConstraint, new ServiceRouteConstraint(metadata) }
                 };
 
-                var routeHandler = isAsync ? (IRestHandler) Rest.Active.ServiceLocator.GetService<RestAsyncHandler>() : Rest.Active.ServiceLocator.GetService<RestHandler>();
+                IRestHandler routeHandler = CreateRouteHandler();
                 routeHandlers.Add(routeHandler);
 
-                string serviceUrl = ConcatUrl(url, metadata.UrlInfo.UrlTemplate.Trim());
+                string serviceUrl = ConcatUrl(m_relativeUrl, metadata.UrlInfo.UrlTemplate.Trim());
 
                 if (!String.IsNullOrWhiteSpace(metadata.UrlInfo.WebPageUrl))
                 {

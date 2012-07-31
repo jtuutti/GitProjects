@@ -80,6 +80,7 @@
     <Compile Include="RouteBuilder.cs" />
     <Compile Include="Runtime\ContentNegotiator.cs" />
     <Compile Include="Runtime\Handlers\BrowserRedirectHandler.cs" />
+    <Compile Include="Runtime\Handlers\RestAsyncCancellableHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
     <Compile Include="IServiceBehaviorInvoker.cs" />
     <Compile Include="Security\IPAddressCollection.cs" />
