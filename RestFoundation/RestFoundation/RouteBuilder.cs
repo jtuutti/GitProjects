@@ -57,7 +57,7 @@ namespace RestFoundation
         /// <exception cref="ArgumentOutOfRangeException">If the timeout is less than 1 second.</exception>
         public RouteBuilder WithAsyncHandler(TimeSpan timeout)
         {
-            if (timeout.TotalMilliseconds < RestAsyncCancellableHandler.MinTimeoutInMilliseconds)
+            if (timeout.TotalMilliseconds < CancellationOperation.MinTimeoutInMilliseconds)
             {
                 throw new ArgumentOutOfRangeException("timeout", timeout.TotalSeconds, "Asynchronous service method timeout cannot be less than 1 second.");
             }
@@ -186,7 +186,7 @@ namespace RestFoundation
 
             if (m_asyncTimeout.HasValue)
             {
-                if (m_asyncTimeout.Value.TotalMilliseconds >= RestAsyncCancellableHandler.MinTimeoutInMilliseconds)
+                if (m_asyncTimeout.Value.TotalMilliseconds >= CancellationOperation.MinTimeoutInMilliseconds)
                 {
                     routeHandler = Rest.Active.ServiceLocator.GetService<RestAsyncCancellableHandler>();
                     ((RestAsyncCancellableHandler) routeHandler).AsyncTimeout = m_asyncTimeout.Value;

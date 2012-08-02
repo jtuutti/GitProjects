@@ -14,7 +14,6 @@ namespace RestFoundation.Runtime.Handlers
     /// </summary>
     public class RestAsyncCancellableHandler : IRestAsyncHandler
     {
-        internal const int MinTimeoutInMilliseconds = 1000;
         private const string ServiceMethodCancellationKey = "_cancellation";
 
         private readonly IServiceContext m_serviceContext;
@@ -271,95 +270,5 @@ namespace RestFoundation.Runtime.Handlers
 
             return httpArguments.ServiceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, this) : null;
         }
-
-        #region HTTP Task Arguments
-
-        private sealed class HttpArguments
-        {
-            public HttpArguments(HttpContext context, ServiceMethodLocatorData serviceMethodData)
-            {
-                Context = context;
-                ServiceMethodData = serviceMethodData;
-            }
-
-            public HttpContext Context { get; private set; }
-            public ServiceMethodLocatorData ServiceMethodData { get; private set; }
-        }
-
-        #endregion
-
-        #region Cancellation Operation
-
-        private sealed class CancellationOperation : IDisposable
-        {
-            private readonly Thread m_currentThread;
-            private readonly Timer m_timer;
-
-            private volatile bool m_isCancelled;
-            private bool m_isDisposed;
-
-            public CancellationOperation(Thread currentThread, int timeoutInMilliseconds)
-            {
-                if (currentThread == null)
-                {
-                    throw new ArgumentNullException("currentThread");
-                }
-
-                if (timeoutInMilliseconds < MinTimeoutInMilliseconds)
-                {
-                    throw new InvalidOperationException("Asynchronous service operation timeout cannot be less than 1 second.");
-                }
-
-                m_currentThread = currentThread;
-                m_timer = InitializeTimer(timeoutInMilliseconds);
-            }
-
-            ~CancellationOperation()
-            {
-                if (!m_isDisposed)
-                {
-                    m_timer.Dispose();
-                }
-            }
-
-            public bool IsCancelled
-            {
-                get
-                {
-                    return m_isCancelled;
-                }
-            }
-
-            public void Dispose()
-            {
-                if (m_isDisposed)
-                {
-                    return;
-                }
-
-                m_timer.Dispose();
-                GC.SuppressFinalize(this);
-
-                m_isDisposed = true;
-            }
-
-            private Timer InitializeTimer(int timeoutInMilliseconds)
-            {
-                return new Timer(thread =>
-                {
-                    m_isCancelled = true;
-
-                    try
-                    {
-                        m_currentThread.Interrupt();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }, null, timeoutInMilliseconds, Timeout.Infinite);
-            }
-        }
-
-        #endregion
     }
 }

@@ -216,21 +216,5 @@ namespace RestFoundation.Runtime.Handlers
 
             return httpArguments.ServiceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, this) : null;
         }
-
-        #region HTTP Task Arguments
-
-        private sealed class HttpArguments
-        {
-            public HttpArguments(HttpContext context, ServiceMethodLocatorData serviceMethodData)
-            {
-                Context = context;
-                ServiceMethodData = serviceMethodData;
-            }
-
-            public HttpContext Context { get; private set; }
-            public ServiceMethodLocatorData ServiceMethodData { get; private set; }
-        }
-
-        #endregion
     }
 }
