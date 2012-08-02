@@ -142,7 +142,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, application/x-shockwave-flash, application/msword, */*";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.True);
@@ -153,7 +153,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "text/html, application/xhtml+xml, */*";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.True);            
@@ -164,7 +164,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.True);
@@ -175,7 +175,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.False); // should return FALSE because XML has a higher priority that HTML
@@ -186,7 +186,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "application/json";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.False);
@@ -197,7 +197,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "application/xml";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.False);
@@ -208,7 +208,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "text/xml";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.False);
@@ -219,7 +219,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "application/json,text/html;q=0.9";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.False);
@@ -230,7 +230,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "application/xml,text/html;q=0.9";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.False);
@@ -241,7 +241,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "text/xml,text/html;q=0.9";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.False);
@@ -252,7 +252,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "*/*";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.True);
@@ -263,7 +263,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "text/plain,image/png;q=0.9,image/jpeg;q=0.5,text/html;charset=utf-8;q=0.1";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.True);
@@ -274,7 +274,7 @@ namespace RestFoundation.Tests
         {
             const string acceptValue = "text/plain,image/png;q=0.9,image/jpeg;q=0.5";
 
-            HttpRequestBase request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequestBase(acceptValue);
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.False);
@@ -314,7 +314,7 @@ namespace RestFoundation.Tests
             return handler.Context.Request;
         }
 
-        private HttpRequestBase CreateRequestBase(string acceptHeaderValue)
+        private IHttpRequest CreateRequestBase(string acceptHeaderValue)
         {
             IRestHandler handler = m_factory.Create<ITestService>("~/test-service/1", m => m.Get(1));
             Assert.That(handler, Is.Not.Null);
@@ -327,7 +327,7 @@ namespace RestFoundation.Tests
 
             context.Request.Headers["Accept"] = acceptHeaderValue;
 
-            return context.Request;
+            return handler.Context.Request;
         }
     }
 }

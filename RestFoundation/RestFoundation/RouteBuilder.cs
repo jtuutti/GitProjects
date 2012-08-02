@@ -20,21 +20,15 @@ namespace RestFoundation
 
         private readonly string m_relativeUrl;
         private readonly RouteCollection m_routes;
-        private readonly IHttpMethodResolver m_httpMethodResolver;
-        private readonly IContentNegotiator m_contentNegotiator;
         private readonly TimeSpan? m_asyncTimeout;
 
-        internal RouteBuilder(string relativeUrl, RouteCollection routes, IHttpMethodResolver httpMethodResolver, IContentNegotiator contentNegotiator, TimeSpan? asyncTimeout)
+        internal RouteBuilder(string relativeUrl, RouteCollection routes, TimeSpan? asyncTimeout)
         {
             if (String.IsNullOrEmpty(relativeUrl)) throw new ArgumentNullException("relativeUrl");
             if (routes == null) throw new ArgumentNullException("routes");
-            if (httpMethodResolver == null) throw new ArgumentNullException("httpMethodResolver");
-            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
 
             m_relativeUrl = relativeUrl.Trim();
             m_routes = routes;
-            m_httpMethodResolver = httpMethodResolver;
-            m_contentNegotiator = contentNegotiator;
             m_asyncTimeout = asyncTimeout;
         }
 
@@ -48,7 +42,7 @@ namespace RestFoundation
         /// <returns>The route builder.</returns>
         public RouteBuilder WithAsyncHandler()
         {
-            return new RouteBuilder(m_relativeUrl, m_routes, m_httpMethodResolver, m_contentNegotiator, TimeSpan.Zero);
+            return new RouteBuilder(m_relativeUrl, m_routes, TimeSpan.Zero);
         }
 
         /// <summary>
@@ -68,7 +62,7 @@ namespace RestFoundation
                 throw new ArgumentOutOfRangeException("timeout", timeout.TotalSeconds, "Asynchronous service method timeout cannot be less than 1 second.");
             }
 
-            return new RouteBuilder(m_relativeUrl, m_routes, m_httpMethodResolver, m_contentNegotiator, timeout);
+            return new RouteBuilder(m_relativeUrl, m_routes, timeout);
         }
 
         /// <summary>
@@ -148,6 +142,29 @@ namespace RestFoundation
             return String.Concat(url.TrimEnd(Slash), Slash, urlTemplate.TrimStart(Slash, Tilda));
         }
 
+        private static List<ServiceMethodMetadata> GenerateMethodMetadata(Type serviceContractType, IEnumerable<MethodInfo> methods, string url)
+        {
+            var urlAttributes = new List<ServiceMethodMetadata>();
+            var httpMethodResolver = Rest.Active.ServiceLocator.GetService<IHttpMethodResolver>();
+
+            foreach (MethodInfo method in methods)
+            {
+                foreach (UrlAttribute urlAttribute in Attribute.GetCustomAttributes(method, urlAttributeType, false).Cast<UrlAttribute>())
+                {
+                    var methodMetadata = new ServiceMethodMetadata(url, method, urlAttribute);
+                    var httpMethods = urlAttribute.HttpMethods ?? (urlAttribute.HttpMethods = httpMethodResolver.Resolve(method));
+
+                    urlAttributes.Add(methodMetadata);
+
+                    HttpMethodRegistry.HttpMethods.AddOrUpdate(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlAttribute.UrlTemplate),
+                                                               template => AddHttpMethods(httpMethods),
+                                                               (template, allowedMethods) => UpdateHttpMethods(allowedMethods, httpMethods));
+                }
+            }
+
+            return urlAttributes;
+        }
+
         private RouteConfiguration MapUrl(Type contractType)
         {
             if (contractType == null) throw new ArgumentNullException("contractType");
@@ -161,28 +178,6 @@ namespace RestFoundation
 
             IEnumerable<IRestHandler> routeHandlers = MapRoutes(methodMetadata, contractType);
             return new RouteConfiguration(routeHandlers);
-        }
-
-        private List<ServiceMethodMetadata> GenerateMethodMetadata(Type serviceContractType, IEnumerable<MethodInfo> methods, string url)
-        {
-            var urlAttributes = new List<ServiceMethodMetadata>();
-
-            foreach (MethodInfo method in methods)
-            {
-                foreach (UrlAttribute urlAttribute in Attribute.GetCustomAttributes(method, urlAttributeType, false).Cast<UrlAttribute>())
-                {
-                    var methodMetadata = new ServiceMethodMetadata(url, method, urlAttribute);
-                    var httpMethods = urlAttribute.HttpMethods ?? (urlAttribute.HttpMethods = m_httpMethodResolver.Resolve(method));
-
-                    urlAttributes.Add(methodMetadata);
-
-                    HttpMethodRegistry.HttpMethods.AddOrUpdate(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlAttribute.UrlTemplate),
-                                                               template => AddHttpMethods(httpMethods),
-                                                               (template, allowedMethods) => UpdateHttpMethods(allowedMethods, httpMethods));
-                }
-            }
-
-            return urlAttributes;
         }
 
         private IRestHandler CreateRouteHandler()
@@ -254,7 +249,10 @@ namespace RestFoundation
 
             var constraints = new RouteValueDictionary
             {
-                { RouteConstants.BrowserConstraint, new BrowserConstraint(m_contentNegotiator) }
+                {
+                    RouteConstants.BrowserConstraint, new BrowserRouteConstraint(Rest.Active.ServiceLocator.GetService<IContentNegotiator>(),
+                                                                                 Rest.Active.ServiceLocator.GetService<IHttpRequest>())
+                }
             };
 
             if (externalUrl.StartsWith("~/", StringComparison.Ordinal) && externalUrl.EndsWith(".aspx", StringComparison.OrdinalIgnoreCase))

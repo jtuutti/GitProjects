@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Web;
 using RestFoundation.Collections.Specialized;
 
 namespace RestFoundation.Runtime
@@ -69,20 +68,19 @@ namespace RestFoundation.Runtime
         /// <returns>
         /// true if the HTTP request came from a web browser; otherwise, false.
         /// </returns>
-        public virtual bool IsBrowserRequest(HttpRequestBase request)
+        public virtual bool IsBrowserRequest(IHttpRequest request)
         {
             if (request == null)
             {
                 throw new ArgumentNullException("request");
             }
 
-            if (!"GET".Equals(request.HttpMethod, StringComparison.OrdinalIgnoreCase) &&
-                !"HEAD".Equals(request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            if (request.Method != HttpMethod.Get && request.Method != HttpMethod.Head)
             {
                 return false;
             }
 
-            string acceptedValue = request.QueryString[AcceptOverrideQuery];
+            string acceptedValue = request.QueryString.TryGet(AcceptOverrideQuery);
 
             if (String.IsNullOrEmpty(acceptedValue))
             {

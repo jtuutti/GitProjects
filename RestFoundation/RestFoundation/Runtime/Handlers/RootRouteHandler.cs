@@ -24,9 +24,20 @@ namespace RestFoundation.Runtime.Handlers
         /// <param name="resultFactory">The service method result factory.</param>
         public RootRouteHandler(IServiceContext serviceContext, IContentNegotiator contentNegotiator, IResultFactory resultFactory)
         {
-            if (serviceContext == null) throw new ArgumentNullException("serviceContext");
-            if (contentNegotiator == null) throw new ArgumentNullException("contentNegotiator");
-            if (resultFactory == null) throw new ArgumentNullException("resultFactory");
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException("serviceContext");
+            }
+
+            if (contentNegotiator == null)
+            {
+                throw new ArgumentNullException("contentNegotiator");
+            }
+
+            if (resultFactory == null)
+            {
+                throw new ArgumentNullException("resultFactory");
+            }
 
             m_serviceContext = serviceContext;
             m_contentNegotiator = contentNegotiator;
@@ -100,7 +111,10 @@ namespace RestFoundation.Runtime.Handlers
         /// <param name="requestContext">An object that encapsulates information about the request.</param>
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
-            if (requestContext == null) throw new ArgumentNullException("requestContext");
+            if (requestContext == null)
+            {
+                throw new ArgumentNullException("requestContext");
+            }
 
             if (!RestHttpModule.IsInitialized)
             {
@@ -138,12 +152,8 @@ namespace RestFoundation.Runtime.Handlers
                     context.Response.SuppressContent = true;
                 }
 
-                if (Rest.Active.IsServiceProxyInitialized && !String.IsNullOrWhiteSpace(Rest.Active.ServiceProxyRelativeUrl) &&
-                    m_contentNegotiator.IsBrowserRequest(new HttpRequestWrapper(context.Request)))
+                if (m_contentNegotiator.IsBrowserRequest(m_serviceContext.Request) && ProcessRequestForBrowser(context))
                 {
-                    string rootUrl = String.Concat((context.Request.ApplicationPath ?? String.Empty).TrimEnd('/'), "/", Rest.Active.ServiceProxyRelativeUrl, "/index");
-                    context.Response.Redirect(rootUrl, false);
-
                     return;
                 }
             }
@@ -171,6 +181,30 @@ namespace RestFoundation.Runtime.Handlers
             }
 
             return operations.ToArray();
+        }
+
+        private bool ProcessRequestForBrowser(HttpContext context)
+        {
+            if (!String.IsNullOrWhiteSpace(Rest.Active.IndexPageRelativeUrl))
+            {
+                try
+                {
+                    context.Server.Transfer(Rest.Active.IndexPageRelativeUrl, false);
+                    return true;
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Index page file could not be loaded. Make sure the specified index file is available and not locked.");
+                }
+            }
+
+            if (Rest.Active.IsServiceProxyInitialized && !String.IsNullOrWhiteSpace(Rest.Active.ServiceProxyRelativeUrl))
+            {
+                context.Response.Redirect(new Uri(m_serviceContext.Request.Url, String.Concat(Rest.Active.ServiceProxyRelativeUrl, "/index")).ToString(), false);
+                return true;
+            }
+
+            return false;
         }
 
         private void ProcessResult()

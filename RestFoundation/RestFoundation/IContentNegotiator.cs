@@ -1,6 +1,4 @@
-﻿using System.Web;
-
-namespace RestFoundation
+﻿namespace RestFoundation
 {
     /// <summary>
     /// Defines a content negotiator that determines an accepted media type from
@@ -23,6 +21,6 @@ namespace RestFoundation
         /// <returns>
         /// true if the HTTP request came from a web browser; otherwise, false.
         /// </returns>
-        bool IsBrowserRequest(HttpRequestBase request);
+        bool IsBrowserRequest(IHttpRequest request);
     }
 }

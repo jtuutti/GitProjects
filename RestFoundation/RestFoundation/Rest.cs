@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Reflection;
 using System.Web.Routing;
 using System.Web.Util;
@@ -68,6 +69,7 @@ namespace RestFoundation
         internal string ServiceProxyRelativeUrl { get; set; }
         internal string DefaultMediaType { get; private set; }
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
+        internal string IndexPageRelativeUrl { get; private set; }
 
         /// <summary>
         /// Configures the REST Foundation with the provided <see cref="IServiceLocator"/>.
@@ -165,6 +167,39 @@ namespace RestFoundation
             }
 
             builder(new GlobalBehaviorBuilder());
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the default page file name. The file must be in the root folder and only the file name must be
+        /// provided.
+        /// </summary>
+        /// <param name="filename">The file name.</param>
+        /// <returns>The configuration object.</returns>
+        /// <exception cref="ArgumentException">
+        /// If the file has an unsupported extension or a file path had been provided in addition to the name.
+        /// </exception>
+        public Rest WithIndexFileName(string filename)
+        {
+            if (String.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentNullException("filename");
+            }
+
+            if (filename.IndexOf('~') >= 0 || filename.IndexOf('/') >= 0 || filename.IndexOf('\\') >= 0 || filename.IndexOf(':') >= 0)
+            {
+                throw new ArgumentException("Only a file name can be specified. Relative or absolute paths/URLs are not supported.");
+            }
+
+            string extension = Path.GetExtension(filename);
+
+            if (!String.Equals(extension, ".htm", StringComparison.OrdinalIgnoreCase) &&
+                !String.Equals(extension, ".html", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ArgumentException("Index files can only have .html or .htm exceptions.");
+            }
+
+            IndexPageRelativeUrl = "~/" + filename.Trim();
             return this;
         }
 
@@ -269,7 +304,7 @@ namespace RestFoundation
                 throw new ArgumentNullException("builder");
             }
 
-            builder(new UrlBuilder(RouteTable.Routes, ServiceLocator.GetService<IHttpMethodResolver>(), ServiceLocator.GetService<IContentNegotiator>()));
+            builder(new UrlBuilder(RouteTable.Routes));
             return this;
         }
     }

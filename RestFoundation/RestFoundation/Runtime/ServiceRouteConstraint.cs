@@ -25,8 +25,15 @@ namespace RestFoundation.Runtime
 
         public bool Match(HttpContextBase httpContext, Route route, string parameterName, RouteValueDictionary values, RouteDirection routeDirection)
         {
-            if (httpContext == null) throw new ArgumentNullException("httpContext");
-            if (values == null) throw new ArgumentNullException("values");
+            if (httpContext == null)
+            {
+                throw new ArgumentNullException("httpContext");
+            }
+
+            if (values == null)
+            {
+                throw new ArgumentNullException("values");
+            }
 
             if (routeDirection != RouteDirection.IncomingRequest)
             {

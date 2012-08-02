@@ -176,7 +176,7 @@
     <Compile Include="RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptionType.cs" />
-    <Compile Include="Runtime\BrowserConstraint.cs" />
+    <Compile Include="Runtime\BrowserRouteConstraint.cs" />
     <Compile Include="Runtime\ExceptionUnwrapper.cs" />
     <Compile Include="Runtime\ResultExecutor.cs" />
     <Compile Include="Security\AuthorizationHeader.cs" />
