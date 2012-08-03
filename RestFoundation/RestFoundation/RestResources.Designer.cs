@@ -61,6 +61,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access forbidden.
+        /// </summary>
+        internal static string AccessForbidden {
+            get {
+                return ResourceManager.GetString("AccessForbidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HTTPS required.
         /// </summary>
         internal static string HttpsRequiredStatusDescription {

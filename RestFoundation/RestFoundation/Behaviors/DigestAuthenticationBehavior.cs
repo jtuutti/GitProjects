@@ -9,9 +9,9 @@ using RestFoundation.Security;
 namespace RestFoundation.Behaviors
 {
     /// <summary>
-    /// Represents a basic authorization secure behavior for a service or a service method.
+    /// Represents a basic authentication secure behavior for a service or a service method.
     /// </summary>
-    public class DigestAuthorizationBehavior : SecureServiceBehavior, IAuthenticationBehavior, IDisposable
+    public class DigestAuthenticationBehavior : SecureServiceBehavior, IAuthenticationBehavior, IDisposable
     {
         private const string AuthenticationType = "Digest";
         private const int DefaultNonceLifeTimeInSeconds = 300;
@@ -23,17 +23,17 @@ namespace RestFoundation.Behaviors
         private bool m_isDisposed;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DigestAuthorizationBehavior"/> class.
+        /// Initializes a new instance of the <see cref="DigestAuthenticationBehavior"/> class.
         /// </summary>
-        public DigestAuthorizationBehavior() : this(Rest.Active.ServiceLocator.GetService<IAuthorizationManager>())
+        public DigestAuthenticationBehavior() : this(Rest.Active.ServiceLocator.GetService<IAuthorizationManager>())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DigestAuthorizationBehavior"/> class.
+        /// Initializes a new instance of the <see cref="DigestAuthenticationBehavior"/> class.
         /// </summary>
         /// <param name="authorizationManager">The authorization manager.</param>
-        public DigestAuthorizationBehavior(IAuthorizationManager authorizationManager)
+        public DigestAuthenticationBehavior(IAuthorizationManager authorizationManager)
         {
             if (authorizationManager == null)
             {
@@ -128,7 +128,7 @@ namespace RestFoundation.Behaviors
         }
 
         /// <summary>
-        /// Releases the unmanaged resources used by the <see cref="DigestAuthorizationBehavior"/> and optionally releases the managed resources.
+        /// Releases the unmanaged resources used by the <see cref="DigestAuthenticationBehavior"/> and optionally releases the managed resources.
         /// </summary>
         /// <param name="disposing">
         /// true to release both managed and unmanaged resources; false to release only unmanaged resources.

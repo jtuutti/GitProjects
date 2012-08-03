@@ -8,26 +8,26 @@ using RestFoundation.Security;
 namespace RestFoundation.Behaviors
 {
     /// <summary>
-    /// Represents a basic authorization secure behavior for a service or a service method.
+    /// Represents a basic authentication secure behavior for a service or a service method.
     /// </summary>
-    public class BasicAuthorizationBehavior : SecureServiceBehavior, IAuthenticationBehavior
+    public class BasicAuthenticationBehavior : SecureServiceBehavior, IAuthenticationBehavior
     {
         private const string AuthenticationType = "Basic";
 
         private readonly IAuthorizationManager m_authorizationManager;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasicAuthorizationBehavior"/> class.
+        /// Initializes a new instance of the <see cref="BasicAuthenticationBehavior"/> class.
         /// </summary>
-        public BasicAuthorizationBehavior() : this(Rest.Active.ServiceLocator.GetService<IAuthorizationManager>())
+        public BasicAuthenticationBehavior() : this(Rest.Active.ServiceLocator.GetService<IAuthorizationManager>())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasicAuthorizationBehavior"/> class.
+        /// Initializes a new instance of the <see cref="BasicAuthenticationBehavior"/> class.
         /// </summary>
         /// <param name="authorizationManager">The authorization manager.</param>
-        public BasicAuthorizationBehavior(IAuthorizationManager authorizationManager)
+        public BasicAuthenticationBehavior(IAuthorizationManager authorizationManager)
         {
             if (authorizationManager == null)
             {
