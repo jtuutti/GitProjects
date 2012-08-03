@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Principal;
@@ -98,7 +97,15 @@ namespace RestFoundation.Behaviors
                 return BehaviorMethodAction.Stop;
             }
 
-            Tuple<bool, bool> responseValidationResult = ValidateResponse(context, header);
+            Credentials credentials = m_authorizationManager.GetCredentials(header.UserName);
+
+            if (credentials == null)
+            {
+                GenerateAuthenticationHeader(context, false);
+                return BehaviorMethodAction.Stop;
+            }
+
+            Tuple<bool, bool> responseValidationResult = ValidateResponse(context, header, credentials);
 
             if (!responseValidationResult.Item1)
             {
@@ -106,7 +113,7 @@ namespace RestFoundation.Behaviors
                 return BehaviorMethodAction.Stop;
             }
 
-            context.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), m_authorizationManager.GetRoles(header.UserName).ToArray());
+            context.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), credentials.GetRoles());
             return BehaviorMethodAction.Execute;
         }
 
@@ -182,7 +189,7 @@ namespace RestFoundation.Behaviors
             context.Response.SetStatus(HttpStatusCode.Unauthorized, "Unauthorized");
         }
 
-        private Tuple<bool, bool> ValidateResponse(IServiceContext context, AuthorizationHeader header)
+        private Tuple<bool, bool> ValidateResponse(IServiceContext context, AuthorizationHeader header, Credentials credentials)
         {
             if (String.IsNullOrWhiteSpace(header.UserName) || header.Parameters == null)
             {
@@ -217,9 +224,7 @@ namespace RestFoundation.Behaviors
                 return Tuple.Create(false, false);
             }
 
-            string password = m_authorizationManager.GetPassword(header.UserName);
-
-            if (String.IsNullOrEmpty(password))
+            if (String.IsNullOrEmpty(credentials.Password))
             {
                 return Tuple.Create(false, false);
             }
@@ -232,7 +237,7 @@ namespace RestFoundation.Behaviors
                 return nonceValidationResult;
             }
 
-            string ha1 = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}", header.UserName, realm, password));
+            string ha1 = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}", header.UserName, realm, credentials.Password));
             string ha2 = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}", context.Request.Method.ToString().ToUpperInvariant(), uri));
 
             string expectedResponse;

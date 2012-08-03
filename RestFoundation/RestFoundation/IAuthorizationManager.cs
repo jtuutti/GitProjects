@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using RestFoundation.Security;
 
 namespace RestFoundation
 {
@@ -8,17 +8,10 @@ namespace RestFoundation
     public interface IAuthorizationManager
     {
         /// <summary>
-        /// Gets a password or a password hash for the provided user name.
+        /// Gets an authenticated and authorized user credentials by the provided user name.
         /// </summary>
         /// <param name="userName">The user name.</param>
-        /// <returns>The user's password or hash.</returns>
-        string GetPassword(string userName);
-
-        /// <summary>
-        /// Gets a sequence of security roles for the provided user name.
-        /// </summary>
-        /// <param name="userName">The user name.</param>
-        /// <returns>The sequence of user associated roles.</returns>
-        IEnumerable<string> GetRoles(string userName);
+        /// <returns>The user credentials; or null if the username is invalid.</returns>
+        Credentials GetCredentials(string userName);
     }
 }

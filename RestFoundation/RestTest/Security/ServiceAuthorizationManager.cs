@@ -1,24 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using RestFoundation;
+using RestFoundation.Security;
 
 namespace RestTest.Security
 {
     public class ServiceAuthorizationManager : IAuthorizationManager
     {
-        public string GetPassword(string userName)
+        public Credentials GetCredentials(string userName)
         {
             if (String.Equals("admin", userName, StringComparison.OrdinalIgnoreCase))
             {
-                return "Rest";
+                return new Credentials(userName, "Rest", new[] { "Administrator" });
             }
 
             return null;
-        }
-
-        public IEnumerable<string> GetRoles(string userName)
-        {
-            return new[] { "Administrator" };
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Principal;
@@ -55,14 +54,21 @@ namespace RestFoundation.Behaviors
             AuthorizationHeader header;
 
             if (!AuthorizationHeaderParser.TryParse(context.Request.Headers.Authorization, context.Request.Headers.ContentCharsetEncoding, out header) ||
-                !AuthenticationType.Equals(header.AuthenticationType, StringComparison.OrdinalIgnoreCase) ||
-                !String.Equals(m_authorizationManager.GetPassword(header.UserName), header.Password, StringComparison.Ordinal))
+                !AuthenticationType.Equals(header.AuthenticationType, StringComparison.OrdinalIgnoreCase))
             {
                 GenerateAuthenticationHeader(context);
                 return BehaviorMethodAction.Stop;
             }
 
-            context.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), m_authorizationManager.GetRoles(header.UserName).ToArray());
+            Credentials credentials = m_authorizationManager.GetCredentials(header.UserName);
+
+            if (credentials == null || !String.Equals(header.Password, credentials.Password, StringComparison.Ordinal))
+            {
+                GenerateAuthenticationHeader(context);
+                return BehaviorMethodAction.Stop;
+            }
+
+            context.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), credentials.GetRoles());
             return BehaviorMethodAction.Execute;
         }
 

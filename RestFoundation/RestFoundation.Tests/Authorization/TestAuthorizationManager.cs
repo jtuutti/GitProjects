@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using RestFoundation.Security;
 
 namespace RestFoundation.Tests
 {
     public class TestAuthorizationManager : IAuthorizationManager
     {
-        public string GetPassword(string userName)
+        public Credentials GetCredentials(string userName)
         {
-            return "test123";
-        }
+            if (String.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentNullException("userName");
+            }
 
-        public IEnumerable<string> GetRoles(string userName)
-        {
-            return new[] { "Tester" };
+            return new Credentials(userName, "test123", new[] { "Tester" });
         }
     }
 }

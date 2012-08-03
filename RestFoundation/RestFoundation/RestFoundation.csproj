@@ -85,6 +85,7 @@
     <Compile Include="Runtime\Handlers\RestAsyncCancellableHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
     <Compile Include="IServiceBehaviorInvoker.cs" />
+    <Compile Include="Security\Credentials.cs" />
     <Compile Include="Security\IPAddressCollection.cs" />
     <Compile Include="Security\IPAddressRange.cs" />
     <Compile Include="Security\IPNetwork.cs" />
