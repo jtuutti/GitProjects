@@ -1,9 +1,9 @@
-﻿namespace RestFoundation.Behaviors
+﻿namespace RestFoundation
 {
     /// <summary>
     /// Defines an action in case of a service method exception.
     /// </summary>
-    public enum BehaviorExceptionAction
+    public enum ExceptionAction
     {
         /// <summary>
         /// Bubble up the exception.

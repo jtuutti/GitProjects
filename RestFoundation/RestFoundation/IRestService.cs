@@ -10,6 +10,11 @@ namespace RestFoundation
     public interface IRestService
     {
         /// <summary>
+        /// Gets an exception handler associated with the service implementation.
+        /// </summary>
+        IServiceExceptionHandler ExceptionHandler { get; }
+
+        /// <summary>
         /// Gets a sequence of service behaviors associated with the service implementation.
         /// </summary>
         IEnumerable<IServiceBehavior> Behaviors { get; }

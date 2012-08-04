@@ -120,46 +120,5 @@ namespace RestFoundation.Runtime
                 behaviors[i].OnMethodExecuted(m_context, service, method, returnedObj);
             }
         }
-
-        /// <summary>
-        /// Executes <see cref="IServiceBehavior"/> behaviors when a service method exception has occurred.
-        /// </summary>
-        /// <param name="behaviors">The list of behaviors.</param>
-        /// <param name="service">The service instance.</param>
-        /// <param name="method">The service method.</param>
-        /// <param name="ex">The exception.</param>
-        /// <returns>A service method exception action.</returns>
-        public virtual BehaviorExceptionAction InvokeOnExceptionBehaviors(IList<IServiceBehavior> behaviors, object service, MethodInfo method, Exception ex)
-        {
-            if (behaviors == null)
-            {
-                throw new ArgumentNullException("behaviors");
-            }
-
-            if (service == null)
-            {
-                throw new ArgumentNullException("service");
-            }
-
-            if (method == null)
-            {
-                throw new ArgumentNullException("method");
-            }
-
-            if (ex == null)
-            {
-                throw new ArgumentNullException("ex");
-            }
-
-            for (int i = 0; i < behaviors.Count; i++)
-            {
-                if (behaviors[i].OnMethodException(m_context, service, method, ex) == BehaviorExceptionAction.Handle)
-                {
-                    return BehaviorExceptionAction.Handle;
-                }
-            }
-
-            return BehaviorExceptionAction.BubbleUp;
-        }
     }
 }

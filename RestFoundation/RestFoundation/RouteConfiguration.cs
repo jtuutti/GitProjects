@@ -17,7 +17,10 @@ namespace RestFoundation
 
         internal RouteConfiguration(IEnumerable<IRestHandler> routeHandlers)
         {
-            if (routeHandlers == null) throw new ArgumentNullException("routeHandlers");
+            if (routeHandlers == null)
+            {
+                throw new ArgumentNullException("routeHandlers");
+            }
 
             m_routeHandlers = routeHandlers;
         }
@@ -29,7 +32,10 @@ namespace RestFoundation
         /// <returns>The route configuration.</returns>
         public RouteConfiguration BlockMediaType(string mediaType)
         {
-            if (String.IsNullOrEmpty(mediaType)) throw new ArgumentNullException("mediaType");
+            if (String.IsNullOrEmpty(mediaType))
+            {
+                throw new ArgumentNullException("mediaType");
+            }
 
             var blockFormatter = new BlockFormatter();
 
@@ -42,15 +48,22 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Sets a route specific formatter for the provided media type.
+        /// Sets a route specific formatter for the provided media type for the current route.
         /// </summary>
         /// <param name="mediaType">The media type.</param>
         /// <param name="formatter">The media formatter.</param>
         /// <returns>The route configuration.</returns>
         public RouteConfiguration SetMediaTypeFormatter(string mediaType, IMediaTypeFormatter formatter)
         {
-            if (String.IsNullOrEmpty(mediaType)) throw new ArgumentNullException("mediaType");
-            if (formatter == null) throw new ArgumentNullException("formatter");
+            if (String.IsNullOrEmpty(mediaType))
+            {
+                throw new ArgumentNullException("mediaType");
+            }
+
+            if (formatter == null)
+            {
+                throw new ArgumentNullException("formatter");
+            }
 
             foreach (IRestHandler routeHandler in m_routeHandlers)
             {
@@ -67,7 +80,10 @@ namespace RestFoundation
         /// <returns>The route configuration.</returns>
         public RouteConfiguration WithBehaviors(params IServiceBehavior[] behaviors)
         {
-            if (behaviors == null) throw new ArgumentNullException("behaviors");
+            if (behaviors == null)
+            {
+                throw new ArgumentNullException("behaviors");
+            }
 
             if (behaviors.GroupBy(s => s.GetType()).Max(g => g.Count()) > 1)
             {
@@ -85,6 +101,26 @@ namespace RestFoundation
                         ServiceBehaviorRegistry.AddBehavior(routeHandler, behaviors[i]);
                     }
                 }
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets an exception handler for the current route.
+        /// </summary>
+        /// <param name="exceptionHandler">The exception handler.</param>
+        /// <returns>The route configuration.</returns>
+        public RouteConfiguration WithExceptionHandler(IServiceExceptionHandler exceptionHandler)
+        {
+            if (exceptionHandler == null)
+            {
+                throw new ArgumentNullException("exceptionHandler");
+            }
+
+            foreach (IRestHandler routeHandler in m_routeHandlers)
+            {
+                ServiceExceptionHandlerRegistry.SetExceptionHandler(routeHandler, exceptionHandler);
             }
 
             return this;
@@ -114,7 +150,10 @@ namespace RestFoundation
         /// <returns>The route configuration.</returns>
         public RouteConfiguration WithIPsRestrictedBySection(string nameValueSectionName)
         {
-            if (String.IsNullOrEmpty(nameValueSectionName)) throw new ArgumentNullException("nameValueSectionName");
+            if (String.IsNullOrEmpty(nameValueSectionName))
+            {
+                throw new ArgumentNullException("nameValueSectionName");
+            }
 
             foreach (IRestHandler routeHandler in m_routeHandlers)
             {

@@ -56,16 +56,17 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExceptionAction.cs" />
     <Compile Include="Behaviors\AuthorizationBehavior.cs" />
     <Compile Include="Behaviors\BehaviorMethodAction.cs" />
     <Compile Include="Behaviors\AjaxOnlyBehavior.cs" />
-    <Compile Include="Behaviors\BehaviorExceptionAction.cs" />
     <Compile Include="Formatters\BlockFormatter.cs" />
     <Compile Include="Formatters\DataContractJsonFormatter.cs" />
     <Compile Include="Formatters\DataContractXmlFormatter.cs" />
     <Compile Include="Formatters\JsonPFormatter.cs" />
     <Compile Include="Behaviors\IAuthenticationBehavior.cs" />
     <Compile Include="IContentNegotiator.cs" />
+    <Compile Include="IServiceExceptionHandler.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="Results\IResultExecutor.cs" />
     <Compile Include="RestResources.Designer.cs">
@@ -86,6 +87,7 @@
     <Compile Include="Runtime\Handlers\RestAsyncCancellableHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
     <Compile Include="IServiceBehaviorInvoker.cs" />
+    <Compile Include="Runtime\Registries\ServiceExceptionHandlerRegistry.cs" />
     <Compile Include="Security\Credentials.cs" />
     <Compile Include="Security\IPAddressCollection.cs" />
     <Compile Include="Security\IPAddressRange.cs" />

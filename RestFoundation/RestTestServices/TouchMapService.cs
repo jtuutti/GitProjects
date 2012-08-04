@@ -26,6 +26,14 @@ namespace RestTestServices
 
         public IServiceContext Context { get; set; }
 
+        public IServiceExceptionHandler ExceptionHandler
+        {
+            get
+            {
+                return null;
+            }
+        }
+
         public IEnumerable<IServiceBehavior> Behaviors
         {
             get

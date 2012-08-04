@@ -23,8 +23,15 @@ namespace RestFoundation.Runtime
         /// <param name="parameterValueProvider">The parameter value provider.</param>
         public ServiceMethodInvoker(IServiceBehaviorInvoker behaviorInvoker, IParameterValueProvider parameterValueProvider)
         {
-            if (behaviorInvoker == null) throw new ArgumentNullException("behaviorInvoker");
-            if (parameterValueProvider == null) throw new ArgumentNullException("parameterValueProvider");
+            if (behaviorInvoker == null)
+            {
+                throw new ArgumentNullException("behaviorInvoker");
+            }
+
+            if (parameterValueProvider == null)
+            {
+                throw new ArgumentNullException("parameterValueProvider");
+            }
 
             m_behaviorInvoker = behaviorInvoker;
             m_parameterValueProvider = parameterValueProvider;
@@ -87,6 +94,24 @@ namespace RestFoundation.Runtime
             }
         }
 
+        private static IServiceExceptionHandler GetServiceExceptionHandler(object service, IRestHandler handler)
+        {
+            IServiceExceptionHandler exceptionHandler;
+
+            var restService = service as IRestService;
+
+            if (restService != null && restService.ExceptionHandler != null)
+            {
+                exceptionHandler = restService.ExceptionHandler;
+            }
+            else
+            {
+                exceptionHandler = ServiceExceptionHandlerRegistry.GetExceptionHandler(handler);
+            }
+
+            return exceptionHandler;
+        }
+
         private object InvokeAndProcessExceptions(MethodInfo method, object service, List<IServiceBehavior> behaviors, IRestHandler handler)
         {
             try
@@ -109,12 +134,18 @@ namespace RestFoundation.Runtime
 
                 try
                 {
-                    if (m_behaviorInvoker.InvokeOnExceptionBehaviors(behaviors, service, method, unwrappedException) == BehaviorExceptionAction.Handle)
+                    IServiceExceptionHandler exceptionHandler = GetServiceExceptionHandler(service, handler);
+
+                    if (exceptionHandler != null && exceptionHandler.Handle(handler.Context, service, method, unwrappedException) == ExceptionAction.Handle)
                     {
                         return null;
                     }
 
                     throw new ServiceRuntimeException(unwrappedException);
+                }
+                catch (ServiceRuntimeException)
+                {
+                    throw;
                 }
                 catch (Exception innerEx)
                 {

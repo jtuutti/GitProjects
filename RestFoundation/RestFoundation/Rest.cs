@@ -171,6 +171,22 @@ namespace RestFoundation
         }
 
         /// <summary>
+        /// Sets the exception handler global to all services.
+        /// </summary>
+        /// <param name="exceptionHandler">The exception handler.</param>
+        /// <returns>The configuration object.</returns>
+        public Rest WithGlobalExceptionHandler(IServiceExceptionHandler exceptionHandler)
+        {
+            if (exceptionHandler == null)
+            {
+                throw new ArgumentNullException("exceptionHandler");
+            }
+
+            ServiceExceptionHandlerRegistry.SetGlobalExceptionHandler(exceptionHandler);
+            return this;
+        }
+
+        /// <summary>
         /// Sets the default page file name. The file must be in the root folder and only the file name must be
         /// provided.
         /// </summary>
