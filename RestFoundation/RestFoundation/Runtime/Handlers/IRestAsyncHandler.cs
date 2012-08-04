@@ -1,6 +1,6 @@
 ﻿using System.Web;
 
-namespace RestFoundation
+namespace RestFoundation.Runtime.Handlers
 {
     /// <summary>
     /// Defines an asynchronous REST service handler.

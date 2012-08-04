@@ -1,4 +1,5 @@
 ﻿using RestFoundation.Runtime;
+using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation
 {

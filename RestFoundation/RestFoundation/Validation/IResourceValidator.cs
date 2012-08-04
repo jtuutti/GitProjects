@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RestFoundation
+namespace RestFoundation.Validation
 {
     /// <summary>
     /// Defines a resource validator.

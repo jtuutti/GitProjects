@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Reflection;
 using System.Web.Routing;
+using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation.UnitTesting
 {

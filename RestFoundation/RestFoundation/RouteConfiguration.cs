@@ -4,6 +4,7 @@ using System.Linq;
 using RestFoundation.Behaviors;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
+using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation
 {

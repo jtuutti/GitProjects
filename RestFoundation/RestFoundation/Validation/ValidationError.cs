@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RestFoundation
+namespace RestFoundation.Validation
 {
     /// <summary>
     /// Represents a validation error.

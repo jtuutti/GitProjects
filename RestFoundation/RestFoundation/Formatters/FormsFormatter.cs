@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Web;
+using RestFoundation.Results;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Formatters

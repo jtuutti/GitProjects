@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RestFoundation
+namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Represents a REST operation associated to a service method.

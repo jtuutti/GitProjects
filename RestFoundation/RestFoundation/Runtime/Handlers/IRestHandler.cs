@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Routing;
 
-namespace RestFoundation
+namespace RestFoundation.Runtime.Handlers
 {
     /// <summary>
     /// Defines a REST service handler.

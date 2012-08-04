@@ -1,4 +1,6 @@
-﻿namespace RestFoundation.Tests.ServiceContracts
+﻿using RestFoundation.Results;
+
+namespace RestFoundation.Tests.ServiceContracts
 {
     public interface ITestService
     {

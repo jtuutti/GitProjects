@@ -1,6 +1,4 @@
-﻿using RestFoundation.Security;
-
-namespace RestFoundation
+﻿namespace RestFoundation.Security
 {
     /// <summary>
     /// Defines a user authorization manager for security models.

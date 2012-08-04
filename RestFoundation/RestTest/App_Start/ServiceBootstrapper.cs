@@ -3,6 +3,7 @@ using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
 using RestFoundation.Behaviors;
 using RestFoundation.Formatters;
+using RestFoundation.Security;
 using RestTest.Security;
 using RestTest.Behaviors;
 using RestTest.StreamCompressors;

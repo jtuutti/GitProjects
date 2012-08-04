@@ -1,4 +1,4 @@
-﻿namespace RestFoundation
+﻿namespace RestFoundation.Results
 {
     /// <summary>
     /// Defines a service method result.

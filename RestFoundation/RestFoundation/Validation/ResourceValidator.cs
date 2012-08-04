@@ -5,7 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Validation
 {
     /// <summary>
     /// Represents a default resource validator that is based on the <see cref="System.ComponentModel.DataAnnotations"/>

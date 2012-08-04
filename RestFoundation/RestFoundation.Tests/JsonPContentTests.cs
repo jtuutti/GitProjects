@@ -5,6 +5,7 @@ using System.Web.Script.Serialization;
 using NUnit.Framework;
 using RestFoundation.Formatters;
 using RestFoundation.Results;
+using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.ServiceContracts;
 using RestFoundation.UnitTesting;
 

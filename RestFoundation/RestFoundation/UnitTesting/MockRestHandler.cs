@@ -1,4 +1,5 @@
 ﻿using System;
+using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation.UnitTesting

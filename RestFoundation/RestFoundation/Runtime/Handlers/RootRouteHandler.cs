@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web;
 using System.Web.Routing;
+using RestFoundation.Results;
 using RestFoundation.ServiceProxy;
 
 namespace RestFoundation.Runtime.Handlers

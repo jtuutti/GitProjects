@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using RestFoundation.Formatters;
 using RestFoundation.Odata;
+using RestFoundation.Results;
+using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation.Runtime
 {
@@ -96,7 +99,7 @@ namespace RestFoundation.Runtime
             string acceptType = m_contentNegotiator.GetPreferredMediaType(handler.Context.Request);
 
             IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, acceptType) ??
-                                          MediaTypeFormatterRegistry.GetFormatter(acceptType);
+                                            MediaTypeFormatterRegistry.GetFormatter(acceptType);
 
             if (formatter == null)
             {

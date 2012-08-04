@@ -1,4 +1,6 @@
-﻿namespace RestFoundation
+﻿using RestFoundation.Runtime.Handlers;
+
+namespace RestFoundation.Results
 {
     /// <summary>
     /// Defines a result factory.

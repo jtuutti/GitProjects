@@ -1,4 +1,5 @@
 ﻿using System;
+using RestFoundation.Results;
 
 namespace RestFoundation.Formatters
 {

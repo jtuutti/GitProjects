@@ -2,6 +2,7 @@
 using Microsoft.Practices.Unity;
 using NUnit.Framework;
 using RestFoundation.Context;
+using RestFoundation.Results;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.Security;
@@ -9,6 +10,7 @@ using RestFoundation.ServiceLocation;
 using RestFoundation.Tests.ServiceContracts;
 using RestFoundation.Tests.Services;
 using RestFoundation.UnitTesting;
+using RestFoundation.Validation;
 using StructureMap;
 
 namespace RestFoundation.Tests

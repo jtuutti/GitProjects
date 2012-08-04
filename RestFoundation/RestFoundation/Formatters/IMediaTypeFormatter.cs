@@ -1,6 +1,7 @@
 ﻿using System;
+using RestFoundation.Results;
 
-namespace RestFoundation
+namespace RestFoundation.Formatters
 {
     /// <summary>
     /// Defines a formatter responsible for serializing and deserializing strongly typed objects

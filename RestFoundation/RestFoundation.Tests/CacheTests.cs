@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Tests
 {

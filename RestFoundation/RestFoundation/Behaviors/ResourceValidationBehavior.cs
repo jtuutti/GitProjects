@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
-using RestFoundation.Runtime;
+using RestFoundation.Validation;
 
 namespace RestFoundation.Behaviors
 {

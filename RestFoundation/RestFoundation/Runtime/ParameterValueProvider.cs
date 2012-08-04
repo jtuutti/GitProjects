@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Web;
 using RestFoundation.Collections;
 using RestFoundation.Formatters;
+using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation.Runtime
 {

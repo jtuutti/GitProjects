@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using RestFoundation.Results;
 using RestFoundation.Tests.ServiceContracts;
 
 namespace RestFoundation.Tests.Services
