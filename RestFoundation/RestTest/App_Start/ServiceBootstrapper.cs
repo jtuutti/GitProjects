@@ -74,7 +74,7 @@ namespace RestTest.App_Start
             urlBuilder.MapUrl("async")
                       .WithAsyncHandler()
                       .ToServiceContract<IIndexService>()
-                      .WithBehaviors(new BasicAuthenticationBehavior(), new AuthorizationBehavior("administrator"), new StatisticsBehavior(), new LoggingBehavior());
+                      .WithBehaviors(new DigestAuthenticationBehavior(), new AuthorizationBehavior("administrators"), new StatisticsBehavior(), new LoggingBehavior());
 
             urlBuilder.MapUrl("dynamic")
                       .ToServiceContract<IDynamicService>()

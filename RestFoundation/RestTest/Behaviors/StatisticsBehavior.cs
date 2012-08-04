@@ -37,7 +37,7 @@ namespace RestTest.Behaviors
             {
                 context.Response.Output.WriteFormat("Authenticated as: \"{0}\" ({1})", context.User.Identity.Name, context.User.Identity.AuthenticationType).WriteLine();
 
-                if (context.User.IsInRole("administrator"))
+                if (context.User.IsInRole("Administrators"))
                 {
                     context.Response.Output.WriteLine("-- ADMIN ACCESS --");
                 }

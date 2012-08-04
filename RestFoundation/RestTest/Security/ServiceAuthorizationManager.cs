@@ -10,7 +10,7 @@ namespace RestTest.Security
         {
             if (String.Equals("admin", userName, StringComparison.OrdinalIgnoreCase))
             {
-                return new Credentials(userName, "Rest", new[] { "Administrator" });
+                return new Credentials(userName, "Rest", new[] { "Administrators" });
             }
 
             return null;
