@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Schema;

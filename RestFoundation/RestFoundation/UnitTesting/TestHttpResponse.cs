@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;

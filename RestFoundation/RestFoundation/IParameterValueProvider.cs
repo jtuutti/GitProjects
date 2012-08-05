@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System.Reflection;
 using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation

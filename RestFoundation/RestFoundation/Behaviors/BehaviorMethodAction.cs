@@ -1,4 +1,7 @@
-﻿namespace RestFoundation.Behaviors
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation.Behaviors
 {
     /// <summary>
     /// Defines an action before a service method gets executed.

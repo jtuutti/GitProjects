@@ -1,4 +1,7 @@
-﻿namespace RestFoundation.Security
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation.Security
 {
     /// <summary>
     /// The base authorization manager that does not perform any user authentication and denies any access.

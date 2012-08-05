@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System;
 using System.Web;
 using System.Web.Routing;
 

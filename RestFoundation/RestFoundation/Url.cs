@@ -1,4 +1,7 @@
-﻿namespace RestFoundation
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation
 {
     /// <summary>
     /// Represents predefined strongly-typed URLs.

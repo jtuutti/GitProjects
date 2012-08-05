@@ -1,4 +1,7 @@
-﻿using System.Xml.Serialization;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System.Xml.Serialization;
 
 namespace RestFoundation.ServiceProxy
 {

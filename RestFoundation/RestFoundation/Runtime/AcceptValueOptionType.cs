@@ -1,4 +1,7 @@
-﻿namespace RestFoundation.Runtime
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Indicates how the accepted values will be searched for the preferred value.

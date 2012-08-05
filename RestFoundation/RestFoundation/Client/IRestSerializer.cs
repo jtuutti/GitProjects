@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System.IO;
 
 namespace RestFoundation.Client
 {

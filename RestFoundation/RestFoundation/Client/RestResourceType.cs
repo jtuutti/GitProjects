@@ -1,4 +1,7 @@
-﻿namespace RestFoundation.Client
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation.Client
 {
     /// <summary>
     /// Describes a REST HTTP resource type.

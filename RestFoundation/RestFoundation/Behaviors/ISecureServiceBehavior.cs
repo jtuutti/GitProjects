@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System.Reflection;
 
 namespace RestFoundation.Behaviors
 {

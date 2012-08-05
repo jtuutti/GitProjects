@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System;
 using System.Threading;
 
 namespace RestFoundation.Runtime.Handlers

@@ -1,4 +1,7 @@
-﻿namespace RestFoundation.Security
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation.Security
 {
     /// <summary>
     /// Defines a user authorization manager for security models.

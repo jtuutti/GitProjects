@@ -1,4 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System.Diagnostics.CodeAnalysis;
 
 namespace RestFoundation.Results
 {

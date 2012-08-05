@@ -1,4 +1,7 @@
-﻿namespace RestFoundation.Collections
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation.Collections
 {
     /// <summary>
     /// Defines a server variable collection.

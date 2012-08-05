@@ -1,4 +1,7 @@
-﻿using System.Collections.Concurrent;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace RestFoundation.Runtime

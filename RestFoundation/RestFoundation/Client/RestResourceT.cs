@@ -1,4 +1,7 @@
-﻿using System.Collections.Specialized;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System.Collections.Specialized;
 
 namespace RestFoundation.Client
 {

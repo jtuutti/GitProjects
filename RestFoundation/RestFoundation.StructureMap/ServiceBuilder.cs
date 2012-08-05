@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System;
 using System.Globalization;
 using RestFoundation.ServiceLocation;
 using RestFoundation.StructureMap.Properties;

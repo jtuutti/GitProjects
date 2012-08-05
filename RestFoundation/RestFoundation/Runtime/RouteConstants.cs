@@ -1,4 +1,7 @@
-﻿namespace RestFoundation.Runtime
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation.Runtime
 {
     internal static class RouteConstants
     {

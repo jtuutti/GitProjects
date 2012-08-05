@@ -1,4 +1,7 @@
-﻿using System.Web;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System.Web;
 
 namespace RestFoundation.Runtime.Handlers
 {

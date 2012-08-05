@@ -1,3 +1,6 @@
+// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
 using System.Text.RegularExpressions;
 
 namespace RestFoundation.Runtime

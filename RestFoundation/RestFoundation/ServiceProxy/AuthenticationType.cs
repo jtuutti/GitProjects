@@ -1,4 +1,7 @@
-﻿namespace RestFoundation.ServiceProxy
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation.ServiceProxy
 {
     /// <summary>
     /// Defines an HTTP authentication type.

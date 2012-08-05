@@ -1,4 +1,7 @@
-﻿using System.Web;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System.Web;
 using System.Web.Routing;
 
 namespace RestFoundation.Runtime.Handlers

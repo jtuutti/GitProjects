@@ -1,4 +1,7 @@
-﻿using RestFoundation.Runtime;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation

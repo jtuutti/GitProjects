@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System.Collections.Generic;
 using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation.Runtime

@@ -1,4 +1,7 @@
-﻿namespace RestFoundation.Results
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation.Results
 {
     /// <summary>
     /// Defines a service method result.

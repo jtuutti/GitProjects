@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using RestFoundation.Runtime;
