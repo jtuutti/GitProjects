@@ -39,8 +39,15 @@ namespace RestFoundation.UnitTesting
         /// <returns>The REST handler./</returns>
         public IRestHandler Create<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
         {
-            if (serviceMethodDelegate == null) throw new ArgumentNullException("serviceMethodDelegate");
-            if (String.IsNullOrEmpty(relativeUrl)) throw new ArgumentNullException("relativeUrl");
+            if (serviceMethodDelegate == null)
+            {
+                throw new ArgumentNullException("serviceMethodDelegate");
+            }
+
+            if (String.IsNullOrEmpty(relativeUrl))
+            {
+                throw new ArgumentNullException("relativeUrl");
+            }
 
             RequestContext requestContext = CreateContext(relativeUrl, serviceMethodDelegate, httpMethod);
 
@@ -69,8 +76,15 @@ namespace RestFoundation.UnitTesting
         /// <returns>The asynchronous REST handler./</returns>
         public IRestAsyncHandler CreateAsync<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
         {
-            if (serviceMethodDelegate == null) throw new ArgumentNullException("serviceMethodDelegate");
-            if (String.IsNullOrEmpty(relativeUrl)) throw new ArgumentNullException("relativeUrl");
+            if (serviceMethodDelegate == null)
+            {
+                throw new ArgumentNullException("serviceMethodDelegate");
+            }
+
+            if (String.IsNullOrEmpty(relativeUrl))
+            {
+                throw new ArgumentNullException("relativeUrl");
+            }
 
             RequestContext requestContext = CreateContext(relativeUrl, serviceMethodDelegate, httpMethod);
 

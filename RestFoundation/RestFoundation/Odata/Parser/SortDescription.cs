@@ -15,7 +15,10 @@ namespace RestFoundation.Odata.Parser
 
         public SortDescription(Func<T, object> keySelector, SortDirection direction)
         {
-            if (keySelector == null) throw new ArgumentNullException("keySelector");
+            if (keySelector == null)
+            {
+                throw new ArgumentNullException("keySelector");
+            }
 
             m_keySelector = keySelector;
             m_direction = direction;

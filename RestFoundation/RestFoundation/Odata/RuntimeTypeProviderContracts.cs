@@ -13,8 +13,15 @@ namespace RestFoundation.Odata
     {
         public Type Get(Type sourceType, IEnumerable<MemberInfo> properties)
         {
-            if (sourceType == null) throw new ArgumentNullException("sourceType");
-            if (properties == null) throw new ArgumentNullException("properties");
+            if (sourceType == null)
+            {
+                throw new ArgumentNullException("sourceType");
+            }
+
+            if (properties == null)
+            {
+                throw new ArgumentNullException("properties");
+            }
 
             throw new NotImplementedException();
         }

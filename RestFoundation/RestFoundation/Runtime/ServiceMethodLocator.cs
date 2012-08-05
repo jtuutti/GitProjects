@@ -21,7 +21,10 @@ namespace RestFoundation.Runtime
         /// <param name="serviceContext">The service context.</param>
         public ServiceMethodLocator(IServiceContext serviceContext)
         {
-            if (serviceContext == null) throw new ArgumentNullException("serviceContext");
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException("serviceContext");
+            }
 
             m_serviceContext = serviceContext;
         }
@@ -33,7 +36,10 @@ namespace RestFoundation.Runtime
         /// <returns>The service method data.</returns>
         public virtual ServiceMethodLocatorData Locate(IRestHandler handler)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null)
+            {
+                throw new ArgumentNullException("handler");
+            }
 
             var serviceContractType = GetServiceContractType(handler.ServiceContractTypeName);
 

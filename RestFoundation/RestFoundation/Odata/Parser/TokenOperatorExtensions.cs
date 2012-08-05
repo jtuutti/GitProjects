@@ -20,28 +20,40 @@ namespace RestFoundation.Odata.Parser
 
         public static bool IsCombinationOperation(this string operation)
         {
-            if (operation == null) throw new ArgumentNullException("operation");
+            if (operation == null)
+            {
+                throw new ArgumentNullException("operation");
+            }
 
             return combiners.Any(x => string.Equals(x, operation, StringComparison.OrdinalIgnoreCase));
         }
 
         public static bool IsOperation(this string operation)
         {
-            if (operation == null) throw new ArgumentNullException("operation");
+            if (operation == null)
+            {
+                throw new ArgumentNullException("operation");
+            }
 
             return operations.Any(x => string.Equals(x, operation, StringComparison.OrdinalIgnoreCase));
         }
 
         public static bool IsArithmetic(this string operation)
         {
-            if (operation == null) throw new ArgumentNullException("operation");
+            if (operation == null)
+            {
+                throw new ArgumentNullException("operation");
+            }
 
             return arithmetic.Any(x => string.Equals(x, operation, StringComparison.OrdinalIgnoreCase));
         }
 
         public static bool IsImpliedBoolean(this string expression)
         {
-            if (expression == null) throw new ArgumentNullException("expression");
+            if (expression == null)
+            {
+                throw new ArgumentNullException("expression");
+            }
 
             if (!string.IsNullOrWhiteSpace(expression) && !expression.IsEnclosed() && expression.IsFunction())
             {
@@ -56,14 +68,20 @@ namespace RestFoundation.Odata.Parser
 
         public static Match EnclosedMatch(this string expression)
         {
-            if (expression == null) throw new ArgumentNullException("expression");
+            if (expression == null)
+            {
+                throw new ArgumentNullException("expression");
+            }
 
             return cleanRx.Match(expression);
         }
 
         public static bool IsEnclosed(this string expression)
         {
-            if (expression == null) throw new ArgumentNullException("expression");
+            if (expression == null)
+            {
+                throw new ArgumentNullException("expression");
+            }
 
             var match = expression.EnclosedMatch();
             return match != null && match.Success;
@@ -71,7 +89,10 @@ namespace RestFoundation.Odata.Parser
 
         private static bool IsFunction(this string expression)
         {
-            if (expression == null) throw new ArgumentNullException("expression");
+            if (expression == null)
+            {
+                throw new ArgumentNullException("expression");
+            }
 
             var open = expression.IndexOf('(');
             var close = expression.IndexOf(')');

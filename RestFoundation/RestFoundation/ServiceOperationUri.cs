@@ -20,8 +20,15 @@ namespace RestFoundation
         /// <param name="operationUrl">The operation URL</param>
         public ServiceOperationUri(Uri serviceUrl, string operationUrl) : base(serviceUrl != null ? serviceUrl.ToString() : null, UriKind.Absolute)
         {
-            if (serviceUrl == null) throw new ArgumentNullException("serviceUrl");
-            if (String.IsNullOrEmpty(operationUrl)) throw new ArgumentNullException("operationUrl");
+            if (serviceUrl == null)
+            {
+                throw new ArgumentNullException("serviceUrl");
+            }
+
+            if (String.IsNullOrEmpty(operationUrl))
+            {
+                throw new ArgumentNullException("operationUrl");
+            }
 
             m_relativeUrl = operationUrl.TrimStart('~', ' ').TrimEnd('/', ' ');
 
@@ -39,7 +46,10 @@ namespace RestFoundation
         /// </param>
         protected ServiceOperationUri(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            if (info == null) throw new ArgumentNullException("info");
+            if (info == null)
+            {
+                throw new ArgumentNullException("info");
+            }
 
             string serviceUrl = info.GetString("ServiceUrl");
 
@@ -61,7 +71,10 @@ namespace RestFoundation
         /// <returns>A corresponding absolute URL.</returns>
         public string ToAbsoluteUrl(string url)
         {
-            if (url == null) throw new ArgumentNullException("url");
+            if (url == null)
+            {
+                throw new ArgumentNullException("url");
+            }
 
             if (IsWellFormedUriString(url, UriKind.Absolute))
             {
@@ -109,7 +122,10 @@ namespace RestFoundation
         [SecurityCritical]
         protected new virtual void GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext) 
         {
-            if (serializationInfo == null) throw new ArgumentNullException("serializationInfo");
+            if (serializationInfo == null)
+            {
+                throw new ArgumentNullException("serializationInfo");
+            }
 
             base.GetObjectData(serializationInfo, streamingContext);
 

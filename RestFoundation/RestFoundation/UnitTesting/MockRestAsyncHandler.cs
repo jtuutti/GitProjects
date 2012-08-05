@@ -30,8 +30,15 @@ namespace RestFoundation.UnitTesting
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(MockRestAsyncHandler other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
 
             return Equals(other.ServiceUrl, ServiceUrl) && Equals(other.ServiceContractTypeName, ServiceContractTypeName) &&
                    Equals(other.UrlTemplate, UrlTemplate);
@@ -47,8 +54,15 @@ namespace RestFoundation.UnitTesting
         /// <filterpriority>2</filterpriority>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
 
             return obj is MockRestAsyncHandler && Equals((MockRestAsyncHandler) obj);
         }

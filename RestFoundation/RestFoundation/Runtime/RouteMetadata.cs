@@ -10,8 +10,15 @@ namespace RestFoundation.Runtime
 
         public RouteMetadata(string typeName, string urlTemplate)
         {
-            if (typeName == null) throw new ArgumentNullException("typeName");
-            if (urlTemplate == null) throw new ArgumentNullException("urlTemplate");
+            if (typeName == null)
+            {
+                throw new ArgumentNullException("typeName");
+            }
+
+            if (urlTemplate == null)
+            {
+                throw new ArgumentNullException("urlTemplate");
+            }
 
             m_typeName = typeName;
             m_urlTemplate = urlTemplate;
@@ -59,7 +66,11 @@ namespace RestFoundation.Runtime
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
             return obj is RouteMetadata && Equals((RouteMetadata) obj);
         }
 

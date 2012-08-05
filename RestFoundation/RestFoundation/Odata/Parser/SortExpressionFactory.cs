@@ -42,7 +42,10 @@ namespace RestFoundation.Odata.Parser
 
         private Expression<Func<T, object>> GetPropertyExpression<T>(string propertyToken, ParameterExpression parameter)
         {
-            if (propertyToken == null) throw new ArgumentNullException("propertyToken");
+            if (propertyToken == null)
+            {
+                throw new ArgumentNullException("propertyToken");
+            }
 
             var parentType = typeof(T);
             Expression propertyExpression = null;
@@ -50,6 +53,7 @@ namespace RestFoundation.Odata.Parser
             foreach (var propertyName in propertyChain)
             {
                 var property = parentType.GetProperty(propertyName);
+
                 if (property != null)
                 {
                     parentType = property.PropertyType;

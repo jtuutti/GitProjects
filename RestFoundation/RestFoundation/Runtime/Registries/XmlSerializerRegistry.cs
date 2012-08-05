@@ -13,7 +13,10 @@ namespace RestFoundation.Runtime
 
         public static XmlSerializer Get(Type objectType)
         {
-            if (objectType == null) throw new ArgumentNullException("objectType");
+            if (objectType == null)
+            {
+                throw new ArgumentNullException("objectType");
+            }
 
             return serializers.GetOrAdd(objectType, type  => type.IsArray ? GetSerializerForArray(type) : new XmlSerializer(type));
         }

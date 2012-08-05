@@ -22,8 +22,15 @@ namespace RestFoundation.Formatters
         /// <exception cref="HttpResponseException">If the object cannot be deserialized.</exception>
         public virtual object FormatRequest(IServiceContext context, Type objectType)
         {
-            if (context == null) throw new ArgumentNullException("context");
-            if (objectType == null) throw new ArgumentNullException("objectType");
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (objectType == null)
+            {
+                throw new ArgumentNullException("objectType");
+            }
 
             if (objectType != typeof(IEnumerable<IUploadedFile>) && objectType != typeof(ICollection<IUploadedFile>))
             {

@@ -38,7 +38,10 @@ namespace RestFoundation.Odata
 
         public RuntimeTypeProvider(IMemberNameResolver nameResolver)
         {
-            if (nameResolver == null) throw new ArgumentNullException("nameResolver");
+            if (nameResolver == null)
+            {
+                throw new ArgumentNullException("nameResolver");
+            }
 
             m_nameResolver = nameResolver;
         }
@@ -46,6 +49,7 @@ namespace RestFoundation.Odata
         public Type Get(Type sourceType, IEnumerable<MemberInfo> properties)
         {
             properties = properties.ToArray();
+
             if (!properties.Any())
             {
                 throw new ArgumentOutOfRangeException("properties", "properties must have at least 1 property definition");
@@ -86,7 +90,10 @@ namespace RestFoundation.Odata
 
         private static void CreateProperty(TypeBuilder typeBuilder, KeyValuePair<string, MemberInfo> field)
         {
-            if (typeBuilder == null) throw new ArgumentNullException("typeBuilder");
+            if (typeBuilder == null)
+            {
+                throw new ArgumentNullException("typeBuilder");
+            }
 
             var propertyType = field.Value.MemberType == MemberTypes.Property
                                 ? ((PropertyInfo)field.Value).PropertyType
@@ -126,7 +133,10 @@ namespace RestFoundation.Odata
 
         private static void SetAttributes(TypeBuilder typeBuilder, Type type)
         {
-            if (typeBuilder == null) throw new ArgumentNullException("typeBuilder");
+            if (typeBuilder == null)
+            {
+                throw new ArgumentNullException("typeBuilder");
+            }
 
             var attributeBuilders = typeAttributeBuilders
                 .GetOrAdd(
@@ -145,8 +155,15 @@ namespace RestFoundation.Odata
 
         private static void SetAttributes(PropertyBuilder propertyBuilder, MemberInfo memberInfo)
         {
-            if (propertyBuilder == null) throw new ArgumentNullException("propertyBuilder");
-            if (memberInfo == null) throw new ArgumentNullException("memberInfo");
+            if (propertyBuilder == null)
+            {
+                throw new ArgumentNullException("propertyBuilder");
+            }
+
+            if (memberInfo == null)
+            {
+                throw new ArgumentNullException("memberInfo");
+            }
 
             var customAttributeBuilders = propertyAttributeBuilders
                 .GetOrAdd(
@@ -165,7 +182,10 @@ namespace RestFoundation.Odata
 
         private static IEnumerable<CustomAttributeBuilder> CreateCustomAttributeBuilders(IEnumerable<CustomAttributeData> customAttributes)
         {
-            if (customAttributes == null) throw new ArgumentNullException("customAttributes");
+            if (customAttributes == null)
+            {
+                throw new ArgumentNullException("customAttributes");
+            }
 
             var attributeBuilders = customAttributes
                 .Select(
@@ -183,8 +203,15 @@ namespace RestFoundation.Odata
 
         private static string GetTypeKey(Type sourceType, Dictionary<string, MemberInfo> fields)
         {
-            if (sourceType == null) throw new ArgumentNullException("sourceType");
-            if (fields == null) throw new ArgumentNullException("fields");
+            if (sourceType == null)
+            {
+                throw new ArgumentNullException("sourceType");
+            }
+
+            if (fields == null)
+            {
+                throw new ArgumentNullException("fields");
+            }
 
             return fields.Aggregate(sourceType.Name, (current, field) => current + (field.Key + field.Value.MemberType));
         }

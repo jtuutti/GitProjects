@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.Practices.Unity;
 using RestFoundation.ServiceLocation;
@@ -8,6 +9,8 @@ namespace RestFoundation.Unity
 {
     internal static class RestConfigurator
     {
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
+                         Justification = "The service locator will be disposed by the application.")]
         public static Rest Configure(IUnityContainer container, bool mockContext)
         {
             return Rest.Configure(CreateServiceLocator(container, mockContext));

@@ -9,8 +9,15 @@ namespace RestFoundation.Runtime
 
         public ServiceMetadata(Type type, string url)
         {
-            if (type == null) throw new ArgumentNullException("type");
-            if (String.IsNullOrEmpty(url)) throw new ArgumentNullException("url");
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+
+            if (String.IsNullOrEmpty(url))
+            {
+                throw new ArgumentNullException("url");
+            }
 
             m_type = type;
             m_url = url.Trim();
@@ -49,7 +56,10 @@ namespace RestFoundation.Runtime
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
 
             return obj is ServiceMetadata && Equals((ServiceMetadata) obj);
         }

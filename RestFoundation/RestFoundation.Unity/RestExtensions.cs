@@ -17,6 +17,11 @@ namespace RestFoundation
         /// <returns>The configuration object.</returns>
         public static Rest ConfigureWithUnity(this Rest restConfiguration, IUnityContainer container)
         {
+            if (restConfiguration == null)
+            {
+                throw new ArgumentNullException("restConfiguration");
+            }
+
             if (container == null)
             {
                 throw new ArgumentNullException("container");

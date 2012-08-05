@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.Practices.Unity;
 using RestFoundation.ServiceLocation;
@@ -32,6 +33,8 @@ namespace RestFoundation.Unity
             }
         }
 
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
+                         Justification = "The lifetime manager will be disposed by the container.")]
         private static LifetimeManager GetLifetimeManager(bool isSingleton)
         {
             return isSingleton ? (LifetimeManager) new ContainerControlledLifetimeManager() : new PerResolveLifetimeManager();

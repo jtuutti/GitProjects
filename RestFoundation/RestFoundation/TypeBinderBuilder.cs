@@ -19,7 +19,10 @@ namespace RestFoundation
         /// <returns>The associated type binder or null.</returns>
         public ITypeBinder Get(Type objectType)
         {
-            if (objectType == null) throw new ArgumentNullException("objectType");
+            if (objectType == null)
+            {
+                throw new ArgumentNullException("objectType");
+            }
 
             return TypeBinderRegistry.GetBinder(objectType);
         }
@@ -31,8 +34,15 @@ namespace RestFoundation
         /// <param name="binder">The type binder.</param>
         public void Set(Type objectType, ITypeBinder binder)
         {
-            if (objectType == null) throw new ArgumentNullException("objectType");
-            if (binder == null) throw new ArgumentNullException("binder");
+            if (objectType == null)
+            {
+                throw new ArgumentNullException("objectType");
+            }
+
+            if (binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
 
             TypeBinderRegistry.SetBinder(objectType, binder);
         }
@@ -47,7 +57,10 @@ namespace RestFoundation
         /// </returns>
         public bool Remove(Type objectType)
         {
-            if (objectType == null) throw new ArgumentNullException("objectType");
+            if (objectType == null)
+            {
+                throw new ArgumentNullException("objectType");
+            }
 
             return TypeBinderRegistry.RemoveBinder(objectType);
         }

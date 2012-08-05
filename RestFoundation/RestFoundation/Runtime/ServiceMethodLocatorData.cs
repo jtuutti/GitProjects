@@ -20,8 +20,15 @@ namespace RestFoundation.Runtime
         /// <param name="method">The method instance.</param>
         public ServiceMethodLocatorData(object service, MethodInfo method)
         {
-            if (service == null) throw new ArgumentNullException("service");
-            if (method == null) throw new ArgumentNullException("method");
+            if (service == null)
+            {
+                throw new ArgumentNullException("service");
+            }
+
+            if (method == null)
+            {
+                throw new ArgumentNullException("method");
+            }
 
             Service = service;
             Method = method;

@@ -32,11 +32,30 @@ namespace RestFoundation.Runtime.Handlers
                                 IResultFactory resultFactory,
                                 IResultExecutor resultExecutor)
         {
-            if (serviceContext == null) throw new ArgumentNullException("serviceContext");
-            if (methodLocator == null) throw new ArgumentNullException("methodLocator");
-            if (methodInvoker == null) throw new ArgumentNullException("methodInvoker");
-            if (resultFactory == null) throw new ArgumentNullException("resultFactory");
-            if (resultExecutor == null) throw new ArgumentNullException("resultExecutor");
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException("serviceContext");
+            }
+
+            if (methodLocator == null)
+            {
+                throw new ArgumentNullException("methodLocator");
+            }
+
+            if (methodInvoker == null)
+            {
+                throw new ArgumentNullException("methodInvoker");
+            }
+
+            if (resultFactory == null)
+            {
+                throw new ArgumentNullException("resultFactory");
+            }
+
+            if (resultExecutor == null)
+            {
+                throw new ArgumentNullException("resultExecutor");
+            }
 
             m_serviceContext = serviceContext;
             m_methodLocator = methodLocator;
@@ -94,7 +113,10 @@ namespace RestFoundation.Runtime.Handlers
         /// <param name="requestContext">An object that encapsulates information about the request.</param>
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
-            if (requestContext == null) throw new ArgumentNullException("requestContext");
+            if (requestContext == null)
+            {
+                throw new ArgumentNullException("requestContext");
+            }
 
             if (UnvalidatedHandlerRegistry.IsUnvalidated(this))
             {

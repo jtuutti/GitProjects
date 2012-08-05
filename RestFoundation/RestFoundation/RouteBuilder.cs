@@ -24,8 +24,15 @@ namespace RestFoundation
 
         internal RouteBuilder(string relativeUrl, RouteCollection routes, TimeSpan? asyncTimeout)
         {
-            if (String.IsNullOrEmpty(relativeUrl)) throw new ArgumentNullException("relativeUrl");
-            if (routes == null) throw new ArgumentNullException("routes");
+            if (String.IsNullOrEmpty(relativeUrl))
+            {
+                throw new ArgumentNullException("relativeUrl");
+            }
+
+            if (routes == null)
+            {
+                throw new ArgumentNullException("routes");
+            }
 
             m_relativeUrl = relativeUrl.Trim();
             m_routes = routes;
@@ -88,7 +95,10 @@ namespace RestFoundation
         /// <exception cref="ArgumentException">If the service contract type is not an interface.</exception>
         public RouteConfiguration ToServiceContract(Type contractType)
         {
-            if (contractType == null) throw new ArgumentNullException("contractType");
+            if (contractType == null)
+            {
+                throw new ArgumentNullException("contractType");
+            }
 
             return MapUrl(contractType);
         }
@@ -110,7 +120,10 @@ namespace RestFoundation
         /// <param name="virtualPageUrl">A virtual URL to the ASPX file.</param>
         public void ToWebFormsPage(string virtualPageUrl)
         {
-            if (String.IsNullOrEmpty(virtualPageUrl)) throw new ArgumentNullException("virtualPageUrl");
+            if (virtualPageUrl == null)
+            {
+                throw new ArgumentNullException("virtualPageUrl");
+            }
 
             m_routes.MapPageRoute(null, m_relativeUrl, virtualPageUrl);
         }
@@ -167,8 +180,15 @@ namespace RestFoundation
 
         private RouteConfiguration MapUrl(Type contractType)
         {
-            if (contractType == null) throw new ArgumentNullException("contractType");
-            if (!contractType.IsInterface) throw new ArgumentException("Service contract type must be an interface", "contractType");
+            if (contractType == null)
+            {
+                throw new ArgumentNullException("contractType");
+            }
+
+            if (!contractType.IsInterface)
+            {
+                throw new ArgumentException("Service contract type must be an interface", "contractType");
+            }
 
             var serviceMethods = contractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
                                              .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);

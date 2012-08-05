@@ -12,9 +12,20 @@ namespace RestFoundation.Runtime
 
         public ServiceMethodMetadata(string serviceUrl, MethodInfo methodInfo, UrlAttribute urlInfo)
         {
-            if (serviceUrl == null) throw new ArgumentNullException("serviceUrl");
-            if (urlInfo == null) throw new ArgumentNullException("urlInfo");
-            if (methodInfo == null) throw new ArgumentNullException("methodInfo");
+            if (serviceUrl == null)
+            {
+                throw new ArgumentNullException("serviceUrl");
+            }
+
+            if (methodInfo == null)
+            {
+                throw new ArgumentNullException("methodInfo");
+            }
+
+            if (urlInfo == null)
+            {
+                throw new ArgumentNullException("urlInfo");
+            }
 
             m_serviceMethodId = Guid.NewGuid();
             m_serviceUrl = serviceUrl.Trim();
@@ -71,7 +82,11 @@ namespace RestFoundation.Runtime
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
             return obj is ServiceMethodMetadata && Equals((ServiceMethodMetadata) obj);
         }
 

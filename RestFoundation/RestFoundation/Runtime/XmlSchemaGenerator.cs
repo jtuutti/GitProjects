@@ -30,7 +30,10 @@ namespace RestFoundation.Runtime
         /// <returns>XML schemas for the object.</returns>
         public static XmlSchemas Generate(Type objectType)
         {
-            if (objectType == null) throw new ArgumentNullException("objectType");
+            if (objectType == null)
+            {
+                throw new ArgumentNullException("objectType");
+            }
 
             var schemas = new XmlSchemas();
 
@@ -81,10 +84,17 @@ namespace RestFoundation.Runtime
                 {
                     foreach (PropertyInfo property in model.GetType().GetProperties())
                     {
-                        if (!property.CanWrite || property.GetIndexParameters().Length > 0) continue;
+                        if (!property.CanWrite || property.GetIndexParameters().Length > 0)
+                        {
+                            continue;
+                        }
 
                         object propertyValue = TryInstantiateModel(property.PropertyType);
-                        if (propertyValue == null) continue;
+
+                        if (propertyValue == null)
+                        {
+                            continue;
+                        }
 
                         property.SetValue(model, propertyValue, null);
                     }

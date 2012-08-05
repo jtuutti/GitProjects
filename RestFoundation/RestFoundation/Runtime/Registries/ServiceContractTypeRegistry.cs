@@ -9,7 +9,10 @@ namespace RestFoundation.Runtime
 
         public static Type GetType(string typeAssemblyName)
         {
-            if (typeAssemblyName == null) throw new ArgumentNullException("typeAssemblyName");
+            if (typeAssemblyName == null)
+            {
+                throw new ArgumentNullException("typeAssemblyName");
+            }
 
             return serviceContractTypes.GetOrAdd(typeAssemblyName, t => Type.GetType(typeAssemblyName, true));
         }

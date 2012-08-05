@@ -50,7 +50,10 @@ namespace RestFoundation.Runtime
         /// <returns>true if the key was found; otherwise, false.</returns>
         public virtual bool Contains(string key)
         {
-            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+            if (String.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException("key");
+            }
 
             return m_cache.Get(key) != null;
         }
@@ -62,7 +65,10 @@ namespace RestFoundation.Runtime
         /// <returns>The corresponding value.</returns>
         public virtual object Get(string key)
         {
-            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+            if (String.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException("key");
+            }
 
             return m_cache.Get(key);
         }
@@ -74,10 +80,16 @@ namespace RestFoundation.Runtime
         /// <param name="value">The cached value.</param>
         public virtual void Add(string key, object value)
         {
-            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
-            if (value == null) throw new ArgumentNullException("value");
+            if (String.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException("key");
+            }
 
-            SerializationValidator.Validate(value);
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
             m_cache.Add(key, value, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
         }
 
@@ -89,10 +101,16 @@ namespace RestFoundation.Runtime
         /// <param name="absoluteExpiration">A <see cref="DateTime"/> representing an absolute expiration time.</param>
         public virtual void Add(string key, object value, DateTime absoluteExpiration)
         {
-            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
-            if (value == null) throw new ArgumentNullException("value");
+            if (String.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException("key");
+            }
 
-            SerializationValidator.Validate(value);
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
             m_cache.Add(key, value, null, absoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
         }
 
@@ -104,10 +122,16 @@ namespace RestFoundation.Runtime
         /// <param name="slidingExpiration">A <see cref="TimeSpan"/> representing a sliding expiration time.</param>
         public virtual void Add(string key, object value, TimeSpan slidingExpiration)
         {
-            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
-            if (value == null) throw new ArgumentNullException("value");
+            if (String.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException("key");
+            }
 
-            SerializationValidator.Validate(value);
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
             m_cache.Add(key, value, null, Cache.NoAbsoluteExpiration, slidingExpiration, CacheItemPriority.Default, null);
         }
 
@@ -118,10 +142,16 @@ namespace RestFoundation.Runtime
         /// <param name="value">The cached value.</param>
         public virtual void Update(string key, object value)
         {
-            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
-            if (value == null) throw new ArgumentNullException("value");
+            if (String.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException("key");
+            }
 
-            SerializationValidator.Validate(value);
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
             m_cache[key] = value;
         }
 
@@ -132,7 +162,10 @@ namespace RestFoundation.Runtime
         /// <returns>If the cache key was found and the entry was removed.</returns>
         public virtual bool Remove(string key)
         {
-            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+            if (String.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException("key");
+            }
 
             return m_cache.Remove(key) != null;
         }

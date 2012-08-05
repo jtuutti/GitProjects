@@ -22,8 +22,15 @@ namespace RestFoundation.Odata.Parser
 
         public SelectExpressionFactory(IMemberNameResolver nameResolver, IRuntimeTypeProvider runtimeTypeProvider)
         {
-            if (nameResolver == null) throw new ArgumentNullException("nameResolver");
-            if (runtimeTypeProvider == null) throw new ArgumentNullException("runtimeTypeProvider");
+            if (nameResolver == null)
+            {
+                throw new ArgumentNullException("nameResolver");
+            }
+
+            if (runtimeTypeProvider == null)
+            {
+                throw new ArgumentNullException("runtimeTypeProvider");
+            }
 
             m_nameResolver = nameResolver;
             m_runtimeTypeProvider = runtimeTypeProvider;
@@ -71,7 +78,11 @@ namespace RestFoundation.Odata.Parser
                             });
 
             var constructorInfo = dynamicType.GetConstructor(Type.EmptyTypes);
-            if (constructorInfo == null) throw new InvalidOperationException("Created type does not have a default constructor");
+
+            if (constructorInfo == null)
+            {
+                throw new InvalidOperationException("Created type does not have a default constructor");
+            }
 
             var selector = Expression.Lambda<Func<T, object>>(
                                                               Expression.MemberInit(Expression.New(constructorInfo), bindings),

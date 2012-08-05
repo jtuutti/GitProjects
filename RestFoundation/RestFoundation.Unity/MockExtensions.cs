@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Practices.Unity;
 using RestFoundation.ServiceLocation;
 using RestFoundation.Unity;
@@ -20,6 +21,11 @@ namespace RestFoundation.UnitTesting
         /// <returns>The configuration object.</returns>
         public static Rest ConfigureMocksWithUnity(this Rest restConfiguration, IUnityContainer container)
         {
+            if (restConfiguration == null)
+            {
+                throw new ArgumentNullException("restConfiguration");
+            }
+
             if (container == null)
             {
                 throw new ArgumentNullException("container");
@@ -34,8 +40,15 @@ namespace RestFoundation.UnitTesting
         /// <param name="restConfiguration">The REST configuration object.</param>
         /// <param name="mockContext">A value indicating whether to inject mocked service context.</param>
         /// <returns>The service locator.</returns>
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
+                         Justification = "The IoC container will be disposed by the unit test through disposing the service locator.")]
         public static IServiceLocator CreateServiceLocatorForUnity(this Rest restConfiguration, bool mockContext)
         {
+            if (restConfiguration == null)
+            {
+                throw new ArgumentNullException("restConfiguration");
+            }
+
             return RestConfigurator.CreateServiceLocator(new UnityContainer(), mockContext);
         }
 
@@ -48,6 +61,11 @@ namespace RestFoundation.UnitTesting
         /// <returns>The service locator.</returns>
         public static IServiceLocator CreateServiceLocatorForUnity(this Rest restConfiguration, IUnityContainer container, bool mockContext)
         {
+            if (restConfiguration == null)
+            {
+                throw new ArgumentNullException("restConfiguration");
+            }
+
             if (container == null)
             {
                 throw new ArgumentNullException("container");

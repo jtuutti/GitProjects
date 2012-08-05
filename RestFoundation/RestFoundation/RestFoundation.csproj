@@ -205,7 +205,6 @@
     <Compile Include="Runtime\ParameterValueProvider.cs" />
     <Compile Include="Validation\ResourceValidator.cs" />
     <Compile Include="UrlBuilder.cs" />
-    <Compile Include="Runtime\SerializationValidator.cs" />
     <Compile Include="Runtime\StreamCompressor.cs" />
     <Compile Include="Context\ServiceContext.cs" />
     <Compile Include="Runtime\ServiceMetadata.cs" />
