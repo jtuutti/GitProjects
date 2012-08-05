@@ -22,13 +22,10 @@ namespace RestFoundation.UnitTesting
         /// <param name="restConfiguration">The REST configuration object.</param>
         /// <param name="container">The StructureMap container.</param>
         /// <returns>The configuration object.</returns>
+        [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "restConfiguration",
+                         Justification = "This extension method should be able to execute if the configuration has not been set up yet.")]
         public static Rest ConfigureMocksWithStructureMap(this Rest restConfiguration, IContainer container)
         {
-            if (restConfiguration == null)
-            {
-                throw new ArgumentNullException("restConfiguration");
-            }
-
             if (container == null)
             {
                 throw new ArgumentNullException("container");
