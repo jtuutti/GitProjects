@@ -16,7 +16,7 @@ namespace RestFoundation.Client.Serializers
         /// <param name="objectType">The object type.</param>
         /// <param name="resourceType">The resource type.</param>
         /// <returns>The serializer instance.</returns>
-        public IRestSerializer Create(Type objectType, RestResourceType resourceType)
+        public virtual IRestSerializer Create(Type objectType, RestResourceType resourceType)
         {
             if (objectType == null)
             {

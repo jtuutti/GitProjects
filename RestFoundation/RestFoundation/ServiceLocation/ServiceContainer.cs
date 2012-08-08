@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using RestFoundation.Client;
+using RestFoundation.Client.Serializers;
 using RestFoundation.Context;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
@@ -38,6 +40,7 @@ namespace RestFoundation.ServiceLocation
                 { typeof(IHttpMethodResolver), typeof(HttpMethodResolver) },
                 { typeof(IParameterValueProvider), typeof(ParameterValueProvider) },
                 { typeof(IResourceValidator), typeof(ResourceValidator) },
+                { typeof(IRestSerializerFactory), typeof(RestSerializerFactory) },
                 { typeof(IResultExecutor), typeof(ResultExecutor) },
                 { typeof(IResultFactory), typeof(ResultFactory) },
                 { typeof(IServiceCache), typeof(ServiceCache) },

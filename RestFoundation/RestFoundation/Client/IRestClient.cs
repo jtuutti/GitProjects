@@ -56,6 +56,11 @@ namespace RestFoundation.Client
         NetworkCredential Credentials { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether self-signed certificates are allowed.
+        /// </summary>
+        bool AllowSelfSignedCertificates { get; set; }
+
+        /// <summary>
         /// Gets the last HTTP status code.
         /// </summary>
         int LastStatusCode { get; }

@@ -8,6 +8,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -46,6 +47,7 @@ namespace RestFoundation.Client
         public string AuthenticationType { get; set; }
         public string ProxyUrl { get; set; }
         public bool SupportsEncoding { get; set; }
+        public bool AllowSelfSignedCertificates { get; set; }
 
         public int LastStatusCode { get; private set; }
         public string LastStatusDescription { get; private set; }
@@ -292,7 +294,7 @@ namespace RestFoundation.Client
 
             if (Credentials != null)
             {
-                SetCredentials(url);
+                SetCredentials(request, url);
             }
 
             if (!String.IsNullOrWhiteSpace(ProxyUrl))
@@ -303,7 +305,7 @@ namespace RestFoundation.Client
             return request;
         }
 
-        private void SetCredentials(Uri url)
+        private void SetCredentials(HttpWebRequest request, Uri url)
         {
             string authenticationType = !String.IsNullOrEmpty(AuthenticationType) ? AuthenticationType : "Basic";
             Uri domainUrl;
@@ -318,15 +320,25 @@ namespace RestFoundation.Client
             {
                 credentialCache.Add(url, authenticationType, Credentials);
             }
+
+            request.Credentials = credentialCache;
         }
 
         private RestResource<T> ProcessResponse<T>(WebRequest request, RestResourceType outputType)
         {
+            RemoteCertificateValidationCallback validationCallback = null;
+
             try
             {
+                if (AllowSelfSignedCertificates && request.RequestUri.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase))
+                {
+                    validationCallback = ServicePointManager.ServerCertificateValidationCallback;
+                    ServicePointManager.ServerCertificateValidationCallback = (obj, certificate, chain, errors) => true;
+                }
+
                 using (var response = (HttpWebResponse) request.GetResponse())
                 {
-                    LastStatusCode = (int)response.StatusCode;
+                    LastStatusCode = (int) response.StatusCode;
                     LastStatusDescription = response.StatusDescription;
 
                     if (LastStatusCode >= MinErrorCode)
@@ -348,13 +360,20 @@ namespace RestFoundation.Client
             {
                 if (ex.Status != WebExceptionStatus.ProtocolError)
                 {
-                    LastStatusCode = (int)HttpStatusCode.InternalServerError;
+                    LastStatusCode = (int) HttpStatusCode.InternalServerError;
                     LastStatusDescription = ex.Message;
 
                     throw new HttpException(LastStatusCode, LastStatusDescription, ex);
                 }
 
                 throw GenerateHttpException(ex);
+            }
+            finally
+            {
+                if (validationCallback != null)
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = validationCallback;
+                }
             }
         }
 
