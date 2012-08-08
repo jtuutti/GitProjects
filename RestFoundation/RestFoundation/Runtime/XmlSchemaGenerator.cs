@@ -85,22 +85,7 @@ namespace RestFoundation.Runtime
 
                 if (!modelType.IsArray && !modelType.IsPrimitive)
                 {
-                    foreach (PropertyInfo property in model.GetType().GetProperties())
-                    {
-                        if (!property.CanWrite || property.GetIndexParameters().Length > 0)
-                        {
-                            continue;
-                        }
-
-                        object propertyValue = TryInstantiateModel(property.PropertyType);
-
-                        if (propertyValue == null)
-                        {
-                            continue;
-                        }
-
-                        property.SetValue(model, propertyValue, null);
-                    }
+                    InstantiateComplexTypeProperties(model);
                 }
 
                 return model;
@@ -149,6 +134,26 @@ namespace RestFoundation.Runtime
             exporter.ExportTypeMapping(modelMap);
 
             schemas.Compile(null, false);
+        }
+
+        private static void InstantiateComplexTypeProperties(object model)
+        {
+            foreach (PropertyInfo property in model.GetType().GetProperties())
+            {
+                if (!property.CanWrite || property.GetIndexParameters().Length > 0)
+                {
+                    continue;
+                }
+
+                object propertyValue = TryInstantiateModel(property.PropertyType);
+
+                if (propertyValue == null)
+                {
+                    continue;
+                }
+
+                property.SetValue(model, propertyValue, null);
+            }
         }
     }
 }

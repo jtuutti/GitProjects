@@ -45,16 +45,7 @@ namespace RestFoundation.Runtime
 
             if (conversionType.IsEnum && !String.IsNullOrEmpty(stringValue))
             {
-                try
-                {
-                    changedValue = Enum.Parse(conversionType, stringValue);
-                    return true;
-                }
-                catch (Exception)
-                {
-                    changedValue = null;
-                    return false;
-                }
+                return ConvertEnum(conversionType, stringValue, out changedValue);
             }
 
             try
@@ -64,23 +55,48 @@ namespace RestFoundation.Runtime
             }
             catch (Exception)
             {
-                try
+                if (ConvertByTypeDescriptor(value, conversionType, out changedValue))
                 {
-                    var converter = TypeDescriptor.GetConverter(conversionType);
-
-                    if (converter.CanConvertFrom(value.GetType()))
-                    {
-                        changedValue = converter.ConvertFrom(value);
-                        return true;
-                    }
-                }
-                catch (Exception)
-                {
+                    return true;
                 }
 
                 changedValue = null;
                 return false;
             }
+        }
+
+        private static bool ConvertEnum(Type conversionType, string stringValue, out object changedValue)
+        {
+            try
+            {
+                changedValue = Enum.Parse(conversionType, stringValue);
+                return true;
+            }
+            catch (Exception)
+            {
+                changedValue = null;
+                return false;
+            }
+        }
+
+        private static bool ConvertByTypeDescriptor(object value, Type conversionType, out object changedValue)
+        {
+            try
+            {
+                var converter = TypeDescriptor.GetConverter(conversionType);
+
+                if (converter.CanConvertFrom(value.GetType()))
+                {
+                    changedValue = converter.ConvertFrom(value);
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            changedValue = null;
+            return false;
         }
     }
 }

@@ -197,20 +197,25 @@ namespace RestFoundation.UnitTesting
                     throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
                 }
 
-                foreach (var routeParameter in routeData.Values)
-                {
-                    if (routeParameter.Key.StartsWith("_", StringComparison.Ordinal))
-                    {
-                        continue;
-                    }
-
-                    if (!serviceMethod.GetParameters().Select(p => p.Name).Contains(routeParameter.Key, StringComparer.OrdinalIgnoreCase))
-                    {
-                        throw new RouteAssertException("Provided service method delegate does not match the route.");
-                    }
-                }
+                AssertRouteParameters(serviceMethod, routeData);
 
                 return new RequestContext(Context, routeData);
+            }
+        }
+
+        private static void AssertRouteParameters(MethodInfo serviceMethod, RouteData routeData)
+        {
+            foreach (var routeParameter in routeData.Values)
+            {
+                if (routeParameter.Key.StartsWith("_", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                if (!serviceMethod.GetParameters().Select(p => p.Name).Contains(routeParameter.Key, StringComparer.OrdinalIgnoreCase))
+                {
+                    throw new RouteAssertException("Provided service method delegate does not match the route.");
+                }
             }
         }
     }

@@ -171,7 +171,7 @@ namespace RestFoundation.ServiceProxy
             return routeParameters;
         }
 
-        private static List<ProxyParameter> GetQueryParameters(ServiceMethodMetadata metadata)
+        private static IEnumerable<ProxyParameter> GetQueryParameters(ServiceMethodMetadata metadata)
         {
             var routeParameters = new List<ProxyParameter>();
             var queryParameterAttributes = metadata.MethodInfo.GetCustomAttributes(typeof(ProxyQueryParameterAttribute), false).Cast<ProxyQueryParameterAttribute>();

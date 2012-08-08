@@ -145,15 +145,7 @@ namespace RestFoundation.ServiceProxy
 
             if (urlTemplate.IndexOf('{') > 0)
             {
-                var routeParametersWithValues = RouteParameters.Where(p => p.ExampleValue != null);
-
-                foreach (ProxyParameter routeParameter in routeParametersWithValues)
-                {
-                    urlTemplate = Regex.Replace(urlTemplate,
-                                                String.Concat(@"\{", routeParameter.Name, @"\}"),
-                                                HttpUtility.UrlEncode(Convert.ToString(routeParameter.ExampleValue, CultureInfo.InvariantCulture)),
-                                                RegexOptions.IgnoreCase);
-                }
+                urlTemplate = FillRouteParameters(urlTemplate);
             }
 
             const char Slash = '/';
@@ -161,12 +153,7 @@ namespace RestFoundation.ServiceProxy
 
             if (HttpsPort > 0 && !Regex.IsMatch(serviceUrl, ":[0-9]+"))
             {
-                serviceUrl = Regex.Replace(serviceUrl, "http://", "https://", RegexOptions.IgnoreCase);
-
-                if (HttpsPort != 443)
-                {
-                    serviceUrl += String.Format(CultureInfo.InvariantCulture, ":{0}", HttpsPort);
-                }
+                serviceUrl = AddUrlPort(serviceUrl);
             }
 
             return Tuple.Create(String.Concat(serviceUrl, context.Request.ApplicationPath.TrimEnd(Slash), Slash), urlTemplate);
@@ -194,6 +181,33 @@ namespace RestFoundation.ServiceProxy
             int urlComparision = String.CompareOrdinal(UrlTempate, other.UrlTempate);
 
             return urlComparision == 0 ? HttpMethod.CompareTo(other.HttpMethod) : urlComparision;
+        }
+
+        private string FillRouteParameters(string urlTemplate)
+        {
+            var routeParametersWithValues = RouteParameters.Where(p => p.ExampleValue != null);
+
+            foreach (ProxyParameter routeParameter in routeParametersWithValues)
+            {
+                urlTemplate = Regex.Replace(urlTemplate,
+                                            String.Concat(@"\{", routeParameter.Name, @"\}"),
+                                            HttpUtility.UrlEncode(Convert.ToString(routeParameter.ExampleValue, CultureInfo.InvariantCulture)),
+                                            RegexOptions.IgnoreCase);
+            }
+
+            return urlTemplate;
+        }
+
+        private string AddUrlPort(string serviceUrl)
+        {
+            serviceUrl = Regex.Replace(serviceUrl, "http://", "https://", RegexOptions.IgnoreCase);
+
+            if (HttpsPort != 443)
+            {
+                serviceUrl += String.Format(CultureInfo.InvariantCulture, ":{0}", HttpsPort);
+            }
+
+            return serviceUrl;
         }
     }
 }
