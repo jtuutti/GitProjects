@@ -7,10 +7,10 @@ using System.Linq;
 using System.Net;
 using RestFoundation.Formatters;
 using RestFoundation.Odata;
-using RestFoundation.Results;
+using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Results
 {
     /// <summary>
     /// Represents the default result factory that converts POCO objects into

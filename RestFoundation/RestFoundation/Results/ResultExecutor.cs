@@ -3,9 +3,8 @@
 // </copyright>
 using System;
 using System.Net;
-using RestFoundation.Results;
 
-namespace RestFoundation.Runtime
+namespace RestFoundation.Results
 {
     /// <summary>
     /// Represents the default result executor.
