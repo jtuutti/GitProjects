@@ -87,10 +87,11 @@ namespace RestFoundation.Formatters
         /// Serializes the object instance into the HTTP response stream using the accepted media type.
         /// </summary>
         /// <param name="context">The service context.</param>
+        /// <param name="methodReturnType">The method return type.</param>
         /// <param name="obj">The object to serialize.</param>
         /// <returns>A service method result containing the serialized object representation.</returns>
-        /// <exception cref="HttpResponseException">If the object cannot be serialized.</exception>
-        public virtual IResult FormatResponse(IServiceContext context, object obj)
+        /// <exception cref="HttpResponseException">If the object could not be serialized.</exception>
+        public virtual IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj)
         {
             if (context == null)
             {
@@ -100,7 +101,8 @@ namespace RestFoundation.Formatters
             return new XmlResult
             {
                 Content = obj,
-                ContentType = m_contentNegotiator.GetPreferredMediaType(context.Request)
+                ContentType = m_contentNegotiator.GetPreferredMediaType(context.Request),
+                ReturnedType = methodReturnType
             };
         }
     }

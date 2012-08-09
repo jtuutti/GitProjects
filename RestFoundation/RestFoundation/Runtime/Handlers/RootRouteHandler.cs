@@ -217,7 +217,7 @@ namespace RestFoundation.Runtime.Handlers
 
             try
             {
-                result = m_resultFactory.Create(GetOperations(), this);
+                result = m_resultFactory.Create(GetOperations(), typeof(Operation[]), this);
             }
             catch (HttpResponseException)
             {

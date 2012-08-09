@@ -293,7 +293,7 @@ namespace RestFoundation.Runtime.Handlers
             HttpContext.Current = httpArguments.Context;
             object returnedObj = m_methodInvoker.Invoke(httpArguments.ServiceMethodData.Method, httpArguments.ServiceMethodData.Service, this);
 
-            return httpArguments.ServiceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, this) : null;
+            return httpArguments.ServiceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, httpArguments.ServiceMethodData.Method.ReturnType, this) : null;
         }
     }
 }

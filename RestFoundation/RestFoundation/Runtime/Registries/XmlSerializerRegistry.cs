@@ -3,9 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Concurrent;
-using System.Data.Entity.Design.PluralizationServices;
-using System.Globalization;
-using System.Linq;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace RestFoundation.Runtime
@@ -21,32 +19,38 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("objectType");
             }
 
-            return serializers.GetOrAdd(objectType, type  => type.IsArray ? GetSerializerForArray(type) : new XmlSerializer(type));
+            return serializers.GetOrAdd(objectType, InitializeXmlSerializer);
         }
 
-        private static XmlSerializer GetSerializerForArray(Type objectType)
+        private static XmlSerializer InitializeXmlSerializer(Type objectType)
         {
-            XmlSerializer serializer;
-
-            Type elementType = objectType.GetElementType();
-            var xmlRootAttribute = elementType.GetCustomAttributes(typeof(XmlRootAttribute), true).OfType<XmlRootAttribute>().FirstOrDefault();
-
-            string elementName = xmlRootAttribute != null && !String.IsNullOrEmpty(xmlRootAttribute.ElementName) ? xmlRootAttribute.ElementName : elementType.Name;
-
-            var pluralization = PluralizationService.CreateService(CultureInfo.CurrentCulture);
-
-            if (!pluralization.IsPlural(elementName))
+            if (objectType.IsArray)
             {
-                elementName = pluralization.Pluralize(elementName);
+                return GetSerializerForCollection(objectType, objectType.GetElementType());
             }
 
-            if (xmlRootAttribute != null && !String.IsNullOrEmpty(xmlRootAttribute.Namespace))
+            if (objectType.IsGenericType && objectType.GetGenericTypeDefinition().GetInterface(typeof(IEnumerable<>).FullName) != null)
             {
-                serializer = new XmlSerializer(objectType, new XmlRootAttribute(elementName) { Namespace = xmlRootAttribute.Namespace });
+                return GetSerializerForCollection(objectType, objectType.GetGenericArguments()[0]);
+            }
+
+            return new XmlSerializer(objectType);
+        }
+
+        private static XmlSerializer GetSerializerForCollection(Type objectType, Type elementType)
+        {
+            string rootNamespace;
+            string rootElementName = XmlRootElementInspector.GetRootElementName(elementType, out rootNamespace);
+
+            XmlSerializer serializer;
+
+            if (!String.IsNullOrEmpty(rootNamespace))
+            {
+                serializer = new XmlSerializer(objectType, new XmlRootAttribute(rootElementName) { Namespace = rootNamespace });
             }
             else
             {
-                serializer = new XmlSerializer(objectType, new XmlRootAttribute(elementName));
+                serializer = new XmlSerializer(objectType, new XmlRootAttribute(rootElementName));
             }
 
             return serializer;

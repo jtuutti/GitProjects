@@ -35,13 +35,13 @@ namespace RestFoundation.Results
         }
 
         /// <summary>
-        /// Creates an <see cref="IResult"/> instance from a POCO object returned by
-        /// the service method.
+        /// Creates an <see cref="IResult"/> instance from a POCO object returned by the service method.
         /// </summary>
         /// <param name="returnedObj">The returned object.</param>
+        /// <param name="methodReturnType">The method return type.</param>
         /// <param name="handler">The REST handler.</param>
         /// <returns>The created result instance.</returns>
-        public virtual IResult Create(object returnedObj, IRestHandler handler)
+        public virtual IResult Create(object returnedObj, Type methodReturnType, IRestHandler handler)
         {
             if (handler == null)
             {
@@ -55,7 +55,7 @@ namespace RestFoundation.Results
                 return result;
             }
 
-            return CreateFormatterResult(returnedObj, handler);
+            return CreateFormatterResult(returnedObj, methodReturnType, handler);
         }
 
         private static object PerformOdataOperations(object returnedObj, IHttpRequest request)
@@ -92,9 +92,9 @@ namespace RestFoundation.Results
             return filteredResultListType.GetMethod("ToArray").Invoke(filteredResultList, null);
         }
 
-        private IResult CreateFormatterResult(object returnedObj, IRestHandler handler)
+        private IResult CreateFormatterResult(object returnedObj, Type methodReturnType, IRestHandler handler)
         {
-            if (returnedObj != null && returnedObj.GetType().IsGenericType && returnedObj.GetType().GetGenericTypeDefinition().GetInterface(typeof(IQueryable<>).FullName) != null)
+            if (returnedObj != null && methodReturnType.IsGenericType && methodReturnType.GetGenericTypeDefinition() == typeof(IQueryable<>))
             {
                 returnedObj = PerformOdataOperations(returnedObj, handler.Context.Request);
             }
@@ -109,7 +109,7 @@ namespace RestFoundation.Results
                 throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported media type was provided in the Accept or the Content-Type header");
             }
 
-            return formatter.FormatResponse(handler.Context, returnedObj);
+            return formatter.FormatResponse(handler.Context, methodReturnType, returnedObj);
         }
     }
 }

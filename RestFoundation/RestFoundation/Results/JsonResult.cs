@@ -2,6 +2,8 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using RestFoundation.Runtime;
 
@@ -22,6 +24,8 @@ namespace RestFoundation.Results
         /// </summary>
         public string ContentType { get; set; }
 
+        internal Type ReturnedType { get; set; }
+
         /// <summary>
         /// Executes the result against the provided service context.
         /// </summary>
@@ -37,10 +41,43 @@ namespace RestFoundation.Results
             context.Response.SetHeader(context.Response.Headers.ContentType, ContentType ?? "application/json");
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
+            var serializer = new JsonSerializer();
+
+            if (ReturnedType != null && ReturnedType.IsGenericType && ReturnedType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            {
+                OutputChunkedSequence(context, serializer);
+                return;
+            }
+
             OutputCompressionManager.FilterResponse(context);
 
-            var serializer = new JsonSerializer();
             serializer.Serialize(context.Response.Output.Writer, Content);
+        }
+
+        private void OutputChunkedSequence(IServiceContext context, JsonSerializer serializer)
+        {
+            var enumerableContent = (IEnumerable) Content;
+
+            context.Response.Output.Write("[").Flush();
+
+            bool arrayStart = true;
+
+            foreach (object enumeratedContent in enumerableContent)
+            {
+                if (!arrayStart)
+                {
+                    context.Response.Output.Write(",");
+                }
+                else
+                {
+                    arrayStart = false;
+                }
+
+                serializer.Serialize(context.Response.Output.Writer, enumeratedContent);
+                context.Response.Output.Flush();
+            }
+
+            context.Response.Output.Write("]");
         }
     }
 }

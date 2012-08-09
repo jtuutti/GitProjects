@@ -57,6 +57,7 @@
     <Compile Include="Authorization\TestAuthorizationManager.cs" />
     <Compile Include="ContentNegotiatorTests.cs" />
     <Compile Include="CacheTests.cs" />
+    <Compile Include="IntegrationTests.cs" />
     <Compile Include="JsonPContentTests.cs" />
     <Compile Include="JsonFormatterTests.cs" />
     <Compile Include="Models\Model.cs" />

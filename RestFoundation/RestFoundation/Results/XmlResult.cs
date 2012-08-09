@@ -2,13 +2,14 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using RestFoundation.Runtime;
-using Formatting = System.Xml.Formatting;
 
 namespace RestFoundation.Results
 {
@@ -27,6 +28,8 @@ namespace RestFoundation.Results
         /// </summary>
         public string ContentType { get; set; }
 
+        internal Type ReturnedType { get; set; }
+
         /// <summary>
         /// Executes the result against the provided service context.
         /// </summary>
@@ -42,26 +45,33 @@ namespace RestFoundation.Results
             context.Response.SetHeader(context.Response.Headers.ContentType, ContentType ?? "application/xml");
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
-            OutputCompressionManager.FilterResponse(context);
+            var xmlWriter = XmlWriter.Create(context.Response.Output.Writer, new XmlWriterSettings
+            {
+                Encoding = context.Request.Headers.AcceptCharsetEncoding,
+                Indent = false
+            });
 
             if (Content == null)
             {
-                SerializeNullObject(context.Response);
+                SerializeNullObject(xmlWriter);
                 return;
             }
 
             if (Attribute.GetCustomAttribute(Content.GetType(), typeof(CompilerGeneratedAttribute), false) != null)
             {
-                SerializeAnonymousType(context.Response, Content);
+                SerializeAnonymousType(xmlWriter, Content);
                 return;
             }
 
-            XmlSerializer serializer = XmlSerializerRegistry.Get(Content.GetType());
-
-            var xmlWriter = new XmlTextWriter(context.Response.Output.Writer)
+            if (ReturnedType != null && ReturnedType.IsGenericType && ReturnedType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
             {
-                Formatting = Formatting.None
-            };
+                SerializeChunkedSequence(context, xmlWriter);
+                return;
+            }
+
+            OutputCompressionManager.FilterResponse(context);
+
+            XmlSerializer serializer = XmlSerializerRegistry.Get(Content.GetType());
 
             var namespaces = new XmlSerializerNamespaces();
             namespaces.Add(String.Empty, String.Empty);
@@ -69,31 +79,53 @@ namespace RestFoundation.Results
             serializer.Serialize(xmlWriter, Content, namespaces);
         }
 
-        private static void SerializeAnonymousType(IHttpResponse response, object obj)
+        private static void SerializeAnonymousType(XmlWriter xmlWriter, object obj)
         {
-            var xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj), "complexType");
-
-            var xmlWriter = new XmlTextWriter(response.Output.Writer)
-            {
-                Formatting = Formatting.None,
-            };
-
+            XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj), "complexType");
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteRaw(xmlDocument.OuterXml);
             xmlWriter.Flush();
         }
 
-        private static void SerializeNullObject(IHttpResponse response)
+        private static void SerializeNullObject(XmlWriter xmlWriter)
         {
-            var xmlWriter = new XmlTextWriter(response.Output.Writer)
-            {
-                Formatting = Formatting.None,
-            };
-
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement("anyType");
             xmlWriter.WriteAttributeString("xmlns", "xsi", "http://www.w3.org/2000/xmlns/", XmlSchema.InstanceNamespace);
             xmlWriter.WriteAttributeString("xsi", "nil", XmlSchema.InstanceNamespace, "true");
+            xmlWriter.WriteEndElement();
+            xmlWriter.WriteEndDocument();
+            xmlWriter.Flush();
+        }
+
+        private void SerializeChunkedSequence(IServiceContext context, XmlWriter xmlWriter)
+        {
+            var enumerableContent = (IEnumerable) Content;
+
+            string rootNamespace;
+            string rootElementName = XmlRootElementInspector.GetRootElementName(Content.GetType().GetGenericArguments()[0], out rootNamespace);
+
+            xmlWriter.WriteStartDocument();
+            xmlWriter.WriteStartElement(rootElementName);
+            xmlWriter.Flush();
+            context.Response.Output.Flush();
+
+            foreach (object enumeratedContent in enumerableContent)
+            {
+                if (enumeratedContent == null)
+                {
+                    continue;
+                }
+
+                XmlSerializer serializer = XmlSerializerRegistry.Get(enumeratedContent.GetType());
+
+                var namespaces = new XmlSerializerNamespaces();
+                namespaces.Add(String.Empty, String.Empty);
+
+                serializer.Serialize(xmlWriter, enumeratedContent, namespaces);
+                context.Response.Output.Flush();
+            }
+
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndDocument();
             xmlWriter.Flush();
