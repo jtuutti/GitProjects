@@ -28,7 +28,7 @@ namespace RestFoundation.Behaviors
 
             if (!String.Equals("https", context.Request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
             {
-                SetForbiddenErrorMessage(RestResources.HttpsRequiredStatusDescription);
+                SetStatusDescription(RestResources.HttpsRequiredStatusDescription);
                 return BehaviorMethodAction.Stop;
             }
 

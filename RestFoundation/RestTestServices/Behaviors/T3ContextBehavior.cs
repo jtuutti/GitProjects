@@ -19,7 +19,7 @@ namespace RestTestServices.Behaviors
             if (String.IsNullOrEmpty(sessionInfo.ApplicationId) || String.IsNullOrEmpty(sessionInfo.CustomerId) ||
                 String.IsNullOrEmpty(sessionInfo.Environment) || sessionInfo.SessionId == Guid.Empty)
             {
-                SetForbiddenErrorMessage("No valid session context found");
+                SetStatusDescription("No valid session context found");
                 return BehaviorMethodAction.Stop;
             }
 

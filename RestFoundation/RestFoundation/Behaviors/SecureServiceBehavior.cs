@@ -15,16 +15,18 @@ namespace RestFoundation.Behaviors
     /// </summary>
     public abstract class SecureServiceBehavior : ServiceBehavior, ISecureServiceBehavior
     {
-        private const string DefaultForbiddenMessage = "Forbidden";
+        private const string DefaultStatusDescription = "Forbidden";
 
-        private string m_forbiddenMessage;
+        private HttpStatusCode m_statusCode;
+        private string m_statusDescription;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SecureServiceBehavior"/> class.
         /// </summary>
         protected SecureServiceBehavior()
         {
-            m_forbiddenMessage = DefaultForbiddenMessage;
+            m_statusCode = HttpStatusCode.Forbidden;
+            m_statusDescription = DefaultStatusDescription;
         }
 
         /// <summary>
@@ -56,9 +58,9 @@ namespace RestFoundation.Behaviors
             {
                 HttpStatusCode statusCode = context.Response.GetStatusCode();
 
-                if (statusCode != HttpStatusCode.Unauthorized && statusCode != HttpStatusCode.Forbidden)
+                if (statusCode != HttpStatusCode.Unauthorized && statusCode != m_statusCode)
                 {
-                    throw new HttpResponseException(HttpStatusCode.Forbidden, m_forbiddenMessage);
+                    throw new HttpResponseException(m_statusCode, m_statusDescription);
                 }
 
                 throw new HttpResponseException(statusCode, context.Response.GetStatusDescription());
@@ -70,12 +72,39 @@ namespace RestFoundation.Behaviors
         }
 
         /// <summary>
-        /// Sets an error message in the case of a security exception.
+        /// Sets an HTTP status code and description in case of a security exception.
         /// </summary>
-        /// <param name="message">The error message.</param>
-        protected void SetForbiddenErrorMessage(string message)
+        /// <param name="statusCode">The status code.</param>
+        /// <param name="description">The status description.</param>
+        /// <exception cref="ArgumentOutOfRangeException">If the status code is less than 400.</exception>
+        protected void SetStatus(HttpStatusCode statusCode, string description)
         {
-            m_forbiddenMessage = message ?? DefaultForbiddenMessage;
+            SetStatusCode(statusCode);
+            SetStatusDescription(description);
+        }
+
+        /// <summary>
+        /// Sets an HTTP status code in case of a security exception.
+        /// </summary>
+        /// <param name="statusCode">The status code.</param>
+        /// <exception cref="ArgumentOutOfRangeException">If the status code is less than 400.</exception>
+        protected void SetStatusCode(HttpStatusCode statusCode)
+        {
+            if ((int) statusCode < 400)
+            {
+                throw new ArgumentOutOfRangeException("statusCode");
+            }
+
+            m_statusCode = statusCode;
+        }
+
+        /// <summary>
+        /// Sets an HTTP status description in case of a security exception.
+        /// </summary>
+        /// <param name="description">The status description.</param>
+        protected void SetStatusDescription(string description)
+        {
+            m_statusDescription = description ?? DefaultStatusDescription;
         }
 
         private void CacheValidationHandler(HttpContext context, object data, ref HttpValidationStatus validationStatus)

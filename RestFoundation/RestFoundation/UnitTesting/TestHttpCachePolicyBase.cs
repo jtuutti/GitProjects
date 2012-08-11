@@ -1,6 +1,8 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012
 // </copyright>
+
+using System;
 using System.Web;
 
 namespace RestFoundation.UnitTesting
@@ -23,6 +25,10 @@ namespace RestFoundation.UnitTesting
             }
         }
 
+        public override void AddValidationCallback(HttpCacheValidateHandler handler, object data)
+        {
+        }
+
         public override void SetCacheability(HttpCacheability cacheability)
         {
         }
@@ -31,7 +37,7 @@ namespace RestFoundation.UnitTesting
         {
         }
 
-        public override void SetExpires(System.DateTime date)
+        public override void SetExpires(DateTime date)
         {
         }
 
@@ -39,7 +45,11 @@ namespace RestFoundation.UnitTesting
         {
         }
 
-        public override void SetMaxAge(System.TimeSpan delta)
+        public override void SetMaxAge(TimeSpan delta)
+        {
+        }
+
+        public override void SetProxyMaxAge(TimeSpan delta)
         {
         }
     }
