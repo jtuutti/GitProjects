@@ -213,6 +213,22 @@ namespace RestFoundation.UnitTesting
             }
         }
 
+        public override string UserHostAddress
+        {
+            get
+            {
+                return "127.0.0.1";
+            }
+        }
+
+        public override string UserHostName
+        {
+            get
+            {
+                return "127.0.0.1";
+            }
+        }
+
         public void Dispose()
         {
             if (m_isDisposed)
