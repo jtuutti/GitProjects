@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
+using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
-using RestFoundation.Tests.ServiceContracts;
 
-namespace RestFoundation.Tests
+namespace RestFoundation.Tests.UnitTests.Routes
 {
     [TestFixture]
     public class RouteTests

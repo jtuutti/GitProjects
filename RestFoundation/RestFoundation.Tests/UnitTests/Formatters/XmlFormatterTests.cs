@@ -7,10 +7,11 @@ using NUnit.Framework;
 using RestFoundation.Formatters;
 using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
-using RestFoundation.Tests.ServiceContracts;
+using RestFoundation.Tests.Implementation.Models;
+using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
-namespace RestFoundation.Tests
+namespace RestFoundation.Tests.UnitTests.Formatters
 {
     [TestFixture]
     public class XmlFormatterTests

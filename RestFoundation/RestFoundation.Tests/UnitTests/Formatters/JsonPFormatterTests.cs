@@ -1,18 +1,22 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Web.Script.Serialization;
 using NUnit.Framework;
 using RestFoundation.Formatters;
 using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
-using RestFoundation.Tests.ServiceContracts;
+using RestFoundation.Tests.Implementation.Models;
+using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
-namespace RestFoundation.Tests
+namespace RestFoundation.Tests.UnitTests.Formatters
 {
     [TestFixture]
-    public class JsonFormatterTests
+    public class JsonPContentTests
     {
+        private const string CallbackFunction = "callback";
+
         private MockHandlerFactory m_factory;
         private IServiceContext m_context;
 
@@ -41,7 +45,7 @@ namespace RestFoundation.Tests
 
             WriteBodyAsJson(model);
 
-            var formatter = new JsonFormatter();
+            var formatter = new JsonPFormatter();
             var resource = formatter.FormatRequest(m_context, typeof(Model)) as Model;
 
             Assert.That(resource, Is.Not.Null);
@@ -56,18 +60,21 @@ namespace RestFoundation.Tests
         {
             Model model = CreateModel();
 
-            var formatter = new JsonFormatter();
-            var result = formatter.FormatResponse(m_context, typeof(Model), model) as JsonResult;
+            var formatter = new JsonPFormatter();
+            var result = formatter.FormatResponse(m_context, typeof(Model), model) as JsonPResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Content, Is.SameAs(model));
 
+            result.Callback = CallbackFunction;
+            Assert.That(result.Callback, Is.EqualTo(CallbackFunction));
+
             result.Execute(m_context);
 
-            string response = ReadResponseAsJson();
+            string response = ReadResponseAsJsonP();
             Assert.That(response, Is.Not.Null);
 
-            string serializedModel = SerializeModel(model);
+            string serializedModel = SerializeModel(model, true);
             Assert.That(response, Is.EqualTo(serializedModel));
         }
 
@@ -83,23 +90,28 @@ namespace RestFoundation.Tests
             return model;
         }
 
-        private static string SerializeModel(Model model)
+        private static string SerializeModel(Model model, bool jsonP)
         {
             var serializer = new JavaScriptSerializer();
 
-            return serializer.Serialize(model);
+            if (!jsonP)
+            {
+                return serializer.Serialize(model);
+            }
+
+            return String.Format("{0}({1});", CallbackFunction, serializer.Serialize(model));
         }
 
         private void WriteBodyAsJson(Model model)
         {
-            string jsonString = SerializeModel(model);
+            string jsonString = SerializeModel(model, false);
 
             var writer = new StreamWriter(m_context.Request.Body, Encoding.UTF8);
             writer.Write(jsonString);
             writer.Flush();
         }
 
-        private string ReadResponseAsJson()
+        private string ReadResponseAsJsonP()
         {
             m_context.Response.Output.Stream.Seek(0, SeekOrigin.Begin);
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using RestFoundation.Security;
 
-namespace RestFoundation.Tests
+namespace RestFoundation.Tests.Implementation.Authorization
 {
     public class TestAuthorizationManager : IAuthorizationManager
     {

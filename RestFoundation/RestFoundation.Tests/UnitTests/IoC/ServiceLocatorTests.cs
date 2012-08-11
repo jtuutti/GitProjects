@@ -7,13 +7,14 @@ using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.Security;
 using RestFoundation.ServiceLocation;
-using RestFoundation.Tests.ServiceContracts;
-using RestFoundation.Tests.Services;
+using RestFoundation.Tests.Implementation.Authorization;
+using RestFoundation.Tests.Implementation.ServiceContracts;
+using RestFoundation.Tests.Implementation.Services;
 using RestFoundation.UnitTesting;
 using RestFoundation.Validation;
 using StructureMap;
 
-namespace RestFoundation.Tests
+namespace RestFoundation.Tests.UnitTests.IoC
 {
     [TestFixture]
     public class ServiceLocatorTests

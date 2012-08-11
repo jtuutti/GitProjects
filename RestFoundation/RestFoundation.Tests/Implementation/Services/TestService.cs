@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Net;
 using RestFoundation.Results;
-using RestFoundation.Tests.ServiceContracts;
+using RestFoundation.Tests.Implementation.ServiceContracts;
 
-namespace RestFoundation.Tests.Services
+namespace RestFoundation.Tests.Implementation.Services
 {
     public class TestService : ITestService
     {

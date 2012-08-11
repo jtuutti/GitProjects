@@ -1,6 +1,6 @@
 ﻿using RestFoundation.Results;
 
-namespace RestFoundation.Tests.ServiceContracts
+namespace RestFoundation.Tests.Implementation.ServiceContracts
 {
     public interface ITestService
     {

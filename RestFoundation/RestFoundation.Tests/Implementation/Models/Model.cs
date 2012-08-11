@@ -1,4 +1,4 @@
-﻿namespace RestFoundation.Tests
+﻿namespace RestFoundation.Tests.Implementation.Models
 {
     public class Model
     {

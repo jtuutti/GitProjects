@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
-using RestFoundation.Tests.ServiceContracts;
-using RestFoundation.Tests.Services;
+using RestFoundation.Tests.Implementation.ServiceContracts;
+using RestFoundation.Tests.Implementation.Services;
 using RestFoundation.UnitTesting;
 using StructureMap;
 

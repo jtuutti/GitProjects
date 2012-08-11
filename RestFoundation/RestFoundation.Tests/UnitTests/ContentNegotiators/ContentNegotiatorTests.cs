@@ -2,10 +2,10 @@
 using System.Web;
 using NUnit.Framework;
 using RestFoundation.Runtime.Handlers;
-using RestFoundation.Tests.ServiceContracts;
+using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
-namespace RestFoundation.Tests
+namespace RestFoundation.Tests.UnitTests.ContentNegotiators
 {
     [TestFixture]
     public class ContentNegotiatorTests
