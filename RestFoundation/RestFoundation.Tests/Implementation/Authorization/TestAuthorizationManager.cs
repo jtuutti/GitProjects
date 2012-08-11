@@ -12,7 +12,7 @@ namespace RestFoundation.Tests.Implementation.Authorization
                 throw new ArgumentNullException("userName");
             }
 
-            return new Credentials(userName, "test123", new[] { "Tester" });
+            return new Credentials(userName, "test123", new[] { "Testers" });
         }
     }
 }

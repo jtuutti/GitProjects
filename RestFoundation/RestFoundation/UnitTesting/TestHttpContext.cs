@@ -26,7 +26,7 @@ namespace RestFoundation.UnitTesting
             m_response = new TestHttpResponse();
             m_server = new TestHttpServerUtility(relativeUrl);
             m_items = new Hashtable();
-            m_user = new GenericPrincipal(new GenericIdentity("Test"), new[] { "Tester" });
+            m_user = new GenericPrincipal(new GenericIdentity("Test"), new[] { "Testers" });
         }
 
         public override HttpApplication ApplicationInstance
