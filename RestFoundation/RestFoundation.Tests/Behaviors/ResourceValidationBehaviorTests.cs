@@ -8,7 +8,7 @@ using RestFoundation.UnitTesting;
 namespace RestFoundation.Tests.Behaviors
 {
     [TestFixture]
-    public class HttpsOnlyBehaviorTests
+    public class ResourceValidationTests
     {
         private MockHandlerFactory m_factory;
         private IServiceContext m_context;
@@ -32,9 +32,20 @@ namespace RestFoundation.Tests.Behaviors
         }
 
         [Test]
-        public void UnsecureServiceRequestShouldThrow403()
+        public void RequestWith_XRequestedWithHeader_ShouldNotThrow()
         {
-            ISecureServiceBehavior behavior = new HttpsOnlyBehavior();
+            m_context.GetHttpContext().Request.Headers["X-Requested-With"] = "XmlHttpRequest";
+
+            ISecureServiceBehavior behavior = new AjaxOnlyBehavior();
+            behavior.OnMethodAuthorizing(m_context, null, null);
+        }
+
+        [Test]
+        public void RequestWithout_XRequestedWithHeader_ShouldThrow404()
+        {
+            m_context.GetHttpContext().Request.Headers["X-Requested-With"] = null;
+
+            ISecureServiceBehavior behavior = new AjaxOnlyBehavior();
 
             try
             {
@@ -43,7 +54,7 @@ namespace RestFoundation.Tests.Behaviors
             }
             catch (HttpResponseException ex)
             {
-                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
+                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
             }
         }
     }

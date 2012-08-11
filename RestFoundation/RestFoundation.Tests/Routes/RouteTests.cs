@@ -24,10 +24,10 @@ namespace RestFoundation.Tests.Routes
             RouteAssert.Url("~/test-service/all/age").WithHttpMethod(HttpMethod.Head).Invokes<ITestService>(s => s.GetAll("age"));
 
             // POST URL
-            RouteAssert.Url("~/test-service/new").WithHttpMethod(HttpMethod.Post).Invokes<ITestService>(s => s.Post());
+            RouteAssert.Url("~/test-service/new").WithHttpMethod(HttpMethod.Post).Invokes<ITestService>(s => s.Post(null));
 
             // POST URL with additional query data
-            RouteAssert.Url("~/test-service/new?timestamp=1234567").WithHttpMethod(HttpMethod.Post).Invokes<ITestService>(s => s.Post());
+            RouteAssert.Url("~/test-service/new?timestamp=1234567").WithHttpMethod(HttpMethod.Post).Invokes<ITestService>(s => s.Post(null));
 
             // PUT URL
             RouteAssert.Url("~/test-service/1").WithHttpMethod(HttpMethod.Put).Invokes<ITestService>(s => s.Put(1));

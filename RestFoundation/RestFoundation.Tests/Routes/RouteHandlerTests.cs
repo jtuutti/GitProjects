@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
 using NUnit.Framework;
+using RestFoundation.Client;
 using RestFoundation.Runtime.Handlers;
+using RestFoundation.Tests.Implementation.Models;
 using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
@@ -186,7 +188,7 @@ namespace RestFoundation.Tests.Routes
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.Post(), method);
+                IRestHandler handler = factory.Create<ITestService>(url, m => m.Post(null), method);
                 Assert.That(handler, Is.Not.Null);
                 Assert.That(handler, Is.InstanceOf<RestHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
@@ -194,6 +196,8 @@ namespace RestFoundation.Tests.Routes
                 Assert.That(handler.Context.Response, Is.Not.Null);
                 Assert.That(handler.Context.Request.Url, Is.EqualTo(ToAbsoluteUri(url)));
                 Assert.That(handler.Context.Request.Method, Is.EqualTo(method));
+
+                factory.SetResource(CreateResource(), RestResourceType.Json);
 
                 ProcessRequest(handler);
 
@@ -211,7 +215,7 @@ namespace RestFoundation.Tests.Routes
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.CreateAsync<ITestService>(url, m => m.Post(), method);
+                IRestHandler handler = factory.CreateAsync<ITestService>(url, m => m.Post(null), method);
                 Assert.That(handler, Is.Not.Null);
                 Assert.That(handler, Is.InstanceOf<RestAsyncHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
@@ -219,6 +223,8 @@ namespace RestFoundation.Tests.Routes
                 Assert.That(handler.Context.Response, Is.Not.Null);
                 Assert.That(handler.Context.Request.Url, Is.EqualTo(ToAbsoluteUri(url)));
                 Assert.That(handler.Context.Request.Method, Is.EqualTo(method));
+
+                factory.SetResource(CreateResource(), RestResourceType.Xml);
 
                 ProcessRequest(handler);
 
@@ -236,7 +242,7 @@ namespace RestFoundation.Tests.Routes
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.Post(), method);
+                IRestHandler handler = factory.Create<ITestService>(url, m => m.Post(null), method);
                 Assert.That(handler, Is.Not.Null);
                 Assert.That(handler, Is.InstanceOf<RestHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
@@ -430,7 +436,7 @@ namespace RestFoundation.Tests.Routes
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.CreateAsync<ITestService>(url, m => m.Post(), method);
+                IRestHandler handler = factory.CreateAsync<ITestService>(url, m => m.Post(null), method);
                 Assert.That(handler, Is.Not.Null);
                 Assert.That(handler, Is.InstanceOf<RestAsyncHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
@@ -482,6 +488,15 @@ namespace RestFoundation.Tests.Routes
         private static Uri ToAbsoluteUri(string url)
         {
             return new Uri(new Uri("http://localhost"), url.TrimStart('~'));
+        }
+
+        private static Model CreateResource()
+        {
+            return new Model
+            {
+                ID = 1,
+                Name = "Joe Bloe"
+            };
         }
     }
 }

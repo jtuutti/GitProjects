@@ -1,4 +1,5 @@
 ﻿using RestFoundation.Results;
+using RestFoundation.Tests.Implementation.Models;
 
 namespace RestFoundation.Tests.Implementation.ServiceContracts
 {
@@ -12,7 +13,7 @@ namespace RestFoundation.Tests.Implementation.ServiceContracts
 
         // has a higher priority for the "new" constant to take precedence over the URLs with a dynamic parameter
         [Url("new", Priority = 1)]
-        IResult Post();
+        IResult Post(Model resource);
 
         [Url("{id}")]
         IResult Put(int? id);

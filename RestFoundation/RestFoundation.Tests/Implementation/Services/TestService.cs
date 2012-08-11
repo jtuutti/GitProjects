@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using RestFoundation.Results;
+using RestFoundation.Tests.Implementation.Models;
 using RestFoundation.Tests.Implementation.ServiceContracts;
 
 namespace RestFoundation.Tests.Implementation.Services
@@ -27,8 +28,13 @@ namespace RestFoundation.Tests.Implementation.Services
             return Result.Ok;
         }
 
-        public IResult Post()
+        public IResult Post(Model model)
         {
+            if (model == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "No model provided.");
+            }
+
             return Result.ResponseStatus(HttpStatusCode.Created, "Created", new Dictionary<string, string>
                                                                             {
                                                                                 { "Location", Context.Request.Url.OperationUrl + "/1" }

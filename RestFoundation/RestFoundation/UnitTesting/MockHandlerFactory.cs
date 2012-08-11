@@ -2,11 +2,16 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Web.Routing;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
+using RestFoundation.Client;
 using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation.UnitTesting
@@ -92,6 +97,48 @@ namespace RestFoundation.UnitTesting
             RequestContext requestContext = CreateContext(relativeUrl, serviceMethodDelegate, httpMethod);
 
             return new MockRestAsyncHandler().GetHttpHandler(requestContext) as IRestAsyncHandler;
+        }
+
+        /// <summary>
+        /// Sets a response object of the provided type as the body of the request.
+        /// </summary>
+        /// <param name="resource">The resource object.</param>
+        /// <param name="resourceType">The resource type (JSON or XML).</param>
+        /// <exception cref="InvalidOperationException">If the HTTP method does not support resources/body content.</exception>
+        public void SetResource(object resource, RestResourceType resourceType)
+        {
+            if (resource == null)
+            {
+                throw new ArgumentNullException("resource");
+            }
+
+            if (!String.Equals(Context.Request.HttpMethod, "POST", StringComparison.OrdinalIgnoreCase) &&
+                !String.Equals(Context.Request.HttpMethod, "PUT", StringComparison.OrdinalIgnoreCase) &&
+                !String.Equals(Context.Request.HttpMethod, "PATCH", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException("A resource cannot be set for the current HTTP method.");
+            }
+
+            if (resourceType == RestResourceType.Json)
+            {
+                Context.Request.Headers.Add("Content-Type", "application/json; charset=utf-8");
+
+                var serializer = new JsonSerializer();
+                var writer = new StreamWriter(Context.Request.InputStream, Encoding.UTF8);
+                serializer.Serialize(writer, resource);
+                writer.Flush();
+            }
+            else
+            {
+                Context.Request.Headers.Add("Content-Type", "application/xml; charset=utf-8");
+
+                var serializer = new XmlSerializer(resource.GetType());
+                var writer = new StreamWriter(Context.Request.InputStream, Encoding.UTF8);
+                var namespaces = new XmlSerializerNamespaces();
+                namespaces.Add(String.Empty, String.Empty);
+                serializer.Serialize(writer, resource, namespaces);
+                writer.Flush();
+            }
         }
 
         /// <summary>

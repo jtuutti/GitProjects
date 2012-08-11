@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\ResourceValidationBehaviorTests.cs" />
     <Compile Include="Implementation\Authorization\TestAuthorizationManager.cs" />
     <Compile Include="Behaviors\AjaxOnlyBehaviorTests.cs" />
     <Compile Include="Behaviors\HttpsOnlyBehaviorTests.cs" />

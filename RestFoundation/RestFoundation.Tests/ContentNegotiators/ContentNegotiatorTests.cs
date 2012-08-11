@@ -283,7 +283,7 @@ namespace RestFoundation.Tests.ContentNegotiators
 
         private IHttpRequest CreateRequest(string acceptHeaderValue = null, string contentTypeHeaderValue = null, string acceptOverrideValue = null, bool isAjax = false)
         {
-            IRestHandler handler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post());
+            IRestHandler handler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post(null));
             Assert.That(handler, Is.Not.Null);
             Assert.That(handler.Context, Is.Not.Null);
 
