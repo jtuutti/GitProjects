@@ -93,7 +93,7 @@ namespace RestFoundation.Behaviors
 
             AuthorizationHeader header;
 
-            if (!AuthorizationHeaderParser.TryParse(context.Request.Headers.Authorization, context.Request.Headers.ContentCharsetEncoding, out header) ||
+            if (!AuthorizationHeaderParser.TryParse(context.Request.Headers.TryGet("Authorization"), context.Request.Headers.ContentCharsetEncoding, out header) ||
                 !AuthenticationType.Equals(header.AuthenticationType, StringComparison.OrdinalIgnoreCase))
             {
                 GenerateAuthenticationHeader(context, false);
