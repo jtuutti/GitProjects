@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using RestFoundation.Behaviors;
 using RestFoundation.Runtime.Handlers;
+using RestFoundation.Tests.Implementation.Models;
 using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
@@ -32,30 +33,114 @@ namespace RestFoundation.Tests.Behaviors
         }
 
         [Test]
-        public void RequestWith_XRequestedWithHeader_ShouldNotThrow()
+        public void ValidResourceShouldNotThrow()
         {
-            m_context.GetHttpContext().Request.Headers["X-Requested-With"] = "XmlHttpRequest";
+            IServiceBehavior behavior = new ResourceValidationBehavior();
 
-            ISecureServiceBehavior behavior = new AjaxOnlyBehavior();
-            behavior.OnMethodAuthorizing(m_context, null, null);
+            var resource = new Model
+            {
+                ID = 1,
+                Name = "Joe Bloe"
+            };
+
+            behavior.OnMethodExecuting(m_context, null, null, resource);
         }
 
         [Test]
-        public void RequestWithout_XRequestedWithHeader_ShouldThrow404()
+        public void EmptyResourceShouldThrow()
         {
-            m_context.GetHttpContext().Request.Headers["X-Requested-With"] = null;
+            IServiceBehavior behavior = new ResourceValidationBehavior();
 
-            ISecureServiceBehavior behavior = new AjaxOnlyBehavior();
+            var resource = new Model();
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodExecuting(m_context, null, null, resource);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
             {
-                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
             }
+        }
+
+        [Test]
+        public void ResourceWithoutIDShouldThrow()
+        {
+            IServiceBehavior behavior = new ResourceValidationBehavior();
+
+            var resource = new Model
+            {
+                Name = "Joe Bloe"
+            };
+
+            try
+            {
+                behavior.OnMethodExecuting(m_context, null, null, resource);
+                Assert.Fail();
+            }
+            catch (HttpResponseException ex)
+            {
+                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+            }
+        }
+
+        [Test]
+        public void ResourceWithEmptyNameShouldThrow()
+        {
+            IServiceBehavior behavior = new ResourceValidationBehavior();
+
+            var resource = new Model
+            {
+                ID = 1,
+                Name = ""
+            };
+
+            try
+            {
+                behavior.OnMethodExecuting(m_context, null, null, resource);
+                Assert.Fail();
+            }
+            catch (HttpResponseException ex)
+            {
+                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+            }
+        }
+
+        [Test]
+        public void ResourceWithNameOver25CharactersShouldThrow()
+        {
+            IServiceBehavior behavior = new ResourceValidationBehavior();
+
+            var resource = new Model
+            {
+                ID = 1,
+                Name = "Abcdefghijklmnopqrstuvwxyz"
+            };
+
+            try
+            {
+                behavior.OnMethodExecuting(m_context, null, null, resource);
+                Assert.Fail();
+            }
+            catch (HttpResponseException ex)
+            {
+                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+            }
+        }
+
+        [Test]
+        public void ResourceWithNameOf25CharactersShouldNotThrow()
+        {
+            IServiceBehavior behavior = new ResourceValidationBehavior();
+
+            var resource = new Model
+            {
+                ID = 1,
+                Name = "Abcdefghijklmnopqrstuvwxy"
+            };
+
+            behavior.OnMethodExecuting(m_context, null, null, resource);
         }
     }
 }
