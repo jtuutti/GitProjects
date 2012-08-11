@@ -6,8 +6,17 @@ using System.Collections.Specialized;
 
 namespace RestFoundation.Security
 {
-    internal sealed class AuthorizationHeader
+    /// <summary>
+    /// Represents an authorization header.
+    /// </summary>
+    public class AuthorizationHeader
     {
+        /// <summary>
+        /// Initializes a new instance of the authorization header.
+        /// </summary>
+        /// <param name="authenticationType">The authentication type.</param>
+        /// <param name="userName">The user name.</param>
+        /// <param name="parameters">A collection of additional parameters.</param>
         public AuthorizationHeader(string authenticationType, string userName, NameValueCollection parameters)
         {
             if (String.IsNullOrEmpty(userName))
@@ -25,9 +34,24 @@ namespace RestFoundation.Security
             Parameters = parameters;
         }
 
-        public string AuthenticationType { get; private set; }
-        public string UserName { get; private set; }
-        public string Password { get; set; }
-        public NameValueCollection Parameters { get; private set; }
+        /// <summary>
+        /// Gets the authentication type.
+        /// </summary>
+        public string AuthenticationType { get; protected set; }
+
+        /// <summary>
+        /// Gets the user name.
+        /// </summary>
+        public string UserName { get; protected set; }
+
+        /// <summary>
+        /// Gets the password, if applicable.
+        /// </summary>
+        public string Password { get; protected internal set; }
+
+        /// <summary>
+        /// Gets the parameter collection.
+        /// </summary>
+        public NameValueCollection Parameters { get; protected set; }
     }
 }

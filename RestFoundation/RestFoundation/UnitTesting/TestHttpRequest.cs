@@ -229,6 +229,7 @@ namespace RestFoundation.UnitTesting
         {
             m_serverVariables.Add("APP_POOL_ID", "UnitTests");
             m_serverVariables.Add("HTTP_VERSION", "HTTP/1.1");
+            m_serverVariables.Add("LOCAL_ADDR", "127.0.0.1");
             m_serverVariables.Add("REMOTE_ADDR", "127.0.0.1");
             m_serverVariables.Add("REMOTE_HOST", "127.0.0.1");
             m_serverVariables.Add("REMOTE_PORT", "20040");

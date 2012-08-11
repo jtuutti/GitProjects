@@ -9,7 +9,10 @@ using System.Text.RegularExpressions;
 
 namespace RestFoundation.Security
 {
-    internal static class AuthorizationHeaderParser
+    /// <summary>
+    /// Represents an authorization header parser.
+    /// </summary>
+    public static class AuthorizationHeaderParser
     {
         private const string AuthenticationTypeKey = "auth-type";
         private const string AuthenticationCredentialsKey = "auth-credentials";
@@ -20,6 +23,24 @@ namespace RestFoundation.Security
 
         private static readonly Regex nameValueSeparatorRegex = new Regex(@"\s+=\s+", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
+        /// <summary>
+        /// Tries to parse an authorization header from an Authorization header style string.
+        /// </summary>
+        /// <param name="authorizationString">The authorization string.</param>
+        /// <param name="header">The authorization header to output.</param>
+        /// <returns>true if the authorization was valid; otherwise, false.</returns>
+        public static bool TryParse(string authorizationString, out AuthorizationHeader header)
+        {
+            return TryParse(authorizationString, Encoding.UTF8, out header);
+        }
+
+        /// <summary>
+        /// Tries to parse an authorization header from an Authorization header style string.
+        /// </summary>
+        /// <param name="authorizationString">The authorization string.</param>
+        /// <param name="encoding">The encoding.</param>
+        /// <param name="header">The authorization header to output.</param>
+        /// <returns>true if the authorization was valid; otherwise, false.</returns>
         public static bool TryParse(string authorizationString, Encoding encoding, out AuthorizationHeader header)
         {
             if (String.IsNullOrWhiteSpace(authorizationString))
@@ -50,18 +71,10 @@ namespace RestFoundation.Security
 
             if (isBasic && items.TryGetValue(AuthenticationCredentialsKey, out credentials))
             {
-                Tuple<string, string> decodedCredentials = DecodeCredentials(credentials, encoding);
+                Tuple<string, string> basicCredentials = GetBasicCredentials(encoding, credentials);
 
-                if (decodedCredentials != null)
-                {
-                    userName = decodedCredentials.Item1;
-                    password = decodedCredentials.Item2;
-                }
-                else
-                {
-                    userName = null;
-                    password = null;
-                }
+                userName = basicCredentials.Item1;
+                password = basicCredentials.Item2;
             }
             else
             {
@@ -115,6 +128,18 @@ namespace RestFoundation.Security
             }
 
             return Tuple.Create(credentialItems[0], credentialItems[1]);
+        }
+
+        private static Tuple<string, string> GetBasicCredentials(Encoding encoding, string credentials)
+        {
+            Tuple<string, string> decodedCredentials = DecodeCredentials(credentials, encoding);
+
+            if (decodedCredentials == null)
+            {
+                return new Tuple<string, string>(null, null);
+            }
+
+            return Tuple.Create(decodedCredentials.Item1, decodedCredentials.Item2);
         }
 
         private static IDictionary<string, string> ParseAuthorizationItems(string authorizationString)

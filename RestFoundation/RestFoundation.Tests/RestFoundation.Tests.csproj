@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Behaviors\AuthorizationBehaviorTests.cs" />
     <Compile Include="Behaviors\BasicAuthenticationBehaviorTests.cs" />
+    <Compile Include="Behaviors\DigestAuthenticationBehaviorTests.cs" />
     <Compile Include="Behaviors\ResourceValidationBehaviorTests.cs" />
     <Compile Include="Implementation\Authorization\TestAuthorizationManager.cs" />
     <Compile Include="Behaviors\AjaxOnlyBehaviorTests.cs" />
