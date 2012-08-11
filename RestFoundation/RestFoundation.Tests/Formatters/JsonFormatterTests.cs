@@ -9,7 +9,7 @@ using RestFoundation.Tests.Implementation.Models;
 using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
-namespace RestFoundation.Tests.UnitTests.Formatters
+namespace RestFoundation.Tests.Formatters
 {
     [TestFixture]
     public class JsonFormatterTests

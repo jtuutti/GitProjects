@@ -45,6 +45,7 @@
       <HintPath>..\Dependencies\IoC\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -55,21 +56,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\Authorization\TestAuthorizationManager.cs" />
-    <Compile Include="UnitTests\Behaviors\AjaxOnlyBehaviorTests.cs" />
-    <Compile Include="UnitTests\Behaviors\HttpsOnlyBehaviorTests.cs" />
-    <Compile Include="UnitTests\ContentNegotiators\ContentNegotiatorTests.cs" />
-    <Compile Include="UnitTests\Cache\CacheTests.cs" />
-    <Compile Include="UnitTests\Formatters\JsonPFormatterTests.cs" />
-    <Compile Include="UnitTests\Formatters\JsonFormatterTests.cs" />
+    <Compile Include="Behaviors\AjaxOnlyBehaviorTests.cs" />
+    <Compile Include="Behaviors\HttpsOnlyBehaviorTests.cs" />
+    <Compile Include="ContentNegotiators\ContentNegotiatorTests.cs" />
+    <Compile Include="Cache\CacheTests.cs" />
+    <Compile Include="Formatters\JsonPFormatterTests.cs" />
+    <Compile Include="Formatters\JsonFormatterTests.cs" />
     <Compile Include="Implementation\Models\Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTests\Routes\RouteHandlerTests.cs" />
-    <Compile Include="UnitTests\Routes\RouteTests.cs" />
+    <Compile Include="Routes\RouteHandlerTests.cs" />
+    <Compile Include="Routes\RouteTests.cs" />
     <Compile Include="Implementation\ServiceContracts\ITestService.cs" />
-    <Compile Include="UnitTests\IoC\ServiceLocatorTests.cs" />
+    <Compile Include="IoC\ServiceLocatorTests.cs" />
     <Compile Include="Implementation\Services\TestService.cs" />
     <Compile Include="SetUpFixture.cs" />
-    <Compile Include="UnitTests\Formatters\XmlFormatterTests.cs" />
+    <Compile Include="Formatters\XmlFormatterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestFoundation.StructureMap\RestFoundation.StructureMap.csproj">

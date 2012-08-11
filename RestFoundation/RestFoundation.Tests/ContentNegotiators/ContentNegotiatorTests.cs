@@ -5,7 +5,7 @@ using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
-namespace RestFoundation.Tests.UnitTests.ContentNegotiators
+namespace RestFoundation.Tests.ContentNegotiators
 {
     [TestFixture]
     public class ContentNegotiatorTests

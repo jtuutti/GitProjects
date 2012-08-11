@@ -5,7 +5,7 @@ using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
-namespace RestFoundation.Tests.UnitTests.Routes
+namespace RestFoundation.Tests.Routes
 {
     [TestFixture]
     public class RouteHandlerTests

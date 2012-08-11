@@ -14,7 +14,7 @@ using RestFoundation.UnitTesting;
 using RestFoundation.Validation;
 using StructureMap;
 
-namespace RestFoundation.Tests.UnitTests.IoC
+namespace RestFoundation.Tests.IoC
 {
     [TestFixture]
     public class ServiceLocatorTests

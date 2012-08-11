@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
+using System.Web.Script.Serialization;
 using NUnit.Framework;
 using RestFoundation.Formatters;
 using RestFoundation.Results;
@@ -11,11 +10,13 @@ using RestFoundation.Tests.Implementation.Models;
 using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
-namespace RestFoundation.Tests.UnitTests.Formatters
+namespace RestFoundation.Tests.Formatters
 {
     [TestFixture]
-    public class XmlFormatterTests
+    public class JsonPContentTests
     {
+        private const string CallbackFunction = "callback";
+
         private MockHandlerFactory m_factory;
         private IServiceContext m_context;
 
@@ -42,9 +43,9 @@ namespace RestFoundation.Tests.UnitTests.Formatters
         {
             Model model = CreateModel();
 
-            WriteBodyAsXml(model);
+            WriteBodyAsJson(model);
 
-            var formatter = new XmlFormatter();
+            var formatter = new JsonPFormatter();
             var resource = formatter.FormatRequest(m_context, typeof(Model)) as Model;
 
             Assert.That(resource, Is.Not.Null);
@@ -59,18 +60,21 @@ namespace RestFoundation.Tests.UnitTests.Formatters
         {
             Model model = CreateModel();
 
-            var formatter = new XmlFormatter();
-            var result = formatter.FormatResponse(m_context, typeof(Model), model) as XmlResult;
+            var formatter = new JsonPFormatter();
+            var result = formatter.FormatResponse(m_context, typeof(Model), model) as JsonPResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Content, Is.SameAs(model));
 
+            result.Callback = CallbackFunction;
+            Assert.That(result.Callback, Is.EqualTo(CallbackFunction));
+
             result.Execute(m_context);
 
-            string response = ReadResponseAsXml();
+            string response = ReadResponseAsJsonP();
             Assert.That(response, Is.Not.Null);
 
-            string serializedModel = SerializeModel(model);
+            string serializedModel = SerializeModel(model, true);
             Assert.That(response, Is.EqualTo(serializedModel));
         }
 
@@ -86,44 +90,28 @@ namespace RestFoundation.Tests.UnitTests.Formatters
             return model;
         }
 
-        private static string SerializeModel(Model model)
+        private static string SerializeModel(Model model, bool jsonP)
         {
-            var memoryStream = new MemoryStream();
+            var serializer = new JavaScriptSerializer();
 
-            var xmlWriter = new XmlTextWriter(new StreamWriter(memoryStream, Encoding.UTF8))
+            if (!jsonP)
             {
-                Formatting = Formatting.None
-            };
-
-            var namespaces = new XmlSerializerNamespaces();
-            namespaces.Add(String.Empty, String.Empty);
-
-            var serializer = new XmlSerializer(model.GetType());
-            serializer.Serialize(xmlWriter, model, namespaces);
-
-            memoryStream.Seek(0, SeekOrigin.Begin);
-
-            using (var reader = new StreamReader(memoryStream, Encoding.UTF8))
-            {
-                return reader.ReadToEnd();
+                return serializer.Serialize(model);
             }
+
+            return String.Format("{0}({1});", CallbackFunction, serializer.Serialize(model));
         }
 
-        private void WriteBodyAsXml(Model model)
+        private void WriteBodyAsJson(Model model)
         {
-            var xmlWriter = new XmlTextWriter(new StreamWriter(m_context.Request.Body, Encoding.UTF8))
-            {
-                Formatting = Formatting.None
-            };
+            string jsonString = SerializeModel(model, false);
 
-            var namespaces = new XmlSerializerNamespaces();
-            namespaces.Add(String.Empty, String.Empty);
-
-            var serializer = new XmlSerializer(model.GetType());
-            serializer.Serialize(xmlWriter, model, namespaces);
+            var writer = new StreamWriter(m_context.Request.Body, Encoding.UTF8);
+            writer.Write(jsonString);
+            writer.Flush();
         }
 
-        private string ReadResponseAsXml()
+        private string ReadResponseAsJsonP()
         {
             m_context.Response.Output.Stream.Seek(0, SeekOrigin.Begin);
 

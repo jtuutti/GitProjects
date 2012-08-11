@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using RestFoundation.Runtime;
 
-namespace RestFoundation.Tests.UnitTests.Cache
+namespace RestFoundation.Tests.Cache
 {
     [TestFixture]
     public class CacheTests

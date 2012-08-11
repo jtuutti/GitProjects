@@ -5,7 +5,7 @@ using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
-namespace RestFoundation.Tests.UnitTests.Behaviors
+namespace RestFoundation.Tests.Behaviors
 {
     [TestFixture]
     public class AjaxOnlyBehaviorTests
