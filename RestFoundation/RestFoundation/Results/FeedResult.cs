@@ -75,10 +75,9 @@ namespace RestFoundation.Results
 
             OutputCompressionManager.FilterResponse(context);
 
-            using (XmlWriter writer = new XmlTextWriter(context.Response.Output.Writer))
-            {
-                formatter.WriteTo(writer);
-            }
+            XmlWriter writer = XmlWriter.Create(context.Response.Output.Writer);
+            formatter.WriteTo(writer);
+            writer.Flush();
         }
     }
 }
