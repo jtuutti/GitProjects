@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Web.Routing;
@@ -20,6 +21,7 @@ namespace RestFoundation
         private const char Tilda = '~';
 
         private static readonly Type urlAttributeType = typeof(UrlAttribute);
+        private static readonly object syncRoot = new Object();
 
         private readonly string m_relativeUrl;
         private readonly RouteCollection m_routes;
@@ -96,6 +98,7 @@ namespace RestFoundation
         /// <param name="contractType">The service contract type./</param>
         /// <returns>The route configuration.</returns>
         /// <exception cref="ArgumentException">If the service contract type is not an interface.</exception>
+        /// <exception cref="InvalidOperationException">If the relative URL has already been mapped.</exception>
         public RouteConfiguration ToServiceContract(Type contractType)
         {
             if (contractType == null)
@@ -112,6 +115,7 @@ namespace RestFoundation
         /// <typeparam name="T">The service contract type.</typeparam>
         /// <returns>The route configuration.</returns>
         /// <exception cref="ArgumentException">If the service contract type is not an interface.</exception>
+        /// <exception cref="InvalidOperationException">If the relative URL has already been mapped.</exception>
         public RouteConfiguration ToServiceContract<T>()
         {
             return MapUrl(typeof(T));
@@ -197,7 +201,16 @@ namespace RestFoundation
                                              .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);
 
             List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(contractType, serviceMethods, m_relativeUrl);
-            ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, m_relativeUrl), t => methodMetadata, (t, u) => methodMetadata);
+
+            lock (syncRoot)
+            {
+                if (ServiceMethodRegistry.ServiceMethods.Any(m => String.Equals(m_relativeUrl, m.Key.Url, StringComparison.OrdinalIgnoreCase)))
+                {
+                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, "The relative URL '{0}' has already been mapped.", m_relativeUrl));
+                }
+
+                ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, m_relativeUrl), t => methodMetadata, (t, u) => methodMetadata);
+            }
 
             IEnumerable<IRestHandler> routeHandlers = MapRoutes(methodMetadata, contractType);
             return new RouteConfiguration(routeHandlers);
