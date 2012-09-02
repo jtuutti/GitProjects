@@ -6,6 +6,7 @@ using RestFoundation.Formatters;
 using RestFoundation.Security;
 using RestTest.Security;
 using RestTest.Behaviors;
+using RestTest.SimpleServices;
 using RestTest.StreamCompressors;
 using RestTestContracts;
 using RestTestServices;
@@ -85,6 +86,9 @@ namespace RestTest.App_Start
                       .ToServiceContract<ITouchMapService>()
                       .WithDataContractFormatters()
                       .WithBehaviors(new HttpsOnlyBehavior());
+
+            urlBuilder.MapUrl("hello")
+                      .ToServiceContract<HelloService>();
 
             urlBuilder.MapUrl("faq")
                       .ToWebFormsPage("~/Views/Faq.aspx");

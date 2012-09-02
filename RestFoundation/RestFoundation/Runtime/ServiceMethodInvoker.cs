@@ -81,7 +81,7 @@ namespace RestFoundation.Runtime
 
         private static void AddServiceBehaviors(MethodInfo method, object service, List<IServiceBehavior> behaviors)
         {
-            var restService = service as IRestService;
+            var restService = service as IServiceWithBehaviors;
 
             if (restService == null || restService.Behaviors == null)
             {
@@ -101,7 +101,7 @@ namespace RestFoundation.Runtime
         {
             IServiceExceptionHandler exceptionHandler;
 
-            var restService = service as IRestService;
+            var restService = service as IServiceWithBehaviors;
 
             if (restService != null && restService.ExceptionHandler != null)
             {

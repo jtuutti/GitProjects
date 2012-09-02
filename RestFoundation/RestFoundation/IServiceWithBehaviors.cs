@@ -10,7 +10,7 @@ namespace RestFoundation
     /// Defines an optional interface for a restful service that allows
     /// to associate behaviors to a specific service implementation.
     /// </summary>
-    public interface IRestService
+    public interface IServiceWithBehaviors
     {
         /// <summary>
         /// Gets an exception handler associated with the service implementation.

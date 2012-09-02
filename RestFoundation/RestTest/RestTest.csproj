@@ -91,6 +91,7 @@
     <Compile Include="Behaviors\LoggingBehavior.cs" />
     <Compile Include="Behaviors\StatisticsBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleServices\HelloService.cs" />
     <Compile Include="StreamCompressors\RestStreamCompressor.cs" />
     <Compile Include="Views\Faq.aspx.cs">
       <DependentUpon>Faq.aspx</DependentUpon>

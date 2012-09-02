@@ -14,7 +14,7 @@ using RestTestServices.Utilities;
 
 namespace RestTestServices
 {
-    public class TouchMapService : ITouchMapService, IRestService
+    public class TouchMapService : ITouchMapService, IServiceWithBehaviors
     {
         private static readonly Dictionary<string, string> environments = new Dictionary<string, string>
         {

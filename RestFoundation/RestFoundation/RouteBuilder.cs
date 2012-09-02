@@ -21,7 +21,7 @@ namespace RestFoundation
         private const char Tilda = '~';
 
         private static readonly Type urlAttributeType = typeof(UrlAttribute);
-        private static readonly object syncRoot = new Object();
+        private static readonly object syncRoot = new object();
 
         private readonly string m_relativeUrl;
         private readonly RouteCollection m_routes;
@@ -97,7 +97,9 @@ namespace RestFoundation
         /// </summary>
         /// <param name="contractType">The service contract type./</param>
         /// <returns>The route configuration.</returns>
-        /// <exception cref="ArgumentException">If the service contract type is not an interface.</exception>
+        /// <exception cref="ArgumentException">
+        /// If the service contract type is not an interface or a concrete class that defines its own contract.
+        /// </exception>
         /// <exception cref="InvalidOperationException">If the relative URL has already been mapped.</exception>
         public RouteConfiguration ToServiceContract(Type contractType)
         {
@@ -114,7 +116,9 @@ namespace RestFoundation
         /// </summary>
         /// <typeparam name="T">The service contract type.</typeparam>
         /// <returns>The route configuration.</returns>
-        /// <exception cref="ArgumentException">If the service contract type is not an interface.</exception>
+        /// <exception cref="ArgumentException">
+        /// If the service contract type is not an interface or a concrete class that defines its own contract.
+        /// </exception>
         /// <exception cref="InvalidOperationException">If the relative URL has already been mapped.</exception>
         public RouteConfiguration ToServiceContract<T>()
         {
@@ -192,9 +196,14 @@ namespace RestFoundation
                 throw new ArgumentNullException("contractType");
             }
 
-            if (!contractType.IsInterface)
+            if (!contractType.IsInterface && !contractType.IsClass)
             {
-                throw new ArgumentException("Service contract type must be an interface", "contractType");
+                throw new ArgumentException("Service contract type must be an interface or a concrete class that defines its own contract.", "contractType");
+            }
+
+            if (contractType.IsClass && (contractType.IsAbstract || Attribute.GetCustomAttribute(contractType, typeof(ServiceContractAttribute), true) == null))
+            {
+                throw new ArgumentException("A service implementation that defines its own contract must be non-abstract and marked with the 'ServiceContract' attribute.", "contractType");
             }
 
             var serviceMethods = contractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
