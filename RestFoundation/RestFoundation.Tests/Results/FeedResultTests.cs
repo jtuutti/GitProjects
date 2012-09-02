@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel.Syndication;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using NUnit.Framework;
@@ -52,8 +53,8 @@ namespace RestFoundation.Tests.Results
 
             result.Execute(Context);
 
-            string output = GetResponseOutput();
-            string feedValue = SerializeFeed(feed, FeedFormat);
+            string output = StripDatetime(GetResponseOutput());
+            string feedValue = StripDatetime(SerializeFeed(feed, FeedFormat));
 
             Assert.That(output, Is.EqualTo(feedValue));
         }
@@ -72,8 +73,8 @@ namespace RestFoundation.Tests.Results
 
             result.Execute(Context);
 
-            string output = GetResponseOutput();
-            string feedValue = SerializeFeed(feed, FeedFormat);
+            string output = StripDatetime(GetResponseOutput());
+            string feedValue = StripDatetime(SerializeFeed(feed, FeedFormat));
 
             Assert.That(output, Is.EqualTo(feedValue));
         }
@@ -133,6 +134,12 @@ namespace RestFoundation.Tests.Results
                  Title = new TextSyndicationContent("Resource Feed", TextSyndicationContentKind.Plaintext),
                  Generator = "Feed Result Unit Tests"
             };
+        }
+
+        private static string StripDatetime(string output)
+        {
+            // Prevents responses that vary by 1-2 ms from failing the assert
+            return Regex.Replace(output, @"\d\d\d\d-\d\d-\d\dT\d\d\:\d\d\:\d\dZ", "datetime");
         }
     }
 }
