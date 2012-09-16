@@ -79,6 +79,23 @@ namespace RestFoundation
         /// </summary>
         /// <param name="url">The JQuery HTTP/HTTPS URL.</param>
         /// <returns>The configuration object.</returns>
+        public ServiceProxyConfiguration SetJQueryUrl(string url)
+        {
+            if (String.IsNullOrEmpty(url))
+            {
+                throw new ArgumentNullException("url");
+            }
+
+            SetJQueryUrl(new Uri(url, UriKind.RelativeOrAbsolute));
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the JQuery URL if the default CDN location "http://code.jquery.com/jquery-1.7.2.min.js" is not desired.
+        /// The service help and proxy interface was designed with JQuery version 1.7.2.
+        /// </summary>
+        /// <param name="url">The JQuery HTTP/HTTPS URL.</param>
+        /// <returns>The configuration object.</returns>
         public ServiceProxyConfiguration SetJQueryUrl(Uri url)
         {
             if (url == null)
