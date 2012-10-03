@@ -45,12 +45,19 @@ namespace RestFoundation.Runtime
             }
 
             var serviceContractType = GetServiceContractType(handler.ServiceContractTypeName);
+            object service = InitializeService(serviceContractType);
 
             HttpMethod httpMethod = m_serviceContext.Request.Method;
 
             if (httpMethod == HttpMethod.Options)
             {
-                SetAllowHeader(handler.UrlTemplate, serviceContractType);
+                var optionsDescriptor = service as IOptionsDescriptor;
+
+                if (optionsDescriptor == null || !TrySetAllowHeaderFromDescriptor(m_serviceContext.Request.Url.LocalPath, optionsDescriptor))
+                {
+                    SetAllowHeader(handler.UrlTemplate, serviceContractType);
+                }
+
                 return ServiceMethodLocatorData.Options;
             }
 
@@ -59,7 +66,6 @@ namespace RestFoundation.Runtime
                 m_serviceContext.GetHttpContext().Response.SuppressContent = true;
             }
 
-            object service = InitializeService(serviceContractType);
             MethodInfo method = GetServiceMethod(handler.ServiceUrl, serviceContractType, handler.UrlTemplate, httpMethod);
 
             return new ServiceMethodLocatorData(service, method);
@@ -104,6 +110,25 @@ namespace RestFoundation.Runtime
             }
 
             return service;
+        }
+
+        private bool TrySetAllowHeaderFromDescriptor(string serviceUrl, IOptionsDescriptor optionsDescriptor)
+        {
+            IEnumerable<HttpMethod> serviceMethodHttpMethods = optionsDescriptor.ReturnHttpMethodsFor(new Uri(serviceUrl, UriKind.Relative));
+
+            if (serviceMethodHttpMethods == null)
+            {
+                return false;
+            }
+
+            var allowedHttpMethods = new HashSet<HttpMethod>(serviceMethodHttpMethods.Where(m => m != HttpMethod.Options));
+
+            if (allowedHttpMethods.Count > 0)
+            {
+                m_serviceContext.Response.SetHeader("Allow", String.Join(", ", serviceMethodHttpMethods.Select(m => m.ToString().ToUpperInvariant()).OrderBy(m => m)));
+            }
+
+            return true;
         }
 
         private void SetAllowHeader(string urlTemplate, Type serviceContractType)
