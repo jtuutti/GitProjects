@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IOptionsDescriptor.cs" />
+    <Compile Include="Runtime\AllowHeaderGenerator.cs" />
     <Compile Include="ServiceContractAttribute.cs" />
     <Compile Include="ExceptionAction.cs" />
     <Compile Include="Behaviors\AuthorizationBehavior.cs" />

@@ -2,9 +2,7 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using RestFoundation.Runtime.Handlers;
@@ -17,6 +15,7 @@ namespace RestFoundation.Runtime
     public class ServiceMethodLocator : IServiceMethodLocator
     {
         private readonly IServiceContext m_serviceContext;
+        private readonly AllowHeaderGenerator m_allowHeaderGenerator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceMethodLocator"/> class.
@@ -30,6 +29,7 @@ namespace RestFoundation.Runtime
             }
 
             m_serviceContext = serviceContext;
+            m_allowHeaderGenerator = new AllowHeaderGenerator(serviceContext.Response);
         }
 
         /// <summary>
@@ -53,9 +53,9 @@ namespace RestFoundation.Runtime
             {
                 var optionsDescriptor = service as IOptionsDescriptor;
 
-                if (optionsDescriptor == null || !TrySetAllowHeaderFromDescriptor(m_serviceContext.Request.Url.LocalPath, optionsDescriptor))
+                if (optionsDescriptor == null || !m_allowHeaderGenerator.TrySetAllowHeaderFromDescriptor(m_serviceContext.Request.Url.LocalPath, optionsDescriptor))
                 {
-                    SetAllowHeader(handler.UrlTemplate, serviceContractType);
+                    m_allowHeaderGenerator.SetAllowHeader(handler.UrlTemplate, serviceContractType);
                 }
 
                 return ServiceMethodLocatorData.Options;
@@ -110,31 +110,6 @@ namespace RestFoundation.Runtime
             }
 
             return service;
-        }
-
-        private bool TrySetAllowHeaderFromDescriptor(string serviceUrl, IOptionsDescriptor optionsDescriptor)
-        {
-            IEnumerable<HttpMethod> serviceMethodHttpMethods = optionsDescriptor.ReturnHttpMethodsFor(new Uri(serviceUrl, UriKind.Relative));
-
-            if (serviceMethodHttpMethods == null)
-            {
-                return false;
-            }
-
-            var allowedHttpMethods = new HashSet<HttpMethod>(serviceMethodHttpMethods.Where(m => m != HttpMethod.Options));
-
-            if (allowedHttpMethods.Count > 0)
-            {
-                m_serviceContext.Response.SetHeader("Allow", String.Join(", ", serviceMethodHttpMethods.Select(m => m.ToString().ToUpperInvariant()).OrderBy(m => m)));
-            }
-
-            return true;
-        }
-
-        private void SetAllowHeader(string urlTemplate, Type serviceContractType)
-        {
-            HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
-            m_serviceContext.Response.SetHeader("Allow", String.Join(", ", allowedHttpMethods.Select(m => m.ToString().ToUpperInvariant()).OrderBy(m => m)));
         }
     }
 }
