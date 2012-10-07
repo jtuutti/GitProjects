@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace RestFoundation.Runtime
 {
@@ -47,10 +48,12 @@ namespace RestFoundation.Runtime
 
         private void WriteAllowHeader(HashSet<HttpMethod> allowedHttpMethods)
         {
-            if (allowedHttpMethods.Count > 0)
+            if (allowedHttpMethods.Count == 0)
             {
-                m_response.SetHeader(AllowHeaderName, String.Join(AllowHeaderValueSeparator, allowedHttpMethods.Select(m => m.ToString().ToUpperInvariant()).OrderBy(m => m)));
+                throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
             }
+
+            m_response.SetHeader(AllowHeaderName, String.Join(AllowHeaderValueSeparator, allowedHttpMethods.Select(m => m.ToString().ToUpperInvariant()).OrderBy(m => m)));
         }
     }
 }
