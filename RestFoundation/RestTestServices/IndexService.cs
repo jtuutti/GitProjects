@@ -29,7 +29,7 @@ namespace RestTestServices
 
             if (!Enum.TryParse(format, true, out feedFormat))
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "The feed only supports ATOM and RSS formats");
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "This feed only supports ATOM and RSS formats");
             }
 
             var feedItems = new List<SyndicationItem>(people.Count);
