@@ -16,6 +16,8 @@ namespace RestFoundation.Runtime.Handlers
     /// </summary>
     public class RootRouteHandler : IRestHandler
     {
+        private const char Slash = '/';
+
         private readonly IServiceContext m_serviceContext;
         private readonly IContentNegotiator m_contentNegotiator;
         private readonly IResultFactory m_resultFactory;
@@ -204,7 +206,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (Rest.Active.IsServiceProxyInitialized && !String.IsNullOrWhiteSpace(Rest.Active.ServiceProxyRelativeUrl))
             {
-                context.Response.Redirect(new Uri(m_serviceContext.Request.Url, String.Concat(Rest.Active.ServiceProxyRelativeUrl, "/index")).ToString(), false);
+                context.Response.Redirect(String.Concat(m_serviceContext.Request.Url.ToString().TrimEnd(Slash), Slash, Rest.Active.ServiceProxyRelativeUrl, "/index"), false);
                 return true;
             }
 
