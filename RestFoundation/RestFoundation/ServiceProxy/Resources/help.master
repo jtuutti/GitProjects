@@ -1,11 +1,33 @@
 ﻿<%@ Master Language="C#" %>
+<%@ Import Namespace="System.Globalization" %>
 <%@ Import Namespace="RestFoundation" %>
 <%@ Import Namespace="RestFoundation.Security" %>
+<%@ Import Namespace="RestFoundation.ServiceProxy" %>
 
 <script runat="server" language="C#">
     private string jqueryUrl = Rest.Active.JQueryUrl;    
 
     protected void Page_Init(object sender, EventArgs e)
+    {
+        ValidateHttpSecurity();
+        ValidateIPRange();
+        AuthorizeUserIfNecessary();
+    }
+
+    private void ValidateHttpSecurity()
+    {
+        if (!Rest.Active.ServiceProxyHttpsOnly || Request.IsSecureConnection)
+        {
+            return;
+        }
+
+        Response.Clear();
+        Response.StatusCode = 403;
+        Response.StatusDescription = "HTTPS required";
+        Response.End();
+    }
+
+    private void ValidateIPRange()
     {
         List<IPAddressRange> ranges = IPAddressRange.GetConfiguredRanges("serviceProxyAcl").ToList();
 
@@ -33,7 +55,39 @@
             Response.End();
         }
     }
+    
+    private void AuthorizeUserIfNecessary()
+    {
+        if (Rest.Active.ServiceProxyAuthorizationManager == null)
+        {
+            return;
+        }
 
+        AuthorizationHeader header;
+
+        if (!AuthorizationHeaderParser.TryParse(Request.Headers["Authorization"], Encoding.Default, out header) ||
+            !String.Equals("Basic", header.AuthenticationType, StringComparison.OrdinalIgnoreCase))
+        {
+            GenerateAuthenticationHeader();
+            return;
+        }
+
+        Credentials credentials = Rest.Active.ServiceProxyAuthorizationManager.GetCredentials(header.UserName);
+
+        if (credentials == null || !String.Equals(header.Password, credentials.Password, StringComparison.Ordinal))
+        {
+            GenerateAuthenticationHeader();
+        }
+    }
+
+    private void GenerateAuthenticationHeader()
+    {
+        Response.Clear();
+        Response.AppendHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "Basic realm=\"{0}\"", Request.ApplicationPath));
+        Response.StatusCode = 401;
+        Response.StatusDescription = "Unauthorized";
+        Response.End();
+    }
 </script>
 
 <!DOCTYPE html>

@@ -1,5 +1,4 @@
 ﻿using System;
-using RestFoundation;
 using RestFoundation.Security;
 
 namespace RestTest.Security

@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Web.Routing;
@@ -11,6 +12,7 @@ using System.Web.Util;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
+using RestFoundation.Security;
 using RestFoundation.ServiceLocation;
 
 namespace RestFoundation
@@ -68,6 +70,18 @@ namespace RestFoundation
         /// </summary>
         public string JQueryUrl { get; internal set; }
 
+        /// <summary>
+        /// Gets a value indicating whether the service proxy must be accessed through the HTTPS protocol only.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public bool ServiceProxyHttpsOnly { get; internal set; }
+
+        /// <summary>
+        /// Gets the service proxy authorization manager instance.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public IAuthorizationManager ServiceProxyAuthorizationManager { get; internal set; }
+
         internal bool IsServiceProxyInitialized { get; set; }
         internal string ServiceProxyRelativeUrl { get; set; }
         internal string DefaultMediaType { get; private set; }
@@ -118,14 +132,14 @@ namespace RestFoundation
         /// </summary>
         /// <param name="configuration">The service help and proxy configuration.</param>
         /// <returns>The configuration object.</returns>
-        public Rest ConfigureServiceHelpAndProxy(Action<ServiceProxyConfiguration> configuration)
+        public Rest ConfigureServiceHelpAndProxy(Action<ProxyConfiguration> configuration)
         {
             if (configuration == null)
             {
                 throw new ArgumentNullException("configuration");
             }
 
-            configuration(new ServiceProxyConfiguration());
+            configuration(new ProxyConfiguration());
             return this;
         }
 

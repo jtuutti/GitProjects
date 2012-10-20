@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Web.Routing;
 using RestFoundation.Runtime.Handlers;
+using RestFoundation.Security;
 using RestFoundation.ServiceProxy;
 
 namespace RestFoundation
@@ -13,9 +14,9 @@ namespace RestFoundation
     /// <summary>
     /// Represents the service help and proxy interface configuration.
     /// </summary>
-    public sealed class ServiceProxyConfiguration
+    public sealed class ProxyConfiguration
     {
-        internal ServiceProxyConfiguration()
+        internal ProxyConfiguration()
         {
         }
 
@@ -23,7 +24,7 @@ namespace RestFoundation
         /// Enables HTML based interface for the service help pages and HTTP proxy under the relative URL "help".
         /// </summary>
         /// <returns>The configuration object.</returns>
-        public ServiceProxyConfiguration Enable()
+        public ProxyConfiguration Enable()
         {
             return EnableWithRelativeUrl("help");
         }
@@ -37,7 +38,7 @@ namespace RestFoundation
         /// <param name="relativeUrl">The relative URL path for the service help and proxy.</param>
         /// <returns>The configuration object.</returns>
         /// <exception cref="ArgumentException">If the relative URL contains invalid characters.</exception>
-        public ServiceProxyConfiguration EnableWithRelativeUrl(string relativeUrl)
+        public ProxyConfiguration EnableWithRelativeUrl(string relativeUrl)
         {
             if (relativeUrl == null)
             {
@@ -79,7 +80,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="url">The JQuery HTTP/HTTPS URL.</param>
         /// <returns>The configuration object.</returns>
-        public ServiceProxyConfiguration SetJQueryUrl(string url)
+        public ProxyConfiguration SetJQueryUrl(string url)
         {
             if (String.IsNullOrEmpty(url))
             {
@@ -96,7 +97,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="url">The JQuery HTTP/HTTPS URL.</param>
         /// <returns>The configuration object.</returns>
-        public ServiceProxyConfiguration SetJQueryUrl(Uri url)
+        public ProxyConfiguration SetJQueryUrl(Uri url)
         {
             if (url == null)
             {
@@ -104,6 +105,33 @@ namespace RestFoundation
             }
 
             Rest.Active.JQueryUrl = url.ToString();
+            return this;
+        }
+
+        /// <summary>
+        /// Requires the service proxy to be accessed through HTTPS only.
+        /// </summary>
+        /// <returns>The configuration object.</returns>
+        public ProxyConfiguration HttpsOnly()
+        {
+            Rest.Active.ServiceProxyHttpsOnly = true;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets basic authentication for the service proxy and authorizes users through the provided authorization manager
+        /// instance.
+        /// </summary>
+        /// <param name="authorizationManager">The authorization manager.</param>
+        /// <returns>The configuration object.</returns>
+        public ProxyConfiguration RequireAuthorization(IAuthorizationManager authorizationManager)
+        {
+            if (authorizationManager == null)
+            {
+                throw new ArgumentNullException("authorizationManager");
+            }
+
+            Rest.Active.ServiceProxyAuthorizationManager = authorizationManager;
             return this;
         }
     }
