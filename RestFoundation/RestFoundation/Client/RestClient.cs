@@ -84,7 +84,7 @@ namespace RestFoundation.Client
 
             if (ReferenceEquals(resource.Body, null))
             {
-                throw new ArgumentException("Resource body cannot be null", "resource");
+                throw new ArgumentException(RestResources.NullResourceBody, "resource");
             }
 
             var request = CreateRequest(url, method, resource);
@@ -143,7 +143,7 @@ namespace RestFoundation.Client
 
             if (ReferenceEquals(resource.Body, null))
             {
-                throw new ArgumentException("Resource body cannot be null", "resource");
+                throw new ArgumentException(RestResources.NullResourceBody, "resource");
             }
 
             var request = CreateRequest(url, method, resource);
@@ -266,7 +266,7 @@ namespace RestFoundation.Client
 
             if (!m_httpResourceMap.TryGetValue(type, out mimeType) || String.IsNullOrWhiteSpace(mimeType))
             {
-                throw new InvalidOperationException("HTTP resource type provided has not been mapped.");
+                throw new InvalidOperationException(RestResources.UnmappedResourceType);
             }
 
             return mimeType;
@@ -276,12 +276,12 @@ namespace RestFoundation.Client
         {
             if (ConnectionTimeout.TotalMilliseconds <= 0)
             {
-                throw new TimeoutException("Connection timeout is invalid.");
+                throw new TimeoutException(RestResources.InvalidConnectionTimeout);
             }
 
             if (SocketTimeout.TotalMilliseconds <= 0)
             {
-                throw new TimeoutException("Socket timeout is invalid.");
+                throw new TimeoutException(RestResources.InvalidSocketTimeout);
             }
 
             var request = (HttpWebRequest) WebRequest.Create(url);

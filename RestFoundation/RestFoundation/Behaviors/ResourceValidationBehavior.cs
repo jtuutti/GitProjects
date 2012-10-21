@@ -62,7 +62,7 @@ namespace RestFoundation.Behaviors
 
             if (!m_validator.IsValid(resource, out validationErrors))
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, "Resource validation failed");
+                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.ResourceValidationFailed);
             }
 
             return BehaviorMethodAction.Execute;

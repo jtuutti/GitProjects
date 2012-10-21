@@ -32,7 +32,7 @@ namespace RestFoundation
 
             if (behaviors.GroupBy(s => s.GetType()).Max(g => g.Count()) > 1)
             {
-                throw new InvalidOperationException("Multiple global service behaviors of the same type are not allowed");
+                throw new InvalidOperationException(RestResources.DuplicateGlobalBehaviors);
             }
 
             for (int i = 0; i < behaviors.Length; i++)

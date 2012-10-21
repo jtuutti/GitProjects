@@ -30,7 +30,7 @@ namespace RestFoundation
 
             if (httpMethods != null && Array.IndexOf(httpMethods, HttpMethod.Options) >= 0)
             {
-                throw new InvalidOperationException("HTTP method OPTIONS cannot be manually defined on a service method");
+                throw new InvalidOperationException(RestResources.ManuallyDefinedOptionsHttpMethod);
             }
 
             UrlTemplate = urlTemplate.Trim();
@@ -97,12 +97,12 @@ namespace RestFoundation
 
                 if (!Enum.TryParse(httpMethodArray[i], true, out httpMethod))
                 {
-                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, "HTTP Method '{0}' is not supported", httpMethodArray[i]));
+                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.UnsupportedHttpMethod, httpMethodArray[i]));
                 }
 
                 if (httpMethod == HttpMethod.Options)
                 {
-                    throw new InvalidOperationException("HTTP method OPTIONS cannot be manually defined on a service method");
+                    throw new InvalidOperationException(RestResources.ManuallyDefinedOptionsHttpMethod);
                 }
 
                 if (!httpMethodList.Contains(httpMethod))

@@ -25,7 +25,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (timeoutInMilliseconds < MinTimeoutInMilliseconds)
             {
-                throw new InvalidOperationException("Asynchronous service operation timeout cannot be less than 1 second.");
+                throw new InvalidOperationException(RestResources.OutOfRangeAsyncServiceTimeout);
             }
 
             m_currentThread = currentThread;

@@ -118,7 +118,7 @@ namespace RestFoundation.Runtime
 
             if (authBehaviorIndex != lastAuthBehaviorIndex)
             {
-                throw new InvalidOperationException("Only a single authentication behavior can be associated with a service method. That includes global behaviors.");
+                throw new InvalidOperationException(RestResources.DuplicateAuthenticationBehavior);
             }
 
             if (authBehaviorIndex == 0)

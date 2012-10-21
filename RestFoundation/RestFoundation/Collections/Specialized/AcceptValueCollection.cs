@@ -189,7 +189,7 @@ namespace RestFoundation.Collections.Specialized
 
             if (names.Any(n => n == null || n.IndexOf('*') >= 0))
             {
-                throw new ArgumentException("An accepted name cannot be null or contain a wildcard", "names");
+                throw new ArgumentException(RestResources.NullOrInvalidAcceptedName, "names");
             }
 
             if (names.Length == 0)
@@ -241,7 +241,7 @@ namespace RestFoundation.Collections.Specialized
 
             if (names.Any(n => n == null || n.IndexOf('*') >= 0))
             {
-                throw new ArgumentException("An accepted name cannot be null or contain a wildcard", "names");
+                throw new ArgumentException(RestResources.NullOrInvalidAcceptedName, "names");
             }
 
             if (names.Length == 0)

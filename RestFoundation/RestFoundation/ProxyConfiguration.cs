@@ -47,7 +47,7 @@ namespace RestFoundation
 
             if (Rest.Active.IsServiceProxyInitialized)
             {
-                throw new InvalidOperationException("Service proxy UI is already enabled.");
+                throw new InvalidOperationException(RestResources.ProxyAlreadyInitialized);
             }
 
             if (!Regex.IsMatch(relativeUrl, "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z]+)?$"))

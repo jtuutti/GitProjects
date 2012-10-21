@@ -200,7 +200,7 @@ namespace RestFoundation.Runtime.Handlers
                 }
                 catch (Exception)
                 {
-                    throw new InvalidOperationException("Index page file could not be loaded. Make sure the specified index file is available and not locked.");
+                    throw new InvalidOperationException(RestResources.UnableToLoadIndexPage);
                 }
             }
 
@@ -223,7 +223,7 @@ namespace RestFoundation.Runtime.Handlers
             }
             catch (HttpResponseException)
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden, "The service is configured not to list its contents in the requested format");
+                throw new HttpResponseException(HttpStatusCode.Forbidden, RestResources.UnsupportedRequestedFormat);
             }
 
             if (result != null)

@@ -103,14 +103,14 @@ namespace RestFoundation
 
             if (Active != null)
             {
-                throw new InvalidOperationException("REST Foundation has already been configured.");
+                throw new InvalidOperationException(RestResources.AlreadyConfigured);
             }
 
             lock (syncRoot)
             {
                 if (Active != null)
                 {
-                    throw new InvalidOperationException("REST Foundation has already been configured.");
+                    throw new InvalidOperationException(RestResources.AlreadyConfigured);
                 }
 
                 RouteCollection routes = RouteTable.Routes;
@@ -221,7 +221,7 @@ namespace RestFoundation
 
             if (filename.IndexOf('~') >= 0 || filename.IndexOf('/') >= 0 || filename.IndexOf('\\') >= 0 || filename.IndexOf(':') >= 0)
             {
-                throw new ArgumentException("Only a file name can be specified. Relative or absolute paths/URLs are not supported.");
+                throw new ArgumentException(RestResources.FileNameContainsPath);
             }
 
             string extension = Path.GetExtension(filename);
@@ -229,7 +229,7 @@ namespace RestFoundation
             if (!String.Equals(extension, ".htm", StringComparison.OrdinalIgnoreCase) &&
                 !String.Equals(extension, ".html", StringComparison.OrdinalIgnoreCase))
             {
-                throw new ArgumentException("Index files can only have .html or .htm exceptions.");
+                throw new ArgumentException(RestResources.InvalidIndexFileException);
             }
 
             IndexPageRelativeUrl = "~/" + filename.Trim();

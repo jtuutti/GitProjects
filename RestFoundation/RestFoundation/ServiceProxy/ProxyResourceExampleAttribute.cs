@@ -58,7 +58,7 @@ namespace RestFoundation.ServiceProxy
 
             if (!value.IsClass || value.IsAbstract || !typeof(IResourceExampleBuilder).IsAssignableFrom(value))
             {
-                throw new ArgumentException("A resource example type must be a class implementing the RestFoundation.ServiceProxy.IResourceExample interface");
+                throw new ArgumentException(RestResources.InvalidResourceExampleType, "value");
             }
         }
     }

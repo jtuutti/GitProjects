@@ -25,7 +25,7 @@ namespace RestFoundation.Runtime
 
             if (m_cache == null)
             {
-                throw new InvalidOperationException("Cache could not be initialized.");
+                throw new InvalidOperationException(RestResources.UnableToInitializeCache);
             }
         }
 

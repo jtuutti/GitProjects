@@ -34,7 +34,7 @@ namespace RestFoundation.Behaviors
         {
             if (authorizationManager == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No authorization manager could be found");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingAuthorizationManager);
             }
 
             m_authorizationManager = authorizationManager;

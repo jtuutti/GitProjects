@@ -81,7 +81,7 @@ namespace RestFoundation.Odata.Parser
 
             if (constructorInfo == null)
             {
-                throw new InvalidOperationException("Created type does not have a default constructor");
+                throw new InvalidOperationException(RestResources.MissingDefaultConstructor);
             }
 
             var selector = Expression.Lambda<Func<T, object>>(

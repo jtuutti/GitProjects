@@ -71,7 +71,7 @@ namespace RestFoundation
         {
             if (timeout.TotalMilliseconds < CancellationOperation.MinTimeoutInMilliseconds)
             {
-                throw new ArgumentOutOfRangeException("timeout", timeout.TotalSeconds, "Asynchronous service method timeout cannot be less than 1 second.");
+                throw new ArgumentOutOfRangeException("timeout", timeout.TotalSeconds, RestResources.OutOfRangeAsyncServiceTimeout);
             }
 
             return new RouteBuilder(m_relativeUrl, m_routes, timeout);
@@ -198,12 +198,12 @@ namespace RestFoundation
 
             if (!contractType.IsInterface && !contractType.IsClass)
             {
-                throw new ArgumentException("Service contract type must be an interface or a concrete class that defines its own contract.", "contractType");
+                throw new ArgumentException(RestResources.InvalidServiceContract, "contractType");
             }
 
             if (contractType.IsClass && (contractType.IsAbstract || Attribute.GetCustomAttribute(contractType, typeof(ServiceContractAttribute), true) == null))
             {
-                throw new ArgumentException("A service implementation that defines its own contract must be non-abstract and marked with the 'ServiceContract' attribute.", "contractType");
+                throw new ArgumentException(RestResources.InvalidServiceImplementation, "contractType");
             }
 
             var serviceMethods = contractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
@@ -215,7 +215,7 @@ namespace RestFoundation
             {
                 if (ServiceMethodRegistry.ServiceMethods.Any(m => String.Equals(m_relativeUrl, m.Key.Url, StringComparison.OrdinalIgnoreCase)))
                 {
-                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, "The relative URL '{0}' has already been mapped.", m_relativeUrl));
+                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.AlreadyMapped, m_relativeUrl));
                 }
 
                 ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, m_relativeUrl), t => methodMetadata, (t, u) => methodMetadata);
@@ -242,7 +242,7 @@ namespace RestFoundation
                 }
                 else
                 {
-                    throw new InvalidOperationException("Invalid asynchronous service method timeout provided.");
+                    throw new InvalidOperationException(RestResources.InvalidAsyncServiceTimeout);
                 }
             }
             else

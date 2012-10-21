@@ -74,7 +74,7 @@ namespace RestFoundation.Collections.Concrete
 
             if (value == null)
             {
-                throw new ArgumentOutOfRangeException("key", "Invalid key provided");
+                throw new ArgumentOutOfRangeException("key", RestResources.InvalidKey);
             }
 
             return value;

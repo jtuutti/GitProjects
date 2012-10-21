@@ -109,7 +109,7 @@ namespace RestFoundation.Runtime
             {
                 if (!allowedHttpMethods.Contains(httpMethod))
                 {
-                    throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "HTTP method is not allowed");
+                    throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, RestResources.DisallowedHttpMethod);
                 }
 
                 if (!m_httpMethods.Contains(httpMethod))

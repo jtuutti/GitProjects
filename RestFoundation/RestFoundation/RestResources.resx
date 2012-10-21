@@ -121,8 +121,152 @@
     <value>Access forbidden</value>
     <comment>Access forbidden</comment>
   </data>
+  <data name="AlreadyConfigured" xml:space="preserve">
+    <value>REST Foundation has already been configured.</value>
+    <comment>REST Foundation has already been configured.</comment>
+  </data>
+  <data name="DuplicateGlobalBehaviors" xml:space="preserve">
+    <value>Multiple global service behaviors of the same type are not allowed.</value>
+    <comment>Multiple global service behaviors of the same type are not allowed.</comment>
+  </data>
+  <data name="FileNameContainsPath" xml:space="preserve">
+    <value>Only a file name can be specified. Relative or absolute paths/URLs are not supported.</value>
+    <comment>Only a file name can be specified. Relative or absolute paths/URLs are not supported.</comment>
+  </data>
   <data name="HttpsRequiredStatusDescription" xml:space="preserve">
     <value>HTTPS required</value>
     <comment>HTTPS required</comment>
+  </data>
+  <data name="InvalidConnectionTimeout" xml:space="preserve">
+    <value>Connection timeout is invalid.</value>
+    <comment>Connection timeout is invalid.</comment>
+  </data>
+  <data name="InvalidIndexFileException" xml:space="preserve">
+    <value>Index files can only have .html or .htm extensions.</value>
+    <comment>Index files can only have .html or .htm extensions.</comment>
+  </data>
+  <data name="InvalidSocketTimeout" xml:space="preserve">
+    <value>Socket timeout is invalid.</value>
+    <comment>Socket timeout is invalid.</comment>
+  </data>
+  <data name="NonStringOutputType" xml:space="preserve">
+    <value>The output type is not a string.</value>
+    <comment>The output type is not a string.</comment>
+  </data>
+  <data name="NullResourceBody" xml:space="preserve">
+    <value>Resource body cannot be null.</value>
+    <comment>Resource body cannot be null.</comment>
+  </data>
+  <data name="UnmappedResourceType" xml:space="preserve">
+    <value>HTTP resource type provided has not been mapped.</value>
+    <comment>HTTP resource type provided has not been mapped.</comment>
+  </data>
+  <data name="InvalidKey" xml:space="preserve">
+    <value>Invalid key provided.</value>
+    <comment>Invalid key provided.</comment>
+  </data>
+  <data name="OutOfRangeAsyncServiceTimeout" xml:space="preserve">
+    <value>Asynchronous service method timeout cannot be less than 1 second.</value>
+    <comment>Asynchronous service method timeout cannot be less than 1 second.</comment>
+  </data>
+  <data name="MissingDefaultConstructor" xml:space="preserve">
+    <value>Created type does not have a default constructor.</value>
+    <comment>Created type does not have a default constructor.</comment>
+  </data>
+  <data name="MissingHttpContext" xml:space="preserve">
+    <value>No HTTP context was found.</value>
+    <comment>No HTTP context was found.</comment>
+  </data>
+  <data name="MissingPropertyDefinition" xml:space="preserve">
+    <value>Properties must have at least 1 property definition.</value>
+    <comment>Properties must have at least 1 property definition.</comment>
+  </data>
+  <data name="NullOrInvalidAcceptedName" xml:space="preserve">
+    <value>An accepted name cannot be null or contain a wildcard.</value>
+    <comment>An accepted name cannot be null or contain a wildcard.</comment>
+  </data>
+  <data name="ProxyAlreadyInitialized" xml:space="preserve">
+    <value>Service proxy UI is already enabled.</value>
+    <comment>Service proxy UI is already enabled.</comment>
+  </data>
+  <data name="UnsupportedOperation" xml:space="preserve">
+    <value>Unsupported operation</value>
+    <comment>Unsupported operation</comment>
+  </data>
+  <data name="InvalidServiceContract" xml:space="preserve">
+    <value>Service contract type must be an interface or a concrete class that defines its own contract.</value>
+    <comment>Service contract type must be an interface or a concrete class that defines its own contract.</comment>
+  </data>
+  <data name="InvalidServiceImplementation" xml:space="preserve">
+    <value>A service implementation that defines its own contract must be non-abstract and marked with the 'ServiceContract' attribute.</value>
+    <comment>A service implementation that defines its own contract must be non-abstract and marked with the 'ServiceContract' attribute.</comment>
+  </data>
+  <data name="AlreadyMapped" xml:space="preserve">
+    <value>The relative URL '{0}' has already been mapped.</value>
+    <comment>The relative URL '{0}' has already been mapped.</comment>
+  </data>
+  <data name="InvalidAsyncServiceTimeout" xml:space="preserve">
+    <value>Invalid asynchronous service method timeout provided.</value>
+    <comment>Invalid asynchronous service method timeout provided.</comment>
+  </data>
+  <data name="DuplicateAuthenticationBehavior" xml:space="preserve">
+    <value>Only a single authentication behavior can be associated with a service method. That includes global behaviors.</value>
+    <comment>Only a single authentication behavior can be associated with a service method. That includes global behaviors.</comment>
+  </data>
+  <data name="DuplicateRouteBehaviors" xml:space="preserve">
+    <value>Multiple service behaviors of the same type are not allowed for the same route.</value>
+    <comment>Multiple service behaviors of the same type are not allowed for the same route.</comment>
+  </data>
+  <data name="UnableToInitializeCache" xml:space="preserve">
+    <value>Cache could not be initialized.</value>
+    <comment>Cache could not be initialized.</comment>
+  </data>
+  <data name="UnableToLoadIndexPage" xml:space="preserve">
+    <value>Index page file could not be loaded. Make sure the specified index file is available and not locked.</value>
+    <comment>Index page file could not be loaded. Make sure the specified index file is available and not locked.</comment>
+  </data>
+  <data name="UnsupportedRequestedFormat" xml:space="preserve">
+    <value>The service is configured not to list its contents in the requested format.</value>
+    <comment>The service is configured not to list its contents in the requested format.</comment>
+  </data>
+  <data name="UnsupportedSyncRequestForAsyncHandler" xml:space="preserve">
+    <value>Async route handler does not support synchronous requests.</value>
+    <comment>Async route handler does not support synchronous requests.</comment>
+  </data>
+  <data name="InvalidUpperBoundAddress" xml:space="preserve">
+    <value>The upper bound address is from a different family than the lower bound address.</value>
+    <comment>The upper bound address is from a different family than the lower bound address.</comment>
+  </data>
+  <data name="InvalidResourceExampleType" xml:space="preserve">
+    <value>A resource example type must be a class implementing the RestFoundation.ServiceProxy.IResourceExample interface.</value>
+    <comment>A resource example type must be a class implementing the RestFoundation.ServiceProxy.IResourceExample interface.</comment>
+  </data>
+  <data name="EmptyFileName" xml:space="preserve">
+    <value>File name cannot be empty.</value>
+    <comment>File name cannot be empty.</comment>
+  </data>
+  <data name="InvalidWebResponse" xml:space="preserve">
+    <value>Invalid web response provided.</value>
+    <comment>Invalid web response provided.</comment>
+  </data>
+  <data name="ManuallyDefinedOptionsHttpMethod" xml:space="preserve">
+    <value>HTTP method OPTIONS cannot be manually defined on a service method.</value>
+    <comment>HTTP method OPTIONS cannot be manually defined on a service method.</comment>
+  </data>
+  <data name="UnsupportedHttpMethod" xml:space="preserve">
+    <value>HTTP Method '{0}' is not supported.</value>
+    <comment>HTTP Method '{0}' is not supported.</comment>
+  </data>
+  <data name="MissingAuthorizationManager" xml:space="preserve">
+    <value>No authorization manager could be found.</value>
+    <comment>No authorization manager could be found.</comment>
+  </data>
+  <data name="DisallowedHttpMethod" xml:space="preserve">
+    <value>HTTP method is not allowed.</value>
+    <comment>HTTP method is not allowed.</comment>
+  </data>
+  <data name="ResourceValidationFailed" xml:space="preserve">
+    <value>Resource validation failed.</value>
+    <comment>Resource validation failed.</comment>
   </data>
 </root>

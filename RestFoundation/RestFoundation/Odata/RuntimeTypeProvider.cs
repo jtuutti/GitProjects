@@ -52,7 +52,7 @@ namespace RestFoundation.Odata
 
             if (!properties.Any())
             {
-                throw new ArgumentOutOfRangeException("properties", "properties must have at least 1 property definition");
+                throw new ArgumentOutOfRangeException("properties", RestResources.MissingPropertyDefinition);
             }
 
             var dictionary = properties.ToDictionary(f => m_nameResolver.ResolveName(f), f => f);

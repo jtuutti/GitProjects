@@ -174,7 +174,7 @@ namespace RestFoundation.Runtime.Handlers
         /// </param>
         public void ProcessRequest(HttpContext context)
         {
-            throw new NotSupportedException("Async route handler does not support synchronous requests");
+            throw new NotSupportedException(RestResources.UnsupportedSyncRequestForAsyncHandler);
         }
 
         /// <summary>

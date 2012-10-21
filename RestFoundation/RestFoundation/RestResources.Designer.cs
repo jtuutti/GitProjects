@@ -70,11 +70,335 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to REST Foundation has already been configured..
+        /// </summary>
+        internal static string AlreadyConfigured {
+            get {
+                return ResourceManager.GetString("AlreadyConfigured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The relative URL &apos;{0}&apos; has already been mapped..
+        /// </summary>
+        internal static string AlreadyMapped {
+            get {
+                return ResourceManager.GetString("AlreadyMapped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTTP method is not allowed..
+        /// </summary>
+        internal static string DisallowedHttpMethod {
+            get {
+                return ResourceManager.GetString("DisallowedHttpMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only a single authentication behavior can be associated with a service method. That includes global behaviors..
+        /// </summary>
+        internal static string DuplicateAuthenticationBehavior {
+            get {
+                return ResourceManager.GetString("DuplicateAuthenticationBehavior", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple global service behaviors of the same type are not allowed..
+        /// </summary>
+        internal static string DuplicateGlobalBehaviors {
+            get {
+                return ResourceManager.GetString("DuplicateGlobalBehaviors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple service behaviors of the same type are not allowed for the same route..
+        /// </summary>
+        internal static string DuplicateRouteBehaviors {
+            get {
+                return ResourceManager.GetString("DuplicateRouteBehaviors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File name cannot be empty..
+        /// </summary>
+        internal static string EmptyFileName {
+            get {
+                return ResourceManager.GetString("EmptyFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only a file name can be specified. Relative or absolute paths/URLs are not supported..
+        /// </summary>
+        internal static string FileNameContainsPath {
+            get {
+                return ResourceManager.GetString("FileNameContainsPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HTTPS required.
         /// </summary>
         internal static string HttpsRequiredStatusDescription {
             get {
                 return ResourceManager.GetString("HttpsRequiredStatusDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid asynchronous service method timeout provided..
+        /// </summary>
+        internal static string InvalidAsyncServiceTimeout {
+            get {
+                return ResourceManager.GetString("InvalidAsyncServiceTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection timeout is invalid..
+        /// </summary>
+        internal static string InvalidConnectionTimeout {
+            get {
+                return ResourceManager.GetString("InvalidConnectionTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Index files can only have .html or .htm extensions..
+        /// </summary>
+        internal static string InvalidIndexFileException {
+            get {
+                return ResourceManager.GetString("InvalidIndexFileException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid key provided..
+        /// </summary>
+        internal static string InvalidKey {
+            get {
+                return ResourceManager.GetString("InvalidKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A resource example type must be a class implementing the RestFoundation.ServiceProxy.IResourceExample interface..
+        /// </summary>
+        internal static string InvalidResourceExampleType {
+            get {
+                return ResourceManager.GetString("InvalidResourceExampleType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service contract type must be an interface or a concrete class that defines its own contract..
+        /// </summary>
+        internal static string InvalidServiceContract {
+            get {
+                return ResourceManager.GetString("InvalidServiceContract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A service implementation that defines its own contract must be non-abstract and marked with the &apos;ServiceContract&apos; attribute..
+        /// </summary>
+        internal static string InvalidServiceImplementation {
+            get {
+                return ResourceManager.GetString("InvalidServiceImplementation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Socket timeout is invalid..
+        /// </summary>
+        internal static string InvalidSocketTimeout {
+            get {
+                return ResourceManager.GetString("InvalidSocketTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The upper bound address is from a different family than the lower bound address..
+        /// </summary>
+        internal static string InvalidUpperBoundAddress {
+            get {
+                return ResourceManager.GetString("InvalidUpperBoundAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid web response provided..
+        /// </summary>
+        internal static string InvalidWebResponse {
+            get {
+                return ResourceManager.GetString("InvalidWebResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTTP method OPTIONS cannot be manually defined on a service method..
+        /// </summary>
+        internal static string ManuallyDefinedOptionsHttpMethod {
+            get {
+                return ResourceManager.GetString("ManuallyDefinedOptionsHttpMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No authorization manager could be found..
+        /// </summary>
+        internal static string MissingAuthorizationManager {
+            get {
+                return ResourceManager.GetString("MissingAuthorizationManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created type does not have a default constructor..
+        /// </summary>
+        internal static string MissingDefaultConstructor {
+            get {
+                return ResourceManager.GetString("MissingDefaultConstructor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No HTTP context was found..
+        /// </summary>
+        internal static string MissingHttpContext {
+            get {
+                return ResourceManager.GetString("MissingHttpContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties must have at least 1 property definition..
+        /// </summary>
+        internal static string MissingPropertyDefinition {
+            get {
+                return ResourceManager.GetString("MissingPropertyDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The output type is not a string..
+        /// </summary>
+        internal static string NonStringOutputType {
+            get {
+                return ResourceManager.GetString("NonStringOutputType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An accepted name cannot be null or contain a wildcard..
+        /// </summary>
+        internal static string NullOrInvalidAcceptedName {
+            get {
+                return ResourceManager.GetString("NullOrInvalidAcceptedName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resource body cannot be null..
+        /// </summary>
+        internal static string NullResourceBody {
+            get {
+                return ResourceManager.GetString("NullResourceBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asynchronous service method timeout cannot be less than 1 second..
+        /// </summary>
+        internal static string OutOfRangeAsyncServiceTimeout {
+            get {
+                return ResourceManager.GetString("OutOfRangeAsyncServiceTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service proxy UI is already enabled..
+        /// </summary>
+        internal static string ProxyAlreadyInitialized {
+            get {
+                return ResourceManager.GetString("ProxyAlreadyInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resource validation failed..
+        /// </summary>
+        internal static string ResourceValidationFailed {
+            get {
+                return ResourceManager.GetString("ResourceValidationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cache could not be initialized..
+        /// </summary>
+        internal static string UnableToInitializeCache {
+            get {
+                return ResourceManager.GetString("UnableToInitializeCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Index page file could not be loaded. Make sure the specified index file is available and not locked..
+        /// </summary>
+        internal static string UnableToLoadIndexPage {
+            get {
+                return ResourceManager.GetString("UnableToLoadIndexPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTTP resource type provided has not been mapped..
+        /// </summary>
+        internal static string UnmappedResourceType {
+            get {
+                return ResourceManager.GetString("UnmappedResourceType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTTP Method &apos;{0}&apos; is not supported..
+        /// </summary>
+        internal static string UnsupportedHttpMethod {
+            get {
+                return ResourceManager.GetString("UnsupportedHttpMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported operation.
+        /// </summary>
+        internal static string UnsupportedOperation {
+            get {
+                return ResourceManager.GetString("UnsupportedOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The service is configured not to list its contents in the requested format..
+        /// </summary>
+        internal static string UnsupportedRequestedFormat {
+            get {
+                return ResourceManager.GetString("UnsupportedRequestedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Async route handler does not support synchronous requests..
+        /// </summary>
+        internal static string UnsupportedSyncRequestForAsyncHandler {
+            get {
+                return ResourceManager.GetString("UnsupportedSyncRequestForAsyncHandler", resourceCulture);
             }
         }
     }

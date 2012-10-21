@@ -62,7 +62,7 @@ namespace RestFoundation.Runtime
 
             if (fileName.Trim().Length == 0)
             {
-                throw new ArgumentException("File name cannot be empty", "fileName");
+                throw new ArgumentException(RestResources.EmptyFileName, "fileName");
             }
 
             m_file.SaveAs(fileName);

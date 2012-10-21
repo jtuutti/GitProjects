@@ -90,7 +90,7 @@ namespace RestFoundation
 
             if (behaviors.GroupBy(s => s.GetType()).Max(g => g.Count()) > 1)
             {
-                throw new InvalidOperationException("Multiple service behaviors of the same type are not allowed for the same route");
+                throw new InvalidOperationException(RestResources.DuplicateRouteBehaviors);
             }
 
             foreach (IRestHandler routeHandler in m_routeHandlers)

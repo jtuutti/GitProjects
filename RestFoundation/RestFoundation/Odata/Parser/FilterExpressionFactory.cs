@@ -249,7 +249,7 @@ namespace RestFoundation.Odata.Parser
                     return Expression.Modulo(left, right);
             }
 
-            throw new InvalidOperationException("Unsupported operation");
+            throw new InvalidOperationException(RestResources.UnsupportedOperation);
         }
 
         private static Expression GetRightOperation(string token, Expression right)
@@ -270,7 +270,7 @@ namespace RestFoundation.Odata.Parser
                     return Expression.Not(right);
             }
 
-            throw new InvalidOperationException("Unsupported operation");
+            throw new InvalidOperationException(RestResources.UnsupportedOperation);
         }
 
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "This is Microsoft code")]
