@@ -9,7 +9,8 @@ namespace RestFoundation.Tests
     [SetUpFixture]
     public class SetUpFixture
     {
-        public const string RelativeUrl = "test-service";
+        public const string TestServiceUrl = "test-service";
+        public const string TestSelfContainedServiceUrl = "test-ok-fail";
 
         [SetUp]
         public void Setup()
@@ -30,7 +31,8 @@ namespace RestFoundation.Tests
 
         private static void RegisterUrls(UrlBuilder urlBuilder)
         {
-            urlBuilder.MapUrl(RelativeUrl).ToServiceContract<ITestService>();
+            urlBuilder.MapUrl(TestServiceUrl).ToServiceContract<ITestService>();
+            urlBuilder.MapUrl(TestSelfContainedServiceUrl).ToServiceContract<TestSelfContainedService>();
         }
     }
 }

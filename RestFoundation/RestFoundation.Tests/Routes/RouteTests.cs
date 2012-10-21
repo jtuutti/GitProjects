@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using RestFoundation.Tests.Implementation.ServiceContracts;
+using RestFoundation.Tests.Implementation.Services;
 using RestFoundation.UnitTesting;
 
 namespace RestFoundation.Tests.Routes
@@ -38,7 +39,7 @@ namespace RestFoundation.Tests.Routes
             // DELETE URL
             RouteAssert.Url("~/test-service/3").WithHttpMethod(HttpMethod.Delete).Invokes<ITestService>(s => s.Delete(3));
         }
-        
+
         [Test]
         public void InvalidRoutes()
         {
@@ -65,6 +66,19 @@ namespace RestFoundation.Tests.Routes
 
             // parameter constraint violation - orderby must start with a letter or underscore
             Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test-service/all/1name").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.GetAll("1name")));
+        }
+
+        [Test]
+        public void SelfContainedServiceRoutes()
+        {
+            RouteAssert.Url("~/test-ok-fail/ok").WithHttpMethod(HttpMethod.Get).Invokes<TestSelfContainedService>(s => s.GetOK());
+            RouteAssert.Url("~/test-ok-fail/fail").WithHttpMethod(HttpMethod.Get).Invokes<TestSelfContainedService>(s => s.GetFail());
+
+            // mismatched http method (HTTP 405 since there is no matching route)
+            Assert.Throws(typeof(HttpResponseException), () => RouteAssert.Url("~/test-ok-fail/fail").WithHttpMethod(HttpMethod.Head).Invokes<TestSelfContainedService>(s => s.GetFail()));
+
+            // invalid relative url
+            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test-ok-fail/ok").WithHttpMethod(HttpMethod.Get).Invokes<TestSelfContainedService>(s => s.GetFail()));
         }
     }
 }

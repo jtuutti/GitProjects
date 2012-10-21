@@ -75,6 +75,7 @@
     <Compile Include="Formatters\JsonPFormatterTests.cs" />
     <Compile Include="Formatters\JsonFormatterTests.cs" />
     <Compile Include="Implementation\Models\Model.cs" />
+    <Compile Include="Implementation\Services\TestSelfContainedService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\ContentResultTests.cs" />
     <Compile Include="Results\FeedResultTests.cs" />
