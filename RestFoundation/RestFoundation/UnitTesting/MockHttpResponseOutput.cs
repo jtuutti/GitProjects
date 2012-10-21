@@ -23,7 +23,7 @@ namespace RestFoundation.UnitTesting
 
                 if (context == null)
                 {
-                    throw new InvalidOperationException("No HTTP context was found");
+                    throw new InvalidOperationException(RestResources.MissingHttpContext);
                 }
 
                 return context;

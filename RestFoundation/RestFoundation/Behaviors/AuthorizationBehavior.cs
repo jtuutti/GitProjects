@@ -60,7 +60,7 @@ namespace RestFoundation.Behaviors
 
             if (!context.IsAuthenticated)
             {
-                SetStatusDescription(RestResources.AccessForbidden);
+                SetStatusDescription(RestResources.Forbidden);
                 return BehaviorMethodAction.Stop;
             }
 
@@ -68,7 +68,7 @@ namespace RestFoundation.Behaviors
 
             if (!isInRole)
             {
-                SetStatusDescription(RestResources.AccessForbidden);
+                SetStatusDescription(RestResources.Forbidden);
                 return BehaviorMethodAction.Stop;
             }
 

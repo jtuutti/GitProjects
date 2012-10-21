@@ -117,10 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccessForbidden" xml:space="preserve">
-    <value>Access forbidden</value>
-    <comment>Access forbidden</comment>
-  </data>
   <data name="AlreadyConfigured" xml:space="preserve">
     <value>REST Foundation has already been configured.</value>
     <comment>REST Foundation has already been configured.</comment>
@@ -268,5 +264,133 @@
   <data name="ResourceValidationFailed" xml:space="preserve">
     <value>Resource validation failed.</value>
     <comment>Resource validation failed.</comment>
+  </data>
+  <data name="UnsupportedContentCharset" xml:space="preserve">
+    <value>The content charset provided is not supported.</value>
+    <comment>The content charset provided is not supported.</comment>
+  </data>
+  <data name="UnsupportedContentLanguage" xml:space="preserve">
+    <value>The content language provided is not supported.</value>
+    <comment>The content language provided is not supported.</comment>
+  </data>
+  <data name="NonAcceptedContentCharset" xml:space="preserve">
+    <value>No accepted charset was provided in the Accept-Charset header.</value>
+    <comment>No accepted charset was provided in the Accept-Charset header.</comment>
+  </data>
+  <data name="NonAcceptedContentLanguage" xml:space="preserve">
+    <value>The accepted language provided in the Accept-Language header is not supported.</value>
+    <comment>The accepted language provided in the Accept-Language header is not supported.</comment>
+  </data>
+  <data name="EmptyHttpHeader" xml:space="preserve">
+    <value>HTTP headers cannot be empty or have white-space in the name.</value>
+    <comment>HTTP headers cannot be empty or have white-space in the name.</comment>
+  </data>
+  <data name="UnsupportedMediaType" xml:space="preserve">
+    <value>No supported media type was provided in the Accept or the Content-Type header.</value>
+    <comment>No supported media type was provided in the Accept or the Content-Type header.</comment>
+  </data>
+  <data name="InvalidIUploadedFileCollectionType" xml:space="preserve">
+    <value>Object type must be IEnumerable&lt;IUploadedFile&gt; or ICollection&lt;IUploadedFile&gt; for the media type.</value>
+    <comment>Object type must be IEnumerable&lt;IUploadedFile&gt; or ICollection&lt;IUploadedFile&gt; for the media type.</comment>
+  </data>
+  <data name="InvalidFilePathOrUrl" xml:space="preserve">
+    <value>No valid file path/URL provided.</value>
+    <comment>No valid file path/URL provided.</comment>
+  </data>
+  <data name="UnsatisfiableRequestedRange" xml:space="preserve">
+    <value>Range not satisfiable.</value>
+    <comment>Range not satisfiable.</comment>
+  </data>
+  <data name="InvalidJsonPCallback" xml:space="preserve">
+    <value>Invalid JSONP callback method provided.</value>
+    <comment>Invalid JSONP callback method provided.</comment>
+  </data>
+  <data name="InvalidODataParameters" xml:space="preserve">
+    <value>Invalid OData parameters provided.</value>
+    <comment>Invalid OData parameters provided.</comment>
+  </data>
+  <data name="MissingRouteData" xml:space="preserve">
+    <value>No route data found.</value>
+    <comment>No route data found.</comment>
+  </data>
+  <data name="MissingRestHttpModule" xml:space="preserve">
+    <value>No REST HTTP module found.</value>
+    <comment>No REST HTTP module found.</comment>
+  </data>
+  <data name="ServiceTimedOut" xml:space="preserve">
+    <value>Service timed out.</value>
+    <comment>Service timed out.</comment>
+  </data>
+  <data name="FailedRequest" xml:space="preserve">
+    <value>HTTP request failed to process.</value>
+    <comment>HTTP request failed to process.</comment>
+  </data>
+  <data name="InvalidResourceBody" xml:space="preserve">
+    <value>Invalid resource body provided.</value>
+    <comment>Invalid resource body provided.</comment>
+  </data>
+  <data name="MismatchedServiceMethod" xml:space="preserve">
+    <value>No matching service type or service method was found.</value>
+    <comment>No matching service type or service method was found.</comment>
+  </data>
+  <data name="MissingRouteHandler" xml:space="preserve">
+    <value>No route handler was passed to the service method invoker.</value>
+    <comment>No route handler was passed to the service method invoker.</comment>
+  </data>
+  <data name="MissingServiceContext" xml:space="preserve">
+    <value>No service context was passed to the service method invoker.</value>
+    <comment>No service context was passed to the service method invoker.</comment>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Not Found</value>
+    <comment>Not Found</comment>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Unauthorized</value>
+    <comment>Unauthorized</comment>
+  </data>
+  <data name="Forbidden" xml:space="preserve">
+    <value>Forbidden</value>
+    <comment>Forbidden</comment>
+  </data>
+  <data name="InvalidRelativeUrl" xml:space="preserve">
+    <value>Relative URL must start with ~/</value>
+    <comment>Relative URL must start with ~/</comment>
+  </data>
+  <data name="InvalidServiceMethodExpression" xml:space="preserve">
+    <value>No valid service method lambda expression provided.</value>
+    <comment>No valid service method lambda expression provided.</comment>
+  </data>
+  <data name="InvalidServiceMethod" xml:space="preserve">
+    <value>No valid service method provided.</value>
+    <comment>No valid service method provided.</comment>
+  </data>
+  <data name="MismatchedServiceMethodRoute" xml:space="preserve">
+    <value>Provided service method delegate does not match the route.</value>
+    <comment>Provided service method delegate does not match the route.</comment>
+  </data>
+  <data name="InvalidHttpMethodForResource" xml:space="preserve">
+    <value>A resource cannot be set for the current HTTP method.</value>
+    <comment>A resource cannot be set for the current HTTP method.</comment>
+  </data>
+  <data name="InvalidServiceMethodArgument" xml:space="preserve">
+    <value>There was a problem validating service method argument '{0}'.</value>
+    <comment>There was a problem validating service method argument '{0}'.</comment>
+  </data>
+  <data name="MismatchedServiceMethodExpression" xml:space="preserve">
+    <value>Service method delegate value of the argument '{0}' does not match the corresponding route value: {1} != {2}.</value>
+    <comment>Service method delegate value of the argument '{0}' does not match the corresponding route value: {1} != {2}.</comment>
+  </data>
+  <data name="ConstraintMismatchedRouteParameter" xml:space="preserve">
+    <value>Route parameter '{0}' with value '{1}' does not match the constraint pattern '{2}'.</value>
+    <comment>Route parameter '{0}' with value '{1}' does not match the constraint pattern '{2}'.</comment>
+  </data>
+  <data name="OvercomplicatedMethodArgument" xml:space="preserve">
+    <value>Method argument '{0}' has a value that is to complex to process. Pass in a constant/variable into the delegate instead.</value>
+    <comment>Method argument '{0}' has a value that is to complex to process. Pass in a constant/variable into the delegate instead.</comment>
+  </data>
+  <data name="MismatchedUrl" xml:space="preserve">
+    <value>URL '{0}' does not match any routes.</value>
+    <comment>URL '{0}' does not match any routes.</comment>
   </data>
 </root>

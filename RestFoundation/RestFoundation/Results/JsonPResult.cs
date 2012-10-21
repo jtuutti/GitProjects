@@ -49,7 +49,7 @@ namespace RestFoundation.Results
             }
             else if (!methodNamePattern.IsMatch(Callback))
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid JSONP callback method provided");
+                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.InvalidJsonPCallback);
             }
 
             context.Response.Output.Clear();

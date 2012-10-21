@@ -156,7 +156,7 @@ namespace RestFoundation.Behaviors
             if (String.IsNullOrWhiteSpace(context.Request.ServerVariables.RemoteAddress) ||
                 String.IsNullOrWhiteSpace(context.Request.ServerVariables.LocalAddress))
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden, "Forbidden");
+                throw new HttpResponseException(HttpStatusCode.Forbidden, RestResources.Forbidden);
             }
 
             string nonce = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture,
@@ -189,7 +189,7 @@ namespace RestFoundation.Behaviors
 
             context.Response.Output.Clear();
             context.Response.SetHeader("WWW-Authenticate", headerBuilder.ToString());
-            context.Response.SetStatus(HttpStatusCode.Unauthorized, "Unauthorized");
+            context.Response.SetStatus(HttpStatusCode.Unauthorized, RestResources.Unauthorized);
         }
 
         private Tuple<bool, bool> ValidateResponse(IServiceContext context, AuthorizationHeader header, Credentials credentials)
@@ -315,7 +315,7 @@ namespace RestFoundation.Behaviors
 
             if (!Double.TryParse(timestamp, NumberStyles.Float, CultureInfo.InvariantCulture, out timestampAsDouble) || timestampAsDouble <= 0)
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden, "Forbidden");
+                throw new HttpResponseException(HttpStatusCode.Forbidden, RestResources.Forbidden);
             }
 
             DateTime nonceLifetime = DateTime.MinValue.AddMilliseconds(timestampAsDouble);

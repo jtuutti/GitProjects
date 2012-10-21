@@ -182,7 +182,7 @@ namespace RestFoundation.Collections.Concrete
             }
             catch (Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, "The content charset provided is not supported");
+                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.UnsupportedContentCharset);
             }
         }
 
@@ -198,7 +198,7 @@ namespace RestFoundation.Collections.Concrete
                 }
                 catch (Exception)
                 {
-                    throw new HttpResponseException(HttpStatusCode.BadRequest, "The content language provided is not supported");
+                    throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.UnsupportedContentLanguage);
                 }
             }
         }
@@ -232,7 +232,7 @@ namespace RestFoundation.Collections.Concrete
             }
             catch (Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No accepted charset was provided in the Accept-Charset header");
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.NonAcceptedContentCharset);
             }
         }
 
@@ -266,7 +266,7 @@ namespace RestFoundation.Collections.Concrete
             }
             catch (Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable, "The accepted language provided in the Accept-Language header is not supported");
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.NonAcceptedContentLanguage);
             }
         }
     }

@@ -122,12 +122,12 @@ namespace RestFoundation.Runtime.Handlers
 
             if (requestContext.RouteData == null || requestContext.RouteData.Values == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route data found");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingRouteData);
             }
 
             if (!RestHttpModule.IsInitialized)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No REST HTTP module found");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingRestHttpModule);
             }
 
             if (UnvalidatedHandlerRegistry.IsUnvalidated(this))
@@ -141,7 +141,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (String.IsNullOrEmpty(ServiceUrl) || String.IsNullOrEmpty(ServiceContractTypeName) || UrlTemplate == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
+                throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.NotFound);
             }
 
             return this;

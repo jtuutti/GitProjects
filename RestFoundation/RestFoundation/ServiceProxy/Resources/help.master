@@ -2,7 +2,6 @@
 <%@ Import Namespace="System.Globalization" %>
 <%@ Import Namespace="RestFoundation" %>
 <%@ Import Namespace="RestFoundation.Security" %>
-<%@ Import Namespace="RestFoundation.ServiceProxy" %>
 
 <script runat="server" language="C#">
     private string jqueryUrl = Rest.Active.JQueryUrl;    

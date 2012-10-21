@@ -61,15 +61,6 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Access forbidden.
-        /// </summary>
-        internal static string AccessForbidden {
-            get {
-                return ResourceManager.GetString("AccessForbidden", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to REST Foundation has already been configured..
         /// </summary>
         internal static string AlreadyConfigured {
@@ -84,6 +75,15 @@ namespace RestFoundation {
         internal static string AlreadyMapped {
             get {
                 return ResourceManager.GetString("AlreadyMapped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Route parameter &apos;{0}&apos; with value &apos;{1}&apos; does not match the constraint pattern &apos;{2}&apos;..
+        /// </summary>
+        internal static string ConstraintMismatchedRouteParameter {
+            get {
+                return ResourceManager.GetString("ConstraintMismatchedRouteParameter", resourceCulture);
             }
         }
         
@@ -133,11 +133,38 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HTTP headers cannot be empty or have white-space in the name..
+        /// </summary>
+        internal static string EmptyHttpHeader {
+            get {
+                return ResourceManager.GetString("EmptyHttpHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HTTP request failed to process..
+        /// </summary>
+        internal static string FailedRequest {
+            get {
+                return ResourceManager.GetString("FailedRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only a file name can be specified. Relative or absolute paths/URLs are not supported..
         /// </summary>
         internal static string FileNameContainsPath {
             get {
                 return ResourceManager.GetString("FileNameContainsPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forbidden.
+        /// </summary>
+        internal static string Forbidden {
+            get {
+                return ResourceManager.GetString("Forbidden", resourceCulture);
             }
         }
         
@@ -169,6 +196,24 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No valid file path/URL provided..
+        /// </summary>
+        internal static string InvalidFilePathOrUrl {
+            get {
+                return ResourceManager.GetString("InvalidFilePathOrUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A resource cannot be set for the current HTTP method..
+        /// </summary>
+        internal static string InvalidHttpMethodForResource {
+            get {
+                return ResourceManager.GetString("InvalidHttpMethodForResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Index files can only have .html or .htm extensions..
         /// </summary>
         internal static string InvalidIndexFileException {
@@ -178,11 +223,56 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Object type must be IEnumerable&lt;IUploadedFile&gt; or ICollection&lt;IUploadedFile&gt; for the media type..
+        /// </summary>
+        internal static string InvalidIUploadedFileCollectionType {
+            get {
+                return ResourceManager.GetString("InvalidIUploadedFileCollectionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid JSONP callback method provided..
+        /// </summary>
+        internal static string InvalidJsonPCallback {
+            get {
+                return ResourceManager.GetString("InvalidJsonPCallback", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid key provided..
         /// </summary>
         internal static string InvalidKey {
             get {
                 return ResourceManager.GetString("InvalidKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid OData parameters provided..
+        /// </summary>
+        internal static string InvalidODataParameters {
+            get {
+                return ResourceManager.GetString("InvalidODataParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Relative URL must start with ~/.
+        /// </summary>
+        internal static string InvalidRelativeUrl {
+            get {
+                return ResourceManager.GetString("InvalidRelativeUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid resource body provided..
+        /// </summary>
+        internal static string InvalidResourceBody {
+            get {
+                return ResourceManager.GetString("InvalidResourceBody", resourceCulture);
             }
         }
         
@@ -210,6 +300,33 @@ namespace RestFoundation {
         internal static string InvalidServiceImplementation {
             get {
                 return ResourceManager.GetString("InvalidServiceImplementation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No valid service method provided..
+        /// </summary>
+        internal static string InvalidServiceMethod {
+            get {
+                return ResourceManager.GetString("InvalidServiceMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was a problem validating service method argument &apos;{0}&apos;..
+        /// </summary>
+        internal static string InvalidServiceMethodArgument {
+            get {
+                return ResourceManager.GetString("InvalidServiceMethodArgument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No valid service method lambda expression provided..
+        /// </summary>
+        internal static string InvalidServiceMethodExpression {
+            get {
+                return ResourceManager.GetString("InvalidServiceMethodExpression", resourceCulture);
             }
         }
         
@@ -250,6 +367,42 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No matching service type or service method was found..
+        /// </summary>
+        internal static string MismatchedServiceMethod {
+            get {
+                return ResourceManager.GetString("MismatchedServiceMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service method delegate value of the argument &apos;{0}&apos; does not match the corresponding route value: {1} != {2}..
+        /// </summary>
+        internal static string MismatchedServiceMethodExpression {
+            get {
+                return ResourceManager.GetString("MismatchedServiceMethodExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provided service method delegate does not match the route..
+        /// </summary>
+        internal static string MismatchedServiceMethodRoute {
+            get {
+                return ResourceManager.GetString("MismatchedServiceMethodRoute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL &apos;{0}&apos; does not match any routes..
+        /// </summary>
+        internal static string MismatchedUrl {
+            get {
+                return ResourceManager.GetString("MismatchedUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No authorization manager could be found..
         /// </summary>
         internal static string MissingAuthorizationManager {
@@ -286,11 +439,74 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No REST HTTP module found..
+        /// </summary>
+        internal static string MissingRestHttpModule {
+            get {
+                return ResourceManager.GetString("MissingRestHttpModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No route data found..
+        /// </summary>
+        internal static string MissingRouteData {
+            get {
+                return ResourceManager.GetString("MissingRouteData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No route handler was passed to the service method invoker..
+        /// </summary>
+        internal static string MissingRouteHandler {
+            get {
+                return ResourceManager.GetString("MissingRouteHandler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No service context was passed to the service method invoker..
+        /// </summary>
+        internal static string MissingServiceContext {
+            get {
+                return ResourceManager.GetString("MissingServiceContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header..
+        /// </summary>
+        internal static string NonAcceptedContentCharset {
+            get {
+                return ResourceManager.GetString("NonAcceptedContentCharset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The accepted language provided in the Accept-Language header is not supported..
+        /// </summary>
+        internal static string NonAcceptedContentLanguage {
+            get {
+                return ResourceManager.GetString("NonAcceptedContentLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The output type is not a string..
         /// </summary>
         internal static string NonStringOutputType {
             get {
                 return ResourceManager.GetString("NonStringOutputType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Found.
+        /// </summary>
+        internal static string NotFound {
+            get {
+                return ResourceManager.GetString("NotFound", resourceCulture);
             }
         }
         
@@ -322,6 +538,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Method argument &apos;{0}&apos; has a value that is to complex to process. Pass in a constant/variable into the delegate instead..
+        /// </summary>
+        internal static string OvercomplicatedMethodArgument {
+            get {
+                return ResourceManager.GetString("OvercomplicatedMethodArgument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Service proxy UI is already enabled..
         /// </summary>
         internal static string ProxyAlreadyInitialized {
@@ -336,6 +561,15 @@ namespace RestFoundation {
         internal static string ResourceValidationFailed {
             get {
                 return ResourceManager.GetString("ResourceValidationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service timed out..
+        /// </summary>
+        internal static string ServiceTimedOut {
+            get {
+                return ResourceManager.GetString("ServiceTimedOut", resourceCulture);
             }
         }
         
@@ -358,6 +592,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unauthorized.
+        /// </summary>
+        internal static string Unauthorized {
+            get {
+                return ResourceManager.GetString("Unauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HTTP resource type provided has not been mapped..
         /// </summary>
         internal static string UnmappedResourceType {
@@ -367,11 +610,47 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Range not satisfiable..
+        /// </summary>
+        internal static string UnsatisfiableRequestedRange {
+            get {
+                return ResourceManager.GetString("UnsatisfiableRequestedRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The content charset provided is not supported..
+        /// </summary>
+        internal static string UnsupportedContentCharset {
+            get {
+                return ResourceManager.GetString("UnsupportedContentCharset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The content language provided is not supported..
+        /// </summary>
+        internal static string UnsupportedContentLanguage {
+            get {
+                return ResourceManager.GetString("UnsupportedContentLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HTTP Method &apos;{0}&apos; is not supported..
         /// </summary>
         internal static string UnsupportedHttpMethod {
             get {
                 return ResourceManager.GetString("UnsupportedHttpMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No supported media type was provided in the Accept or the Content-Type header..
+        /// </summary>
+        internal static string UnsupportedMediaType {
+            get {
+                return ResourceManager.GetString("UnsupportedMediaType", resourceCulture);
             }
         }
         

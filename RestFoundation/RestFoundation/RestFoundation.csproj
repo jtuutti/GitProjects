@@ -57,6 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IOptionsDescriptor.cs" />
+    <Compile Include="RestResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RestResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Runtime\AllowHeaderGenerator.cs" />
     <Compile Include="ServiceContractAttribute.cs" />
     <Compile Include="ExceptionAction.cs" />
@@ -72,11 +77,6 @@
     <Compile Include="IServiceExceptionHandler.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="Results\IResultExecutor.cs" />
-    <Compile Include="RestResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RestResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Results\DataContractJsonResult.cs" />
     <Compile Include="Results\DataContractXmlResult.cs" />
     <Compile Include="Results\FileResultBase.cs" />
@@ -321,8 +321,8 @@
   <ItemGroup>
     <EmbeddedResource Include="RestResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>RestResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>RestResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ServiceProxy\Resources\index.aspx">
       <SubType>ASPXCodeBehind</SubType>

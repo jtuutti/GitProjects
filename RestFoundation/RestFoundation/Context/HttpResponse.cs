@@ -104,7 +104,7 @@ namespace RestFoundation.Context
 
             if (!HeaderNameValidator.IsValid(headerName))
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "HTTP headers cannot be empty or have whitespace in the name");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.EmptyHttpHeader);
             }
 
             Context.Response.AppendHeader(headerName, headerValue);

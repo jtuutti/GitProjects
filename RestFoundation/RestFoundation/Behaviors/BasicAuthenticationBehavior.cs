@@ -79,7 +79,7 @@ namespace RestFoundation.Behaviors
         {
             context.Response.Output.Clear();
             context.Response.SetHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "{0} realm=\"{1}\"", AuthenticationType, context.Request.Url.OperationUrl));
-            context.Response.SetStatus(HttpStatusCode.Unauthorized, "Unauthorized");
+            context.Response.SetStatus(HttpStatusCode.Unauthorized, RestResources.Unauthorized);
         }
     }
 }

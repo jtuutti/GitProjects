@@ -37,7 +37,7 @@ namespace RestFoundation.Formatters
 
             if (objectType != typeof(IEnumerable<IUploadedFile>) && objectType != typeof(ICollection<IUploadedFile>))
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Object type must be IEnumerable<IUploadedFile> or ICollection<IUploadedFile> for the media type");
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.InvalidIUploadedFileCollectionType);
             }
 
             var fileList = new List<IUploadedFile>();
@@ -61,7 +61,7 @@ namespace RestFoundation.Formatters
         /// <exception cref="HttpResponseException">If the object could not be serialized.</exception>
         public virtual IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj)
         {
-            throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported media type was provided in the Accept or the Content-Type header");
+            throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.UnsupportedMediaType);
         }
     }
 }

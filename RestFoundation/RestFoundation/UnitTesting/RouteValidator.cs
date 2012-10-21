@@ -39,12 +39,19 @@ namespace RestFoundation.UnitTesting
 
             if (methodDelegate == null)
             {
-                throw new RouteAssertException("Invalid service method delegate provided.");
+                throw new RouteAssertException(RestResources.InvalidServiceMethodExpression);
             }
 
-            if (!typeof(T).IsInterface)
+            Type validatedContractType = typeof(T);
+
+            if (!validatedContractType.IsInterface && !validatedContractType.IsClass)
             {
-                throw new RouteAssertException("Invalid service contract type provided.");
+                throw new RouteAssertException(RestResources.InvalidServiceContract);
+            }
+
+            if (validatedContractType.IsClass && (validatedContractType.IsAbstract || Attribute.GetCustomAttribute(validatedContractType, typeof(ServiceContractAttribute), true) == null))
+            {
+                throw new RouteAssertException(RestResources.InvalidServiceImplementation);
             }
 
             using (var httpContext = new TestHttpContext(m_relativeUrl, m_httpMethod.ToString().ToUpperInvariant()))
@@ -53,21 +60,21 @@ namespace RestFoundation.UnitTesting
 
                 if (routeData == null)
                 {
-                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, "URL '{0}' does not match any routes.", m_relativeUrl));
+                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.MismatchedUrl, m_relativeUrl));
                 }
 
-                Type serviceContractType = GetServiceContractType(routeData);
+                Type contractType = GetServiceContractType(routeData);
 
-                if (serviceContractType != methodDelegate.Method.DeclaringType)
+                if (contractType != methodDelegate.Method.DeclaringType)
                 {
-                    throw new RouteAssertException("Provided service contract type does not match the route.");
+                    throw new RouteAssertException(RestResources.MismatchedServiceMethodRoute);
                 }
 
-                MethodInfo serviceMethod = GetServiceMethod(routeData, serviceContractType);
+                MethodInfo serviceMethod = GetServiceMethod(routeData, contractType);
 
                 if (serviceMethod != methodDelegate.Method)
                 {
-                    throw new RouteAssertException("Provided service method delegate does not match the route.");
+                    throw new RouteAssertException(RestResources.InvalidServiceMethodExpression);
                 }
 
                 ValidateServiceMethodArguments(methodDelegate, routeData);
@@ -107,7 +114,7 @@ namespace RestFoundation.UnitTesting
 
                 if (argumentExpression == null)
                 {
-                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, "There was a problem validating service method argument '{0}'.", argument.Name));
+                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidServiceMethodArgument, argument.Name));
                 }
 
                 object argumentValue = GetArgumentValue(argument, argumentExpression);
@@ -117,7 +124,7 @@ namespace RestFoundation.UnitTesting
                 if (!SafeConvert.TryChangeType(routeArgumentValue, argumentExpression.Type, out convertedArgumentValue) || !Equals(argumentValue, convertedArgumentValue))
                 {
                     throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture,
-                                                                 "Service method delegate value of the argument '{0}' does not match the corresponding route value: {1} != {2}",
+                                                                 RestResources.MismatchedServiceMethodExpression,
                                                                  argument.Name,
                                                                  argumentValue ?? "(null)",
                                                                  routeArgumentValue ?? "(null)"));
@@ -128,10 +135,10 @@ namespace RestFoundation.UnitTesting
                 if (constraintAttribute != null && !constraintAttribute.PatternRegex.IsMatch(Convert.ToString(routeArgumentValue, CultureInfo.InvariantCulture)))
                 {
                     throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture,
-                                                                 "Route parameter '{0}' with value '{1}' does not match the constraint pattern '{2}'.",
-                                                                  argument.Name,
-                                                                  routeArgumentValue,
-                                                                  constraintAttribute.Pattern));
+                                                                 RestResources.ConstraintMismatchedRouteParameter,
+                                                                 argument.Name,
+                                                                 routeArgumentValue,
+                                                                 constraintAttribute.Pattern));
                 }
             }
         }
@@ -158,9 +165,7 @@ namespace RestFoundation.UnitTesting
                 }
                 else
                 {
-                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture,
-                                                                 "Method argument '{0}' has a value that is to complex to process. Pass in a constant/variable into the delegate instead.",
-                                                                 argument.Name));
+                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.OvercomplicatedMethodArgument, argument.Name));
                 }
             }
             else if (argumentExpression is MethodCallExpression)
@@ -169,9 +174,7 @@ namespace RestFoundation.UnitTesting
             }
             else
             {
-                throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture,
-                                                             "Method argument '{0}' has a value that is to complex to process. Pass in a constant/variable into the delegate instead.",
-                                                             argument.Name));
+                throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.OvercomplicatedMethodArgument, argument.Name));
             }
 
             return argumentValue;

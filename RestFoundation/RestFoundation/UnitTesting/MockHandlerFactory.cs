@@ -116,7 +116,7 @@ namespace RestFoundation.UnitTesting
                 !String.Equals(Context.Request.HttpMethod, "PUT", StringComparison.OrdinalIgnoreCase) &&
                 !String.Equals(Context.Request.HttpMethod, "PATCH", StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException("A resource cannot be set for the current HTTP method.");
+                throw new InvalidOperationException(RestResources.InvalidHttpMethodForResource);
             }
 
             if (resourceType == RestResourceType.Json)
@@ -168,35 +168,40 @@ namespace RestFoundation.UnitTesting
         {
             if (!relativeUrl.StartsWith("~/", StringComparison.Ordinal))
             {
-                throw new ArgumentException("Relative URL must start with ~/");
+                throw new ArgumentException(RestResources.InvalidRelativeUrl);
             }
 
-            Type serviceContractType = typeof(T);
+            Type contractType = typeof(T);
 
-            if (!serviceContractType.IsInterface)
+            if (!contractType.IsInterface && !contractType.IsClass)
             {
-                throw new ArgumentException("Service contract type must be an interface", "serviceMethodDelegate");
+                throw new ArgumentException(RestResources.InvalidServiceContract, "serviceMethodDelegate");
+            }
+
+            if (contractType.IsClass && (contractType.IsAbstract || Attribute.GetCustomAttribute(contractType, typeof(ServiceContractAttribute), true) == null))
+            {
+                throw new ArgumentException(RestResources.InvalidServiceImplementation, "serviceMethodDelegate");
             }
 
             var serviceMethodCallDelegate = serviceMethodDelegate.Body as MethodCallExpression;
 
             if (serviceMethodCallDelegate == null)
             {
-                throw new ArgumentException("No valid service method lambda expression provided", "serviceMethodDelegate");
+                throw new ArgumentException(RestResources.InvalidServiceMethodExpression, "serviceMethodDelegate");
             }
 
             var serviceMethod = serviceMethodCallDelegate.Method;
 
             if (serviceMethod == null)
             {
-                throw new ArgumentException("No valid service method rovided", "serviceMethodDelegate");
+                throw new ArgumentException(RestResources.InvalidServiceMethod, "serviceMethodDelegate");
             }
 
             var urlAttribute = Attribute.GetCustomAttribute(serviceMethod, typeof(UrlAttribute), false) as UrlAttribute;
 
             if (urlAttribute == null || urlAttribute.UrlTemplate == null)
             {
-                throw new RouteAssertException("No valid service method provided");
+                throw new RouteAssertException(RestResources.InvalidServiceMethod);
             }
 
             if (urlAttribute.HttpMethods == null)
@@ -205,7 +210,7 @@ namespace RestFoundation.UnitTesting
 
                 if (urlAttribute.HttpMethods == null)
                 {
-                    throw new RouteAssertException("No supported HTTP method provided");
+                    throw new RouteAssertException(RestResources.DisallowedHttpMethod);
                 }
             }
 
@@ -213,7 +218,7 @@ namespace RestFoundation.UnitTesting
             {
                 if (httpMethod.Value != HttpMethod.Options && !urlAttribute.HttpMethods.Contains(httpMethod.Value))
                 {
-                    throw new RouteAssertException("No supported HTTP method provided");
+                    throw new RouteAssertException(RestResources.DisallowedHttpMethod);
                 }
             }
             else
@@ -230,7 +235,7 @@ namespace RestFoundation.UnitTesting
 
             if (routes == null)
             {
-                throw new RouteAssertException("No active routes were found");
+                throw new RouteAssertException(RestResources.MissingRouteData);
             }
 
             lock (syncRoot)
@@ -241,7 +246,7 @@ namespace RestFoundation.UnitTesting
 
                 if (routeData == null)
                 {
-                    throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
+                    throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.NotFound);
                 }
 
                 AssertRouteParameters(serviceMethod, routeData);
@@ -261,7 +266,7 @@ namespace RestFoundation.UnitTesting
 
                 if (!serviceMethod.GetParameters().Select(p => p.Name).Contains(routeParameter.Key, StringComparer.OrdinalIgnoreCase))
                 {
-                    throw new RouteAssertException("Provided service method delegate does not match the route.");
+                    throw new RouteAssertException(RestResources.MismatchedServiceMethodRoute);
                 }
             }
         }

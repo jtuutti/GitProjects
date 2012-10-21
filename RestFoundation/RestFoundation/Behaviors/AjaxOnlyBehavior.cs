@@ -30,7 +30,7 @@ namespace RestFoundation.Behaviors
 
             if (!context.Request.IsAjax)
             {
-                SetStatus(HttpStatusCode.NotFound, "Not Found");
+                SetStatus(HttpStatusCode.NotFound, RestResources.NotFound);
                 return BehaviorMethodAction.Stop;
             }
 

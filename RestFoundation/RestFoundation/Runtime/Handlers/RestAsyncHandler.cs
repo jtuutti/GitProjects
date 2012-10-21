@@ -128,12 +128,12 @@ namespace RestFoundation.Runtime.Handlers
 
             if (requestContext.RouteData == null || requestContext.RouteData.Values == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route data found");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingRouteData);
             }
 
             if (!RestHttpModule.IsInitialized)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No REST HTTP module found");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingRestHttpModule);
             }
 
             ServiceUrl = (string) requestContext.RouteData.Values[RouteConstants.ServiceUrl];
@@ -142,7 +142,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (String.IsNullOrEmpty(ServiceUrl) || String.IsNullOrEmpty(ServiceContractTypeName) || UrlTemplate == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
+                throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.NotFound);
             }
 
             return this;
@@ -219,7 +219,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (taskException == null)
             {
-                return new HttpResponseException(HttpStatusCode.InternalServerError, "HTTP request failed to process");
+                return new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.FailedRequest);
             }
 
             return ExceptionUnwrapper.IsDirectResponseException(taskException.InnerException) ? taskException.InnerException : taskException;

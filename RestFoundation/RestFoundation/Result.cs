@@ -109,7 +109,7 @@ namespace RestFoundation
                 var result = new StatusResult
                              {
                                  StatusCode = HttpStatusCode.NotFound,
-                                 StatusDescription = "Not Found"
+                                 StatusDescription = RestResources.NotFound
                              };
 
                 return result;

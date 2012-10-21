@@ -124,7 +124,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (!RestHttpModule.IsInitialized)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No REST HTTP module found");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingRestHttpModule);
             }
 
             return this;
@@ -148,7 +148,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (m_serviceContext.Request.Method != HttpMethod.Get && m_serviceContext.Request.Method != HttpMethod.Head)
             {
-                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "HTTP method is not allowed");
+                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, RestResources.DisallowedHttpMethod);
             }
 
             if (context != null)

@@ -68,7 +68,7 @@ namespace RestFoundation.Results
             }
             catch (Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid OData parameters provided");
+                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.InvalidODataParameters);
             }
 
             var filteredResultArray = filteredResults as object[];
@@ -106,7 +106,7 @@ namespace RestFoundation.Results
 
             if (formatter == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable, "No supported media type was provided in the Accept or the Content-Type header");
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.UnsupportedMediaType);
             }
 
             return formatter.FormatResponse(handler.Context, methodReturnType, returnedObj);

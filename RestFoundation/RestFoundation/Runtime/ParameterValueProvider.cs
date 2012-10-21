@@ -104,7 +104,7 @@ namespace RestFoundation.Runtime
 
             if (!SafeConvert.TryChangeType(routeValue, parameter.ParameterType, out value))
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound, "Not Found");
+                throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.NotFound);
             }
 
             return value;
@@ -135,7 +135,7 @@ namespace RestFoundation.Runtime
 
             if (formatter == null || formatter is BlockFormatter)
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "Unsupported media type provided");
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.UnsupportedMediaType);
             }
 
             object argumentValue;
@@ -158,7 +158,7 @@ namespace RestFoundation.Runtime
                     throw new HttpResponseException((HttpStatusCode) httpException.GetHttpCode(), httpException.Message);
                 }
 
-                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid resource body provided");
+                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.InvalidResourceBody);
             }
 
             return argumentValue;

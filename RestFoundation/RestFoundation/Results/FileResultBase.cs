@@ -40,7 +40,7 @@ namespace RestFoundation.Results
 
             if (file == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No valid file path/URL provided");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.InvalidFilePathOrUrl);
             }
 
             context.Response.Output.Buffer = false;
@@ -109,7 +109,7 @@ namespace RestFoundation.Results
             if (start < 0 || end >= stream.Length || start > end)
             {
                 context.Response.SetHeader(context.Response.Headers.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes */{0}", stream.Length));
-                throw new HttpResponseException(HttpStatusCode.RequestedRangeNotSatisfiable, "Range not satisfiable");
+                throw new HttpResponseException(HttpStatusCode.RequestedRangeNotSatisfiable, RestResources.UnsatisfiableRequestedRange);
             }
 
             if (start > 0)

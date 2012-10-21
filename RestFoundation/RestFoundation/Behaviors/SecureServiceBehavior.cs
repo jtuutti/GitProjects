@@ -15,8 +15,6 @@ namespace RestFoundation.Behaviors
     /// </summary>
     public abstract class SecureServiceBehavior : ServiceBehavior, ISecureServiceBehavior
     {
-        private const string DefaultStatusDescription = "Forbidden";
-
         private HttpStatusCode m_statusCode;
         private string m_statusDescription;
 
@@ -26,7 +24,7 @@ namespace RestFoundation.Behaviors
         protected SecureServiceBehavior()
         {
             m_statusCode = HttpStatusCode.Forbidden;
-            m_statusDescription = DefaultStatusDescription;
+            m_statusDescription = RestResources.Forbidden;
         }
 
         /// <summary>
@@ -104,7 +102,7 @@ namespace RestFoundation.Behaviors
         /// <param name="description">The status description.</param>
         protected void SetStatusDescription(string description)
         {
-            m_statusDescription = description ?? DefaultStatusDescription;
+            m_statusDescription = description ?? RestResources.Forbidden;
         }
 
         private void CacheValidationHandler(HttpContext context, object data, ref HttpValidationStatus validationStatus)

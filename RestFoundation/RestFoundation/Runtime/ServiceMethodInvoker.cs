@@ -51,17 +51,17 @@ namespace RestFoundation.Runtime
         {
             if (service == null || method == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound, "No matching service type or service method was found");
+                throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.MismatchedServiceMethod);
             }
 
             if (handler == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No route handler was passed to the service method invoker");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingRouteHandler);
             }
 
             if (handler.Context == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, "No service context was passed to the service method invoker");
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingServiceContext);
             }
 
             List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, method, service);
