@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -144,7 +145,7 @@ namespace RestFoundation
         {
             var parameters = from parameter in constructor.GetParameters()
                              let parameterType = parameter.ParameterType
-                             select Rest.Active.ServiceLocator.GetService(parameterType);
+                             select Rest.Configuration.ServiceLocator.GetService(parameterType);
 
             constructor.Invoke(control, parameters.ToArray());
         }
@@ -162,12 +163,14 @@ namespace RestFoundation
 
         private static void SetResponseHeaders(HttpApplication context)
         {
-            if (Rest.Active.ResponseHeaders == null || Rest.Active.ResponseHeaders.Count == 0)
+            IDictionary<string, string> responseHeaders = Rest.Configuration.Options.ResponseHeaders;
+
+            if (responseHeaders == null || responseHeaders.Count == 0)
             {
                 return;
             }
 
-            foreach (var header in Rest.Active.ResponseHeaders)
+            foreach (var header in responseHeaders)
             {
                 if (!HeaderNameValidator.IsValid(header.Key))
                 {

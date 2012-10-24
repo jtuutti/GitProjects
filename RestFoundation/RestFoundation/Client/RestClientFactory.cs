@@ -58,7 +58,7 @@ namespace RestFoundation.Client
         /// <returns>The created <see cref="IRestClient"/> instance.</returns>
         public static IRestClient Create(TimeSpan connectionTimeout, TimeSpan socketTimeout, IDictionary<RestResourceType, string> resourceTypes)
         {
-            IRestClient client = new RestClient(Rest.Active.ServiceLocator.GetService<IRestSerializerFactory>(), resourceTypes)
+            IRestClient client = new RestClient(Rest.Configuration.ServiceLocator.GetService<IRestSerializerFactory>(), resourceTypes)
             {
                 ConnectionTimeout = connectionTimeout,
                 SocketTimeout = socketTimeout

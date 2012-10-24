@@ -22,7 +22,7 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="BasicAuthenticationBehavior"/> class.
         /// </summary>
-        public BasicAuthenticationBehavior() : this(Rest.Active.ServiceLocator.GetService<IAuthorizationManager>())
+        public BasicAuthenticationBehavior() : this(Rest.Configuration.ServiceLocator.GetService<IAuthorizationManager>())
         {
         }
 

@@ -45,7 +45,9 @@ namespace RestFoundation
                 throw new ArgumentNullException("relativeUrl");
             }
 
-            if (Rest.Active.IsServiceProxyInitialized)
+            RestOptions options = Rest.Configuration.Options;
+
+            if (options.IsServiceProxyInitialized)
             {
                 throw new InvalidOperationException(RestResources.ProxyAlreadyInitialized);
             }
@@ -60,8 +62,8 @@ namespace RestFoundation
                 throw new ArgumentException(message, "relativeUrl");
             }
 
-            Rest.Active.IsServiceProxyInitialized = true;
-            Rest.Active.ServiceProxyRelativeUrl = relativeUrl.ToLowerInvariant();
+            options.IsServiceProxyInitialized = true;
+            options.ServiceProxyRelativeUrl = relativeUrl.ToLowerInvariant();
 
             ProxyPathProvider.AppInitialize();
 
@@ -104,7 +106,7 @@ namespace RestFoundation
                 throw new ArgumentNullException("url");
             }
 
-            Rest.Active.JQueryUrl = url.ToString();
+            Rest.Configuration.Options.JQueryUrl = url.ToString();
             return this;
         }
 
@@ -114,7 +116,7 @@ namespace RestFoundation
         /// <returns>The configuration object.</returns>
         public ProxyConfiguration HttpsOnly()
         {
-            Rest.Active.ServiceProxyHttpsOnly = true;
+            Rest.Configuration.Options.ServiceProxyHttpsOnly = true;
             return this;
         }
 
@@ -131,7 +133,7 @@ namespace RestFoundation
                 throw new ArgumentNullException("authorizationManager");
             }
 
-            Rest.Active.ServiceProxyAuthorizationManager = authorizationManager;
+            Rest.Configuration.Options.ServiceProxyAuthorizationManager = authorizationManager;
             return this;
         }
     }

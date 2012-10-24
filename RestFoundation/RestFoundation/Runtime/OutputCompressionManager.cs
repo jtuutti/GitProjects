@@ -14,7 +14,7 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("context");
             }
 
-            var streamCompressor = Rest.Active.ServiceLocator.GetService<IStreamCompressor>();
+            var streamCompressor = Rest.Configuration.ServiceLocator.GetService<IStreamCompressor>();
 
             if (streamCompressor == null)
             {

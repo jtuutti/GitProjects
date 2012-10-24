@@ -191,11 +191,13 @@ namespace RestFoundation.Runtime.Handlers
 
         private bool ProcessRequestForBrowser(HttpContext context)
         {
-            if (!String.IsNullOrWhiteSpace(Rest.Active.IndexPageRelativeUrl))
+            RestOptions options = Rest.Configuration.Options;
+
+            if (!String.IsNullOrWhiteSpace(options.IndexPageRelativeUrl))
             {
                 try
                 {
-                    context.Server.Transfer(Rest.Active.IndexPageRelativeUrl, false);
+                    context.Server.Transfer(options.IndexPageRelativeUrl, false);
                     return true;
                 }
                 catch (Exception)
@@ -204,9 +206,9 @@ namespace RestFoundation.Runtime.Handlers
                 }
             }
 
-            if (Rest.Active.IsServiceProxyInitialized && !String.IsNullOrWhiteSpace(Rest.Active.ServiceProxyRelativeUrl))
+            if (options.IsServiceProxyInitialized && !String.IsNullOrWhiteSpace(options.ServiceProxyRelativeUrl))
             {
-                context.Response.Redirect(String.Concat(m_serviceContext.Request.Url.ToString().TrimEnd(Slash), Slash, Rest.Active.ServiceProxyRelativeUrl, "/index"), false);
+                context.Response.Redirect(String.Concat(m_serviceContext.Request.Url.ToString().TrimEnd(Slash), Slash, options.ServiceProxyRelativeUrl, "/index"), false);
                 return true;
             }
 

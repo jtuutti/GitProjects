@@ -49,7 +49,7 @@ namespace RestFoundation.Runtime
                 return true;
             }
 
-            string serviceProxyRelativeUrl = Rest.Active.ServiceProxyRelativeUrl;
+            string serviceProxyRelativeUrl = Rest.Configuration.Options.ServiceProxyRelativeUrl;
 
             if (!String.IsNullOrEmpty(serviceProxyRelativeUrl) &&
                 context.Request.AppRelativeCurrentExecutionFilePath.Equals(String.Format(CultureInfo.InvariantCulture,

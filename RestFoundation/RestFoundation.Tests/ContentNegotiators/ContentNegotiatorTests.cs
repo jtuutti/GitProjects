@@ -20,7 +20,7 @@ namespace RestFoundation.Tests.ContentNegotiators
         [SetUp]
         public void Initialize()
         {
-            m_contentNegotiator = Rest.Active.ServiceLocator.GetService<IContentNegotiator>();
+            m_contentNegotiator = Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>();
             m_factory = new MockHandlerFactory();
         }
 

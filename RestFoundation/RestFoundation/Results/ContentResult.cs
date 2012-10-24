@@ -16,7 +16,7 @@ namespace RestFoundation.Results
         /// <summary>
         /// Initializes the new instance of the <see cref="ContentResult"/> class.
         /// </summary>
-        public ContentResult() : this(Rest.Active.ServiceLocator.GetService<IContentNegotiator>()) 
+        public ContentResult() : this(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>()) 
         {
         }
 

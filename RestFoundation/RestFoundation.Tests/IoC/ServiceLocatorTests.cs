@@ -22,7 +22,7 @@ namespace RestFoundation.Tests.IoC
         [Test]
         public void StructureMap_TestIfSystemInterfacesAreRegisteredAndHaveCorrectLifetime()
         {
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(false))
+            using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForStructureMap(false))
             {
                 TestSingleton<IAuthorizationManager>(serviceLocator);
                 TestSingleton<IContentNegotiator>(serviceLocator);
@@ -48,7 +48,7 @@ namespace RestFoundation.Tests.IoC
         [Test]
         public void StructureMap_TestIfSystemInterfacesHaveCorrectImplementations()
         {
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(false))
+            using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForStructureMap(false))
             {
                 TestImplementation<IAuthorizationManager, AuthorizationManager>(serviceLocator);
                 TestImplementation<IContentNegotiator, ContentNegotiator>(serviceLocator);
@@ -75,7 +75,7 @@ namespace RestFoundation.Tests.IoC
         {
             var container = new Container(registry => registry.For<IAuthorizationManager>().Use<TestAuthorizationManager>());
 
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(container, false))
+            using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForStructureMap(container, false))
             {
                 TestTransient<IAuthorizationManager>(serviceLocator);
                 TestImplementation<IAuthorizationManager, TestAuthorizationManager>(serviceLocator);
@@ -85,7 +85,7 @@ namespace RestFoundation.Tests.IoC
         [Test]
         public void StructureMap_TestServiceResolutionWithoutRegistration()
         {
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(true))
+            using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForStructureMap(true))
             {
                 var service = serviceLocator.GetService<ITestService>();
                 Assert.That(service, Is.Null, "A service was resolved without any registration");
@@ -97,7 +97,7 @@ namespace RestFoundation.Tests.IoC
         {
             var container = new Container(registry => registry.For<ITestService>().Use<TestService>());
 
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(container, true))
+            using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForStructureMap(container, true))
             {
                 TestTransient<ITestService>(serviceLocator);
 
@@ -115,7 +115,7 @@ namespace RestFoundation.Tests.IoC
                 action.WithDefaultConventions();
             }));
 
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForStructureMap(container, true))
+            using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForStructureMap(container, true))
             {
                 TestTransient<ITestService>(serviceLocator);
 
@@ -127,7 +127,7 @@ namespace RestFoundation.Tests.IoC
         [Test]
         public void Unity_TestIfSystemInterfacesAreRegisteredAndHaveCorrectLifetime()
         {
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForUnity(false))
+            using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForUnity(false))
             {
                 TestSingleton<IAuthorizationManager>(serviceLocator);
                 TestSingleton<IContentNegotiator>(serviceLocator);
@@ -153,7 +153,7 @@ namespace RestFoundation.Tests.IoC
         [Test]
         public void Unity_TestIfSystemInterfacesHaveCorrectImplementations()
         {
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForUnity(false))
+            using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForUnity(false))
             {
                 TestImplementation<IAuthorizationManager, AuthorizationManager>(serviceLocator);
                 TestImplementation<IContentNegotiator, ContentNegotiator>(serviceLocator);
@@ -181,7 +181,7 @@ namespace RestFoundation.Tests.IoC
             var container = new UnityContainer();
             container.RegisterType<IAuthorizationManager, TestAuthorizationManager>(new TransientLifetimeManager());
 
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForUnity(container, false))
+            using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForUnity(container, false))
             {
                 TestTransient<IAuthorizationManager>(serviceLocator);
                 TestImplementation<IAuthorizationManager, TestAuthorizationManager>(serviceLocator);
@@ -191,7 +191,7 @@ namespace RestFoundation.Tests.IoC
         [Test]
         public void Unity_TestServiceResolutionWithoutRegistration()
         {
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForUnity(true))
+            using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForUnity(true))
             {
                 var service = serviceLocator.GetService<ITestService>();
                 Assert.That(service, Is.Null, "A service was resolved without any registration");
@@ -204,7 +204,7 @@ namespace RestFoundation.Tests.IoC
             var container = new UnityContainer();
             container.RegisterType<ITestService, TestService>(new InjectionProperty("Context")); // property injection can only be specified manually for Unity
 
-            using (IServiceLocator serviceLocator = Rest.Active.CreateServiceLocatorForUnity(container, true))
+            using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForUnity(container, true))
             {
                 TestTransient<ITestService>(serviceLocator);
 

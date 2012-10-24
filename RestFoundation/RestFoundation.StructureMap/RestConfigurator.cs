@@ -14,9 +14,9 @@ namespace RestFoundation.StructureMap
     {
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
                          Justification = "The service locator will be disposed by the application.")]
-        public static Rest Configure(IContainer container, bool mockContext)
+        public static RestOptions Configure(IContainer container, bool mockContext)
         {
-            return Rest.Configure(CreateServiceLocator(container, mockContext));
+            return Rest.Configuration.Initialize(CreateServiceLocator(container, mockContext));
         }
 
         public static IServiceLocator CreateServiceLocator(IContainer container, bool mockContext)

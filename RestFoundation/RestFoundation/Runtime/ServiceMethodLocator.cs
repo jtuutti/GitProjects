@@ -10,25 +10,33 @@ using RestFoundation.Runtime.Handlers;
 namespace RestFoundation.Runtime
 {
     /// <summary>
-    /// Represents the service method locator.
+    /// Represents a service method locator.
     /// </summary>
     public class ServiceMethodLocator : IServiceMethodLocator
     {
         private readonly IServiceContext m_serviceContext;
+        private readonly IServiceFactory m_serviceFactory;
         private readonly AllowHeaderGenerator m_allowHeaderGenerator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceMethodLocator"/> class.
         /// </summary>
         /// <param name="serviceContext">The service context.</param>
-        public ServiceMethodLocator(IServiceContext serviceContext)
+        /// <param name="serviceFactory">The service factory.</param>
+        public ServiceMethodLocator(IServiceContext serviceContext, IServiceFactory serviceFactory)
         {
             if (serviceContext == null)
             {
                 throw new ArgumentNullException("serviceContext");
             }
 
+            if (serviceFactory == null)
+            {
+                throw new ArgumentNullException("serviceFactory");
+            }
+
             m_serviceContext = serviceContext;
+            m_serviceFactory = serviceFactory;
             m_allowHeaderGenerator = new AllowHeaderGenerator(serviceContext.Response);
         }
 
@@ -98,9 +106,9 @@ namespace RestFoundation.Runtime
             return method;
         }
 
-        private static object InitializeService(Type serviceContractType)
+        private object InitializeService(Type serviceContractType)
         {
-            object service = Rest.Active.ServiceLocator.GetService(serviceContractType);
+            object service = m_serviceFactory.Create(serviceContractType);
 
             if (service == null)
             {

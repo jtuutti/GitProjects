@@ -16,8 +16,9 @@ namespace RestFoundation.Tests
         public void Setup()
         {
             // Configuring REST foundation
-            Rest.Active.ConfigureMocksWithStructureMap(CreateContainerWithDependencies())
-                       .WithUrls(RegisterUrls);
+            Rest.Configuration
+                .InitializeAndMockWithStructureMap(CreateContainerWithDependencies())
+                .WithUrls(RegisterUrls);
         }
 
         private static IContainer CreateContainerWithDependencies()

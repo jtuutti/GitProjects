@@ -18,7 +18,7 @@ namespace RestFoundation.Formatters
         /// <summary>
         /// Initializes a new instance of the <see cref="DataContractJsonFormatter"/> class with the provided content negotiator.
         /// </summary>
-        public DataContractJsonFormatter() : this(Rest.Active.ServiceLocator.GetService<IContentNegotiator>())
+        public DataContractJsonFormatter() : this(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>())
         {
         }
 

@@ -4,7 +4,7 @@
 <%@ Import Namespace="RestFoundation.Security" %>
 
 <script runat="server" language="C#">
-    private string jqueryUrl = Rest.Active.JQueryUrl;    
+    private RestOptions configurationOptions = Rest.Configuration.Options;    
 
     protected void Page_Init(object sender, EventArgs e)
     {
@@ -15,7 +15,7 @@
 
     private void ValidateHttpSecurity()
     {
-        if (!Rest.Active.ServiceProxyHttpsOnly || Request.IsSecureConnection)
+        if (!configurationOptions.ServiceProxyHttpsOnly || Request.IsSecureConnection)
         {
             return;
         }
@@ -57,7 +57,7 @@
     
     private void AuthorizeUserIfNecessary()
     {
-        if (Rest.Active.ServiceProxyAuthorizationManager == null)
+        if (Rest.Configuration.Options.ServiceProxyAuthorizationManager == null)
         {
             return;
         }
@@ -71,7 +71,7 @@
             return;
         }
 
-        Credentials credentials = Rest.Active.ServiceProxyAuthorizationManager.GetCredentials(header.UserName);
+        Credentials credentials = configurationOptions.ServiceProxyAuthorizationManager.GetCredentials(header.UserName);
 
         if (credentials == null || !String.Equals(header.Password, credentials.Password, StringComparison.Ordinal))
         {
@@ -148,8 +148,8 @@
         #UserName{width:150px}
         #Password{width:100px}
     </style>
-    <% if (!String.IsNullOrEmpty(jqueryUrl)) { %>
-    <script type="text/javascript" src="<%: jqueryUrl.Trim() %>"></script>
+    <% if (!String.IsNullOrEmpty(configurationOptions.JQueryUrl)) { %>
+    <script type="text/javascript" src="<%: configurationOptions.JQueryUrl.Trim() %>"></script>
     <% } else { %>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
     <% } %>

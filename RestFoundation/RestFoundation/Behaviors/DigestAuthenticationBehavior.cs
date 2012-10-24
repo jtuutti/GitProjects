@@ -28,7 +28,7 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="DigestAuthenticationBehavior"/> class.
         /// </summary>
-        public DigestAuthenticationBehavior() : this(Rest.Active.ServiceLocator.GetService<IAuthorizationManager>())
+        public DigestAuthenticationBehavior() : this(Rest.Configuration.ServiceLocator.GetService<IAuthorizationManager>())
         {
         }
 

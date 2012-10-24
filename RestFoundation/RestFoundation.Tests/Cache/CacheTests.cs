@@ -11,7 +11,7 @@ namespace RestFoundation.Tests.Cache
         [TestFixtureSetUp]
         public void Initialize()
         {
-            m_cache = Rest.Active.ServiceLocator.GetService<IServiceCache>();
+            m_cache = Rest.Configuration.ServiceLocator.GetService<IServiceCache>();
         }
 
         [TestFixtureTearDown]

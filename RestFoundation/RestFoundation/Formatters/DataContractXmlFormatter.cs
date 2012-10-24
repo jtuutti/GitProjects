@@ -18,7 +18,7 @@ namespace RestFoundation.Formatters
         /// <summary>
         /// Initializes a new instance of the <see cref="DataContractXmlFormatter"/> class with the provided content negotiator.
         /// </summary>
-        public DataContractXmlFormatter() : this(Rest.Active.ServiceLocator.GetService<IContentNegotiator>())
+        public DataContractXmlFormatter() : this(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>())
         {
         }
 

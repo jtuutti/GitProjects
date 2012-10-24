@@ -57,12 +57,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IOptionsDescriptor.cs" />
+    <Compile Include="IServiceFactory.cs" />
+    <Compile Include="RestOptions.cs" />
     <Compile Include="RestResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>RestResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Runtime\AllowHeaderGenerator.cs" />
+    <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
+    <Compile Include="Runtime\ServiceFactory.cs" />
     <Compile Include="ServiceContractAttribute.cs" />
     <Compile Include="ExceptionAction.cs" />
     <Compile Include="Behaviors\AuthorizationBehavior.cs" />
@@ -133,6 +137,7 @@
     <Compile Include="ServiceLocation\ServiceActivationException.cs" />
     <Compile Include="ServiceProxy\AuthenticationType.cs" />
     <Compile Include="ServiceProxy\ProxyAuthenticationAttribute.cs" />
+    <Compile Include="Runtime\IoC\TinyIoC.generated.cs" />
     <Compile Include="TypeBinderBuilder.cs" />
     <Compile Include="MediaTypeFormatterBuilder.cs" />
     <Compile Include="Formatters\MultipartFormatter.cs" />

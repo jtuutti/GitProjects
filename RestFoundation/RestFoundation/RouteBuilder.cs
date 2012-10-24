@@ -169,7 +169,7 @@ namespace RestFoundation
         private static List<ServiceMethodMetadata> GenerateMethodMetadata(Type serviceContractType, IEnumerable<MethodInfo> methods, string url)
         {
             var urlAttributes = new List<ServiceMethodMetadata>();
-            var httpMethodResolver = Rest.Active.ServiceLocator.GetService<IHttpMethodResolver>();
+            var httpMethodResolver = Rest.Configuration.ServiceLocator.GetService<IHttpMethodResolver>();
 
             foreach (MethodInfo method in methods)
             {
@@ -233,12 +233,12 @@ namespace RestFoundation
             {
                 if (m_asyncTimeout.Value.TotalMilliseconds >= CancellationOperation.MinTimeoutInMilliseconds)
                 {
-                    routeHandler = Rest.Active.ServiceLocator.GetService<RestAsyncCancellableHandler>();
+                    routeHandler = Rest.Configuration.ServiceLocator.GetService<RestAsyncCancellableHandler>();
                     ((RestAsyncCancellableHandler) routeHandler).AsyncTimeout = m_asyncTimeout.Value;
                 }
                 else if (m_asyncTimeout.Value == TimeSpan.Zero)
                 {
-                    routeHandler = Rest.Active.ServiceLocator.GetService<RestAsyncHandler>();
+                    routeHandler = Rest.Configuration.ServiceLocator.GetService<RestAsyncHandler>();
                 }
                 else
                 {
@@ -247,7 +247,7 @@ namespace RestFoundation
             }
             else
             {
-                routeHandler = Rest.Active.ServiceLocator.GetService<RestHandler>();
+                routeHandler = Rest.Configuration.ServiceLocator.GetService<RestHandler>();
             }
 
             return routeHandler;
@@ -295,8 +295,8 @@ namespace RestFoundation
             var constraints = new RouteValueDictionary
             {
                 {
-                    RouteConstants.BrowserConstraint, new BrowserRouteConstraint(Rest.Active.ServiceLocator.GetService<IContentNegotiator>(),
-                                                                                 Rest.Active.ServiceLocator.GetService<IHttpRequest>())
+                    RouteConstants.BrowserConstraint, new BrowserRouteConstraint(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>(),
+                                                                                 Rest.Configuration.ServiceLocator.GetService<IHttpRequest>())
                 }
             };
 

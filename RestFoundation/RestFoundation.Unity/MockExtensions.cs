@@ -16,15 +16,15 @@ namespace RestFoundation.UnitTesting
     public static class MockExtensions
     {
         /// <summary>
-        /// Configures REST Foundation with the provided Unity container and configures it with mocked service context.
+        /// Initializes REST Foundation configuration with the provided Unity container and configures it with mocked service context.
         /// This method is used for unit testing.
         /// </summary>
-        /// <param name="restConfiguration">The REST configuration object.</param>
+        /// <param name="restConfiguration">The REST configuration options object.</param>
         /// <param name="container">The Unity container.</param>
         /// <returns>The configuration object.</returns>
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "restConfiguration",
                          Justification = "This extension method should be able to execute if the configuration has not been set up yet.")]
-        public static Rest ConfigureMocksWithUnity(this Rest restConfiguration, IUnityContainer container)
+        public static RestOptions InitializeAndMockWithUnity(this Rest restConfiguration, IUnityContainer container)
         {
             if (container == null)
             {

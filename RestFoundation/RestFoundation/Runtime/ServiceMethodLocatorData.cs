@@ -7,7 +7,7 @@ using System.Reflection;
 namespace RestFoundation.Runtime
 {
     /// <summary>
-    /// Represents the service method data returned by the service method locator.
+    /// Represents service method data returned by the service method locator.
     /// </summary>
     public class ServiceMethodLocatorData
     {

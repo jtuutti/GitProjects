@@ -52,6 +52,7 @@ namespace RestFoundation.ServiceLocation
                 { typeof(IRestAsyncHandler), typeof(RestAsyncHandler) },
                 { typeof(IRestHandler), typeof(RestHandler) },
                 { typeof(IServiceBehaviorInvoker), typeof(ServiceBehaviorInvoker) },
+                { typeof(IServiceFactory), typeof(ServiceFactory) },
                 { typeof(IServiceMethodInvoker), typeof(ServiceMethodInvoker) },
                 { typeof(IServiceMethodLocator), typeof(ServiceMethodLocator) }
             };

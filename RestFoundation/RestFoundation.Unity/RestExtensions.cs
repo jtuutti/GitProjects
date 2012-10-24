@@ -14,14 +14,14 @@ namespace RestFoundation
     public static class RestExtensions
     {
         /// <summary>
-        /// Configures REST Foundation with the provided Unity container.
+        /// Initializes REST Foundation configuration with the provided Unity container.
         /// </summary>
-        /// <param name="restConfiguration">The REST configuration object.</param>
+        /// <param name="restConfiguration">The REST configuration options object.</param>
         /// <param name="container">The Unity container.</param>
         /// <returns>The configuration object.</returns>
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "restConfiguration",
                          Justification = "This extension method should be able to execute if the configuration has not been set up yet.")]
-        public static Rest ConfigureWithUnity(this Rest restConfiguration, IUnityContainer container)
+        public static RestOptions InitializeWithUnity(this Rest restConfiguration, IUnityContainer container)
         {
             if (container == null)
             {

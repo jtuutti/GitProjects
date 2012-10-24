@@ -20,13 +20,14 @@ namespace RestTest.App_Start
         {
             DynamicModuleUtility.RegisterModule(typeof(RestHttpModule));
 
-            Rest.Active.ConfigureWithStructureMap(CreateStructureMapContainer())
-                       .WithUrls(RegisterUrls)
-                       .WithMediaTypeFormatters(RegisterFormatters)
-                       .EnableJsonPSupport()
-                       .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
-                       .WithResponseHeader("X-Service-Version", "1.0")
-                       .ConfigureServiceHelpAndProxy(c => c.Enable().RequireAuthorization(new ProxyAuthorizationManager()));
+            Rest.Configuration
+                .InitializeWithStructureMap(CreateStructureMapContainer())
+                .WithUrls(RegisterUrls)
+                .WithMediaTypeFormatters(RegisterFormatters)
+                .EnableJsonPSupport()
+                .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
+                .WithResponseHeader("X-Service-Version", "1.0")
+                .ConfigureServiceHelpAndProxy(c => c.Enable().RequireAuthorization(new ProxyAuthorizationManager()));
         }
 
         private static IUnityContainer CreateUnityContainer()

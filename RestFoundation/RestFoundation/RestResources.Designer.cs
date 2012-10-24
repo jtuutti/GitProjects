@@ -79,11 +79,29 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to REST Foundation configuration has not been initialized. Make sure to add a call to one of the Initialize methods of the RestFoundation.Rest.Configuration object on the application start..
+        /// </summary>
+        internal static string ConfigurationNotInitialized {
+            get {
+                return ResourceManager.GetString("ConfigurationNotInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Route parameter &apos;{0}&apos; with value &apos;{1}&apos; does not match the constraint pattern &apos;{2}&apos;..
         /// </summary>
         internal static string ConstraintMismatchedRouteParameter {
             get {
                 return ResourceManager.GetString("ConstraintMismatchedRouteParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was a problem resolving an object: {0}.
+        /// </summary>
+        internal static string DependencyResolutionError {
+            get {
+                return ResourceManager.GetString("DependencyResolutionError", resourceCulture);
             }
         }
         
@@ -439,7 +457,7 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No REST HTTP module found..
+        ///   Looks up a localized string similar to No REST HTTP module detected. Make sure to add a reference to the RestFoundation.RestHttpModule HTTP module in the Web.config file..
         /// </summary>
         internal static string MissingRestHttpModule {
             get {

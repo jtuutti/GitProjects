@@ -43,7 +43,7 @@ namespace RestFoundation.Runtime
                 return new AcceptValueCollection(acceptValue).GetPreferredName();
             }
 
-            acceptValue = Rest.Active.DefaultMediaType;
+            acceptValue = Rest.Configuration.Options.DefaultMediaType;
 
             if (!String.IsNullOrWhiteSpace(acceptValue))
             {
