@@ -223,7 +223,7 @@
 
                 if (!hasData || DisplayResponseHeaders.Checked)
                 {
-                    data = GetResponseHeaders(client.ResponseHeaders, duration, protocolVersion, responseCode, hasData) + data;
+                    data = GetResponseHeaders(url, client.ResponseHeaders, duration, protocolVersion, responseCode, hasData) + data;
                 }
 
                 ResponseText.Value = data;
@@ -318,7 +318,7 @@
         return data;
     }
 
-    private static string GetResponseHeaders(NameValueCollection headerCollection, TimeSpan duration, string protocolVersion, string responseCode, bool hasOutput)
+    private static string GetResponseHeaders(String url, NameValueCollection headerCollection, TimeSpan duration, string protocolVersion, string responseCode, bool hasOutput)
     {
         if (headerCollection == null || headerCollection.Count == 0)
         {
@@ -330,6 +330,7 @@
         headerString.AppendLine("RESPONSE");
         CreateOutputSeparator(headerString);
 
+        headerString.Append("URL: ").AppendLine(url);
         headerString.Append("HTTP/").Append(protocolVersion);
 
         if (!String.IsNullOrEmpty(responseCode))

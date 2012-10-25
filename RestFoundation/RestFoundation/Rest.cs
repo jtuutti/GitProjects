@@ -32,7 +32,8 @@ namespace RestFoundation
         });
 
         private static Rest configuration;
-        private RestOptions options;
+
+        private RestOptions m_options;
 
         private Rest()
         {
@@ -89,12 +90,12 @@ namespace RestFoundation
         {
             get
             {
-                if (options == null)
+                if (m_options == null)
                 {
                     throw new InvalidOperationException(RestResources.ConfigurationNotInitialized);
                 }
 
-                return options;
+                return m_options;
             }
         }
 
@@ -107,9 +108,11 @@ namespace RestFoundation
         /// Initializes REST Foundation configuration with the default IoC container.
         /// </summary>
         /// <returns>The configuration options object.</returns>
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
+                         Justification = "This method is not responsible for disposing the IoC container")]
         public RestOptions Initialize()
         {
-            return Initialize(false);
+            return InitializeWithDefaultDependencies(false);
         }
 
         /// <summary>
@@ -119,9 +122,29 @@ namespace RestFoundation
         /// <returns>The configuration options object.</returns>
         public RestOptions InitializeAndMock()
         {
-            return Initialize(true);
+            return InitializeWithDefaultDependencies(true);
         }
 
+        /// <summary>
+        /// Initializes REST foundation configuration with custom dependencies.
+        /// </summary>
+        /// <param name="builder">The dependency builder.</param>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions Initialize(Action<DependencyBuilder> builder)
+        {
+            return InitializeWithBuilder(builder, false);
+        }
+
+        /// <summary>
+        /// Initializes REST foundation configuration with custom dependencies.
+        /// </summary>
+        /// <param name="builder">The dependency builder.</param>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions InitializeAndMock(Action<DependencyBuilder> builder)
+        {
+            return InitializeWithBuilder(builder, true);
+        }
+        
         /// <summary>
         /// Initializes REST Foundation configuration with the default IoC container.
         /// </summary>
@@ -144,29 +167,61 @@ namespace RestFoundation
 
             ServiceLocator = serviceLocator;
 
-            options = new RestOptions();
-            return options;
+            m_options = new RestOptions();
+            return m_options;
         }
 
-        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
-                         Justification = "This method is not responsible for disposing the IoC container")]
-        private RestOptions Initialize(bool mockContext)
+        private static void RegisterDependencies(TinyIoCContainer container, bool mockContext, Func<Type, bool> registrationValidator)
         {
-            var defaultIoCContainer = new TinyIoCContainer();
-
             var serviceContainer = new ServiceContainer(mockContext);
 
             foreach (var dependency in serviceContainer.SingletonServices)
             {
-                defaultIoCContainer.Register(dependency.Key, dependency.Value).AsSingleton();
+                if (registrationValidator != null && registrationValidator(dependency.Key))
+                {
+                    continue;
+                }
+
+                container.Register(dependency.Key, dependency.Value).AsSingleton();
             }
 
             foreach (var dependency in serviceContainer.TransientServices)
             {
-                defaultIoCContainer.Register(dependency.Key, dependency.Value).AsMultiInstance();
+                if (registrationValidator != null && registrationValidator(dependency.Key))
+                {
+                    continue;
+                }
+
+                container.Register(dependency.Key, dependency.Value).AsMultiInstance();
+            }
+        }
+
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
+                         Justification = "This method is not responsible for disposing the IoC container")]
+        private RestOptions InitializeWithDefaultDependencies(bool mockContext)
+        {
+            var container = new TinyIoCContainer();
+            RegisterDependencies(container, mockContext, null);
+
+            return Initialize(new DefaultServiceLocator(container, null));
+        }
+
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
+                         Justification = "This method is not responsible for disposing the IoC container")]
+        private RestOptions InitializeWithBuilder(Action<DependencyBuilder> builder, bool mockContext)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
             }
 
-            return Initialize(new DefaultServiceLocator(defaultIoCContainer));
+            var container = new TinyIoCContainer();
+            var dependencyBuilder = new DependencyBuilder(container);
+
+            builder(dependencyBuilder);
+            RegisterDependencies(container, mockContext, dependencyBuilder.IsRegistered);
+
+            return Initialize(new DefaultServiceLocator(container, dependencyBuilder.PropertyInjectionPredicate));
         }
     }
 }

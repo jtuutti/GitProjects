@@ -65,6 +65,7 @@ namespace TinyIoC
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
+    using System.Web;
 
 #if EXPRESSIONS
     using System.Linq.Expressions;
@@ -2229,13 +2230,14 @@ namespace TinyIoC
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private ObjectFactoryBase GetDefaultObjectFactory(Type registerType, Type registerImplementation)
         {
+/*
 //#if NETFX_CORE
 //			if (registerType.GetTypeInfo().IsInterface() || registerType.GetTypeInfo().IsAbstract())
 //#else
             if (registerType.IsInterface() || registerType.IsAbstract())
 //#endif
                 return new SingletonFactory(registerType, registerImplementation);
-
+*/
             return new MultiInstanceFactory(registerType, registerImplementation);
         }
 
@@ -2805,6 +2807,41 @@ namespace TinyIoC
         }
 
         #endregion
+    }
+
+    internal class HttpContextLifetimeProvider : TinyIoCContainer.ITinyIoCObjectLifetimeProvider
+    {
+        private readonly string m_keyName = String.Format(CultureInfo.InvariantCulture, "TinyIoC.HttpContext.{0}", Guid.NewGuid());
+
+        public object GetObject()
+        {
+            return HttpContext.Current.Items[m_keyName];
+        }
+
+        public void SetObject(object value)
+        {
+            HttpContext.Current.Items[m_keyName] = value;
+        }
+
+        public void ReleaseObject()
+        {
+            var item = GetObject() as IDisposable;
+
+            if (item != null)
+            {
+                item.Dispose();
+            }
+
+            SetObject(null);
+        }
+    }
+
+    internal static class TinyIoCAspNetExtensions
+    {
+        internal static TinyIoC.TinyIoCContainer.RegisterOptions AsPerRequestSingleton(this TinyIoC.TinyIoCContainer.RegisterOptions registerOptions)
+        {
+            return TinyIoCContainer.RegisterOptions.ToCustomLifetimeManager(registerOptions, new HttpContextLifetimeProvider(), "per request singleton");
+        }
     }
 }
 

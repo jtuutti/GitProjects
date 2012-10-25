@@ -13,8 +13,9 @@ namespace RestFoundation.Runtime
     public sealed class DefaultServiceLocator : IServiceLocator
     {
         private readonly TinyIoCContainer m_container;
+        private readonly Func<Type, bool> m_propertyInjectionPredicate;
 
-        internal DefaultServiceLocator(TinyIoCContainer container)
+        internal DefaultServiceLocator(TinyIoCContainer container, Func<Type, bool> propertyInjectionPredicate)
         {
             if (container == null)
             {
@@ -22,6 +23,7 @@ namespace RestFoundation.Runtime
             }
 
             m_container = container;
+            m_propertyInjectionPredicate = propertyInjectionPredicate ?? (t => false);
         }
 
         /// <summary>
@@ -42,7 +44,14 @@ namespace RestFoundation.Runtime
             {
                 object resolvedObject;
 
-                return m_container.TryResolve(serviceType, out resolvedObject) ? resolvedObject : null;
+                if (!m_container.TryResolve(serviceType, out resolvedObject))
+                {
+                    return null;
+                }
+
+                BuildUpServiceIfNecessary(new[] { resolvedObject });
+
+                return resolvedObject;
             }
             catch (Exception ex)
             {
@@ -79,7 +88,10 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("serviceType");
             }
 
-            return m_container.ResolveAll(serviceType);
+            var services = m_container.ResolveAll(serviceType).ToArray();
+            BuildUpServiceIfNecessary(services);
+
+            return services;
         }
 
         /// <summary>
@@ -92,7 +104,10 @@ namespace RestFoundation.Runtime
         /// <filterpriority>2</filterpriority>
         public IEnumerable<T> GetServices<T>()
         {
-            return m_container.ResolveAll(typeof(T)).Cast<T>();
+            var services = m_container.ResolveAll(typeof(T)).ToArray();
+            BuildUpServiceIfNecessary(services);
+
+            return services.Cast<T>();
         }
 
         /// <summary>
@@ -102,6 +117,17 @@ namespace RestFoundation.Runtime
         public void Dispose()
         {
             m_container.Dispose();
+        }
+
+        private void BuildUpServiceIfNecessary(IEnumerable<object> resolvedObjects)
+        {
+            foreach (object resolvedObject in resolvedObjects)
+            {
+                if (resolvedObject != null && m_propertyInjectionPredicate(resolvedObject.GetType()))
+                {
+                    m_container.BuildUp(resolvedObject);
+                }
+            }
         }
     }
 }

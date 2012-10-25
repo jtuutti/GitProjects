@@ -97,7 +97,16 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There was a problem resolving an object: {0}.
+        ///   Looks up a localized string similar to There was a problem registering a service: {0}.
+        /// </summary>
+        internal static string DependencyRegistrationError {
+            get {
+                return ResourceManager.GetString("DependencyRegistrationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was a problem resolving a service: {0}.
         /// </summary>
         internal static string DependencyResolutionError {
             get {

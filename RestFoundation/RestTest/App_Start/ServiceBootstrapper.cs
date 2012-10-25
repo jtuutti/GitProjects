@@ -21,7 +21,9 @@ namespace RestTest.App_Start
             DynamicModuleUtility.RegisterModule(typeof(RestHttpModule));
 
             Rest.Configuration
-                .InitializeWithStructureMap(CreateStructureMapContainer())
+                .Initialize(RegisterServiceDependencies)
+                // .InitializeWithStructureMap(CreateStructureMapContainer())
+                // .InitializeWithUnity(CreateUnityContainer())
                 .WithUrls(RegisterUrls)
                 .WithMediaTypeFormatters(RegisterFormatters)
                 .EnableJsonPSupport()
@@ -58,6 +60,18 @@ namespace RestTest.App_Start
 
                 registry.SetAllProperties(convention => convention.TypeMatches(Rest.ServiceContextTypes.Contains));
             });
+        }
+
+        private static void RegisterServiceDependencies(DependencyBuilder builder)
+        {
+            builder.Register<IAuthorizationManager, ServiceAuthorizationManager>(InstanceLifetime.Singleton)
+                   .Register<IStreamCompressor, RestStreamCompressor>(InstanceLifetime.Singleton)
+                   .ScanAssemblies(new[] { "RestTestContracts", "RestTestServices" }, t => t.Name.EndsWith("Service"))
+                   .AllowPropertyInjection(t =>
+                   {
+                       var contextProperty = t.GetProperty("Context");
+                       return contextProperty != null && contextProperty.PropertyType == typeof(IServiceContext);
+                   });
         }
 
         private static void RegisterFormatters(MediaTypeFormatterBuilder builder)

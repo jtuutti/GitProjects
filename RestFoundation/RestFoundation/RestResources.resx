@@ -394,11 +394,15 @@
     <comment>URL '{0}' does not match any routes.</comment>
   </data>
   <data name="DependencyResolutionError" xml:space="preserve">
-    <value>There was a problem resolving an object: {0}</value>
-    <comment>There was a problem resolving an object: {0}</comment>
+    <value>There was a problem resolving a service: {0}</value>
+    <comment>There was a problem resolving a service: {0}</comment>
   </data>
   <data name="ConfigurationNotInitialized" xml:space="preserve">
     <value>REST Foundation configuration has not been initialized. Make sure to add a call to one of the Initialize methods of the RestFoundation.Rest.Configuration object on the application start.</value>
     <comment>REST Foundation configuration has not been initialized. Make sure to add a call to one of the Initialize methods of the RestFoundation.Rest.Configuration object on the application start.</comment>
+  </data>
+  <data name="DependencyRegistrationError" xml:space="preserve">
+    <value>There was a problem registering a service: {0}</value>
+    <comment>There was a problem registering a service: {0}</comment>
   </data>
 </root>
