@@ -2355,6 +2355,7 @@ namespace TinyIoC
             return _Parent.GetParentObjectFactory(registration);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         private object ResolveInternal(TypeRegistration registration, NamedParameterOverloads parameters, ResolveOptions options)
         {
             ObjectFactoryBase factory;
@@ -2367,6 +2368,10 @@ namespace TinyIoC
                     return factory.GetObject(registration.Type, this, parameters, options);
                 }
                 catch (TinyIoCResolutionException)
+                {
+                    throw;
+                }
+                catch (HttpException)
                 {
                     throw;
                 }
@@ -2815,11 +2820,21 @@ namespace TinyIoC
 
         public object GetObject()
         {
+            if (HttpContext.Current == null)
+            {
+                return null;
+            }
+
             return HttpContext.Current.Items[m_keyName];
         }
 
         public void SetObject(object value)
         {
+            if (HttpContext.Current == null)
+            {
+                throw new HttpException("HTTP context has not been initialized");
+            }
+
             HttpContext.Current.Items[m_keyName] = value;
         }
 
