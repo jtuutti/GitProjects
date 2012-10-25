@@ -1,8 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.Tests.Implementation.Services;
-using RestFoundation.UnitTesting;
-using StructureMap;
 
 namespace RestFoundation.Tests
 {
@@ -15,25 +14,17 @@ namespace RestFoundation.Tests
         [SetUp]
         public void Setup()
         {
-            // Configuring REST foundation
             Rest.Configuration
-                .InitializeAndMockWithStructureMap(CreateContainerWithDependencies())
-                .WithUrls(RegisterUrls);
-        }
-
-        private static IContainer CreateContainerWithDependencies()
-        {
-            return new Container(registry =>
-            {
-                registry.For<ITestService>().Use<TestService>();
-                registry.SetAllProperties(convention => convention.TypeMatches(type => type == typeof(IServiceContext)));
-            });
-        }
-
-        private static void RegisterUrls(UrlBuilder urlBuilder)
-        {
-            urlBuilder.MapUrl(TestServiceUrl).ToServiceContract<ITestService>();
-            urlBuilder.MapUrl(TestSelfContainedServiceUrl).ToServiceContract<TestSelfContainedService>();
+                .InitializeAndMock(builder =>
+                {
+                    builder.ScanAssemblies(new[] { GetType().Assembly }, t => t.Name.EndsWith("Service"));
+                    builder.AllowPropertyInjection(type => type.GetProperties().Any(p => p.PropertyType == typeof(IServiceContext)));
+                })
+                .WithUrls(builder =>
+                {
+                    builder.MapUrl(TestServiceUrl).ToServiceContract<ITestService>();
+                    builder.MapUrl(TestSelfContainedServiceUrl).ToServiceContract<TestSelfContainedService>();
+                });
         }
     }
 }

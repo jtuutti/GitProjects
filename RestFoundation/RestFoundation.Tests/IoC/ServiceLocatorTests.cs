@@ -95,7 +95,11 @@ namespace RestFoundation.Tests.IoC
         [Test]
         public void StructureMap_TestServiceResolution()
         {
-            var container = new Container(registry => registry.For<ITestService>().Use<TestService>());
+            var container = new Container(registry =>
+            {
+                registry.For<ITestService>().Use<TestService>();
+                registry.SetAllProperties(convention => convention.TypeMatches(t => t == typeof(IServiceContext)));
+            });
 
             using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForStructureMap(container, true))
             {
@@ -109,11 +113,15 @@ namespace RestFoundation.Tests.IoC
         [Test]
         public void StructureMap_TestServiceResolutionRegisteredByConvention()
         {
-            var container = new Container(registry => registry.Scan(action =>
+            var container = new Container(registry =>
             {
-                action.TheCallingAssembly();
-                action.WithDefaultConventions();
-            }));
+                registry.Scan(action =>
+                {
+                    action.TheCallingAssembly();
+                    action.WithDefaultConventions();
+                });
+                registry.SetAllProperties(convention => convention.TypeMatches(t => t == typeof(IServiceContext)));
+            });
 
             using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForStructureMap(container, true))
             {
