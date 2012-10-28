@@ -37,7 +37,7 @@ namespace RestFoundation.Tests.Behaviors
             m_context.GetHttpContext().Request.Headers["X-Requested-With"] = "XmlHttpRequest";
 
             ISecureServiceBehavior behavior = new AjaxOnlyBehavior();
-            behavior.OnMethodAuthorizing(m_context, null, null);
+            behavior.OnMethodAuthorizing(m_context, null);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodAuthorizing(m_context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)

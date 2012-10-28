@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace RestFoundation.Runtime
 {
@@ -20,34 +21,9 @@ namespace RestFoundation.Runtime
             return serviceContractTypes.GetOrAdd(typeAssemblyName, t => Type.GetType(typeAssemblyName, true));
         }
 
-        public static bool IsServiceContract(Type type)
+        public static ICollection<Type> GetContractTypes()
         {
-            if (type == null || !type.IsInterface)
-            {
-                return false;
-            }
-
-            return serviceContractTypes.Values.Contains(type);
-        }
-
-        public static bool IsServiceImplementation(Type type)
-        {
-            if (type == null || type.IsInterface || type.IsAbstract)
-            {
-                return false;
-            }
-
-            var contractTypes = serviceContractTypes.Values;
-
-            foreach (Type contractType in contractTypes)
-            {
-                if (contractType.IsAssignableFrom(type))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return new HashSet<Type>(serviceContractTypes.Values);
         }
     }
 }

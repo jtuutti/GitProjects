@@ -76,7 +76,7 @@ namespace RestFoundation
         public string UrlTemplate { get; private set; }
 
         /// <summary>
-        /// Get a sequence of allowed HTTP methods.
+        /// Gets a sequence of allowed HTTP methods.
         /// </summary>
         public IEnumerable<HttpMethod> HttpMethods { get; internal set; }
 

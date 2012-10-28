@@ -42,7 +42,7 @@ namespace RestFoundation.ServiceProxy
         public bool IsIPFiltered { get; set; }
 
         /// <summary>
-        /// Gets the metadata URL.
+        /// Gets or sets the metadata URL.
         /// </summary>
         public string MetadataUrl { get; set; }
 

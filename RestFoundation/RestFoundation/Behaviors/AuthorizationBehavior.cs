@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Security.Principal;
 
 namespace RestFoundation.Behaviors
@@ -17,7 +16,7 @@ namespace RestFoundation.Behaviors
         private readonly string[] m_roles;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SecureServiceBehavior"/> class.
+        /// Initializes a new instance of the <see cref="AuthorizationBehavior"/> class.
         /// </summary>
         /// <param name="roles">An array of authorized roles.</param>
         public AuthorizationBehavior(params string[] roles)
@@ -31,7 +30,7 @@ namespace RestFoundation.Behaviors
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SecureServiceBehavior"/> class.
+        /// Initializes a new instance of the <see cref="AuthorizationBehavior"/> class.
         /// </summary>
         /// <param name="roles">A sequence of authorized roles.</param>
         public AuthorizationBehavior(IEnumerable<string> roles)
@@ -47,24 +46,23 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
         /// </summary>
-        /// <param name="context">The service context.</param>
-        /// <param name="service">The service object.</param>
-        /// <param name="method">The service method.</param>
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="behaviorContext">The "method authorizing" behavior context.</param>
         /// <returns>A service method action.</returns>
-        public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
+        public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext serviceContext, MethodAuthorizingContext behaviorContext)
         {
-            if (context == null)
+            if (serviceContext == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException("serviceContext");
             }
 
-            if (!context.IsAuthenticated)
+            if (!serviceContext.IsAuthenticated)
             {
                 SetStatusDescription(RestResources.Forbidden);
                 return BehaviorMethodAction.Stop;
             }
 
-            bool isInRole = IsUserInRole(context.User);
+            bool isInRole = IsUserInRole(serviceContext.User);
 
             if (!isInRole)
             {

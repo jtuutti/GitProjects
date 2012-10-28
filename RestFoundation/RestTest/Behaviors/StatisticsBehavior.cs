@@ -19,58 +19,59 @@ namespace RestTest.Behaviors
             return method.Name.Equals("Get");
         }
 
-        public override BehaviorMethodAction OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
+        public override BehaviorMethodAction OnMethodExecuting(IServiceContext serviceContext, MethodExecutingContext behaviorContext)
         {
             timer = Stopwatch.StartNew();
 
-            context.Response.Output.WriteFormat("Service: {0}", service.GetType().Name).WriteLine();
-            context.Response.Output.WriteFormat("Method: {0}", method.Name).WriteLine();
-            context.Response.Output.WriteFormat("Full URL: {0}", context.Request.Url.ToString()).WriteLine();
-            context.Response.Output.WriteFormat("Relative URL: {0}", context.Request.Url.LocalPath).WriteLine();
-            context.Response.Output.WriteFormat("Service absolute URL: {0}", context.Request.Url.OperationUrl.ToString()).WriteLine();
-            context.Response.Output.WriteFormat("Service relative URL: {0}", context.Request.Url.OperationUrl.LocalPath).WriteLine();
-            context.Response.Output.WriteFormat("Is Local: {0}", context.Request.IsLocal).WriteLine();
-            context.Response.Output.WriteFormat("Is Secure: {0}", context.Request.IsSecure).WriteLine();
-            context.Response.Output.WriteFormat("Is AJAX: {0}", context.Request.IsAjax).WriteLine();
+            serviceContext.Response.Output.WriteFormat("Contract: {0}", behaviorContext.GetServiceContractType().Name).WriteLine();
+            serviceContext.Response.Output.WriteFormat("Service: {0}", behaviorContext.GetServiceType().Name).WriteLine();
+            serviceContext.Response.Output.WriteFormat("Method: {0}", behaviorContext.GetMethodName()).WriteLine();
+            serviceContext.Response.Output.WriteFormat("Full URL: {0}", serviceContext.Request.Url.ToString()).WriteLine();
+            serviceContext.Response.Output.WriteFormat("Relative URL: {0}", serviceContext.Request.Url.LocalPath).WriteLine();
+            serviceContext.Response.Output.WriteFormat("Service absolute URL: {0}", serviceContext.Request.Url.OperationUrl.ToString()).WriteLine();
+            serviceContext.Response.Output.WriteFormat("Service relative URL: {0}", serviceContext.Request.Url.OperationUrl.LocalPath).WriteLine();
+            serviceContext.Response.Output.WriteFormat("Is Local: {0}", serviceContext.Request.IsLocal).WriteLine();
+            serviceContext.Response.Output.WriteFormat("Is Secure: {0}", serviceContext.Request.IsSecure).WriteLine();
+            serviceContext.Response.Output.WriteFormat("Is AJAX: {0}", serviceContext.Request.IsAjax).WriteLine();
 
-            if (context.IsAuthenticated)
+            if (serviceContext.IsAuthenticated)
             {
-                context.Response.Output.WriteFormat("Authenticated as: \"{0}\" ({1})", context.User.Identity.Name, context.User.Identity.AuthenticationType).WriteLine();
+                serviceContext.Response.Output.WriteFormat("Authenticated as: \"{0}\" ({1})", serviceContext.User.Identity.Name, serviceContext.User.Identity.AuthenticationType).WriteLine();
 
-                if (context.User.IsInRole("Administrators"))
+                if (serviceContext.User.IsInRole("Administrators"))
                 {
-                    context.Response.Output.WriteLine("-- ADMIN ACCESS --");
+                    serviceContext.Response.Output.WriteLine("-- ADMIN ACCESS --");
                 }
             }
             else
             {
-                context.Response.Output.WriteLine("Not Authenticated");
+                serviceContext.Response.Output.WriteLine("Not Authenticated");
             }
 
-            context.Response.Output.WriteLine().WriteLine("--- Route Values ---");
+            serviceContext.Response.Output.WriteLine().WriteLine("--- Route Values ---");
 
-            foreach (string key in context.Request.RouteValues.Keys)
+            foreach (string key in serviceContext.Request.RouteValues.Keys)
             {
-                context.Response.Output.WriteFormat("{0} : {1}", key, context.Request.RouteValues.TryGet(key)).WriteLine();
+                serviceContext.Response.Output.WriteFormat("{0} : {1}", key, serviceContext.Request.RouteValues.TryGet(key)).WriteLine();
             }
 
-            context.Response.Output.WriteLine().WriteLine("--- Query Values ---");
+            serviceContext.Response.Output.WriteLine().WriteLine("--- Query Values ---");
 
-            foreach (string key in context.Request.QueryString.Keys)
+            foreach (string key in serviceContext.Request.QueryString.Keys)
             {
-                context.Response.Output.WriteFormat("{0} : {1}", key, context.Request.QueryString.TryGet(key)).WriteLine();
+                serviceContext.Response.Output.WriteFormat("{0} : {1}", key, serviceContext.Request.QueryString.TryGet(key)).WriteLine();
             }
 
-            context.Response.Output.WriteLine();
+            serviceContext.Response.Output.WriteLine();
 
             return BehaviorMethodAction.Execute;
         }
 
-        public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object returnedObj)
+        public override void OnMethodExecuted(IServiceContext serviceContext, MethodExecutedContext behaviorContext)
         {
             timer.Stop();
 
-            context.Response.Output.WriteLine(2).WriteFormat("Response generated in {0} ms ({1} ticks)", timer.ElapsedMilliseconds, timer.ElapsedTicks);
+            serviceContext.Response.Output.WriteLine(2).WriteFormat("Response generated in {0} ms ({1} ticks)", timer.ElapsedMilliseconds, timer.ElapsedTicks);
         }
     }
 }

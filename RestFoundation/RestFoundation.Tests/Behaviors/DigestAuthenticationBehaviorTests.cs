@@ -49,7 +49,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodAuthorizing(m_context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
@@ -67,7 +67,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodAuthorizing(m_context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
@@ -101,7 +101,7 @@ namespace RestFoundation.Tests.Behaviors
 
             m_context.GetHttpContext().Request.Headers["Authorization"] = String.Format("{0}, response=\"{1}\"", authorizationHeaderString, response);
 
-            behavior.OnMethodAuthorizing(m_context, null, null);
+            behavior.OnMethodAuthorizing(m_context, null);
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodAuthorizing(m_context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
@@ -148,7 +148,7 @@ namespace RestFoundation.Tests.Behaviors
 
             m_context.GetHttpContext().Request.Headers["Authorization"] = String.Format("{0}, response=\"{1}\"", authorizationHeaderString, response);
 
-            behavior.OnMethodAuthorizing(m_context, null, null);
+            behavior.OnMethodAuthorizing(m_context, null);
         }
     }
 }

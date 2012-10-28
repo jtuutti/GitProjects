@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Net;
-using System.Reflection;
 using System.Web;
 
 namespace RestFoundation.Behaviors
@@ -12,6 +11,7 @@ namespace RestFoundation.Behaviors
     /// The base secure service behavior class. It is highly recommended to inherit this class
     /// instead of implementing the <see cref="ISecureServiceBehavior"/> interface to avoid
     /// output caching security problems.
+    /// This class cannot be instantiated.
     /// </summary>
     public abstract class SecureServiceBehavior : ServiceBehavior, ISecureServiceBehavior
     {
@@ -30,43 +30,36 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
         /// </summary>
-        /// <param name="context">The service context.</param>
-        /// <param name="service">The service object.</param>
-        /// <param name="method">The service method.</param>
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="behaviorContext">The "method authorizing" behavior context.</param>
         /// <returns>A service method action.</returns>
-        public virtual BehaviorMethodAction OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
+        public virtual BehaviorMethodAction OnMethodAuthorizing(IServiceContext serviceContext, MethodAuthorizingContext behaviorContext)
         {
             return BehaviorMethodAction.Stop;
         }
 
-        /// <summary>
-        /// Called during the authorization process before a service method or behavior is executed.
-        /// </summary>
-        /// <param name="context">The service context.</param>
-        /// <param name="service">The service object.</param>
-        /// <param name="method">The service method.</param>
-        void ISecureServiceBehavior.OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
+        void ISecureServiceBehavior.OnMethodAuthorizing(IServiceContext serviceContext, MethodAuthorizingContext behaviorContext)
         {
-            if (context == null)
+            if (serviceContext == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException("serviceContext");
             }
 
-            if (OnMethodAuthorizing(context, service, method) == BehaviorMethodAction.Stop)
+            if (OnMethodAuthorizing(serviceContext, behaviorContext) == BehaviorMethodAction.Stop)
             {
-                HttpStatusCode statusCode = context.Response.GetStatusCode();
+                HttpStatusCode statusCode = serviceContext.Response.GetStatusCode();
 
                 if (statusCode != HttpStatusCode.Unauthorized && statusCode != m_statusCode)
                 {
                     throw new HttpResponseException(m_statusCode, m_statusDescription);
                 }
 
-                throw new HttpResponseException(statusCode, context.Response.GetStatusDescription());
+                throw new HttpResponseException(statusCode, serviceContext.Response.GetStatusDescription());
             }
 
-            HttpCachePolicyBase cache = context.GetHttpContext().Response.Cache;
+            HttpCachePolicyBase cache = serviceContext.GetHttpContext().Response.Cache;
             cache.SetProxyMaxAge(new TimeSpan(0L));
-            cache.AddValidationCallback(CacheValidationHandler, new CacheValidationHandlerData(context, service, method));
+            cache.AddValidationCallback(CacheValidationHandler, new CacheValidationHandlerData(serviceContext, behaviorContext));
         }
 
         /// <summary>
@@ -109,13 +102,13 @@ namespace RestFoundation.Behaviors
         {
             var handlerData = data as CacheValidationHandlerData;
 
-            if (handlerData == null || handlerData.Service == null || handlerData.Method == null)
+            if (handlerData == null)
             {
                 validationStatus = HttpValidationStatus.Invalid;
                 return;
             }
 
-            if (OnMethodAuthorizing(handlerData.Context, handlerData.Service, handlerData.Method) == BehaviorMethodAction.Stop)
+            if (OnMethodAuthorizing(handlerData.ServiceContext, handlerData.BehaviorContext) == BehaviorMethodAction.Stop)
             {
                 validationStatus = HttpValidationStatus.IgnoreThisRequest;
                 return;
@@ -128,16 +121,14 @@ namespace RestFoundation.Behaviors
 
         private sealed class CacheValidationHandlerData
         {
-            public CacheValidationHandlerData(IServiceContext context, object service, MethodInfo method)
+            public CacheValidationHandlerData(IServiceContext serviceContext, MethodAuthorizingContext behaviorContext)
             {
-                Context = context;
-                Service = service;
-                Method = method;
+                ServiceContext = serviceContext;
+                BehaviorContext = behaviorContext;
             }
 
-            public IServiceContext Context { get; private set; }
-            public object Service { get; private set; }
-            public MethodInfo Method { get; private set; }
+            public IServiceContext ServiceContext { get; private set; }
+            public MethodAuthorizingContext BehaviorContext { get; private set; }
         }
 
         #endregion

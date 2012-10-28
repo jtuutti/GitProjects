@@ -89,6 +89,7 @@ namespace RestFoundation.Runtime
                                                                                                   "Service contract of type '{0}' could not be determined",
                                                                                                   serviceTypeContractName));
             }
+
             return serviceContractType;
         }
 

@@ -18,7 +18,7 @@ namespace RestFoundation.ServiceProxy
         private readonly bool m_isRouteParameter;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProxyParameter"/> class.
+        /// Initializes a new instance of the <see cref="ProxyParameter"/> struct.
         /// </summary>
         /// <param name="name">The parameter name.</param>
         /// <param name="parameterType">The parameter type.</param>
@@ -29,7 +29,7 @@ namespace RestFoundation.ServiceProxy
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProxyParameter"/> class.
+        /// Initializes a new instance of the <see cref="ProxyParameter"/> struct.
         /// </summary>
         /// <param name="name">The parameter name.</param>
         /// <param name="parameterType">The parameter type.</param>

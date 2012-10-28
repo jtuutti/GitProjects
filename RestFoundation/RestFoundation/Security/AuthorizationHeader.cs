@@ -12,7 +12,7 @@ namespace RestFoundation.Security
     public class AuthorizationHeader
     {
         /// <summary>
-        /// Initializes a new instance of the authorization header.
+        /// Initializes a new instance of the <see cref="AuthorizationHeader"/> class.
         /// </summary>
         /// <param name="authenticationType">The authentication type.</param>
         /// <param name="userName">The user name.</param>

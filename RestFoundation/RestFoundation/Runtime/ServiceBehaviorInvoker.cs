@@ -54,7 +54,7 @@ namespace RestFoundation.Runtime
 
             foreach (ISecureServiceBehavior behavior in behaviors)
             {
-                behavior.OnMethodAuthorizing(m_context, service, method);
+                behavior.OnMethodAuthorizing(m_context, new MethodAuthorizingContext(service, method));
             }
         }
 
@@ -85,7 +85,7 @@ namespace RestFoundation.Runtime
 
             for (int i = 0; i < behaviors.Count; i++)
             {
-                if (behaviors[i].OnMethodExecuting(m_context, service, method, resource) == BehaviorMethodAction.Stop)
+                if (behaviors[i].OnMethodExecuting(m_context, new MethodExecutingContext(service, method, resource)) == BehaviorMethodAction.Stop)
                 {
                     return BehaviorMethodAction.Stop;
                 }
@@ -120,7 +120,7 @@ namespace RestFoundation.Runtime
 
             for (int i = behaviors.Count - 1; i >= 0; i--)
             {
-                behaviors[i].OnMethodExecuted(m_context, service, method, returnedObj);
+                behaviors[i].OnMethodExecuted(m_context, new MethodExecutedContext(service, method, returnedObj));
             }
         }
     }

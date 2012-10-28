@@ -44,7 +44,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodAuthorizing(m_context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
@@ -60,7 +60,7 @@ namespace RestFoundation.Tests.Behaviors
 
             m_context.GetHttpContext().Request.Headers["Authorization"] = String.Format("Basic {0}", ToBase64String("user1:test123"));
 
-            behavior.OnMethodAuthorizing(m_context, null, null);
+            behavior.OnMethodAuthorizing(m_context, null);
 
             Assert.That(m_context.User, Is.Not.Null);
             Assert.That(m_context.IsAuthenticated, Is.True);
@@ -78,7 +78,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodAuthorizing(m_context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
@@ -96,7 +96,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodAuthorizing(m_context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)

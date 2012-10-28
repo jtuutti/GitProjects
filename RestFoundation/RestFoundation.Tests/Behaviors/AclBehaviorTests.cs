@@ -35,7 +35,7 @@ namespace RestFoundation.Tests.Behaviors
         public void RequestWithLocalAclSectionShouldNotThrow()
         {
             ISecureServiceBehavior behavior = new AclBehavior("localAcl");
-            behavior.OnMethodAuthorizing(m_context, null, null);
+            behavior.OnMethodAuthorizing(m_context, null);
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodAuthorizing(m_context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
@@ -61,7 +61,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodAuthorizing(m_context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)

@@ -27,7 +27,7 @@ namespace RestFoundation.ServiceProxy
         }
 
         /// <summary>
-        /// Gets the parameter comma separated list of all allowed values.
+        /// Gets or sets the parameter comma separated list of all allowed values.
         /// </summary>
         public string AllowedValues { get; set; }
 

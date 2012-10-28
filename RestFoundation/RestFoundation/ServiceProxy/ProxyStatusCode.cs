@@ -15,7 +15,7 @@ namespace RestFoundation.ServiceProxy
         private readonly string m_condition;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProxyStatusCode"/> class.
+        /// Initializes a new instance of the <see cref="ProxyStatusCode"/> struct.
         /// </summary>
         /// <param name="statusCode">The status code.</param>
         /// <param name="condition">The condition when the status code may occur.</param>
@@ -99,6 +99,7 @@ namespace RestFoundation.ServiceProxy
         /// <summary>
         /// Gets a numeric HTTP status code.
         /// </summary>
+        /// <returns>A number representing the HTTP status code.</returns>
         public int GetNumericStatusCode()
         {
             return (int) m_statusCode;

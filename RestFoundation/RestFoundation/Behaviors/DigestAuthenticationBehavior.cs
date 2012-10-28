@@ -4,7 +4,6 @@
 using System;
 using System.Globalization;
 using System.Net;
-using System.Reflection;
 using System.Security.Principal;
 using System.Text;
 using RestFoundation.Security;
@@ -80,23 +79,22 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
         /// </summary>
-        /// <param name="context">The service context.</param>
-        /// <param name="service">The service object.</param>
-        /// <param name="method">The service method.</param>
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="behaviorContext">The "method authorizing" behavior context.</param>
         /// <returns>A service method action.</returns>
-        public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
+        public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext serviceContext, MethodAuthorizingContext behaviorContext)
         {
-            if (context == null)
+            if (serviceContext == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException("serviceContext");
             }
 
             AuthorizationHeader header;
 
-            if (!AuthorizationHeaderParser.TryParse(context.Request.Headers.TryGet("Authorization"), context.Request.Headers.ContentCharsetEncoding, out header) ||
+            if (!AuthorizationHeaderParser.TryParse(serviceContext.Request.Headers.TryGet("Authorization"), serviceContext.Request.Headers.ContentCharsetEncoding, out header) ||
                 !AuthenticationType.Equals(header.AuthenticationType, StringComparison.OrdinalIgnoreCase))
             {
-                GenerateAuthenticationHeader(context, false);
+                GenerateAuthenticationHeader(serviceContext, false);
                 return BehaviorMethodAction.Stop;
             }
 
@@ -104,19 +102,19 @@ namespace RestFoundation.Behaviors
 
             if (credentials == null)
             {
-                GenerateAuthenticationHeader(context, false);
+                GenerateAuthenticationHeader(serviceContext, false);
                 return BehaviorMethodAction.Stop;
             }
 
-            Tuple<bool, bool> responseValidationResult = ValidateResponse(context, header, credentials);
+            Tuple<bool, bool> responseValidationResult = ValidateResponse(serviceContext, header, credentials);
 
             if (!responseValidationResult.Item1)
             {
-                GenerateAuthenticationHeader(context, responseValidationResult.Item2);
+                GenerateAuthenticationHeader(serviceContext, responseValidationResult.Item2);
                 return BehaviorMethodAction.Stop;
             }
 
-            context.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), credentials.GetRoles());
+            serviceContext.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), credentials.GetRoles());
             return BehaviorMethodAction.Execute;
         }
 
@@ -151,31 +149,31 @@ namespace RestFoundation.Behaviors
             m_isDisposed = true;
         }
 
-        private string GenerateNonce(IServiceContext context, string timestamp)
+        private string GenerateNonce(IServiceContext serviceContext, string timestamp)
         {
-            if (String.IsNullOrWhiteSpace(context.Request.ServerVariables.RemoteAddress) ||
-                String.IsNullOrWhiteSpace(context.Request.ServerVariables.LocalAddress))
+            if (String.IsNullOrWhiteSpace(serviceContext.Request.ServerVariables.RemoteAddress) ||
+                String.IsNullOrWhiteSpace(serviceContext.Request.ServerVariables.LocalAddress))
             {
                 throw new HttpResponseException(HttpStatusCode.Forbidden, RestResources.Forbidden);
             }
 
             string nonce = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture,
                                                           "{0}:{1}:{2}",
-                                                          context.Request.ServerVariables.RemoteAddress,
-                                                          context.Request.ServerVariables.LocalAddress,
-                                                          context.Request.ServerVariables.ServerPort));
+                                                          serviceContext.Request.ServerVariables.RemoteAddress,
+                                                          serviceContext.Request.ServerVariables.LocalAddress,
+                                                          serviceContext.Request.ServerVariables.ServerPort));
 
             return m_encryptor.Encrypt(String.Format(CultureInfo.InvariantCulture, "{0}:{1}", timestamp, nonce));
         }
 
-        private void GenerateAuthenticationHeader(IServiceContext context, bool isStale)
+        private void GenerateAuthenticationHeader(IServiceContext serviceContext, bool isStale)
         {
             string timestamp = (DateTime.UtcNow - DateTime.MinValue).TotalMilliseconds.ToString(CultureInfo.InvariantCulture);
 
             var headerBuilder = new StringBuilder();
             headerBuilder.Append(AuthenticationType).Append(' ');
-            headerBuilder.AppendFormat(CultureInfo.InvariantCulture, "realm=\"{0}\"", context.Request.Url.OperationUrl);
-            headerBuilder.AppendFormat(CultureInfo.InvariantCulture, ", nonce=\"{0}\"", GenerateNonce(context, timestamp));
+            headerBuilder.AppendFormat(CultureInfo.InvariantCulture, "realm=\"{0}\"", serviceContext.Request.Url.OperationUrl);
+            headerBuilder.AppendFormat(CultureInfo.InvariantCulture, ", nonce=\"{0}\"", GenerateNonce(serviceContext, timestamp));
 
             if (Qop == QualityOfProtection.Auth)
             {
@@ -187,19 +185,19 @@ namespace RestFoundation.Behaviors
                 headerBuilder.AppendFormat(CultureInfo.InvariantCulture, ", stale=\"TRUE\"");
             }
 
-            context.Response.Output.Clear();
-            context.Response.SetHeader("WWW-Authenticate", headerBuilder.ToString());
-            context.Response.SetStatus(HttpStatusCode.Unauthorized, RestResources.Unauthorized);
+            serviceContext.Response.Output.Clear();
+            serviceContext.Response.SetHeader("WWW-Authenticate", headerBuilder.ToString());
+            serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, RestResources.Unauthorized);
         }
 
-        private Tuple<bool, bool> ValidateResponse(IServiceContext context, AuthorizationHeader header, Credentials credentials)
+        private Tuple<bool, bool> ValidateResponse(IServiceContext serviceContext, AuthorizationHeader header, Credentials credentials)
         {
             if (String.IsNullOrWhiteSpace(header.UserName) || header.Parameters == null)
             {
                 return Tuple.Create(false, false);
             }
 
-            string ipAddress = context.Request.ServerVariables.RemoteAddress;
+            string ipAddress = serviceContext.Request.ServerVariables.RemoteAddress;
 
             if (String.IsNullOrWhiteSpace(ipAddress))
             {
@@ -233,7 +231,7 @@ namespace RestFoundation.Behaviors
             }
 
             string nonce = header.Parameters.Get("nonce");           
-            Tuple<bool, bool> nonceValidationResult = ValidateNonce(context, nonce);
+            Tuple<bool, bool> nonceValidationResult = ValidateNonce(serviceContext, nonce);
 
             if (!nonceValidationResult.Item1)
             {
@@ -241,7 +239,7 @@ namespace RestFoundation.Behaviors
             }
 
             string ha1 = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}", header.UserName, realm, credentials.Password));
-            string ha2 = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}", context.Request.Method.ToString().ToUpperInvariant(), uri));
+            string ha2 = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}", serviceContext.Request.Method.ToString().ToUpperInvariant(), uri));
 
             string expectedResponse;
 
@@ -271,7 +269,7 @@ namespace RestFoundation.Behaviors
             return Tuple.Create(String.Equals(expectedResponse, response, StringComparison.Ordinal), false);
         }
 
-        private Tuple<bool, bool> ValidateNonce(IServiceContext context, string nonce)
+        private Tuple<bool, bool> ValidateNonce(IServiceContext serviceContext, string nonce)
         {
             if (String.IsNullOrEmpty(nonce))
             {
@@ -296,7 +294,7 @@ namespace RestFoundation.Behaviors
                 return Tuple.Create(false, false);
             }
 
-            if (!String.Equals(nonce, GenerateNonce(context, nonceParts[0]), StringComparison.Ordinal))
+            if (!String.Equals(nonce, GenerateNonce(serviceContext, nonceParts[0]), StringComparison.Ordinal))
             {
                 return Tuple.Create(false, false);
             }

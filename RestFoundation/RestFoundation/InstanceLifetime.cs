@@ -1,4 +1,7 @@
-﻿namespace RestFoundation
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation
 {
     /// <summary>
     /// Defines a dependency instance lifetime for the default service locator.

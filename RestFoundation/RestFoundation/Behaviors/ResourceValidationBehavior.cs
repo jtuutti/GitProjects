@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Reflection;
 using RestFoundation.Validation;
 
 namespace RestFoundation.Behaviors
@@ -41,26 +40,29 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Called before a service method is executed.
         /// </summary>
-        /// <param name="context">The service context.</param>
-        /// <param name="service">The service object.</param>
-        /// <param name="method">The service method.</param>
-        /// <param name="resource">The resource parameter value, if applicable, or null.</param>
-        /// <returns>true to execute the service method; false to stop the request.</returns>
-        public override BehaviorMethodAction OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="behaviorContext">The "method executing" behavior context.</param>
+        /// <returns>A service method action.</returns>
+        public override BehaviorMethodAction OnMethodExecuting(IServiceContext serviceContext, MethodExecutingContext behaviorContext)
         {
-            if (context == null)
+            if (serviceContext == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException("serviceContext");
             }
 
-            if (resource == null || m_validator == null)
+            if (behaviorContext == null)
+            {
+                throw new ArgumentNullException("behaviorContext");
+            }
+
+            if (behaviorContext.Resource == null || m_validator == null)
             {
                 return BehaviorMethodAction.Execute;
             }
 
             ICollection<ValidationError> validationErrors;
 
-            if (!m_validator.IsValid(resource, out validationErrors))
+            if (!m_validator.IsValid(behaviorContext.Resource, out validationErrors))
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.ResourceValidationFailed);
             }

@@ -1,22 +1,21 @@
-﻿using System.Reflection;
-using RestFoundation;
+﻿using RestFoundation;
 using RestFoundation.Behaviors;
 
 namespace RestTest.Behaviors
 {
     public class LoggingBehavior : ServiceBehavior
     {
-        public override BehaviorMethodAction OnMethodExecuting(IServiceContext context, object service, MethodInfo method, object resource)
+        public override BehaviorMethodAction OnMethodExecuting(IServiceContext serviceContext, MethodExecutingContext behaviorContext)
         {
-            context.HttpItemBag.LoggingEnabled = true;
-            context.Response.Output.WriteFormat("Action '{0}' executing", method.Name).WriteLine(2);
+            serviceContext.HttpItemBag.LoggingEnabled = true;
+            serviceContext.Response.Output.WriteFormat("Action '{0}' executing", behaviorContext.GetMethodName()).WriteLine(2);
 
             return BehaviorMethodAction.Execute;
         }
 
-        public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object returnedObj)
+        public override void OnMethodExecuted(IServiceContext serviceContext, MethodExecutedContext behaviorContext)
         {
-            context.Response.Output.WriteLine(2).WriteFormat("Action '{0}' executed", method.Name);
+            serviceContext.Response.Output.WriteLine(2).WriteFormat("Action '{0}' executed", behaviorContext.GetMethodName());
         }
     }
 }

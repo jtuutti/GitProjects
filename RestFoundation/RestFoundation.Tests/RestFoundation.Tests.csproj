@@ -63,6 +63,7 @@
     <Compile Include="Behaviors\AclBehaviorTests.cs" />
     <Compile Include="Behaviors\AuthorizationBehaviorTests.cs" />
     <Compile Include="Behaviors\BasicAuthenticationBehaviorTests.cs" />
+    <Compile Include="Behaviors\BehaviorContextTests.cs" />
     <Compile Include="Behaviors\DigestAuthenticationBehaviorTests.cs" />
     <Compile Include="Behaviors\ResourceValidationBehaviorTests.cs" />
     <Compile Include="Formatters\BsonFormatterTests.cs" />

@@ -29,6 +29,9 @@ namespace RestFoundation.ServiceLocation
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceContainer"/> class.
         /// </summary>
+        /// <param name="mockContext">
+        /// A <see cref="bool"/> indicating whether to inject a mocked service context for unit tests.
+        /// </param>
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling",
                          Justification = "This class is a service container, therefore it is coupled to numerous implementations.")]
         public ServiceContainer(bool mockContext)

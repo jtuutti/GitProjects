@@ -93,6 +93,7 @@ namespace RestFoundation.Security
         /// <summary>
         /// Gets the current IP network in the collection.
         /// </summary>
+        /// <param name="i">A collection index value.</param>
         public IPNetwork this[double i]
         {
             get

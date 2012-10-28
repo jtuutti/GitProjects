@@ -41,7 +41,7 @@ namespace RestFoundation.Tests.Behaviors
             m_context.User = new GenericPrincipal(new GenericIdentity(UserName), new[] { "Administrators", UserRole });
 
             ISecureServiceBehavior behavior = new AuthorizationBehavior(UserRole);
-            behavior.OnMethodAuthorizing(m_context, null, null);
+            behavior.OnMethodAuthorizing(m_context, null);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodAuthorizing(m_context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
@@ -71,7 +71,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null, null);
+                behavior.OnMethodAuthorizing(m_context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)

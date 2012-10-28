@@ -4,7 +4,6 @@
 using System;
 using System.Globalization;
 using System.Net;
-using System.Reflection;
 using System.Security.Principal;
 using RestFoundation.Security;
 
@@ -43,23 +42,22 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
         /// </summary>
-        /// <param name="context">The service context.</param>
-        /// <param name="service">The service object.</param>
-        /// <param name="method">The service method.</param>
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="behaviorContext">The "method authorizing" behavior context.</param>
         /// <returns>A service method action.</returns>
-        public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method)
+        public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext serviceContext, MethodAuthorizingContext behaviorContext)
         {
-            if (context == null)
+            if (serviceContext == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException("serviceContext");
             }
 
             AuthorizationHeader header;
 
-            if (!AuthorizationHeaderParser.TryParse(context.Request.Headers.TryGet("Authorization"), context.Request.Headers.ContentCharsetEncoding, out header) ||
+            if (!AuthorizationHeaderParser.TryParse(serviceContext.Request.Headers.TryGet("Authorization"), serviceContext.Request.Headers.ContentCharsetEncoding, out header) ||
                 !AuthenticationType.Equals(header.AuthenticationType, StringComparison.OrdinalIgnoreCase))
             {
-                GenerateAuthenticationHeader(context);
+                GenerateAuthenticationHeader(serviceContext);
                 return BehaviorMethodAction.Stop;
             }
 
@@ -67,19 +65,19 @@ namespace RestFoundation.Behaviors
 
             if (credentials == null || !String.Equals(header.Password, credentials.Password, StringComparison.Ordinal))
             {
-                GenerateAuthenticationHeader(context);
+                GenerateAuthenticationHeader(serviceContext);
                 return BehaviorMethodAction.Stop;
             }
 
-            context.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), credentials.GetRoles());
+            serviceContext.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), credentials.GetRoles());
             return BehaviorMethodAction.Execute;
         }
 
-        private static void GenerateAuthenticationHeader(IServiceContext context)
+        private static void GenerateAuthenticationHeader(IServiceContext serviceContext)
         {
-            context.Response.Output.Clear();
-            context.Response.SetHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "{0} realm=\"{1}\"", AuthenticationType, context.Request.Url.OperationUrl));
-            context.Response.SetStatus(HttpStatusCode.Unauthorized, RestResources.Unauthorized);
+            serviceContext.Response.Output.Clear();
+            serviceContext.Response.SetHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "{0} realm=\"{1}\"", AuthenticationType, serviceContext.Request.Url.OperationUrl));
+            serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, RestResources.Unauthorized);
         }
     }
 }

@@ -339,7 +339,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="feed">The feed.</param>
         /// <param name="format">The feed format.</param>
-        /// <returns></returns>
+        /// <returns>The feed result.</returns>
         public static FeedResult Feed(SyndicationFeed feed, FeedResult.SyndicationFormat format)
         {
             var result = new FeedResult

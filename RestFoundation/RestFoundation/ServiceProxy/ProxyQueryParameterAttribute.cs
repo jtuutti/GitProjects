@@ -34,7 +34,7 @@ namespace RestFoundation.ServiceProxy
         }
 
         /// <summary>
-        /// Gets the parameter comma separated list of all allowed values.
+        /// Gets or sets the parameter comma separated list of all allowed values.
         /// </summary>
         public string AllowedValues { get; set; }
 
@@ -49,12 +49,12 @@ namespace RestFoundation.ServiceProxy
         public string Name { get; private set; }
 
         /// <summary>
-        /// Gets the parameter type.
+        /// Gets or sets the parameter type.
         /// </summary>
         public Type ParameterType { get; set; }
 
         /// <summary>
-        /// Gets the parameter regular expression constraint.
+        /// Gets or sets the parameter regular expression constraint.
         /// </summary>
         public string RegexConstraint { get; set; }
     }

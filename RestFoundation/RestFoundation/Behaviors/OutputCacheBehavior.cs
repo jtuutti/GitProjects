@@ -2,7 +2,6 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
-using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using RestFoundation.Runtime;
@@ -133,18 +132,16 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Called after a service method is executed.
         /// </summary>
-        /// <param name="context">The service context.</param>
-        /// <param name="service">The service object.</param>
-        /// <param name="method">The service method.</param>
-        /// <param name="returnedObj">The service method returned object.</param>
-        public override void OnMethodExecuted(IServiceContext context, object service, MethodInfo method, object returnedObj)
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="behaviorContext">The "method executed" behavior context.</param>
+        public override void OnMethodExecuted(IServiceContext serviceContext, MethodExecutedContext behaviorContext)
         {
-            if (context == null)
+            if (serviceContext == null)
             {
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException("serviceContext");
             }
 
-            if (context.Request.Method != HttpMethod.Get && context.Request.Method != HttpMethod.Head)
+            if (serviceContext.Request.Method != HttpMethod.Get && serviceContext.Request.Method != HttpMethod.Head)
             {
                 return;
             }

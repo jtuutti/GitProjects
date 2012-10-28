@@ -12,6 +12,7 @@ namespace RestFoundation.Results
 {
     /// <summary>
     /// Represents a base file result.
+    /// This class cannot be instantiated.
     /// </summary>
     public abstract class FileResultBase : IResult
     {

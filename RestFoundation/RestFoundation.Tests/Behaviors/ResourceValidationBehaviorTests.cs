@@ -1,9 +1,11 @@
 ﻿using System.Net;
+using System.Reflection;
 using NUnit.Framework;
 using RestFoundation.Behaviors;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.Implementation.Models;
 using RestFoundation.Tests.Implementation.ServiceContracts;
+using RestFoundation.Tests.Implementation.Services;
 using RestFoundation.UnitTesting;
 
 namespace RestFoundation.Tests.Behaviors
@@ -13,6 +15,8 @@ namespace RestFoundation.Tests.Behaviors
     {
         private MockHandlerFactory m_factory;
         private IServiceContext m_context;
+        private object m_service;
+        private MethodInfo m_method;
 
         [SetUp]
         public void Initialize()
@@ -24,6 +28,8 @@ namespace RestFoundation.Tests.Behaviors
             Assert.That(handler.Context, Is.Not.Null);
             
             m_context = handler.Context;
+            m_service = new TestService();
+            m_method = m_service.GetType().GetMethod("Post");
         }
 
         [TearDown]
@@ -43,7 +49,7 @@ namespace RestFoundation.Tests.Behaviors
                 Name = "Joe Bloe"
             };
 
-            behavior.OnMethodExecuting(m_context, null, null, resource);
+            behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
         }
 
         [Test]
@@ -55,7 +61,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodExecuting(m_context, null, null, resource);
+                behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
@@ -76,7 +82,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodExecuting(m_context, null, null, resource);
+                behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
@@ -98,7 +104,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodExecuting(m_context, null, null, resource);
+                behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
@@ -120,7 +126,7 @@ namespace RestFoundation.Tests.Behaviors
 
             try
             {
-                behavior.OnMethodExecuting(m_context, null, null, resource);
+                behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
@@ -140,7 +146,7 @@ namespace RestFoundation.Tests.Behaviors
                 Name = "Abcdefghijklmnopqrstuvwxy"
             };
 
-            behavior.OnMethodExecuting(m_context, null, null, resource);
+            behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
         }
     }
 }

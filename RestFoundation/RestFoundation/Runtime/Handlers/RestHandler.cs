@@ -21,7 +21,7 @@ namespace RestFoundation.Runtime.Handlers
         private readonly IResultExecutor m_resultExecutor;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RestAsyncHandler"/> class.
+        /// Initializes a new instance of the <see cref="RestHandler"/> class.
         /// </summary>
         /// <param name="serviceContext">The service context.</param>
         /// <param name="methodLocator">The service method locator.</param>

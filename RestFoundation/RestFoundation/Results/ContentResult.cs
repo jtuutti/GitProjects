@@ -14,14 +14,14 @@ namespace RestFoundation.Results
         private readonly IContentNegotiator m_contentNegotiator;
 
         /// <summary>
-        /// Initializes the new instance of the <see cref="ContentResult"/> class.
+        /// Initializes a new instance of the <see cref="ContentResult"/> class.
         /// </summary>
         public ContentResult() : this(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>()) 
         {
         }
 
         /// <summary>
-        /// Initializes the new instance of the <see cref="ContentResult"/> class with the provided content negotiator.
+        /// Initializes a new instance of the <see cref="ContentResult"/> class with the provided content negotiator.
         /// </summary>
         /// <param name="contentNegotiator">The content negotiator.</param>
         public ContentResult(IContentNegotiator contentNegotiator)

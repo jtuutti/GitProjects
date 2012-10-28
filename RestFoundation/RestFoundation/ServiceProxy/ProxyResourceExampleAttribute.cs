@@ -16,7 +16,7 @@ namespace RestFoundation.ServiceProxy
         private Type m_responseBuilderType;
 
         /// <summary>
-        /// Gets the request example builder type.
+        /// Gets or sets the request example builder type.
         /// </summary>
         public Type RequestBuilderType
         {
@@ -33,7 +33,7 @@ namespace RestFoundation.ServiceProxy
         }
 
         /// <summary>
-        /// Gets the response example builder type.
+        /// Gets or sets the response example builder type.
         /// </summary>
         public Type ResponseBuilderType
         {

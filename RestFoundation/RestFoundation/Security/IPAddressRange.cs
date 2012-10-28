@@ -31,7 +31,7 @@ namespace RestFoundation.Security
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IPNetwork"/> class.
+        /// Initializes a new instance of the <see cref="IPAddressRange"/> class.
         /// </summary>
         /// <param name="cidr">
         /// An IP network that represents a starting IP and a subnet in a CIDR notation.

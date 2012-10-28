@@ -1,8 +1,6 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012
 // </copyright>
-using System.Reflection;
-
 namespace RestFoundation.Behaviors
 {
     /// <summary>
@@ -13,9 +11,8 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
         /// </summary>
-        /// <param name="context">The service context.</param>
-        /// <param name="service">The service object.</param>
-        /// <param name="method">The service method.</param>
-        void OnMethodAuthorizing(IServiceContext context, object service, MethodInfo method);
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="behaviorContext">The "method authorizing" behavior context.</param>
+        void OnMethodAuthorizing(IServiceContext serviceContext, MethodAuthorizingContext behaviorContext);
     }
 }

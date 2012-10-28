@@ -8,6 +8,7 @@ namespace RestFoundation.Context
 {
     /// <summary>
     /// Defines a base service context class.
+    /// This class cannot be instantiated.
     /// </summary>
     public abstract class ContextBase
     {

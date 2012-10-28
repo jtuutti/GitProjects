@@ -54,6 +54,7 @@ namespace RestFoundation.Security
         /// <summary>
         /// Returns a read only list of user roles.
         /// </summary>
+        /// <returns>An array of user roles.</returns>
         public string[] GetRoles()
         {
             return new List<string>(m_roles).ToArray();

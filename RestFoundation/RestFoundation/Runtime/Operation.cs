@@ -12,22 +12,22 @@ namespace RestFoundation.Runtime
     public class Operation
     {
         /// <summary>
-        /// Gets a relative URL template.
+        /// Gets or sets a relative URL template.
         /// </summary>
         public string RelativeUrlTemplate { get; set; }
 
         /// <summary>
-        /// Gets an HTTP method.
+        /// Gets or sets an HTTP method.
         /// </summary>
         public string HttpMethod { get; set; }
 
         /// <summary>
-        /// Gets an optional description.
+        /// Gets or sets an optional description.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets an optional sample URL.
+        /// Gets or sets an optional sample URL.
         /// </summary>
         public string SampleUrl { get; set; }
     }
