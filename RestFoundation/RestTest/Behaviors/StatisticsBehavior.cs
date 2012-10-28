@@ -1,6 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.Reflection;
+﻿using System.Diagnostics;
+using System.Linq;
 using RestFoundation;
 using RestFoundation.Behaviors;
 
@@ -14,9 +13,9 @@ namespace RestTest.Behaviors
         {
         }
 
-        public override bool AppliesTo(Type serviceType, MethodInfo method)
+        public override bool AppliesTo(IServiceContext serviceContext, MethodAppliesContext methodContext)
         {
-            return method.Name.Equals("Get");
+            return methodContext.GetSupportedHttpMethods().Contains(HttpMethod.Get);
         }
 
         public override BehaviorMethodAction OnMethodExecuting(IServiceContext serviceContext, MethodExecutingContext behaviorContext)

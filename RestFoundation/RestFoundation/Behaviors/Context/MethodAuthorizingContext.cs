@@ -6,7 +6,7 @@ using System.Reflection;
 namespace RestFoundation.Behaviors
 {
     /// <summary>
-    /// Contains associated objects for a "method authorizing" behavior.
+    /// Contains associated objects for the "method authorizing" behavior.
     /// </summary>
     public class MethodAuthorizingContext : BehaviorContext
     {

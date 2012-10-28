@@ -6,7 +6,7 @@ using System.Reflection;
 namespace RestFoundation.Behaviors
 {
     /// <summary>
-    /// Contains associated objects for a "method executed" behavior.
+    /// Contains associated objects for the "method executed" behavior.
     /// </summary>
     public class MethodExecutedContext : BehaviorContext
     {

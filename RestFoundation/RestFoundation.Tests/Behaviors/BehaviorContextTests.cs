@@ -511,5 +511,29 @@ namespace RestFoundation.Tests.Behaviors
             Assert.That(httpMethods.Contains(HttpMethod.Patch), Is.False);
             Assert.That(httpMethods.Contains(HttpMethod.Delete), Is.False);
         }
+
+        [Test]
+        public void MethodAppliesContextShouldBePopulated()
+        {
+            var service = new TestService();
+
+            MethodInfo method = service.GetType().GetMethod("GetAll");
+            Assert.That(method, Is.Not.Null);
+
+            var methodContext = new MethodAppliesContext(service, method);
+            Assert.That(methodContext.Service, Is.SameAs(service));
+            Assert.That(methodContext.Method, Is.SameAs(method));
+            Assert.That(methodContext.GetServiceContractType(), Is.EqualTo(typeof(ITestService)));
+            Assert.That(methodContext.GetServiceType(), Is.EqualTo(typeof(TestService)));
+            Assert.That(methodContext.GetMethodName(), Is.EqualTo(method.Name));
+
+            var httpMethods = methodContext.GetSupportedHttpMethods().ToList();
+            Assert.That(httpMethods.Contains(HttpMethod.Get), Is.True);
+            Assert.That(httpMethods.Contains(HttpMethod.Head), Is.True);
+            Assert.That(httpMethods.Contains(HttpMethod.Post), Is.False);
+            Assert.That(httpMethods.Contains(HttpMethod.Put), Is.False);
+            Assert.That(httpMethods.Contains(HttpMethod.Patch), Is.False);
+            Assert.That(httpMethods.Contains(HttpMethod.Delete), Is.False);
+        }
     }
 }

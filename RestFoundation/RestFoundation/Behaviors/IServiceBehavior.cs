@@ -15,10 +15,10 @@ namespace RestFoundation.Behaviors
         /// Returns a value indicating whether to apply the behavior to the provided method of the specified
         /// service type.
         /// </summary>
-        /// <param name="serviceType">The service type.</param>
-        /// <param name="method">The service method.</param>
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="methodContext">The "method applies" context.</param>
         /// <returns>true to apply the behavior; false to bypass.</returns>
-        bool AppliesTo(Type serviceType, MethodInfo method);
+        bool AppliesTo(IServiceContext serviceContext, MethodAppliesContext methodContext);
 
         /// <summary>
         /// Called before a service method is executed.

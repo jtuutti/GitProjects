@@ -64,22 +64,22 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingServiceContext);
             }
 
-            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, method, service);
-            AddServiceBehaviors(method, service, behaviors);
+            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(method, service, handler);
+            AddServiceBehaviors(method, service, behaviors, handler);
 
             return InvokeAndProcessExceptions(method, service, behaviors, handler);
         }
 
-        private static List<IServiceBehavior> GetServiceMethodBehaviors(IRestHandler handler, MethodInfo method, object service)
+        private static List<IServiceBehavior> GetServiceMethodBehaviors(MethodInfo method, object service, IRestHandler handler)
         {
             List<IServiceBehavior> behaviors = ServiceBehaviorRegistry.GetBehaviors(handler)
-                                                                      .Where(behavior => behavior.AppliesTo(service.GetType(), method))
+                                                                      .Where(behavior => behavior.AppliesTo(handler.Context, new MethodAppliesContext(service, method)))
                                                                       .ToList();
 
             return behaviors;
         }
 
-        private static void AddServiceBehaviors(MethodInfo method, object service, List<IServiceBehavior> behaviors)
+        private static void AddServiceBehaviors(MethodInfo method, object service, List<IServiceBehavior> behaviors, IRestHandler handler)
         {
             var restService = service as IServiceWithBehaviors;
 
@@ -90,7 +90,7 @@ namespace RestFoundation.Runtime
 
             foreach (IServiceBehavior serviceBehavior in restService.Behaviors)
             {
-                if (serviceBehavior.AppliesTo(service.GetType(), method))
+                if (serviceBehavior.AppliesTo(handler.Context, new MethodAppliesContext(service, method)))
                 {
                     behaviors.Add(serviceBehavior);
                 }

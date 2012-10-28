@@ -56,10 +56,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviors\BehaviorContext.cs" />
-    <Compile Include="Behaviors\MethodAuthorizingContext.cs" />
-    <Compile Include="Behaviors\MethodExecutedContext.cs" />
-    <Compile Include="Behaviors\MethodExecutingContext.cs" />
+    <Compile Include="Behaviors\Context\BehaviorContext.cs" />
+    <Compile Include="Behaviors\Context\MethodAppliesContext.cs" />
+    <Compile Include="Behaviors\Context\MethodAuthorizingContext.cs" />
+    <Compile Include="Behaviors\Context\MethodExecutedContext.cs" />
+    <Compile Include="Behaviors\Context\MethodExecutingContext.cs" />
     <Compile Include="DependencyBuilder.cs" />
     <Compile Include="InstanceLifetime.cs" />
     <Compile Include="IOptionsDescriptor.cs" />
