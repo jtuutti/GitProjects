@@ -72,7 +72,7 @@ namespace RestFoundation.Behaviors
         /// Gets the service contract type.
         /// </summary>
         /// <returns>The service contract type.</returns>
-        public Type GetServiceContractType()
+        public virtual Type GetServiceContractType()
         {
             if (m_service == null)
             {
@@ -104,7 +104,7 @@ namespace RestFoundation.Behaviors
         /// Get the service type.
         /// </summary>
         /// <returns>The service type.</returns>
-        public Type GetServiceType()
+        public virtual Type GetServiceType()
         {
             return m_service != null ? m_service.GetType() : null;
         }
@@ -113,7 +113,7 @@ namespace RestFoundation.Behaviors
         /// Gets the service method name.
         /// </summary>
         /// <returns>The service method name.</returns>
-        public string GetMethodName()
+        public virtual string GetMethodName()
         {
             return m_method != null ? m_method.Name : null;
         }
@@ -122,7 +122,7 @@ namespace RestFoundation.Behaviors
         /// Gets supported HTTP methods by the service method.
         /// </summary>
         /// <returns>A sequence of supported HTTP methods.</returns>
-        public IEnumerable<HttpMethod> GetSupportedHttpMethods()
+        public virtual IEnumerable<HttpMethod> GetSupportedHttpMethods()
         {
             if (m_method == null)
             {
@@ -138,7 +138,7 @@ namespace RestFoundation.Behaviors
         /// Gets the URL template for the service method.
         /// </summary>
         /// <returns>The URL template.</returns>
-        public string GetUrlTemplate()
+        public virtual string GetUrlTemplate()
         {
             if (m_method == null)
             {
