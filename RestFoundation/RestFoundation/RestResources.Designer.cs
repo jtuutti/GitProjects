@@ -707,5 +707,14 @@ namespace RestFoundation {
                 return ResourceManager.GetString("UnsupportedSyncRequestForAsyncHandler", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A potentially dangerous value was found in the HTTP request.
+        /// </summary>
+        internal static string ValidationRequestFailed {
+            get {
+                return ResourceManager.GetString("ValidationRequestFailed", resourceCulture);
+            }
+        }
     }
 }

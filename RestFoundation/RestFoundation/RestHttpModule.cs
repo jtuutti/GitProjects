@@ -3,9 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using RestFoundation.Runtime;
@@ -17,6 +15,10 @@ namespace RestFoundation
     /// </summary>
     public sealed class RestHttpModule : IHttpModule
     {
+        private const string DangerousRequestMessage = "A potentially dangerous Request.Path value was detected from the client";
+        private const string RequestTimeoutMessage = "Request timed out";
+
+        private HttpApplication m_context;
         private bool m_integratedPipeline;
 
         internal static bool IsInitialized { get; set; }
@@ -37,14 +39,15 @@ namespace RestFoundation
 
             IsInitialized = true;
 
+            m_context = context;
             m_integratedPipeline = HttpRuntime.UsingIntegratedPipeline;
 
-            context.Error += (sender, args) => CompleteRequestOnError(context);
-            context.PreRequestHandlerExecute += (sender, args) => IngestPageDependencies(context);
+            context.Error += (sender, args) => CompleteRequestOnError();
+            context.PreRequestHandlerExecute += (sender, args) => IngestPageDependencies();
             context.PreSendRequestHeaders += (sender, args) =>
             {
-                RemoveServerHeaders(context);
-                SetResponseHeaders(context);
+                RemoveServerHeaders();
+                SetResponseHeaders();
             };
         }
 
@@ -55,9 +58,24 @@ namespace RestFoundation
         {
         }
 
-        private static void CompleteRequestOnError(HttpApplication context)
+        private void SetResponseStatus(HttpStatusCode statusCode, string statusDescription)
         {
-            Exception exception = context.Server.GetLastError();
+            try
+            {
+                m_context.Response.Clear();
+                m_context.Response.StatusCode = (int) statusCode;
+                m_context.Response.StatusDescription = HttpUtility.HtmlEncode(statusDescription);
+                m_context.Server.ClearError();
+                m_context.CompleteRequest();
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void CompleteRequestOnError()
+        {
+            Exception exception = m_context.Server.GetLastError();
 
             if (exception is HttpUnhandledException && exception.InnerException != null)
             {
@@ -68,7 +86,7 @@ namespace RestFoundation
 
             if (responseException != null)
             {
-                SetResponseStatus(context, responseException.StatusCode, responseException.StatusDescription);
+                SetResponseStatus(responseException.StatusCode, responseException.StatusDescription);
                 return;
             }
 
@@ -76,7 +94,7 @@ namespace RestFoundation
 
             if (validationException != null)
             {
-                SetResponseStatus(context, HttpStatusCode.Forbidden, "A potentially dangerous value was found in the HTTP request");
+                SetResponseStatus(HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
                 return;
             }
 
@@ -84,84 +102,44 @@ namespace RestFoundation
 
             if (httpException != null)
             {
-                if (httpException.Message.Contains("A potentially dangerous Request.Path value was detected from the client"))
+                if (httpException.Message.Contains(DangerousRequestMessage))
                 {
-                    SetResponseStatus(context, HttpStatusCode.Forbidden, "A potentially dangerous value was found in the HTTP request");
+                    SetResponseStatus(HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
                 }
-                else if (httpException.Message.Contains("Request timed out"))
+                else if (httpException.Message.Contains(RequestTimeoutMessage))
                 {
-                    SetResponseStatus(context, HttpStatusCode.ServiceUnavailable, "Service timed out");
-                }
-            }
-        }
-
-        private static void SetResponseStatus(HttpApplication context, HttpStatusCode statusCode, string statusDescription)
-        {
-            try
-            {
-                context.Response.Clear();
-                context.Response.StatusCode = (int) statusCode;
-                context.Response.StatusDescription = HttpUtility.HtmlEncode(statusDescription);
-                context.Server.ClearError();
-                context.CompleteRequest();
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-        private static void IngestPageDependencies(HttpApplication context)
-        {
-            var handler = context.Context.CurrentHandler as Page;
-
-            if (handler != null)
-            {
-                InjectControlDependencies(handler);
-
-                handler.PreInit += (s, e) => InitializeChildControls(handler);
-            }
-        }
-
-        private static void InjectControlDependencies(Control control)
-        {
-            Type controlType = control.GetType().BaseType;
-
-            if (controlType != null)
-            {
-                ConstructorInfo constructor = (from ctor in controlType.GetConstructors()
-                                               let parameterLength = ctor.GetParameters().Length
-                                               where parameterLength > 0
-                                               orderby parameterLength descending
-                                               select ctor).FirstOrDefault();
-
-                if (constructor != null)
-                {
-                    CallPageInjectionConstructor(control, constructor);
+                    SetResponseStatus(HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
                 }
             }
         }
 
-        private static void CallPageInjectionConstructor(Control control, ConstructorInfo constructor)
+        private void IngestPageDependencies()
         {
-            var parameters = from parameter in constructor.GetParameters()
-                             let parameterType = parameter.ParameterType
-                             select Rest.Configuration.ServiceLocator.GetService(parameterType);
+            var handler = m_context.Context.CurrentHandler as Page;
 
-            constructor.Invoke(control, parameters.ToArray());
-        }
-
-        private static void InitializeChildControls(Control control)
-        {
-            var childControls = control.Controls.OfType<UserControl>();
-
-            foreach (var childControl in childControls)
+            if (handler == null)
             {
-                InjectControlDependencies(childControl);
-                InitializeChildControls(childControl);
+                return;
             }
+
+            WebFormsInjectionHelper.InjectControlDependencies(handler);
+
+            handler.PreInit += (s, e) => WebFormsInjectionHelper.InitializeChildControls(handler);
         }
 
-        private static void SetResponseHeaders(HttpApplication context)
+        private void RemoveServerHeaders()
+        {
+            if (!m_integratedPipeline)
+            {
+                return;
+            }
+
+            m_context.Response.Headers.Remove("Server");
+            m_context.Response.Headers.Remove("X-AspNet-Version");
+            m_context.Response.Headers.Remove("X-Powered-By");
+        }
+
+        private void SetResponseHeaders()
         {
             IDictionary<string, string> responseHeaders = Rest.Configuration.Options.ResponseHeaders;
 
@@ -177,20 +155,8 @@ namespace RestFoundation
                     throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.EmptyHttpHeader);
                 }
 
-                context.Response.AppendHeader(header.Key, header.Value);
+                m_context.Response.AppendHeader(header.Key, header.Value);
             }
-        }
-
-        private void RemoveServerHeaders(HttpApplication context)
-        {
-            if (!m_integratedPipeline)
-            {
-                return;
-            }
-
-            context.Response.Headers.Remove("Server");
-            context.Response.Headers.Remove("X-AspNet-Version");
-            context.Response.Headers.Remove("X-Powered-By");
         }
     }
 }

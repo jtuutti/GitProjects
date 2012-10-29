@@ -405,4 +405,8 @@
     <value>There was a problem registering a service: {0}</value>
     <comment>There was a problem registering a service: {0}</comment>
   </data>
+  <data name="ValidationRequestFailed">
+    <value xml:space="preserve">A potentially dangerous value was found in the HTTP request</value>
+    <comment>A potentially dangerous value was found in the HTTP request</comment>
+  </data>
 </root>

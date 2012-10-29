@@ -74,6 +74,7 @@
     <Compile Include="Runtime\AllowHeaderGenerator.cs" />
     <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
     <Compile Include="Runtime\ServiceFactory.cs" />
+    <Compile Include="Runtime\WebFormsInjectionHelper.cs" />
     <Compile Include="ServiceContractAttribute.cs" />
     <Compile Include="ExceptionAction.cs" />
     <Compile Include="Behaviors\AuthorizationBehavior.cs" />
