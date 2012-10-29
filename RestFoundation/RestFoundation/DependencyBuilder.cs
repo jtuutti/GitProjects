@@ -58,6 +58,7 @@ namespace RestFoundation
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <typeparam name="TImplementation">The service implementation type.</typeparam>
         /// <returns>The dependency builder.</returns>
+        /// <exception cref="ServiceActivationException">If there is a problem registring the service.</exception>
         public DependencyBuilder Register<TContract, TImplementation>()
             where TContract : class
             where TImplementation : class, TContract
@@ -72,6 +73,7 @@ namespace RestFoundation
         /// <typeparam name="TImplementation">The service implementation type.</typeparam>
         /// <param name="lifetime">The instance lifetime.</param>
         /// <returns>The dependency builder.</returns>
+        /// <exception cref="ServiceActivationException">If there is a problem registring the service.</exception>
         public DependencyBuilder Register<TContract, TImplementation>(InstanceLifetime lifetime)
             where TContract : class
             where TImplementation : class, TContract
@@ -97,6 +99,7 @@ namespace RestFoundation
         /// <param name="contractType">The service contract type.</param>
         /// <param name="implementationType">The service implementation type.</param>
         /// <returns>The dependency builder.</returns>
+        /// <exception cref="ServiceActivationException">If there is a problem registring the service.</exception>
         public DependencyBuilder Register(Type contractType, Type implementationType)
         {
             return Register(contractType, implementationType, InstanceLifetime.PerInstance);
@@ -109,6 +112,7 @@ namespace RestFoundation
         /// <param name="implementationType">The service implementation type.</param>
         /// <param name="lifetime">The instance lifetime.</param>
         /// <returns>The dependency builder.</returns>
+        /// <exception cref="ServiceActivationException">If there is a problem registring the service.</exception>
         public DependencyBuilder Register(Type contractType, Type implementationType, InstanceLifetime lifetime)
         {
             if (contractType == null)
@@ -142,6 +146,7 @@ namespace RestFoundation
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="instance">The service instance.</param>
         /// <returns>The dependency builder.</returns>
+        /// <exception cref="ServiceActivationException">If there is a problem registring the service.</exception>
         public DependencyBuilder Register<TContract>(TContract instance)
             where TContract : class
         {
@@ -170,6 +175,7 @@ namespace RestFoundation
         /// <param name="contractType">The service contract type.</param>
         /// <param name="instance">The service instance.</param>
         /// <returns>The dependency builder.</returns>
+        /// <exception cref="ServiceActivationException">If there is a problem registring the service.</exception>
         public DependencyBuilder Register(Type contractType, object instance)
         {
             if (contractType == null)
@@ -197,56 +203,11 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Scans assemblies with the provided names and registers the inner service implementations to their contracts.
-        /// </summary>
-        /// <param name="assemblyNames">An array of assembly names to scan.</param>
-        /// <returns>The dependency builder.</returns>
-        public DependencyBuilder ScanAssemblies(params string[] assemblyNames)
-        {
-            return ScanAssemblies(assemblyNames, null);
-        }
-
-        /// <summary>
-        /// Scans assemblies with the provided names and registers the inner service implementations to their contracts.
-        /// The registration predicate must account for both, service contracts and implementations.
-        /// </summary>
-        /// <param name="assemblyNames">An array of assembly names to scan.</param>
-        /// <param name="registrationPredicate">The registration predicate.</param>
-        /// <returns>The dependency builder.</returns>
-        public DependencyBuilder ScanAssemblies(string[] assemblyNames, Func<Type, bool> registrationPredicate)
-        {
-            if (assemblyNames == null)
-            {
-                throw new ArgumentNullException("assemblyNames");
-            }
-
-            if (assemblyNames.Length == 0)
-            {
-                return this;
-            }
-
-            var assemblies = new List<Assembly>();
-
-            try
-            {
-                foreach (string assemblyName in assemblyNames)
-                {
-                    assemblies.Add(AppDomain.CurrentDomain.Load(assemblyName));
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, RestResources.DependencyRegistrationError, ex.Message), ex);
-            }
-
-            return ScanAssemblies(assemblies.ToArray(), registrationPredicate);
-        }
-
-        /// <summary>
         /// Scans the provided assemblies and registers the inner service implementations to their contracts.
         /// </summary>
         /// <param name="assemblies">An array of assemblies to scan.</param>
         /// <returns>The dependency builder.</returns>
+        /// <exception cref="ServiceActivationException">If there is a problem registring the service.</exception>
         public DependencyBuilder ScanAssemblies(params Assembly[] assemblies)
         {
             return ScanAssemblies(assemblies, null);
@@ -259,6 +220,7 @@ namespace RestFoundation
         /// <param name="assemblies">An array of assemblies to scan.</param>
         /// <param name="registrationPredicate">The registration predicate.</param>
         /// <returns>The dependency builder.</returns>
+        /// <exception cref="ServiceActivationException">If there is a problem registring the service.</exception>
         public DependencyBuilder ScanAssemblies(Assembly[] assemblies, Func<Type, bool> registrationPredicate)
         {
             if (assemblies == null)
@@ -288,6 +250,62 @@ namespace RestFoundation
             }
 
             return this;
+        }
+
+        /// <summary>
+        /// Scans assemblies with the provided names and registers the inner service implementations to their contracts.
+        /// </summary>
+        /// <param name="assemblyNames">An array of assembly names to scan.</param>
+        /// <returns>The dependency builder.</returns>
+        /// <exception cref="ServiceActivationException">If there is a problem registring the service.</exception>
+        /// <exception cref="T:System.IO.FileNotFoundException">An assembly specified in <paramref name="assemblyNames"/> is not found.</exception>
+        /// <exception cref="T:System.BadImageFormatException">An assembly specified in <paramref name="assemblyNames"/> is not a valid assembly.</exception>
+        /// <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
+        /// <exception cref="T:System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
+        public DependencyBuilder ScanAssemblies(params string[] assemblyNames)
+        {
+            return ScanAssemblies(assemblyNames, null);
+        }
+
+        /// <summary>
+        /// Scans assemblies with the provided names and registers the inner service implementations to their contracts.
+        /// The registration predicate must account for both, service contracts and implementations.
+        /// </summary>
+        /// <param name="assemblyNames">An array of assembly names to scan.</param>
+        /// <param name="registrationPredicate">The registration predicate.</param>
+        /// <returns>The dependency builder.</returns>
+        /// <exception cref="ServiceActivationException">If there is a problem registring the service.</exception>
+        /// <exception cref="T:System.IO.FileNotFoundException">An assembly specified in <paramref name="assemblyNames"/> is not found.</exception>
+        /// <exception cref="T:System.BadImageFormatException">An assembly specified in <paramref name="assemblyNames"/> is not a valid assembly.</exception>
+        /// <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
+        /// <exception cref="T:System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
+        public DependencyBuilder ScanAssemblies(string[] assemblyNames, Func<Type, bool> registrationPredicate)
+        {
+            if (assemblyNames == null)
+            {
+                throw new ArgumentNullException("assemblyNames");
+            }
+
+            if (assemblyNames.Length == 0)
+            {
+                return this;
+            }
+
+            var assemblies = new List<Assembly>();
+
+            try
+            {
+                foreach (string assemblyName in assemblyNames)
+                {
+                    assemblies.Add(AppDomain.CurrentDomain.Load(assemblyName));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, RestResources.DependencyRegistrationError, ex.Message), ex);
+            }
+
+            return ScanAssemblies(assemblies.ToArray(), registrationPredicate);
         }
 
         internal bool IsRegistered(Type dependencyType)

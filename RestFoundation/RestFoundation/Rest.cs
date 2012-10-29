@@ -107,22 +107,53 @@ namespace RestFoundation
         /// <summary>
         /// Initializes REST Foundation configuration with the default IoC container.
         /// </summary>
+        /// <param name="serviceAssembly">The service assembly.</param>
         /// <returns>The configuration options object.</returns>
-        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
-                         Justification = "This method is not responsible for disposing the IoC container")]
-        public RestOptions Initialize()
+        public RestOptions Initialize(Assembly serviceAssembly)
         {
-            return InitializeWithDefaultDependencies(false);
+            return InitializeWithDefaultDependencies(serviceAssembly, false);
         }
 
         /// <summary>
         /// Initializes REST Foundation configuration with the default IoC container. Mocked
         /// service context is injected. Use this method only for unit testing.
         /// </summary>
+        /// <param name="serviceAssembly">The service assembly.</param>
         /// <returns>The configuration options object.</returns>
-        public RestOptions InitializeAndMock()
+        public RestOptions InitializeAndMock(Assembly serviceAssembly)
         {
-            return InitializeWithDefaultDependencies(true);
+            return InitializeWithDefaultDependencies(serviceAssembly, true);
+        }
+
+        /// <summary>
+        /// Initializes REST Foundation configuration with the default IoC container.
+        /// </summary>
+        /// <param name="serviceAssemblyName">The service assembly name.</param>
+        /// <returns>The configuration options object.</returns>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="serviceAssemblyName"/> is null.</exception>
+        /// <exception cref="T:System.IO.FileNotFoundException"><paramref name="serviceAssemblyName"/> is not found.</exception>
+        /// <exception cref="T:System.BadImageFormatException"><paramref name="serviceAssemblyName"/> is not a valid assembly.</exception>
+        /// <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
+        /// <exception cref="T:System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
+        public RestOptions Initialize(string serviceAssemblyName)
+        {
+            return InitializeWithDefaultDependencies(AppDomain.CurrentDomain.Load(serviceAssemblyName), false);
+        }
+
+        /// <summary>
+        /// Initializes REST Foundation configuration with the default IoC container. Mocked
+        /// service context is injected. Use this method only for unit testing.
+        /// </summary>
+        /// <param name="serviceAssemblyName">The service assembly name.</param>
+        /// <returns>The configuration options object.</returns>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="serviceAssemblyName"/> is null.</exception>
+        /// <exception cref="T:System.IO.FileNotFoundException"><paramref name="serviceAssemblyName"/> is not found.</exception>
+        /// <exception cref="T:System.BadImageFormatException"><paramref name="serviceAssemblyName"/> is not a valid assembly.</exception>
+        /// <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
+        /// <exception cref="T:System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
+        public RestOptions InitializeAndMock(string serviceAssemblyName)
+        {
+            return InitializeWithDefaultDependencies(AppDomain.CurrentDomain.Load(serviceAssemblyName), true);
         }
 
         /// <summary>
@@ -198,9 +229,15 @@ namespace RestFoundation
 
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope",
                          Justification = "This method is not responsible for disposing the IoC container")]
-        private RestOptions InitializeWithDefaultDependencies(bool mockContext)
+        private RestOptions InitializeWithDefaultDependencies(Assembly serviceAssembly, bool mockContext)
         {
             var container = new TinyIoCContainer();
+
+            if (serviceAssembly != null)
+            {
+                container.AutoRegister(new[] { serviceAssembly });
+            }
+
             RegisterDependencies(container, mockContext, null);
 
             return Initialize(new DefaultServiceLocator(container, null));
