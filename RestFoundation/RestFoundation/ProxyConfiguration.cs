@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Globalization;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web.Routing;
 using RestFoundation.Runtime.Handlers;
@@ -66,6 +67,7 @@ namespace RestFoundation
             options.ServiceProxyRelativeUrl = relativeUrl.ToLowerInvariant();
 
             ProxyPathProvider.AppInitialize();
+            SetAllowUnsafeHeaderParsing();
 
             RouteTable.Routes.MapPageRoute("ProxyIndex", relativeUrl + "/index", "~/index.aspx");
             RouteTable.Routes.MapPageRoute(String.Empty, relativeUrl + "/metadata", "~/metadata.aspx");
@@ -135,6 +137,44 @@ namespace RestFoundation
 
             Rest.Configuration.Options.ServiceProxyAuthorizationManager = authorizationManager;
             return this;
+        }
+
+        private static void SetAllowUnsafeHeaderParsing()
+        {
+            const string AssemblyName = "System.Net.Configuration.SettingsSectionInternal";
+            const string SectionName = "Section";
+            const string FieldName = "useUnsafeHeaderParsing";
+
+            const BindingFlags SectionBindingFlags = BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic;
+            const BindingFlags FieldBindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
+
+            Assembly assembly = Assembly.GetAssembly(typeof(System.Net.Configuration.SettingsSection));
+
+            if (assembly == null)
+            {
+                return;
+            }
+
+            Type assemblyType = assembly.GetType(AssemblyName);
+
+            if (assemblyType == null)
+            {
+                return;
+            }
+
+            object section = assemblyType.InvokeMember(SectionName, SectionBindingFlags, null, null, new object[0], CultureInfo.InvariantCulture);
+
+            if (section == null)
+            {
+                return;
+            }
+
+            FieldInfo unsafeHeaderField = assemblyType.GetField(FieldName, FieldBindingFlags);
+
+            if (unsafeHeaderField != null)
+            {
+                unsafeHeaderField.SetValue(section, true);
+            }
         }
     }
 }
