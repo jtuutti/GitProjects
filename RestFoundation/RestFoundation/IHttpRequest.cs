@@ -1,6 +1,7 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012
 // </copyright>
+
 using System.IO;
 using RestFoundation.Collections;
 
@@ -40,6 +41,11 @@ namespace RestFoundation
         /// Gets the stream containing the HTTP request body data.
         /// </summary>
         Stream Body { get; }
+
+        /// <summary>
+        /// Gets a resource state associated with the service method with associated validation errors.
+        /// </summary>
+        ResourceState ResourceState { get; }
 
         /// <summary>
         /// Gets the dynamic query string dictionary.

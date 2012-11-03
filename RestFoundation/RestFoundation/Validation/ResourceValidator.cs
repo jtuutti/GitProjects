@@ -16,6 +16,8 @@ namespace RestFoundation.Validation
     /// </summary>
     public class ResourceValidator : IResourceValidator
     {
+        internal const string ValidationErrorKey = "REST_ValidationErrors";
+
         /// <summary>
         /// Returns a <see cref="bool"/> value indicating whether the resource is valid along with the associated
         /// collection of errors.

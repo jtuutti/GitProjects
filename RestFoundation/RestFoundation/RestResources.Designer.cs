@@ -583,15 +583,6 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resource validation failed..
-        /// </summary>
-        internal static string ResourceValidationFailed {
-            get {
-                return ResourceManager.GetString("ResourceValidationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Service timed out..
         /// </summary>
         internal static string ServiceTimedOut {

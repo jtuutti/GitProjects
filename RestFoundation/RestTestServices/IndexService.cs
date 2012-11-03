@@ -94,7 +94,7 @@ namespace RestTestServices
 
         public object Post(Person resource)
         {
-            if (resource == null)
+            if (resource == null || !Context.Request.ResourceState.IsValid)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
             }
@@ -109,7 +109,7 @@ namespace RestTestServices
 
         public Person Put(int? id, Person personToUpdate)
         {
-            if (personToUpdate == null)
+            if (personToUpdate == null || !Context.Request.ResourceState.IsValid)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
             }
@@ -121,7 +121,7 @@ namespace RestTestServices
 
         public Person Patch(int? id, Person resource)
         {
-            if (resource == null)
+            if (resource == null || !Context.Request.ResourceState.IsValid)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
             }

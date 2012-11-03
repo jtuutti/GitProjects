@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Net;
 using RestFoundation.Validation;
 
 namespace RestFoundation.Behaviors
@@ -64,7 +63,7 @@ namespace RestFoundation.Behaviors
 
             if (!m_validator.IsValid(behaviorContext.Resource, out validationErrors))
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.ResourceValidationFailed);
+                serviceContext.GetHttpContext().Items[ResourceValidator.ValidationErrorKey] = new ResourceState(validationErrors);
             }
 
             return BehaviorMethodAction.Execute;

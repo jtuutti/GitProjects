@@ -7,6 +7,7 @@ using System.Web.Routing;
 using RestFoundation.Collections;
 using RestFoundation.Collections.Concrete;
 using RestFoundation.Collections.Specialized;
+using RestFoundation.Validation;
 
 namespace RestFoundation.Context
 {
@@ -76,6 +77,19 @@ namespace RestFoundation.Context
                 }
 
                 return ContextContainer.Method.Value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a resource state associated with the service method with associated validation errors.
+        /// </summary>
+        public ResourceState ResourceState
+        {
+            get
+            {
+                var validationErrors = Context.Items[ResourceValidator.ValidationErrorKey] as ResourceState;
+
+                return validationErrors ?? new ResourceState(new ValidationError[0]);
             }
         }
 

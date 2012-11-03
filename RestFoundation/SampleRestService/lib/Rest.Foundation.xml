@@ -303,6 +303,36 @@
       <param name="serviceContractType">A service contract type.</param>
       <returns>The created service instance.</returns>
     </member>
+    <member name="T:RestFoundation.ResourceState">
+      <summary>
+            Represents the resource state for service methods.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ResourceState.#ctor(System.Collections.Generic.ICollection{RestFoundation.Validation.ValidationError})">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.ResourceState" /> class.
+            </summary>
+      <param name="errors">A collection of validation errors associated with the resource.</param>
+    </member>
+    <member name="M:RestFoundation.ResourceState.GetEnumerator">
+      <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+      <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+            </returns>
+      <filterpriority>1</filterpriority>
+    </member>
+    <member name="P:RestFoundation.ResourceState.Count">
+      <summary>
+            Gets the number of elements contained in the <see cref="T:RestFoundation.ResourceState" />.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ResourceState.IsValid">
+      <summary>
+            Gets a value indicating whether the resource state is valid (has no errors).
+            </summary>
+    </member>
     <member name="T:RestFoundation.RestOptions">
       <summary>
             Represents the REST Foundation configuration options.
@@ -6389,6 +6419,11 @@
             Gets the stream containing the HTTP request body data.
             </summary>
     </member>
+    <member name="P:RestFoundation.IHttpRequest.ResourceState">
+      <summary>
+            Gets a resource state associated with the service method with associated validation errors.
+            </summary>
+    </member>
     <member name="P:RestFoundation.IHttpRequest.QueryBag">
       <summary>
             Gets the dynamic query string dictionary.
@@ -6447,6 +6482,11 @@
     <member name="P:RestFoundation.Context.HttpRequest.Method">
       <summary>
             Gets the HTTP method of the request.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Context.HttpRequest.ResourceState">
+      <summary>
+            Gets a resource state associated with the service method with associated validation errors.
             </summary>
     </member>
     <member name="P:RestFoundation.Context.HttpRequest.Body">

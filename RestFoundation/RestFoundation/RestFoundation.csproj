@@ -65,6 +65,7 @@
     <Compile Include="InstanceLifetime.cs" />
     <Compile Include="IOptionsDescriptor.cs" />
     <Compile Include="IServiceFactory.cs" />
+    <Compile Include="ResourceState.cs" />
     <Compile Include="RestOptions.cs" />
     <Compile Include="RestResources.Designer.cs">
       <AutoGen>True</AutoGen>

@@ -11,11 +11,17 @@ namespace SampleRestService.Services
 {
     public class SampleService : ISampleService
     {
+        private readonly IHttpRequest m_request;
         private readonly IHttpResponse m_response;
         private readonly ProductRepository m_repository;
 
-        public SampleService(IHttpResponse response, ProductRepository repository)
+        public SampleService(IHttpRequest request, IHttpResponse response, ProductRepository repository)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
             if (response == null)
             {
                 throw new ArgumentNullException("response");
@@ -26,6 +32,7 @@ namespace SampleRestService.Services
                 throw new ArgumentNullException("repository");
             }
 
+            m_request = request;
             m_response = response;
             m_repository = repository;
         }
@@ -49,6 +56,12 @@ namespace SampleRestService.Services
 
         public Product Post(Product resource)
         {
+            if (!m_request.ResourceState.IsValid)
+            {
+                HandleValidationErrors();
+                return null;
+            }
+
             try
             {
                 m_repository.Add(resource);
@@ -70,6 +83,12 @@ namespace SampleRestService.Services
 
         public Product Put(int id, Product resource)
         {
+            if (!m_request.ResourceState.IsValid)
+            {
+                HandleValidationErrors();
+                return null;
+            }
+
             try
             {
                 m_repository.Update(resource);
@@ -133,6 +152,16 @@ namespace SampleRestService.Services
             {
                 return Result.ResponseStatus(HttpStatusCode.BadRequest, ex.Message);
             }
+        }
+
+        private void HandleValidationErrors()
+        {
+            foreach (var error in m_request.ResourceState)
+            {
+                // handle errors
+            }
+
+            m_response.SetStatus(HttpStatusCode.BadRequest, "Product resource validation failed");
         }
     }
 }

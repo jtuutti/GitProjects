@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Reflection;
+﻿using System.Reflection;
 using NUnit.Framework;
 using RestFoundation.Behaviors;
 using RestFoundation.Runtime.Handlers;
@@ -39,7 +38,7 @@ namespace RestFoundation.Tests.Behaviors
         }
 
         [Test]
-        public void ValidResourceShouldNotThrow()
+        public void ValidResourceShouldNotCreateValidationErrors()
         {
             IServiceBehavior behavior = new ResourceValidationBehavior();
 
@@ -50,28 +49,26 @@ namespace RestFoundation.Tests.Behaviors
             };
 
             behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
+
+            Assert.That(m_context.Request.ResourceState.IsValid, Is.True);
+            Assert.That(m_context.Request.ResourceState.Count, Is.EqualTo(0));
         }
 
         [Test]
-        public void EmptyResourceShouldThrow()
+        public void EmptyResourceShouldCreateValidationErrors()
         {
             IServiceBehavior behavior = new ResourceValidationBehavior();
 
             var resource = new Model();
 
-            try
-            {
-                behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
-                Assert.Fail();
-            }
-            catch (HttpResponseException ex)
-            {
-                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-            }
+            behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
+
+            Assert.That(m_context.Request.ResourceState.IsValid, Is.False);
+            Assert.That(m_context.Request.ResourceState.Count, Is.GreaterThan(0));
         }
 
         [Test]
-        public void ResourceWithoutIDShouldThrow()
+        public void ResourceWithoutIDShouldCreateValidationErrors()
         {
             IServiceBehavior behavior = new ResourceValidationBehavior();
 
@@ -80,19 +77,14 @@ namespace RestFoundation.Tests.Behaviors
                 Name = "Joe Bloe"
             };
 
-            try
-            {
-                behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
-                Assert.Fail();
-            }
-            catch (HttpResponseException ex)
-            {
-                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-            }
+            behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
+
+            Assert.That(m_context.Request.ResourceState.IsValid, Is.False);
+            Assert.That(m_context.Request.ResourceState.Count, Is.GreaterThan(0));
         }
 
         [Test]
-        public void ResourceWithEmptyNameShouldThrow()
+        public void ResourceWithEmptyNameShouldCreateValidationErrors()
         {
             IServiceBehavior behavior = new ResourceValidationBehavior();
 
@@ -102,19 +94,14 @@ namespace RestFoundation.Tests.Behaviors
                 Name = ""
             };
 
-            try
-            {
-                behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
-                Assert.Fail();
-            }
-            catch (HttpResponseException ex)
-            {
-                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-            }
+            behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
+
+            Assert.That(m_context.Request.ResourceState.IsValid, Is.False);
+            Assert.That(m_context.Request.ResourceState.Count, Is.GreaterThan(0));
         }
 
         [Test]
-        public void ResourceWithNameOver25CharactersShouldThrow()
+        public void ResourceWithNameOver25CharactersShouldCreateValidationErrors()
         {
             IServiceBehavior behavior = new ResourceValidationBehavior();
 
@@ -124,19 +111,14 @@ namespace RestFoundation.Tests.Behaviors
                 Name = "Abcdefghijklmnopqrstuvwxyz"
             };
 
-            try
-            {
-                behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
-                Assert.Fail();
-            }
-            catch (HttpResponseException ex)
-            {
-                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-            }
+            behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
+
+            Assert.That(m_context.Request.ResourceState.IsValid, Is.False);
+            Assert.That(m_context.Request.ResourceState.Count, Is.GreaterThan(0));
         }
 
         [Test]
-        public void ResourceWithNameOf25CharactersShouldNotThrow()
+        public void ResourceWithNameOf25CharactersShouldNotCreateValidationErrors()
         {
             IServiceBehavior behavior = new ResourceValidationBehavior();
 
@@ -147,6 +129,9 @@ namespace RestFoundation.Tests.Behaviors
             };
 
             behavior.OnMethodExecuting(m_context, new MethodExecutingContext(m_service, m_method, resource));
+
+            Assert.That(m_context.Request.ResourceState.IsValid, Is.True);
+            Assert.That(m_context.Request.ResourceState.Count, Is.EqualTo(0));
         }
     }
 }
