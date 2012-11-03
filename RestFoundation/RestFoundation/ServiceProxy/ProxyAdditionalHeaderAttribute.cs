@@ -9,7 +9,7 @@ namespace RestFoundation.ServiceProxy
     /// Represents a service proxy decorator attribute that specifies an additional HTTP header
     /// associated with a service contract or a specific service method.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
     public sealed class ProxyAdditionalHeaderAttribute : Attribute
     {
         /// <summary>

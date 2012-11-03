@@ -9,7 +9,7 @@ namespace RestFoundation.ServiceProxy
     /// Represents a service proxy decorator attribute that indicates that the service contract
     /// or a service method is IP restricted.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class ProxyIPFilteredAttribute : Attribute
     {
     }

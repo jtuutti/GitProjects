@@ -9,7 +9,7 @@ namespace RestFoundation.ServiceProxy
     /// Represents a service proxy decorator attribute for a service method parameter that specifies
     /// a route parameter.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
     public sealed class ProxyRouteParameterAttribute : Attribute
     {
         /// <summary>

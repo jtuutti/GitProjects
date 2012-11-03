@@ -9,7 +9,7 @@ namespace RestFoundation.ServiceProxy
     /// Represents a service proxy decorator attribute that specifies a description for a
     /// service method.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class ProxyOperationDescriptionAttribute : Attribute
     {
         /// <summary>

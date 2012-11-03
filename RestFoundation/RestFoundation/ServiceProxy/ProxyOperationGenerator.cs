@@ -85,14 +85,14 @@ namespace RestFoundation.ServiceProxy
 
         private static string GetDescription(MethodInfo method)
         {
-            var descriptionAttribute = Attribute.GetCustomAttribute(method, typeof(ProxyOperationDescriptionAttribute), true) as ProxyOperationDescriptionAttribute;
+            var descriptionAttribute = Attribute.GetCustomAttribute(method, typeof(ProxyOperationDescriptionAttribute), false) as ProxyOperationDescriptionAttribute;
 
             return descriptionAttribute != null ? descriptionAttribute.Description : "No description provided";
         }
 
         private static List<ProxyStatusCode> GetStatusCodes(MethodInfo methodInfo, bool hasResource, bool hasResponse, bool requiresHttps)
         {
-            var statusAttributes = methodInfo.GetCustomAttributes(typeof(ProxyStatusCodeAttribute), true).Cast<ProxyStatusCodeAttribute>();
+            var statusAttributes = methodInfo.GetCustomAttributes(typeof(ProxyStatusCodeAttribute), false).Cast<ProxyStatusCodeAttribute>();
             var statusCodes = new List<ProxyStatusCode>();
 
             foreach (ProxyStatusCodeAttribute statusAttribute in statusAttributes)
@@ -145,7 +145,7 @@ namespace RestFoundation.ServiceProxy
                     continue;
                 }
 
-                var routeParameterAttribute = Attribute.GetCustomAttribute(parameter, typeof(ProxyRouteParameterAttribute), true) as ProxyRouteParameterAttribute;
+                var routeParameterAttribute = Attribute.GetCustomAttribute(parameter, typeof(ProxyRouteParameterAttribute), false) as ProxyRouteParameterAttribute;
                 ProxyParameter routeParameter;
 
                 if (routeParameterAttribute == null)
@@ -253,8 +253,8 @@ namespace RestFoundation.ServiceProxy
                 return null;
             }
 
-            if (!String.IsNullOrEmpty(authenticationAttribute.ServiceRelativeUrl) &&
-                !authenticationAttribute.ServiceRelativeUrl.Trim().TrimStart('~', '/').Equals(serviceUrl, StringComparison.OrdinalIgnoreCase))
+            if (!String.IsNullOrEmpty(authenticationAttribute.RelativeUrlToMatch) &&
+                !authenticationAttribute.RelativeUrlToMatch.Trim().TrimStart('~', '/').Equals(serviceUrl, StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }

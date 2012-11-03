@@ -10,7 +10,7 @@ namespace RestFoundation.ServiceProxy
     /// Represents a service proxy decorator attribute that specifies additional HTTP status codes
     /// that could be returned by the service method.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
     public sealed class ProxyStatusCodeAttribute : Attribute
     {
         /// <summary>

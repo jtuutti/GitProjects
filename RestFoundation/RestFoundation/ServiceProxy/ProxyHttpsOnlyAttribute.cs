@@ -9,7 +9,7 @@ namespace RestFoundation.ServiceProxy
     /// Represents a service proxy decorator attribute that specifies that the service method
     /// requires a secure HTTPS connection.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class ProxyHttpsOnlyAttribute : Attribute
     {
         /// <summary>

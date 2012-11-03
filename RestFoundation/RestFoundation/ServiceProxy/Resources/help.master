@@ -4,7 +4,7 @@
 <%@ Import Namespace="RestFoundation.Security" %>
 
 <script runat="server" language="C#">
-    private RestOptions configurationOptions = Rest.Configuration.Options;    
+    private readonly RestOptions configurationOptions = Rest.Configuration.Options;    
 
     protected void Page_Init(object sender, EventArgs e)
     {
