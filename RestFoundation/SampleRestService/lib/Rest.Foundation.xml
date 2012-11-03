@@ -740,11 +740,6 @@
               Looks up a localized string similar to Service proxy UI is already enabled..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ResourceValidationFailed">
-      <summary>
-              Looks up a localized string similar to Resource validation failed..
-            </summary>
-    </member>
     <member name="P:RestFoundation.RestResources.ServiceTimedOut">
       <summary>
               Looks up a localized string similar to Service timed out..
@@ -3826,12 +3821,12 @@
     </member>
     <member name="P:RestFoundation.ServiceProxy.ProxyAuthenticationAttribute.DefaultUserName">
       <summary>
-            Gets or sets an optional  default user name for the service proxy UI.
+            Gets or sets an optional default user name for the service proxy UI.
             </summary>
     </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyAuthenticationAttribute.ServiceRelativeUrl">
+    <member name="P:RestFoundation.ServiceProxy.ProxyAuthenticationAttribute.RelativeUrlToMatch">
       <summary>
-            Gets or sets an optional service relative URL specific for the authentication.
+            Gets or sets an optional service relative URL for the authentication to match.
             </summary>
     </member>
     <member name="T:RestFoundation.TypeBinderBuilder">

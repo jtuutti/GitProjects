@@ -58,6 +58,8 @@ namespace SampleRestService.DataAccess
                 {
                     throw new InvalidOperationException("Duplicate product ID provided");
                 }
+
+                product.Added = DateTime.UtcNow;
             }
         }
 

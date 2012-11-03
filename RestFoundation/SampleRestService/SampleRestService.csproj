@@ -66,6 +66,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\ExampleBuilders\NewProductExampleBuilder.cs" />
     <Compile Include="Resources\ExampleBuilders\ProductArrayExampleBuilder.cs" />
     <Compile Include="Resources\ExampleBuilders\ProductExampleBuilder.cs" />
     <Compile Include="Resources\Product.cs" />

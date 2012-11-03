@@ -22,6 +22,18 @@ namespace SampleRestService.Resources
         public decimal Price { get; set; }
 
         public bool InStock { get; set; }
-        public DateTime Added { get; set; }
+        public DateTime? Added { get; set; }
+
+
+        // a conditional serialization pattern supported by JSON and XML formatters
+        public bool ShouldSerializeID()
+        {
+            return ID > 0;
+        }
+
+        public bool ShouldSerializeAdded()
+        {
+            return Added.HasValue;
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace SampleRestService.Contracts
         [Url("product")]
         [ProxyOperationDescription("Creates a new product")]
         [ProxyStatusCode(HttpStatusCode.Created, "Product created")]
-        [ProxyResourceExample(RequestBuilderType = typeof(ProductExampleBuilder), ResponseBuilderType = typeof(ProductExampleBuilder))]
+        [ProxyResourceExample(RequestBuilderType = typeof(NewProductExampleBuilder), ResponseBuilderType = typeof(ProductExampleBuilder))]
         Product Post(Product resource);
 
         [Url("product/{id}")]

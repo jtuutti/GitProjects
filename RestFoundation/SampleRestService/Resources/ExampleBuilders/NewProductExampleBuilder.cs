@@ -1,16 +1,19 @@
-﻿using System.Linq;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using RestFoundation.Runtime;
 using RestFoundation.ServiceProxy;
-using SampleRestService.DataAccess;
 
 namespace SampleRestService.Resources.ExampleBuilders
 {
-    public sealed class ProductExampleBuilder : IResourceExampleBuilder
+    public sealed class NewProductExampleBuilder : IResourceExampleBuilder
     {
         public object BuildInstance()
         {
-            return new ProductRepository().GetAll().FirstOrDefault();
+            return new Product
+            {
+                Name = "Bananas",
+                Price = 4.59m,
+                InStock = true
+            };
         }
 
         public XmlSchemas BuildSchemas()
