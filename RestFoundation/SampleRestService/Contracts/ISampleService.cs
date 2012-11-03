@@ -30,16 +30,16 @@ namespace SampleRestService.Contracts
         [ProxyOperationDescription("Creates a new product")]
         [ProxyStatusCode(HttpStatusCode.OK, "Product updated")]
         [ProxyResourceExample(RequestBuilderType = typeof(ProductExampleBuilder), ResponseBuilderType = typeof(ProductExampleBuilder))]
-        Product Put([ParameterConstraint(@"\d+"), ProxyRouteParameter(1)] int id, Product resource);
+        Product Put([ProxyRouteParameter(1)] int id, Product resource);
 
         [Url("product/{id}/in-stock/{inStock}")]
         [ProxyStatusCode(HttpStatusCode.OK, "Product updated")]
         [ProxyResourceExample(ResponseBuilderType = typeof(ProductExampleBuilder))]
-        Product PatchStockStatus([ParameterConstraint(@"\d+"), ProxyRouteParameter(1)] int id,
+        Product PatchStockStatus([ProxyRouteParameter(1)] int id,
                                  [ProxyRouteParameter("true")] bool? inStock);
 
         [Url("product/{id}")]
         [ProxyStatusCode(HttpStatusCode.NoContent, "Product deleted")]
-        StatusResult DeleteById([ParameterConstraint(@"\d+"), ProxyRouteParameter(1)] int id);
+        StatusResult DeleteById([ProxyRouteParameter(1)] int id);
     }
 }
