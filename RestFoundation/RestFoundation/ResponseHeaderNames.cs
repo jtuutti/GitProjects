@@ -6,7 +6,7 @@ namespace RestFoundation
     /// <summary>
     /// Defines HTTP response header names.
     /// </summary>
-    public class ResponseHeaderNames
+    public sealed class ResponseHeaderNames
     {
         /// <summary>
         /// Accept-Ranges
