@@ -9,6 +9,7 @@ using RestTestContracts.Resources;
 
 namespace RestTestContracts
 {
+    [ProxyMetadata(typeof(IndexServiceMetadata))]
     [ProxyAuthentication(AuthenticationType.Digest, RelativeUrlToMatch = "~/async", DefaultUserName = "admin")]
     public interface IIndexService
     {

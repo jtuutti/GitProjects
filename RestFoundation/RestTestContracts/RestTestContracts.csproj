@@ -42,6 +42,7 @@
     <Compile Include="IDynamicService.cs" />
     <Compile Include="IIndexService.cs" />
     <Compile Include="ITouchMapService.cs" />
+    <Compile Include="Metadata\IndexServiceMetadata.cs" />
     <Compile Include="Metadata\PersonArrayExampleBuilder.cs" />
     <Compile Include="Metadata\PersonExampleBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -73,6 +73,18 @@ namespace RestFoundation.ServiceProxy
             return operations;
         }
 
+        private static IProxyMetadata GetProxyMetadata(ServiceMethodMetadata metadata)
+        {
+            if (metadata.MethodInfo.DeclaringType == null)
+            {
+                return null;
+            }
+
+            var proxyMetadataAttribute = metadata.MethodInfo.DeclaringType.GetCustomAttributes(typeof(ProxyMetadataAttribute), false).Cast<ProxyMetadataAttribute>().FirstOrDefault();
+
+            return proxyMetadataAttribute != null ? Activator.CreateInstance(proxyMetadataAttribute.ProxyMetadataType, true) as IProxyMetadata : null;
+        }
+
         private static string GetUrlTemplate(ServiceMethodMetadata metadata)
         {
             return (metadata.ServiceUrl + (metadata.UrlInfo.UrlTemplate.Length > 0 ? UrlSeparator + metadata.UrlInfo.UrlTemplate.TrimStart(UrlSeparator[0]) : UrlSeparator)).Trim(UrlSeparator[0]);
@@ -307,6 +319,13 @@ namespace RestFoundation.ServiceProxy
 
         private static ProxyOperation GenerateProxyOperation(ServiceMethodMetadata metadata)
         {
+            IProxyMetadata proxyMetadata = GetProxyMetadata(metadata);
+
+            if (proxyMetadata != null)
+            {
+                proxyMetadata.Initialize();
+            }
+
             var operation = new ProxyOperation
                             {
                                 ServiceUrl = metadata.ServiceUrl,
@@ -315,13 +334,13 @@ namespace RestFoundation.ServiceProxy
                                 SupportedHttpMethods = GetSupportedHttpMethods(metadata),
                                 MetadataUrl = String.Concat("metadata?oid=", metadata.ServiceMethodId),
                                 ProxyUrl = String.Concat("proxy?oid=", metadata.ServiceMethodId),
-                                Description = GetDescription(metadata.MethodInfo),
+                                Description = proxyMetadata != null ? proxyMetadata.GetDescription(metadata.MethodInfo) ?? "No description provided" : "No description provided",
                                 ResultType = metadata.MethodInfo.ReturnType,
                                 RouteParameters = GetParameters(metadata),
-                                HttpsPort = GetHttpsPort(metadata),
-                                IsIPFiltered = GetIsIPFiltered(metadata),
+                                HttpsPort = proxyMetadata != null && proxyMetadata.GetHttps(metadata.MethodInfo) != null ? proxyMetadata.GetHttps(metadata.MethodInfo).Port : 0,
+                                IsIPFiltered = proxyMetadata != null && proxyMetadata.IsIPFiltered(metadata.MethodInfo),
                                 Credentials = GetCredentials(metadata, metadata.ServiceUrl),
-                                AdditionalHeaders = GetAdditionalHeaders(metadata),
+                                AdditionalHeaders = proxyMetadata != null ? proxyMetadata.GetHeaders(metadata.MethodInfo).Select(x => Tuple.Create(x.Name, x.Value)).ToList() : new List<Tuple<string, string>>()
                             };
 
             operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, operation.HasResource, operation.HasResponse, operation.HttpsPort > 0);
