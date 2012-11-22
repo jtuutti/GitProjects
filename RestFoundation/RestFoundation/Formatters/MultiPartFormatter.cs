@@ -14,7 +14,7 @@ namespace RestFoundation.Formatters
     /// <summary>
     /// Represents a multi-part media type formatter for uploading files over the HTTP.
     /// </summary>
-    public class MultipartFormatter : IMediaTypeFormatter
+    public class MultiPartFormatter : IMediaTypeFormatter
     {
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.
