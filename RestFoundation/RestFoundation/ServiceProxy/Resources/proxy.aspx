@@ -46,9 +46,9 @@
 
         if (operation.Credentials != null)
         {
-            if (!String.IsNullOrEmpty(operation.Credentials.Item2))
+            if (!String.IsNullOrEmpty(operation.Credentials.DefaultUserName))
             {
-                UserName.Value = operation.Credentials.Item2;
+                UserName.Value = operation.Credentials.DefaultUserName;
             }
         }
 
@@ -76,31 +76,21 @@
         ResourceFormat.Text = format.ToUpperInvariant();
         HttpMethod.Value = operation.HttpMethod.ToString().ToUpperInvariant();
 
-        foreach (Tuple<string, string> header in operation.AdditionalHeaders)
+        foreach (HeaderMetadata header in operation.AdditionalHeaders)
         {
-            HeaderText.Value += String.Concat(header.Item1, ": ", header.Item2, Environment.NewLine);
+            HeaderText.Value += String.Concat(header.Name, ": ", header.Value, Environment.NewLine);
         }
 
-        if (operation.HasResource && operation.RequestExampleType != null)
+        if (operation.HasResource && operation.RequestResourceExample != null)
         {
-            IResourceExampleBuilder requestExampleBuilder;
 
-            try
-            {
-                requestExampleBuilder = Activator.CreateInstance(operation.RequestExampleType) as IResourceExampleBuilder;
-            }
-            catch (Exception)
-            {
-                requestExampleBuilder = null;
-            }
-
-            if (requestExampleBuilder != null)
+            if (operation.RequestResourceExample != null)
             {
                 object requestObj;
 
                 try
                 {
-                    requestObj = requestExampleBuilder.BuildInstance();
+                    requestObj = operation.RequestResourceExample.Instance;
                 }
                 catch (Exception)
                 {
@@ -166,7 +156,7 @@
                 {
                     var cachedCredentials = new CredentialCache
                     {
-                        { new Uri(serviceUrl), operation.Credentials.Item1.ToString(), new NetworkCredential(UserName.Value.Trim(), Password.Value) }
+                        { new Uri(serviceUrl), operation.Credentials.Type.ToString(), new NetworkCredential(UserName.Value.Trim(), Password.Value) }
                     };
 
                     client.Credentials = cachedCredentials;
@@ -581,7 +571,7 @@
             <% if (operation.Credentials != null) { %>
             <div id="Authentication">
                 <strong>Authentication:</strong>
-                <span><%: operation.Credentials.Item1.ToString() %></span>
+                <span><%: operation.Credentials.Type.ToString() %></span>
                 <span class="spacer" />
                 <strong>Username:</strong>
                 <input type="text" id="UserName" runat="server" />

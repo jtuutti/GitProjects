@@ -31,11 +31,6 @@ namespace RestFoundation.ServiceProxy
                 return null;
             }
 
-            if (Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyHiddenOperationAttribute), false) != null)
-            {
-                return null;
-            }
-
             return GenerateProxyOperation(metadata);
         }
 
@@ -54,10 +49,6 @@ namespace RestFoundation.ServiceProxy
                     continue;
                 }
 
-                if (Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyHiddenOperationAttribute), false) != null)
-                {
-                    continue;
-                }
 
                 foreach (HttpMethod httpMethod in metadata.UrlInfo.HttpMethods)
                 {
@@ -66,7 +57,12 @@ namespace RestFoundation.ServiceProxy
                         continue;
                     }
 
-                    operations.Add(GenerateProxyOperation(metadata));
+                    ProxyOperation operation = GenerateProxyOperation(metadata);
+
+                    if (operation != null)
+                    {
+                        operations.Add(operation);
+                    }
                 }
             }
 
@@ -95,42 +91,44 @@ namespace RestFoundation.ServiceProxy
             return String.Join(", ", metadata.UrlInfo.HttpMethods.Where(m => m != metadata.UrlInfo.HttpMethods.First()).Select(m => m.ToString().ToUpperInvariant()));
         }
 
-        private static string GetDescription(MethodInfo method)
+        private static string GetDescription(MethodInfo method, IProxyMetadata proxyMetadata)
         {
-            var descriptionAttribute = Attribute.GetCustomAttribute(method, typeof(ProxyOperationDescriptionAttribute), false) as ProxyOperationDescriptionAttribute;
+            if (proxyMetadata == null)
+            {
+                return "No description provided";
+            }
 
-            return descriptionAttribute != null ? descriptionAttribute.Description : "No description provided";
+            return proxyMetadata.GetDescription(method) ?? "No description provided";
         }
 
-        private static List<ProxyStatusCode> GetStatusCodes(MethodInfo methodInfo, bool hasResource, bool hasResponse, bool requiresHttps)
+        private static List<StatusCodeMetadata> GetStatusCodes(MethodInfo method, IProxyMetadata proxyMetadata, bool hasResource, bool hasResponse, bool requiresHttps)
         {
-            var statusAttributes = methodInfo.GetCustomAttributes(typeof(ProxyStatusCodeAttribute), false).Cast<ProxyStatusCodeAttribute>();
-            var statusCodes = new List<ProxyStatusCode>();
+            var statusCodes = new List<StatusCodeMetadata>();
 
-            foreach (ProxyStatusCodeAttribute statusAttribute in statusAttributes)
+            if (proxyMetadata != null)
             {
-                statusCodes.Add(new ProxyStatusCode(statusAttribute.StatusCode, statusAttribute.Condition));
+                statusCodes.AddRange(proxyMetadata.GetStatusCodes(method));
             }
 
             if (hasResource)
             {
-                statusCodes.Add(new ProxyStatusCode(HttpStatusCode.BadRequest, "Resource body is invalid"));
-                statusCodes.Add(new ProxyStatusCode(HttpStatusCode.UnsupportedMediaType, "Media type is not supported"));
+                statusCodes.Add(new StatusCodeMetadata { StatusCode = HttpStatusCode.BadRequest, StatusCondition = "Resource body is invalid" });
+                statusCodes.Add(new StatusCodeMetadata { StatusCode = HttpStatusCode.UnsupportedMediaType, StatusCondition = "Media type is not supported" });
             }
 
             if (hasResponse)
             {
-                statusCodes.Add(new ProxyStatusCode(HttpStatusCode.NotAcceptable, "Resulting media type is not accepted by the client"));
+                statusCodes.Add(new StatusCodeMetadata { StatusCode = HttpStatusCode.NotAcceptable, StatusCondition = "Resulting media type is not accepted by the client" });
             }
 
             if (!statusCodes.Any(code => code.GetNumericStatusCode() >= 200 && code.GetNumericStatusCode() <= 204))
             {
-                statusCodes.Add(new ProxyStatusCode(HttpStatusCode.OK, "Operation is successful"));
+                statusCodes.Add(new StatusCodeMetadata { StatusCode = HttpStatusCode.OK, StatusCondition = "Operation is successful" });
             }
 
             if (requiresHttps)
             {
-                statusCodes.Add(new ProxyStatusCode(HttpStatusCode.Forbidden, "HTTP protocol without SSL is not supported"));
+                statusCodes.Add(new StatusCodeMetadata { StatusCode = HttpStatusCode.Forbidden, StatusCondition = "HTTP protocol without SSL is not supported" });
             }
 
             statusCodes.Sort((code1, code2) => code1.CompareTo(code2));
@@ -138,17 +136,17 @@ namespace RestFoundation.ServiceProxy
             return statusCodes;
         }
 
-        private static List<ProxyParameter> GetParameters(ServiceMethodMetadata metadata)
+        private static ICollection<ParameterMetadata> GetParameters(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
         {
-            List<ProxyParameter> parameters = GetRouteParameters(metadata);
-            parameters.AddRange(GetQueryParameters(metadata));
+            var parameters = new List<ParameterMetadata>(GetQueryStringParameters(metadata, proxyMetadata));
+            parameters.AddRange(GetRouteParameters(metadata, proxyMetadata));
 
-            return parameters;
+            return parameters.Distinct().ToList();
         }
 
-        private static List<ProxyParameter> GetRouteParameters(ServiceMethodMetadata metadata)
+        private static IEnumerable<ParameterMetadata> GetRouteParameters(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
         {
-            var routeParameters = new List<ProxyParameter>();
+            var routeParameters = new List<ParameterMetadata>();
 
             foreach (ParameterInfo parameter in metadata.MethodInfo.GetParameters())
             {
@@ -157,25 +155,17 @@ namespace RestFoundation.ServiceProxy
                     continue;
                 }
 
-                var routeParameterAttribute = Attribute.GetCustomAttribute(parameter, typeof(ProxyRouteParameterAttribute), false) as ProxyRouteParameterAttribute;
-                ProxyParameter routeParameter;
+                ParameterMetadata parameterMetadata = proxyMetadata.GetParameter(metadata.MethodInfo, parameter.Name, true);
 
-                if (routeParameterAttribute == null)
+                var routeParameter = new ParameterMetadata
                 {
-                    routeParameter = new ProxyParameter(parameter.Name.ToLowerInvariant(),
-                                                        TypeDescriptor.GetTypeName(parameter.ParameterType),
-                                                        GetParameterConstraint(parameter),
-                                                        true);
-                }
-                else
-                {
-                    routeParameter = new ProxyParameter(parameter.Name.ToLowerInvariant(),
-                                                        TypeDescriptor.GetTypeName(parameter.ParameterType),
-                                                        GetParameterConstraint(parameter),
-                                                        routeParameterAttribute.ExampleValue,
-                                                        routeParameterAttribute.AllowedValues,
-                                                        true);
-                }
+                    Name = parameter.Name.ToLowerInvariant(),
+                    Type = parameter.ParameterType,
+                    IsRouteParameter = true,
+                    RegexConstraint = GetParameterConstraint(parameter),
+                    ExampleValue = parameterMetadata != null ? parameterMetadata.ExampleValue : null,
+                    AllowedValues = parameterMetadata != null ? parameterMetadata.AllowedValues : null
+                };
 
                 routeParameters.Add(routeParameter);
             }
@@ -183,36 +173,41 @@ namespace RestFoundation.ServiceProxy
             return routeParameters;
         }
 
-        private static IEnumerable<ProxyParameter> GetQueryParameters(ServiceMethodMetadata metadata)
+        private static IEnumerable<ParameterMetadata> GetQueryStringParameters(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
         {
-            var routeParameters = new List<ProxyParameter>();
-            var queryParameterAttributes = metadata.MethodInfo.GetCustomAttributes(typeof(ProxyQueryParameterAttribute), false).Cast<ProxyQueryParameterAttribute>();
+            var queryParameters = new List<ParameterMetadata>();
 
-            foreach (ProxyQueryParameterAttribute queryParameterAttribute in queryParameterAttributes)
+            if (proxyMetadata == null)
             {
-                routeParameters.Add(new ProxyParameter(queryParameterAttribute.Name,
-                                                       queryParameterAttribute.ParameterType != null ?
-                                                                                TypeDescriptor.GetTypeName(queryParameterAttribute.ParameterType) :
-                                                                                TypeDescriptor.GetTypeName(typeof(string)),
-                                                       queryParameterAttribute.RegexConstraint,
-                                                       queryParameterAttribute.ExampleValue,
-                                                       queryParameterAttribute.AllowedValues,
-                                                       false));
+                return queryParameters;
             }
 
-            return routeParameters;
+            foreach (var queryParameter in proxyMetadata.GetParameters(metadata.MethodInfo, false))
+            {
+                queryParameters.Add(new ParameterMetadata
+                {
+                    Name = queryParameter.Name.ToLowerInvariant(),
+                    Type = queryParameter.Type,
+                    RegexConstraint = queryParameter.RegexConstraint,
+                    ExampleValue = queryParameter.ExampleValue,
+                    AllowedValues = queryParameter.AllowedValues
+                });
+            }
+
+            return queryParameters;
         }
 
-        private static Tuple<Type, Type> GetResourceExampleTypes(MethodInfo methodInfo)
+        private static Tuple<ResourceExampleMetadata, ResourceExampleMetadata> GetResourceExampleTypes(MethodInfo method, IProxyMetadata proxyMetadata)
         {
-            var resourceExampleAttribute = Attribute.GetCustomAttribute(methodInfo, typeof(ProxyResourceExampleAttribute), false) as ProxyResourceExampleAttribute;
-
-            if (resourceExampleAttribute == null)
+            if (proxyMetadata == null)
             {
-                return new Tuple<Type, Type>(null, null);
+                return new Tuple<ResourceExampleMetadata, ResourceExampleMetadata>(null, null);
             }
 
-            return Tuple.Create(resourceExampleAttribute.RequestBuilderType, resourceExampleAttribute.ResponseBuilderType);
+            ResourceExampleMetadata requestResourceExample = proxyMetadata.GetRequestResourceExample(method);
+            ResourceExampleMetadata responseResourceExample = proxyMetadata.GetResponseResourceExample(method);
+
+            return Tuple.Create(requestResourceExample, responseResourceExample);
         }
 
         private static string GetParameterConstraint(ParameterInfo parameter)
@@ -222,82 +217,9 @@ namespace RestFoundation.ServiceProxy
             return constraintAttribute != null ? constraintAttribute.Pattern.TrimStart('^').TrimEnd('$') : null;
         }
 
-        private static int GetHttpsPort(ServiceMethodMetadata metadata)
+        private static AuthenticationMetadata GetCredentials(MethodInfo method, IProxyMetadata proxyMetadata)
         {
-            var httpsOnlyAttribute = Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyHttpsOnlyAttribute), false) as ProxyHttpsOnlyAttribute;
-
-            if (httpsOnlyAttribute == null && metadata.MethodInfo.DeclaringType != null)
-            {
-                httpsOnlyAttribute = Attribute.GetCustomAttribute(metadata.MethodInfo.DeclaringType, typeof(ProxyHttpsOnlyAttribute), false) as ProxyHttpsOnlyAttribute;
-            }
-
-            if (httpsOnlyAttribute == null || httpsOnlyAttribute.Port <= 0)
-            {
-                return 0;
-            }
-
-            return httpsOnlyAttribute.Port;
-        }
-
-        private static bool GetIsIPFiltered(ServiceMethodMetadata metadata)
-        {
-            var isIPFilteredAttribute = Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyIPFilteredAttribute), false);
-
-            if (isIPFilteredAttribute == null && metadata.MethodInfo.DeclaringType != null)
-            {
-                isIPFilteredAttribute = Attribute.GetCustomAttribute(metadata.MethodInfo.DeclaringType, typeof(ProxyIPFilteredAttribute), false);
-            }
-
-            return isIPFilteredAttribute != null;
-        }
-
-        private static Tuple<AuthenticationType, string> GetCredentials(ServiceMethodMetadata metadata, string serviceUrl)
-        {
-            var authenticationAttribute = Attribute.GetCustomAttribute(metadata.MethodInfo, typeof(ProxyAuthenticationAttribute), false) as ProxyAuthenticationAttribute;
-
-            if (authenticationAttribute == null && metadata.MethodInfo.DeclaringType != null)
-            {
-                authenticationAttribute = Attribute.GetCustomAttribute(metadata.MethodInfo.DeclaringType, typeof(ProxyAuthenticationAttribute), false) as ProxyAuthenticationAttribute;
-            }
-
-            if (authenticationAttribute == null)
-            {
-                return null;
-            }
-
-            if (!String.IsNullOrEmpty(authenticationAttribute.RelativeUrlToMatch) &&
-                !authenticationAttribute.RelativeUrlToMatch.Trim().TrimStart('~', '/').Equals(serviceUrl, StringComparison.OrdinalIgnoreCase))
-            {
-                return null;
-            }
-
-            return Tuple.Create(authenticationAttribute.Authentication, authenticationAttribute.DefaultUserName);
-        }
-
-        private static List<Tuple<string, string>> GetAdditionalHeaders(ServiceMethodMetadata metadata)
-        {
-            List<ProxyAdditionalHeaderAttribute> methodAttributes = metadata.MethodInfo.GetCustomAttributes(typeof(ProxyAdditionalHeaderAttribute), false)
-                                                                                       .Cast<ProxyAdditionalHeaderAttribute>().ToList();
-
-            if (metadata.MethodInfo.DeclaringType != null)
-            {
-                IEnumerable<ProxyAdditionalHeaderAttribute> contractAttributes = metadata.MethodInfo
-                                                                                         .DeclaringType
-                                                                                         .GetCustomAttributes(typeof(ProxyAdditionalHeaderAttribute), false)
-                                                                                         .Cast<ProxyAdditionalHeaderAttribute>();
-
-                foreach (ProxyAdditionalHeaderAttribute contractAttribute in contractAttributes)
-                {
-                    if (!methodAttributes.Any(a => String.Equals(contractAttribute.Name, a.Name, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        methodAttributes.Add(contractAttribute);
-                    }
-                }
-            }
-
-            methodAttributes.Sort((a1, a2) => String.Compare(a1.Name, a2.Name, StringComparison.OrdinalIgnoreCase));
-
-            return methodAttributes.Select(a => Tuple.Create(a.Name, a.Value)).ToList();
+            return proxyMetadata != null ? proxyMetadata.GetAuthentication(method) : null;
         }
 
         private static bool HasResource(ServiceMethodMetadata metadata, HttpMethod httpMethod)
@@ -314,7 +236,7 @@ namespace RestFoundation.ServiceProxy
                 return true;
             }
 
-            return methodParameters.Any(p => Attribute.GetCustomAttribute(p, typeof(ResourceParameterAttribute), false) != null);
+            return methodParameters.Any(p => Attribute.GetCustomAttributes(p, typeof(ResourceParameterAttribute), false).Length > 0);
         }
 
         private static ProxyOperation GenerateProxyOperation(ServiceMethodMetadata metadata)
@@ -326,6 +248,11 @@ namespace RestFoundation.ServiceProxy
                 proxyMetadata.Initialize();
             }
 
+            if (proxyMetadata != null && proxyMetadata.IsHidden(metadata.MethodInfo))
+            {
+                return null;
+            }
+
             var operation = new ProxyOperation
                             {
                                 ServiceUrl = metadata.ServiceUrl,
@@ -334,21 +261,21 @@ namespace RestFoundation.ServiceProxy
                                 SupportedHttpMethods = GetSupportedHttpMethods(metadata),
                                 MetadataUrl = String.Concat("metadata?oid=", metadata.ServiceMethodId),
                                 ProxyUrl = String.Concat("proxy?oid=", metadata.ServiceMethodId),
-                                Description = proxyMetadata != null ? proxyMetadata.GetDescription(metadata.MethodInfo) ?? "No description provided" : "No description provided",
+                                Description = GetDescription(metadata.MethodInfo, proxyMetadata),
                                 ResultType = metadata.MethodInfo.ReturnType,
-                                RouteParameters = GetParameters(metadata),
+                                RouteParameters = GetParameters(metadata, proxyMetadata),
                                 HttpsPort = proxyMetadata != null && proxyMetadata.GetHttps(metadata.MethodInfo) != null ? proxyMetadata.GetHttps(metadata.MethodInfo).Port : 0,
                                 IsIPFiltered = proxyMetadata != null && proxyMetadata.IsIPFiltered(metadata.MethodInfo),
-                                Credentials = GetCredentials(metadata, metadata.ServiceUrl),
-                                AdditionalHeaders = proxyMetadata != null ? proxyMetadata.GetHeaders(metadata.MethodInfo).Select(x => Tuple.Create(x.Name, x.Value)).ToList() : new List<Tuple<string, string>>()
+                                Credentials = GetCredentials(metadata.MethodInfo, proxyMetadata),
+                                AdditionalHeaders = proxyMetadata != null ? proxyMetadata.GetHeaders(metadata.MethodInfo) : new List<HeaderMetadata>()
                             };
 
-            operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, operation.HasResource, operation.HasResponse, operation.HttpsPort > 0);
+            operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, proxyMetadata, operation.HasResource, operation.HasResponse, operation.HttpsPort > 0);
             operation.HasResource = HasResource(metadata, operation.HttpMethod);
 
-            Tuple<Type, Type> resourceExampleTypes = GetResourceExampleTypes(metadata.MethodInfo);
-            operation.RequestExampleType = resourceExampleTypes.Item1;
-            operation.ResponseExampleType = resourceExampleTypes.Item2;
+            Tuple<ResourceExampleMetadata, ResourceExampleMetadata> resourceExampleTypes = GetResourceExampleTypes(metadata.MethodInfo, proxyMetadata);
+            operation.RequestResourceExample = resourceExampleTypes.Item1;
+            operation.ResponseResourceExample = resourceExampleTypes.Item2;
 
             return operation;
         }

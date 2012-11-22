@@ -29,120 +29,92 @@
             return;
         }
 
-        if (operation.HasResource && operation.RequestExampleType != null)
+        if (operation.HasResource && operation.RequestResourceExample != null)
         {
-            IResourceExampleBuilder requestExampleBuilder;
+            object requestObj;
 
             try
             {
-                requestExampleBuilder = Activator.CreateInstance(operation.RequestExampleType) as IResourceExampleBuilder;
+                requestObj = operation.RequestResourceExample.Instance;
             }
             catch (Exception)
             {
-                requestExampleBuilder = null;
+                requestObj = null;
             }
 
-            if (requestExampleBuilder != null)
+            if (requestObj != null)
             {
-                object requestObj;
-
                 try
                 {
-                    requestObj = requestExampleBuilder.BuildInstance();
+                    requestJsonExample = JsonConvert.SerializeObject(requestObj, Formatting.Indented);
                 }
                 catch (Exception)
                 {
-                    requestObj = null;
+                    requestJsonExample = null;
                 }
 
-                if (requestObj != null)
+                try
                 {
-                    try
-                    {
-                        requestJsonExample = JsonConvert.SerializeObject(requestObj, Formatting.Indented);
-                    }
-                    catch (Exception)
-                    {
-                        requestJsonExample = null;
-                    }
-
-                    try
-                    {
-                        requestXmlExample = XmlConvert.SerializeObject(requestObj, System.Xml.Formatting.Indented);
-                    }
-                    catch (Exception)
-                    {
-                        requestXmlExample = null;
-                    }
+                    requestXmlExample = XmlConvert.SerializeObject(requestObj, System.Xml.Formatting.Indented);
                 }
+                catch (Exception)
+                {
+                    requestXmlExample = null;
+                }
+            }
                 
-                if (requestXmlExample != null)
-                {
-                    XmlSchemas schemas = requestExampleBuilder.BuildSchemas();
+            if (requestXmlExample != null)
+            {
+                XmlSchemas schemas = operation.RequestResourceExample.XmlSchemas;
 
-                    if (schemas != null && schemas.Count > 0)
-                    {
-                        requestXmlSchemas = schemas.Serialize();
-                    }
+                if (schemas != null && schemas.Count > 0)
+                {
+                    requestXmlSchemas = schemas.Serialize();
                 }
             }
         }
 
-        if (operation.HasResponse && operation.ResponseExampleType != null)
+        if (operation.HasResponse && operation.ResponseResourceExample != null)
         {
-            IResourceExampleBuilder responseExampleBuilder;
+            object responseObj;
 
             try
             {
-                responseExampleBuilder = Activator.CreateInstance(operation.ResponseExampleType) as IResourceExampleBuilder;
+                responseObj = operation.ResponseResourceExample.Instance;
             }
             catch (Exception)
             {
-                responseExampleBuilder = null;
+                responseObj = null;
             }
 
-            if (responseExampleBuilder != null)
+            if (responseObj != null)
             {
-                object responseObj;
-
                 try
                 {
-                    responseObj = responseExampleBuilder.BuildInstance();
+                    responseJsonExample = JsonConvert.SerializeObject(responseObj, Formatting.Indented);
                 }
                 catch (Exception)
                 {
-                    responseObj = null;
+                    responseJsonExample = null;
                 }
 
-                if (responseObj != null)
+                try
                 {
-                    try
-                    {
-                        responseJsonExample = JsonConvert.SerializeObject(responseObj, Formatting.Indented);
-                    }
-                    catch (Exception)
-                    {
-                        responseJsonExample = null;
-                    }
-
-                    try
-                    {
-                        responseXmlExample = XmlConvert.SerializeObject(responseObj, System.Xml.Formatting.Indented);
-                    }
-                    catch (Exception)
-                    {
-                        responseXmlExample = null;
-                    }
+                    responseXmlExample = XmlConvert.SerializeObject(responseObj, System.Xml.Formatting.Indented);
                 }
-
-                if (responseXmlExample != null)
+                catch (Exception)
                 {
-                    XmlSchemas schemas = responseExampleBuilder.BuildSchemas();
+                    responseXmlExample = null;
+                }
+            }
 
-                    if (schemas != null && schemas.Count > 0)
-                    {
-                        responseXmlSchemas = schemas.Serialize();
-                    }
+            if (responseXmlExample != null)
+            {
+                XmlSchemas schemas = operation.ResponseResourceExample.XmlSchemas;
+
+                if (schemas != null && schemas.Count > 0)
+                {
+                    responseXmlSchemas = schemas.Serialize();
                 }
             }
         }
@@ -168,7 +140,7 @@
     <% } %>
     <% if (operation.Credentials != null) { %>
     <p>
-        <strong>Authentication: </strong><span><%: operation.Credentials.Item1.ToString() %></span>
+        <strong>Authentication: </strong><span><%: operation.Credentials.Type.ToString() %></span>
     </p>
     <% } %>
     <p>
@@ -198,8 +170,8 @@
     <tr>
         <td><%: "{" + routeParameter.Name + "}" %></td>
         <td><%: routeParameter.IsRouteParameter ? "N" : "Y" %></td>
-        <td><%: routeParameter.ParameterType %></td>
-        <td><%: routeParameter.Constraint ?? String.Empty %></td>
+        <td><%: routeParameter.GetTypeDescription() %></td>
+        <td><%: routeParameter.RegexConstraint ?? String.Empty %></td>
         <td><%: routeParameter.AllowedValues ?? String.Empty %></td>
         <td><%: routeParameter.ExampleValue ?? String.Empty %></td>
     </tr>
@@ -208,13 +180,13 @@
     <% } %>
     <% if (operation.AdditionalHeaders.Count > 0) { %>
     <%
-        var authorizationHeader = operation.AdditionalHeaders.FirstOrDefault(h => String.Equals("Authorization", h.Item1, StringComparison.OrdinalIgnoreCase));
+        var authorizationHeader = operation.AdditionalHeaders.FirstOrDefault(h => String.Equals("Authorization", h.Name, StringComparison.OrdinalIgnoreCase));
 
         if (authorizationHeader != null) {
-            if (authorizationHeader.Item2.StartsWith("Basic", StringComparison.OrdinalIgnoreCase)) {
+            if (authorizationHeader.Value.StartsWith("Basic", StringComparison.OrdinalIgnoreCase)) {
                 authentication = "basic";
             }
-            else if (authorizationHeader.Item2.StartsWith("Digest", StringComparison.OrdinalIgnoreCase)) {
+            else if (authorizationHeader.Value.StartsWith("Digest", StringComparison.OrdinalIgnoreCase)) {
                 authentication = "digest";
             }
         }
@@ -229,8 +201,8 @@
     </tr>
     <% foreach (var header in operation.AdditionalHeaders) { %>
     <tr>
-        <td><%: header.Item1 %></td>
-        <td><%: header.Item2 %></td>
+        <td><%: header.Name %></td>
+        <td><%: header.Value %></td>
     </tr>
     <% } %>
     </table>
@@ -296,11 +268,11 @@
     <%  foreach (var statusCode in operation.StatusCodes) { %>
     <tr<%= statusCode.GetNumericStatusCode() >= 400 ? " class=\"error-response-code\"" : "" %>>
         <td><%: statusCode.GetNumericStatusCode() %></td>
-        <td><%: statusCode.Condition %></td>
+        <td><%: statusCode.StatusCondition %></td>
     </tr>
     <% } %>
     </table>
-    <% if (operation.ResponseExampleType != null) { %>
+    <% if (operation.RequestResourceExample != null && operation.RequestResourceExample.Instance != null) { %>
     <% if (!String.IsNullOrEmpty(requestJsonExample)) { %>
     <div class="schemaSection">
         <a name="request-json"></a>The following is an example JSON serialized request:
@@ -316,7 +288,7 @@
     </div>
     <% } %>
     <% } %>
-    <% if (operation.ResponseExampleType != null) { %>
+    <% if (operation.ResponseResourceExample != null && operation.ResponseResourceExample.Instance != null) { %>
     <% if (!String.IsNullOrEmpty(responseJsonExample)) { %>
     <div class="schemaSection">
         <a name="response-json"></a>The following is an example JSON serialized response:

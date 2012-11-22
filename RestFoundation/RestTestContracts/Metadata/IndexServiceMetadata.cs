@@ -1,4 +1,5 @@
-﻿using RestFoundation.Runtime;
+﻿using System;
+using System.Net;
 using RestFoundation.ServiceProxy;
 using RestTestContracts.Resources;
 
@@ -8,14 +9,38 @@ namespace RestTestContracts.Metadata
     {
         public override void Initialize()
         {
-            SetServiceAuthentication(AuthenticationType.Digest, "admin", "~/async");
+            SetAuthentication(AuthenticationType.Digest, "admin", "~/async");
 
-            MarkOperationHidden(x => x.Feed(null));
-            MarkOperationHidden(x => x.FileDownload());
-            MarkOperationHidden(x => x.FileUpload(null));
+            ForMethod(x => x.Feed(null)).SetHidden();
+            ForMethod(x => x.FileDownload()).SetHidden();
+            ForMethod(x => x.FileUpload(null)).SetHidden();
 
-            SetOperationDescription(x => x.GetAll(), "Gets all resources of type 'Index'");
-            SetOperationRequestResourceBuilder(x => x.GetAll(), CreatePersonArrayExample(), XmlSchemaGenerator.Generate<Person[]>());
+            ForMethod(x => x.GetAll()).SetDescription("Gets all resources of type 'Person'")
+                                      .SetResponseResourceExample(CreatePersonArrayExample());
+
+            ForMethod(x => x.Get(null, null)).SetDescription("Gets resources of type 'Person' by ID")
+                                             .SetRouteParameter("id", 1);
+
+            ForMethod(x => x.Post(null)).SetDescription("Creates a new resource of type 'Person'")
+                                        .SetStatusCode(HttpStatusCode.Created, "Resource is created")
+                                        .SetRequestResourceExample(CreatePersonRequestExample())
+                                        .SetResponseResourceExample(CreatePersonResponseExample());
+
+            ForMethod(x => x.Put(null, null)).SetDescription("Updates an existing resource of type 'Person'")
+                                             .SetRouteParameter("id", 1)
+                                             .SetStatusCode(HttpStatusCode.OK, "Resource is updated")
+                                             .SetRequestResourceExample(CreatePersonRequestExample())
+                                             .SetResponseResourceExample(CreatePersonResponseExample());
+
+            ForMethod(x => x.Patch(null, null)).SetDescription("Partially modifies an existing resource of type 'Person'")
+                                               .SetRouteParameter("id", 1)
+                                               .SetStatusCode(HttpStatusCode.OK, "Resource is partially modified")
+                                               .SetRequestResourceExample(CreatePersonRequestExample())
+                                               .SetResponseResourceExample(CreatePersonResponseExample());
+
+            ForMethod(x => x.Delete(null)).SetDescription("Deletes an existing resource of type 'Person' by name")
+                                          .SetRouteParameter("name", "John Doe")
+                                          .SetStatusCode(HttpStatusCode.NoContent, "Resource is deleted");
         }
 
         private static Person[] CreatePersonArrayExample()
@@ -39,6 +64,24 @@ namespace RestTestContracts.Metadata
                     Name = "Beth Sue",
                     Age = 33
                 }
+            };
+        }
+        private static Person CreatePersonRequestExample()
+        {
+            return new Person
+            {
+                Name = "Joe Bloe",
+                Age = 41
+            };
+        }
+
+        private static Person CreatePersonResponseExample()
+        {
+            return new Person
+            {
+                Name = "Joe Bloe",
+                Age = 41,
+                Values = new[] { DateTime.Now.ToLongDateString() }
             };
         }
     }

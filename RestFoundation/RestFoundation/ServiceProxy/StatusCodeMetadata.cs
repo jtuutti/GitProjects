@@ -3,10 +3,15 @@ using System.Net;
 
 namespace RestFoundation.ServiceProxy
 {
-    public sealed class StatusCodeMetadata : IEquatable<StatusCodeMetadata>
+    public sealed class StatusCodeMetadata : IComparable<StatusCodeMetadata>, IEquatable<StatusCodeMetadata>
     {
         public HttpStatusCode StatusCode { get; set; }
-        public string StatusDescription { get; set; }
+        public string StatusCondition { get; set; }
+
+        public int GetNumericStatusCode()
+        {
+            return (int) StatusCode;
+        }
 
         public bool Equals(StatusCodeMetadata other)
         {
@@ -20,7 +25,12 @@ namespace RestFoundation.ServiceProxy
                 return true;
             }
 
-            return StatusCode == other.StatusCode && string.Equals(StatusDescription, other.StatusDescription);
+            return StatusCode == other.StatusCode && string.Equals(StatusCondition, other.StatusCondition);
+        }
+
+        public int CompareTo(StatusCodeMetadata other)
+        {
+            return other != null ? StatusCode.CompareTo(other.StatusCode) : 1;
         }
 
         public override bool Equals(object obj)
@@ -42,7 +52,7 @@ namespace RestFoundation.ServiceProxy
         {
             unchecked
             {
-                return ((int) StatusCode * 397) ^ (StatusDescription != null ? StatusDescription.GetHashCode() : 0);
+                return ((int) StatusCode * 397) ^ (StatusCondition != null ? StatusCondition.GetHashCode() : 0);
             }
         }
     }

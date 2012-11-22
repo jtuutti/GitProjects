@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Reflection;
 using System.Xml.Serialization;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.ServiceProxy
 {
@@ -12,7 +13,7 @@ namespace RestFoundation.ServiceProxy
     /// Represents a service proxy metadata for a service. This class cannot be instantiated.
     /// </summary>
     /// <typeparam name="TContract">The service contract type.</typeparam>
-    public abstract class ProxyMetadata<TContract> : IProxyMetadata
+    public abstract class ProxyMetadata<TContract> : IMethodMetadata, IProxyMetadata
         where TContract : class
     {
         private readonly List<HeaderMetadata> m_serviceHeaders = new List<HeaderMetadata>();
@@ -23,8 +24,8 @@ namespace RestFoundation.ServiceProxy
         private readonly Dictionary<MethodInfo, string> m_descriptionDictionary = new Dictionary<MethodInfo, string>();
         private readonly Dictionary<MethodInfo, AuthenticationMetadata> m_authenticationDictionary = new Dictionary<MethodInfo, AuthenticationMetadata>();
         private readonly Dictionary<MethodInfo, HttpsMetadata> m_httpsDictionary = new Dictionary<MethodInfo, HttpsMetadata>();
-        private readonly Dictionary<MethodInfo, ResourceBuilderMetadata> m_requestResourceBuilderDictionary = new Dictionary<MethodInfo, ResourceBuilderMetadata>();
-        private readonly Dictionary<MethodInfo, ResourceBuilderMetadata> m_responseResourceBuilderDictionary = new Dictionary<MethodInfo, ResourceBuilderMetadata>();
+        private readonly Dictionary<MethodInfo, ResourceExampleMetadata> m_requestResourceExampleDictionary = new Dictionary<MethodInfo, ResourceExampleMetadata>();
+        private readonly Dictionary<MethodInfo, ResourceExampleMetadata> m_responseResourceExampleDictionary = new Dictionary<MethodInfo, ResourceExampleMetadata>();
 
         private readonly Dictionary<MethodInfo, List<HeaderMetadata>> m_headerDictionary = new Dictionary<MethodInfo, List<HeaderMetadata>>();
         private readonly Dictionary<MethodInfo, List<ParameterMetadata>> m_parameterDictionary = new Dictionary<MethodInfo, List<ParameterMetadata>>();
@@ -34,7 +35,339 @@ namespace RestFoundation.ServiceProxy
         private HttpsMetadata m_https;
         private bool m_isIPFiltered;
 
-        public bool IsIPFiltered(MethodInfo serviceMethod)
+        private MethodInfo m_currentServiceMethod;
+
+        public void SetAuthentication(AuthenticationType type)
+        {
+            SetAuthentication(type, null, null);
+        }
+
+        public void SetAuthentication(AuthenticationType type, string defaultUserName)
+        {
+            SetAuthentication(type, defaultUserName, null);
+        }
+
+        public void SetAuthentication(AuthenticationType type, string defaultUserName, string relativeUrlToMatch)
+        {
+            m_authentication = new AuthenticationMetadata
+            {
+                Type = type,
+                DefaultUserName = defaultUserName,
+                RelativeUrlToMatch = relativeUrlToMatch
+            };
+        }
+
+        public void SetHeader(string name, string value)
+        {
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            if (String.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            m_serviceHeaders.Add(new HeaderMetadata
+            {
+                Name = name,
+                Value = value
+            });
+        }
+
+        public void SetIPFiltered()
+        {
+            m_isIPFiltered = true;
+        }
+
+        public void SetHttps(int port)
+        {
+            if (port <= 0)
+            {
+                throw new ArgumentOutOfRangeException("port", "Port must be greater than 0");
+            }
+
+            m_https = new HttpsMetadata
+            {
+                Port = port
+            };
+        }
+        
+        public IMethodMetadata ForMethod(Expression<Func<TContract, object>> serviceMethod)
+        {
+            if (serviceMethod == null)
+            {
+                throw new ArgumentNullException("serviceMethod");
+            }
+
+            var methodExpression = serviceMethod.Body as MethodCallExpression;
+
+            if (methodExpression == null || methodExpression.Method == null)
+            {
+                throw new ArgumentException("Invalid service method expression provided.", "serviceMethod");
+            }
+
+            m_currentServiceMethod = methodExpression.Method;
+
+            return this;
+        }
+
+        public abstract void Initialize();
+
+        IMethodMetadata IMethodMetadata.SetAuthentication(AuthenticationType type)
+        {
+            return ((IMethodMetadata) this).SetAuthentication(type, null, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetAuthentication(AuthenticationType type, string defaultUserName)
+        {
+            return ((IMethodMetadata) this).SetAuthentication(type, defaultUserName, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetAuthentication(AuthenticationType type, string defaultUserName, string relativeUrlToMatch)
+        {
+            ValidateCurrentServiceMethod();
+
+            m_authenticationDictionary[m_currentServiceMethod] = new AuthenticationMetadata
+            {
+                Type = type,
+                DefaultUserName = defaultUserName,
+                RelativeUrlToMatch = relativeUrlToMatch
+            };
+
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetDescription(string description)
+        {
+            ValidateCurrentServiceMethod();
+
+            if (String.IsNullOrEmpty(description))
+            {
+                throw new ArgumentNullException("description");
+            }
+
+            m_descriptionDictionary[m_currentServiceMethod] = description;
+
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetIPFiltered()
+        {
+            ValidateCurrentServiceMethod();
+
+            m_ipFilteredSet.Add(m_currentServiceMethod);
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetHeader(string name, string value)
+        {
+            ValidateCurrentServiceMethod();
+
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            if (String.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            List<HeaderMetadata> headers;
+
+            if (!m_headerDictionary.TryGetValue(m_currentServiceMethod, out headers))
+            {
+                headers = new List<HeaderMetadata>();
+            }
+
+            headers.Add(new HeaderMetadata
+            {
+                Name = name,
+                Value = value
+            });
+
+            m_headerDictionary[m_currentServiceMethod] = headers;
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetHidden()
+        {
+            ValidateCurrentServiceMethod();
+
+            m_hiddenOperationSet.Add(m_currentServiceMethod);
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetHttps()
+        {
+            const int DefaultHttpsPort = 443;
+
+            return ((IMethodMetadata) this).SetHttps(DefaultHttpsPort);
+        }
+
+        IMethodMetadata IMethodMetadata.SetHttps(int port)
+        {
+            ValidateCurrentServiceMethod();
+
+            if (port <= 0)
+            {
+                throw new ArgumentOutOfRangeException("port", "Port must be greater than 0");
+            }
+
+            m_httpsDictionary[m_currentServiceMethod] = new HttpsMetadata
+            {
+                Port = port
+            };
+
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetQueryParameter(string name, Type type)
+        {
+            return ((IMethodMetadata) this).SetQueryParameter(name, type, null, null, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetQueryParameter(string name, Type type, object exampleValue)
+        {
+            return ((IMethodMetadata) this).SetQueryParameter(name, type, exampleValue, null, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetQueryParameter(string name, Type type, object exampleValue, IList<string> allowedValues)
+        {
+            return ((IMethodMetadata) this).SetQueryParameter(name, type, exampleValue, allowedValues, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetQueryParameter(string name, Type type, object exampleValue, string regexConstraint)
+        {
+            return ((IMethodMetadata) this).SetQueryParameter(name, type, exampleValue, null, regexConstraint);
+        }
+
+        IMethodMetadata IMethodMetadata.SetQueryParameter(string name, Type type, object exampleValue, IList<string> allowedValues, string regexConstraint)
+        {
+            ValidateCurrentServiceMethod();
+
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            SetParameter(name, type, exampleValue, allowedValues, regexConstraint, false);
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetRouteParameter(string name)
+        {
+            return ((IMethodMetadata) this).SetRouteParameter(name, null, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetRouteParameter(string name, object exampleValue)
+        {
+            return ((IMethodMetadata) this).SetRouteParameter(name, exampleValue, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetRouteParameter(string name, object exampleValue, IList<string> allowedValues)
+        {
+            ValidateCurrentServiceMethod();
+
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            if (m_currentServiceMethod.GetParameters().All(p => p.Name != name))
+            {
+                throw new ArgumentException("Invalid method parameter name provided", "name");
+            }
+
+            SetParameter(name, null, exampleValue, allowedValues, null, true);
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetRequestResourceExample(object instance)
+        {
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
+
+            return ((IMethodMetadata) this).SetRequestResourceExample(instance, XmlSchemaGenerator.Generate(instance.GetType()));
+        }
+
+        IMethodMetadata IMethodMetadata.SetRequestResourceExample(object instance, XmlSchemas xmlSchemas)
+        {
+            ValidateCurrentServiceMethod();
+
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
+
+            m_requestResourceExampleDictionary[m_currentServiceMethod] = new ResourceExampleMetadata
+            {
+                Instance = instance,
+                XmlSchemas = xmlSchemas
+            };
+
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetResponseResourceExample(object instance)
+        {
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
+
+            return ((IMethodMetadata) this).SetResponseResourceExample(instance, XmlSchemaGenerator.Generate(instance.GetType()));
+        }
+
+        IMethodMetadata IMethodMetadata.SetResponseResourceExample(object instance, XmlSchemas xmlSchemas)
+        {
+            ValidateCurrentServiceMethod();
+
+            if (instance == null)
+            {
+                throw new ArgumentNullException("instance");
+            }
+
+            m_responseResourceExampleDictionary[m_currentServiceMethod] = new ResourceExampleMetadata
+            {
+                Instance = instance,
+                XmlSchemas = xmlSchemas
+            };
+
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetStatusCode(HttpStatusCode statusCode)
+        {
+            return ((IMethodMetadata) this).SetStatusCode(statusCode, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetStatusCode(HttpStatusCode statusCode, string statusDescription)
+        {
+            ValidateCurrentServiceMethod();
+
+            List<StatusCodeMetadata> statusCodes;
+
+            if (!m_statusCodeDictionary.TryGetValue(m_currentServiceMethod, out statusCodes))
+            {
+                statusCodes = new List<StatusCodeMetadata>();
+            }
+
+            statusCodes.Add(new StatusCodeMetadata
+            {
+                StatusCode = statusCode,
+                StatusCondition = statusDescription
+            });
+
+            m_statusCodeDictionary[m_currentServiceMethod] = statusCodes;
+            return this;
+        }
+
+        bool IProxyMetadata.IsIPFiltered(MethodInfo serviceMethod)
         {
             if (serviceMethod == null)
             {
@@ -49,7 +382,7 @@ namespace RestFoundation.ServiceProxy
             return m_ipFilteredSet.Contains(serviceMethod);
         }
 
-        public bool IsHidden(MethodInfo serviceMethod)
+        bool IProxyMetadata.IsHidden(MethodInfo serviceMethod)
         {
             if (serviceMethod == null)
             {
@@ -59,7 +392,7 @@ namespace RestFoundation.ServiceProxy
             return m_hiddenOperationSet.Contains(serviceMethod);
         }
 
-        public string GetDescription(MethodInfo serviceMethod)
+        string IProxyMetadata.GetDescription(MethodInfo serviceMethod)
         {
             if (serviceMethod == null)
             {
@@ -76,7 +409,7 @@ namespace RestFoundation.ServiceProxy
             return description;
         }
 
-        public AuthenticationMetadata GetAuthentication(MethodInfo serviceMethod)
+        AuthenticationMetadata IProxyMetadata.GetAuthentication(MethodInfo serviceMethod)
         {
             if (serviceMethod == null)
             {
@@ -93,7 +426,7 @@ namespace RestFoundation.ServiceProxy
             return authentication;
         }
 
-        public HttpsMetadata GetHttps(MethodInfo serviceMethod)
+        HttpsMetadata IProxyMetadata.GetHttps(MethodInfo serviceMethod)
         {
             if (serviceMethod == null)
             {
@@ -110,41 +443,70 @@ namespace RestFoundation.ServiceProxy
             return https;
         }
 
-        public ResourceBuilderMetadata GetRequestResourceBuilder(MethodInfo serviceMethod)
+        ResourceExampleMetadata IProxyMetadata.GetRequestResourceExample(MethodInfo serviceMethod)
         {
             if (serviceMethod == null)
             {
                 throw new ArgumentNullException("serviceMethod");
             }
 
-            ResourceBuilderMetadata resourceBuilder;
+            ResourceExampleMetadata resourceExample;
 
-            if (!m_requestResourceBuilderDictionary.TryGetValue(serviceMethod, out resourceBuilder))
+            if (!m_requestResourceExampleDictionary.TryGetValue(serviceMethod, out resourceExample))
             {
                 return null;
             }
 
-            return resourceBuilder;
+            return resourceExample;
         }
 
-        public ResourceBuilderMetadata GetResponseResourceBuilder(MethodInfo serviceMethod)
+        ResourceExampleMetadata IProxyMetadata.GetResponseResourceExample(MethodInfo serviceMethod)
         {
             if (serviceMethod == null)
             {
                 throw new ArgumentNullException("serviceMethod");
             }
 
-            ResourceBuilderMetadata resourceBuilder;
+            ResourceExampleMetadata resourceExample;
 
-            if (!m_responseResourceBuilderDictionary.TryGetValue(serviceMethod, out resourceBuilder))
+            if (!m_responseResourceExampleDictionary.TryGetValue(serviceMethod, out resourceExample))
             {
                 return null;
             }
 
-            return resourceBuilder;
+            return resourceExample;
         }
 
-        public IList<HeaderMetadata> GetHeaders(MethodInfo serviceMethod)
+        public ParameterMetadata GetParameter(MethodInfo serviceMethod, string name, bool isRouteParameter)
+        {
+            List<ParameterMetadata> parameters;
+
+            if (!m_parameterDictionary.TryGetValue(serviceMethod, out parameters))
+            {
+                return null;
+            }
+
+            return parameters.FirstOrDefault(p => p.Name == name && p.IsRouteParameter == isRouteParameter);
+        }
+
+        IList<ParameterMetadata> IProxyMetadata.GetParameters(MethodInfo serviceMethod, bool isRouteParameter)
+        {
+            if (serviceMethod == null)
+            {
+                throw new ArgumentNullException("serviceMethod");
+            }
+
+            List<ParameterMetadata> parameters;
+
+            if (!m_parameterDictionary.TryGetValue(serviceMethod, out parameters))
+            {
+                return new List<ParameterMetadata>();
+            }
+
+            return parameters.Where(p => p.IsRouteParameter == isRouteParameter).ToList();
+        }
+
+        IList<HeaderMetadata> IProxyMetadata.GetHeaders(MethodInfo serviceMethod)
         {
             if (serviceMethod == null)
             {
@@ -165,24 +527,7 @@ namespace RestFoundation.ServiceProxy
             return headers;          
         }
 
-        public IList<ParameterMetadata> GetParameters(MethodInfo serviceMethod)
-        {
-            if (serviceMethod == null)
-            {
-                throw new ArgumentNullException("serviceMethod");
-            }
-
-            List<ParameterMetadata> parameters;
-
-            if (!m_parameterDictionary.TryGetValue(serviceMethod, out parameters))
-            {
-                return new List<ParameterMetadata>();
-            }
-
-            return parameters;
-        }
-
-        public IList<StatusCodeMetadata> GetStatusCodes(MethodInfo serviceMethod)
+        IList<StatusCodeMetadata> IProxyMetadata.GetStatusCodes(MethodInfo serviceMethod)
         {
             if (serviceMethod == null)
             {
@@ -199,244 +544,19 @@ namespace RestFoundation.ServiceProxy
             return statusCodes;
         }
 
-        public void MarkServiceIPFiltered()
+        private void ValidateCurrentServiceMethod()
         {
-            m_isIPFiltered = true;
-        }
-
-        public void MarkOperationIPFiltered(Expression<Func<TContract, object>> serviceMethod)
-        {
-            if (serviceMethod == null)
+            if (m_currentServiceMethod == null)
             {
-                throw new ArgumentNullException("serviceMethod");
+                throw new InvalidOperationException("No current service method has been set");
             }
-
-            MethodInfo serviceMethodInfo = GetMethodInfo(serviceMethod);
-            m_ipFilteredSet.Add(serviceMethodInfo);
         }
 
-        public void MarkOperationHidden(Expression<Func<TContract, object>> serviceMethod)
+        private void SetParameter(string name, Type type, object exampleValue, IEnumerable<string> allowedValues, string regexConstraint, bool isRouteParameter)
         {
-            if (serviceMethod == null)
-            {
-                throw new ArgumentNullException("serviceMethod");
-            }
-
-            MethodInfo serviceMethodInfo = GetMethodInfo(serviceMethod);
-            m_hiddenOperationSet.Add(serviceMethodInfo);
-        }
-
-        public void SetServiceAuthentication(AuthenticationType type)
-        {
-            SetServiceAuthentication(type, null, null);
-        }
-
-        public void SetServiceAuthentication(AuthenticationType type, string defaultUserName)
-        {
-            SetServiceAuthentication(type, defaultUserName, null);
-        }
-
-        public void SetServiceAuthentication(AuthenticationType type, string defaultUserName, string relativeUrlToMatch)
-        {
-            m_authentication = new AuthenticationMetadata
-            {
-                Type = type,
-                DefaultUserName = defaultUserName,
-                RelativeUrlToMatch = relativeUrlToMatch
-            };
-        }
-
-        public void SetServiceHeader(string name, string value)
-        {
-            if (String.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException("name");
-            }
-
-            if (String.IsNullOrEmpty(value))
-            {
-                throw new ArgumentNullException("value");
-            }
-
-            m_serviceHeaders.Add(new HeaderMetadata
-            {
-                Name = name,
-                Value = value
-            });
-        }
-
-        public void SetServiceHttps(int port)
-        {
-            if (port <= 0)
-            {
-                throw new ArgumentOutOfRangeException("port", "Port must be greater than 0");
-            }
-
-            m_https = new HttpsMetadata
-            {
-                Port = port
-            };
-        }
-
-        public void SetOperationDescription(Expression<Func<TContract, object>> serviceMethod, string operationDescription)
-        {
-            if (serviceMethod == null)
-            {
-                throw new ArgumentNullException("serviceMethod");
-            }
-
-            if (String.IsNullOrEmpty(operationDescription))
-            {
-                throw new ArgumentNullException("operationDescription");
-            }
-
-            MethodInfo serviceMethodInfo = GetMethodInfo(serviceMethod);
-            m_descriptionDictionary[serviceMethodInfo] = operationDescription;
-        }
-
-        public void SetOperationAuthentication(Expression<Func<TContract, object>> serviceMethod, AuthenticationType type)
-        {
-            SetOperationAuthentication(serviceMethod, type, null, null);
-        }
-
-        public void SetOperationAuthentication(Expression<Func<TContract, object>> serviceMethod, AuthenticationType type, string defaultUserName)
-        {
-            SetOperationAuthentication(serviceMethod, type, defaultUserName, null);
-        }
-
-        public void SetOperationAuthentication(Expression<Func<TContract, object>> serviceMethod, AuthenticationType type, string defaultUserName, string relativeUrlToMatch)
-        {
-            if (serviceMethod == null)
-            {
-                throw new ArgumentNullException("serviceMethod");
-            }
-
-            MethodInfo serviceMethodInfo = GetMethodInfo(serviceMethod);
-
-            m_authenticationDictionary[serviceMethodInfo] = new AuthenticationMetadata
-            {
-                Type = type,
-                DefaultUserName = defaultUserName,
-                RelativeUrlToMatch = relativeUrlToMatch
-            };
-        }
-
-        public void SetOperationResponseResourceBuilder(Expression<Func<TContract, object>> serviceMethod, object instance)
-        {
-            SetOperationResponseResourceBuilder(serviceMethod, instance, null);
-        }
-
-        public void SetOperationResponseResourceBuilder(Expression<Func<TContract, object>> serviceMethod, object instance, XmlSchemas xmlSchemas)
-        {
-            if (serviceMethod == null)
-            {
-                throw new ArgumentNullException("serviceMethod");
-            }
-
-            if (instance == null)
-            {
-                throw new ArgumentNullException("instance");
-            }
-
-            MethodInfo serviceMethodInfo = GetMethodInfo(serviceMethod);
-
-            m_responseResourceBuilderDictionary[serviceMethodInfo] = new ResourceBuilderMetadata
-            {
-                Instance = instance,
-                XmlSchemas = xmlSchemas
-            };
-        }
-
-        public void SetOperationHttps(Expression<Func<TContract, object>> serviceMethod)
-        {
-            SetOperationHttps(serviceMethod, 443);
-        }
-
-        public void SetOperationHttps(Expression<Func<TContract, object>> serviceMethod, int port)
-        {
-            if (serviceMethod == null)
-            {
-                throw new ArgumentNullException("serviceMethod");
-            }
-
-            if (port <= 0)
-            {
-                throw new ArgumentOutOfRangeException("port", "Port must be greater than 0");
-            }
-
-            MethodInfo serviceMethodInfo = GetMethodInfo(serviceMethod);
-
-            m_httpsDictionary[serviceMethodInfo] = new HttpsMetadata
-            {
-                Port = port
-            };
-        }
-
-        public void SetOperationHeader(Expression<Func<TContract, object>> serviceMethod, string name, string value)
-        {
-            if (serviceMethod == null)
-            {
-                throw new ArgumentNullException("serviceMethod");
-            }
-
-            if (String.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException("name");
-            }
-
-            if (String.IsNullOrEmpty(value))
-            {
-                throw new ArgumentNullException("value");
-            }
-
-            MethodInfo serviceMethodInfo = GetMethodInfo(serviceMethod);
-            List<HeaderMetadata> headers;
-
-            if (!m_headerDictionary.TryGetValue(serviceMethodInfo, out headers))
-            {
-                headers = new List<HeaderMetadata>();
-            }
-
-            headers.Add(new HeaderMetadata
-            {
-                Name = name,
-                Value = value
-            });
-
-            m_headerDictionary[serviceMethodInfo] = headers;
-        }
-
-        public void SetOperationParameter(Expression<Func<TContract, object>> serviceMethod, string name, ParameterType type)
-        {
-            SetOperationParameter(serviceMethod, name, type, null, null, null);
-        }
-
-        public void SetOperationParameter(Expression<Func<TContract, object>> serviceMethod, string name, ParameterType type, object exampleValue)
-        {
-            SetOperationParameter(serviceMethod, name, type, exampleValue, null, null);
-        }
-
-        public void SetOperationParameter(Expression<Func<TContract, object>> serviceMethod, string name, ParameterType type, object exampleValue, IList<object> allowedValues)
-        {
-            SetOperationParameter(serviceMethod, name, type, exampleValue, allowedValues, null);
-        }
-
-        public void SetOperationParameter(Expression<Func<TContract, object>> serviceMethod, string name, ParameterType type, object exampleValue, IList<object> allowedValues, string regexConstraint)
-        {
-            if (serviceMethod == null)
-            {
-                throw new ArgumentNullException("serviceMethod");
-            }
-
-            if (String.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException("name");
-            }
-
-            MethodInfo serviceMethodInfo = GetMethodInfo(serviceMethod);
             List<ParameterMetadata> parameters;
 
-            if (!m_parameterDictionary.TryGetValue(serviceMethodInfo, out parameters))
+            if (!m_parameterDictionary.TryGetValue(m_currentServiceMethod, out parameters))
             {
                 parameters = new List<ParameterMetadata>();
             }
@@ -446,80 +566,12 @@ namespace RestFoundation.ServiceProxy
                 Name = name,
                 Type = type,
                 ExampleValue = exampleValue,
-                AllowedValues = allowedValues,
-                RegexConstraint = regexConstraint
+                AllowedValues = allowedValues != null ? String.Join(", ", allowedValues.Where(o => o != null).ToArray()) : null,
+                RegexConstraint = regexConstraint,
+                IsRouteParameter = isRouteParameter
             });
 
-            m_parameterDictionary[serviceMethodInfo] = parameters;
-        }
-
-        public void SetOperationRequestResourceBuilder(Expression<Func<TContract, object>> serviceMethod, object instance)
-        {
-            SetOperationRequestResourceBuilder(serviceMethod, instance, null);
-        }
-
-        public void SetOperationRequestResourceBuilder(Expression<Func<TContract, object>> serviceMethod, object instance, XmlSchemas xmlSchemas)
-        {
-            if (serviceMethod == null)
-            {
-                throw new ArgumentNullException("serviceMethod");
-            }
-
-            if (instance == null)
-            {
-                throw new ArgumentNullException("instance");
-            }
-
-            MethodInfo serviceMethodInfo = GetMethodInfo(serviceMethod);
-
-            m_requestResourceBuilderDictionary[serviceMethodInfo] = new ResourceBuilderMetadata
-            {
-                Instance = instance,
-                XmlSchemas = xmlSchemas
-            };
-        }
-
-        public void SetOperationStatusCode(Expression<Func<TContract, object>> serviceMethod, HttpStatusCode statusCode)
-        {
-            SetOperationStatusCode(serviceMethod, statusCode, null);
-        }
-
-        public void SetOperationStatusCode(Expression<Func<TContract, object>> serviceMethod, HttpStatusCode statusCode, string statusDescription)
-        {
-            if (serviceMethod == null)
-            {
-                throw new ArgumentNullException("serviceMethod");
-            }
-
-            MethodInfo serviceMethodInfo = GetMethodInfo(serviceMethod);
-            List<StatusCodeMetadata> statusCodes;
-
-            if (!m_statusCodeDictionary.TryGetValue(serviceMethodInfo, out statusCodes))
-            {
-                statusCodes = new List<StatusCodeMetadata>();
-            }
-
-            statusCodes.Add(new StatusCodeMetadata
-            {
-                StatusCode = statusCode,
-                StatusDescription = statusDescription
-            });
-
-            m_statusCodeDictionary[serviceMethodInfo] = statusCodes;
-        }
-
-        public abstract void Initialize();
-
-        private static MethodInfo GetMethodInfo(Expression<Func<TContract, object>> serviceMethod)
-        {
-            var methodExpression = serviceMethod.Body as MethodCallExpression;
-
-            if (methodExpression == null)
-            {
-                throw new ArgumentException("Invalid service method expression provided.", "serviceMethod");
-            }
-
-            return methodExpression.Method;
+            m_parameterDictionary[m_currentServiceMethod] = parameters;
         }
     }
 }

@@ -1,15 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace RestFoundation.ServiceProxy
 {
     public sealed class ParameterMetadata : IEquatable<ParameterMetadata>
     {
         public string Name { get; set; }
-        public ParameterType Type { get; set; }
+        public Type Type { get; set; }
+        public bool IsRouteParameter { get; set; }
         public object ExampleValue { get; set; }
-        public IList<object> AllowedValues { get; set; }
+        public string AllowedValues { get; set; }
         public string RegexConstraint { get; set; }
+
+        public string GetTypeDescription()
+        {
+            return TypeDescriptor.GetTypeName(Type);
+        }
 
         public bool Equals(ParameterMetadata other)
         {

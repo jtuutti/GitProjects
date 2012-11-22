@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace RestFoundation.ServiceProxy
 {
@@ -15,6 +16,7 @@ namespace RestFoundation.ServiceProxy
             ProxyMetadataType = proxyMetadataType;
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public Type ProxyMetadataType { get; private set; }
     }
 }

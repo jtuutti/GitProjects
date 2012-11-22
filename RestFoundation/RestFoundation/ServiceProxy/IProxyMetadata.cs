@@ -11,11 +11,13 @@ namespace RestFoundation.ServiceProxy
         string GetDescription(MethodInfo serviceMethod);
         AuthenticationMetadata GetAuthentication(MethodInfo serviceMethod);
         HttpsMetadata GetHttps(MethodInfo serviceMethod);
-        ResourceBuilderMetadata GetRequestResourceBuilder(MethodInfo serviceMethod);
-        ResourceBuilderMetadata GetResponseResourceBuilder(MethodInfo serviceMethod);
+        ResourceExampleMetadata GetRequestResourceExample(MethodInfo serviceMethod);
+        ResourceExampleMetadata GetResponseResourceExample(MethodInfo serviceMethod);
+
+        ParameterMetadata GetParameter(MethodInfo serviceMethod, string name, bool isRouteParameter);
+        IList<ParameterMetadata> GetParameters(MethodInfo serviceMethod, bool isRouteParameter);
 
         IList<HeaderMetadata> GetHeaders(MethodInfo serviceMethod);
-        IList<ParameterMetadata> GetParameters(MethodInfo serviceMethod);
         IList<StatusCodeMetadata> GetStatusCodes(MethodInfo serviceMethod);
 
         void Initialize();

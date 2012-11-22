@@ -1,32 +1,22 @@
-﻿using System.Xml.Serialization;
-using RestFoundation;
+﻿using RestFoundation;
 using RestFoundation.Results;
-using RestFoundation.Runtime;
 using RestFoundation.ServiceProxy;
 
 namespace RestTest.SimpleServices
 {
-    [ServiceContract]
-    public class HelloService
+    [ServiceContract, ProxyMetadata(typeof(HelloService))]
+    public class HelloService : ProxyMetadata<HelloService>
     {
         [Url("", HttpMethod.Get)]
-        [ProxyResourceExample(ResponseBuilderType = typeof(HelloWorldResponseBuilder))]
         public ContentResult Get()
         {
             return Result.Content("Hello world!", true, "text/plain");
         }
-    }
 
-    public class HelloWorldResponseBuilder : IResourceExampleBuilder
-    {
-        public object BuildInstance()
+        public override void Initialize()
         {
-            return "Hello world!";
-        }
- 
-        public XmlSchemas BuildSchemas()
-        {
-            return XmlSchemaGenerator.Generate<string>();
+            ForMethod(x => x.Get()).SetDescription("Prints 'Hello world!'")
+                                   .SetResponseResourceExample("Hello world!");
         }
     }
 }

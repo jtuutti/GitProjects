@@ -57,14 +57,14 @@ namespace RestFoundation.ServiceProxy
         public int RepeatedTemplateCount { get; set; }
 
         /// <summary>
-        /// Gets or sets the HTTP request resource example type or null.
+        /// Gets or sets the HTTP request resource example.
         /// </summary>
-        public Type RequestExampleType { get; set; }
+        public ResourceExampleMetadata RequestResourceExample { get; set; }
 
         /// <summary>
-        /// Gets or sets the HTTP response resource example type or null.
+        /// Gets or sets the HTTP response resource example.
         /// </summary>
-        public Type ResponseExampleType { get; set; }
+        public ResourceExampleMetadata ResponseResourceExample { get; set; }
 
         /// <summary>
         /// Gets or sets the result type.
@@ -89,22 +89,22 @@ namespace RestFoundation.ServiceProxy
         /// <summary>
         /// Gets or sets authentication type and default credentials.
         /// </summary>
-        public Tuple<AuthenticationType, string> Credentials { get; set; }
+        public AuthenticationMetadata Credentials { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of additional headers.
         /// </summary>
-        public ICollection<Tuple<string, string>> AdditionalHeaders { get; set; }
+        public ICollection<HeaderMetadata> AdditionalHeaders { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of route parameters.
         /// </summary>
-        public ICollection<ProxyParameter> RouteParameters { get; set; }
+        public ICollection<ParameterMetadata> RouteParameters { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of possible HTTP status codes.
         /// </summary>
-        public ICollection<ProxyStatusCode> StatusCodes { get; set; }
+        public ICollection<StatusCodeMetadata> StatusCodes { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the operation has a response.
@@ -187,11 +187,11 @@ namespace RestFoundation.ServiceProxy
         {
             var routeParametersWithValues = RouteParameters.Where(p => p.ExampleValue != null);
 
-            foreach (ProxyParameter routeParameter in routeParametersWithValues)
+            foreach (ParameterMetadata routeParameter in routeParametersWithValues)
             {
                 urlTemplate = Regex.Replace(urlTemplate,
                                             String.Concat(@"\{", routeParameter.Name, @"\}"),
-                                            HttpUtility.UrlEncode(Convert.ToString(routeParameter.ExampleValue, CultureInfo.InvariantCulture)),
+                                            HttpUtility.UrlEncode(Convert.ToString(routeParameter.ExampleValue, CultureInfo.InvariantCulture)) ?? String.Empty,
                                             RegexOptions.IgnoreCase);
             }
 

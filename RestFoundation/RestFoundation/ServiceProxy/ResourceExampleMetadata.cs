@@ -2,7 +2,7 @@
 
 namespace RestFoundation.ServiceProxy
 {
-    public sealed class ResourceBuilderMetadata
+    public sealed class ResourceExampleMetadata
     {
         public object Instance { get; set; }
         public XmlSchemas XmlSchemas { get; set; }

@@ -50,7 +50,14 @@ namespace RestFoundation.Runtime
 
                 if (model != null)
                 {
-                    GetSchemaByInference(model, schemas);
+                    try
+                    {
+                        GetSchemaByInference(model, schemas);
+                    }
+                    catch (Exception)
+                    {
+                        return null;
+                    }
                 }
             }
 
