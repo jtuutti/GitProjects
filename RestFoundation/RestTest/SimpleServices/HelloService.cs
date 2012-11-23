@@ -4,7 +4,7 @@ using RestFoundation.ServiceProxy;
 
 namespace RestTest.SimpleServices
 {
-    [ServiceContract, ProxyMetadata(typeof(HelloService))]
+    [ServiceContract]
     public class HelloService : ProxyMetadata<HelloService>
     {
         [Url("", HttpMethod.Get)]

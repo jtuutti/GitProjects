@@ -107,6 +107,7 @@
         .heading1{background-color:#036;border-bottom:#369 6px solid;color:#fff;font-family:Tahoma;font-size:26px;font-weight:400;padding-bottom:8px;padding-left:30px;padding-top:16px;margin:0 0 10px -20px}
         .heading1 a:link,.heading1 a:visited,.heading1 a:active{color:#fff;font-family:Tahoma;font-size:26px;font-weight:400;text-decoration:none}
         .heading1 a:hover{color:#fff;font-family:Tahoma;font-size:26px;font-weight:400;text-decoration:underline}
+        .heading2{display:block;font-family:Verdana;font-size:12px;padding-top:5px}
         #content{margin-left:30px;font-size:.70em}
         #main{border:#bbb 1px solid;margin-left:-10px;background-color:#e5e5cc;padding:15px}
         #main h1{font-size:1.2em;font-weight:700;margin:15px 0 5px;padding:0}
@@ -155,7 +156,12 @@
     <% } %>
 </head>
 <body>
-<p class="heading1"><a href="index" title="Service proxy home page">Index Service</a></p>
+<p class="heading1">
+    <a href="index" title="Service proxy home page">Index Service</a>
+    <% if (!String.IsNullOrEmpty(Rest.Configuration.Options.ServiceDescription)) { %>
+    <span class="heading2"><%: Rest.Configuration.Options.ServiceDescription %></span>
+    <% } %>
+</p>
 <div id="content">
     <asp:ContentPlaceHolder runat="server" ID="bodyPlaceholder"></asp:ContentPlaceHolder>
 </div>

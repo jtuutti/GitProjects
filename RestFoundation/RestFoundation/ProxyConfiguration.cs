@@ -79,6 +79,17 @@ namespace RestFoundation
         }
 
         /// <summary>
+        /// Sets the service description for the service help and proxy pages.
+        /// </summary>
+        /// <param name="description">The service description.</param>
+        /// <returns>The configuration object.</returns>
+        public ProxyConfiguration WithServiceDescription(string description)
+        {
+            Rest.Configuration.Options.ServiceDescription = description;
+            return this;
+        }
+
+        /// <summary>
         /// Sets the JQuery URL if the default CDN location "http://code.jquery.com/jquery-1.7.2.min.js" is not desired.
         /// The service help and proxy interface was designed with JQuery version 1.7.2.
         /// </summary>

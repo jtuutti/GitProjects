@@ -35,6 +35,12 @@ namespace RestFoundation
         [EditorBrowsable(EditorBrowsableState.Never)]
         public IAuthorizationManager ServiceProxyAuthorizationManager { get; internal set; }
 
+        /// <summary>
+        /// Gets the service description.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public string ServiceDescription { get; internal set; }
+
         internal bool IsServiceProxyInitialized { get; set; }
         internal string ServiceProxyRelativeUrl { get; set; }
         internal string DefaultMediaType { get; private set; }
