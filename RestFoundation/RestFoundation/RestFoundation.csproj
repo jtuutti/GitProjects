@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="Runtime\AllowHeaderGenerator.cs" />
     <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
+    <Compile Include="Runtime\ServiceContractMetadata.cs" />
     <Compile Include="Runtime\ServiceFactory.cs" />
     <Compile Include="Runtime\WebFormsInjectionHelper.cs" />
     <Compile Include="ServiceContractAttribute.cs" />
@@ -150,11 +151,13 @@
     <Compile Include="ServiceProxy\HttpsMetadata.cs" />
     <Compile Include="ServiceProxy\IMethodMetadata.cs" />
     <Compile Include="ServiceProxy\IProxyMetadata.cs" />
+    <Compile Include="ServiceProxy\NullProxyMetadata.cs" />
     <Compile Include="ServiceProxy\ParameterMetadata.cs" />
-    <Compile Include="ServiceProxy\ProxyAuthenticationAttribute.cs" />
     <Compile Include="Runtime\IoC\TinyIoC.generated.cs" />
+    <Compile Include="ServiceProxy\ProxyHeader.cs" />
     <Compile Include="ServiceProxy\ProxyMetadata.cs" />
     <Compile Include="ServiceProxy\ProxyMetadataAttribute.cs" />
+    <Compile Include="ServiceProxy\ProxyStatus.cs" />
     <Compile Include="ServiceProxy\ResourceExampleMetadata.cs" />
     <Compile Include="ServiceProxy\StatusCodeMetadata.cs" />
     <Compile Include="TypeBinderBuilder.cs" />
@@ -280,21 +283,9 @@
     <Compile Include="Runtime\XmlSchemaGenerator.cs" />
     <Compile Include="Runtime\Registries\XmlSerializerRegistry.cs" />
     <Compile Include="ProxyConfiguration.cs" />
-    <Compile Include="ServiceProxy\ProxyIPFilteredAttribute.cs" />
-    <Compile Include="ServiceProxy\ProxyAdditionalHeaderAttribute.cs" />
-    <Compile Include="ServiceProxy\ProxyHiddenOperationAttribute.cs" />
-    <Compile Include="ServiceProxy\ProxyHttpsOnlyAttribute.cs" />
-    <Compile Include="ServiceProxy\ProxyOperationDescriptionAttribute.cs" />
-    <Compile Include="ServiceProxy\ProxyQueryParameterAttribute.cs" />
-    <Compile Include="ServiceProxy\ProxyResourceExampleAttribute.cs" />
     <Compile Include="Runtime\Handlers\ProxyRootHandler.cs" />
-    <Compile Include="ServiceProxy\ProxyRouteParameterAttribute.cs" />
-    <Compile Include="ServiceProxy\ProxyStatusCodeAttribute.cs" />
-    <Compile Include="ServiceProxy\ProxyParameter.cs" />
     <Compile Include="ServiceProxy\ProxyOperation.cs" />
     <Compile Include="ServiceProxy\ProxyOperationGenerator.cs" />
-    <Compile Include="ServiceProxy\ProxyStatusCode.cs" />
-    <Compile Include="ServiceProxy\IResourceExampleBuilder.cs" />
     <Compile Include="ServiceProxy\ProxyFile.cs" />
     <Compile Include="ServiceProxy\ProxyPathProvider.cs" />
     <Compile Include="Runtime\Handlers\RootRouteHandler.cs" />

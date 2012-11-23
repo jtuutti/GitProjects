@@ -18,7 +18,7 @@ namespace RestFoundation.ServiceProxy
         IList<ParameterMetadata> GetParameters(MethodInfo serviceMethod, bool isRouteParameter);
 
         IList<HeaderMetadata> GetHeaders(MethodInfo serviceMethod);
-        IList<StatusCodeMetadata> GetStatusCodes(MethodInfo serviceMethod);
+        IList<StatusCodeMetadata> GetResponseStatuses(MethodInfo serviceMethod);
 
         void Initialize();
     }

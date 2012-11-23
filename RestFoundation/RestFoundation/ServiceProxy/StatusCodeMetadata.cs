@@ -5,12 +5,12 @@ namespace RestFoundation.ServiceProxy
 {
     public sealed class StatusCodeMetadata : IComparable<StatusCodeMetadata>, IEquatable<StatusCodeMetadata>
     {
-        public HttpStatusCode StatusCode { get; set; }
-        public string StatusCondition { get; set; }
+        public HttpStatusCode Code { get; set; }
+        public string Condition { get; set; }
 
         public int GetNumericStatusCode()
         {
-            return (int) StatusCode;
+            return (int) Code;
         }
 
         public bool Equals(StatusCodeMetadata other)
@@ -25,12 +25,12 @@ namespace RestFoundation.ServiceProxy
                 return true;
             }
 
-            return StatusCode == other.StatusCode && string.Equals(StatusCondition, other.StatusCondition);
+            return Code == other.Code && string.Equals(Condition, other.Condition);
         }
 
         public int CompareTo(StatusCodeMetadata other)
         {
-            return other != null ? StatusCode.CompareTo(other.StatusCode) : 1;
+            return other != null ? Code.CompareTo(other.Code) : 1;
         }
 
         public override bool Equals(object obj)
@@ -52,7 +52,7 @@ namespace RestFoundation.ServiceProxy
         {
             unchecked
             {
-                return ((int) StatusCode * 397) ^ (StatusCondition != null ? StatusCondition.GetHashCode() : 0);
+                return ((int) Code * 397) ^ (Condition != null ? Condition.GetHashCode() : 0);
             }
         }
     }

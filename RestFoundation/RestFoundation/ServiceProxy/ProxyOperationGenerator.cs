@@ -69,18 +69,6 @@ namespace RestFoundation.ServiceProxy
             return operations;
         }
 
-        private static IProxyMetadata GetProxyMetadata(ServiceMethodMetadata metadata)
-        {
-            if (metadata.MethodInfo.DeclaringType == null)
-            {
-                return null;
-            }
-
-            var proxyMetadataAttribute = metadata.MethodInfo.DeclaringType.GetCustomAttributes(typeof(ProxyMetadataAttribute), false).Cast<ProxyMetadataAttribute>().FirstOrDefault();
-
-            return proxyMetadataAttribute != null ? Activator.CreateInstance(proxyMetadataAttribute.ProxyMetadataType, true) as IProxyMetadata : null;
-        }
-
         private static string GetUrlTemplate(ServiceMethodMetadata metadata)
         {
             return (metadata.ServiceUrl + (metadata.UrlInfo.UrlTemplate.Length > 0 ? UrlSeparator + metadata.UrlInfo.UrlTemplate.TrimStart(UrlSeparator[0]) : UrlSeparator)).Trim(UrlSeparator[0]);
@@ -107,28 +95,28 @@ namespace RestFoundation.ServiceProxy
 
             if (proxyMetadata != null)
             {
-                statusCodes.AddRange(proxyMetadata.GetStatusCodes(method));
+                statusCodes.AddRange(proxyMetadata.GetResponseStatuses(method));
             }
 
             if (hasResource)
             {
-                statusCodes.Add(new StatusCodeMetadata { StatusCode = HttpStatusCode.BadRequest, StatusCondition = "Resource body is invalid" });
-                statusCodes.Add(new StatusCodeMetadata { StatusCode = HttpStatusCode.UnsupportedMediaType, StatusCondition = "Media type is not supported" });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.BadRequest, Condition = "Resource body is invalid" });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.UnsupportedMediaType, Condition = "Media type is not supported" });
             }
 
             if (hasResponse)
             {
-                statusCodes.Add(new StatusCodeMetadata { StatusCode = HttpStatusCode.NotAcceptable, StatusCondition = "Resulting media type is not accepted by the client" });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.NotAcceptable, Condition = "Resulting media type is not accepted by the client" });
             }
 
             if (!statusCodes.Any(code => code.GetNumericStatusCode() >= 200 && code.GetNumericStatusCode() <= 204))
             {
-                statusCodes.Add(new StatusCodeMetadata { StatusCode = HttpStatusCode.OK, StatusCondition = "Operation is successful" });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.OK, Condition = "Operation is successful" });
             }
 
             if (requiresHttps)
             {
-                statusCodes.Add(new StatusCodeMetadata { StatusCode = HttpStatusCode.Forbidden, StatusCondition = "HTTP protocol without SSL is not supported" });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.Forbidden, Condition = "HTTP protocol without SSL is not supported" });
             }
 
             statusCodes.Sort((code1, code2) => code1.CompareTo(code2));
@@ -155,7 +143,7 @@ namespace RestFoundation.ServiceProxy
                     continue;
                 }
 
-                ParameterMetadata parameterMetadata = proxyMetadata.GetParameter(metadata.MethodInfo, parameter.Name, true);
+                ParameterMetadata parameterMetadata = proxyMetadata != null ? proxyMetadata.GetParameter(metadata.MethodInfo, parameter.Name, true) : new ParameterMetadata();
 
                 var routeParameter = new ParameterMetadata
                 {
@@ -163,8 +151,8 @@ namespace RestFoundation.ServiceProxy
                     Type = parameter.ParameterType,
                     IsRouteParameter = true,
                     RegexConstraint = GetParameterConstraint(parameter),
-                    ExampleValue = parameterMetadata != null ? parameterMetadata.ExampleValue : null,
-                    AllowedValues = parameterMetadata != null ? parameterMetadata.AllowedValues : null
+                    ExampleValue = parameterMetadata.ExampleValue,
+                    AllowedValues = parameterMetadata.AllowedValues
                 };
 
                 routeParameters.Add(routeParameter);
@@ -241,12 +229,7 @@ namespace RestFoundation.ServiceProxy
 
         private static ProxyOperation GenerateProxyOperation(ServiceMethodMetadata metadata)
         {
-            IProxyMetadata proxyMetadata = GetProxyMetadata(metadata);
-
-            if (proxyMetadata != null)
-            {
-                proxyMetadata.Initialize();
-            }
+            IProxyMetadata proxyMetadata = ServiceContractTypeRegistry.GetProxyMetadata(metadata.MethodInfo.DeclaringType);
 
             if (proxyMetadata != null && proxyMetadata.IsHidden(metadata.MethodInfo))
             {

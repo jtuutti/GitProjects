@@ -44,8 +44,6 @@
     <Compile Include="ITouchMapService.cs" />
     <Compile Include="Metadata\DynamicServiceMetadata.cs" />
     <Compile Include="Metadata\IndexServiceMetadata.cs" />
-    <Compile Include="Metadata\PersonArrayExampleBuilder.cs" />
-    <Compile Include="Metadata\PersonExampleBuilder.cs" />
     <Compile Include="Metadata\TouchMapServiceMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\TouchMap\Action.cs" />

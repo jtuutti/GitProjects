@@ -22,25 +22,25 @@ namespace RestTestContracts.Metadata
                                              .SetRouteParameter("id", 1);
 
             ForMethod(x => x.Post(null)).SetDescription("Creates a new resource of type 'Person'")
-                                        .SetStatusCode(HttpStatusCode.Created, "Resource is created")
+                                        .SetResponseStatus(HttpStatusCode.Created, "Resource is created")
                                         .SetRequestResourceExample(CreatePersonRequestExample())
                                         .SetResponseResourceExample(CreatePersonResponseExample());
 
             ForMethod(x => x.Put(null, null)).SetDescription("Updates an existing resource of type 'Person'")
                                              .SetRouteParameter("id", 1)
-                                             .SetStatusCode(HttpStatusCode.OK, "Resource is updated")
+                                             .SetResponseStatus(HttpStatusCode.OK, "Resource is updated")
                                              .SetRequestResourceExample(CreatePersonRequestExample())
                                              .SetResponseResourceExample(CreatePersonResponseExample());
 
             ForMethod(x => x.Patch(null, null)).SetDescription("Partially modifies an existing resource of type 'Person'")
                                                .SetRouteParameter("id", 1)
-                                               .SetStatusCode(HttpStatusCode.OK, "Resource is partially modified")
+                                               .SetResponseStatus(HttpStatusCode.OK, "Resource is partially modified")
                                                .SetRequestResourceExample(CreatePersonRequestExample())
                                                .SetResponseResourceExample(CreatePersonResponseExample());
 
             ForMethod(x => x.Delete(null)).SetDescription("Deletes an existing resource of type 'Person' by name")
                                           .SetRouteParameter("name", "John Doe")
-                                          .SetStatusCode(HttpStatusCode.NoContent, "Resource is deleted");
+                                          .SetResponseStatus(HttpStatusCode.NoContent, "Resource is deleted");
         }
 
         private static Person[] CreatePersonArrayExample()

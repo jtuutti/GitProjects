@@ -268,7 +268,7 @@
     <%  foreach (var statusCode in operation.StatusCodes) { %>
     <tr<%= statusCode.GetNumericStatusCode() >= 400 ? " class=\"error-response-code\"" : "" %>>
         <td><%: statusCode.GetNumericStatusCode() %></td>
-        <td><%: statusCode.StatusCondition %></td>
+        <td><%: statusCode.Condition %></td>
     </tr>
     <% } %>
     </table>

@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Globalization;
 
 namespace RestFoundation.ServiceProxy
 {
-    public sealed class HeaderMetadata : IEquatable<HeaderMetadata>
+    public sealed class HeaderMetadata : IEquatable<HeaderMetadata>, IComparable<HeaderMetadata>
     {
+        private static readonly StringComparer Comparer = StringComparer.Create(CultureInfo.InvariantCulture, true);
+
         public string Name { get; set; }
         public string Value { get; set; }
 
@@ -43,6 +46,16 @@ namespace RestFoundation.ServiceProxy
             {
                 return ((Name != null ? Name.GetHashCode() : 0) * 397) ^ (Value != null ? Value.GetHashCode() : 0);
             }
+        }
+ 
+        public int CompareTo(HeaderMetadata other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+
+            return Comparer.Compare(Name, other.Name);
         }
     }
 }

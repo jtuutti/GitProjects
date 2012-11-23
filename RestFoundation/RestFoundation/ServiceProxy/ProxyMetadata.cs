@@ -16,10 +16,9 @@ namespace RestFoundation.ServiceProxy
     public abstract class ProxyMetadata<TContract> : IMethodMetadata, IProxyMetadata
         where TContract : class
     {
-        private readonly List<HeaderMetadata> m_serviceHeaders = new List<HeaderMetadata>();
-
         private readonly HashSet<MethodInfo> m_hiddenOperationSet = new HashSet<MethodInfo>();
         private readonly HashSet<MethodInfo> m_ipFilteredSet = new HashSet<MethodInfo>();
+        private readonly SortedSet<HeaderMetadata> m_serviceHeaders = new SortedSet<HeaderMetadata>();
 
         private readonly Dictionary<MethodInfo, string> m_descriptionDictionary = new Dictionary<MethodInfo, string>();
         private readonly Dictionary<MethodInfo, AuthenticationMetadata> m_authenticationDictionary = new Dictionary<MethodInfo, AuthenticationMetadata>();
@@ -27,13 +26,13 @@ namespace RestFoundation.ServiceProxy
         private readonly Dictionary<MethodInfo, ResourceExampleMetadata> m_requestResourceExampleDictionary = new Dictionary<MethodInfo, ResourceExampleMetadata>();
         private readonly Dictionary<MethodInfo, ResourceExampleMetadata> m_responseResourceExampleDictionary = new Dictionary<MethodInfo, ResourceExampleMetadata>();
 
-        private readonly Dictionary<MethodInfo, List<HeaderMetadata>> m_headerDictionary = new Dictionary<MethodInfo, List<HeaderMetadata>>();
-        private readonly Dictionary<MethodInfo, List<ParameterMetadata>> m_parameterDictionary = new Dictionary<MethodInfo, List<ParameterMetadata>>();
-        private readonly Dictionary<MethodInfo, List<StatusCodeMetadata>> m_statusCodeDictionary = new Dictionary<MethodInfo, List<StatusCodeMetadata>>();
+        private readonly Dictionary<MethodInfo, SortedSet<HeaderMetadata>> m_headerDictionary = new Dictionary<MethodInfo, SortedSet<HeaderMetadata>>();
+        private readonly Dictionary<MethodInfo, HashSet<ParameterMetadata>> m_parameterDictionary = new Dictionary<MethodInfo, HashSet<ParameterMetadata>>();
+        private readonly Dictionary<MethodInfo, SortedSet<StatusCodeMetadata>> m_statusCodeDictionary = new Dictionary<MethodInfo, SortedSet<StatusCodeMetadata>>();
 
         private AuthenticationMetadata m_authentication;
         private HttpsMetadata m_https;
-        private bool m_isIPFiltered;
+        private bool m_isIPFiltered, m_isInitialized;
 
         private MethodInfo m_currentServiceMethod;
 
@@ -57,6 +56,11 @@ namespace RestFoundation.ServiceProxy
             };
         }
 
+        public void SetHeader(ProxyHeader header)
+        {
+            SetHeader(header.Name, header.Value);
+        }
+
         public void SetHeader(string name, string value)
         {
             if (String.IsNullOrEmpty(name))
@@ -74,6 +78,28 @@ namespace RestFoundation.ServiceProxy
                 Name = name,
                 Value = value
             });
+        }
+
+        public void SetHeaders(IList<ProxyHeader> headers)
+        {
+            if (headers == null)
+            {
+                throw new ArgumentNullException("headers");
+            }
+
+            foreach (ProxyHeader header in headers)
+            {
+                if (String.IsNullOrWhiteSpace(header.Name) || String.IsNullOrEmpty(header.Value))
+                {
+                    continue;
+                }
+
+                m_serviceHeaders.Add(new HeaderMetadata
+                {
+                    Name = header.Name,
+                    Value = header.Value
+                });
+            }
         }
 
         public void SetIPFiltered()
@@ -161,6 +187,11 @@ namespace RestFoundation.ServiceProxy
             return this;
         }
 
+        IMethodMetadata IMethodMetadata.SetHeader(ProxyHeader header)
+        {
+            return ((IMethodMetadata) this).SetHeader(header.Name, header.Value);
+        }
+
         IMethodMetadata IMethodMetadata.SetHeader(string name, string value)
         {
             ValidateCurrentServiceMethod();
@@ -175,20 +206,52 @@ namespace RestFoundation.ServiceProxy
                 throw new ArgumentNullException("value");
             }
 
-            List<HeaderMetadata> headers;
+            SortedSet<HeaderMetadata> methodHeaders;
 
-            if (!m_headerDictionary.TryGetValue(m_currentServiceMethod, out headers))
+            if (!m_headerDictionary.TryGetValue(m_currentServiceMethod, out methodHeaders))
             {
-                headers = new List<HeaderMetadata>();
+                methodHeaders = new SortedSet<HeaderMetadata>();
             }
 
-            headers.Add(new HeaderMetadata
+            methodHeaders.Add(new HeaderMetadata
             {
                 Name = name,
                 Value = value
             });
 
-            m_headerDictionary[m_currentServiceMethod] = headers;
+            m_headerDictionary[m_currentServiceMethod] = methodHeaders;
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetHeaders(IList<ProxyHeader> headers)
+        {
+            if (headers == null)
+            {
+                throw new ArgumentNullException("headers");
+            }
+
+            SortedSet<HeaderMetadata> methodHeaders;
+
+            if (!m_headerDictionary.TryGetValue(m_currentServiceMethod, out methodHeaders))
+            {
+                methodHeaders = new SortedSet<HeaderMetadata>();
+            }
+
+            foreach (ProxyHeader header in headers)
+            {
+                if (String.IsNullOrWhiteSpace(header.Name) || String.IsNullOrEmpty(header.Value))
+                {
+                    continue;
+                }
+
+                methodHeaders.Add(new HeaderMetadata
+                {
+                    Name = header.Name,
+                    Value = header.Value
+                });
+            }
+
+            m_headerDictionary[m_currentServiceMethod] = methodHeaders;
             return this;
         }
 
@@ -341,29 +404,76 @@ namespace RestFoundation.ServiceProxy
             return this;
         }
 
-        IMethodMetadata IMethodMetadata.SetStatusCode(HttpStatusCode statusCode)
+        IMethodMetadata IMethodMetadata.SetResponseStatus(ProxyStatus status)
         {
-            return ((IMethodMetadata) this).SetStatusCode(statusCode, null);
+            return ((IMethodMetadata) this).SetResponseStatus(status.Code, status.Condition);
         }
 
-        IMethodMetadata IMethodMetadata.SetStatusCode(HttpStatusCode statusCode, string statusDescription)
+        IMethodMetadata IMethodMetadata.SetResponseStatus(HttpStatusCode statusCode)
         {
-            ValidateCurrentServiceMethod();
+            return ((IMethodMetadata) this).SetResponseStatus(statusCode, statusCode.ToString());
+        }
 
-            List<StatusCodeMetadata> statusCodes;
-
-            if (!m_statusCodeDictionary.TryGetValue(m_currentServiceMethod, out statusCodes))
+        IMethodMetadata IMethodMetadata.SetResponseStatus(HttpStatusCode statusCode, string statusDescription)
+        {
+            if (!Enum.IsDefined(typeof(HttpStatusCode), statusCode))
             {
-                statusCodes = new List<StatusCodeMetadata>();
+                throw new ArgumentOutOfRangeException("statusCode");
             }
 
-            statusCodes.Add(new StatusCodeMetadata
+            if (String.IsNullOrEmpty(statusDescription))
             {
-                StatusCode = statusCode,
-                StatusCondition = statusDescription
+                throw new ArgumentNullException("statusDescription");
+            }
+
+            ValidateCurrentServiceMethod();
+
+            SortedSet<StatusCodeMetadata> methodStatuses;
+
+            if (!m_statusCodeDictionary.TryGetValue(m_currentServiceMethod, out methodStatuses))
+            {
+                methodStatuses = new SortedSet<StatusCodeMetadata>();
+            }
+
+            methodStatuses.Add(new StatusCodeMetadata
+            {
+                Code = statusCode,
+                Condition = statusDescription
             });
 
-            m_statusCodeDictionary[m_currentServiceMethod] = statusCodes;
+            m_statusCodeDictionary[m_currentServiceMethod] = methodStatuses;
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetResponseStatuses(IList<ProxyStatus> statuses)
+        {
+            if (statuses == null)
+            {
+                throw new ArgumentNullException("statuses");
+            }
+
+            SortedSet<StatusCodeMetadata> methodStatuses;
+
+            if (!m_statusCodeDictionary.TryGetValue(m_currentServiceMethod, out methodStatuses))
+            {
+                methodStatuses = new SortedSet<StatusCodeMetadata>();
+            }
+
+            foreach (ProxyStatus status in statuses)
+            {
+                if (String.IsNullOrEmpty(status.Condition))
+                {
+                    continue;
+                }
+
+                methodStatuses.Add(new StatusCodeMetadata
+                {
+                    Code = status.Code,
+                    Condition = status.Condition
+                });
+            }
+
+            m_statusCodeDictionary[m_currentServiceMethod] = methodStatuses;
             return this;
         }
 
@@ -479,7 +589,7 @@ namespace RestFoundation.ServiceProxy
 
         public ParameterMetadata GetParameter(MethodInfo serviceMethod, string name, bool isRouteParameter)
         {
-            List<ParameterMetadata> parameters;
+            HashSet<ParameterMetadata> parameters;
 
             if (!m_parameterDictionary.TryGetValue(serviceMethod, out parameters))
             {
@@ -496,7 +606,7 @@ namespace RestFoundation.ServiceProxy
                 throw new ArgumentNullException("serviceMethod");
             }
 
-            List<ParameterMetadata> parameters;
+            HashSet<ParameterMetadata> parameters;
 
             if (!m_parameterDictionary.TryGetValue(serviceMethod, out parameters))
             {
@@ -513,35 +623,46 @@ namespace RestFoundation.ServiceProxy
                 throw new ArgumentNullException("serviceMethod");
             }
 
-            List<HeaderMetadata> headers, operationHeaders;
+            SortedSet<HeaderMetadata> headers, operationHeaders;
 
             if (!m_headerDictionary.TryGetValue(serviceMethod, out operationHeaders))
             {
-                headers = new List<HeaderMetadata>(m_serviceHeaders);
+                headers = new SortedSet<HeaderMetadata>(m_serviceHeaders);
             }
             else
             {
-                headers = new List<HeaderMetadata>(operationHeaders.Union(m_serviceHeaders));
+                headers = new SortedSet<HeaderMetadata>(operationHeaders.Union(m_serviceHeaders));
             }
 
-            return headers;          
+            return headers.ToList();          
         }
 
-        IList<StatusCodeMetadata> IProxyMetadata.GetStatusCodes(MethodInfo serviceMethod)
+        IList<StatusCodeMetadata> IProxyMetadata.GetResponseStatuses(MethodInfo serviceMethod)
         {
             if (serviceMethod == null)
             {
                 throw new ArgumentNullException("serviceMethod");
             }
 
-            List<StatusCodeMetadata> statusCodes;
+            SortedSet<StatusCodeMetadata> statusCodes;
 
             if (!m_statusCodeDictionary.TryGetValue(serviceMethod, out statusCodes))
             {
                 return new List<StatusCodeMetadata>();
             }
 
-            return statusCodes;
+            return statusCodes.ToList();
+        }
+
+        void IProxyMetadata.Initialize()
+        {
+            if (m_isInitialized)
+            {
+                return;
+            }
+
+            Initialize();
+            m_isInitialized = true;
         }
 
         private void ValidateCurrentServiceMethod()
@@ -554,11 +675,11 @@ namespace RestFoundation.ServiceProxy
 
         private void SetParameter(string name, Type type, object exampleValue, IEnumerable<string> allowedValues, string regexConstraint, bool isRouteParameter)
         {
-            List<ParameterMetadata> parameters;
+            HashSet<ParameterMetadata> parameters;
 
             if (!m_parameterDictionary.TryGetValue(m_currentServiceMethod, out parameters))
             {
-                parameters = new List<ParameterMetadata>();
+                parameters = new HashSet<ParameterMetadata>();
             }
 
             parameters.Add(new ParameterMetadata

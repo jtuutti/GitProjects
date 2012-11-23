@@ -11,7 +11,9 @@ namespace RestFoundation.ServiceProxy
         IMethodMetadata SetAuthentication(AuthenticationType type, string defaultUserName);
         IMethodMetadata SetAuthentication(AuthenticationType type, string defaultUserName, string relativeUrlToMatch);
         IMethodMetadata SetDescription(string operationDescription);
+        IMethodMetadata SetHeader(ProxyHeader header);
         IMethodMetadata SetHeader(string name, string value);
+        IMethodMetadata SetHeaders(IList<ProxyHeader> headers);
         IMethodMetadata SetHidden();
         IMethodMetadata SetHttps();
         IMethodMetadata SetHttps(int port);
@@ -28,7 +30,9 @@ namespace RestFoundation.ServiceProxy
         IMethodMetadata SetRequestResourceExample(object instance, XmlSchemas xmlSchemas);
         IMethodMetadata SetResponseResourceExample(object instance);
         IMethodMetadata SetResponseResourceExample(object instance, XmlSchemas xmlSchemas);
-        IMethodMetadata SetStatusCode(HttpStatusCode statusCode);
-        IMethodMetadata SetStatusCode(HttpStatusCode statusCode, string statusDescription);
+        IMethodMetadata SetResponseStatus(ProxyStatus status);
+        IMethodMetadata SetResponseStatus(HttpStatusCode statusCode);
+        IMethodMetadata SetResponseStatus(HttpStatusCode statusCode, string statusDescription);
+        IMethodMetadata SetResponseStatuses(IList<ProxyStatus> statuses);
     }
 }

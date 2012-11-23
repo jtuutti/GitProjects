@@ -4,12 +4,16 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using RestFoundation.ServiceProxy;
 
 namespace RestFoundation.Runtime
 {
     internal static class ServiceContractTypeRegistry
     {
         private static readonly ConcurrentDictionary<string, Type> serviceContractTypes = new ConcurrentDictionary<string, Type>();
+        private static readonly ConcurrentDictionary<Type, IProxyMetadata> serviceContractMetadata = new ConcurrentDictionary<Type, IProxyMetadata>();
 
         public static Type GetType(string typeAssemblyName)
         {
@@ -24,6 +28,49 @@ namespace RestFoundation.Runtime
         public static ICollection<Type> GetContractTypes()
         {
             return new HashSet<Type>(serviceContractTypes.Values);
+        }
+
+        public static IProxyMetadata GetProxyMetadata(Type contractType)
+        {
+            if (contractType == null)
+            {
+                throw new ArgumentNullException("contractType");
+            }
+
+            IProxyMetadata proxyMetadata = serviceContractMetadata.GetOrAdd(contractType, GenerateProxyMetadata);
+
+            return proxyMetadata is NullProxyMetadata ? null : proxyMetadata;
+        }
+
+        internal static IProxyMetadata GenerateProxyMetadata(Type contractType)
+        {
+            if (contractType.IsClass && contractType.GetInterface(typeof(IProxyMetadata).FullName) != null)
+            {
+                return InitializeProxyMetadata(contractType);
+            }
+
+            var metadataAttribute = contractType.GetCustomAttributes(typeof(ProxyMetadataAttribute), false).Cast<ProxyMetadataAttribute>().FirstOrDefault();
+
+            if (metadataAttribute == null || metadataAttribute.ProxyMetadataType == null)
+            {
+                return new NullProxyMetadata();
+            }
+
+            return InitializeProxyMetadata(metadataAttribute.ProxyMetadataType);
+        }
+
+        private static IProxyMetadata InitializeProxyMetadata(Type proxyMetadataType)
+        {
+            var proxyMetadata = Rest.Configuration.ServiceLocator.GetService(proxyMetadataType) as IProxyMetadata;
+
+            if (proxyMetadata == null)
+            {
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, "The type '{0}' is not a valid proxy metadata type.", proxyMetadataType.Name));
+            }
+
+            proxyMetadata.Initialize();
+
+            return proxyMetadata;
         }
     }
 }

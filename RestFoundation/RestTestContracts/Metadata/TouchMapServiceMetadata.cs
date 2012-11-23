@@ -1,4 +1,5 @@
-﻿using RestFoundation.ServiceProxy;
+﻿using System.Collections.Generic;
+using RestFoundation.ServiceProxy;
 
 namespace RestTestContracts.Metadata
 {
@@ -6,13 +7,22 @@ namespace RestTestContracts.Metadata
     {
         public override void Initialize()
         {
-            SetHeader("X-SpeechCycle-SmartCare-CustomerID", "AlphaMedia");
-            SetHeader("X-SpeechCycle-SmartCare-ApplicationID", "Mobile");
-            SetHeader("X-SpeechCycle-SmartCare-SessionID", "706035D4-3FD0-4CFD-AD40-0A951DA09838");
-            SetHeader("X-SpeechCycle-SmartCare-Environment", "Development");
-            SetHeader("X-SpeechCycle-SmartCare-Platform", "All");
-
+            SetHeaders(GetServiceHeaders());
             SetHttps(8443);
+
+            ForMethod(x => x.Get()).SetDescription("Get a touchmap");
+        }
+
+        public static IList<ProxyHeader> GetServiceHeaders()
+        {
+            return new[]
+            {
+                new ProxyHeader("X-SpeechCycle-SmartCare-CustomerID", "AlphaMedia"),
+                new ProxyHeader("X-SpeechCycle-SmartCare-ApplicationID", "Mobile"),
+                new ProxyHeader("X-SpeechCycle-SmartCare-SessionID", "706035D4-3FD0-4CFD-AD40-0A951DA09838"),
+                new ProxyHeader("X-SpeechCycle-SmartCare-Environment", "Development"),
+                new ProxyHeader("X-SpeechCycle-SmartCare-Platform", "All")
+            };
         }
     }
 }
