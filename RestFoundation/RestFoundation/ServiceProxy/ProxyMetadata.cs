@@ -119,7 +119,7 @@ namespace RestFoundation.ServiceProxy
                 Port = port
             };
         }
-        
+
         public IMethodMetadata ForMethod(Expression<Func<TContract, object>> serviceMethod)
         {
             if (serviceMethod == null)
@@ -135,6 +135,13 @@ namespace RestFoundation.ServiceProxy
             }
 
             m_currentServiceMethod = methodExpression.Method;
+
+            var arguments = ExpressionArgumentExtractor.Extract(methodExpression);
+
+            foreach (var argument in arguments)
+            {
+                ((IMethodMetadata) this).SetRouteParameter(argument.Name, argument.Value);
+            }
 
             return this;
         }
@@ -682,7 +689,7 @@ namespace RestFoundation.ServiceProxy
                 parameters = new HashSet<ParameterMetadata>();
             }
 
-            parameters.Add(new ParameterMetadata
+            var parameter = new ParameterMetadata
             {
                 Name = name,
                 Type = type,
@@ -690,7 +697,12 @@ namespace RestFoundation.ServiceProxy
                 AllowedValues = allowedValues != null ? String.Join(", ", allowedValues.Where(o => o != null).ToArray()) : null,
                 RegexConstraint = regexConstraint,
                 IsRouteParameter = isRouteParameter
-            });
+            };
+
+            // trying to delete existing parameters to allow overridding inferred values from the lambda expressions
+            parameters.Remove(parameter);
+
+            parameters.Add(parameter);
 
             m_parameterDictionary[m_currentServiceMethod] = parameters;
         }

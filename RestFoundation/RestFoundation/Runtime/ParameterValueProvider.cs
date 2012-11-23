@@ -24,7 +24,7 @@ namespace RestFoundation.Runtime
         /// <summary>
         /// Gets the resource parameter name.
         /// </summary>
-        protected const string ResourceParameterName = "resource";
+        protected internal const string ResourceParameterName = "resource";
 
         /// <summary>
         /// Creates a parameter value based on the routing and HTTP data.

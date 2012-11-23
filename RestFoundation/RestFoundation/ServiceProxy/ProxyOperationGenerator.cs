@@ -143,7 +143,7 @@ namespace RestFoundation.ServiceProxy
                     continue;
                 }
 
-                ParameterMetadata parameterMetadata = proxyMetadata != null ? proxyMetadata.GetParameter(metadata.MethodInfo, parameter.Name, true) : new ParameterMetadata();
+                ParameterMetadata parameterMetadata = proxyMetadata.GetParameter(metadata.MethodInfo, parameter.Name, true);
 
                 var routeParameter = new ParameterMetadata
                 {
@@ -151,8 +151,8 @@ namespace RestFoundation.ServiceProxy
                     Type = parameter.ParameterType,
                     IsRouteParameter = true,
                     RegexConstraint = GetParameterConstraint(parameter),
-                    ExampleValue = parameterMetadata.ExampleValue,
-                    AllowedValues = parameterMetadata.AllowedValues
+                    ExampleValue = parameterMetadata != null ? parameterMetadata.ExampleValue : null,
+                    AllowedValues = parameterMetadata != null ? parameterMetadata.AllowedValues : null
                 };
 
                 routeParameters.Add(routeParameter);

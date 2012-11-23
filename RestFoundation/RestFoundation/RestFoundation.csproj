@@ -62,6 +62,7 @@
     <Compile Include="Behaviors\Context\MethodExecutedContext.cs" />
     <Compile Include="Behaviors\Context\MethodExecutingContext.cs" />
     <Compile Include="DependencyBuilder.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InstanceLifetime.cs" />
     <Compile Include="IOptionsDescriptor.cs" />
     <Compile Include="IServiceFactory.cs" />
@@ -73,7 +74,9 @@
       <DependentUpon>RestResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Runtime\AllowHeaderGenerator.cs" />
+    <Compile Include="Runtime\ExpressionArgument.cs" />
     <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
+    <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
     <Compile Include="Runtime\ServiceContractMetadata.cs" />
     <Compile Include="Runtime\ServiceFactory.cs" />
     <Compile Include="Runtime\WebFormsInjectionHelper.cs" />

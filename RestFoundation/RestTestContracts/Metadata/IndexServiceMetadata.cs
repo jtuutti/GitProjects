@@ -18,29 +18,25 @@ namespace RestTestContracts.Metadata
             ForMethod(x => x.GetAll()).SetDescription("Gets all resources of type 'Person'")
                                       .SetResponseResourceExample(CreatePersonArrayExample());
 
-            ForMethod(x => x.Get(null, null)).SetDescription("Gets resources of type 'Person' by ID")
-                                             .SetRouteParameter("id", 1);
+            ForMethod(x => x.Get(1, null)).SetDescription("Gets resources of type 'Person' by ID");
 
             ForMethod(x => x.Post(null)).SetDescription("Creates a new resource of type 'Person'")
                                         .SetResponseStatus(HttpStatusCode.Created, "Resource is created")
                                         .SetRequestResourceExample(CreatePersonRequestExample())
                                         .SetResponseResourceExample(CreatePersonResponseExample());
 
-            ForMethod(x => x.Put(null, null)).SetDescription("Updates an existing resource of type 'Person'")
-                                             .SetRouteParameter("id", 1)
-                                             .SetResponseStatus(HttpStatusCode.OK, "Resource is updated")
-                                             .SetRequestResourceExample(CreatePersonRequestExample())
-                                             .SetResponseResourceExample(CreatePersonResponseExample());
+            ForMethod(x => x.Put(1, null)).SetDescription("Updates an existing resource of type 'Person'")
+                                          .SetResponseStatus(HttpStatusCode.OK, "Resource is updated")
+                                          .SetRequestResourceExample(CreatePersonRequestExample())
+                                          .SetResponseResourceExample(CreatePersonResponseExample());
 
-            ForMethod(x => x.Patch(null, null)).SetDescription("Partially modifies an existing resource of type 'Person'")
-                                               .SetRouteParameter("id", 1)
-                                               .SetResponseStatus(HttpStatusCode.OK, "Resource is partially modified")
-                                               .SetRequestResourceExample(CreatePersonRequestExample())
-                                               .SetResponseResourceExample(CreatePersonResponseExample());
+            ForMethod(x => x.Patch(1, null)).SetDescription("Partially modifies an existing resource of type 'Person'")
+                                            .SetResponseStatus(HttpStatusCode.OK, "Resource is partially modified")
+                                            .SetRequestResourceExample(CreatePersonRequestExample())
+                                            .SetResponseResourceExample(CreatePersonResponseExample());
 
-            ForMethod(x => x.Delete(null)).SetDescription("Deletes an existing resource of type 'Person' by name")
-                                          .SetRouteParameter("name", "John Doe")
-                                          .SetResponseStatus(HttpStatusCode.NoContent, "Resource is deleted");
+            ForMethod(x => x.Delete("John Doe")).SetDescription("Deletes an existing resource of type 'Person' by name")
+                                                .SetResponseStatus(HttpStatusCode.NoContent, "Resource is deleted");
         }
 
         private static Person[] CreatePersonArrayExample()
