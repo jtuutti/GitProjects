@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using RestFoundation.ServiceProxy.OperationMetadata;
 
 namespace RestFoundation.ServiceProxy
 {

@@ -6,6 +6,7 @@ using System.Net;
 using System.Reflection;
 using System.Xml.Serialization;
 using RestFoundation.Runtime;
+using RestFoundation.ServiceProxy.OperationMetadata;
 
 namespace RestFoundation.ServiceProxy
 {

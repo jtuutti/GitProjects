@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using RestFoundation.Results;
+using RestFoundation.ServiceProxy.OperationMetadata;
 
 namespace RestFoundation.ServiceProxy
 {
