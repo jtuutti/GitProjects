@@ -65,7 +65,7 @@ namespace RestFoundation.Runtime
 
             if (proxyMetadata == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, "The type '{0}' is not a valid proxy metadata type.", proxyMetadataType.Name));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidProxyMetadataType, proxyMetadataType.Name));
             }
 
             proxyMetadata.Initialize();

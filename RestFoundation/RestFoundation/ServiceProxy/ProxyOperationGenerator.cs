@@ -49,7 +49,6 @@ namespace RestFoundation.ServiceProxy
                     continue;
                 }
 
-
                 foreach (HttpMethod httpMethod in metadata.UrlInfo.HttpMethods)
                 {
                     if (httpMethod == HttpMethod.Head || httpMethod == HttpMethod.Options)
@@ -83,10 +82,10 @@ namespace RestFoundation.ServiceProxy
         {
             if (proxyMetadata == null)
             {
-                return "No description provided";
+                return RestResources.MissingDescription;
             }
 
-            return proxyMetadata.GetDescription(method) ?? "No description provided";
+            return proxyMetadata.GetDescription(method) ?? RestResources.MissingDescription;
         }
 
         private static List<StatusCodeMetadata> GetStatusCodes(MethodInfo method, IProxyMetadata proxyMetadata, bool hasResource, bool hasResponse, bool requiresHttps)
@@ -100,23 +99,23 @@ namespace RestFoundation.ServiceProxy
 
             if (hasResource)
             {
-                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.BadRequest, Condition = "Resource body is invalid" });
-                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.UnsupportedMediaType, Condition = "Media type is not supported" });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.BadRequest, Condition = RestResources.InvalidResourceBody });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.UnsupportedMediaType, Condition = RestResources.UnsupportedMediaType });
             }
 
             if (hasResponse)
             {
-                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.NotAcceptable, Condition = "Resulting media type is not accepted by the client" });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.NotAcceptable, Condition = RestResources.NonAcceptedMediaType });
             }
 
             if (!statusCodes.Any(code => code.GetNumericStatusCode() >= 200 && code.GetNumericStatusCode() <= 204))
             {
-                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.OK, Condition = "Operation is successful" });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.OK, Condition = RestResources.SuccessfulOperation });
             }
 
             if (requiresHttps)
             {
-                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.Forbidden, Condition = "HTTP protocol without SSL is not supported" });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.Forbidden, Condition = RestResources.HttpsRequiredStatusDescription });
             }
 
             statusCodes.Sort((code1, code2) => code1.CompareTo(code2));

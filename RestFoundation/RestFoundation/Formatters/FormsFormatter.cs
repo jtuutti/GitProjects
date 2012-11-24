@@ -80,7 +80,7 @@ namespace RestFoundation.Formatters
         /// <exception cref="HttpResponseException">If the object could not be serialized.</exception>
         public virtual IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj)
         {
-            throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.UnsupportedMediaType);
+            throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.MissingValidMediaType);
         }
 
         private static NameValueCollection PopulateFormData(IServiceContext context)

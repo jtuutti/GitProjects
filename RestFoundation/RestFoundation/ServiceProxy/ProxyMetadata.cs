@@ -16,6 +16,8 @@ namespace RestFoundation.ServiceProxy
     public abstract class ProxyMetadata<TContract> : IMethodMetadata, IProxyMetadata
         where TContract : class
     {
+        private const int DefaultHttpsPort = 443;
+
         private readonly HashSet<MethodInfo> m_hiddenOperationSet = new HashSet<MethodInfo>();
         private readonly HashSet<MethodInfo> m_ipFilteredSet = new HashSet<MethodInfo>();
         private readonly SortedSet<HeaderMetadata> m_serviceHeaders = new SortedSet<HeaderMetadata>();
@@ -36,16 +38,31 @@ namespace RestFoundation.ServiceProxy
 
         private MethodInfo m_currentServiceMethod;
 
+        /// <summary>
+        /// Sets the global service authentication.
+        /// </summary>
+        /// <param name="type">The authentication type.</param>
         public void SetAuthentication(AuthenticationType type)
         {
             SetAuthentication(type, null, null);
         }
 
+        /// <summary>
+        /// Sets the global service authentication.
+        /// </summary>
+        /// <param name="type">The authentication type.</param>
+        /// <param name="defaultUserName">The default user name.</param>
         public void SetAuthentication(AuthenticationType type, string defaultUserName)
         {
             SetAuthentication(type, defaultUserName, null);
         }
 
+        /// <summary>
+        /// Sets the global service authentication.
+        /// </summary>
+        /// <param name="type">The authentication type.</param>
+        /// <param name="defaultUserName">The default user name.</param>
+        /// <param name="relativeUrlToMatch">A relative URL to apply authentication to.</param>
         public void SetAuthentication(AuthenticationType type, string defaultUserName, string relativeUrlToMatch)
         {
             m_authentication = new AuthenticationMetadata
@@ -56,11 +73,20 @@ namespace RestFoundation.ServiceProxy
             };
         }
 
+        /// <summary>
+        /// Sets an additional HTTP header for all service operations.
+        /// </summary>
+        /// <param name="header">The HTTP header for the proxy.</param>
         public void SetHeader(ProxyHeader header)
         {
             SetHeader(header.Name, header.Value);
         }
 
+        /// <summary>
+        /// Sets an additional HTTP header for all service operations.
+        /// </summary>
+        /// <param name="name">The HTTP header name.</param>
+        /// <param name="value">The HTTP header value.</param>
         public void SetHeader(string name, string value)
         {
             if (String.IsNullOrEmpty(name))
@@ -80,6 +106,10 @@ namespace RestFoundation.ServiceProxy
             });
         }
 
+        /// <summary>
+        /// Sets additional HTTP headers for all service operations.
+        /// </summary>
+        /// <param name="headers">The list of HTTP headers for the proxy.</param>
         public void SetHeaders(IList<ProxyHeader> headers)
         {
             if (headers == null)
@@ -102,16 +132,23 @@ namespace RestFoundation.ServiceProxy
             }
         }
 
-        public void SetIPFiltered()
+        /// <summary>
+        /// Sets all service operations to require secure HTTPS connection with port 443.
+        /// </summary>
+        public void SetHttps()
         {
-            m_isIPFiltered = true;
+            SetHttps(DefaultHttpsPort);
         }
 
+        /// <summary>
+        /// Sets all service operations as HTTPS specific.
+        /// </summary>
+        /// <param name="port">The TCP port number.</param>
         public void SetHttps(int port)
         {
             if (port <= 0)
             {
-                throw new ArgumentOutOfRangeException("port", "Port must be greater than 0");
+                throw new ArgumentOutOfRangeException("port", RestResources.InvalidPortNumber);
             }
 
             m_https = new HttpsMetadata
@@ -119,7 +156,20 @@ namespace RestFoundation.ServiceProxy
                 Port = port
             };
         }
+        
+        /// <summary>
+        /// Marks all service operations as IP filtered.
+        /// </summary>
+        public void SetIPFiltered()
+        {
+            m_isIPFiltered = true;
+        }
 
+        /// <summary>
+        /// Specifies metadata for a specific service method.
+        /// </summary>
+        /// <param name="serviceMethod">The service method.</param>
+        /// <returns>The service method metadata.</returns>
         public IMethodMetadata ForMethod(Expression<Func<TContract, object>> serviceMethod)
         {
             if (serviceMethod == null)
@@ -131,7 +181,7 @@ namespace RestFoundation.ServiceProxy
 
             if (methodExpression == null || methodExpression.Method == null)
             {
-                throw new ArgumentException("Invalid service method expression provided.", "serviceMethod");
+                throw new ArgumentException(RestResources.InvalidServiceMethodExpression, "serviceMethod");
             }
 
             m_currentServiceMethod = methodExpression.Method;
@@ -146,7 +196,12 @@ namespace RestFoundation.ServiceProxy
             return this;
         }
 
+        /// <summary>
+        /// Initializes the service contract metadata.
+        /// </summary>
         public abstract void Initialize();
+
+        #region IMethodMetadata Members
 
         IMethodMetadata IMethodMetadata.SetAuthentication(AuthenticationType type)
         {
@@ -272,8 +327,6 @@ namespace RestFoundation.ServiceProxy
 
         IMethodMetadata IMethodMetadata.SetHttps()
         {
-            const int DefaultHttpsPort = 443;
-
             return ((IMethodMetadata) this).SetHttps(DefaultHttpsPort);
         }
 
@@ -283,7 +336,7 @@ namespace RestFoundation.ServiceProxy
 
             if (port <= 0)
             {
-                throw new ArgumentOutOfRangeException("port", "Port must be greater than 0");
+                throw new ArgumentOutOfRangeException("port", RestResources.InvalidPortNumber);
             }
 
             m_httpsDictionary[m_currentServiceMethod] = new HttpsMetadata
@@ -348,7 +401,7 @@ namespace RestFoundation.ServiceProxy
 
             if (m_currentServiceMethod.GetParameters().All(p => p.Name != name))
             {
-                throw new ArgumentException("Invalid method parameter name provided", "name");
+                throw new ArgumentException(RestResources.InvalidMethodParameterName, "name");
             }
 
             SetParameter(name, null, exampleValue, allowedValues, null, true);
@@ -484,6 +537,10 @@ namespace RestFoundation.ServiceProxy
             return this;
         }
 
+        #endregion
+
+        #region IProxyMetadata Members
+
         bool IProxyMetadata.IsIPFiltered(MethodInfo serviceMethod)
         {
             if (serviceMethod == null)
@@ -594,7 +651,7 @@ namespace RestFoundation.ServiceProxy
             return resourceExample;
         }
 
-        public ParameterMetadata GetParameter(MethodInfo serviceMethod, string name, bool isRouteParameter)
+        ParameterMetadata IProxyMetadata.GetParameter(MethodInfo serviceMethod, string name, bool isRouteParameter)
         {
             HashSet<ParameterMetadata> parameters;
 
@@ -672,11 +729,15 @@ namespace RestFoundation.ServiceProxy
             m_isInitialized = true;
         }
 
+        #endregion
+
+        #region Private Methods
+
         private void ValidateCurrentServiceMethod()
         {
             if (m_currentServiceMethod == null)
             {
-                throw new InvalidOperationException("No current service method has been set");
+                throw new InvalidOperationException(RestResources.MissingCurrentServiceMethod);
             }
         }
 
@@ -706,5 +767,7 @@ namespace RestFoundation.ServiceProxy
 
             m_parameterDictionary[m_currentServiceMethod] = parameters;
         }
+
+        #endregion
     }
 }

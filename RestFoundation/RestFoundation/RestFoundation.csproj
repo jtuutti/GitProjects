@@ -62,7 +62,6 @@
     <Compile Include="Behaviors\Context\MethodExecutedContext.cs" />
     <Compile Include="Behaviors\Context\MethodExecutingContext.cs" />
     <Compile Include="DependencyBuilder.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InstanceLifetime.cs" />
     <Compile Include="IOptionsDescriptor.cs" />
     <Compile Include="IServiceFactory.cs" />

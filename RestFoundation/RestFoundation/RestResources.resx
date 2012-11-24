@@ -281,7 +281,7 @@
     <value>HTTP headers cannot be empty or have white-space in the name.</value>
     <comment>HTTP headers cannot be empty or have white-space in the name.</comment>
   </data>
-  <data name="UnsupportedMediaType" xml:space="preserve">
+  <data name="MissingValidMediaType" xml:space="preserve">
     <value>No supported media type was provided in the Accept or the Content-Type header.</value>
     <comment>No supported media type was provided in the Accept or the Content-Type header.</comment>
   </data>
@@ -402,7 +402,39 @@
     <comment>There was a problem registering a service: {0}</comment>
   </data>
   <data name="ValidationRequestFailed" xml:space="preserve">
-    <value>A potentially dangerous value was found in the HTTP request</value>
-    <comment>A potentially dangerous value was found in the HTTP request</comment>
+    <value>A potentially dangerous value was found in the HTTP request.</value>
+    <comment>A potentially dangerous value was found in the HTTP request.</comment>
+  </data>
+  <data name="InvalidProxyMetadataType" xml:space="preserve">
+    <value>The type '{0}' is not a valid proxy metadata type.</value>
+    <comment>The type '{0}' is not a valid proxy metadata type.</comment>
+  </data>
+  <data name="InvalidMethodParameterName" xml:space="preserve">
+    <value>Invalid method parameter name provided.</value>
+    <comment>Invalid method parameter name provided.</comment>
+  </data>
+  <data name="InvalidPortNumber" xml:space="preserve">
+    <value>Port must be greater than 0.</value>
+    <comment>Port must be greater than 0.</comment>
+  </data>
+  <data name="MissingCurrentServiceMethod" xml:space="preserve">
+    <value>No current service method has been set.</value>
+    <comment>No current service method has been set.</comment>
+  </data>
+  <data name="MissingDescription" xml:space="preserve">
+    <value>No description provided</value>
+    <comment>No description provided</comment>
+  </data>
+  <data name="NonAcceptedMediaType" xml:space="preserve">
+    <value>Resulting media type is not accepted by the client</value>
+    <comment>Resulting media type is not accepted by the client</comment>
+  </data>
+  <data name="SuccessfulOperation" xml:space="preserve">
+    <value>Operation is successful</value>
+    <comment>Operation is successful</comment>
+  </data>
+  <data name="UnsupportedMediaType" xml:space="preserve">
+    <value>Media type is not supported</value>
+    <comment>Media type is not supported</comment>
   </data>
 </root>

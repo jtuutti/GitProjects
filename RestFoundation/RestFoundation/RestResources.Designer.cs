@@ -277,11 +277,38 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid method parameter name provided..
+        /// </summary>
+        internal static string InvalidMethodParameterName {
+            get {
+                return ResourceManager.GetString("InvalidMethodParameterName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid OData parameters provided..
         /// </summary>
         internal static string InvalidODataParameters {
             get {
                 return ResourceManager.GetString("InvalidODataParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port must be greater than 0..
+        /// </summary>
+        internal static string InvalidPortNumber {
+            get {
+                return ResourceManager.GetString("InvalidPortNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The type &apos;{0}&apos; is not a valid proxy metadata type..
+        /// </summary>
+        internal static string InvalidProxyMetadataType {
+            get {
+                return ResourceManager.GetString("InvalidProxyMetadataType", resourceCulture);
             }
         }
         
@@ -439,11 +466,29 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No current service method has been set..
+        /// </summary>
+        internal static string MissingCurrentServiceMethod {
+            get {
+                return ResourceManager.GetString("MissingCurrentServiceMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created type does not have a default constructor..
         /// </summary>
         internal static string MissingDefaultConstructor {
             get {
                 return ResourceManager.GetString("MissingDefaultConstructor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No description provided.
+        /// </summary>
+        internal static string MissingDescription {
+            get {
+                return ResourceManager.GetString("MissingDescription", resourceCulture);
             }
         }
         
@@ -502,6 +547,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No supported media type was provided in the Accept or the Content-Type header..
+        /// </summary>
+        internal static string MissingValidMediaType {
+            get {
+                return ResourceManager.GetString("MissingValidMediaType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header..
         /// </summary>
         internal static string NonAcceptedContentCharset {
@@ -516,6 +570,15 @@ namespace RestFoundation {
         internal static string NonAcceptedContentLanguage {
             get {
                 return ResourceManager.GetString("NonAcceptedContentLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resulting media type is not accepted by the client.
+        /// </summary>
+        internal static string NonAcceptedMediaType {
+            get {
+                return ResourceManager.GetString("NonAcceptedMediaType", resourceCulture);
             }
         }
         
@@ -592,6 +655,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Operation is successful.
+        /// </summary>
+        internal static string SuccessfulOperation {
+            get {
+                return ResourceManager.GetString("SuccessfulOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cache could not be initialized..
         /// </summary>
         internal static string UnableToInitializeCache {
@@ -664,7 +736,7 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No supported media type was provided in the Accept or the Content-Type header..
+        ///   Looks up a localized string similar to Media type is not supported.
         /// </summary>
         internal static string UnsupportedMediaType {
             get {
@@ -700,7 +772,7 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A potentially dangerous value was found in the HTTP request.
+        ///   Looks up a localized string similar to A potentially dangerous value was found in the HTTP request..
         /// </summary>
         internal static string ValidationRequestFailed {
             get {

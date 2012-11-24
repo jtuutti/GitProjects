@@ -135,7 +135,7 @@ namespace RestFoundation.Runtime
 
             if (formatter == null || formatter is BlockFormatter)
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.UnsupportedMediaType);
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.MissingValidMediaType);
             }
 
             object argumentValue;

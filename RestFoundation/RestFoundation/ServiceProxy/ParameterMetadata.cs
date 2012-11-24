@@ -43,7 +43,7 @@ namespace RestFoundation.ServiceProxy
 
         public override int GetHashCode()
         {
-            return (Name != null ? Name.GetHashCode() : 0);
+            return Name != null ? Name.GetHashCode() : 0;
         }
     }
 }

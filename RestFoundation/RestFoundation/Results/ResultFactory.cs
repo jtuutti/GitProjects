@@ -106,7 +106,7 @@ namespace RestFoundation.Results
 
             if (formatter == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.UnsupportedMediaType);
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.MissingValidMediaType);
             }
 
             return formatter.FormatResponse(handler.Context, methodReturnType, returnedObj);
