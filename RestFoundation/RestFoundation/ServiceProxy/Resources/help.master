@@ -157,7 +157,7 @@
 </head>
 <body>
 <p class="heading1">
-    <a href="index" title="Service proxy home page">Index Service</a>
+    <a href="index" title="Service proxy home page">Service Proxy</a>
     <% if (!String.IsNullOrEmpty(Rest.Configuration.Options.ServiceDescription)) { %>
     <span class="heading2"><%: Rest.Configuration.Options.ServiceDescription %></span>
     <% } %>
