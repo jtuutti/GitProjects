@@ -11,7 +11,7 @@ namespace SampleRestService
         {
             Rest.Configuration
                 .Initialize(typeof(Global).Assembly)
-                .ConfigureServiceHelpAndProxy(c => c.Enable())
+                .ConfigureServiceHelpAndProxy(c => c.Enable().WithServiceDescription("A sample REST service"))
                 .WithUrls(RegisterUrls);
         }
 
