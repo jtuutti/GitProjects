@@ -6,6 +6,7 @@
 <%@ Import Namespace="Newtonsoft.Json" %>
 <%@ Import Namespace="RestFoundation.Runtime" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
+<%@ Import Namespace="RestFoundation.ServiceProxy.OperationMetadata" %>
 
 <script runat="server" language="C#">
     private const string AcceptHeader = "Accept";

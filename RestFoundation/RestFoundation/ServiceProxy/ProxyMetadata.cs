@@ -755,7 +755,7 @@ namespace RestFoundation.ServiceProxy
             {
                 Name = name,
                 Type = type,
-                ExampleValue = exampleValue,
+                ExampleValue = exampleValue is bool ? exampleValue.ToString().ToLowerInvariant() : exampleValue,
                 AllowedValues = allowedValues != null ? String.Join(", ", allowedValues.Where(o => o != null).ToArray()) : null,
                 RegexConstraint = regexConstraint,
                 IsRouteParameter = isRouteParameter

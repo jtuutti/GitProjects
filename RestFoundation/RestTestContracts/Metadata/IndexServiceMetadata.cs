@@ -47,13 +47,13 @@ namespace RestTestContracts.Metadata
                 {
                     Name = "Joe Bloe",
                     Age = 41,
-                    Values = new[] { "01/21/1971" }
+                    Values = new[] { "1971-01-21" }
                 },
                 new Person
                 {
                     Name = "Mike Star",
                     Age = 21,
-                    Values = new[] { "10/02/1991" }
+                    Values = new[] { "1991-02-10" }
                 },
                 new Person
                 {
@@ -77,7 +77,7 @@ namespace RestTestContracts.Metadata
             {
                 Name = "Joe Bloe",
                 Age = 41,
-                Values = new[] { DateTime.Now.ToLongDateString() }
+                Values = new[] { DateTime.Now.ToString("yyyy-MM-dd") }
             };
         }
     }

@@ -10,7 +10,7 @@ cd .\RestFoundation\bin\Release
 echo.
 echo.
 echo Performing IL Merge
-ilmerge /out:Rest.Foundation.dll RestFoundation.dll Newtonsoft.Json.dll /ver:1.0.2.0 /v4 /keyfile:..\..\..\RestFoundation.snk /xmldocs
+ilmerge /out:Rest.Foundation.dll RestFoundation.dll Newtonsoft.Json.dll /ver:1.1.0.0 /v4 /keyfile:..\..\..\RestFoundation.snk /xmldocs
 echo.
 echo.
 copy Rest.Foundation.* ..\..\..\build\ /y

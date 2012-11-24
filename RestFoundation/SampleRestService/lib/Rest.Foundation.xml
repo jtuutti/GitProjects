@@ -434,6 +434,11 @@
             Gets the service proxy authorization manager instance.
             </summary>
     </member>
+    <member name="P:RestFoundation.RestOptions.ServiceDescription">
+      <summary>
+            Gets the service description.
+            </summary>
+    </member>
     <member name="T:RestFoundation.RestResources">
       <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
@@ -570,9 +575,24 @@
               Looks up a localized string similar to Invalid key provided..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.InvalidMethodParameterName">
+      <summary>
+              Looks up a localized string similar to Invalid method parameter name provided..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.InvalidODataParameters">
       <summary>
               Looks up a localized string similar to Invalid OData parameters provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.InvalidPortNumber">
+      <summary>
+              Looks up a localized string similar to Port must be greater than 0..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.InvalidProxyMetadataType">
+      <summary>
+              Looks up a localized string similar to The type '{0}' is not a valid proxy metadata type..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidRelativeUrl">
@@ -660,9 +680,19 @@
               Looks up a localized string similar to No authorization manager could be found..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.MissingCurrentServiceMethod">
+      <summary>
+              Looks up a localized string similar to No current service method has been set..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.MissingDefaultConstructor">
       <summary>
               Looks up a localized string similar to Created type does not have a default constructor..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.MissingDescription">
+      <summary>
+              Looks up a localized string similar to No description provided.
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.MissingHttpContext">
@@ -695,6 +725,11 @@
               Looks up a localized string similar to No service context was passed to the service method invoker..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.MissingValidMediaType">
+      <summary>
+              Looks up a localized string similar to No supported media type was provided in the Accept or the Content-Type header..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.NonAcceptedContentCharset">
       <summary>
               Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header..
@@ -703,6 +738,11 @@
     <member name="P:RestFoundation.RestResources.NonAcceptedContentLanguage">
       <summary>
               Looks up a localized string similar to The accepted language provided in the Accept-Language header is not supported..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.NonAcceptedMediaType">
+      <summary>
+              Looks up a localized string similar to Resulting media type is not accepted by the client.
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.NonStringOutputType">
@@ -743,6 +783,11 @@
     <member name="P:RestFoundation.RestResources.ServiceTimedOut">
       <summary>
               Looks up a localized string similar to Service timed out..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.SuccessfulOperation">
+      <summary>
+              Looks up a localized string similar to Operation is successful.
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.UnableToInitializeCache">
@@ -787,7 +832,7 @@
     </member>
     <member name="P:RestFoundation.RestResources.UnsupportedMediaType">
       <summary>
-              Looks up a localized string similar to No supported media type was provided in the Accept or the Content-Type header..
+              Looks up a localized string similar to Media type is not supported.
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.UnsupportedOperation">
@@ -807,7 +852,7 @@
     </member>
     <member name="P:RestFoundation.RestResources.ValidationRequestFailed">
       <summary>
-              Looks up a localized string similar to A potentially dangerous value was found in the HTTP request.
+              Looks up a localized string similar to A potentially dangerous value was found in the HTTP request..
             </summary>
     </member>
     <member name="T:RestFoundation.ServiceLocation.IServiceLocator">
@@ -858,7 +903,7 @@
       <returns>
             A service object of type <paramref name="serviceType" />.-or- null if there is no service object of type <paramref name="serviceType" />.
             </returns>
-      <param name="serviceType">An object that specifies the type of service object to get. </param>
+      <param name="serviceType">An object that specifies the type of service object to get.</param>
       <filterpriority>2</filterpriority>
     </member>
     <member name="M:RestFoundation.Runtime.DefaultServiceLocator.GetService``1">
@@ -3787,6 +3832,26 @@
             The class name is null or <see cref="P:System.Exception.HResult" /> is zero (0).
             </exception>
     </member>
+    <member name="T:RestFoundation.ServiceProxy.OperationMetadata.AuthenticationMetadata">
+      <summary>
+            Represents an authentication metadata.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.AuthenticationMetadata.Type">
+      <summary>
+            Gets or sets the authentication type.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.AuthenticationMetadata.DefaultUserName">
+      <summary>
+            Gets or sets the default username.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.AuthenticationMetadata.RelativeUrlToMatch">
+      <summary>
+            Gets or sets the relative URL to match.
+            </summary>
+    </member>
     <member name="T:RestFoundation.ServiceProxy.AuthenticationType">
       <summary>
             Defines an HTTP authentication type.
@@ -3802,31 +3867,748 @@
             Digest authentication
             </summary>
     </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyAuthenticationAttribute">
+    <member name="T:RestFoundation.ServiceProxy.OperationMetadata.HeaderMetadata">
       <summary>
-            Represents a service proxy decorator attribute that defines an authentication type and default
-            credentials associated with a service or a specific service method.
+            Represents an HTTP header metadata.
             </summary>
     </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyAuthenticationAttribute.#ctor(RestFoundation.ServiceProxy.AuthenticationType)">
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.HeaderMetadata.Equals(RestFoundation.ServiceProxy.OperationMetadata.HeaderMetadata)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyAuthenticationAttribute" /> class.
+            Indicates whether the current object is equal to another object of the same type.
             </summary>
-      <param name="authentication">The authentication type.</param>
+      <returns>
+            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+            </returns>
+      <param name="other">An object to compare with this object.</param>
     </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyAuthenticationAttribute.Authentication">
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.HeaderMetadata.Equals(System.Object)">
       <summary>
-            Gets the authentication type.
+            Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.
+            </summary>
+      <returns>
+            true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.
+            </returns>
+      <param name="obj">The object to compare with the current object.</param>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.HeaderMetadata.GetHashCode">
+      <summary>
+            Serves as a hash function for a particular type. 
+            </summary>
+      <returns>
+            A hash code for the current <see cref="T:System.Object" />.
+            </returns>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.HeaderMetadata.CompareTo(RestFoundation.ServiceProxy.OperationMetadata.HeaderMetadata)">
+      <summary>
+            Compares the current object with another object of the same type.
+            </summary>
+      <returns>
+            A value that indicates the relative order of the objects being compared. The return value has the following meanings:
+            Value Meaning Less than zero: This object is less than the <paramref name="other" /> parameter.
+            Zero: This object is equal to <paramref name="other" />.
+            Greater than zero: This object is greater than <paramref name="other" />. 
+            </returns>
+      <param name="other">An object to compare with this object.</param>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.HeaderMetadata.Name">
+      <summary>
+            Gets the header name.
             </summary>
     </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyAuthenticationAttribute.DefaultUserName">
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.HeaderMetadata.Value">
       <summary>
-            Gets or sets an optional default user name for the service proxy UI.
+            Gets the header value.
             </summary>
     </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyAuthenticationAttribute.RelativeUrlToMatch">
+    <member name="T:RestFoundation.ServiceProxy.OperationMetadata.HttpsMetadata">
       <summary>
-            Gets or sets an optional service relative URL for the authentication to match.
+            Represents the HTTPS metadata.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.HttpsMetadata.Port">
+      <summary>
+            Gets or sets the port number.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.IMethodMetadata">
+      <summary>
+            Defines the method metadata for a service operation.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetAuthentication(RestFoundation.ServiceProxy.AuthenticationType)">
+      <summary>
+            Sets the authentication for the service operation.
+            </summary>
+      <param name="type">The authentication type.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetAuthentication(RestFoundation.ServiceProxy.AuthenticationType,System.String)">
+      <summary>
+            Sets the authentication for the service operation.
+            </summary>
+      <param name="type">The authentication type.</param>
+      <param name="defaultUserName">The default user name.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetAuthentication(RestFoundation.ServiceProxy.AuthenticationType,System.String,System.String)">
+      <summary>
+            Sets the authentication for the service operation.
+            </summary>
+      <param name="type">The authentication type.</param>
+      <param name="defaultUserName">The default user name.</param>
+      <param name="relativeUrlToMatch">A relative URL to apply authentication to.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetDescription(System.String)">
+      <summary>
+            Sets the description for the service operation.
+            </summary>
+      <param name="operationDescription">The description.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetHeader(RestFoundation.ServiceProxy.ProxyHeader)">
+      <summary>
+            Sets an additional HTTP header for the service operation.
+            </summary>
+      <param name="header">The HTTP header for the proxy.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetHeader(System.String,System.String)">
+      <summary>
+            Sets an additional HTTP header for the service operation.
+            </summary>
+      <param name="name">The HTTP header name.</param>
+      <param name="value">The HTTP header value.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetHeaders(System.Collections.Generic.IList{RestFoundation.ServiceProxy.ProxyHeader})">
+      <summary>
+            Sets additional HTTP headers for the service operation.
+            </summary>
+      <param name="headers">The list of HTTP headers for the proxy.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetHidden">
+      <summary>
+            Marks all service operations as IP filtered.
+            </summary>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetHttps">
+      <summary>
+            Sets the service operation to require secure HTTPS connection with port 443.
+            </summary>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetHttps(System.Int32)">
+      <summary>
+            Sets the service operation as HTTPS specific.
+            </summary>
+      <param name="port">The TCP port number.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetIPFiltered">
+      <summary>
+            Marks the service operation as IP filtered.
+            </summary>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetQueryParameter(System.String,System.Type)">
+      <summary>
+            Sets a query string parameter for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="type">The parameter type.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetQueryParameter(System.String,System.Type,System.Object)">
+      <summary>
+            Sets a query string parameter for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="type">The parameter type.</param>
+      <param name="exampleValue">An example value.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetQueryParameter(System.String,System.Type,System.Object,System.Collections.Generic.IList{System.String})">
+      <summary>
+            Sets a query string parameter for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="type">The parameter type.</param>
+      <param name="exampleValue">An example value.</param>
+      <param name="allowedValues">An optional list of allowed values.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetQueryParameter(System.String,System.Type,System.Object,System.String)">
+      <summary>
+            Sets a query string parameter for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="type">The parameter type.</param>
+      <param name="exampleValue">An example value.</param>
+      <param name="regexConstraint">An optional regular expression constraint.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetQueryParameter(System.String,System.Type,System.Object,System.Collections.Generic.IList{System.String},System.String)">
+      <summary>
+            Sets a query string parameter for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="type">The parameter type.</param>
+      <param name="exampleValue">An example value.</param>
+      <param name="allowedValues">An optional list of allowed values.</param>
+      <param name="regexConstraint">An optional regular expression constraint.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetRouteParameter(System.String)">
+      <summary>
+            Sets a route parameter, that was not inferred by the lambda expression or has additional information such as list of allowed values,
+            for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetRouteParameter(System.String,System.Object)">
+      <summary>
+            Sets a route parameter, that was not inferred by the lambda expression or has additional information such as list of allowed values,
+            for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="exampleValue">An example value.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetRouteParameter(System.String,System.Object,System.Collections.Generic.IList{System.String})">
+      <summary>
+            Sets a route parameter, that was not inferred by the lambda expression or has additional information such as list of allowed values,
+            for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="exampleValue">An example value.</param>
+      <param name="allowedValues">An optional list of allowed values.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetRequestResourceExample(System.Object)">
+      <summary>
+            Sets a resource instance used as an example for the service operation request data.
+            </summary>
+      <param name="instance">The request resource instance.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetRequestResourceExample(System.Object,System.Xml.Serialization.XmlSchemas)">
+      <summary>
+            Sets a resource instance used as an example for the service operation request data.
+            </summary>
+      <param name="instance">The request resource instance.</param>
+      <param name="xmlSchemas">Custom XML schemas for the resource.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetResponseResourceExample(System.Object)">
+      <summary>
+            Sets a resource instance used as an example for the service operation response data.
+            </summary>
+      <param name="instance">The response resource instance.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetResponseResourceExample(System.Object,System.Xml.Serialization.XmlSchemas)">
+      <summary>
+            Sets a resource instance used as an example for the service operation response data.
+            </summary>
+      <param name="instance">The response resource instance.</param>
+      <param name="xmlSchemas">Custom XML schemas for the resource.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetResponseStatus(RestFoundation.ServiceProxy.ProxyStatus)">
+      <summary>
+            Sets a custom HTTP response status for the service operation.
+            </summary>
+      <param name="status">The HTTP status.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetResponseStatus(System.Net.HttpStatusCode)">
+      <summary>
+            Sets a custom HTTP response status for the service operation.
+            </summary>
+      <param name="statusCode">The HTTP status code.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetResponseStatus(System.Net.HttpStatusCode,System.String)">
+      <summary>
+            Sets a custom HTTP response status for the service operation.
+            </summary>
+      <param name="statusCode">The HTTP status code.</param>
+      <param name="statusDescription">The HTTP status description.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetResponseStatuses(System.Collections.Generic.IList{RestFoundation.ServiceProxy.ProxyStatus})">
+      <summary>
+            Sets custom HTTP response statuses for the service operation.
+            </summary>
+      <param name="statuses">A list of HTTP statuses.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.IProxyMetadata">
+      <summary>
+            Defines a service contract metadata.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.IsIPFiltered(System.Reflection.MethodInfo)">
+      <summary>
+            Returns a <see cref="T:System.Boolean" /> indicating whether the operation is IP filtered.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>true if the operation is IP filtered; false otherwise.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.IsHidden(System.Reflection.MethodInfo)">
+      <summary>
+            Returns a <see cref="T:System.Boolean" /> indicating whether the operation is hidden from the service proxy.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>true if the operation is hidden from the service proxy; false otherwise.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetDescription(System.Reflection.MethodInfo)">
+      <summary>
+            Returns the operation description.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>The operation description.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetAuthentication(System.Reflection.MethodInfo)">
+      <summary>
+            Returns the operation authentication information, if applicable; or null.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>The operation authentication metadata</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetHttps(System.Reflection.MethodInfo)">
+      <summary>
+            Returns the operation HTTPS information.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>The operation HTTPS metadata</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetRequestResourceExample(System.Reflection.MethodInfo)">
+      <summary>
+            Returns the request resource example, if applicable, for the operation; or null.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>The request resource example.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetResponseResourceExample(System.Reflection.MethodInfo)">
+      <summary>
+            Returns the response resource example, if applicable, for the operation; or null.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>The response resource example.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetParameter(System.Reflection.MethodInfo,System.String,System.Boolean)">
+      <summary>
+            Returns an operation parameter with the provided name and type.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <param name="name">The parameter name.</param>
+      <param name="isRouteParameter">
+            A bool indicating whether the parameter is a route parameter (true) or a query string parameter (false).
+            </param>
+      <returns>The operation parameter information.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetParameters(System.Reflection.MethodInfo,System.Boolean)">
+      <summary>
+            Returns all operation parameters with the provided type.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <param name="isRouteParameter">
+            A bool indicating whether the parameters are route parameter (true) or query string parameters (false).
+            </param>
+      <returns>The operation parameters.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetHeaders(System.Reflection.MethodInfo)">
+      <summary>
+            Gets all additional HTTP headers associated with the operation.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>A list of additional HTTP headers for the operation.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetResponseStatuses(System.Reflection.MethodInfo)">
+      <summary>
+            Gets all additional HTTP response statuses associated with the operation.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>A list of additional HTTP response statuses for the operation.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.Initialize">
+      <summary>
+            Initializes the service contract metadata.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata">
+      <summary>
+            Represents a service operation parameter metadata.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.GetTypeDescription">
+      <summary>
+            Gets the parameter type description for the service proxy.
+            </summary>
+      <returns>The parameter type description.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.Equals(RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata)">
+      <summary>
+            Indicates whether the current object is equal to another object of the same type.
+            </summary>
+      <returns>
+            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+            </returns>
+      <param name="other">An object to compare with this object.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.Equals(System.Object)">
+      <summary>
+            Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.
+            </summary>
+      <returns>
+            true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.
+            </returns>
+      <param name="obj">The object to compare with the current object. </param>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.GetHashCode">
+      <summary>
+            Serves as a hash function for a particular type. 
+            </summary>
+      <returns>
+            A hash code for the current <see cref="T:System.Object" />.
+            </returns>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.Name">
+      <summary>
+            Gets or sets the parameter name.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.Type">
+      <summary>
+            Gets or sets the parameter type.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.IsRouteParameter">
+      <summary>
+            Gets or sets a value indicating whether the parameter is a route parameter (true),
+            or a query string parameter (false).
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.ExampleValue">
+      <summary>
+            Gets or sets a parameter example value.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.AllowedValues">
+      <summary>
+            Gets or sets a comma separated sequence of allowed parameter values.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.RegexConstraint">
+      <summary>
+            Gets or sets a regular expression constraint.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.ProxyHeader">
+      <summary>
+            Represents an HTTP header.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyHeader.#ctor(System.String,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyHeader" /> struct.
+            </summary>
+      <param name="name">The header name.</param>
+      <param name="value">The header value.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyHeader.op_Equality(RestFoundation.ServiceProxy.ProxyHeader,RestFoundation.ServiceProxy.ProxyHeader)">
+      <summary>
+            Compares two <see cref="T:RestFoundation.ServiceProxy.ProxyHeader" /> objects for equality.
+            </summary>
+      <param name="left">The first object</param>
+      <param name="right">The second object</param>
+      <returns>true if both objects are equivalent; otherwise, false.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyHeader.op_Inequality(RestFoundation.ServiceProxy.ProxyHeader,RestFoundation.ServiceProxy.ProxyHeader)">
+      <summary>
+            Compares two <see cref="T:RestFoundation.ServiceProxy.ProxyHeader" /> objects for inequality.
+            </summary>
+      <param name="left">The first object</param>
+      <param name="right">The second object</param>
+      <returns>true if both objects are not equivalent; otherwise, false.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyHeader.Equals(RestFoundation.ServiceProxy.ProxyHeader)">
+      <summary>
+            Indicates whether the current object is equal to another object of the same type.
+            </summary>
+      <returns>
+            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+            </returns>
+      <param name="other">An object to compare with this object.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyHeader.Equals(System.Object)">
+      <summary>
+            Indicates whether this instance and a specified object are equal.
+            </summary>
+      <returns>
+            true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.
+            </returns>
+      <param name="obj">Another object to compare to.</param>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyHeader.GetHashCode">
+      <summary>
+            Returns the hash code for this instance.
+            </summary>
+      <returns>
+            A 32-bit signed integer that is the hash code for this instance.
+            </returns>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxyHeader.Name">
+      <summary>
+            Gets the header name.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxyHeader.Value">
+      <summary>
+            Gets the header value.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.ProxyMetadata`1">
+      <summary>
+            Represents a service proxy metadata for a service. This class cannot be instantiated.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.SetAuthentication(RestFoundation.ServiceProxy.AuthenticationType)">
+      <summary>
+            Sets the global service authentication.
+            </summary>
+      <param name="type">The authentication type.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.SetAuthentication(RestFoundation.ServiceProxy.AuthenticationType,System.String)">
+      <summary>
+            Sets the global service authentication.
+            </summary>
+      <param name="type">The authentication type.</param>
+      <param name="defaultUserName">The default user name.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.SetAuthentication(RestFoundation.ServiceProxy.AuthenticationType,System.String,System.String)">
+      <summary>
+            Sets the global service authentication.
+            </summary>
+      <param name="type">The authentication type.</param>
+      <param name="defaultUserName">The default user name.</param>
+      <param name="relativeUrlToMatch">A relative URL to apply authentication to.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.SetHeader(RestFoundation.ServiceProxy.ProxyHeader)">
+      <summary>
+            Sets an additional HTTP header for all service operations.
+            </summary>
+      <param name="header">The HTTP header for the proxy.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.SetHeader(System.String,System.String)">
+      <summary>
+            Sets an additional HTTP header for all service operations.
+            </summary>
+      <param name="name">The HTTP header name.</param>
+      <param name="value">The HTTP header value.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.SetHeaders(System.Collections.Generic.IList{RestFoundation.ServiceProxy.ProxyHeader})">
+      <summary>
+            Sets additional HTTP headers for all service operations.
+            </summary>
+      <param name="headers">The list of HTTP headers for the proxy.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.SetHttps">
+      <summary>
+            Sets all service operations to require secure HTTPS connection with port 443.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.SetHttps(System.Int32)">
+      <summary>
+            Sets all service operations as HTTPS specific.
+            </summary>
+      <param name="port">The TCP port number.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.SetIPFiltered">
+      <summary>
+            Marks all service operations as IP filtered.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.ForMethod(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
+      <summary>
+            Specifies metadata for a specific service method.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.Initialize">
+      <summary>
+            Initializes the service contract metadata.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.ProxyMetadataAttribute">
+      <summary>
+            Specifies a proxy metadata type for a service contract.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadataAttribute.#ctor(System.Type)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyMetadataAttribute" /> class.
+            </summary>
+      <param name="proxyMetadataType">A proxy metadata type.</param>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxyMetadataAttribute.ProxyMetadataType">
+      <summary>
+            Gets the proxy metadata type.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.ProxyStatus">
+      <summary>
+            Represents an HTTP response status for the service proxy.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyStatus.#ctor(System.Net.HttpStatusCode,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyStatus" /> struct.
+            </summary>
+      <param name="code">HTTP status code.</param>
+      <param name="condition">Condition for the status.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyStatus.op_Equality(RestFoundation.ServiceProxy.ProxyStatus,RestFoundation.ServiceProxy.ProxyStatus)">
+      <summary>
+            Compares two <see cref="T:RestFoundation.ServiceProxy.ProxyStatus" /> objects for equality.
+            </summary>
+      <param name="left">The first object</param>
+      <param name="right">The second object</param>
+      <returns>true if both objects are equivalent; otherwise, false.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyStatus.op_Inequality(RestFoundation.ServiceProxy.ProxyStatus,RestFoundation.ServiceProxy.ProxyStatus)">
+      <summary>
+            Compares two <see cref="T:RestFoundation.ServiceProxy.ProxyStatus" /> objects for inequality.
+            </summary>
+      <param name="left">The first object</param>
+      <param name="right">The second object</param>
+      <returns>true if both objects are not equivalent; otherwise, false.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyStatus.Equals(RestFoundation.ServiceProxy.ProxyStatus)">
+      <summary>
+            Indicates whether the current object is equal to another object of the same type.
+            </summary>
+      <returns>
+            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+            </returns>
+      <param name="other">An object to compare with this object.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyStatus.Equals(System.Object)">
+      <summary>
+            Indicates whether this instance and a specified object are equal.
+            </summary>
+      <returns>
+            true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.
+            </returns>
+      <param name="obj">Another object to compare to. </param>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyStatus.GetHashCode">
+      <summary>
+            Returns the hash code for this instance.
+            </summary>
+      <returns>
+            A 32-bit signed integer that is the hash code for this instance.
+            </returns>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxyStatus.Code">
+      <summary>
+            Gets the HTTP status code.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxyStatus.Condition">
+      <summary>
+            Gets the condition for the status.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.OperationMetadata.ResourceExampleMetadata">
+      <summary>
+            Represents a resource example metadata.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ResourceExampleMetadata.Instance">
+      <summary>
+            Gets or sets a resource example instance.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ResourceExampleMetadata.XmlSchemas">
+      <summary>
+            Gets or sets XML schemas.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.OperationMetadata.StatusCodeMetadata">
+      <summary>
+            Represents an HTTP response status code metadata.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.StatusCodeMetadata.GetNumericStatusCode">
+      <summary>
+            Returns a numeric representation of the HTTP status code.
+            </summary>
+      <returns>An <see cref="T:System.Int32" /> representing the status code.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.StatusCodeMetadata.Equals(RestFoundation.ServiceProxy.OperationMetadata.StatusCodeMetadata)">
+      <summary>
+            Indicates whether the current object is equal to another object of the same type.
+            </summary>
+      <returns>
+            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+            </returns>
+      <param name="other">An object to compare with this object.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.StatusCodeMetadata.Equals(System.Object)">
+      <summary>
+            Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.
+            </summary>
+      <returns>
+            true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.
+            </returns>
+      <param name="obj">The object to compare with the current object.</param>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.StatusCodeMetadata.GetHashCode">
+      <summary>
+            Serves as a hash function for a particular type. 
+            </summary>
+      <returns>
+            A hash code for the current <see cref="T:System.Object" />.
+            </returns>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.OperationMetadata.StatusCodeMetadata.CompareTo(RestFoundation.ServiceProxy.OperationMetadata.StatusCodeMetadata)">
+      <summary>
+            Compares the current object with another object of the same type.
+            </summary>
+      <returns>
+            A value that indicates the relative order of the objects being compared. The return value has the following meanings:
+            Value Meaning Less than zero: This object is less than the <paramref name="other" /> parameter.
+            Zero: This object is equal to <paramref name="other" />.
+            Greater than zero: This object is greater than <paramref name="other" />. 
+            </returns>
+      <param name="other">An object to compare with this object.</param>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.StatusCodeMetadata.Code">
+      <summary>
+            Gets or sets the HTTP status code.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.StatusCodeMetadata.Condition">
+      <summary>
+            Gets or sets the condition for the status.
             </summary>
     </member>
     <member name="T:RestFoundation.TypeBinderBuilder">
@@ -3897,12 +4679,12 @@
             Clears all associated media type formatters.
             </summary>
     </member>
-    <member name="T:RestFoundation.Formatters.MultipartFormatter">
+    <member name="T:RestFoundation.Formatters.MultiPartFormatter">
       <summary>
             Represents a multi-part media type formatter for uploading files over the HTTP.
             </summary>
     </member>
-    <member name="M:RestFoundation.Formatters.MultipartFormatter.FormatRequest(RestFoundation.IServiceContext,System.Type)">
+    <member name="M:RestFoundation.Formatters.MultiPartFormatter.FormatRequest(RestFoundation.IServiceContext,System.Type)">
       <summary>
             Deserializes HTTP message body data into an object instance of the provided type.
             </summary>
@@ -3911,7 +4693,7 @@
       <returns>The deserialized object.</returns>
       <exception cref="T:RestFoundation.HttpResponseException">If the object cannot be deserialized.</exception>
     </member>
-    <member name="M:RestFoundation.Formatters.MultipartFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
+    <member name="M:RestFoundation.Formatters.MultiPartFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
       <summary>
             Serializes the object instance into the HTTP response stream using the accepted media type.
             </summary>
@@ -6715,6 +7497,13 @@
       <returns>The configuration object.</returns>
       <exception cref="T:System.ArgumentException">If the relative URL contains invalid characters.</exception>
     </member>
+    <member name="M:RestFoundation.ProxyConfiguration.WithServiceDescription(System.String)">
+      <summary>
+            Sets the service description for the service help and proxy pages.
+            </summary>
+      <param name="description">The service description.</param>
+      <returns>The configuration object.</returns>
+    </member>
     <member name="M:RestFoundation.ProxyConfiguration.SetJQueryUrl(System.String)">
       <summary>
             Sets the JQuery URL if the default CDN location "http://code.jquery.com/jquery-1.7.2.min.js" is not desired.
@@ -6744,272 +7533,6 @@
             </summary>
       <param name="authorizationManager">The authorization manager.</param>
       <returns>The configuration object.</returns>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyIPFilteredAttribute">
-      <summary>
-            Represents a service proxy decorator attribute that indicates that the service contract
-            or a service method is IP restricted.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyAdditionalHeaderAttribute">
-      <summary>
-            Represents a service proxy decorator attribute that specifies an additional HTTP header
-            associated with a service contract or a specific service method.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyAdditionalHeaderAttribute.#ctor(System.String,System.String)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyAdditionalHeaderAttribute" /> class.
-            </summary>
-      <param name="name">The header name.</param>
-      <param name="value">The header value.</param>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyAdditionalHeaderAttribute.Name">
-      <summary>
-            Gets the header name.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyAdditionalHeaderAttribute.Value">
-      <summary>
-            Gets the header value.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyHiddenOperationAttribute">
-      <summary>
-            Represents a service proxy decorator attribute that hides service methods from the
-            service proxy UI.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyHttpsOnlyAttribute">
-      <summary>
-            Represents a service proxy decorator attribute that specifies that the service method
-            requires a secure HTTPS connection.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyHttpsOnlyAttribute.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyHttpsOnlyAttribute" /> class.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyHttpsOnlyAttribute.Port">
-      <summary>
-            Gets or sets the HTTPS port number. The default port is 443.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyOperationDescriptionAttribute">
-      <summary>
-            Represents a service proxy decorator attribute that specifies a description for a
-            service method.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyOperationDescriptionAttribute.#ctor(System.String)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyOperationDescriptionAttribute" /> class.
-            </summary>
-      <param name="description">The service method description.</param>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyOperationDescriptionAttribute.Description">
-      <summary>
-            Gets the description.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyQueryParameterAttribute">
-      <summary>
-            Represents a service proxy decorator attribute that represents a query string parameter
-            for a service method.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyQueryParameterAttribute.#ctor(System.String,System.Object)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyQueryParameterAttribute" /> class.
-            </summary>
-      <param name="name">The parameter name.</param>
-      <param name="exampleValue">An example parameter value.</param>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyQueryParameterAttribute.AllowedValues">
-      <summary>
-            Gets or sets the parameter comma separated list of all allowed values.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyQueryParameterAttribute.ExampleValue">
-      <summary>
-            Gets the parameter example value.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyQueryParameterAttribute.Name">
-      <summary>
-            Gets the parameter name.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyQueryParameterAttribute.ParameterType">
-      <summary>
-            Gets or sets the parameter type.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyQueryParameterAttribute.RegexConstraint">
-      <summary>
-            Gets or sets the parameter regular expression constraint.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyResourceExampleAttribute">
-      <summary>
-            Represents a service proxy decorator attribute that specifies a type responsible for
-            building example resource object instances.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyResourceExampleAttribute.RequestBuilderType">
-      <summary>
-            Gets or sets the request example builder type.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyResourceExampleAttribute.ResponseBuilderType">
-      <summary>
-            Gets or sets the response example builder type.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyRouteParameterAttribute">
-      <summary>
-            Represents a service proxy decorator attribute for a service method parameter that specifies
-            a route parameter.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyRouteParameterAttribute.#ctor(System.Object)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyRouteParameterAttribute" /> class.
-            </summary>
-      <param name="exampleValue">An example parameter value.</param>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyRouteParameterAttribute.AllowedValues">
-      <summary>
-            Gets or sets the parameter comma separated list of all allowed values.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyRouteParameterAttribute.ExampleValue">
-      <summary>
-            Gets the parameter example value.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyStatusCodeAttribute">
-      <summary>
-            Represents a service proxy decorator attribute that specifies additional HTTP status codes
-            that could be returned by the service method.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyStatusCodeAttribute.#ctor(System.Net.HttpStatusCode,System.String)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyStatusCodeAttribute" /> class.
-            </summary>
-      <param name="statusCode">The status code.</param>
-      <param name="condition">The condition when the status code may occur.</param>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyStatusCodeAttribute.Condition">
-      <summary>
-            Gets the condition under which the HTTP status code may occur.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyStatusCodeAttribute.StatusCode">
-      <summary>
-            Gets the HTTP status code.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyParameter">
-      <summary>
-            Represents a service proxy parameter.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyParameter.#ctor(System.String,System.String,System.String,System.Boolean)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyParameter" /> struct.
-            </summary>
-      <param name="name">The parameter name.</param>
-      <param name="parameterType">The parameter type.</param>
-      <param name="constraint">The paramater regular expression contraint.</param>
-      <param name="isRouteParameter">The value indicating whether the parameter is a route parameter.</param>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyParameter.#ctor(System.String,System.String,System.String,System.Object,System.String,System.Boolean)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyParameter" /> struct.
-            </summary>
-      <param name="name">The parameter name.</param>
-      <param name="parameterType">The parameter type.</param>
-      <param name="constraint">The paramater regular expression contraint.</param>
-      <param name="exampleValue">An example parameter value.</param>
-      <param name="allowedValues">A comma separated list of all allowed parameter values, if applicable.</param>
-      <param name="isRouteParameter">The value indicating whether the parameter is a route parameter.</param>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyParameter.op_Equality(RestFoundation.ServiceProxy.ProxyParameter,RestFoundation.ServiceProxy.ProxyParameter)">
-      <summary>
-            Compares two <see cref="T:RestFoundation.ServiceProxy.ProxyParameter" /> objects for equality.
-            </summary>
-      <param name="left">The first object</param>
-      <param name="right">The second object</param>
-      <returns>true if both objects are equivalent; otherwise, false.</returns>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyParameter.op_Inequality(RestFoundation.ServiceProxy.ProxyParameter,RestFoundation.ServiceProxy.ProxyParameter)">
-      <summary>
-            Compares two <see cref="T:RestFoundation.ServiceProxy.ProxyParameter" /> objects for inequality.
-            </summary>
-      <param name="left">The first object</param>
-      <param name="right">The second object</param>
-      <returns>true if both objects are not equivalent; otherwise, false.</returns>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyParameter.Equals(RestFoundation.ServiceProxy.ProxyParameter)">
-      <summary>
-            Indicates whether the current object is equal to another object of the same type.
-            </summary>
-      <returns>
-            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
-            </returns>
-      <param name="other">An object to compare with this object.</param>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyParameter.Equals(System.Object)">
-      <summary>
-            Indicates whether this instance and a specified object are equal.
-            </summary>
-      <returns>
-            true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.
-            </returns>
-      <param name="obj">Another object to compare to. </param>
-      <filterpriority>2</filterpriority>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyParameter.GetHashCode">
-      <summary>
-            Returns the hash code for this instance.
-            </summary>
-      <returns>
-            A 32-bit signed integer that is the hash code for this instance.
-            </returns>
-      <filterpriority>2</filterpriority>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyParameter.Name">
-      <summary>
-            Gets the parameter name.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyParameter.ParameterType">
-      <summary>
-            Gets the parameter type.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyParameter.Constraint">
-      <summary>
-            Gets the parameter regular expression constraint.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyParameter.ExampleValue">
-      <summary>
-            Gets the parameter example value.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyParameter.AllowedValues">
-      <summary>
-            Gets the parameter comma separated list of all allowed values.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyParameter.IsRouteParameter">
-      <summary>
-            Gets a value indicating whether the parameter is a route parameter.
-            </summary>
     </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyOperation">
       <summary>
@@ -7069,14 +7592,14 @@
             Gets or sets a value how many times the current template is repeated in the list.
             </summary>
     </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyOperation.RequestExampleType">
+    <member name="P:RestFoundation.ServiceProxy.ProxyOperation.RequestResourceExample">
       <summary>
-            Gets or sets the HTTP request resource example type or null.
+            Gets or sets the HTTP request resource example.
             </summary>
     </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyOperation.ResponseExampleType">
+    <member name="P:RestFoundation.ServiceProxy.ProxyOperation.ResponseResourceExample">
       <summary>
-            Gets or sets the HTTP response resource example type or null.
+            Gets or sets the HTTP response resource example.
             </summary>
     </member>
     <member name="P:RestFoundation.ServiceProxy.ProxyOperation.ResultType">
@@ -7146,127 +7669,6 @@
             Gets all proxy operations associated with the service URL.
             </summary>
       <returns>A sequence of proxy operation.</returns>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.ProxyStatusCode">
-      <summary>
-            Represents an HTTP status code to display in the service proxy UI.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyStatusCode.#ctor(System.Net.HttpStatusCode,System.String)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceProxy.ProxyStatusCode" /> struct.
-            </summary>
-      <param name="statusCode">The status code.</param>
-      <param name="condition">The condition when the status code may occur.</param>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyStatusCode.op_Equality(RestFoundation.ServiceProxy.ProxyStatusCode,RestFoundation.ServiceProxy.ProxyStatusCode)">
-      <summary>
-            Compares two <see cref="T:RestFoundation.ServiceProxy.ProxyStatusCode" /> objects for equality.
-            </summary>
-      <param name="left">The first object</param>
-      <param name="right">The second object</param>
-      <returns>true if both objects are equivalent; otherwise, false.</returns>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyStatusCode.op_Inequality(RestFoundation.ServiceProxy.ProxyStatusCode,RestFoundation.ServiceProxy.ProxyStatusCode)">
-      <summary>
-            Compares two <see cref="T:RestFoundation.ServiceProxy.ProxyStatusCode" /> objects for inequality.
-            </summary>
-      <param name="left">The first object</param>
-      <param name="right">The second object</param>
-      <returns>true if both objects are not equivalent; otherwise, false.</returns>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyStatusCode.op_LessThan(RestFoundation.ServiceProxy.ProxyStatusCode,RestFoundation.ServiceProxy.ProxyStatusCode)">
-      <summary>
-            Compares whether the first <see cref="T:RestFoundation.ServiceProxy.ProxyStatusCode" /> is less than the second.
-            </summary>
-      <param name="left">The first object</param>
-      <param name="right">The second object</param>
-      <returns>true if the first object is less than the second; otherwise, false.</returns>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyStatusCode.op_GreaterThan(RestFoundation.ServiceProxy.ProxyStatusCode,RestFoundation.ServiceProxy.ProxyStatusCode)">
-      <summary>
-            Compares whether the first <see cref="T:RestFoundation.ServiceProxy.ProxyStatusCode" /> is greater than the second.
-            </summary>
-      <param name="left">The first object</param>
-      <param name="right">The second object</param>
-      <returns>true if the first object is greater than the second; otherwise, false.</returns>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyStatusCode.GetNumericStatusCode">
-      <summary>
-            Gets a numeric HTTP status code.
-            </summary>
-      <returns>A number representing the HTTP status code.</returns>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyStatusCode.CompareTo(RestFoundation.ServiceProxy.ProxyStatusCode)">
-      <summary>
-            Compares the current object with another object of the same type.
-            </summary>
-      <returns>
-            A value that indicates the relative order of the objects being compared. The return value has the following
-            meanings: Less than zero - This object is less than the <paramref name="other" /> parameter. Zero -
-            This object is equal to <paramref name="other" />. Greater than zero - This object is greater than
-            <paramref name="other" />.
-            </returns>
-      <param name="other">An object to compare with this object.</param>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyStatusCode.Equals(RestFoundation.ServiceProxy.ProxyStatusCode)">
-      <summary>
-            Indicates whether the current object is equal to another object of the same type.
-            </summary>
-      <returns>
-            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
-            </returns>
-      <param name="other">An object to compare with this object.</param>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyStatusCode.Equals(System.Object)">
-      <summary>
-            Indicates whether this instance and a specified object are equal.
-            </summary>
-      <returns>
-            true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.
-            </returns>
-      <param name="obj">Another object to compare to.</param>
-      <filterpriority>2</filterpriority>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyStatusCode.GetHashCode">
-      <summary>
-            Returns the hash code for this instance.
-            </summary>
-      <returns>
-            A 32-bit signed integer that is the hash code for this instance.
-            </returns>
-      <filterpriority>2</filterpriority>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyStatusCode.Condition">
-      <summary>
-            Gets the condition under which the HTTP status code may occur.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.ServiceProxy.ProxyStatusCode.StatusCode">
-      <summary>
-            Gets the HTTP status code.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.ServiceProxy.IResourceExampleBuilder">
-      <summary>
-            Defines a resource example builder.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.IResourceExampleBuilder.BuildInstance">
-      <summary>
-            Builds and returns an instance of the example resource class.
-            </summary>
-      <returns>An example resource object instance.</returns>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.IResourceExampleBuilder.BuildSchemas">
-      <summary>
-            Builds and returns XML schemas for the resource class.
-            See <seealso cref="T:RestFoundation.Runtime.XmlSchemaGenerator" /> for an automatic XML schema generator.
-            Return null from this method, if you do not need XML schemas to be displayed.
-            </summary>
-      <returns>
-            An list of XML schemas for the response object.
-            </returns>
     </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyFile">
       <summary>
@@ -8238,7 +8640,7 @@
       <returns>
             true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.
             </returns>
-      <param name="obj">Another object to compare to. </param>
+      <param name="obj">Another object to compare to.</param>
       <filterpriority>2</filterpriority>
     </member>
     <member name="M:RestFoundation.Validation.ValidationError.GetHashCode">
