@@ -321,7 +321,7 @@
         headerString.AppendLine("RESPONSE");
         CreateOutputSeparator(headerString);
 
-        headerString.Append("URL: ").AppendLine(url);
+        headerString.Append("URL: ").AppendLine(url.Replace("%20", "+"));
         headerString.Append("HTTP/").Append(protocolVersion);
 
         if (!String.IsNullOrEmpty(responseCode))
