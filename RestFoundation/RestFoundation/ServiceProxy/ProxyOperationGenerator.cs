@@ -205,9 +205,27 @@ namespace RestFoundation.ServiceProxy
             return constraintAttribute != null ? constraintAttribute.Pattern.TrimStart('^').TrimEnd('$') : null;
         }
 
-        private static AuthenticationMetadata GetCredentials(MethodInfo method, IProxyMetadata proxyMetadata)
+        private static AuthenticationMetadata GetCredentials(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
         {
-            return proxyMetadata != null ? proxyMetadata.GetAuthentication(method) : null;
+            if (proxyMetadata == null)
+            {
+                return null;
+            }
+
+            AuthenticationMetadata authenticationInfo = proxyMetadata.GetAuthentication(metadata.MethodInfo);
+
+            if (authenticationInfo == null)
+            {
+                return null;
+            }
+
+            if (!String.IsNullOrEmpty(authenticationInfo.RelativeUrlToMatch) &&
+                !authenticationInfo.RelativeUrlToMatch.Trim().TrimStart('~', '/').Equals(metadata.ServiceUrl, StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            return authenticationInfo;
         }
 
         private static bool HasResource(ServiceMethodMetadata metadata, HttpMethod httpMethod)
@@ -249,7 +267,7 @@ namespace RestFoundation.ServiceProxy
                                 RouteParameters = GetParameters(metadata, proxyMetadata),
                                 HttpsPort = proxyMetadata != null && proxyMetadata.GetHttps(metadata.MethodInfo) != null ? proxyMetadata.GetHttps(metadata.MethodInfo).Port : 0,
                                 IsIPFiltered = proxyMetadata != null && proxyMetadata.IsIPFiltered(metadata.MethodInfo),
-                                Credentials = GetCredentials(metadata.MethodInfo, proxyMetadata),
+                                Credentials = GetCredentials(metadata, proxyMetadata),
                                 AdditionalHeaders = proxyMetadata != null ? proxyMetadata.GetHeaders(metadata.MethodInfo) : new List<HeaderMetadata>()
                             };
 
