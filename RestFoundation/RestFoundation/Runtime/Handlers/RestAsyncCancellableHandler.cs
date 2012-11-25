@@ -17,7 +17,7 @@ namespace RestFoundation.Runtime.Handlers
     /// </summary>
     public class RestAsyncCancellableHandler : IRestAsyncHandler
     {
-        private const string ServiceMethodCancellationKey = "_cancellation";
+        private const string ServiceMethodCancellationKey = "REST_HandlerCancellation";
 
         private readonly IServiceContext m_serviceContext;
         private readonly IServiceMethodLocator m_methodLocator;

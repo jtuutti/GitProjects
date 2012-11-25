@@ -13,7 +13,7 @@ namespace RestFoundation.Runtime
     /// </summary>
     public sealed class ServiceRequestValidator : RequestValidator
     {
-        internal const string UnvalidatedHandlerKey = "_ignoreRequest";
+        internal const string UnvalidatedHandlerKey = "REST_DoNotValidateRequest";
 
         /// <summary>
         /// Validates a string that contains HTTP request data.

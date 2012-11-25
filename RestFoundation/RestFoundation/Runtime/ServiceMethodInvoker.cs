@@ -164,6 +164,11 @@ namespace RestFoundation.Runtime
             object resource;
             object[] methodArguments = GenerateMethodArguments(method, handler, out resource);
 
+            if (!ReferenceEquals(null, resource))
+            {
+                handler.Context.Request.ResourceBag.Resource = resource;
+            }
+
             if (m_behaviorInvoker.InvokeOnExecutingBehaviors(behaviors, service, method, resource) == BehaviorMethodAction.Stop)
             {
                 return null;
