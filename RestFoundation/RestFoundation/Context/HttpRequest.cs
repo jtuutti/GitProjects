@@ -81,19 +81,6 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
-        /// Gets a resource state associated with the service method with associated validation errors.
-        /// </summary>
-        public ResourceState ResourceState
-        {
-            get
-            {
-                var validationErrors = Context.Items[ResourceValidator.ValidationErrorKey] as ResourceState;
-
-                return validationErrors ?? new ResourceState(new ValidationError[0]);
-            }
-        }
-
-        /// <summary>
         /// Gets the stream containing the HTTP request body data.
         /// </summary>
         public Stream Body
@@ -112,6 +99,30 @@ namespace RestFoundation.Context
             get
             {
                 return ContextContainer.Query ?? (ContextContainer.Query = new DynamicStringCollection(QueryString));
+            }
+        }
+
+        /// <summary>
+        /// Gets the dynamic resource object bag.
+        /// </summary>
+        public dynamic ResourceBag
+        {
+            get
+            {
+                return new DynamicDictionary(Context.Items);
+            }
+        }
+
+        /// <summary>
+        /// Gets a resource state associated with the service method with associated validation errors.
+        /// </summary>
+        public ResourceState ResourceState
+        {
+            get
+            {
+                var validationErrors = Context.Items[ResourceValidator.ValidationErrorKey] as ResourceState;
+
+                return validationErrors ?? new ResourceState(new ValidationError[0]);
             }
         }
 

@@ -44,7 +44,7 @@ namespace RestTestServices
 
         public object Get()
         {
-            var sessionInfo = (SessionInfo) Context.HttpItemBag.SessionInfo;
+            var sessionInfo = (SessionInfo) Context.Request.ResourceBag.SessionInfo;
 
             string relativePath = Context.MapPath(String.Format(@"~\App_Data\{0}\{1}\{2}\TouchMap.xml",
                                                   sessionInfo.CustomerId,
@@ -81,9 +81,16 @@ namespace RestTestServices
             const string HostSeparatorPattern = @"([\.|\-])";
             const string HostSeparatorReplacement = "$1";
 
+            string environmentName;
+
+            if (!environments.TryGetValue(environment, out environmentName))
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid environment provided");
+            }
+
             return Regex.Replace(xml,
                                  String.Concat(ProtocolPrefix, environments["Default"], HostSeparatorPattern),
-                                 String.Concat(ProtocolPrefix, environments[environment], HostSeparatorReplacement),
+                                 String.Concat(ProtocolPrefix, environmentName, HostSeparatorReplacement),
                                  RegexOptions.IgnoreCase);
         }
     }

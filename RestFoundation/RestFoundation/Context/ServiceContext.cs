@@ -5,7 +5,6 @@ using System;
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
-using RestFoundation.Collections.Specialized;
 
 namespace RestFoundation.Context
 {
@@ -113,17 +112,6 @@ namespace RestFoundation.Context
             get
             {
                 return Context.User != null && Context.User.Identity.IsAuthenticated;
-            }
-        }
-
-        /// <summary>
-        /// Gets the dynamic HTTP context item dictionary.
-        /// </summary>
-        public dynamic HttpItemBag
-        {
-            get
-            {
-                return new DynamicDictionary(Context.Items);
             }
         }
 

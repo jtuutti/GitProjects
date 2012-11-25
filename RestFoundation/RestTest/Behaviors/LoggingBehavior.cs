@@ -7,7 +7,7 @@ namespace RestTest.Behaviors
     {
         public override BehaviorMethodAction OnMethodExecuting(IServiceContext serviceContext, MethodExecutingContext behaviorContext)
         {
-            serviceContext.HttpItemBag.LoggingEnabled = true;
+            serviceContext.Request.ResourceBag.LoggingEnabled = true;
             serviceContext.Response.Output.WriteFormat("Action '{0}' executing", behaviorContext.GetMethodName()).WriteLine(2);
 
             return BehaviorMethodAction.Execute;

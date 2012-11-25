@@ -22,7 +22,7 @@ namespace RestTestServices.Behaviors
                 return BehaviorMethodAction.Stop;
             }
 
-            serviceContext.HttpItemBag.SessionInfo = sessionInfo;
+            serviceContext.Request.ResourceBag.SessionInfo = sessionInfo;
             return BehaviorMethodAction.Execute;
         }
     }

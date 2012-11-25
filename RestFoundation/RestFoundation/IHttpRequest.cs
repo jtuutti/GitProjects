@@ -43,14 +43,19 @@ namespace RestFoundation
         Stream Body { get; }
 
         /// <summary>
-        /// Gets a resource state associated with the service method with associated validation errors.
-        /// </summary>
-        ResourceState ResourceState { get; }
-
-        /// <summary>
         /// Gets the dynamic query string dictionary.
         /// </summary>
         dynamic QueryBag { get; }
+
+        /// <summary>
+        /// Gets the dynamic resource object bag.
+        /// </summary>
+        dynamic ResourceBag { get; }
+
+        /// <summary>
+        /// Gets a resource state associated with the service method with associated validation errors.
+        /// </summary>
+        ResourceState ResourceState { get; }
 
         /// <summary>
         /// Gets the route collection.

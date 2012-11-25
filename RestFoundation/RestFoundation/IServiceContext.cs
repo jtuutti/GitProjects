@@ -43,11 +43,6 @@ namespace RestFoundation
         bool IsAuthenticated { get; }
 
         /// <summary>
-        /// Gets the dynamic HTTP context item dictionary.
-        /// </summary>
-        dynamic HttpItemBag { get; }
-
-        /// <summary>
         /// Returns the physical path associated to the virtual path of the file.
         /// </summary>
         /// <param name="relativePath">The relative virtual path to the file.</param>
