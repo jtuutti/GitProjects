@@ -7,6 +7,8 @@ using System.Web.Routing;
 using RestFoundation.Collections;
 using RestFoundation.Collections.Concrete;
 using RestFoundation.Collections.Specialized;
+using RestFoundation.Formatters;
+using RestFoundation.Runtime;
 using RestFoundation.Validation;
 
 namespace RestFoundation.Context
@@ -109,7 +111,41 @@ namespace RestFoundation.Context
         {
             get
             {
-                return new DynamicDictionary(Context.Items);
+                dynamic resourceDictionary = new DynamicDictionary(Context.Items);
+                resourceDictionary.GetResource = new Func<dynamic>(() =>
+                {
+                    if (Method != HttpMethod.Post && Method != HttpMethod.Put && Method != HttpMethod.Patch)
+                    {
+                        return null;
+                    }
+
+                    if (String.IsNullOrWhiteSpace(Headers.ContentType) || Body.Length == 0)
+                    {
+                        return null;
+                    }
+
+                    IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetFormatter(Headers.ContentType);
+
+                    if (formatter == null || formatter is BlockFormatter)
+                    {
+                        return null;
+                    }
+
+                    dynamic resource;
+
+                    try
+                    {
+                        resource = formatter.FormatRequest(Rest.Configuration.ServiceLocator.GetService<IServiceContext>(), typeof(object));
+                    }
+                    catch (Exception)
+                    {
+                        resource = null;
+                    }
+
+                    return resource;
+                });
+
+                return resourceDictionary;
             }
         }
 

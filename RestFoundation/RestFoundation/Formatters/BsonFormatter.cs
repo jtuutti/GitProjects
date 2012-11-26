@@ -38,17 +38,15 @@ namespace RestFoundation.Formatters
                 context.Request.Body.Seek(0, SeekOrigin.Begin);
             }
 
-            using (var reader = new BsonReader(context.Request.Body))
+            var reader = new BsonReader(context.Request.Body);
+            var serializer = new JsonSerializer();
+
+            if (objectType == typeof(object))
             {
-                var serializer = new JsonSerializer();
-
-                if (objectType == typeof(object))
-                {
-                    return serializer.Deserialize(reader);
-                }
-
-                return serializer.Deserialize(reader, objectType);
+                return serializer.Deserialize(reader);
             }
+
+            return serializer.Deserialize(reader, objectType);
         }
 
         /// <summary>

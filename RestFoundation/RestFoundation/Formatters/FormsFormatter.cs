@@ -93,9 +93,7 @@ namespace RestFoundation.Formatters
             }
 
             var streamReader = new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding);
-            {
-                formData = ParseFormData(streamReader.ReadToEnd());
-            }
+            formData = ParseFormData(streamReader.ReadToEnd());
 
             return formData;
         }

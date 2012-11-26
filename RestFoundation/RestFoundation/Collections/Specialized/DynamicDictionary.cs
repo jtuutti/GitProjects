@@ -5,6 +5,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
+using System.Reflection;
 using System.Text;
 
 namespace RestFoundation.Collections.Specialized
@@ -97,7 +99,23 @@ namespace RestFoundation.Collections.Specialized
         /// <param name="result">The result of the member invocation.</param>
         public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
         {
-            throw new NotSupportedException();
+            if (binder == null)
+            {
+                throw new ArgumentNullException("binder");
+            }
+
+            Type dictionaryType = m_inner.GetType();
+
+            try
+            {
+                result = dictionaryType.InvokeMember(binder.Name, BindingFlags.InvokeMethod, Type.DefaultBinder, m_inner, args, CultureInfo.InvariantCulture);
+                return true;
+            }
+            catch (Exception)
+            {
+                result = null;
+                return false;
+            }
         }
 
         /// <summary>

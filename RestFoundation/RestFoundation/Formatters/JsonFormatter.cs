@@ -60,18 +60,16 @@ namespace RestFoundation.Formatters
                 context.Request.Body.Seek(0, SeekOrigin.Begin);
             }
 
-            using (var streamReader = new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding))
+            var streamReader = new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding);
+            var serializer = new JsonSerializer();
+            var reader = new JsonTextReader(streamReader);
+
+            if (objectType == typeof(object))
             {
-                var serializer = new JsonSerializer();
-                var reader = new JsonTextReader(streamReader);
-
-                if (objectType == typeof(object))
-                {
-                    return serializer.Deserialize(reader);
-                }
-
-                return serializer.Deserialize(reader, objectType);
+                return serializer.Deserialize(reader);
             }
+
+            return serializer.Deserialize(reader, objectType);
         }
 
         /// <summary>
