@@ -112,38 +112,7 @@ namespace RestFoundation.Context
             get
             {
                 dynamic resourceDictionary = new DynamicDictionary(Context.Items);
-                resourceDictionary.GetResource = new Func<dynamic>(() =>
-                {
-                    if (Method != HttpMethod.Post && Method != HttpMethod.Put && Method != HttpMethod.Patch)
-                    {
-                        return null;
-                    }
-
-                    if (String.IsNullOrWhiteSpace(Headers.ContentType) || Body.Length == 0)
-                    {
-                        return null;
-                    }
-
-                    IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetFormatter(Headers.ContentType);
-
-                    if (formatter == null || formatter is BlockFormatter)
-                    {
-                        return null;
-                    }
-
-                    dynamic resource;
-
-                    try
-                    {
-                        resource = formatter.FormatRequest(Rest.Configuration.ServiceLocator.GetService<IServiceContext>(), typeof(object));
-                    }
-                    catch (Exception)
-                    {
-                        resource = null;
-                    }
-
-                    return resource;
-                });
+                resourceDictionary.GetResource = new Func<dynamic>(() => GetResource());
 
                 return resourceDictionary;
             }
@@ -238,6 +207,39 @@ namespace RestFoundation.Context
             var routeData = RouteTable.Routes.GetRouteData(Context);
 
             return routeData != null ? new ObjectValueCollection(routeData.Values) : new ObjectValueCollection(new RouteValueDictionary());
+        }
+
+        private dynamic GetResource()
+        {
+            if (Method != HttpMethod.Post && Method != HttpMethod.Put && Method != HttpMethod.Patch)
+            {
+                return null;
+            }
+
+            if (String.IsNullOrWhiteSpace(Headers.ContentType) || Body.Length == 0)
+            {
+                return null;
+            }
+
+            IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetFormatter(Headers.ContentType);
+
+            if (formatter == null || formatter is BlockFormatter)
+            {
+                return null;
+            }
+
+            dynamic resource;
+
+            try
+            {
+                resource = formatter.FormatRequest(Rest.Configuration.ServiceLocator.GetService<IServiceContext>(), typeof(object));
+            }
+            catch (Exception)
+            {
+                resource = null;
+            }
+
+            return resource;
         }
 
         private sealed class HttpRequestContainer
