@@ -4998,11 +4998,6 @@
             Gets a value indicating whether there is an authenticated user associated with the HTTP request.
             </summary>
     </member>
-    <member name="P:RestFoundation.IServiceContext.HttpItemBag">
-      <summary>
-            Gets the dynamic HTTP context item dictionary.
-            </summary>
-    </member>
     <member name="T:RestFoundation.Validation.IResourceValidator">
       <summary>
             Defines a resource validator.
@@ -6069,11 +6064,6 @@
     <member name="P:RestFoundation.Context.ServiceContext.IsAuthenticated">
       <summary>
             Gets a value indicating whether there is an authenticated user associated with the HTTP request.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Context.ServiceContext.HttpItemBag">
-      <summary>
-            Gets the dynamic HTTP context item dictionary.
             </summary>
     </member>
     <member name="T:RestFoundation.Runtime.ServiceRequestValidator">
@@ -7196,14 +7186,19 @@
             Gets the stream containing the HTTP request body data.
             </summary>
     </member>
-    <member name="P:RestFoundation.IHttpRequest.ResourceState">
-      <summary>
-            Gets a resource state associated with the service method with associated validation errors.
-            </summary>
-    </member>
     <member name="P:RestFoundation.IHttpRequest.QueryBag">
       <summary>
             Gets the dynamic query string dictionary.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.IHttpRequest.ResourceBag">
+      <summary>
+            Gets the dynamic resource object bag.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.IHttpRequest.ResourceState">
+      <summary>
+            Gets a resource state associated with the service method with associated validation errors.
             </summary>
     </member>
     <member name="P:RestFoundation.IHttpRequest.RouteValues">
@@ -7261,11 +7256,6 @@
             Gets the HTTP method of the request.
             </summary>
     </member>
-    <member name="P:RestFoundation.Context.HttpRequest.ResourceState">
-      <summary>
-            Gets a resource state associated with the service method with associated validation errors.
-            </summary>
-    </member>
     <member name="P:RestFoundation.Context.HttpRequest.Body">
       <summary>
             Gets the stream containing the HTTP request body data.
@@ -7274,6 +7264,16 @@
     <member name="P:RestFoundation.Context.HttpRequest.QueryBag">
       <summary>
             Gets the dynamic query string dictionary.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Context.HttpRequest.ResourceBag">
+      <summary>
+            Gets the dynamic resource object bag.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Context.HttpRequest.ResourceState">
+      <summary>
+            Gets a resource state associated with the service method with associated validation errors.
             </summary>
     </member>
     <member name="P:RestFoundation.Context.HttpRequest.RouteValues">
