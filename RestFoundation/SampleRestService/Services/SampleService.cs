@@ -65,6 +65,8 @@ namespace SampleRestService.Services
             try
             {
                 m_repository.Add(resource);
+                
+                // TODO: add location header
                 m_response.SetStatus(HttpStatusCode.Created, "Product added");
             }
             catch (ArgumentException ex)
@@ -150,7 +152,7 @@ namespace SampleRestService.Services
             }
             catch (Exception ex)
             {
-                return Result.ResponseStatus(HttpStatusCode.BadRequest, ex.Message);
+                return Result.ResponseStatus(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
