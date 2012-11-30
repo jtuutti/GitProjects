@@ -176,7 +176,7 @@ namespace RestFoundation.Runtime
                 return true;
             }
 
-            if (Attribute.GetCustomAttribute(parameter, typeof(ResourceParameterAttribute), false) != null)
+            if (Attribute.IsDefined(parameter, typeof(ResourceParameterAttribute), false))
             {
                 return true;
             }

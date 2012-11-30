@@ -201,13 +201,13 @@ namespace RestFoundation
                 throw new ArgumentException(RestResources.InvalidServiceContract, "contractType");
             }
 
-            if (contractType.IsClass && (contractType.IsAbstract || Attribute.GetCustomAttribute(contractType, typeof(ServiceContractAttribute), true) == null))
+            if (contractType.IsClass && (contractType.IsAbstract || !Attribute.IsDefined(contractType, typeof(ServiceContractAttribute), true)))
             {
                 throw new ArgumentException(RestResources.InvalidServiceImplementation, "contractType");
             }
 
             var serviceMethods = contractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                                             .Where(m => m.GetCustomAttributes(urlAttributeType, false).Length > 0);
+                                             .Where(m => Attribute.IsDefined(m, urlAttributeType, false));
 
             List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(contractType, serviceMethods, m_relativeUrl);
 

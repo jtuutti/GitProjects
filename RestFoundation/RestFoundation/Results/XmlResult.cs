@@ -57,7 +57,7 @@ namespace RestFoundation.Results
                 return;
             }
 
-            if (Attribute.GetCustomAttribute(Content.GetType(), typeof(CompilerGeneratedAttribute), false) != null)
+            if (Attribute.IsDefined(Content.GetType(), typeof(CompilerGeneratedAttribute), false))
             {
                 SerializeAnonymousType(xmlWriter, Content);
                 return;

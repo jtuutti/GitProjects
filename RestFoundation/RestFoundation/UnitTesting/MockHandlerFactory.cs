@@ -178,7 +178,7 @@ namespace RestFoundation.UnitTesting
                 throw new ArgumentException(RestResources.InvalidServiceContract, "serviceMethodDelegate");
             }
 
-            if (contractType.IsClass && (contractType.IsAbstract || Attribute.GetCustomAttribute(contractType, typeof(ServiceContractAttribute), true) == null))
+            if (contractType.IsClass && (contractType.IsAbstract || !Attribute.IsDefined(contractType, typeof(ServiceContractAttribute), true)))
             {
                 throw new ArgumentException(RestResources.InvalidServiceImplementation, "serviceMethodDelegate");
             }

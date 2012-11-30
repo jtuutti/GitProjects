@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using RestFoundation.Runtime;
 
@@ -81,7 +80,7 @@ namespace RestFoundation.Behaviors
 
             Type serviceType = m_service.GetType();
 
-            if (serviceType.GetCustomAttributes(typeof(ServiceContractAttribute), false).Length > 0)
+            if (Attribute.IsDefined(serviceType, typeof(ServiceContractAttribute), true))
             {
                 return serviceType;
             }
@@ -145,7 +144,7 @@ namespace RestFoundation.Behaviors
                 return null;
             }
 
-            var urlAttribute = m_method.GetCustomAttributes(typeof(UrlAttribute), false).Cast<UrlAttribute>().FirstOrDefault();
+            var urlAttribute = Attribute.GetCustomAttribute(m_method, typeof(UrlAttribute), false) as UrlAttribute;
 
             return urlAttribute != null ? urlAttribute.UrlTemplate : null;
         }

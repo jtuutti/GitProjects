@@ -49,7 +49,7 @@ namespace RestFoundation.UnitTesting
                 throw new RouteAssertException(RestResources.InvalidServiceContract);
             }
 
-            if (validatedContractType.IsClass && (validatedContractType.IsAbstract || Attribute.GetCustomAttribute(validatedContractType, typeof(ServiceContractAttribute), true) == null))
+            if (validatedContractType.IsClass && (validatedContractType.IsAbstract || !Attribute.IsDefined(validatedContractType, typeof(ServiceContractAttribute), true)))
             {
                 throw new RouteAssertException(RestResources.InvalidServiceImplementation);
             }

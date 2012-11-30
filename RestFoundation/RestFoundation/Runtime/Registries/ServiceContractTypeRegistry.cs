@@ -5,7 +5,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using RestFoundation.ServiceProxy;
 
 namespace RestFoundation.Runtime
@@ -49,7 +48,7 @@ namespace RestFoundation.Runtime
                 return InitializeProxyMetadata(contractType);
             }
 
-            var metadataAttribute = contractType.GetCustomAttributes(typeof(ProxyMetadataAttribute), false).Cast<ProxyMetadataAttribute>().FirstOrDefault();
+            var metadataAttribute = Attribute.GetCustomAttribute(contractType, typeof(ProxyMetadataAttribute), false) as ProxyMetadataAttribute;
 
             if (metadataAttribute == null || metadataAttribute.ProxyMetadataType == null)
             {
