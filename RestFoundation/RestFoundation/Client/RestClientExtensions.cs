@@ -203,6 +203,57 @@ namespace RestFoundation.Client
         }
 
         /// <summary>
+        /// Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PATCH HTTP method.
+        /// </summary>
+        /// <typeparam name="TInput">The input resource object type.</typeparam>
+        /// <typeparam name="TOutput">The output resource object type.</typeparam>
+        /// <param name="client">The HTTP client instance.</param>
+        /// <param name="url">The URL.</param>
+        /// <param name="resource">The input resource.</param>
+        /// <returns>The output resource.</returns>
+        /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
+        /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
+        /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+        /// <exception cref="SecurityException">If a security exception occurred.</exception>
+        /// <exception cref="InvalidOperationException">If a resource object is not serializable.</exception>
+        /// <exception cref="ArgumentException">If the resource body is null.</exception>
+        public static RestResource<TOutput> Patch<TInput, TOutput>(this IRestClient client, Uri url, RestResource<TInput> resource)
+        {
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
+
+            return client.Execute<TInput, TOutput>(url, HttpMethod.Patch, resource);
+        }
+
+        /// <summary>
+        /// Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PATCH HTTP method.
+        /// </summary>
+        /// <typeparam name="TInput">The input resource object type.</typeparam>
+        /// <typeparam name="TOutput">The output resource object type.</typeparam>
+        /// <param name="client">The HTTP client instance.</param>
+        /// <param name="url">The URL.</param>
+        /// <param name="resource">The input resource.</param>
+        /// <param name="outputType">The output resource type.</param>
+        /// <returns>The output resource.</returns>
+        /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
+        /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
+        /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+        /// <exception cref="SecurityException">If a security exception occurred.</exception>
+        /// <exception cref="InvalidOperationException">If a resource object is not serializable.</exception>
+        /// <exception cref="ArgumentException">If the resource body is null.</exception>
+        public static RestResource<TOutput> Patch<TInput, TOutput>(this IRestClient client, Uri url, RestResource<TInput> resource, RestResourceType outputType)
+        {
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
+
+            return client.Execute<TInput, TOutput>(url, HttpMethod.Patch, resource, outputType);
+        }
+
+        /// <summary>
         /// Executes an HTTP request to the provided URL using the DELETE HTTP method.
         /// </summary>
         /// <param name="client">The HTTP client instance.</param>
