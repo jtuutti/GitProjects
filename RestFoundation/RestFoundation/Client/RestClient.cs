@@ -51,12 +51,12 @@ namespace RestFoundation.Client
         public int LastStatusCode { get; private set; }
         public string LastStatusDescription { get; private set; }
 
-        public void Execute(Uri url, HttpMethod method)
+        public NameValueCollection Execute(Uri url, HttpMethod method)
         {
-            Execute(url, method, null);
+            return Execute(url, method, null);
         }
 
-        public void Execute(Uri url, HttpMethod method, NameValueCollection headers)
+        public NameValueCollection Execute(Uri url, HttpMethod method, NameValueCollection headers)
         {
             if (url == null)
             {
@@ -70,11 +70,12 @@ namespace RestFoundation.Client
                 MergeHeaders(headers, emptyResource);
             }
 
-            var request = CreateRequest(url, method, emptyResource);
-            ProcessEmptyResponse(request);
+            HttpWebRequest request = CreateRequest(url, method, emptyResource);
+
+            return ProcessEmptyResponse(request);
         }
 
-        public void Execute<TInput>(Uri url, HttpMethod method, RestResource<TInput> resource)
+        public NameValueCollection Execute<TInput>(Uri url, HttpMethod method, RestResource<TInput> resource)
         {
             if (url == null)
             {
@@ -91,7 +92,7 @@ namespace RestFoundation.Client
                 throw new ArgumentException(RestResources.NullResourceBody, "resource");
             }
 
-            var request = CreateRequest(url, method, resource);
+            HttpWebRequest request = CreateRequest(url, method, resource);
             request.ContentType = GetMimeType(resource.Type);
 
             if (AllowCookies)
@@ -100,7 +101,8 @@ namespace RestFoundation.Client
             }
 
             ProcessBody<TInput>(request, resource);
-            ProcessEmptyResponse(request);
+
+            return ProcessEmptyResponse(request);
         }
 
         public RestResource<TOutput> Execute<TOutput>(Uri url, HttpMethod method, RestResourceType outputType)
@@ -150,7 +152,7 @@ namespace RestFoundation.Client
                 throw new ArgumentException(RestResources.NullResourceBody, "resource");
             }
 
-            var request = CreateRequest(url, method, resource);
+            HttpWebRequest request = CreateRequest(url, method, resource);
             request.ContentType = GetMimeType(resource.Type);
             request.Accept = GetMimeType(outputType);
 
@@ -402,7 +404,7 @@ namespace RestFoundation.Client
             }
         }
 
-        private void ProcessEmptyResponse(WebRequest request)
+        private NameValueCollection ProcessEmptyResponse(WebRequest request)
         {
             try
             {
@@ -415,6 +417,8 @@ namespace RestFoundation.Client
                     {
                         throw new HttpException(LastStatusCode, response.StatusDescription);
                     }
+
+                    return response.Headers;
                 }
             }
             catch (WebException ex)

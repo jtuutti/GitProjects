@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Security;
@@ -19,18 +20,19 @@ namespace RestFoundation.Client
         /// </summary>
         /// <param name="client">The HTTP client instance.</param>
         /// <param name="url">The URL.</param>
+        /// <returns>A collection of HTTP headers returned.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        public static void Get(this IRestClient client, Uri url)
+        public static NameValueCollection Get(this IRestClient client, Uri url)
         {
             if (client == null)
             {
                 throw new ArgumentNullException("client");
             }
 
-            client.Execute(url, HttpMethod.Get);
+            return client.Execute(url, HttpMethod.Get);
         }
 
         /// <summary>
@@ -39,18 +41,19 @@ namespace RestFoundation.Client
         /// <param name="client">The HTTP client instance.</param>
         /// <param name="url">The URL.</param>
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
+        /// <returns>A collection of HTTP headers returned.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        public static void Get(this IRestClient client, Uri url, NameValueCollection headers)
+        public static NameValueCollection Get(this IRestClient client, Uri url, NameValueCollection headers)
         {
             if (client == null)
             {
                 throw new ArgumentNullException("client");
             }
 
-            client.Execute(url, HttpMethod.Get, headers);
+            return client.Execute(url, HttpMethod.Get, headers);
         }
 
         /// <summary>
@@ -98,6 +101,47 @@ namespace RestFoundation.Client
             }
 
             return client.Execute<TOutput>(url, HttpMethod.Get, outputType, headers);
+        }
+
+        /// <summary>
+        /// Executes an HTTP request to the provided URL using the HEAD HTTP method.
+        /// </summary>
+        /// <param name="client">The HTTP client instance.</param>
+        /// <param name="url">The URL.</param>
+        /// <returns>A collection of HTTP headers returned.</returns>
+        /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
+        /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
+        /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+        /// <exception cref="SecurityException">If a security exception occurred.</exception>
+        public static NameValueCollection Head(this IRestClient client, Uri url)
+        {
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
+
+            return client.Execute(url, HttpMethod.Head);
+        }
+
+        /// <summary>
+        /// Executes an HTTP request to the provided URL using the HEAD HTTP method.
+        /// </summary>
+        /// <param name="client">The HTTP client instance.</param>
+        /// <param name="url">The URL.</param>
+        /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
+        /// <returns>A collection of HTTP headers returned.</returns>
+        /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
+        /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
+        /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+        /// <exception cref="SecurityException">If a security exception occurred.</exception>
+        public static NameValueCollection Head(this IRestClient client, Uri url, NameValueCollection headers)
+        {
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
+
+            return client.Execute(url, HttpMethod.Head, headers);
         }
 
         /// <summary>
@@ -258,18 +302,19 @@ namespace RestFoundation.Client
         /// </summary>
         /// <param name="client">The HTTP client instance.</param>
         /// <param name="url">The URL.</param>
+        /// <returns>A collection of HTTP headers returned.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        public static void Delete(this IRestClient client, Uri url)
+        public static NameValueCollection Delete(this IRestClient client, Uri url)
         {
             if (client == null)
             {
                 throw new ArgumentNullException("client");
             }
 
-            client.Execute(url, HttpMethod.Delete);
+            return client.Execute(url, HttpMethod.Delete);
         }
 
         /// <summary>
@@ -278,18 +323,72 @@ namespace RestFoundation.Client
         /// <param name="client">The HTTP client instance.</param>
         /// <param name="url">The URL.</param>
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
+        /// <returns>A collection of HTTP headers returned.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        public static void Delete(this IRestClient client, Uri url, NameValueCollection headers)
+        public static NameValueCollection Delete(this IRestClient client, Uri url, NameValueCollection headers)
         {
             if (client == null)
             {
                 throw new ArgumentNullException("client");
             }
 
-            client.Execute(url, HttpMethod.Delete, headers);
+            return client.Execute(url, HttpMethod.Delete, headers);
+        }
+
+        /// <summary>
+        /// Executes an HTTP request to the provided URL using the OPTIONS HTTP method.
+        /// </summary>
+        /// <param name="client">The HTTP client instance.</param>
+        /// <param name="url">The URL.</param>
+        /// <returns>A list of allowed HTTP methods.</returns>
+        /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
+        /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
+        /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+        /// <exception cref="SecurityException">If a security exception occurred.</exception>
+        public static IList<HttpMethod> Options(this IRestClient client, Uri url)
+        {
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
+
+            NameValueCollection responseHeaders = client.Execute(url, HttpMethod.Options);
+
+            if (responseHeaders == null || responseHeaders.Count == 0)
+            {
+                return new HttpMethod[0];
+            }
+
+            string allowHeader = responseHeaders.Get("Allow");
+
+            if (String.IsNullOrEmpty(allowHeader))
+            {
+                return new HttpMethod[0];
+            }
+
+            return ParseAllowHeader(allowHeader);
+        }
+
+        private static List<HttpMethod> ParseAllowHeader(string allowHeader)
+        {
+            var allowedMethods = new List<HttpMethod>();
+            string[] allowedHeaderValues = allowHeader.Split(',');
+
+            for (int i = 0; i < allowedHeaderValues.Length; i++)
+            {
+                string allowedHeaderValue = allowedHeaderValues[i];
+                HttpMethod allowedMethod;
+
+                if (allowedHeaderValue != null && Enum.TryParse(allowedHeaderValue.Trim(), true, out allowedMethod) && allowedMethod != HttpMethod.Options)
+                {
+                    allowedMethods.Add(allowedMethod);
+                }
+            }
+
+            return allowedMethods;
         }
     }
 }

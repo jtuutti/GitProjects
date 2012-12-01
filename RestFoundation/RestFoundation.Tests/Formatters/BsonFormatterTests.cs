@@ -1,8 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using NUnit.Framework;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
+using RestFoundation.Client;
 using RestFoundation.Formatters;
 using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
@@ -34,6 +37,14 @@ namespace RestFoundation.Tests.Formatters
         public void ShutDown()
         {
             m_factory.Dispose();
+        }
+
+
+        [Test]
+        public void RandomTest()
+        {
+            IRestClient client = RestClientFactory.Create();
+            IList<HttpMethod> methods = client.Options(new Uri("http://theory-m.com"));
         }
 
         [Test]

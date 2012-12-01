@@ -71,16 +71,17 @@ namespace RestFoundation.Client
         /// </summary>
         string LastStatusDescription { get; }
 
-                /// <summary>
+        /// <summary>
         /// Executes an HTTP request to the provided URL using the specified HTTP verb.
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <param name="method">The HTTP verb.</param>
+        /// <returns>A collection of HTTP headers returned.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        void Execute(Uri url, HttpMethod method);
+        NameValueCollection Execute(Uri url, HttpMethod method);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL using the specified HTTP verb.
@@ -88,11 +89,12 @@ namespace RestFoundation.Client
         /// <param name="url">The URL.</param>
         /// <param name="method">The HTTP verb.</param>
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
+        /// <returns>A collection of HTTP headers returned.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        void Execute(Uri url, HttpMethod method, NameValueCollection headers);
+        NameValueCollection Execute(Uri url, HttpMethod method, NameValueCollection headers);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL using the specified HTTP verb and the provided resource.
@@ -101,13 +103,14 @@ namespace RestFoundation.Client
         /// <param name="url">The URL.</param>
         /// <param name="method">The HTTP verb.</param>
         /// <param name="resource">The input resource.</param>
+        /// <returns>A collection of HTTP headers returned.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
         /// <exception cref="InvalidOperationException">If a resource object is not serializable.</exception>
         /// <exception cref="ArgumentException">If the resource body is null.</exception>
-        void Execute<TInput>(Uri url, HttpMethod method, RestResource<TInput> resource);
+        NameValueCollection Execute<TInput>(Uri url, HttpMethod method, RestResource<TInput> resource);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL and outputs an expected resource of the specified type.
