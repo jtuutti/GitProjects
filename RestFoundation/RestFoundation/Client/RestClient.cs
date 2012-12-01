@@ -17,7 +17,6 @@ namespace RestFoundation.Client
     internal sealed class RestClient : IRestClient
     {
         private const int MinErrorCode = 400;
-        private const string InvalidAsyncResult = "Invalid asynchronous result was provided.";
         private const string ContentEncodingHeader = "Content-Encoding";
 
         private readonly IRestSerializerFactory m_factory;
@@ -59,6 +58,11 @@ namespace RestFoundation.Client
 
         public void Execute(Uri url, HttpMethod method, NameValueCollection headers)
         {
+            if (url == null)
+            {
+                throw new ArgumentNullException("url");
+            }
+
             var emptyResource = new RestResource();
 
             if (headers != null && headers.Count > 0)
@@ -106,6 +110,11 @@ namespace RestFoundation.Client
 
         public RestResource<TOutput> Execute<TOutput>(Uri url, HttpMethod method, RestResourceType outputType, NameValueCollection headers)
         {
+            if (url == null)
+            {
+                throw new ArgumentNullException("url");
+            }
+
             var emptyResource = new RestResource();
 
             if (headers != null && headers.Count > 0)
@@ -121,12 +130,7 @@ namespace RestFoundation.Client
 
         public RestResource<TOutput> Execute<TInput, TOutput>(Uri url, HttpMethod method, RestResource<TInput> resource)
         {
-            if (resource == null)
-            {
-                throw new ArgumentNullException("resource");
-            }
-
-            return Execute<TInput, TOutput>(url, method, resource, resource.Type);
+            return Execute<TInput, TOutput>(url, method, resource, resource != null ? resource.Type : default(RestResourceType));
         }
 
         public RestResource<TOutput> Execute<TInput, TOutput>(Uri url, HttpMethod method, RestResource<TInput> resource, RestResourceType outputType)
@@ -160,45 +164,44 @@ namespace RestFoundation.Client
             return ProcessResponse<TOutput>(request, outputType);
         }
 
-        public IAsyncResult BeginExecute<TOutput>(Uri url, HttpMethod method, RestResourceType outputType, NameValueCollection headers, AsyncCallback callback)
+        public Task<RestResource<TOutput>> ExecuteAsync<TOutput>(Uri url, HttpMethod method, RestResourceType outputType)
         {
-            var task = Task<RestResource<TOutput>>.Factory.StartNew(() => Execute<TOutput>(url, method, outputType, headers));
-
-            if (callback != null)
+            if (url == null)
             {
-                task.ContinueWith(asyncResult => callback(asyncResult));
+                throw new ArgumentNullException("url");
             }
 
-            return task;
+            return Task<RestResource<TOutput>>.Factory.StartNew(() => Execute<TOutput>(url, method, outputType, null));
         }
 
-        public IAsyncResult BeginExecute<TInput, TOutput>(Uri url, HttpMethod method, RestResource<TInput> resource, RestResourceType outputType, AsyncCallback callback)
+        public Task<RestResource<TOutput>> ExecuteAsync<TOutput>(Uri url, HttpMethod method, RestResourceType outputType, NameValueCollection headers)
         {
-            var task = Task<RestResource<TOutput>>.Factory.StartNew(() => Execute<TInput, TOutput>(url, method, resource, outputType));
-
-            if (callback != null)
+            if (url == null)
             {
-                task.ContinueWith(asyncResult => callback(asyncResult));
+                throw new ArgumentNullException("url");
             }
 
-            return task;
+            return Task<RestResource<TOutput>>.Factory.StartNew(() => Execute<TOutput>(url, method, outputType, headers));
         }
 
-        public RestResource<TOutput> EndExecute<TOutput>(IAsyncResult result)
+        public Task<RestResource<TOutput>> ExecuteAsync<TInput, TOutput>(Uri url, HttpMethod method, RestResource<TInput> resource, RestResourceType outputType)
         {
-            var task = result as Task<RestResource<TOutput>>;
-
-            if (task == null)
+            if (url == null)
             {
-                throw new InvalidOperationException(InvalidAsyncResult);
+                throw new ArgumentNullException("url");
             }
 
-            if (task.IsFaulted && task.Exception != null)
+            if (resource == null)
             {
-                throw task.Exception;
+                throw new ArgumentNullException("resource");
             }
 
-            return task.Result;
+            if (ReferenceEquals(resource.Body, null))
+            {
+                throw new ArgumentException(RestResources.NullResourceBody, "resource");
+            }
+
+            return Task<RestResource<TOutput>>.Factory.StartNew(() => Execute<TInput, TOutput>(url, method, resource, outputType));
         }
 
         private static void MergeHeaders(NameValueCollection headers, RestResource emptyResource)
