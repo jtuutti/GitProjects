@@ -573,10 +573,10 @@
             <div id="Authentication">
                 <strong>Authentication:</strong>
                 <span><%: operation.Credentials.Type.ToString() %></span>
-                <span class="spacer" />
+                <span class="spacer"></span>
                 <strong>Username:</strong>
                 <input type="text" id="UserName" runat="server" />
-                <span class="spacer" />
+                <span class="spacer"></span>
                 <strong>Password:</strong>
                 <input type="password" id="Password" runat="server" />
             </div>
