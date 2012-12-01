@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 using RestFoundation;
 using RestFoundation.Results;
@@ -83,6 +84,11 @@ namespace RestTestServices
         public IQueryable<Person> GetAll()
         {
             return new List<Person>(people).AsQueryable();
+        }
+
+        public Task<IQueryable<Person>> GetAllAsync()
+        {
+            return Task<IQueryable<Person>>.Factory.StartNew(() => new List<Person>(people).AsQueryable());
         }
 
         public ContentResult Get(int? id, string someGarbage)

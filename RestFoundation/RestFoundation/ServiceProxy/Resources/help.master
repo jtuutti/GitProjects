@@ -166,7 +166,7 @@
     <asp:ContentPlaceHolder runat="server" ID="bodyPlaceholder"></asp:ContentPlaceHolder>
 </div>
 <div id="footer">
-    This web service was built with the <strong>REST Foundation</strong> framework (c) 2012-<%= DateTime.Now.Year %> by Dmitry Starosta
+    This web service was built with the <strong>REST Foundation v<%= Rest.FoundationAssembly.GetName().Version %></strong> framework (c) 2012-<%= DateTime.Now.Year %> by Dmitry Starosta
 </div>
 </body>
 </html>

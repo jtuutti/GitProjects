@@ -18,6 +18,9 @@ namespace RestTestContracts.Metadata
             ForMethod(x => x.GetAll()).SetDescription("Gets all resources of type 'Person'")
                                       .SetResponseResourceExample(CreatePersonArrayExample());
 
+            ForMethod(x => x.GetAllAsync()).SetDescription("Gets all resources of type 'Person' using an asynchronous task")
+                                           .SetResponseResourceExample(CreatePersonArrayExample());
+
             ForMethod(x => x.Get(1, null)).SetDescription("Gets resources of type 'Person' by ID");
 
             ForMethod(x => x.Post(null)).SetDescription("Creates a new resource of type 'Person'")

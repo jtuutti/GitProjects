@@ -227,7 +227,18 @@ namespace RestFoundation.Runtime.Handlers
                 }
             });
 
-            waitHandler.WaitOne(); // keeping the HTTP channel open until the result executes
+            // keeping the HTTP channel open until the result executes
+            if (!currentHttpContext.IsDebuggingEnabled && currentHttpContext.Server.ScriptTimeout > 0)
+            {
+                if (!waitHandler.WaitOne(TimeSpan.FromSeconds(currentHttpContext.Server.ScriptTimeout)))
+                {
+                    throw new HttpResponseException(HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
+                }
+            }
+            else
+            {
+                waitHandler.WaitOne();
+            }
 
             if (taskException != null)
             {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using RestFoundation;
 using RestFoundation.Results;
 using RestFoundation.ServiceProxy;
@@ -22,6 +23,9 @@ namespace RestTestContracts
 
         [Url("index/all", "Get, Head")]
         IQueryable<Person> GetAll();
+
+        [Url("index/all-async", "Get, Head")]
+        Task<IQueryable<Person>> GetAllAsync();
 
         [Url("index/{id}")]
         ContentResult Get([ParameterConstraint(@"\d{1,3}")] int? id, string dummyParam);
