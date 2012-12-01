@@ -709,6 +709,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Task results are not supported in services that are already running asynchronously..
+        /// </summary>
+        internal static string UnsupportedAsyncTasks {
+            get {
+                return ResourceManager.GetString("UnsupportedAsyncTasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The content charset provided is not supported..
         /// </summary>
         internal static string UnsupportedContentCharset {

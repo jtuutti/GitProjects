@@ -3,6 +3,9 @@
 // </copyright>
 using System;
 using System.Net;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
 using RestFoundation.Results;
@@ -165,11 +168,80 @@ namespace RestFoundation.Runtime.Handlers
             }
 
             object returnedObj = m_methodInvoker.Invoke(serviceMethodData.Method, serviceMethodData.Service, this);
-            IResult result = serviceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, serviceMethodData.Method.ReturnType, this) : null;
+            var returnedTask = returnedObj as Task;
+
+            if (returnedTask != null)
+            {
+                ExecuteTaskResult(returnedTask, serviceMethodData.Method.ReturnType);
+            }
+            else
+            {
+                ExecuteResult(returnedObj, serviceMethodData.Method.ReturnType);
+            }
+        }
+
+        private static Type UnwrapMethodType(Type methodReturnType)
+        {
+            if (methodReturnType == typeof(Task))
+            {
+                return typeof(void);
+            }
+
+            if (methodReturnType.IsGenericType() && methodReturnType.GetGenericTypeDefinition() == typeof(Task<>))
+            {
+                return methodReturnType.GetGenericArguments()[0];
+            }
+
+            return methodReturnType;
+        }
+
+        private void ExecuteTaskResult(Task returnedTask, Type methodReturnType)
+        {
+            HttpContext currentHttpContext = HttpContext.Current;
+            Exception taskException = null;
+
+            var waitHandler = new ManualResetEvent(false);
+
+            returnedTask.ContinueWith(t =>
+            {
+                try
+                {
+                    if (t.IsFaulted && t.Exception != null)
+                    {
+                        taskException = t.Exception.InnerException;
+                        return;
+                    }
+
+                    HttpContext.Current = currentHttpContext;
+
+                    PropertyInfo resultProperty = t.GetType().GetProperty("Result");
+
+                    if (resultProperty != null)
+                    {
+                        ExecuteResult(resultProperty.GetValue(t, null), methodReturnType);
+                    }
+                }
+                finally
+                {
+                    waitHandler.Set();
+                }
+            });
+
+            waitHandler.WaitOne(); // keeping the HTTP channel open until the result executes
+
+            if (taskException != null)
+            {
+                throw taskException;
+            }
+        }
+
+        private void ExecuteResult(object returnedObj, Type methodReturnType)
+        {
+            IResult result = methodReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, UnwrapMethodType(methodReturnType), this) : null;
 
             if (!(result is EmptyResult))
             {
-                m_resultExecutor.Execute(result, serviceMethodData.Method.ReturnType, m_serviceContext);
+                m_resultExecutor.Execute(result, methodReturnType, m_serviceContext);
             }
         }
     }

@@ -293,6 +293,11 @@ namespace RestFoundation.Runtime.Handlers
             HttpContext.Current = httpArguments.Context;
             object returnedObj = m_methodInvoker.Invoke(httpArguments.ServiceMethodData.Method, httpArguments.ServiceMethodData.Service, this);
 
+            if (returnedObj is Task)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.UnsupportedAsyncTasks);
+            }
+
             return httpArguments.ServiceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, httpArguments.ServiceMethodData.Method.ReturnType, this) : null;
         }
     }

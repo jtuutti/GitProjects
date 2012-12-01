@@ -437,4 +437,8 @@
     <value>Media type is not supported</value>
     <comment>Media type is not supported</comment>
   </data>
+  <data name="UnsupportedAsyncTasks" xml:space="preserve">
+    <value>Task results are not supported in services that are already running asynchronously.</value>
+    <comment>Task results are not supported in services that are already running asynchronously.</comment>
+  </data>
 </root>
