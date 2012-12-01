@@ -2897,6 +2897,41 @@
       <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
       <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
     </member>
+    <member name="M:RestFoundation.Client.RestClientExtensions.Patch``2(RestFoundation.Client.IRestClient,System.Uri,RestFoundation.Client.RestResource{``0})">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PATCH HTTP method.
+            </summary>
+      <typeparam name="TInput">The input resource object type.</typeparam>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="client">The HTTP client instance.</param>
+      <param name="url">The URL.</param>
+      <param name="resource">The input resource.</param>
+      <returns>The output resource.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.RestClientExtensions.Patch``2(RestFoundation.Client.IRestClient,System.Uri,RestFoundation.Client.RestResource{``0},RestFoundation.Client.RestResourceType)">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PATCH HTTP method.
+            </summary>
+      <typeparam name="TInput">The input resource object type.</typeparam>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="client">The HTTP client instance.</param>
+      <param name="url">The URL.</param>
+      <param name="resource">The input resource.</param>
+      <param name="outputType">The output resource type.</param>
+      <returns>The output resource.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
+    </member>
     <member name="M:RestFoundation.Client.RestClientExtensions.Delete(RestFoundation.Client.IRestClient,System.Uri)">
       <summary>
             Executes an HTTP request to the provided URL using the DELETE HTTP method.
@@ -3077,26 +3112,40 @@
       <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
       <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
     </member>
-    <member name="M:RestFoundation.Client.IRestClient.BeginExecute``1(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection,System.AsyncCallback)">
+    <member name="M:RestFoundation.Client.IRestClient.ExecuteAsync``1(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResourceType)">
       <summary>
-            Begins to asynchronously execute an HTTP request to the provided URL.
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type asynchronously.
             </summary>
       <typeparam name="TOutput">The output resource object type.</typeparam>
       <param name="url">The URL.</param>
       <param name="method">The HTTP verb.</param>
       <param name="outputType">The output resource type.</param>
-      <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <param name="callback">An <see cref="T:System.AsyncCallback" /> delegate that references the method to invoke when the operation is complete.</param>
-      <returns>An <see cref="T:System.IAsyncResult" /> that references the asynchronous execution.</returns>
+      <returns>The task object representing the asynchronous operation.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
       <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
       <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
     </member>
-    <member name="M:RestFoundation.Client.IRestClient.BeginExecute``2(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResource{``0},RestFoundation.Client.RestResourceType,System.AsyncCallback)">
+    <member name="M:RestFoundation.Client.IRestClient.ExecuteAsync``1(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection)">
       <summary>
-            Begins to asynchronously execute an HTTP request to the provided URL.
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type asynchronously.
+            </summary>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="url">The URL.</param>
+      <param name="method">The HTTP verb.</param>
+      <param name="outputType">The output resource type.</param>
+      <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <returns>The task object representing the asynchronous operation.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.ExecuteAsync``2(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResource{``0},RestFoundation.Client.RestResourceType)">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type asynchronously.
             </summary>
       <typeparam name="TInput">The input resource object type.</typeparam>
       <typeparam name="TOutput">The output resource object type.</typeparam>
@@ -3104,24 +3153,13 @@
       <param name="method">The HTTP verb.</param>
       <param name="resource">The input resource.</param>
       <param name="outputType">The output resource type.</param>
-      <param name="callback">An <see cref="T:System.AsyncCallback" /> delegate that references the method to invoke when the operation is complete.</param>
-      <returns>An <see cref="T:System.IAsyncResult" /> that references the asynchronous execution.</returns>
+      <returns>The task object representing the asynchronous operation.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
       <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
       <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
       <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.IRestClient.EndExecute``1(System.IAsyncResult)">
-      <summary>
-            Asynchronously completes the current HTTP request execution and outputs an expected resource of the specified type.
-            </summary>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="result">
-            An <see cref="T:System.IAsyncResult" /> that stores state information for this asynchronous operation as well as any user defined data.
-            </param>
-      <returns>The output resource.</returns>
     </member>
     <member name="P:RestFoundation.Client.IRestClient.ConnectionTimeout">
       <summary>
