@@ -2779,6 +2779,7 @@
             </summary>
       <param name="client">The HTTP client instance.</param>
       <param name="url">The URL.</param>
+      <returns>A collection of HTTP headers returned.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
@@ -2791,6 +2792,7 @@
       <param name="client">The HTTP client instance.</param>
       <param name="url">The URL.</param>
       <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <returns>A collection of HTTP headers returned.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
@@ -2826,6 +2828,31 @@
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
       <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
       <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.RestClientExtensions.Head(RestFoundation.Client.IRestClient,System.Uri)">
+      <summary>
+            Executes an HTTP request to the provided URL using the HEAD HTTP method.
+            </summary>
+      <param name="client">The HTTP client instance.</param>
+      <param name="url">The URL.</param>
+      <returns>A collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.RestClientExtensions.Head(RestFoundation.Client.IRestClient,System.Uri,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Executes an HTTP request to the provided URL using the HEAD HTTP method.
+            </summary>
+      <param name="client">The HTTP client instance.</param>
+      <param name="url">The URL.</param>
+      <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <returns>A collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
     </member>
     <member name="M:RestFoundation.Client.RestClientExtensions.Post``2(RestFoundation.Client.IRestClient,System.Uri,RestFoundation.Client.RestResource{``0})">
       <summary>
@@ -2938,6 +2965,7 @@
             </summary>
       <param name="client">The HTTP client instance.</param>
       <param name="url">The URL.</param>
+      <returns>A collection of HTTP headers returned.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
@@ -2950,6 +2978,19 @@
       <param name="client">The HTTP client instance.</param>
       <param name="url">The URL.</param>
       <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <returns>A collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.RestClientExtensions.Options(RestFoundation.Client.IRestClient,System.Uri)">
+      <summary>
+            Executes an HTTP request to the provided URL using the OPTIONS HTTP method.
+            </summary>
+      <param name="client">The HTTP client instance.</param>
+      <param name="url">The URL.</param>
+      <returns>A list of allowed HTTP methods.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
@@ -3014,6 +3055,7 @@
             </summary>
       <param name="url">The URL.</param>
       <param name="method">The HTTP verb.</param>
+      <returns>A collection of HTTP headers returned.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
@@ -3026,6 +3068,7 @@
       <param name="url">The URL.</param>
       <param name="method">The HTTP verb.</param>
       <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <returns>A collection of HTTP headers returned.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
@@ -3039,6 +3082,7 @@
       <param name="url">The URL.</param>
       <param name="method">The HTTP verb.</param>
       <param name="resource">The input resource.</param>
+      <returns>A collection of HTTP headers returned.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
