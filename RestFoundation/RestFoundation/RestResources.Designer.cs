@@ -655,6 +655,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service is not available.
+        /// </summary>
+        internal static string ServiceUnavailable {
+            get {
+                return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Operation is successful.
         /// </summary>
         internal static string SuccessfulOperation {

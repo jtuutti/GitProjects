@@ -212,6 +212,12 @@ namespace RestFoundation.Runtime.Handlers
                         return;
                     }
 
+                    if (t.IsCanceled)
+                    {
+                        taskException = new HttpResponseException(HttpStatusCode.ServiceUnavailable, RestResources.ServiceUnavailable);
+                        return;
+                    }
+
                     HttpContext.Current = currentHttpContext;
 
                     PropertyInfo resultProperty = t.GetType().GetProperty("Result");

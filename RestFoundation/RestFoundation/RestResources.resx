@@ -441,4 +441,8 @@
     <value>Task results are not supported in services that are already running asynchronously.</value>
     <comment>Task results are not supported in services that are already running asynchronously.</comment>
   </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>Service is not available</value>
+    <comment>Service is not available</comment>
+  </data>
 </root>
