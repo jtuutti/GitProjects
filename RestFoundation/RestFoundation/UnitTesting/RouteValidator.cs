@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -110,18 +111,23 @@ namespace RestFoundation.UnitTesting
                     continue;
                 }
 
-                Expression argumentExpression = methodDelegate.Arguments[index];
+                IList<ExpressionArgument> argumentValues = ExpressionArgumentExtractor.Extract(methodDelegate);
 
-                if (argumentExpression == null)
+                if (argumentValues == null || argumentValues.Count == 0)
                 {
                     throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidServiceMethodArgument, argument.Name));
                 }
 
-                object argumentValue = GetArgumentValue(argument, argumentExpression);
+                if (argumentValues.Count > 1)
+                {
+                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.OvercomplicatedMethodArgument, argument.Name));
+                }
+
+                object argumentValue = argumentValues[0].Value;
                 object routeArgumentValue = routeData.Values[argument.Name];
                 object convertedArgumentValue;
 
-                if (!SafeConvert.TryChangeType(routeArgumentValue, argumentExpression.Type, out convertedArgumentValue) || !Equals(argumentValue, convertedArgumentValue))
+                if (!SafeConvert.TryChangeType(routeArgumentValue, methodDelegate.Arguments[index].Type, out convertedArgumentValue) || !Equals(argumentValue, convertedArgumentValue))
                 {
                     throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture,
                                                                  RestResources.MismatchedServiceMethodExpression,
@@ -141,43 +147,6 @@ namespace RestFoundation.UnitTesting
                                                                  constraintAttribute.Pattern));
                 }
             }
-        }
-
-        private static object GetArgumentValue(ParameterInfo argument, Expression argumentExpression)
-        {
-            object argumentValue;
-
-            if (argumentExpression is ConstantExpression)
-            {
-                argumentValue = ((ConstantExpression) argumentExpression).Value;
-            }
-            else if (argumentExpression is UnaryExpression)
-            {
-                Expression unaryExpression = ((UnaryExpression) argumentExpression).Operand;
-
-                if (unaryExpression is ConstantExpression)
-                {
-                    argumentValue = ((ConstantExpression) unaryExpression).Value;
-                }
-                else if (unaryExpression is MethodCallExpression)
-                {
-                    argumentValue = Expression.Lambda(unaryExpression).Compile().DynamicInvoke();
-                }
-                else
-                {
-                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.OvercomplicatedMethodArgument, argument.Name));
-                }
-            }
-            else if (argumentExpression is MethodCallExpression)
-            {
-                argumentValue = Expression.Lambda(argumentExpression).Compile().DynamicInvoke();
-            }
-            else
-            {
-                throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.OvercomplicatedMethodArgument, argument.Name));
-            }
-
-            return argumentValue;
         }
 
         private MethodInfo GetServiceMethod(RouteData routeData, Type serviceContractType)

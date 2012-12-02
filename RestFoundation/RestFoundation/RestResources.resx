@@ -382,8 +382,8 @@
     <comment>Route parameter '{0}' with value '{1}' does not match the constraint pattern '{2}'.</comment>
   </data>
   <data name="OvercomplicatedMethodArgument" xml:space="preserve">
-    <value>Method argument '{0}' has a value that is to complex to process. Pass in a constant/variable into the delegate instead.</value>
-    <comment>Method argument '{0}' has a value that is to complex to process. Pass in a constant/variable into the delegate instead.</comment>
+    <value>Method argument '{0}' has a value that is to complex to process. It must be a simple constant or variable value.</value>
+    <comment>Method argument '{0}' has a value that is to complex to process. It must be a simple constant or variable value.</comment>
   </data>
   <data name="MismatchedUrl" xml:space="preserve">
     <value>URL '{0}' does not match any routes.</value>

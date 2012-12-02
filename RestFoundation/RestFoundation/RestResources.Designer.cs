@@ -628,7 +628,7 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method argument &apos;{0}&apos; has a value that is to complex to process. Pass in a constant/variable into the delegate instead..
+        ///   Looks up a localized string similar to Method argument &apos;{0}&apos; has a value that is to complex to process. It must be a simple constant or variable value..
         /// </summary>
         internal static string OvercomplicatedMethodArgument {
             get {
