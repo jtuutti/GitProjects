@@ -1,6 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="help.master" ClientIDMode="Static" EnableViewStateMac="false" EnableEventValidation="false" %>
 <%@ Import Namespace="System.Xml.Serialization" %>
-<%@ Import Namespace="Newtonsoft.Json" %>
 <%@ Import Namespace="RestFoundation.Runtime" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
 
@@ -46,7 +45,7 @@
             {
                 try
                 {
-                    requestJsonExample = JsonConvert.SerializeObject(requestObj, Formatting.Indented);
+                    requestJsonExample = ProxyJsonConvert.SerializeObject(requestObj, true);
                 }
                 catch (Exception)
                 {
@@ -55,7 +54,7 @@
 
                 try
                 {
-                    requestXmlExample = XmlConvert.SerializeObject(requestObj, System.Xml.Formatting.Indented);
+                    requestXmlExample = ProxyXmlConvert.SerializeObject(requestObj, true);
                 }
                 catch (Exception)
                 {
@@ -91,7 +90,7 @@
             {
                 try
                 {
-                    responseJsonExample = JsonConvert.SerializeObject(responseObj, Formatting.Indented);
+                    responseJsonExample = ProxyJsonConvert.SerializeObject(responseObj, true);
                 }
                 catch (Exception)
                 {
@@ -100,7 +99,7 @@
 
                 try
                 {
-                    responseXmlExample = XmlConvert.SerializeObject(responseObj, System.Xml.Formatting.Indented);
+                    responseXmlExample = ProxyXmlConvert.SerializeObject(responseObj, true);
                 }
                 catch (Exception)
                 {

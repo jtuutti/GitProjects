@@ -40,7 +40,7 @@ namespace RestTest.App_Start
             container.RegisterType<IAuthorizationManager, ServiceAuthorizationManager>(new ContainerControlledLifetimeManager());
             container.RegisterType<IStreamCompressor, RestStreamCompressor>(new ContainerControlledLifetimeManager());
             container.RegisterType<IIndexService, IndexService>(new InjectionProperty("Context"));
-            container.RegisterType<IDynamicService, DynamicService>();
+            container.RegisterType<IDynamicService, DynamicService>(new InjectionProperty("Request"));
             container.RegisterType<ITouchMapService, TouchMapService>(new InjectionProperty("Context"));
 
             return container;
@@ -69,16 +69,11 @@ namespace RestTest.App_Start
             builder.Register<IAuthorizationManager, ServiceAuthorizationManager>(InstanceLifetime.Singleton)
                    .Register<IStreamCompressor, RestStreamCompressor>(InstanceLifetime.Singleton)
                    .ScanAssemblies(new[] { "RestTestContracts", "RestTestServices" }, t => t.Name.EndsWith("Service"))
-                   .AllowPropertyInjection(t =>
-                   {
-                       var contextProperty = t.GetProperty("Context");
-                       return contextProperty != null && contextProperty.PropertyType == typeof(IServiceContext);
-                   });
+                   .AllowPropertyInjection(t => t.GetProperty("Context") != null || t.GetProperty("Request") != null);
         }
 
         private static void RegisterFormatters(MediaTypeFormatterBuilder builder)
         {
-            builder.Set("application/bson", new BsonFormatter());
             builder.Set("application/x-www-form-urlencoded", new FormsFormatter());
             builder.Set("multipart/form-data", new MultiPartFormatter());
         }
@@ -101,7 +96,6 @@ namespace RestTest.App_Start
 
             urlBuilder.MapUrl("touch-map")
                       .ToServiceContract<ITouchMapService>()
-                      .WithDataContractFormatters()
                       .WithBehaviors(new HttpsOnlyBehavior());
 
             urlBuilder.MapUrl("hello")

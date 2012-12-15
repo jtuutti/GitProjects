@@ -160,6 +160,8 @@ namespace RestFoundation.Runtime.Handlers
         /// </param>
         public void ProcessRequest(HttpContext context)
         {
+            m_serviceContext.Request.ResourceBag.ServiceExecutionId = Guid.NewGuid();
+
             ServiceMethodLocatorData serviceMethodData = m_methodLocator.Locate(this);
 
             if (serviceMethodData == ServiceMethodLocatorData.Options)
@@ -167,7 +169,20 @@ namespace RestFoundation.Runtime.Handlers
                 return;
             }
 
+            bool canLog = LogUtility.CanLog;
+
+            if (canLog)
+            {
+                LogUtility.LogRequestData(m_serviceContext.GetHttpContext());
+            }
+
             object returnedObj = m_methodInvoker.Invoke(serviceMethodData.Method, serviceMethodData.Service, this);
+
+            if (canLog)
+            {
+                LogUtility.LogResponseData(m_serviceContext.GetHttpContext());
+            }
+
             var returnedTask = returnedObj as Task;
 
             if (returnedTask != null)

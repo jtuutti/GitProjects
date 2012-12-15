@@ -3,7 +3,6 @@
 <%@ Import Namespace="System.Globalization" %>
 <%@ Import Namespace="System.Net" %>
 <%@ Import Namespace="System.Net.Security" %>
-<%@ Import Namespace="Newtonsoft.Json" %>
 <%@ Import Namespace="RestFoundation.Runtime" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy.OperationMetadata" %>
@@ -104,7 +103,7 @@
                     {
                         try
                         {
-                            RequestText.Value = XmlConvert.SerializeObject(requestObj, System.Xml.Formatting.Indented);
+                            RequestText.Value = ProxyXmlConvert.SerializeObject(requestObj, true);
                         }
                         catch (Exception)
                         {
@@ -115,7 +114,7 @@
                     {
                         try
                         {
-                            RequestText.Value = JsonConvert.SerializeObject(requestObj, Formatting.Indented);
+                            RequestText.Value = ProxyJsonConvert.SerializeObject(requestObj, true);
                         }
                         catch (Exception)
                         {

@@ -130,22 +130,6 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Uses WCF-style data contract serializers to format and output the resources for the current route.
-        /// </summary>
-        /// <returns>The route configuration.</returns>
-        public RouteConfiguration WithDataContractFormatters()
-        {
-            foreach (IRestHandler routeHandler in m_routeHandlers)
-            {
-                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, "application/json", new DataContractJsonFormatter());
-                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, "application/xml", new DataContractXmlFormatter());
-                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, "text/xml", new DataContractXmlFormatter());
-            }
-
-            return this;
-        }
-
-        /// <summary>
         /// Specifies a Web.config name-value section that contains an ACL list of allowed IPs.
         /// All other IPs will be blocked for the current route.
         /// </summary>

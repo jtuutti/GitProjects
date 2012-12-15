@@ -49,6 +49,16 @@ namespace RestFoundation
                 RemoveServerHeaders();
                 SetResponseHeaders();
             };
+            context.EndRequest += (sender, args) =>
+            {
+                if (LogUtility.CanLog)
+                {
+                    LogUtility.Writer.WriteInfo(String.Empty)
+                                     .WriteInfo("--- SERVICE CALL ENDED ---")
+                                     .WriteInfo(String.Empty)
+                                     .Flush();
+                }
+            };
         }
 
         /// <summary>
@@ -88,6 +98,17 @@ namespace RestFoundation
             {
                 SetResponseStatus(responseException.StatusCode, responseException.StatusDescription);
                 return;
+            }
+
+            if (exception != null && LogUtility.CanLog)
+            {
+                LogUtility.Writer.WriteInfo("EXCEPTION OCCURRED:")
+                                 .WriteInfo(exception.ToString())
+                                 .WriteInfo(String.Empty);
+
+                LogUtility.Writer.WriteError("EXCEPTION OCCURRED:")
+                                 .WriteError(exception.ToString())
+                                 .WriteError(String.Empty);
             }
 
             var validationException = exception as HttpRequestValidationException;

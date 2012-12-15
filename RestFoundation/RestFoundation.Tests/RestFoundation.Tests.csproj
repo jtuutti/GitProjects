@@ -66,7 +66,6 @@
     <Compile Include="Behaviors\BehaviorContextTests.cs" />
     <Compile Include="Behaviors\DigestAuthenticationBehaviorTests.cs" />
     <Compile Include="Behaviors\ResourceValidationBehaviorTests.cs" />
-    <Compile Include="Formatters\BsonFormatterTests.cs" />
     <Compile Include="Formatters\FormsFormatterTests.cs" />
     <Compile Include="Implementation\Authorization\TestAuthorizationManager.cs" />
     <Compile Include="Behaviors\AjaxOnlyBehaviorTests.cs" />

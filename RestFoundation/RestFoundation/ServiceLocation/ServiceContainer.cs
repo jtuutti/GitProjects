@@ -41,6 +41,7 @@ namespace RestFoundation.ServiceLocation
                 { typeof(IAuthorizationManager), typeof(AuthorizationManager) },
                 { typeof(IContentNegotiator), typeof(ContentNegotiator) },
                 { typeof(IHttpMethodResolver), typeof(HttpMethodResolver) },
+                { typeof(ILogWriter), typeof(NullLogWriter) },
                 { typeof(IParameterValueProvider), typeof(ParameterValueProvider) },
                 { typeof(IResourceValidator), typeof(ResourceValidator) },
                 { typeof(IRestSerializerFactory), typeof(RestSerializerFactory) },

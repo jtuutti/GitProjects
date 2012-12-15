@@ -3,9 +3,12 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
+using System.Web;
 using RestFoundation.Runtime;
 using RestFoundation.ServiceProxy.OperationMetadata;
 
@@ -69,9 +72,34 @@ namespace RestFoundation.ServiceProxy
             return operations;
         }
 
-        private static string GetUrlTemplate(ServiceMethodMetadata metadata)
+        private static string GetUrlTemplate(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
         {
-            return (metadata.ServiceUrl + (metadata.UrlInfo.UrlTemplate.Length > 0 ? UrlSeparator + metadata.UrlInfo.UrlTemplate.TrimStart(UrlSeparator[0]) : UrlSeparator)).Trim(UrlSeparator[0]);
+            string urlTemplate = (metadata.ServiceUrl + (metadata.UrlInfo.UrlTemplate.Length > 0 ? UrlSeparator + metadata.UrlInfo.UrlTemplate.TrimStart(UrlSeparator[0]) : UrlSeparator)).Trim(UrlSeparator[0]);
+
+            if (proxyMetadata == null)
+            {
+                return urlTemplate;
+            }
+
+            var parameters = GetQueryStringParameters(metadata, proxyMetadata).Where(p => p.ExampleValue != null);
+            var parameterBuilder = new StringBuilder();
+
+            foreach (var parameter in parameters)
+            {
+                if (parameterBuilder.Length > 0)
+                {
+                    parameterBuilder.Append("&");
+                }
+
+                parameterBuilder.AppendFormat(CultureInfo.InvariantCulture, "{0}={{{0}}}", HttpUtility.UrlEncode(parameter.Name));
+            }
+
+            if (parameterBuilder.Length == 0)
+            {
+                return urlTemplate;
+            }
+
+            return urlTemplate + "?" + parameterBuilder;
         }
 
         private static string GetSupportedHttpMethods(ServiceMethodMetadata metadata)
@@ -257,7 +285,7 @@ namespace RestFoundation.ServiceProxy
             var operation = new ProxyOperation
                             {
                                 ServiceUrl = metadata.ServiceUrl,
-                                UrlTempate = GetUrlTemplate(metadata),
+                                UrlTempate = GetUrlTemplate(metadata, proxyMetadata),
                                 HttpMethod = metadata.UrlInfo.HttpMethods.First(),
                                 SupportedHttpMethods = GetSupportedHttpMethods(metadata),
                                 MetadataUrl = String.Concat("metadata?oid=", metadata.ServiceMethodId),

@@ -62,6 +62,7 @@
     <Compile Include="Behaviors\Context\MethodExecutedContext.cs" />
     <Compile Include="Behaviors\Context\MethodExecutingContext.cs" />
     <Compile Include="DependencyBuilder.cs" />
+    <Compile Include="ILogWriter.cs" />
     <Compile Include="InstanceLifetime.cs" />
     <Compile Include="IOptionsDescriptor.cs" />
     <Compile Include="IServiceFactory.cs" />
@@ -76,6 +77,9 @@
     <Compile Include="Runtime\ExpressionArgument.cs" />
     <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
     <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
+    <Compile Include="ServiceProxy\ProxyJsonConvert.cs" />
+    <Compile Include="Runtime\LogUtility.cs" />
+    <Compile Include="Runtime\NullLogWriter.cs" />
     <Compile Include="Runtime\ServiceContractMetadata.cs" />
     <Compile Include="Runtime\ServiceFactory.cs" />
     <Compile Include="Runtime\WebFormsInjectionHelper.cs" />
@@ -85,16 +89,12 @@
     <Compile Include="Behaviors\BehaviorMethodAction.cs" />
     <Compile Include="Behaviors\AjaxOnlyBehavior.cs" />
     <Compile Include="Formatters\BlockFormatter.cs" />
-    <Compile Include="Formatters\DataContractJsonFormatter.cs" />
-    <Compile Include="Formatters\DataContractXmlFormatter.cs" />
     <Compile Include="Formatters\JsonPFormatter.cs" />
     <Compile Include="Behaviors\IAuthenticationBehavior.cs" />
     <Compile Include="IContentNegotiator.cs" />
     <Compile Include="IServiceExceptionHandler.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
     <Compile Include="Results\IResultExecutor.cs" />
-    <Compile Include="Results\DataContractJsonResult.cs" />
-    <Compile Include="Results\DataContractXmlResult.cs" />
     <Compile Include="Results\FileResultBase.cs" />
     <Compile Include="Results\JsonPResult.cs" />
     <Compile Include="Results\RedirectType.cs" />
@@ -118,7 +118,6 @@
     <Compile Include="Behaviors\OutputCacheBehavior.cs" />
     <Compile Include="Collections\Concrete\ServerVariableCollection.cs" />
     <Compile Include="Collections\IServerVariableCollection.cs" />
-    <Compile Include="Formatters\BsonFormatter.cs" />
     <Compile Include="ResponseHeaderNames.cs" />
     <Compile Include="Runtime\Handlers\IRestAsyncHandler.cs" />
     <Compile Include="GlobalBehaviorBuilder.cs" />
@@ -204,7 +203,6 @@
     <Compile Include="Odata\RuntimeTypeProviderContracts.cs" />
     <Compile Include="Odata\StringConstants.cs" />
     <Compile Include="Rest.cs" />
-    <Compile Include="Results\BsonResult.cs" />
     <Compile Include="Results\ContentResult.cs" />
     <Compile Include="Results\EmptyResult.cs" />
     <Compile Include="Results\FeedResult.cs" />
@@ -291,12 +289,12 @@
     <Compile Include="ServiceProxy\ProxyFile.cs" />
     <Compile Include="ServiceProxy\ProxyPathProvider.cs" />
     <Compile Include="Runtime\Handlers\RootRouteHandler.cs" />
-    <Compile Include="Runtime\XmlConvert.cs" />
+    <Compile Include="ServiceProxy\ProxyXmlConvert.cs" />
     <Compile Include="ServiceProxy\ProxyWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ServiceProxy\ProxyWebResponse.cs" />
-    <Compile Include="ServiceProxy\ResourceOutputFormatter.cs" />
+    <Compile Include="Runtime\ResourceOutputFormatter.cs" />
     <Compile Include="ServiceProxy\TypeDescriptor.cs" />
     <Compile Include="ServiceProxy\XmlSchemasExtensions.cs" />
     <Compile Include="ServiceRuntimeException.cs" />

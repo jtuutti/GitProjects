@@ -646,6 +646,24 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to -- SERVICE CALL ENDED --.
+        /// </summary>
+        internal static string ServiceCallEnded {
+            get {
+                return ResourceManager.GetString("ServiceCallEnded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to -- SERVICE CALL STARTED --.
+        /// </summary>
+        internal static string ServiceCallStarted {
+            get {
+                return ResourceManager.GetString("ServiceCallStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Service timed out..
         /// </summary>
         internal static string ServiceTimedOut {
@@ -705,6 +723,15 @@ namespace RestFoundation {
         internal static string UnmappedResourceType {
             get {
                 return ResourceManager.GetString("UnmappedResourceType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No log writer has been registered..
+        /// </summary>
+        internal static string UnregisteredLogWriter {
+            get {
+                return ResourceManager.GetString("UnregisteredLogWriter", resourceCulture);
             }
         }
         

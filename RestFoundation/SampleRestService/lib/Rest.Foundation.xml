@@ -772,7 +772,7 @@
     </member>
     <member name="P:RestFoundation.RestResources.OvercomplicatedMethodArgument">
       <summary>
-              Looks up a localized string similar to Method argument '{0}' has a value that is to complex to process. Pass in a constant/variable into the delegate instead..
+              Looks up a localized string similar to Method argument '{0}' has a value that is to complex to process. It must be a simple constant or variable value..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.ProxyAlreadyInitialized">
@@ -783,6 +783,11 @@
     <member name="P:RestFoundation.RestResources.ServiceTimedOut">
       <summary>
               Looks up a localized string similar to Service timed out..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.ServiceUnavailable">
+      <summary>
+              Looks up a localized string similar to Service is not available.
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.SuccessfulOperation">
@@ -947,6 +952,28 @@
             Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
             </summary>
       <filterpriority>2</filterpriority>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.ProxyJsonConvert">
+      <summary>
+            Represents an JSON object converter.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyJsonConvert.SerializeObject(System.Object)">
+      <summary>
+            Converts an object into JSON.
+            </summary>
+      <param name="value">The object to serialize.</param>
+      <returns>The <see cref="T:System.String" /> value containing the serialized object.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyJsonConvert.SerializeObject(System.Object,System.Boolean)">
+      <summary>
+            Converts an object into JSON with the provided formatting options.
+            </summary>
+      <param name="value">The object to serialize.</param>
+      <param name="isFormatted">
+            A <see cref="T:System.Boolean" /> indicating whether the serialized object is formatted for output.
+            </param>
+      <returns>The <see cref="T:System.String" /> value containing the serialized object.</returns>
     </member>
     <member name="T:RestFoundation.Runtime.ServiceFactory">
       <summary>
@@ -2589,30 +2616,6 @@
       <summary>
             Gets the server port.
             </summary>
-    </member>
-    <member name="T:RestFoundation.Formatters.BsonFormatter">
-      <summary>
-            Represents a BSON media type formatter.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Formatters.BsonFormatter.FormatRequest(RestFoundation.IServiceContext,System.Type)">
-      <summary>
-            Deserializes HTTP message body data into an object instance of the provided type.
-            </summary>
-      <param name="context">The service context.</param>
-      <param name="objectType">The object type.</param>
-      <returns>The deserialized object.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object cannot be deserialized.</exception>
-    </member>
-    <member name="M:RestFoundation.Formatters.BsonFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
-      <summary>
-            Serializes the object instance into the HTTP response stream using the accepted media type.
-            </summary>
-      <param name="context">The service context.</param>
-      <param name="methodReturnType">The method return type.</param>
-      <param name="obj">The object to serialize.</param>
-      <returns>A service method result containing the serialized object representation.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be serialized.</exception>
     </member>
     <member name="T:RestFoundation.ResponseHeaderNames">
       <summary>
@@ -5239,27 +5242,6 @@
             Gets the service locator.
             </summary>
     </member>
-    <member name="T:RestFoundation.Results.BsonResult">
-      <summary>
-            Represents a BSON result.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Results.BsonResult.Execute(RestFoundation.IServiceContext)">
-      <summary>
-            Executes the result against the provided service context.
-            </summary>
-      <param name="context">The service context.</param>
-    </member>
-    <member name="P:RestFoundation.Results.BsonResult.Content">
-      <summary>
-            Gets or sets the object to serialize to BSON.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Results.BsonResult.ContentType">
-      <summary>
-            Gets or sets the content type.
-            </summary>
-    </member>
     <member name="T:RestFoundation.Results.ContentResult">
       <summary>
             Represents a content result.
@@ -7865,24 +7847,26 @@
             Gets a relative URL template.
             </summary>
     </member>
-    <member name="T:RestFoundation.Runtime.XmlConvert">
+    <member name="T:RestFoundation.ServiceProxy.ProxyXmlConvert">
       <summary>
             Represents an XML object converter.
             </summary>
     </member>
-    <member name="M:RestFoundation.Runtime.XmlConvert.SerializeObject(System.Object)">
+    <member name="M:RestFoundation.ServiceProxy.ProxyXmlConvert.SerializeObject(System.Object)">
       <summary>
             Converts an object into XML.
             </summary>
       <param name="obj">The object to serialize.</param>
       <returns>The <see cref="T:System.String" /> value containing the serialized object.</returns>
     </member>
-    <member name="M:RestFoundation.Runtime.XmlConvert.SerializeObject(System.Object,System.Xml.Formatting)">
+    <member name="M:RestFoundation.ServiceProxy.ProxyXmlConvert.SerializeObject(System.Object,System.Boolean)">
       <summary>
             Converts an object into XML with the provided formatting options.
             </summary>
       <param name="obj">The object to serialize.</param>
-      <param name="formatting">The object containing XML serialization formatting options.</param>
+      <param name="isFormatted">
+            A <see cref="T:System.Boolean" /> indicating whether the serialized object is formatted for output.
+            </param>
       <returns>The <see cref="T:System.String" /> value containing the serialized object.</returns>
     </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyWebClient">
@@ -8026,19 +8010,19 @@
             An instance of the <see cref="T:System.Uri" /> class that contains the URI of the Internet resource that actually responded to the request.
             </returns>
     </member>
-    <member name="T:RestFoundation.ServiceProxy.ResourceOutputFormatter">
+    <member name="T:RestFoundation.Runtime.ResourceOutputFormatter">
       <summary>
             Represents a resource output formatter that adds whitespace to improve JSON/XML readability.
             </summary>
     </member>
-    <member name="M:RestFoundation.ServiceProxy.ResourceOutputFormatter.FormatJson(System.String)">
+    <member name="M:RestFoundation.Runtime.ResourceOutputFormatter.FormatJson(System.String)">
       <summary>
             Formats the input JSON with whitespace.
             </summary>
       <param name="input">The input JSON string</param>
       <returns>The formatted JSON output.</returns>
     </member>
-    <member name="M:RestFoundation.ServiceProxy.ResourceOutputFormatter.FormatXml(System.String)">
+    <member name="M:RestFoundation.Runtime.ResourceOutputFormatter.FormatXml(System.String)">
       <summary>
             Formats the input XML with whitespace.
             </summary>

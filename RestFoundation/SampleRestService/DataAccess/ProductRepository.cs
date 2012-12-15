@@ -18,7 +18,7 @@ namespace SampleRestService.DataAccess
             { 5, new Product { ID = 5, Name = "Barbeque coal", Price = 12.99m, Added = DateTime.Now, InStock = false } }
         });
 
-        private readonly static object syncRoot = new object();
+        private static readonly object syncRoot = new object();
 
         public virtual bool Contains(int id)
         {

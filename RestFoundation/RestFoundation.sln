@@ -1,6 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{479B6794-0802-49A6-9589-DBE2ADA41884}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestFoundation", "RestFoundation\RestFoundation.csproj", "{ED6954C7-884B-42CD-B216-9FDEAA110707}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestTest", "RestTest\RestTest.csproj", "{3D661B11-05CB-4F18-A392-3A617601B473}"
@@ -10,13 +17,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestTestContracts", "RestTestContracts\RestTestContracts.csproj", "{BD354EC2-BA78-40A0-85FF-1209200166BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestFoundation.Tests", "RestFoundation.Tests\RestFoundation.Tests.csproj", "{A9050C1E-F135-4227-A101-AE7D6D9395E1}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{479B6794-0802-49A6-9589-DBE2ADA41884}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestFoundation.StructureMap", "RestFoundation.StructureMap\RestFoundation.StructureMap.csproj", "{9E87CB04-44C4-407B-A3ED-E62F6E1FDED6}"
 EndProject

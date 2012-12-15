@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
@@ -80,7 +81,9 @@ namespace RestFoundation.Formatters
                 return null;
             }
 
-            return serializer.Deserialize(context.Request.Body);
+            var reader = XmlReader.Create(new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding));
+
+            return serializer.Deserialize(reader);
         }
 
         /// <summary>

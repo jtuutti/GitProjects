@@ -4,12 +4,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using RestFoundation.Runtime;
+using Formatting = System.Xml.Formatting;
 
 namespace RestFoundation.Results
 {
@@ -18,6 +21,8 @@ namespace RestFoundation.Results
     /// </summary>
     public class XmlResult : IResult
     {
+        private Encoding m_encoding;
+
         /// <summary>
         /// Gets or sets the object to serialize to XML.
         /// </summary>
@@ -41,13 +46,20 @@ namespace RestFoundation.Results
                 throw new ArgumentNullException("context");
             }
 
+            if (String.IsNullOrEmpty(ContentType))
+            {
+                ContentType = "application/json";
+            }
+
+            m_encoding = context.Request.Headers.AcceptCharsetEncoding;
+
             context.Response.Output.Clear();
-            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType ?? "application/xml");
-            context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
+            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
+            context.Response.SetCharsetEncoding(m_encoding);
 
             var xmlWriter = XmlWriter.Create(context.Response.Output.Writer, new XmlWriterSettings
             {
-                Encoding = context.Request.Headers.AcceptCharsetEncoding,
+                Encoding = m_encoding,
                 Indent = false
             });
 
@@ -77,14 +89,8 @@ namespace RestFoundation.Results
             namespaces.Add(String.Empty, String.Empty);
 
             serializer.Serialize(xmlWriter, Content, namespaces);
-        }
 
-        private static void SerializeAnonymousType(XmlWriter xmlWriter, object obj)
-        {
-            XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj), "complexType");
-            xmlWriter.WriteStartDocument();
-            xmlWriter.WriteRaw(xmlDocument.OuterXml);
-            xmlWriter.Flush();
+            LogResponse(Content);
         }
 
         private static void SerializeNullObject(XmlWriter xmlWriter)
@@ -96,6 +102,16 @@ namespace RestFoundation.Results
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndDocument();
             xmlWriter.Flush();
+        }
+
+        private void SerializeAnonymousType(XmlWriter xmlWriter, object obj)
+        {
+            XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj), "complexType");
+            xmlWriter.WriteStartDocument();
+            xmlWriter.WriteRaw(xmlDocument.OuterXml);
+            xmlWriter.Flush();
+
+            LogResponse(xmlDocument);
         }
 
         private void SerializeChunkedSequence(IServiceContext context, XmlWriter xmlWriter)
@@ -124,11 +140,59 @@ namespace RestFoundation.Results
 
                 serializer.Serialize(xmlWriter, enumeratedContent, namespaces);
                 context.Response.Output.Flush();
+
+                LogResponse(enumerableContent);
             }
 
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndDocument();
             xmlWriter.Flush();
+        }
+
+        private void LogResponse(object content)
+        {
+            if (content == null || !LogUtility.CanLog)
+            {
+                return;
+            }
+
+            string serializedContent = SerializeFormatted(content);
+            LogUtility.LogResponseBody(serializedContent, ContentType);
+        }
+
+        private void LogResponse(XmlDocument document)
+        {
+            if (document == null || !LogUtility.CanLog)
+            {
+                return;
+            }
+
+            string serializedContent = ResourceOutputFormatter.FormatXml(document.OuterXml);
+            LogUtility.LogResponseBody(serializedContent, ContentType);
+        }
+
+        private string SerializeFormatted(object content)
+        {
+            var serializer = XmlSerializerRegistry.Get(content.GetType());
+
+            using (var stream = new MemoryStream())
+            {
+                var xmlWriter = new XmlTextWriter(stream, m_encoding)
+                                {
+                                    Formatting = Formatting.Indented
+                                };
+
+                var namespaces = new XmlSerializerNamespaces();
+                namespaces.Add(String.Empty, String.Empty);
+
+                serializer.Serialize(xmlWriter, content, namespaces);
+                xmlWriter.Flush();
+
+                stream.Seek(0, SeekOrigin.Begin);
+
+                var xmlReader = new StreamReader(stream, m_encoding);
+                return xmlReader.ReadToEnd();
+            }
         }
     }
 }

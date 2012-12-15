@@ -77,6 +77,8 @@ namespace RestFoundation.Results
             OutputCompressionManager.FilterResponse(context);
 
             context.Response.Output.Write(Content);
+
+            LogResponse();
         }
 
         private void SetContentType(IServiceContext context)
@@ -93,6 +95,14 @@ namespace RestFoundation.Results
                 {
                     context.Response.SetHeader(context.Response.Headers.ContentType, acceptType);
                 }
+            }
+        }
+
+        private void LogResponse()
+        {
+            if (Content != null && LogUtility.CanLog)
+            {
+                LogUtility.LogResponseBody(Content, ContentType);
             }
         }
     }

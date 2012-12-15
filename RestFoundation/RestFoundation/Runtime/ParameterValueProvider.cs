@@ -3,8 +3,10 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Web;
 using RestFoundation.Collections;
 using RestFoundation.Formatters;
@@ -143,6 +145,11 @@ namespace RestFoundation.Runtime
             try
             {
                 argumentValue = formatter.FormatRequest(handler.Context, parameter.ParameterType);
+
+                if (argumentValue != null)
+                {
+                    LogRequest(handler.Context);
+                }
             }
             catch (Exception ex)
             {
@@ -162,6 +169,24 @@ namespace RestFoundation.Runtime
             }
 
             return argumentValue;
+        }
+
+        private static void LogRequest(IServiceContext context)
+        {
+            if (!LogUtility.CanLog)
+            {
+                return;
+            }
+
+            using (var dataStream = new MemoryStream())
+            {
+                context.Request.Body.Seek(0, SeekOrigin.Begin);
+                context.Request.Body.CopyTo(dataStream);
+                dataStream.Seek(0, SeekOrigin.Begin);
+
+                var dataReader = new StreamReader(dataStream, context.Request.Headers.ContentCharsetEncoding);
+                LogUtility.LogRequestBody(dataReader.ReadToEnd(), context.Request.Headers.ContentType);
+            }
         }
 
         private static bool IsResourceParameter(ParameterInfo parameter, IServiceContext context)

@@ -128,6 +128,13 @@ namespace RestFoundation.Behaviors
                 return new HttpMethod[0];
             }
 
+            var urlAttribute = Attribute.GetCustomAttribute(m_method, typeof(UrlAttribute), false) as UrlAttribute;
+
+            if (urlAttribute != null && urlAttribute.HttpMethods != null)
+            {
+                return urlAttribute.HttpMethods;
+            }
+
             var httpMethodResolver = Rest.Configuration.ServiceLocator.GetService<IHttpMethodResolver>();
 
             return httpMethodResolver.Resolve(m_method);

@@ -37,8 +37,13 @@ namespace RestFoundation.Results
                 throw new ArgumentNullException("context");
             }
 
+            if (String.IsNullOrEmpty(ContentType))
+            {
+                ContentType = "application/json";
+            }
+
             context.Response.Output.Clear();
-            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType ?? "application/json");
+            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
             var serializer = new JsonSerializer();
@@ -52,6 +57,8 @@ namespace RestFoundation.Results
             OutputCompressionManager.FilterResponse(context);
 
             serializer.Serialize(context.Response.Output.Writer, Content);
+
+            LogResponse(Content);
         }
 
         private void OutputChunkedSequence(IServiceContext context, JsonSerializer serializer)
@@ -75,9 +82,22 @@ namespace RestFoundation.Results
 
                 serializer.Serialize(context.Response.Output.Writer, enumeratedContent);
                 context.Response.Output.Flush();
+
+                LogResponse(enumerableContent);
             }
 
             context.Response.Output.Write("]");
+        }
+
+        private void LogResponse(object content)
+        {
+            if (content == null || !LogUtility.CanLog)
+            {
+                return;
+            }
+
+            string serializedContent = JsonConvert.SerializeObject(content, Formatting.Indented);
+            LogUtility.LogResponseBody(serializedContent, ContentType);
         }
     }
 }

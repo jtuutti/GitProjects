@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace RestFoundation.ServiceProxy
+namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Represents a resource output formatter that adds whitespace to improve JSON/XML readability.

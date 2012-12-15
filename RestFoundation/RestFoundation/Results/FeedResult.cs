@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.ServiceModel.Syndication;
+using System.Text;
 using System.Xml;
 using RestFoundation.Runtime;
 
@@ -75,9 +76,26 @@ namespace RestFoundation.Results
 
             OutputCompressionManager.FilterResponse(context);
 
-            XmlWriter writer = XmlWriter.Create(context.Response.Output.Writer);
-            formatter.WriteTo(writer);
-            writer.Flush();
+            var responseBuilder = new StringBuilder();
+
+            using (XmlWriter writer = XmlWriter.Create(responseBuilder, new XmlWriterSettings { Indent = true }))
+            {
+                formatter.WriteTo(writer);
+                writer.Flush();
+            }
+
+            string response = responseBuilder.ToString();
+            context.Response.Output.Write(response);
+
+            LogResponse(response, contentType);
+        }
+
+        private static void LogResponse(string response, string contentType)
+        {
+            if (response != null && LogUtility.CanLog)
+            {
+                LogUtility.LogResponseBody(response, contentType);
+            }
         }
     }
 }

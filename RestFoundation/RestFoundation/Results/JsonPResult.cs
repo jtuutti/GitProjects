@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using RestFoundation.Runtime;
@@ -52,16 +53,34 @@ namespace RestFoundation.Results
                 throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.InvalidJsonPCallback);
             }
 
+            if (String.IsNullOrEmpty(ContentType))
+            {
+                ContentType = "application/javascript";
+            }
+
             context.Response.Output.Clear();
-            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType ?? "application/javascript");
+            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
             OutputCompressionManager.FilterResponse(context);
 
-            context.Response.Output.Write(Callback)
-                                   .Write("(")
-                                   .Write(Content != null ? JsonConvert.SerializeObject(Content) : "null")
-                                   .Write(");");
+            string response = new StringBuilder().Append(Callback)
+                                                 .Append("(")
+                                                 .Append(Content != null ? JsonConvert.SerializeObject(Content) : "null")
+                                                 .Append(");")
+                                                 .ToString();
+
+            context.Response.Output.Write(response);
+
+            LogResponse(response);
+        }
+
+        private void LogResponse(string response)
+        {
+            if (LogUtility.CanLog)
+            {
+                LogUtility.LogResponseBody(response, ContentType);
+            }
         }
     }
 }

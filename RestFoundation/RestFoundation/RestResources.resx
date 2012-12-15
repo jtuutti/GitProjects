@@ -445,4 +445,16 @@
     <value>Service is not available</value>
     <comment>Service is not available</comment>
   </data>
+  <data name="ServiceCallEnded" xml:space="preserve">
+    <value>-- SERVICE CALL ENDED --</value>
+    <comment>-- SERVICE CALL ENDED --</comment>
+  </data>
+  <data name="ServiceCallStarted" xml:space="preserve">
+    <value>-- SERVICE CALL STARTED --</value>
+    <comment>-- SERVICE CALL STARTED --</comment>
+  </data>
+  <data name="UnregisteredLogWriter" xml:space="preserve">
+    <value>No log writer has been registered.</value>
+    <comment>No log writer has been registered.</comment>
+  </data>
 </root>

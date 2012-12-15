@@ -191,12 +191,16 @@ namespace RestFoundation.Runtime.Handlers
         /// <param name="extraData">Any extra data needed to process the request.</param>
         public IAsyncResult BeginProcessRequest(HttpContext context, AsyncCallback cb, object extraData)
         {
+            m_serviceContext.Request.ResourceBag.ServiceExecutionId = Guid.NewGuid();
+
             ServiceMethodLocatorData serviceMethodData = m_methodLocator.Locate(this);
 
-            TaskScheduler.UnobservedTaskException += (sender, args) =>
+            if (LogUtility.CanLog)
             {
-                args.SetObserved();
-            };
+                LogUtility.LogRequestData(m_serviceContext.GetHttpContext());
+            }
+
+            TaskScheduler.UnobservedTaskException += (sender, args) => args.SetObserved();
 
             if (serviceMethodData == ServiceMethodLocatorData.Options)
             {
@@ -216,11 +220,16 @@ namespace RestFoundation.Runtime.Handlers
         {
             if (result == null)
             {
-                return;
+                throw new ArgumentNullException("result");
             }
 
             var httpArguments = (HttpArguments) result.AsyncState;
             HttpContext.Current = httpArguments.Context;
+
+            if (LogUtility.CanLog)
+            {
+                LogUtility.LogResponseData(new HttpContextWrapper(httpArguments.Context));
+            }
 
             lock (m_syncRoot)
             {
