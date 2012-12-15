@@ -453,7 +453,7 @@ namespace RestFoundation.Tests.Behaviors
 
             var httpMethods = behaviorContext.GetSupportedHttpMethods().ToList();
             Assert.That(httpMethods.Contains(HttpMethod.Get), Is.True);
-            Assert.That(httpMethods.Contains(HttpMethod.Head), Is.True);
+            Assert.That(httpMethods.Contains(HttpMethod.Head), Is.False);
             Assert.That(httpMethods.Contains(HttpMethod.Post), Is.False);
             Assert.That(httpMethods.Contains(HttpMethod.Put), Is.False);
             Assert.That(httpMethods.Contains(HttpMethod.Patch), Is.False);
@@ -478,7 +478,7 @@ namespace RestFoundation.Tests.Behaviors
 
             var httpMethods = behaviorContext.GetSupportedHttpMethods().ToList();
             Assert.That(httpMethods.Contains(HttpMethod.Get), Is.True);
-            Assert.That(httpMethods.Contains(HttpMethod.Head), Is.True);
+            Assert.That(httpMethods.Contains(HttpMethod.Head), Is.False);
             Assert.That(httpMethods.Contains(HttpMethod.Post), Is.False);
             Assert.That(httpMethods.Contains(HttpMethod.Put), Is.False);
             Assert.That(httpMethods.Contains(HttpMethod.Patch), Is.False);
@@ -505,7 +505,7 @@ namespace RestFoundation.Tests.Behaviors
 
             var httpMethods = behaviorContext.GetSupportedHttpMethods().ToList();
             Assert.That(httpMethods.Contains(HttpMethod.Get), Is.True);
-            Assert.That(httpMethods.Contains(HttpMethod.Head), Is.True);
+            Assert.That(httpMethods.Contains(HttpMethod.Head), Is.False);
             Assert.That(httpMethods.Contains(HttpMethod.Post), Is.False);
             Assert.That(httpMethods.Contains(HttpMethod.Put), Is.False);
             Assert.That(httpMethods.Contains(HttpMethod.Patch), Is.False);

@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.IO;
 using System.ServiceModel.Syndication;
 using System.Text;
 using System.Xml;
@@ -76,25 +77,30 @@ namespace RestFoundation.Results
 
             OutputCompressionManager.FilterResponse(context);
 
-            var responseBuilder = new StringBuilder();
+            XmlWriter writer = XmlWriter.Create(context.Response.Output.Writer);
+            formatter.WriteTo(writer);
+            writer.Flush();
 
-            using (XmlWriter writer = XmlWriter.Create(responseBuilder, new XmlWriterSettings { Indent = true }))
-            {
-                formatter.WriteTo(writer);
-                writer.Flush();
-            }
-
-            string response = responseBuilder.ToString();
-            context.Response.Output.Write(response);
-
-            LogResponse(response, contentType);
+            LogResponse(formatter, contentType, context.Request.Headers.AcceptCharsetEncoding);
         }
 
-        private static void LogResponse(string response, string contentType)
+        private static void LogResponse(SyndicationFeedFormatter formatter, string contentType, Encoding contentEncoding)
         {
-            if (response != null && LogUtility.CanLog)
+            if (!LogUtility.CanLog)
             {
-                LogUtility.LogResponseBody(response, contentType);
+                return;
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                XmlWriter writer = XmlWriter.Create(stream, new XmlWriterSettings { Indent = true });
+                formatter.WriteTo(writer);
+                writer.Flush();
+
+                stream.Seek(0, SeekOrigin.Begin);
+
+                var reader = new StreamReader(stream, contentEncoding);
+                LogUtility.LogResponseBody(reader.ReadToEnd(), contentType);
             }
         }
     }
