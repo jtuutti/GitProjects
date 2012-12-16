@@ -89,6 +89,24 @@ namespace RestFoundation.ServiceProxy
         IMethodMetadata SetIPFiltered();
 
         /// <summary>
+        /// Indicates the service operation does not support JSON serialization.
+        /// </summary>
+        /// <returns>The service method metadata.</returns>
+        IMethodMetadata DoesNotSupportJson();
+
+        /// <summary>
+        /// Indicates the service operation does not support XML serialization.
+        /// </summary>
+        /// <returns>The service method metadata.</returns>
+        IMethodMetadata DoesNotSupportXml();
+
+        /// <summary>
+        /// Indicates the service operation does not support JSON and XML serialization.
+        /// </summary>
+        /// <returns>The service method metadata.</returns>
+        IMethodMetadata DoesNotSupportJsonAndXml();
+
+        /// <summary>
         /// Sets a query string parameter for the service operation.
         /// </summary>
         /// <param name="name">The parameter name.</param>

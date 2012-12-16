@@ -1,6 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="help.master" ClientIDMode="Static" EnableViewStateMac="false" EnableEventValidation="false" %>
 <%@ Import Namespace="System.Xml.Serialization" %>
-<%@ Import Namespace="RestFoundation.Runtime" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
 
 <script runat="server" language="C#">
@@ -43,26 +42,32 @@
 
             if (requestObj != null)
             {
-                try
+                if (!operation.DoesNotSupportJson)
                 {
-                    requestJsonExample = ProxyJsonConvert.SerializeObject(requestObj, true);
-                }
-                catch (Exception)
-                {
-                    requestJsonExample = null;
+                    try
+                    {
+                        requestJsonExample = ProxyJsonConvert.SerializeObject(requestObj, true);
+                    }
+                    catch (Exception)
+                    {
+                        requestJsonExample = null;
+                    }
                 }
 
-                try
+                if (!operation.DoesNotSupportXml)
                 {
-                    requestXmlExample = ProxyXmlConvert.SerializeObject(requestObj, true);
-                }
-                catch (Exception)
-                {
-                    requestXmlExample = null;
+                    try
+                    {
+                        requestXmlExample = ProxyXmlConvert.SerializeObject(requestObj, true);
+                    }
+                    catch (Exception)
+                    {
+                        requestXmlExample = null;
+                    }
                 }
             }
                 
-            if (requestXmlExample != null)
+            if (!operation.DoesNotSupportXml && requestXmlExample != null)
             {
                 XmlSchemas schemas = operation.RequestResourceExample.XmlSchemas;
 
@@ -88,26 +93,32 @@
 
             if (responseObj != null)
             {
-                try
+                if (!operation.DoesNotSupportJson)
                 {
-                    responseJsonExample = ProxyJsonConvert.SerializeObject(responseObj, true);
-                }
-                catch (Exception)
-                {
-                    responseJsonExample = null;
+                    try
+                    {
+                        responseJsonExample = ProxyJsonConvert.SerializeObject(responseObj, true);
+                    }
+                    catch (Exception)
+                    {
+                        responseJsonExample = null;
+                    }
                 }
 
-                try
+                if (!operation.DoesNotSupportXml)
                 {
-                    responseXmlExample = ProxyXmlConvert.SerializeObject(responseObj, true);
-                }
-                catch (Exception)
-                {
-                    responseXmlExample = null;
+                    try
+                    {
+                        responseXmlExample = ProxyXmlConvert.SerializeObject(responseObj, true);
+                    }
+                    catch (Exception)
+                    {
+                        responseXmlExample = null;
+                    }
                 }
             }
 
-            if (responseXmlExample != null)
+            if (!operation.DoesNotSupportXml && responseXmlExample != null)
             {
                 XmlSchemas schemas = operation.ResponseResourceExample.XmlSchemas;
 

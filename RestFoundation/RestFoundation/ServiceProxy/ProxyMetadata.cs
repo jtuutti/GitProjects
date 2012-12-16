@@ -21,6 +21,8 @@ namespace RestFoundation.ServiceProxy
 
         private readonly HashSet<MethodInfo> m_hiddenOperationSet = new HashSet<MethodInfo>();
         private readonly HashSet<MethodInfo> m_ipFilteredSet = new HashSet<MethodInfo>();
+        private readonly HashSet<MethodInfo> m_noJsonSupportSet = new HashSet<MethodInfo>();
+        private readonly HashSet<MethodInfo> m_noXmlSupportSet = new HashSet<MethodInfo>();
         private readonly SortedSet<HeaderMetadata> m_serviceHeaders = new SortedSet<HeaderMetadata>();
 
         private readonly Dictionary<MethodInfo, string> m_descriptionDictionary = new Dictionary<MethodInfo, string>();
@@ -247,6 +249,31 @@ namespace RestFoundation.ServiceProxy
             ValidateCurrentServiceMethod();
 
             m_ipFilteredSet.Add(m_currentServiceMethod);
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.DoesNotSupportJson()
+        {
+            ValidateCurrentServiceMethod();
+
+            m_noJsonSupportSet.Add(m_currentServiceMethod);
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.DoesNotSupportXml()
+        {
+            ValidateCurrentServiceMethod();
+
+            m_noXmlSupportSet.Add(m_currentServiceMethod);
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.DoesNotSupportJsonAndXml()
+        {
+            ValidateCurrentServiceMethod();
+
+            m_noJsonSupportSet.Add(m_currentServiceMethod);
+            m_noXmlSupportSet.Add(m_currentServiceMethod);
             return this;
         }
 
@@ -565,6 +592,26 @@ namespace RestFoundation.ServiceProxy
             }
 
             return m_hiddenOperationSet.Contains(serviceMethod);
+        }
+
+        bool IProxyMetadata.HasJsonSupport(MethodInfo serviceMethod)
+        {
+            if (serviceMethod == null)
+            {
+                throw new ArgumentNullException("serviceMethod");
+            }
+
+            return !m_noJsonSupportSet.Contains(serviceMethod);
+        }
+
+        bool IProxyMetadata.HasXmlSupport(MethodInfo serviceMethod)
+        {
+            if (serviceMethod == null)
+            {
+                throw new ArgumentNullException("serviceMethod");
+            }
+
+            return !m_noXmlSupportSet.Contains(serviceMethod);
         }
 
         string IProxyMetadata.GetDescription(MethodInfo serviceMethod)

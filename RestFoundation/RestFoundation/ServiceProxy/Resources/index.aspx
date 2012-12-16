@@ -70,7 +70,13 @@
                 <td><%: operation.Description %></td>
                 <td class="centered"><a href="<%: operation.MetadataUrl %>" title="View detailed service information">View</a></td>
                 <td class="centered">
-                    <a href="<%: operation.ProxyUrl + "&ct=json" %>" title="Profile or debug the service">JSON</a>&nbsp;|&nbsp;<a href="<%: operation.ProxyUrl + "&ct=xml" %>" title="Profile or debug the service">XML</a>
+                    <% if (!operation.DoesNotSupportJson) { %>
+                        <a href="<%: operation.ProxyUrl + "&ct=json" %>" title="Profile or debug the service">JSON</a>
+                    <% } %>
+                    <% if (!operation.DoesNotSupportXml) { %>
+                        <% if (!operation.DoesNotSupportJson) { %>|<% } %>
+                        <a href="<%: operation.ProxyUrl + "&ct=xml" %>" title="Profile or debug the service">XML</a>
+                    <% } %>
                 </td>
             </tr>
             <% } %>

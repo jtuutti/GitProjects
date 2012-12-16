@@ -295,6 +295,8 @@ namespace RestFoundation.ServiceProxy
                                 RouteParameters = GetParameters(metadata, proxyMetadata),
                                 HttpsPort = proxyMetadata != null && proxyMetadata.GetHttps(metadata.MethodInfo) != null ? proxyMetadata.GetHttps(metadata.MethodInfo).Port : 0,
                                 IsIPFiltered = proxyMetadata != null && proxyMetadata.IsIPFiltered(metadata.MethodInfo),
+                                DoesNotSupportJson = proxyMetadata != null && !proxyMetadata.HasJsonSupport(metadata.MethodInfo),
+                                DoesNotSupportXml = proxyMetadata != null && !proxyMetadata.HasXmlSupport(metadata.MethodInfo),
                                 Credentials = GetCredentials(metadata, proxyMetadata),
                                 AdditionalHeaders = proxyMetadata != null ? proxyMetadata.GetHeaders(metadata.MethodInfo) : new List<HeaderMetadata>()
                             };

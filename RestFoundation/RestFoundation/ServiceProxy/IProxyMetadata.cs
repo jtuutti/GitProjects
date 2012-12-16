@@ -24,6 +24,20 @@ namespace RestFoundation.ServiceProxy
         bool IsHidden(MethodInfo serviceMethod);
 
         /// <summary>
+        /// Returns a <see cref="bool"/> indicating whether the operation supports JSON serialization.
+        /// </summary>
+        /// <param name="serviceMethod">The service method.</param>
+        /// <returns>true if the operation supports JSON serialization; false otherwise.</returns>
+        bool HasJsonSupport(MethodInfo serviceMethod);
+
+        /// <summary>
+        /// Returns a <see cref="bool"/> indicating whether the operation supports XML serialization.
+        /// </summary>
+        /// <param name="serviceMethod">The service method.</param>
+        /// <returns>true if the operation supports XML serialization; false otherwise.</returns>
+        bool HasXmlSupport(MethodInfo serviceMethod);
+
+        /// <summary>
         /// Returns the operation description.
         /// </summary>
         /// <param name="serviceMethod">The service method.</param>

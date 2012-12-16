@@ -67,11 +67,19 @@
             return;
         }
 
-        ResourceFormat.SelectedIndexChanged += (o, args) =>
+        if (!operation.DoesNotSupportJson && !operation.DoesNotSupportXml)
         {
-            var resourceFormat = (DropDownList) o;
-            Response.Redirect(String.Format(CultureInfo.InvariantCulture, "proxy?oid={0}&ct={1}", operationId, resourceFormat.Text.ToLowerInvariant()));
-        };
+            ResourceFormat.Enabled = true;
+            ResourceFormat.SelectedIndexChanged += (o, args) =>
+            {
+                var resourceFormat = (DropDownList) o;
+                Response.Redirect(String.Format(CultureInfo.InvariantCulture, "proxy?oid={0}&ct={1}", operationId, resourceFormat.Text.ToLowerInvariant()));
+            };
+        }
+        else
+        {
+            ResourceFormat.Enabled = false;
+        }
 
         ResourceFormat.Text = format.ToUpperInvariant();
         HttpMethod.Value = operation.HttpMethod.ToString().ToUpperInvariant();
@@ -83,7 +91,6 @@
 
         if (operation.HasResource && operation.RequestResourceExample != null)
         {
-
             if (operation.RequestResourceExample != null)
             {
                 object requestObj;

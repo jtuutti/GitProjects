@@ -17,6 +17,16 @@ namespace RestFoundation.ServiceProxy
             return false;
         }
 
+        public bool HasJsonSupport(MethodInfo serviceMethod)
+        {
+            return false;
+        }
+
+        public bool HasXmlSupport(MethodInfo serviceMethod)
+        {
+            return false;
+        }
+
         public string GetDescription(MethodInfo serviceMethod)
         {
             return null;

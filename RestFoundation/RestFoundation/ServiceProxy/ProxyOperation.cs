@@ -38,6 +38,16 @@ namespace RestFoundation.ServiceProxy
         public int HttpsPort { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the operation supports JSON format.
+        /// </summary>
+        public bool DoesNotSupportJson { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the operation supports XML format.
+        /// </summary>
+        public bool DoesNotSupportXml { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the operation is IP filtered.
         /// </summary>
         public bool IsIPFiltered { get; set; }
