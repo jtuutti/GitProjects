@@ -259,6 +259,40 @@
       <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
       <exception cref="T:System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
     </member>
+    <member name="T:RestFoundation.ILogWriter">
+      <summary>
+            Defines a log writer for the services.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ILogWriter.WriteDebug(System.String)">
+      <summary>
+            Writes a debug message into the log buffer.
+            The implementation should add a line break at the end of the message.
+            </summary>
+      <param name="debug">A debug message.</param>
+      <returns>The log writer instance.</returns>
+    </member>
+    <member name="M:RestFoundation.ILogWriter.WriteError(System.String)">
+      <summary>
+            Writes an error message into the log buffer.
+            The implementation should add a line break at the end of the message.
+            </summary>
+      <param name="error">An error message.</param>
+      <returns>The log writer instance.</returns>
+    </member>
+    <member name="M:RestFoundation.ILogWriter.WriteInfo(System.String)">
+      <summary>
+            Writes an information message into the log buffer.
+            The implementation should add a line break at the end of the message.
+            </summary>
+      <param name="info">An information message.</param>
+      <returns>The log writer instance.</returns>
+    </member>
+    <member name="M:RestFoundation.ILogWriter.Flush">
+      <summary>
+            Flushes the log buffer.
+            </summary>
+    </member>
     <member name="T:RestFoundation.InstanceLifetime">
       <summary>
             Defines a dependency instance lifetime for the default service locator.
@@ -780,6 +814,16 @@
               Looks up a localized string similar to Service proxy UI is already enabled..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.ServiceCallEnded">
+      <summary>
+              Looks up a localized string similar to -- SERVICE CALL ENDED --.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.ServiceCallStarted">
+      <summary>
+              Looks up a localized string similar to -- SERVICE CALL STARTED --.
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.ServiceTimedOut">
       <summary>
               Looks up a localized string similar to Service timed out..
@@ -813,6 +857,11 @@
     <member name="P:RestFoundation.RestResources.UnmappedResourceType">
       <summary>
               Looks up a localized string similar to HTTP resource type provided has not been mapped..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.UnregisteredLogWriter">
+      <summary>
+              Looks up a localized string similar to No log writer has been registered..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.UnsatisfiableRequestedRange">
@@ -974,6 +1023,37 @@
             A <see cref="T:System.Boolean" /> indicating whether the serialized object is formatted for output.
             </param>
       <returns>The <see cref="T:System.String" /> value containing the serialized object.</returns>
+    </member>
+    <member name="T:RestFoundation.Runtime.NullLogWriter">
+      <summary>
+            Represents a dummy log writer that ignores logged messages.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Runtime.NullLogWriter.WriteDebug(System.String)">
+      <summary>
+            Writes a debug message into the log buffer.
+            </summary>
+      <param name="debug">A debug message.</param>
+      <returns>The log writer instance.</returns>
+    </member>
+    <member name="M:RestFoundation.Runtime.NullLogWriter.WriteInfo(System.String)">
+      <summary>
+            Writes an information message into the log buffer.
+            </summary>
+      <param name="info">An information message.</param>
+      <returns>The log writer instance.</returns>
+    </member>
+    <member name="M:RestFoundation.Runtime.NullLogWriter.WriteError(System.String)">
+      <summary>
+            Writes an error message into the log buffer.
+            </summary>
+      <param name="error">An error message.</param>
+      <returns>The log writer instance.</returns>
+    </member>
+    <member name="M:RestFoundation.Runtime.NullLogWriter.Flush">
+      <summary>
+            Flushes the log buffer.
+            </summary>
     </member>
     <member name="T:RestFoundation.Runtime.ServiceFactory">
       <summary>
@@ -1224,76 +1304,6 @@
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.HttpResponseException">If the object could not be serialized.</exception>
     </member>
-    <member name="T:RestFoundation.Formatters.DataContractJsonFormatter">
-      <summary>
-            Represents a data contract serializer based JSON formatter.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Formatters.DataContractJsonFormatter.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Formatters.DataContractJsonFormatter" /> class with the provided content negotiator.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Formatters.DataContractJsonFormatter.#ctor(RestFoundation.IContentNegotiator)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Formatters.DataContractJsonFormatter" /> class.
-            </summary>
-      <param name="contentNegotiator">The content negotiator.</param>
-    </member>
-    <member name="M:RestFoundation.Formatters.DataContractJsonFormatter.FormatRequest(RestFoundation.IServiceContext,System.Type)">
-      <summary>
-            Deserializes HTTP message body data into an object instance of the provided type.
-            </summary>
-      <param name="context">The service context.</param>
-      <param name="objectType">The object type.</param>
-      <returns>The deserialized object.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be deserialized.</exception>
-    </member>
-    <member name="M:RestFoundation.Formatters.DataContractJsonFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
-      <summary>
-            Serializes the object instance into the HTTP response stream using the accepted media type.
-            </summary>
-      <param name="context">The service context.</param>
-      <param name="methodReturnType">The method return type.</param>
-      <param name="obj">The object to serialize.</param>
-      <returns>A service method result containing the serialized object representation.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be serialized.</exception>
-    </member>
-    <member name="T:RestFoundation.Formatters.DataContractXmlFormatter">
-      <summary>
-            Represents a data contract serializer based XML formatter.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Formatters.DataContractXmlFormatter.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Formatters.DataContractXmlFormatter" /> class with the provided content negotiator.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Formatters.DataContractXmlFormatter.#ctor(RestFoundation.IContentNegotiator)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Formatters.DataContractXmlFormatter" /> class.
-            </summary>
-      <param name="contentNegotiator">The content negotiator.</param>
-    </member>
-    <member name="M:RestFoundation.Formatters.DataContractXmlFormatter.FormatRequest(RestFoundation.IServiceContext,System.Type)">
-      <summary>
-            Deserializes HTTP message body data into an object instance of the provided type.
-            </summary>
-      <param name="context">The service context.</param>
-      <param name="objectType">The object type.</param>
-      <returns>The deserialized object.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be deserialized.</exception>
-    </member>
-    <member name="M:RestFoundation.Formatters.DataContractXmlFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
-      <summary>
-            Serializes the object instance into the HTTP response stream using the accepted media type.
-            </summary>
-      <param name="context">The service context.</param>
-      <param name="methodReturnType">The method return type.</param>
-      <param name="obj">The object to serialize.</param>
-      <returns>A service method result containing the serialized object representation.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be serialized.</exception>
-    </member>
     <member name="T:RestFoundation.Formatters.JsonPFormatter">
       <summary>
             Represents a JSONP media type formatter.
@@ -1400,48 +1410,6 @@
             Executes the result against the provided service context.
             </summary>
       <param name="context">The service context.</param>
-    </member>
-    <member name="T:RestFoundation.Results.DataContractJsonResult">
-      <summary>
-            Represents a data contract serialized JSON result.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Results.DataContractJsonResult.Execute(RestFoundation.IServiceContext)">
-      <summary>
-            Executes the result against the provided service context.
-            </summary>
-      <param name="context">The service context.</param>
-    </member>
-    <member name="P:RestFoundation.Results.DataContractJsonResult.Content">
-      <summary>
-            Gets or sets the object to serialize to XML.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Results.DataContractJsonResult.ContentType">
-      <summary>
-            Gets or sets the content type. The "application/xml" content type is used by default.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.Results.DataContractXmlResult">
-      <summary>
-            Represents a data contract serialized XML result.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Results.DataContractXmlResult.Execute(RestFoundation.IServiceContext)">
-      <summary>
-            Executes the result against the provided service context.
-            </summary>
-      <param name="context">The service context.</param>
-    </member>
-    <member name="P:RestFoundation.Results.DataContractXmlResult.Content">
-      <summary>
-            Gets or sets the object to serialize to JSON.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Results.DataContractXmlResult.ContentType">
-      <summary>
-            Gets or sets the content type. The "application/json" content type is used by default.
-            </summary>
     </member>
     <member name="T:RestFoundation.Results.FileResultBase">
       <summary>
@@ -4105,6 +4073,24 @@
             </summary>
       <returns>The service method metadata.</returns>
     </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.DoesNotSupportJson">
+      <summary>
+            Indicates the service operation does not support JSON serialization.
+            </summary>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.DoesNotSupportXml">
+      <summary>
+            Indicates the service operation does not support XML serialization.
+            </summary>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.DoesNotSupportJsonAndXml">
+      <summary>
+            Indicates the service operation does not support JSON and XML serialization.
+            </summary>
+      <returns>The service method metadata.</returns>
+    </member>
     <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetQueryParameter(System.String,System.Type)">
       <summary>
             Sets a query string parameter for the service operation.
@@ -4257,6 +4243,20 @@
             </summary>
       <param name="serviceMethod">The service method.</param>
       <returns>true if the operation is hidden from the service proxy; false otherwise.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.HasJsonSupport(System.Reflection.MethodInfo)">
+      <summary>
+            Returns a <see cref="T:System.Boolean" /> indicating whether the operation supports JSON serialization.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>true if the operation supports JSON serialization; false otherwise.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.HasXmlSupport(System.Reflection.MethodInfo)">
+      <summary>
+            Returns a <see cref="T:System.Boolean" /> indicating whether the operation supports XML serialization.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>true if the operation supports XML serialization; false otherwise.</returns>
     </member>
     <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetDescription(System.Reflection.MethodInfo)">
       <summary>
@@ -5425,12 +5425,6 @@
             Sets an exception handler for the current route.
             </summary>
       <param name="exceptionHandler">The exception handler.</param>
-      <returns>The route configuration.</returns>
-    </member>
-    <member name="M:RestFoundation.RouteConfiguration.WithDataContractFormatters">
-      <summary>
-            Uses WCF-style data contract serializers to format and output the resources for the current route.
-            </summary>
       <returns>The route configuration.</returns>
     </member>
     <member name="M:RestFoundation.RouteConfiguration.WithIPsRestrictedBySection(System.String)">
@@ -7639,6 +7633,16 @@
     <member name="P:RestFoundation.ServiceProxy.ProxyOperation.HttpsPort">
       <summary>
             Gets or sets the HTTPS port, if applicable.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxyOperation.DoesNotSupportJson">
+      <summary>
+            Gets or sets a value indicating whether the operation supports JSON format.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxyOperation.DoesNotSupportXml">
+      <summary>
+            Gets or sets a value indicating whether the operation supports XML format.
             </summary>
     </member>
     <member name="P:RestFoundation.ServiceProxy.ProxyOperation.IsIPFiltered">
