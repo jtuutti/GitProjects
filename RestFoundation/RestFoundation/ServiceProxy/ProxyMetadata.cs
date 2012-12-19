@@ -173,6 +173,32 @@ namespace RestFoundation.ServiceProxy
         /// </summary>
         /// <param name="serviceMethod">The service method.</param>
         /// <returns>The service method metadata.</returns>
+        public IMethodMetadata ForMethod(Expression<Action<TContract>> serviceMethod)
+        {
+            if (serviceMethod == null)
+            {
+                throw new ArgumentNullException("serviceMethod");
+            }
+
+            var methodExpression = serviceMethod.Body as MethodCallExpression;
+
+            if (methodExpression == null || methodExpression.Method == null)
+            {
+                throw new ArgumentException(RestResources.InvalidServiceMethodExpression, "serviceMethod");
+            }
+
+            m_currentServiceMethod = methodExpression.Method;
+
+            ProcessMethodArguments(methodExpression);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Specifies metadata for a specific service method.
+        /// </summary>
+        /// <param name="serviceMethod">The service method.</param>
+        /// <returns>The service method metadata.</returns>
         public IMethodMetadata ForMethod(Expression<Func<TContract, object>> serviceMethod)
         {
             if (serviceMethod == null)
@@ -189,12 +215,7 @@ namespace RestFoundation.ServiceProxy
 
             m_currentServiceMethod = methodExpression.Method;
 
-            var arguments = ExpressionArgumentExtractor.Extract(methodExpression);
-
-            foreach (var argument in arguments)
-            {
-                ((IMethodMetadata) this).SetRouteParameter(argument.Name, argument.Value);
-            }
+            ProcessMethodArguments(methodExpression);
 
             return this;
         }
@@ -814,6 +835,16 @@ namespace RestFoundation.ServiceProxy
             parameters.Add(parameter);
 
             m_parameterDictionary[m_currentServiceMethod] = parameters;
+        }
+
+        private void ProcessMethodArguments(MethodCallExpression methodExpression)
+        {
+            var arguments = ExpressionArgumentExtractor.Extract(methodExpression);
+
+            foreach (var argument in arguments)
+            {
+                ((IMethodMetadata) this).SetRouteParameter(argument.Name, argument.Value);
+            }
         }
 
         #endregion

@@ -354,8 +354,8 @@
     <comment>Relative URL must start with ~/</comment>
   </data>
   <data name="InvalidServiceMethodExpression" xml:space="preserve">
-    <value>No valid service method lambda expression provided.</value>
-    <comment>No valid service method lambda expression provided.</comment>
+    <value>Invalid service method lambda expression provided.</value>
+    <comment>Invalid service method lambda expression provided.</comment>
   </data>
   <data name="InvalidServiceMethod" xml:space="preserve">
     <value>No valid service method provided.</value>
@@ -456,5 +456,9 @@
   <data name="UnregisteredLogWriter" xml:space="preserve">
     <value>No log writer has been registered.</value>
     <comment>No log writer has been registered.</comment>
+  </data>
+  <data name="InvalidServiceUrlOrMethodExpression" xml:space="preserve">
+    <value>Invalid service URL or method lambda expression provided.</value>
+    <comment>Invalid service URL or method lambda expression provided.</comment>
   </data>
 </root>

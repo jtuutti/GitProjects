@@ -376,11 +376,20 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No valid service method lambda expression provided..
+        ///   Looks up a localized string similar to Invalid service method lambda expression provided..
         /// </summary>
         internal static string InvalidServiceMethodExpression {
             get {
                 return ResourceManager.GetString("InvalidServiceMethodExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid service URL or method lambda expression provided..
+        /// </summary>
+        internal static string InvalidServiceUrlOrMethodExpression {
+            get {
+                return ResourceManager.GetString("InvalidServiceUrlOrMethodExpression", resourceCulture);
             }
         }
         

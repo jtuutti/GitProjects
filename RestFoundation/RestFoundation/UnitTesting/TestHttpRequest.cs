@@ -113,11 +113,19 @@ namespace RestFoundation.UnitTesting
         {
             get
             {
-                return m_path;
+                return "/";
             }
         }
 
         public override string CurrentExecutionFilePath
+        {
+            get
+            {
+                return m_path;
+            }
+        }
+
+        public override string FilePath
         {
             get
             {

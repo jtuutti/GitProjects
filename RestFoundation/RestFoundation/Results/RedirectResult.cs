@@ -8,7 +8,7 @@ namespace RestFoundation.Results
 {
     /// <summary>
     /// Represents a redirect result. This result is not recommended to use for methods that return JSON or XML.
-    /// Set the Location HTTP response header instead.
+    /// Set the "Location" HTTP response header instead.
     /// </summary>
     public class RedirectResult : IResult
     {

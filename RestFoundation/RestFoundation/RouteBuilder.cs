@@ -282,7 +282,9 @@ namespace RestFoundation
                     SetBrowserRoutes(serviceUrl, metadata);
                 }
 
-                m_routes.Add(new Route(serviceUrl, defaults, constraints, routeHandler));
+                string routeName = RouteNameHelper.GetRouteName(metadata.ServiceUrl, metadata.MethodInfo);
+
+                m_routes.Add(routeName, new Route(serviceUrl, defaults, constraints, routeHandler));
             }
 
             return routeHandlers;

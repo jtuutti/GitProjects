@@ -138,6 +138,16 @@ namespace RestFoundation.UnitTesting
         {
         }
 
+        public override string ApplyAppPathModifier(string virtualPath)
+        {
+            if (virtualPath == null)
+            {
+                return null;
+            }
+
+            return "~/" + virtualPath.TrimEnd('~', '/');
+        }
+
         public override void ClearContent()
         {
         }
