@@ -13,21 +13,21 @@ namespace RestFoundation.UnitTesting
         /// <summary>
         /// Specifies the route relative URL to test.
         /// </summary>
-        /// <param name="relativeUrl">The relative URL.</param>
+        /// <param name="virtualUrl">The virtual service URL.</param>
         /// <returns>The HTTP method builder.</returns>
-        public static HttpMethodBuilder Url(string relativeUrl)
+        public static HttpMethodBuilder Url(string virtualUrl)
         {
-            if (String.IsNullOrEmpty(relativeUrl))
+            if (String.IsNullOrEmpty(virtualUrl))
             {
-                throw new ArgumentNullException("relativeUrl");
+                throw new ArgumentNullException("virtualUrl");
             }
 
-            if (!relativeUrl.TrimStart().StartsWith("~", StringComparison.Ordinal))
+            if (!virtualUrl.TrimStart().StartsWith("~", StringComparison.Ordinal))
             {
-                throw new ArgumentException(RestResources.InvalidRelativeUrl, "relativeUrl");
+                throw new ArgumentException(RestResources.InvalidVirtualUrl, "virtualUrl");
             }
 
-            return new HttpMethodBuilder(relativeUrl);
+            return new HttpMethodBuilder(virtualUrl);
         }
     }
 }

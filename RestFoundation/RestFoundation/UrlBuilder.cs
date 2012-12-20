@@ -26,16 +26,16 @@ namespace RestFoundation
         /// <summary>
         /// Maps the provided relative URL to a service or a web forms page.
         /// </summary>
-        /// <param name="url">The relative URL.</param>
+        /// <param name="serviceUrl">The service URL.</param>
         /// <returns>The URL builder.</returns>
-        public RouteBuilder MapUrl(string url)
+        public RouteBuilder MapUrl(string serviceUrl)
         {
-            if (String.IsNullOrEmpty(url))
+            if (String.IsNullOrEmpty(serviceUrl))
             {
-                throw new ArgumentNullException("url");
+                throw new ArgumentNullException("serviceUrl");
             }
 
-            return new RouteBuilder(url, m_routes, null);
+            return new RouteBuilder(serviceUrl, m_routes, null);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace RestFoundation
         /// <param name="serviceMethod">The service contract method.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service url or the service method provided.
+        /// If an invalid service URL or the service method provided.
         /// </exception>
         string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod);
 
@@ -69,7 +69,7 @@ namespace RestFoundation
         /// <param name="routeValues">Additional route values based on the object properties.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service url or the service method provided.
+        /// If an invalid service URL or the service method provided.
         /// </exception>
         string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, object routeValues);
 
@@ -84,7 +84,7 @@ namespace RestFoundation
         /// <param name="routeValues">Additional route values.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service url or the service method provided.
+        /// If an invalid service URL or the service method provided.
         /// </exception>
         string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteValueDictionary routeValues);
 
@@ -98,7 +98,7 @@ namespace RestFoundation
         /// <param name="serviceMethod">The service contract method.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service url or the service method provided.
+        /// If an invalid service URL or the service method provided.
         /// </exception>
         string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod);
 
@@ -113,7 +113,7 @@ namespace RestFoundation
         /// <param name="routeValues">Additional route values based on the object properties.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service url or the service method provided.
+        /// If an invalid service URL or the service method provided.
         /// </exception>
         string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, object routeValues);
 
@@ -128,7 +128,7 @@ namespace RestFoundation
         /// <param name="routeValues">Additional route values.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service url or the service method provided.
+        /// If an invalid service URL or the service method provided.
         /// </exception>
         string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteValueDictionary routeValues);
 

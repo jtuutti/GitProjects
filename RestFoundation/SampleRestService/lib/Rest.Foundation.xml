@@ -629,11 +629,6 @@
               Looks up a localized string similar to The type '{0}' is not a valid proxy metadata type..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidRelativeUrl">
-      <summary>
-              Looks up a localized string similar to Relative URL must start with ~/.
-            </summary>
-    </member>
     <member name="P:RestFoundation.RestResources.InvalidResourceBody">
       <summary>
               Looks up a localized string similar to Invalid resource body provided..
@@ -666,7 +661,12 @@
     </member>
     <member name="P:RestFoundation.RestResources.InvalidServiceMethodExpression">
       <summary>
-              Looks up a localized string similar to No valid service method lambda expression provided..
+              Looks up a localized string similar to Invalid service method lambda expression provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.InvalidServiceUrlOrMethodExpression">
+      <summary>
+              Looks up a localized string similar to Invalid service URL or method lambda expression provided..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidSocketTimeout">
@@ -677,6 +677,11 @@
     <member name="P:RestFoundation.RestResources.InvalidUpperBoundAddress">
       <summary>
               Looks up a localized string similar to The upper bound address is from a different family than the lower bound address..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.InvalidVirtualUrl">
+      <summary>
+              Looks up a localized string similar to Virtual URL must start with ~/.
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidWebResponse">
@@ -4531,6 +4536,13 @@
             Marks all service operations as IP filtered.
             </summary>
     </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.ForMethod(System.Linq.Expressions.Expression{System.Action{`0}})">
+      <summary>
+            Specifies metadata for a specific service method.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>The service method metadata.</returns>
+    </member>
     <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.ForMethod(System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
       <summary>
             Specifies metadata for a specific service method.
@@ -5044,6 +5056,94 @@
       <summary>
             Defines a service context.
             </summary>
+    </member>
+    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}})">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},System.Object)">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <param name="routeValues">Additional route values based on the object properties.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},System.Web.Routing.RouteValueDictionary)">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <param name="routeValues">Additional route values.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Object)">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <param name="routeValues">Additional route values based on the object properties.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Web.Routing.RouteValueDictionary)">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <param name="routeValues">Additional route values.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
     </member>
     <member name="M:RestFoundation.IServiceContext.MapPath(System.String)">
       <summary>
@@ -6055,7 +6155,7 @@
       <summary>
             Maps the provided relative URL to a service or a web forms page.
             </summary>
-      <param name="url">The relative URL.</param>
+      <param name="serviceUrl">The service URL.</param>
       <returns>The URL builder.</returns>
     </member>
     <member name="T:RestFoundation.Runtime.StreamCompressor">
@@ -6085,6 +6185,94 @@
       <param name="request">The current HTTP request.</param>
       <param name="response">The current HTTP response.</param>
       <param name="cache">The service cache.</param>
+    </member>
+    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}})">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},System.Object)">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <param name="routeValues">Additional route values based on the object properties.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},System.Web.Routing.RouteValueDictionary)">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <param name="routeValues">Additional route values.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Object)">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <param name="routeValues">Additional route values based on the object properties.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Web.Routing.RouteValueDictionary)">
+      <summary>
+            Gets the application path for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            </param>
+      <param name="serviceMethod">The service contract method.</param>
+      <param name="routeValues">Additional route values.</param>
+      <returns>The application path for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or the service method provided.
+            </exception>
     </member>
     <member name="M:RestFoundation.Context.ServiceContext.MapPath(System.String)">
       <summary>
@@ -6619,7 +6807,7 @@
     <member name="T:RestFoundation.Results.RedirectResult">
       <summary>
             Represents a redirect result. This result is not recommended to use for methods that return JSON or XML.
-            Set the Location HTTP response header instead.
+            Set the "Location" HTTP response header instead.
             </summary>
     </member>
     <member name="M:RestFoundation.Results.RedirectResult.#ctor">
@@ -8328,38 +8516,38 @@
     </member>
     <member name="M:RestFoundation.UnitTesting.MockHandlerFactory.Create``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}})">
       <summary>
-            Creates a REST handler that executes that provided service method at the specified relative URL.
+            Creates a REST handler that executes that provided service method at the specified virtual URL.
             </summary>
       <typeparam name="T">The service contract type.</typeparam>
-      <param name="relativeUrl">The relative URL.</param>
+      <param name="virtualUrl">The virtual service URL.</param>
       <param name="serviceMethodDelegate">The service method delegate.</param>
       <returns>The REST handler./</returns>
     </member>
     <member name="M:RestFoundation.UnitTesting.MockHandlerFactory.Create``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},System.Nullable{RestFoundation.HttpMethod})">
       <summary>
-            Creates a REST handler that executes that provided service method at the specified relative URL.
+            Creates a REST handler that executes that provided service method at the specified virtual URL.
             </summary>
       <typeparam name="T">The service contract type.</typeparam>
-      <param name="relativeUrl">The relative URL.</param>
+      <param name="virtualUrl">The virtual service URL.</param>
       <param name="serviceMethodDelegate">The service method delegate.</param>
       <param name="httpMethod">The HTTP method.</param>
       <returns>The REST handler./</returns>
     </member>
     <member name="M:RestFoundation.UnitTesting.MockHandlerFactory.CreateAsync``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}})">
       <summary>
-            Creates an asyncronous REST handler that executes that provided service method at the specified relative URL.
+            Creates an asyncronous REST handler that executes that provided service method at the specified virtual URL.
             </summary>
       <typeparam name="T">The service contract type.</typeparam>
-      <param name="relativeUrl">The relative URL.</param>
+      <param name="virtualUrl">The virtual service URL.</param>
       <param name="serviceMethodDelegate">The service method delegate.</param>
       <returns>The asynchronous REST handler./</returns>
     </member>
     <member name="M:RestFoundation.UnitTesting.MockHandlerFactory.CreateAsync``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},System.Nullable{RestFoundation.HttpMethod})">
       <summary>
-            Creates an asyncronous REST handler that executes that provided service method at the specified relative URL.
+            Creates an asyncronous REST handler that executes that provided service method at the specified virtual URL.
             </summary>
       <typeparam name="T">The service contract type.</typeparam>
-      <param name="relativeUrl">The relative URL.</param>
+      <param name="virtualUrl">The virtual service URL.</param>
       <param name="serviceMethodDelegate">The service method delegate.</param>
       <param name="httpMethod">The HTTP method.</param>
       <returns>The asynchronous REST handler./</returns>
@@ -8529,7 +8717,7 @@
       <summary>
             Specifies the route relative URL to test.
             </summary>
-      <param name="relativeUrl">The relative URL.</param>
+      <param name="virtualUrl">The virtual service URL.</param>
       <returns>The HTTP method builder.</returns>
     </member>
     <member name="T:RestFoundation.UnitTesting.RouteAssertException">
@@ -8600,7 +8788,7 @@
     </member>
     <member name="M:RestFoundation.UrlAttribute.#ctor(System.String,RestFoundation.HttpMethod[])">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.UrlAttribute" /> class with the url template
+            Initializes a new instance of the <see cref="T:RestFoundation.UrlAttribute" /> class with the URL template
             and HTTP methods.
             </summary>
       <param name="urlTemplate">The URL template.</param>
@@ -8609,7 +8797,7 @@
     </member>
     <member name="M:RestFoundation.UrlAttribute.#ctor(System.String,System.String)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.UrlAttribute" /> class with the url template
+            Initializes a new instance of the <see cref="T:RestFoundation.UrlAttribute" /> class with the URL template
             and HTTP methods.
             </summary>
       <param name="urlTemplate">The URL template.</param>

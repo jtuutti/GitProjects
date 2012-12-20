@@ -12,11 +12,11 @@ namespace RestFoundation.UnitTesting
     public sealed class RouteValidatorBuilder
     {
         private readonly HttpMethod m_httpMethod;
-        private readonly string m_relativeUrl;
+        private readonly string m_virtualUrl;
 
-        internal RouteValidatorBuilder(string relativeUrl, HttpMethod httpMethod)
+        internal RouteValidatorBuilder(string virtualUrl, HttpMethod httpMethod)
         {
-            m_relativeUrl = relativeUrl;
+            m_virtualUrl = virtualUrl;
             m_httpMethod = httpMethod;
         }
 
@@ -28,7 +28,7 @@ namespace RestFoundation.UnitTesting
         /// <exception cref="RouteAssertException">If the route does not match the invoked delegate.</exception>
         public void Invokes<T>(Expression<Action<T>> serviceMethodDelegate)
         {
-            var testRoute = new RouteValidator<T>(m_relativeUrl, m_httpMethod, serviceMethodDelegate);
+            var testRoute = new RouteValidator<T>(m_virtualUrl, m_httpMethod, serviceMethodDelegate);
             testRoute.Validate();
         }
     }

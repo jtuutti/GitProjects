@@ -37,7 +37,7 @@ namespace RestFoundation.Runtime
                                                                                             x.Name,
                                                                                             x.ParameterType.FullName,
                                                                                             x.ParameterType.Assembly.GetName().FullName))
-                                                                 .ToArray())).TrimEnd('-').Replace(" ", "");
+                                                                 .ToArray())).TrimEnd('-').Replace(" ", String.Empty);
 
             return ToBase64(routeName);
         }

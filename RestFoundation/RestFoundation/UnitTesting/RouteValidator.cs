@@ -14,14 +14,14 @@ namespace RestFoundation.UnitTesting
     internal sealed class RouteValidator<T>
     {
         private readonly HttpMethod m_httpMethod;
-        private readonly string m_relativeUrl;
+        private readonly string m_virtualUrl;
         private readonly Expression<Action<T>> m_serviceMethodDelegate;
 
-        internal RouteValidator(string relativeUrl, HttpMethod httpMethod, Expression<Action<T>> serviceMethodDelegate)
+        internal RouteValidator(string virtualUrl, HttpMethod httpMethod, Expression<Action<T>> serviceMethodDelegate)
         {
-            if (String.IsNullOrEmpty(relativeUrl))
+            if (String.IsNullOrEmpty(virtualUrl))
             {
-                throw new ArgumentNullException("relativeUrl");
+                throw new ArgumentNullException("virtualUrl");
             }
 
             if (serviceMethodDelegate == null)
@@ -29,7 +29,7 @@ namespace RestFoundation.UnitTesting
                 throw new ArgumentNullException("serviceMethodDelegate");
             }
 
-            m_relativeUrl = relativeUrl;
+            m_virtualUrl = virtualUrl;
             m_serviceMethodDelegate = serviceMethodDelegate;
             m_httpMethod = httpMethod;
         }
@@ -55,13 +55,13 @@ namespace RestFoundation.UnitTesting
                 throw new RouteAssertException(RestResources.InvalidServiceImplementation);
             }
 
-            using (var httpContext = new TestHttpContext(m_relativeUrl, m_httpMethod.ToString().ToUpperInvariant()))
+            using (var httpContext = new TestHttpContext(m_virtualUrl, m_httpMethod.ToString().ToUpperInvariant()))
             {
                 RouteData routeData = RouteTable.Routes.GetRouteData(httpContext);
 
                 if (routeData == null)
                 {
-                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.MismatchedUrl, m_relativeUrl));
+                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.MismatchedUrl, m_virtualUrl));
                 }
 
                 Type contractType = GetServiceContractType(routeData);

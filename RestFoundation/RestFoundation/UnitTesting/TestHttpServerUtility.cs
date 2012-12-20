@@ -8,17 +8,17 @@ namespace RestFoundation.UnitTesting
 {
     internal sealed class TestHttpServerUtility : HttpServerUtilityBase
     {
-        private readonly string m_relativeUrl;
+        private readonly string m_virtualUrl;
         private int m_scriptTimeout;
 
-        internal TestHttpServerUtility(string relativeUrl)
+        internal TestHttpServerUtility(string virtualUrl)
         {
-            if (relativeUrl == null)
+            if (virtualUrl == null)
             {
-                throw new ArgumentNullException("relativeUrl");
+                throw new ArgumentNullException("virtualUrl");
             }
 
-            m_relativeUrl = relativeUrl.TrimStart('~', '/', ' ');
+            m_virtualUrl = virtualUrl.TrimStart('~', '/', ' ');
             m_scriptTimeout = 60;
         }
 
@@ -41,7 +41,7 @@ namespace RestFoundation.UnitTesting
                 return null;
             }
 
-            return path.ToLowerInvariant().Replace("http://localhost/" + m_relativeUrl, Environment.CurrentDirectory).Replace("/", @"\").TrimStart('~', '\\');
+            return path.ToLowerInvariant().Replace("http://localhost/" + m_virtualUrl, Environment.CurrentDirectory).Replace("/", @"\").TrimStart('~', '\\');
         }
     }
 }

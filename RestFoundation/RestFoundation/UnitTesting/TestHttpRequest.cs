@@ -26,13 +26,23 @@ namespace RestFoundation.UnitTesting
         private Stream m_filter;
         private bool m_isDisposed;
 
-        internal TestHttpRequest(string relativeUrl, string httpMethod)
+        internal TestHttpRequest(string virtualUrl, string httpMethod)
         {
-            string[] urlParts = relativeUrl.Split(new[] { '?', '#' }, StringSplitOptions.RemoveEmptyEntries);
+            if (virtualUrl == null)
+            {
+                throw new ArgumentNullException("virtualUrl");
+            }
+
+            if (httpMethod == null)
+            {
+                throw new ArgumentNullException("httpMethod");
+            }
+
+            string[] urlParts = virtualUrl.Split(new[] { '?', '#' }, StringSplitOptions.RemoveEmptyEntries);
 
             m_httpMethod = httpMethod;
             m_executionFilePath = urlParts[0].Trim();
-            m_path = m_rawUrl = relativeUrl.Trim().TrimStart('~');
+            m_path = m_rawUrl = virtualUrl.Trim().TrimStart('~');
             m_url = new Uri(new Uri("http://localhost"), m_path);
             m_cookies = new HttpCookieCollection();
             m_form = new NameValueCollection();

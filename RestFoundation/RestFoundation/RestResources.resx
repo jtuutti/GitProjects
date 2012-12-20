@@ -349,9 +349,9 @@
     <value>Forbidden</value>
     <comment>Forbidden</comment>
   </data>
-  <data name="InvalidRelativeUrl" xml:space="preserve">
-    <value>Relative URL must start with ~/</value>
-    <comment>Relative URL must start with ~/</comment>
+  <data name="InvalidVirtualUrl" xml:space="preserve">
+    <value>Virtual URL must start with ~/</value>
+    <comment>Virtual URL must start with ~/</comment>
   </data>
   <data name="InvalidServiceMethodExpression" xml:space="preserve">
     <value>Invalid service method lambda expression provided.</value>

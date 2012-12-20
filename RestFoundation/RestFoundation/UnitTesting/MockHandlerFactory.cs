@@ -26,75 +26,75 @@ namespace RestFoundation.UnitTesting
         internal static TestHttpContext Context { get; private set; }
 
         /// <summary>
-        /// Creates a REST handler that executes that provided service method at the specified relative URL.
+        /// Creates a REST handler that executes that provided service method at the specified virtual URL.
         /// </summary>
         /// <typeparam name="T">The service contract type.</typeparam>
-        /// <param name="relativeUrl">The relative URL.</param>
+        /// <param name="virtualUrl">The virtual service URL.</param>
         /// <param name="serviceMethodDelegate">The service method delegate.</param>
         /// <returns>The REST handler./</returns>
-        public IRestHandler Create<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate)
+        public IRestHandler Create<T>(string virtualUrl, Expression<Action<T>> serviceMethodDelegate)
         {
-            return Create(relativeUrl, serviceMethodDelegate, null);
+            return Create(virtualUrl, serviceMethodDelegate, null);
         }
 
         /// <summary>
-        /// Creates a REST handler that executes that provided service method at the specified relative URL.
+        /// Creates a REST handler that executes that provided service method at the specified virtual URL.
         /// </summary>
         /// <typeparam name="T">The service contract type.</typeparam>
-        /// <param name="relativeUrl">The relative URL.</param>
+        /// <param name="virtualUrl">The virtual service URL.</param>
         /// <param name="serviceMethodDelegate">The service method delegate.</param>
         /// <param name="httpMethod">The HTTP method.</param>
         /// <returns>The REST handler./</returns>
-        public IRestHandler Create<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
+        public IRestHandler Create<T>(string virtualUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
         {
             if (serviceMethodDelegate == null)
             {
                 throw new ArgumentNullException("serviceMethodDelegate");
             }
 
-            if (String.IsNullOrEmpty(relativeUrl))
+            if (String.IsNullOrEmpty(virtualUrl))
             {
-                throw new ArgumentNullException("relativeUrl");
+                throw new ArgumentNullException("virtualUrl");
             }
 
-            RequestContext requestContext = CreateContext(relativeUrl, serviceMethodDelegate, httpMethod);
+            RequestContext requestContext = CreateContext(virtualUrl, serviceMethodDelegate, httpMethod);
 
             return new MockRestHandler().GetHttpHandler(requestContext) as IRestHandler;
         }
 
         /// <summary>
-        /// Creates an asyncronous REST handler that executes that provided service method at the specified relative URL.
+        /// Creates an asyncronous REST handler that executes that provided service method at the specified virtual URL.
         /// </summary>
         /// <typeparam name="T">The service contract type.</typeparam>
-        /// <param name="relativeUrl">The relative URL.</param>
+        /// <param name="virtualUrl">The virtual service URL.</param>
         /// <param name="serviceMethodDelegate">The service method delegate.</param>
         /// <returns>The asynchronous REST handler./</returns>
-        public IRestAsyncHandler CreateAsync<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate)
+        public IRestAsyncHandler CreateAsync<T>(string virtualUrl, Expression<Action<T>> serviceMethodDelegate)
         {
-            return CreateAsync(relativeUrl, serviceMethodDelegate, null);
+            return CreateAsync(virtualUrl, serviceMethodDelegate, null);
         }
 
         /// <summary>
-        /// Creates an asyncronous REST handler that executes that provided service method at the specified relative URL.
+        /// Creates an asyncronous REST handler that executes that provided service method at the specified virtual URL.
         /// </summary>
         /// <typeparam name="T">The service contract type.</typeparam>
-        /// <param name="relativeUrl">The relative URL.</param>
+        /// <param name="virtualUrl">The virtual service URL.</param>
         /// <param name="serviceMethodDelegate">The service method delegate.</param>
         /// <param name="httpMethod">The HTTP method.</param>
         /// <returns>The asynchronous REST handler./</returns>
-        public IRestAsyncHandler CreateAsync<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
+        public IRestAsyncHandler CreateAsync<T>(string virtualUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
         {
             if (serviceMethodDelegate == null)
             {
                 throw new ArgumentNullException("serviceMethodDelegate");
             }
 
-            if (String.IsNullOrEmpty(relativeUrl))
+            if (String.IsNullOrEmpty(virtualUrl))
             {
-                throw new ArgumentNullException("relativeUrl");
+                throw new ArgumentNullException("virtualUrl");
             }
 
-            RequestContext requestContext = CreateContext(relativeUrl, serviceMethodDelegate, httpMethod);
+            RequestContext requestContext = CreateContext(virtualUrl, serviceMethodDelegate, httpMethod);
 
             return new MockRestAsyncHandler().GetHttpHandler(requestContext) as IRestAsyncHandler;
         }
@@ -164,11 +164,11 @@ namespace RestFoundation.UnitTesting
             }
         }
 
-        private static RequestContext CreateContext<T>(string relativeUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
+        private static RequestContext CreateContext<T>(string virtualUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
         {
-            if (!relativeUrl.StartsWith("~/", StringComparison.Ordinal))
+            if (!virtualUrl.StartsWith("~/", StringComparison.Ordinal))
             {
-                throw new ArgumentException(RestResources.InvalidRelativeUrl);
+                throw new ArgumentException(RestResources.InvalidVirtualUrl);
             }
 
             Type contractType = typeof(T);
@@ -226,10 +226,10 @@ namespace RestFoundation.UnitTesting
                 httpMethod = urlAttribute.HttpMethods.First();
             }
 
-            return GenerateRouteContext(relativeUrl, httpMethod.Value, serviceMethod);
+            return GenerateRouteContext(virtualUrl, httpMethod.Value, serviceMethod);
         }
 
-        private static RequestContext GenerateRouteContext(string relativeUrl, HttpMethod httpMethod, MethodInfo serviceMethod)
+        private static RequestContext GenerateRouteContext(string virtualUrl, HttpMethod httpMethod, MethodInfo serviceMethod)
         {
             RouteCollection routes = RouteTable.Routes;
 
@@ -240,7 +240,7 @@ namespace RestFoundation.UnitTesting
 
             lock (syncRoot)
             {
-                Context = new TestHttpContext(relativeUrl, httpMethod.ToString().ToUpperInvariant());
+                Context = new TestHttpContext(virtualUrl, httpMethod.ToString().ToUpperInvariant());
 
                 RouteData routeData = routes.GetRouteData(Context);
 

@@ -10,11 +10,11 @@ namespace RestFoundation.UnitTesting
     /// </summary>
     public sealed class HttpMethodBuilder
     {
-        private readonly string m_relativeUrl;
+        private readonly string m_virtualUrl;
 
-        internal HttpMethodBuilder(string relativeUrl)
+        internal HttpMethodBuilder(string virtualUrl)
         {
-            m_relativeUrl = relativeUrl;
+            m_virtualUrl = virtualUrl;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace RestFoundation.UnitTesting
                 throw new ArgumentOutOfRangeException("httpMethod");
             }
 
-            return new RouteValidatorBuilder(m_relativeUrl, httpMethod);
+            return new RouteValidatorBuilder(m_virtualUrl, httpMethod);
         }
     }
 }

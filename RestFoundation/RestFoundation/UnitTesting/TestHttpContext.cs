@@ -19,12 +19,12 @@ namespace RestFoundation.UnitTesting
 
         private bool m_isDisposed;
 
-        internal TestHttpContext(string relativeUrl, string httpMethod)
+        internal TestHttpContext(string virtualUrl, string httpMethod)
         {
             m_application = new TestHttpApplication();
-            m_request = new TestHttpRequest(relativeUrl, httpMethod);
+            m_request = new TestHttpRequest(virtualUrl, httpMethod);
             m_response = new TestHttpResponse();
-            m_server = new TestHttpServerUtility(relativeUrl);
+            m_server = new TestHttpServerUtility(virtualUrl);
             m_items = new Hashtable();
             m_user = new GenericPrincipal(new GenericIdentity("Test"), new[] { "Testers" });
         }

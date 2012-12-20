@@ -15,7 +15,7 @@ namespace RestFoundation
     public sealed class UrlAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UrlAttribute"/> class with the url template
+        /// Initializes a new instance of the <see cref="UrlAttribute"/> class with the URL template
         /// and HTTP methods.
         /// </summary>
         /// <param name="urlTemplate">The URL template.</param>
@@ -38,7 +38,7 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UrlAttribute"/> class with the url template
+        /// Initializes a new instance of the <see cref="UrlAttribute"/> class with the URL template
         /// and HTTP methods.
         /// </summary>
         /// <param name="urlTemplate">The URL template.</param>

@@ -313,15 +313,6 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Relative URL must start with ~/.
-        /// </summary>
-        internal static string InvalidRelativeUrl {
-            get {
-                return ResourceManager.GetString("InvalidRelativeUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Invalid resource body provided..
         /// </summary>
         internal static string InvalidResourceBody {
@@ -408,6 +399,15 @@ namespace RestFoundation {
         internal static string InvalidUpperBoundAddress {
             get {
                 return ResourceManager.GetString("InvalidUpperBoundAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Virtual URL must start with ~/.
+        /// </summary>
+        internal static string InvalidVirtualUrl {
+            get {
+                return ResourceManager.GetString("InvalidVirtualUrl", resourceCulture);
             }
         }
         
