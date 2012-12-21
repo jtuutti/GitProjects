@@ -106,7 +106,7 @@ namespace RestFoundation.Results
 
         private void SerializeAnonymousType(XmlWriter xmlWriter, object obj)
         {
-            XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj), "complexType");
+            XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings()), "complexType");
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteRaw(xmlDocument.OuterXml);
             xmlWriter.Flush();

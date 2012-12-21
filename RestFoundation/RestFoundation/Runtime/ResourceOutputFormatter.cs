@@ -28,12 +28,11 @@ namespace RestFoundation.Runtime
 
             try
             {
-                if (input.TrimStart().StartsWith("[", StringComparison.Ordinal))
-                {
-                    return JArray.Parse(input).ToString(Formatting.Indented);
-                }
+                var options = Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings();
+                object jsonObject = JsonConvert.DeserializeObject(input, options);
 
-                return JObject.Parse(input).ToString(Formatting.Indented);
+                options.Formatting = Formatting.Indented;
+                return JsonConvert.SerializeObject(jsonObject, options);
             }
             catch (Exception)
             {

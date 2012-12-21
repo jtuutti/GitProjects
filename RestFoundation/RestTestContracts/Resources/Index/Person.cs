@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace RestTestContracts.Resources
@@ -14,6 +15,8 @@ namespace RestTestContracts.Resources
         public int Age { get; set; }
 
         public string[] Values { get; set; }
+
+        public DateTime TimeStamp { get; set; }
 
         /// <summary>
         /// Determines whether the specified object is valid.

@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Client.Serializers
 {
@@ -35,7 +36,7 @@ namespace RestFoundation.Client.Serializers
 
             m_reference = obj;
 
-            m_serializedObject = JsonConvert.SerializeObject(obj, Formatting.None);
+            m_serializedObject = JsonConvert.SerializeObject(obj, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings());
             return m_serializedObject.Length;
         }
 
@@ -58,7 +59,7 @@ namespace RestFoundation.Client.Serializers
 
             if (m_serializedObject == null || !ReferenceEquals(obj, m_reference))
             {
-                m_serializedObject = JsonConvert.SerializeObject(obj, Formatting.None);    
+                m_serializedObject = JsonConvert.SerializeObject(obj, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings());
             }
 
             byte[] data = Encoding.UTF8.GetBytes(m_serializedObject);
@@ -80,7 +81,7 @@ namespace RestFoundation.Client.Serializers
 
             using (var streamReader = new StreamReader(stream, Encoding.UTF8))
             {
-                var serializer = new JsonSerializer();
+                var serializer = JsonSerializerFactory.Create();
                 var reader = new JsonTextReader(streamReader);
 
                 if (typeof(T) == typeof(object))

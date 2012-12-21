@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using RestFoundation.Results;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Formatters
 {
@@ -38,7 +39,7 @@ namespace RestFoundation.Formatters
             }
 
             var streamReader = new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding);
-            var serializer = new JsonSerializer();
+            var serializer = JsonSerializerFactory.Create();
             var reader = new JsonTextReader(streamReader);
 
             if (objectType == typeof(object))

@@ -46,7 +46,7 @@ namespace RestFoundation.Results
             context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
-            var serializer = new JsonSerializer();
+            var serializer = JsonSerializerFactory.Create();
 
             if (ReturnedType != null && ReturnedType.IsGenericType && ReturnedType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
             {
@@ -96,7 +96,10 @@ namespace RestFoundation.Results
                 return;
             }
 
-            string serializedContent = JsonConvert.SerializeObject(content, Formatting.Indented);
+            var options = Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings();
+            options.Formatting = Formatting.Indented;
+
+            string serializedContent = JsonConvert.SerializeObject(content, options);
             LogUtility.LogResponseBody(serializedContent, ContentType);
         }
     }

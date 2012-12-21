@@ -66,7 +66,7 @@ namespace RestFoundation.Results
 
             string response = new StringBuilder().Append(Callback)
                                                  .Append("(")
-                                                 .Append(Content != null ? JsonConvert.SerializeObject(Content) : "null")
+                                                 .Append(Content != null ? JsonConvert.SerializeObject(Content, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings()) : "null")
                                                  .Append(");")
                                                  .ToString();
 

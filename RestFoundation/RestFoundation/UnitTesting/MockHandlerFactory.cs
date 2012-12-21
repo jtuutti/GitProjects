@@ -12,6 +12,7 @@ using System.Web.Routing;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using RestFoundation.Client;
+using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation.UnitTesting
@@ -123,7 +124,7 @@ namespace RestFoundation.UnitTesting
             {
                 Context.Request.Headers.Add("Content-Type", "application/json; charset=utf-8");
 
-                var serializer = new JsonSerializer();
+                var serializer = JsonSerializerFactory.Create();
                 var writer = new StreamWriter(Context.Request.InputStream, Encoding.UTF8);
                 serializer.Serialize(writer, resource);
                 writer.Flush();

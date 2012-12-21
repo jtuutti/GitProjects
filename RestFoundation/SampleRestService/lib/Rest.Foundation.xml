@@ -337,6 +337,39 @@
       <param name="serviceContractType">A service contract type.</param>
       <returns>The created service instance.</returns>
     </member>
+    <member name="T:RestFoundation.JsonFormatterSettings">
+      <summary>
+            Contains settings used by JSON formatters and results.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.JsonFormatterSettings.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.JsonFormatterSettings" /> class.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.JsonFormatterSettings.MaxDepth">
+      <summary>
+            Gets or sets an optional maximum depth of the object graph.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.JsonFormatterSettings.IncludeNullValues">
+      <summary>
+            Gets or sets a value indicating that properties with null values must be serialized.
+            This property is set to false by default.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.JsonFormatterSettings.UseLocalTimeZone">
+      <summary>
+            Gets or sets a value indicating that dates must be serialized in the local server
+            timezone instead of UTC. This property is set to true by default.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.JsonFormatterSettings.UseMicrosoftStyleDates">
+      <summary>
+            Gets or sets a value indicating that dates must be serialized in Microsoft format
+            instead of the ISO 8601 format. This property is set to false by default.
+            </summary>
+    </member>
     <member name="T:RestFoundation.ResourceState">
       <summary>
             Represents the resource state for service methods.
@@ -451,6 +484,13 @@
             Calls the provided URL builder delegate to set up URL routes to services and web form pages.
             </summary>
       <param name="builder">The builder.</param>
+      <returns>The configuration options object.</returns>
+    </member>
+    <member name="M:RestFoundation.RestOptions.UseJsonFormatterSettings(RestFoundation.JsonFormatterSettings)">
+      <summary>
+            Sets custom JSON formatter and result settings.
+            </summary>
+      <param name="settings">The JSON formatter settings.</param>
       <returns>The configuration options object.</returns>
     </member>
     <member name="P:RestFoundation.RestOptions.JQueryUrl">

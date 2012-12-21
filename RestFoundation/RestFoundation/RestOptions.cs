@@ -16,6 +16,7 @@ namespace RestFoundation
     {
         internal RestOptions()
         {
+            JsonSettings = new JsonFormatterSettings();
         }
 
         /// <summary>
@@ -46,6 +47,7 @@ namespace RestFoundation
         internal string DefaultMediaType { get; private set; }
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
         internal string IndexPageRelativeUrl { get; private set; }
+        internal JsonFormatterSettings JsonSettings { get; private set; }
 
         /// <summary>
         /// Calls the provided service proxy configuration object to set up service help and proxy UI for the services.
@@ -258,6 +260,22 @@ namespace RestFoundation
             }
 
             builder(new UrlBuilder(RouteTable.Routes));
+            return this;
+        }
+
+        /// <summary>
+        /// Sets custom JSON formatter and result settings.
+        /// </summary>
+        /// <param name="settings">The JSON formatter settings.</param>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions UseJsonFormatterSettings(JsonFormatterSettings settings)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            JsonSettings = settings;
             return this;
         }
     }

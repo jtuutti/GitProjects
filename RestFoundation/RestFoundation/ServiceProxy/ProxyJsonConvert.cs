@@ -19,7 +19,7 @@ namespace RestFoundation.ServiceProxy
         /// <returns>The <see cref="String"/> value containing the serialized object.</returns>
         public static string SerializeObject(object value)
         {
-            return JsonConvertInternal.SerializeObject(value);
+            return SerializeObject(value, false);
         }
 
         /// <summary>
@@ -32,7 +32,14 @@ namespace RestFoundation.ServiceProxy
         /// <returns>The <see cref="String"/> value containing the serialized object.</returns>
         public static string SerializeObject(object value, bool isFormatted)
         {
-            return JsonConvertInternal.SerializeObject(value, isFormatted ? Formatting.Indented : Formatting.None);
+            var options = Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings();
+
+            if (isFormatted)
+            {
+                options.Formatting = Formatting.Indented;
+            }
+
+            return JsonConvertInternal.SerializeObject(value, options);
         }
     }
 }
