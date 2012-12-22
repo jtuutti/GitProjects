@@ -85,7 +85,7 @@ namespace RestFoundation.Results
         {
             if (!String.IsNullOrEmpty(ContentType))
             {
-                context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
+                context.Response.SetHeader(context.Response.HeaderNames.ContentType, ContentType);
             }
             else
             {
@@ -93,7 +93,7 @@ namespace RestFoundation.Results
 
                 if (!String.IsNullOrEmpty(acceptType))
                 {
-                    context.Response.SetHeader(context.Response.Headers.ContentType, acceptType);
+                    context.Response.SetHeader(context.Response.HeaderNames.ContentType, acceptType);
                 }
             }
         }

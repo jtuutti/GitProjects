@@ -72,7 +72,7 @@ namespace RestFoundation.Results
             }
 
             context.Response.Output.Clear();
-            context.Response.SetHeader(context.Response.Headers.ContentType, contentType);
+            context.Response.SetHeader(context.Response.HeaderNames.ContentType, contentType);
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
             OutputCompressionManager.FilterResponse(context);

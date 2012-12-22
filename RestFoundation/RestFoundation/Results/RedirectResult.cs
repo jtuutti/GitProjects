@@ -43,7 +43,7 @@ namespace RestFoundation.Results
 
             if (!String.IsNullOrWhiteSpace(RedirectUrl))
             {
-                context.Response.SetHeader(context.Response.Headers.Location, RedirectUrl);
+                context.Response.SetHeader(context.Response.HeaderNames.Location, RedirectUrl);
                 context.Response.SetStatus((HttpStatusCode) (int) RedirectType);
             }
         }

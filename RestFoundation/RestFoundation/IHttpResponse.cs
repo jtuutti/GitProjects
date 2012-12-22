@@ -5,6 +5,7 @@ using System;
 using System.Net;
 using System.Text;
 using System.Web;
+using RestFoundation.Collections;
 
 namespace RestFoundation
 {
@@ -19,6 +20,11 @@ namespace RestFoundation
         IHttpResponseOutput Output { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the response status code is successful.
+        /// </summary>
+        bool IsSuccess { get; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether custom IIS 7+ error pages should be
         /// skipped, if possible.
         /// </summary>
@@ -27,7 +33,13 @@ namespace RestFoundation
         /// <summary>
         /// Gets response header names.
         /// </summary>
-        ResponseHeaderNames Headers { get; }
+        ResponseHeaderNames HeaderNames { get; }
+
+        /// <summary>
+        /// Gets a collection of all response headers set by the service.
+        /// </summary>
+        /// <returns>A list of response headers.</returns>
+        IHeaderCollection GetHeaders();
 
         /// <summary>
         /// Gets a response header value by name.
@@ -59,6 +71,12 @@ namespace RestFoundation
         void ClearHeaders();
 
         /// <summary>
+        /// Gets the response character encoding.
+        /// </summary>
+        /// <returns>Returns the encoding.</returns>
+        Encoding GetCharsetEncoding();
+
+        /// <summary>
         /// Sets the response character encoding.
         /// </summary>
         /// <param name="encoding">The encoding.</param>
@@ -88,6 +106,12 @@ namespace RestFoundation
         /// <param name="statusCode">The status code.</param>
         /// <param name="statusDescription">The status description.</param>
         void SetStatus(HttpStatusCode statusCode, string statusDescription);
+
+        /// <summary>
+        /// Gets a collection of all response cookies set by the service.
+        /// </summary>
+        /// <returns>A list of response cookies.</returns>
+        ICookieValueCollection GetCookies();
 
         /// <summary>
         /// Gets a response cookie by name.

@@ -54,7 +54,7 @@ namespace RestFoundation.Results
             m_encoding = context.Request.Headers.AcceptCharsetEncoding;
 
             context.Response.Output.Clear();
-            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType);
+            context.Response.SetHeader(context.Response.HeaderNames.ContentType, ContentType);
             context.Response.SetCharsetEncoding(m_encoding);
 
             var xmlWriter = XmlWriter.Create(context.Response.Output.Writer, new XmlWriterSettings

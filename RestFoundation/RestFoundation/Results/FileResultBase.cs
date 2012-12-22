@@ -47,14 +47,14 @@ namespace RestFoundation.Results
             context.Response.Output.Buffer = false;
             context.Response.Output.Clear();
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
-            context.Response.SetHeader(context.Response.Headers.AcceptRanges, "bytes");
-            context.Response.SetHeader(context.Response.Headers.ContentLength, file.Length.ToString(CultureInfo.InvariantCulture));
-            context.Response.SetHeader(context.Response.Headers.ContentType, ContentType ?? "application/octet-stream");
-            context.Response.SetHeader(context.Response.Headers.ETag, GenerateETag(file));
+            context.Response.SetHeader(context.Response.HeaderNames.AcceptRanges, "bytes");
+            context.Response.SetHeader(context.Response.HeaderNames.ContentLength, file.Length.ToString(CultureInfo.InvariantCulture));
+            context.Response.SetHeader(context.Response.HeaderNames.ContentType, ContentType ?? "application/octet-stream");
+            context.Response.SetHeader(context.Response.HeaderNames.ETag, GenerateETag(file));
 
             if (!String.IsNullOrEmpty(ContentDisposition))
             {
-                context.Response.SetHeader(context.Response.Headers.ContentDisposition, ContentDisposition);
+                context.Response.SetHeader(context.Response.HeaderNames.ContentDisposition, ContentDisposition);
             }
 
             TransmitFile(context, file);
@@ -109,7 +109,7 @@ namespace RestFoundation.Results
 
             if (start < 0 || end >= stream.Length || start > end)
             {
-                context.Response.SetHeader(context.Response.Headers.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes */{0}", stream.Length));
+                context.Response.SetHeader(context.Response.HeaderNames.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes */{0}", stream.Length));
                 throw new HttpResponseException(HttpStatusCode.RequestedRangeNotSatisfiable, RestResources.UnsatisfiableRequestedRange);
             }
 
@@ -118,8 +118,8 @@ namespace RestFoundation.Results
                 stream.Seek(start, SeekOrigin.Begin);
             }
 
-            context.Response.SetHeader(context.Response.Headers.ContentLength, (end - start + 1).ToString(CultureInfo.InvariantCulture));
-            context.Response.SetHeader(context.Response.Headers.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes {0}-{1}/{2}", start, end, stream.Length));
+            context.Response.SetHeader(context.Response.HeaderNames.ContentLength, (end - start + 1).ToString(CultureInfo.InvariantCulture));
+            context.Response.SetHeader(context.Response.HeaderNames.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes {0}-{1}/{2}", start, end, stream.Length));
             context.Response.SetStatus(HttpStatusCode.PartialContent, "Partial content");
         }
 

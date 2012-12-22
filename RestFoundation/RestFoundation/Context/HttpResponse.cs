@@ -5,6 +5,8 @@ using System;
 using System.Net;
 using System.Text;
 using System.Web;
+using RestFoundation.Collections;
+using RestFoundation.Collections.Concrete;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Context
@@ -15,7 +17,7 @@ namespace RestFoundation.Context
     public class HttpResponse : ContextBase, IHttpResponse
     {
         private readonly IHttpResponseOutput m_output;
-        private readonly ResponseHeaderNames m_headers;
+        private readonly ResponseHeaderNames m_headerNames;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpResponse"/> class.
@@ -29,7 +31,7 @@ namespace RestFoundation.Context
             }
 
             m_output = output;
-            m_headers = new ResponseHeaderNames();
+            m_headerNames = new ResponseHeaderNames();
         }
 
         /// <summary>
@@ -40,6 +42,17 @@ namespace RestFoundation.Context
             get
             {
                 return m_output;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the response status code is successful.
+        /// </summary>
+        public bool IsSuccess
+        {
+            get
+            {
+                return Context.Response.StatusCode >= 200 && Context.Response.StatusCode < 300;
             }
         }
 
@@ -62,12 +75,21 @@ namespace RestFoundation.Context
         /// <summary>
         /// Gets response header names.
         /// </summary>
-        public ResponseHeaderNames Headers
+        public ResponseHeaderNames HeaderNames
         {
             get
             {
-                return m_headers;
+                return m_headerNames;
             }
+        }
+
+        /// <summary>
+        /// Gets a collection of all response headers set by the service.
+        /// </summary>
+        /// <returns>A list of response headers.</returns>
+        public IHeaderCollection GetHeaders()
+        {
+            return new HeaderCollection(Context.Response.Headers);
         }
 
         /// <summary>
@@ -143,6 +165,15 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
+        /// Gets the response character encoding.
+        /// </summary>
+        /// <returns>Returns the encoding.</returns>
+        public Encoding GetCharsetEncoding()
+        {
+            return Context.Response.ContentEncoding;
+        }
+
+        /// <summary>
         /// Sets the response character encoding.
         /// </summary>
         /// <param name="encoding">The encoding.</param>
@@ -192,6 +223,15 @@ namespace RestFoundation.Context
         {
             Context.Response.StatusCode = (int) statusCode;
             Context.Response.StatusDescription = FormatStatusDescription(statusDescription);
+        }
+
+        /// <summary>
+        /// Gets a collection of all response cookies set by the service.
+        /// </summary>
+        /// <returns>A list of response cookies.</returns>
+        public ICookieValueCollection GetCookies()
+        {
+            return new CookieValueCollection(Context.Response.Cookies);
         }
 
         /// <summary>

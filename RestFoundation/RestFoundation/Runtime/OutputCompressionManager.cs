@@ -26,7 +26,7 @@ namespace RestFoundation.Runtime
 
             if (!String.IsNullOrEmpty(outputEncoding))
             {
-                context.Response.SetHeader(context.Response.Headers.ContentEncoding, outputEncoding);
+                context.Response.SetHeader(context.Response.HeaderNames.ContentEncoding, outputEncoding);
             }
         }
     }
