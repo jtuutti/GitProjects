@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using System;
 using System.Globalization;
 using System.Web;
 
@@ -17,7 +20,7 @@ namespace RestFoundation.Runtime
             {
                 ILogWriter writerSnapshot = Writer;
 
-                if (writerSnapshot == null || writerSnapshot is NullLogWriter)
+                if (writerSnapshot == null || !writerSnapshot.LogGeneratedInfo)
                 {
                     return false;
                 }

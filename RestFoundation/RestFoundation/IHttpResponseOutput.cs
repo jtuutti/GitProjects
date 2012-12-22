@@ -83,15 +83,5 @@ namespace RestFoundation
         /// <param name="values">An object array that contains zero or more objects to format.</param>
         /// <returns>The response output object.</returns>
         IHttpResponseOutput WriteFormat(string format, params object[] values);
-
-        /// <summary>
-        /// Replaces the format item in a specified string with the string representation of a corresponding object in a specified array,
-        /// then writes the formatted string into the output stream.
-        /// </summary>
-        /// <param name="provider">An object that supplies culture-specific formatting information.</param>
-        /// <param name="format">The format string.</param>
-        /// <param name="values">An object array that contains zero or more objects to format.</param>
-        /// <returns>The response output object.</returns>
-        IHttpResponseOutput WriteFormat(IFormatProvider provider, string format, params object[] values);
     }
 }
