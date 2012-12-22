@@ -293,7 +293,7 @@
             Writes a warning message into the log buffer.
             The implementation should add a line break at the end of the message.
             </summary>
-      <param name="debug">A warning message.</param>
+      <param name="warning">A warning message.</param>
       <returns>The log writer instance.</returns>
     </member>
     <member name="M:RestFoundation.ILogWriter.Flush">
@@ -506,11 +506,6 @@
             </summary>
       <param name="settings">The JSON formatter settings.</param>
       <returns>The configuration options object.</returns>
-    </member>
-    <member name="P:RestFoundation.RestOptions.JQueryUrl">
-      <summary>
-            Gets the JQuery URL used by the service help and proxy interface.
-            </summary>
     </member>
     <member name="P:RestFoundation.RestOptions.ServiceProxyHttpsOnly">
       <summary>
@@ -1114,7 +1109,7 @@
             Writes a warning message into the log buffer.
             The implementation should add a line break at the end of the message.
             </summary>
-      <param name="debug">A warning message.</param>
+      <param name="warning">A warning message.</param>
       <returns>The log writer instance.</returns>
     </member>
     <member name="M:RestFoundation.Runtime.NullLogWriter.Flush">
@@ -7847,22 +7842,6 @@
             Sets the service description for the service help and proxy pages.
             </summary>
       <param name="description">The service description.</param>
-      <returns>The configuration object.</returns>
-    </member>
-    <member name="M:RestFoundation.ProxyConfiguration.SetJQueryUrl(System.String)">
-      <summary>
-            Sets the JQuery URL if the default CDN location "http://code.jquery.com/jquery-1.7.2.min.js" is not desired.
-            The service help and proxy interface was designed with JQuery version 1.7.2.
-            </summary>
-      <param name="url">The JQuery HTTP/HTTPS URL.</param>
-      <returns>The configuration object.</returns>
-    </member>
-    <member name="M:RestFoundation.ProxyConfiguration.SetJQueryUrl(System.Uri)">
-      <summary>
-            Sets the JQuery URL if the default CDN location "http://code.jquery.com/jquery-1.7.2.min.js" is not desired.
-            The service help and proxy interface was designed with JQuery version 1.7.2.
-            </summary>
-      <param name="url">The JQuery HTTP/HTTPS URL.</param>
       <returns>The configuration object.</returns>
     </member>
     <member name="M:RestFoundation.ProxyConfiguration.HttpsOnly">

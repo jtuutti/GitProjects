@@ -23,11 +23,6 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Gets the JQuery URL used by the service help and proxy interface.
-        /// </summary>
-        public string JQueryUrl { get; internal set; }
-
-        /// <summary>
         /// Gets a value indicating whether the service proxy must be accessed through the HTTPS protocol only.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]

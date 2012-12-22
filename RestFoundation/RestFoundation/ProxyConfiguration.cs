@@ -69,6 +69,8 @@ namespace RestFoundation
             ProxyPathProvider.AppInitialize();
             SetAllowUnsafeHeaderParsing();
 
+            RouteTable.Routes.Add("ProxyCss", new Route(relativeUrl + "/help.css", new CssRouteHandler()));
+            RouteTable.Routes.Add("ProxyJQuery", new Route(relativeUrl + "/jquery.js", new JQueryRouteHandler()));
             RouteTable.Routes.MapPageRoute("ProxyIndex", relativeUrl + "/index", "~/index.aspx");
             RouteTable.Routes.MapPageRoute(String.Empty, relativeUrl + "/metadata", "~/metadata.aspx");
             RouteTable.Routes.MapPageRoute(String.Empty, relativeUrl + "/output", "~/output.aspx");
@@ -86,40 +88,6 @@ namespace RestFoundation
         public ProxyConfiguration WithServiceDescription(string description)
         {
             Rest.Configuration.Options.ServiceDescription = description;
-            return this;
-        }
-
-        /// <summary>
-        /// Sets the JQuery URL if the default CDN location "http://code.jquery.com/jquery-1.7.2.min.js" is not desired.
-        /// The service help and proxy interface was designed with JQuery version 1.7.2.
-        /// </summary>
-        /// <param name="url">The JQuery HTTP/HTTPS URL.</param>
-        /// <returns>The configuration object.</returns>
-        public ProxyConfiguration SetJQueryUrl(string url)
-        {
-            if (String.IsNullOrEmpty(url))
-            {
-                throw new ArgumentNullException("url");
-            }
-
-            SetJQueryUrl(new Uri(url, UriKind.RelativeOrAbsolute));
-            return this;
-        }
-
-        /// <summary>
-        /// Sets the JQuery URL if the default CDN location "http://code.jquery.com/jquery-1.7.2.min.js" is not desired.
-        /// The service help and proxy interface was designed with JQuery version 1.7.2.
-        /// </summary>
-        /// <param name="url">The JQuery HTTP/HTTPS URL.</param>
-        /// <returns>The configuration object.</returns>
-        public ProxyConfiguration SetJQueryUrl(Uri url)
-        {
-            if (url == null)
-            {
-                throw new ArgumentNullException("url");
-            }
-
-            Rest.Configuration.Options.JQueryUrl = url.ToString();
             return this;
         }
 
