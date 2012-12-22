@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
-using System.Text;
 using System.Web;
 using RestFoundation.Collections;
 using RestFoundation.Formatters;

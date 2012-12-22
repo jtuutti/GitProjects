@@ -5013,16 +5013,6 @@
       <param name="values">An object array that contains zero or more objects to format.</param>
       <returns>The response output object.</returns>
     </member>
-    <member name="M:RestFoundation.IHttpResponseOutput.WriteFormat(System.IFormatProvider,System.String,System.Object[])">
-      <summary>
-            Replaces the format item in a specified string with the string representation of a corresponding object in a specified array,
-            then writes the formatted string into the output stream.
-            </summary>
-      <param name="provider">An object that supplies culture-specific formatting information.</param>
-      <param name="format">The format string.</param>
-      <param name="values">An object array that contains zero or more objects to format.</param>
-      <returns>The response output object.</returns>
-    </member>
     <member name="P:RestFoundation.IHttpResponseOutput.Buffer">
       <summary>
             Gets or sets a value indicating whether the output should be buffered.
@@ -6099,16 +6089,6 @@
       <param name="values">An object array that contains zero or more objects to format.</param>
       <returns>The response output object.</returns>
     </member>
-    <member name="M:RestFoundation.Context.HttpResponseOutput.WriteFormat(System.IFormatProvider,System.String,System.Object[])">
-      <summary>
-            Replaces the format item in a specified string with the string representation of a corresponding object in a specified array,
-            then writes the formatted string into the output stream.
-            </summary>
-      <param name="provider">An object that supplies culture-specific formatting information.</param>
-      <param name="format">The format string.</param>
-      <param name="values">An object array that contains zero or more objects to format.</param>
-      <returns>The response output object.</returns>
-    </member>
     <member name="P:RestFoundation.Context.HttpResponseOutput.Buffer">
       <summary>
             Gets or sets a value indicating whether the output should be buffered.
@@ -7083,6 +7063,12 @@
             Defines an HTTP response.
             </summary>
     </member>
+    <member name="M:RestFoundation.IHttpResponse.GetHeaders">
+      <summary>
+            Gets a collection of all response headers set by the service.
+            </summary>
+      <returns>A list of response headers.</returns>
+    </member>
     <member name="M:RestFoundation.IHttpResponse.GetHeader(System.String)">
       <summary>
             Gets a response header value by name.
@@ -7111,6 +7097,12 @@
       <summary>
             Clears all response headers.
             </summary>
+    </member>
+    <member name="M:RestFoundation.IHttpResponse.GetCharsetEncoding">
+      <summary>
+            Gets the response character encoding.
+            </summary>
+      <returns>Returns the encoding.</returns>
     </member>
     <member name="M:RestFoundation.IHttpResponse.SetCharsetEncoding(System.Text.Encoding)">
       <summary>
@@ -7142,6 +7134,12 @@
             </summary>
       <param name="statusCode">The status code.</param>
       <param name="statusDescription">The status description.</param>
+    </member>
+    <member name="M:RestFoundation.IHttpResponse.GetCookies">
+      <summary>
+            Gets a collection of all response cookies set by the service.
+            </summary>
+      <returns>A list of response cookies.</returns>
     </member>
     <member name="M:RestFoundation.IHttpResponse.GetCookie(System.String)">
       <summary>
@@ -7191,13 +7189,18 @@
             Gets the response output.
             </summary>
     </member>
+    <member name="P:RestFoundation.IHttpResponse.IsSuccess">
+      <summary>
+            Gets a value indicating whether the response status code is successful.
+            </summary>
+    </member>
     <member name="P:RestFoundation.IHttpResponse.TrySkipIisCustomErrors">
       <summary>
             Gets or sets a value indicating whether custom IIS 7+ error pages should be
             skipped, if possible.
             </summary>
     </member>
-    <member name="P:RestFoundation.IHttpResponse.Headers">
+    <member name="P:RestFoundation.IHttpResponse.HeaderNames">
       <summary>
             Gets response header names.
             </summary>
@@ -7603,6 +7606,12 @@
             </summary>
       <param name="output">The HTTP response output.</param>
     </member>
+    <member name="M:RestFoundation.Context.HttpResponse.GetHeaders">
+      <summary>
+            Gets a collection of all response headers set by the service.
+            </summary>
+      <returns>A list of response headers.</returns>
+    </member>
     <member name="M:RestFoundation.Context.HttpResponse.GetHeader(System.String)">
       <summary>
             Gets a response header value by name.
@@ -7631,6 +7640,12 @@
       <summary>
             Clears all response headers.
             </summary>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponse.GetCharsetEncoding">
+      <summary>
+            Gets the response character encoding.
+            </summary>
+      <returns>Returns the encoding.</returns>
     </member>
     <member name="M:RestFoundation.Context.HttpResponse.SetCharsetEncoding(System.Text.Encoding)">
       <summary>
@@ -7662,6 +7677,12 @@
             </summary>
       <param name="statusCode">The status code.</param>
       <param name="statusDescription">The status description.</param>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponse.GetCookies">
+      <summary>
+            Gets a collection of all response cookies set by the service.
+            </summary>
+      <returns>A list of response cookies.</returns>
     </member>
     <member name="M:RestFoundation.Context.HttpResponse.GetCookie(System.String)">
       <summary>
@@ -7711,13 +7732,18 @@
             Gets the response output.
             </summary>
     </member>
+    <member name="P:RestFoundation.Context.HttpResponse.IsSuccess">
+      <summary>
+            Gets a value indicating whether the response status code is successful.
+            </summary>
+    </member>
     <member name="P:RestFoundation.Context.HttpResponse.TrySkipIisCustomErrors">
       <summary>
             Gets or sets a value indicating whether custom IIS 7+ error pages should be
             skipped, if possible.
             </summary>
     </member>
-    <member name="P:RestFoundation.Context.HttpResponse.Headers">
+    <member name="P:RestFoundation.Context.HttpResponse.HeaderNames">
       <summary>
             Gets response header names.
             </summary>

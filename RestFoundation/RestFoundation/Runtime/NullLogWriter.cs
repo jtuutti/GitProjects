@@ -1,4 +1,7 @@
-﻿namespace RestFoundation.Runtime
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Represents a dummy log writer that ignores logged messages.

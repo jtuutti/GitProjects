@@ -134,7 +134,7 @@
     <Compile Include="Client\IRestSerializerFactory.cs" />
     <Compile Include="Client\RestClient.cs" />
     <Compile Include="Client\RestResource.cs" />
-    <Compile Include="Client\RestResourceT.cs" />
+    <Compile Include="Client\RestResourceOfT.cs" />
     <Compile Include="Client\RestResourceType.cs" />
     <Compile Include="Client\IRestClient.cs" />
     <Compile Include="Client\IRestSerializer.cs" />

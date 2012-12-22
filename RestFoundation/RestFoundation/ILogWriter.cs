@@ -1,4 +1,7 @@
-﻿namespace RestFoundation
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+namespace RestFoundation
 {
     /// <summary>
     /// Defines a log writer for the services.

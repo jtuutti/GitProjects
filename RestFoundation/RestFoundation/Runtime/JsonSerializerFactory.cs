@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿// <copyright>
+// Dmitry Starosta, 2012
+// </copyright>
+using Newtonsoft.Json;
 
 namespace RestFoundation.Runtime
 {
