@@ -54,9 +54,9 @@ namespace RestFoundation.Runtime
         /// Writes a warning message into the log buffer.
         /// The implementation should add a line break at the end of the message.
         /// </summary>
-        /// <param name="debug">A warning message.</param>
+        /// <param name="warning">A warning message.</param>
         /// <returns>The log writer instance.</returns>
-        public ILogWriter WriteWarning(string debug)
+        public ILogWriter WriteWarning(string warning)
         {
             return this;
         }
