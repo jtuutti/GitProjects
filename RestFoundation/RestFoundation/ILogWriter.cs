@@ -42,9 +42,9 @@ namespace RestFoundation
         /// Writes a warning message into the log buffer.
         /// The implementation should add a line break at the end of the message.
         /// </summary>
-        /// <param name="debug">A warning message.</param>
+        /// <param name="warning">A warning message.</param>
         /// <returns>The log writer instance.</returns>
-        ILogWriter WriteWarning(string debug);
+        ILogWriter WriteWarning(string warning);
 
         /// <summary>
         /// Flushes the log buffer.
