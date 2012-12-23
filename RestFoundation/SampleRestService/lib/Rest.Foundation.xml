@@ -142,6 +142,32 @@
             Gets the resource object to be passed into the service method.
             </summary>
     </member>
+    <member name="T:RestFoundation.Collections.Specialized.LinkCollection">
+      <summary>
+            A collection of Link header values.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Collections.Specialized.LinkCollection.#ctor(System.Collections.Generic.IList{System.String})">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Collections.Specialized.LinkCollection" /> class.
+            </summary>
+      <param name="linkValues">A list of Link header values.</param>
+    </member>
+    <member name="M:RestFoundation.Collections.Specialized.LinkCollection.ToList">
+      <summary>
+            Returns a list <see cref="T:RestFoundation.Runtime.Link" /> objects representing the Link header values.
+            </summary>
+      <returns>A list of <see cref="T:RestFoundation.Runtime.Link" /> objects.</returns>
+    </member>
+    <member name="M:RestFoundation.Collections.Specialized.LinkCollection.GetEnumerator">
+      <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+      <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+            </returns>
+      <filterpriority>1</filterpriority>
+    </member>
     <member name="T:RestFoundation.DependencyBuilder">
       <summary>
             Represents a dependency builder for the default service locator.
@@ -384,6 +410,101 @@
             instead of the ISO 8601 format. This property is set to false by default.
             </summary>
     </member>
+    <member name="T:RestFoundation.Runtime.Link">
+      <summary>
+            Represents a Link HTTP header value.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Runtime.Link.#ctor(System.Uri,System.String,System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.Link" /> struct.
+            </summary>
+      <param name="href">An absolute or relative URL.</param>
+      <param name="rel">A relation value.</param>
+      <param name="anchor">An optional URL anchor.</param>
+      <param name="title">An optional title value.</param>
+      <param name="additionalParameters">Additional link parameters</param>
+    </member>
+    <member name="M:RestFoundation.Runtime.Link.op_Equality(RestFoundation.Runtime.Link,RestFoundation.Runtime.Link)">
+      <summary>
+            Compares two <see cref="T:RestFoundation.Runtime.Link" /> objects for equality.
+            </summary>
+      <param name="left">The first object</param>
+      <param name="right">The second object</param>
+      <returns>true if both objects are equivalent; otherwise, false.</returns>
+    </member>
+    <member name="M:RestFoundation.Runtime.Link.op_Inequality(RestFoundation.Runtime.Link,RestFoundation.Runtime.Link)">
+      <summary>
+            Compares two <see cref="T:RestFoundation.Runtime.Link" /> objects for inequality.
+            </summary>
+      <param name="left">The first object</param>
+      <param name="right">The second object</param>
+      <returns>true if both objects are not equivalent; otherwise, false.</returns>
+    </member>
+    <member name="M:RestFoundation.Runtime.Link.GetAdditionalParameter(System.String)">
+      <summary>
+            Gets additional an additional parameter specified in the Link header.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <returns>The parameter value.</returns>
+    </member>
+    <member name="M:RestFoundation.Runtime.Link.Equals(RestFoundation.Runtime.Link)">
+      <summary>
+            Indicates whether the current object is equal to another object of the same type.
+            </summary>
+      <returns>
+            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+            </returns>
+      <param name="other">An object to compare with this object.</param>
+    </member>
+    <member name="M:RestFoundation.Runtime.Link.Equals(System.Object)">
+      <summary>
+            Indicates whether this instance and a specified object are equal.
+            </summary>
+      <returns>
+            true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.
+            </returns>
+      <param name="obj">Another object to compare to. </param>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="M:RestFoundation.Runtime.Link.GetHashCode">
+      <summary>
+            Returns the hash code for this instance.
+            </summary>
+      <returns>
+            A 32-bit signed integer that is the hash code for this instance.
+            </returns>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="M:RestFoundation.Runtime.Link.ToString">
+      <summary>
+            Returns the fully qualified type name of this instance.
+            </summary>
+      <returns>
+            A <see cref="T:System.String" /> containing a fully qualified type name.
+            </returns>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="P:RestFoundation.Runtime.Link.Href">
+      <summary>
+            Gets the link URL.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Link.Rel">
+      <summary>
+            Gets the link relation to the resource.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Link.Anchor">
+      <summary>
+            Gets the URL anchor.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Link.Title">
+      <summary>
+            Gets the link title.
+            </summary>
+    </member>
     <member name="T:RestFoundation.ResourceState">
       <summary>
             Represents the resource state for service methods.
@@ -621,6 +742,11 @@
     <member name="P:RestFoundation.RestResources.HttpsRequiredStatusDescription">
       <summary>
               Looks up a localized string similar to HTTPS required.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.InvalidArgumentValue">
+      <summary>
+              Looks up a localized string similar to The argument contains invalid elements..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidAsyncServiceTimeout">
@@ -2489,7 +2615,7 @@
             Returns all values associated with the key as a collection.
             </summary>
       <param name="key">The key.</param>
-      <returns>The collection of values for the key.</returns>
+      <returns>The list of values for the key.</returns>
     </member>
     <member name="M:RestFoundation.Collections.IStringValueCollection.ToNameValueCollection">
       <summary>
@@ -2541,7 +2667,7 @@
             Returns all values associated with the key as a collection.
             </summary>
       <param name="key">The key.</param>
-      <returns>The collection of values for the key.</returns>
+      <returns>The list of values for the key.</returns>
     </member>
     <member name="M:RestFoundation.Collections.Concrete.StringValueCollection.ToNameValueCollection">
       <summary>
@@ -3596,6 +3722,11 @@
             Gets the Content-Language header value as a <see cref="T:System.Globalization.CultureInfo" /> object.
             </summary>
     </member>
+    <member name="P:RestFoundation.Collections.IHeaderCollection.Links">
+      <summary>
+            Gets a list of links specified in the Link header.
+            </summary>
+    </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.Authorization">
       <summary>
             Gets the Authorization header value.
@@ -3700,6 +3831,11 @@
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.ContentLanguageCulture">
       <summary>
             Gets the Content-Language header value as a <see cref="T:System.Globalization.CultureInfo" /> object.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.Links">
+      <summary>
+            Gets a list of links specified in the Link header.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.ContentEncoding">
@@ -7209,6 +7345,36 @@
             </summary>
       <param name="cookie">The cookie object.</param>
     </member>
+    <member name="M:RestFoundation.IHttpResponse.SetLink(System.String,System.String)">
+      <summary>
+            Sets a link header with the provided href and rel.
+            </summary>
+      <param name="href">The href URL.</param>
+      <param name="rel">The relationship value.</param>
+    </member>
+    <member name="M:RestFoundation.IHttpResponse.SetLink(System.String,System.String,System.String)">
+      <summary>
+            Sets a link header with the provided href, rel and title.
+            </summary>
+      <param name="href">The href URL.</param>
+      <param name="rel">The relationship value.</param>
+      <param name="title">The link title.</param>
+    </member>
+    <member name="M:RestFoundation.IHttpResponse.SetLink(System.Uri,System.String)">
+      <summary>
+            Sets a link header with the provided href and rel.
+            </summary>
+      <param name="href">The href URL.</param>
+      <param name="rel">The relationship value.</param>
+    </member>
+    <member name="M:RestFoundation.IHttpResponse.SetLink(System.Uri,System.String,System.String)">
+      <summary>
+            Sets a link header with the provided href, rel and title.
+            </summary>
+      <param name="href">The href URL.</param>
+      <param name="rel">The relationship value.</param>
+      <param name="title">The link title.</param>
+    </member>
     <member name="M:RestFoundation.IHttpResponse.SetFileDependencies(System.String)">
       <summary>
             Adds the file as a response dependency to create an e-tag, last modified time and
@@ -7751,6 +7917,40 @@
             Expires a response cookie.
             </summary>
       <param name="cookie">The cookie object.</param>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponse.SetLink(System.String,System.String)">
+      <summary>
+            Sets a link header with the provided href and rel.
+            </summary>
+      <param name="href">The href URL.</param>
+      <param name="rel">The relationship value.</param>
+      <exception cref="T:System.ArgumentException">If href or rel contain invalid characters.</exception>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponse.SetLink(System.String,System.String,System.String)">
+      <summary>
+            Sets a link header with the provided href, rel and title.
+            </summary>
+      <param name="href">The href URL.</param>
+      <param name="rel">The relationship value.</param>
+      <param name="title">The link title.</param>
+      <exception cref="T:System.ArgumentException">If href or rel contain invalid characters.</exception>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponse.SetLink(System.Uri,System.String)">
+      <summary>
+            Sets a link header with the provided href and rel.
+            </summary>
+      <param name="href">The href URL.</param>
+      <param name="rel">The relationship value.</param>
+      <exception cref="T:System.ArgumentException">If href or rel contain invalid characters.</exception>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponse.SetLink(System.Uri,System.String,System.String)">
+      <summary>
+            Sets a link header with the provided href, rel and title.
+            </summary>
+      <param name="href">The href URL.</param>
+      <param name="rel">The relationship value.</param>
+      <param name="title">The link title.</param>
+      <exception cref="T:System.ArgumentException">If href or rel contain invalid characters.</exception>
     </member>
     <member name="M:RestFoundation.Context.HttpResponse.SetFileDependencies(System.String)">
       <summary>

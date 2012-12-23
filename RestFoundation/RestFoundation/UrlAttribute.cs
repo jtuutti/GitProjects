@@ -65,6 +65,11 @@ namespace RestFoundation
         }
 
         /// <summary>
+        /// Gets a sequence of allowed HTTP methods.
+        /// </summary>
+        public IEnumerable<HttpMethod> HttpMethods { get; internal set; }
+
+        /// <summary>
         /// Gets or sets the URL priority. A larger priority puts the URL route higher in the route collection.
         /// 0 is the default priority.
         /// </summary>
@@ -74,11 +79,6 @@ namespace RestFoundation
         /// Gets the URL template.
         /// </summary>
         public string UrlTemplate { get; private set; }
-
-        /// <summary>
-        /// Gets a sequence of allowed HTTP methods.
-        /// </summary>
-        public IEnumerable<HttpMethod> HttpMethods { get; internal set; }
 
         /// <summary>
         /// Gets or sets the supporting web page URL. It can be a virtual path to an existing
