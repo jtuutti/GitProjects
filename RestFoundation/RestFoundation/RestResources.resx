@@ -461,4 +461,8 @@
     <value>Invalid service URL or method lambda expression provided.</value>
     <comment>Invalid service URL or method lambda expression provided.</comment>
   </data>
+  <data name="DisallowedMediaTypeParameters" xml:space="preserve">
+    <value>Media type parameters are not allowed.</value>
+    <comment>Media type parameters are not allowed.</comment>
+  </data>
 </root>

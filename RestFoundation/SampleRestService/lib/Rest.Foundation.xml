@@ -573,6 +573,11 @@
               Looks up a localized string similar to HTTP method is not allowed..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.DisallowedMediaTypeParameters">
+      <summary>
+              Looks up a localized string similar to Media type parameters are not allowed..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.DuplicateAuthenticationBehavior">
       <summary>
               Looks up a localized string similar to Only a single authentication behavior can be associated with a service method. That includes global behaviors..
@@ -3550,6 +3555,12 @@
             Gets the Accept-Language header value as a <see cref="T:System.Globalization.CultureInfo" /> object.
             </summary>
     </member>
+    <member name="P:RestFoundation.Collections.IHeaderCollection.AcceptVersion">
+      <summary>
+            Gets the version specified in the version parameter of the mime type provided in the
+            Accept header value. This value defaults to 0 if no version was specified.
+            </summary>
+    </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.ContentType">
       <summary>
             Gets the Content-Type header value.
@@ -3658,6 +3669,12 @@
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AcceptLanguageCulture">
       <summary>
             Gets the Accept-Language header value as a <see cref="T:System.Globalization.CultureInfo" /> object.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AcceptVersion">
+      <summary>
+            Gets the version specified in the version parameter of the mime type provided in the
+            Accept header value. This value defaults to 0 if no version was specified.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.ContentType">
@@ -4821,6 +4838,7 @@
             </summary>
       <param name="mediaType">The media type.</param>
       <returns>The associated media type formatter or null.</returns>
+      <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
     </member>
     <member name="M:RestFoundation.MediaTypeFormatterBuilder.Set(System.String,RestFoundation.Formatters.IMediaTypeFormatter)">
       <summary>
@@ -4828,6 +4846,7 @@
             </summary>
       <param name="mediaType">The media type.</param>
       <param name="formatter">The media type formatter.</param>
+      <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
     </member>
     <member name="M:RestFoundation.MediaTypeFormatterBuilder.Remove(System.String)">
       <summary>
@@ -4838,6 +4857,7 @@
             true if a media type formatter was removed; false if no formatter had been associated
             for the media type.
             </returns>
+      <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
     </member>
     <member name="M:RestFoundation.MediaTypeFormatterBuilder.Clear">
       <summary>
@@ -5739,6 +5759,12 @@
     <member name="P:RestFoundation.Runtime.AcceptValue.Charset">
       <summary>
             Gets the item encoding. If an encoding is not specified, UTF-8 is assumed.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.AcceptValue.Version">
+      <summary>
+            Gets the accepted mime type version. If the version is not specified, it is assumed
+            to be 0.
             </summary>
     </member>
     <member name="P:RestFoundation.Runtime.AcceptValue.CanAccept">

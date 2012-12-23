@@ -11,6 +11,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using RestFoundation.Collections.Specialized;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Collections.Concrete
 {
@@ -92,6 +93,12 @@ namespace RestFoundation.Collections.Concrete
         /// Gets the Accept-Language header value as a <see cref="CultureInfo"/> object.
         /// </summary>
         public CultureInfo AcceptLanguageCulture { get; protected set; }
+
+        /// <summary>
+        /// Gets the version specified in the version parameter of the mime type provided in the
+        /// Accept header value. This value defaults to 0 if no version was specified.
+        /// </summary>
+        public decimal AcceptVersion { get; protected set; }
 
         /// <summary>
         /// Gets the Content-Type header value.
@@ -208,6 +215,9 @@ namespace RestFoundation.Collections.Concrete
             var acceptValues = new AcceptValueCollection(TryGet("Accept"));
             AcceptType = acceptValues.GetPreferredName();
             AcceptTypes = acceptValues.AcceptedNames;
+
+            AcceptValue? acceptedTypeValue = acceptValues.GetPreferredValue();
+            AcceptVersion = acceptedTypeValue.HasValue ? acceptedTypeValue.Value.Version : 0;
         }
 
         private void SetAcceptCharsets()

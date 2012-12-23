@@ -21,6 +21,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="mediaType">The media type.</param>
         /// <returns>The associated media type formatter or null.</returns>
+        /// <exception cref="ArgumentException">If media type parameters are provided.</exception>
         public IMediaTypeFormatter Get(string mediaType)
         {
             if (String.IsNullOrEmpty(mediaType))
@@ -28,7 +29,12 @@ namespace RestFoundation
                 throw new ArgumentNullException("mediaType");
             }
 
-            return MediaTypeFormatterRegistry.GetFormatter(mediaType);
+            if (mediaType.IndexOf(';') >= 0 || mediaType.IndexOf(',') >= 0)
+            {
+                throw new ArgumentException(RestResources.DisallowedMediaTypeParameters, "mediaType");
+            }
+
+            return MediaTypeFormatterRegistry.GetFormatter(mediaType.Trim());
         }
 
         /// <summary>
@@ -36,6 +42,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="mediaType">The media type.</param>
         /// <param name="formatter">The media type formatter.</param>
+        /// <exception cref="ArgumentException">If media type parameters are provided.</exception>
         public void Set(string mediaType, IMediaTypeFormatter formatter)
         {
             if (formatter == null)
@@ -48,7 +55,12 @@ namespace RestFoundation
                 throw new ArgumentNullException("mediaType");
             }
 
-            MediaTypeFormatterRegistry.SetFormatter(mediaType, formatter);
+            if (mediaType.IndexOf(';') >= 0 || mediaType.IndexOf(',') >= 0)
+            {
+                throw new ArgumentException(RestResources.DisallowedMediaTypeParameters, "mediaType");
+            }
+
+            MediaTypeFormatterRegistry.SetFormatter(mediaType.Trim(), formatter);
         }
 
         /// <summary>
@@ -59,6 +71,7 @@ namespace RestFoundation
         /// true if a media type formatter was removed; false if no formatter had been associated
         /// for the media type.
         /// </returns>
+        /// <exception cref="ArgumentException">If media type parameters are provided.</exception>
         public bool Remove(string mediaType)
         {
             if (String.IsNullOrEmpty(mediaType))
@@ -66,7 +79,12 @@ namespace RestFoundation
                 throw new ArgumentNullException("mediaType");
             }
 
-            return MediaTypeFormatterRegistry.RemoveFormatter(mediaType);
+            if (mediaType.IndexOf(';') >= 0 || mediaType.IndexOf(',') >= 0)
+            {
+                throw new ArgumentException(RestResources.DisallowedMediaTypeParameters, "mediaType");
+            }
+
+            return MediaTypeFormatterRegistry.RemoveFormatter(mediaType.Trim());
         }
 
         /// <summary>

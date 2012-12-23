@@ -61,6 +61,12 @@ namespace RestFoundation.Collections
         /// Gets the Accept-Language header value as a <see cref="CultureInfo"/> object.
         /// </summary>
         CultureInfo AcceptLanguageCulture { get; }
+        
+        /// <summary>
+        /// Gets the version specified in the version parameter of the mime type provided in the
+        /// Accept header value. This value defaults to 0 if no version was specified.
+        /// </summary>
+        decimal AcceptVersion { get; }
 
         /// <summary>
         /// Gets the Content-Type header value.

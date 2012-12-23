@@ -15,20 +15,23 @@ namespace RestFoundation.Runtime
     public struct AcceptValue : IComparable<AcceptValue>, IEquatable<AcceptValue>
     {
         private const int DefaultLevel = 0;
-        private const float DefaultWeight = 1.0f;
+        private const decimal DefaultVersion = 0;
+        private const decimal DefaultWeight = 1.0m;
 
         private const string AcceptKey = "accept-key";
         private const string LevelKey = "level";
         private const string WeightKey = "q";
         private const string CharsetKey = "charset";
+        private const string VersionKey = "version";
 
         private const string InvalidAcceptHeaderFormat = "One of the Accept* HTTP headers has an invalid format";
         private const string InvalidValueMessage = "Invalid {0} value to parse";
 
         private readonly string m_name;
-        private readonly float m_weight;
-        private readonly int m_level;
+        private readonly decimal m_weight;
+        private readonly decimal m_level;
         private readonly string m_charset;
+        private readonly decimal m_version;
         private readonly int m_ordinal;
 
         /// <summary>
@@ -47,14 +50,14 @@ namespace RestFoundation.Runtime
             this = Parse(value);
         }
 
-        private AcceptValue(string name, int ordinal, float weight, int level, string charset)
+        private AcceptValue(string name, int ordinal, decimal weight, int level, string charset, decimal version)
         {
             if (String.IsNullOrEmpty(name))
             {
                 throw new ArgumentNullException("name");
             }
 
-            if (weight < 0.0 || weight > DefaultWeight)
+            if (weight < 0 || weight > DefaultWeight)
             {
                 throw new ArgumentOutOfRangeException("weight");
             }
@@ -69,6 +72,7 @@ namespace RestFoundation.Runtime
             m_weight = weight;
             m_level = level;
             m_charset = charset;
+            m_version = version;
         }
 
         /// <summary>
@@ -85,7 +89,7 @@ namespace RestFoundation.Runtime
         /// <summary>
         /// Gets the weight (or qvalue, quality value) of the item.
         /// </summary>
-        public float Weight
+        public decimal Weight
         {
             get
             {
@@ -96,7 +100,7 @@ namespace RestFoundation.Runtime
         /// <summary>
         /// Gets the level of the item. If a level is not specified, it is assumed to be 0.
         /// </summary>
-        public int Level
+        public decimal Level
         {
             get
             {
@@ -112,6 +116,18 @@ namespace RestFoundation.Runtime
             get
             {
                 return m_charset;
+            }
+        }
+
+        /// <summary>
+        /// Gets the accepted mime type version. If the version is not specified, it is assumed
+        /// to be 0.
+        /// </summary>
+        public decimal Version
+        {
+            get
+            {
+                return m_version;
             }
         }
 
@@ -226,7 +242,7 @@ namespace RestFoundation.Runtime
 
             try
             {
-                return new AcceptValue(GetAcceptValue(itemList), ordinal, GetWeightValue(itemList), GetLevelValue(itemList), GetCharsetValue(itemList));
+                return new AcceptValue(GetAcceptValue(itemList), ordinal, GetWeightValue(itemList), GetLevelValue(itemList), GetCharsetValue(itemList), GetVersionValue(itemList));
             }
             catch (ArgumentException)
             {
@@ -361,16 +377,16 @@ namespace RestFoundation.Runtime
             return acceptItem.Item2;
         }
 
-        private static float GetWeightValue(List<Tuple<string, string>> itemList)
+        private static decimal GetWeightValue(List<Tuple<string, string>> itemList)
         {
             Tuple<string, string> weightItem = itemList.Find(i => i.Item1 == WeightKey);
-            float weight;
+            decimal weight;
 
             if (weightItem == null || String.IsNullOrWhiteSpace(weightItem.Item1))
             {
                 weight = DefaultWeight;
             }
-            else if (!Single.TryParse(weightItem.Item2, out weight))
+            else if (!Decimal.TryParse(weightItem.Item2, NumberStyles.Any, CultureInfo.InvariantCulture, out weight))
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, InvalidValueMessage, "weight"));
             }
@@ -387,7 +403,7 @@ namespace RestFoundation.Runtime
             {
                 level = DefaultLevel;
             }
-            else if (!Int32.TryParse(levelItem.Item2, out level))
+            else if (!Int32.TryParse(levelItem.Item2, NumberStyles.Integer, CultureInfo.InvariantCulture, out level))
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, InvalidValueMessage, "level"));
             }
@@ -400,6 +416,23 @@ namespace RestFoundation.Runtime
             Tuple<string, string> charsetItem = itemList.Find(i => i.Item1 == CharsetKey);
 
             return charsetItem != null && !String.IsNullOrWhiteSpace(charsetItem.Item2) ? charsetItem.Item2.Trim().ToUpperInvariant() : null;
+        }
+
+        private static decimal GetVersionValue(List<Tuple<string, string>> itemList)
+        {
+            Tuple<string, string> versionItem = itemList.Find(i => i.Item1 == VersionKey);
+            decimal version;
+
+            if (versionItem == null || String.IsNullOrWhiteSpace(versionItem.Item1))
+            {
+                version = DefaultVersion;
+            }
+            else if (!Decimal.TryParse(versionItem.Item2, NumberStyles.Any, CultureInfo.InvariantCulture, out version) || version < 0)
+            {
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, InvalidValueMessage, "version"));
+            }
+
+            return version;
         }
     }
 }

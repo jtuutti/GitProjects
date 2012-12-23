@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Globalization;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -56,6 +57,10 @@ namespace RestFoundation.Results
             if (String.IsNullOrEmpty(ContentType))
             {
                 ContentType = "application/javascript";
+            }
+            else if (context.Request.Headers.AcceptVersion > 0 && ContentType.IndexOf("version=", StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                ContentType += String.Format(CultureInfo.InvariantCulture, "; version={0}", context.Request.Headers.AcceptVersion);
             }
 
             context.Response.Output.Clear();

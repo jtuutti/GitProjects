@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Newtonsoft.Json;
 using RestFoundation.Runtime;
 
@@ -40,6 +41,10 @@ namespace RestFoundation.Results
             if (String.IsNullOrEmpty(ContentType))
             {
                 ContentType = "application/json";
+            }
+            else if (context.Request.Headers.AcceptVersion > 0 && ContentType.IndexOf("version=", StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                ContentType += String.Format(CultureInfo.InvariantCulture, "; version={0}", context.Request.Headers.AcceptVersion);
             }
 
             context.Response.Output.Clear();

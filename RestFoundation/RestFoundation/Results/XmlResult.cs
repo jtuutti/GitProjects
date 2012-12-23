@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -49,6 +50,10 @@ namespace RestFoundation.Results
             if (String.IsNullOrEmpty(ContentType))
             {
                 ContentType = "application/json";
+            }
+            else if (context.Request.Headers.AcceptVersion > 0 && ContentType.IndexOf("version=", StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                ContentType += String.Format(CultureInfo.InvariantCulture, "; version={0}", context.Request.Headers.AcceptVersion);
             }
 
             m_encoding = context.Request.Headers.AcceptCharsetEncoding;

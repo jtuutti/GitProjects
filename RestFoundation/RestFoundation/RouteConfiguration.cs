@@ -44,7 +44,7 @@ namespace RestFoundation
 
             foreach (IRestHandler routeHandler in m_routeHandlers)
             {
-                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, mediaType, blockFormatter);
+                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, mediaType.Trim(), blockFormatter);
             }
 
             return this;
@@ -70,7 +70,7 @@ namespace RestFoundation
 
             foreach (IRestHandler routeHandler in m_routeHandlers)
             {
-                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, mediaType, formatter);
+                MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, mediaType.Trim(), formatter);
             }
 
             return this;

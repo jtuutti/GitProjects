@@ -124,6 +124,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Media type parameters are not allowed..
+        /// </summary>
+        internal static string DisallowedMediaTypeParameters {
+            get {
+                return ResourceManager.GetString("DisallowedMediaTypeParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only a single authentication behavior can be associated with a service method. That includes global behaviors..
         /// </summary>
         internal static string DuplicateAuthenticationBehavior {
