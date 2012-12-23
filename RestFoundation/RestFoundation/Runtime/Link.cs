@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace RestFoundation.Runtime
@@ -10,15 +11,19 @@ namespace RestFoundation.Runtime
     {
         private readonly Uri m_href;
         private readonly string m_rel;
+        private readonly string m_anchor;
         private readonly string m_title;
+        private readonly IDictionary<string, string> m_additionalParameters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Link"/> struct.
         /// </summary>
         /// <param name="href">An absolute or relative URL.</param>
         /// <param name="rel">A relation value.</param>
+        /// <param name="anchor">An optional URL anchor.</param>
         /// <param name="title">An optional title value.</param>
-        public Link(Uri href, string rel, string title)
+        /// <param name="additionalParameters">Additional link parameters</param>
+        public Link(Uri href, string rel, string anchor, string title, IDictionary<string, string> additionalParameters)
         {
             if (href == null)
             {
@@ -32,7 +37,9 @@ namespace RestFoundation.Runtime
 
             m_href = href;
             m_rel = rel;
+            m_anchor = anchor;
             m_title = title;
+            m_additionalParameters = additionalParameters ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -54,6 +61,17 @@ namespace RestFoundation.Runtime
             get
             {
                 return m_rel;
+            }
+        }
+
+        /// <summary>
+        /// Gets the URL anchor.
+        /// </summary>
+        public string Anchor
+        {
+            get
+            {
+                return m_anchor;
             }
         }
 
@@ -88,6 +106,22 @@ namespace RestFoundation.Runtime
         public static bool operator !=(Link left, Link right)
         {
             return !left.Equals(right);
+        }
+
+        /// <summary>
+        /// Gets additional an additional parameter specified in the Link header.
+        /// </summary>
+        /// <param name="name">The parameter name.</param>
+        /// <returns>The parameter value.</returns>
+        public string GetAdditionalParameter(string name)
+        {
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            string value;
+            return m_additionalParameters.TryGetValue(name, out value) ? value : null;
         }
 
         /// <summary>

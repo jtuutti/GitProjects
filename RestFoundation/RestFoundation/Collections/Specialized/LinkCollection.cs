@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Collections.Specialized
@@ -11,6 +12,20 @@ namespace RestFoundation.Collections.Specialized
     /// </summary>
     public class LinkCollection : IEnumerable<string>
     {
+        private const string CommaPlaceholder = "<%cm%>";
+        private const string SemicolonPlaceholder = "<%sc%>";
+        private const string DefaultRelation = "link";
+        private const string Comma = ",";
+        private const string EqualsSign = "=";
+        private const string HashSign = "#";
+        private const string LessThan = "<";
+        private const string GreaterThan = ">";
+        private const string QuotationMark = "\"";
+        private const string Semicolon = ";";
+        private const string Space = " ";
+
+        private static readonly Regex ValueGroupRegex = new Regex(@"=\s*\""([^\""]*[,;][^\""]*)+\""", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
         private readonly IEnumerable<string> m_linkValues;
 
         /// <summary>
@@ -69,11 +84,13 @@ namespace RestFoundation.Collections.Specialized
 
             for (int i = 0; i < linkValues.Count; i++)
             {
-                string linkValue = linkValues[i].TrimEnd(',', ' ');
+                string linkValue = linkValues[i].TrimEnd(Comma[0], Space[0]);
 
-                if (linkValue.Contains(','))
+                linkValue = ValueGroupRegex.Replace(linkValue, m => m.Value.Replace(Comma, CommaPlaceholder).Replace(Semicolon, SemicolonPlaceholder));
+
+                if (linkValue.IndexOf(Comma, StringComparison.Ordinal) >= 0)
                 {
-                    string[] linkValueArray = linkValue.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] linkValueArray = linkValue.Split(new[] { Comma }, StringSplitOptions.RemoveEmptyEntries);
 
                     foreach (string distinctLinkValue in linkValueArray)
                     {
@@ -96,51 +113,53 @@ namespace RestFoundation.Collections.Specialized
                 return default(Link);
             }
 
-            string[] linkValues = linkValue.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] linkParameterValues = linkValue.Split(new[] { Semicolon }, StringSplitOptions.RemoveEmptyEntries);
+            string href = linkParameterValues[0].Trim();
 
-            string href = linkValues[0].Trim();
-
-            if (!href.StartsWith("<", StringComparison.Ordinal) || !href.EndsWith(">", StringComparison.Ordinal))
+            if (!href.StartsWith(LessThan, StringComparison.Ordinal) || !href.EndsWith(GreaterThan, StringComparison.Ordinal))
             {
                 return default(Link);
             }
 
             Uri hrefUri;
 
-            if (!Uri.TryCreate(href.TrimStart('<').TrimEnd('>'), UriKind.RelativeOrAbsolute, out hrefUri))
+            if (!Uri.TryCreate(href.TrimStart(LessThan[0]).TrimEnd(GreaterThan[0]), UriKind.RelativeOrAbsolute, out hrefUri))
             {
                 return default(Link);
             }
 
-            string rel, title;
+            string rel, anchor, title;
+            var additionalParameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            if (linkValues.Length > 1)
+            if (linkParameterValues.Length > 1)
             {
-                ParseRelAndTitle(linkValues, out rel, out title);
+                ParseRelAndTitle(linkParameterValues, additionalParameters, out rel, out anchor, out title);
 
                 if (rel == null)
                 {
-                    rel = "link";
+                    rel = DefaultRelation;
                 }
             }
             else
             {
-                rel = "link";
+                rel = DefaultRelation;
+                anchor = null;
                 title = null;
             }
 
-            return new Link(hrefUri, rel, title);
+            return new Link(hrefUri, rel, anchor, title, additionalParameters);
         }
 
-        private static void ParseRelAndTitle(string[] linkValues, out string rel, out string title)
+        private static void ParseRelAndTitle(string[] linkValues, IDictionary<string, string> additionalParameters, out string rel, out string anchor, out string title)
         {
             rel = null;
+            anchor = null;
             title = null;
 
             for (int i = 1; i < linkValues.Length; i++)
             {
                 string linkValueParameter = linkValues[i];
-                int indexOfEquals = linkValueParameter.IndexOf('=');
+                int indexOfEquals = linkValueParameter.IndexOf(EqualsSign, StringComparison.Ordinal);
 
                 if (indexOfEquals <= 0 || indexOfEquals == linkValueParameter.Length - 1)
                 {
@@ -152,18 +171,31 @@ namespace RestFoundation.Collections.Specialized
 
                 if (String.Equals("rel", name, StringComparison.OrdinalIgnoreCase))
                 {
-                    rel = value.TrimStart('"', ' ').TrimEnd('"', ' ');
+                    rel = ParseLinkParameterValue(value);
                 }
                 else if (String.Equals("title", name, StringComparison.OrdinalIgnoreCase))
                 {
-                    title = value.TrimStart('"', ' ').TrimEnd('"', ' ');
+                    title = ParseLinkParameterValue(value);
                 }
-
-                if (rel != null && title != null)
+                else if (String.Equals("anchor", name, StringComparison.OrdinalIgnoreCase))
                 {
-                    break;
+                    anchor = ParseLinkParameterValue(value);
+
+                    if (!anchor.StartsWith(HashSign, StringComparison.Ordinal))
+                    {
+                        anchor = null;
+                    }
                 }
-            }
+                else
+                {
+                    additionalParameters[name] = ParseLinkParameterValue(value);
+                }
+             }
+        }
+
+        private static string ParseLinkParameterValue(string value)
+        {
+            return value.Trim(QuotationMark[0], Space[0]).Replace(CommaPlaceholder, Comma).Replace(SemicolonPlaceholder, Semicolon);
         }
     }
 }
