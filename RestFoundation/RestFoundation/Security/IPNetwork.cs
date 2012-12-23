@@ -1145,7 +1145,7 @@ namespace RestFoundation.Security
             {
                 if (trySupernet == false)
                 {
-                    throw new ArgumentException("cidr");
+                    throw new ArgumentOutOfRangeException("network1");
                 }
                 supernet = null;
                 return;
@@ -1226,15 +1226,15 @@ namespace RestFoundation.Security
             ipns.AddRange(array);
             RemoveNull(ipns);
             ipns.Sort((ipn1, ipn2) =>
-                      {
-                          int networkCompare = ipn1.NetworkAsInt.CompareTo(ipn2.NetworkAsInt);
-                          if (networkCompare == 0)
-                          {
-                              int cidrCompare = ipn1.m_cidr.CompareTo(ipn2.m_cidr);
-                              return cidrCompare;
-                          }
-                          return networkCompare;
-                      });
+            {
+                int networkCompare = ipn1.NetworkAsInt.CompareTo(ipn2.NetworkAsInt);
+                if (networkCompare == 0)
+                {
+                    int cidrCompare = ipn1.m_cidr.CompareTo(ipn2.m_cidr);
+                    return cidrCompare;
+                }
+                return networkCompare;
+            });
             ipns.Reverse();
 
             return ipns;
@@ -1376,7 +1376,7 @@ namespace RestFoundation.Security
 
         private static void InternalToNetmask(bool tryParse, byte cidr, out IPAddress netmask)
         {
-            if (cidr < 0 || cidr > 32)
+            if (cidr > 32)
             {
                 if (tryParse == false)
                 {

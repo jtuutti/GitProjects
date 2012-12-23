@@ -133,6 +133,36 @@ namespace RestFoundation
         void ExpireCookie(HttpCookie cookie);
 
         /// <summary>
+        /// Sets a link header with the provided href and rel.
+        /// </summary>
+        /// <param name="href">The href URL.</param>
+        /// <param name="rel">The relationship value.</param>
+        void SetLink(string href, string rel);
+
+        /// <summary>
+        /// Sets a link header with the provided href, rel and title.
+        /// </summary>
+        /// <param name="href">The href URL.</param>
+        /// <param name="rel">The relationship value.</param>
+        /// <param name="title">The link title.</param>
+        void SetLink(string href, string rel, string title);
+
+        /// <summary>
+        /// Sets a link header with the provided href and rel.
+        /// </summary>
+        /// <param name="href">The href URL.</param>
+        /// <param name="rel">The relationship value.</param>
+        void SetLink(Uri href, string rel);
+
+        /// <summary>
+        /// Sets a link header with the provided href, rel and title.
+        /// </summary>
+        /// <param name="href">The href URL.</param>
+        /// <param name="rel">The relationship value.</param>
+        /// <param name="title">The link title.</param>
+        void SetLink(Uri href, string rel, string title);
+
+        /// <summary>
         /// Adds the file as a response dependency to create an e-tag, last modified time and
         /// set appropriate caching parameters.
         /// </summary>

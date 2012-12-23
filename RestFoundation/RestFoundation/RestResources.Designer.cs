@@ -214,6 +214,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The argument contains invalid elements..
+        /// </summary>
+        internal static string InvalidArgumentValue {
+            get {
+                return ResourceManager.GetString("InvalidArgumentValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid asynchronous service method timeout provided..
         /// </summary>
         internal static string InvalidAsyncServiceTimeout {

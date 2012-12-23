@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
@@ -42,6 +43,7 @@ namespace RestFoundation.Collections.Concrete
             SetAcceptCharsets();
             SetAcceptEncodings();
             SetAcceptLanguages();
+            SetLinks();
         }
 
         /// <summary>
@@ -124,6 +126,11 @@ namespace RestFoundation.Collections.Concrete
         /// Gets the Content-Language header value as a <see cref="CultureInfo"/> object.
         /// </summary>
         public CultureInfo ContentLanguageCulture { get; protected set; }
+
+        /// <summary>
+        /// Gets a list of links specified in the Link header.
+        /// </summary>
+        public IEnumerable<Link> Links { get; private set; }
 
         /// <summary>
         /// Gets the Content-Encoding header value.
@@ -278,6 +285,20 @@ namespace RestFoundation.Collections.Concrete
             {
                 throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.NonAcceptedContentLanguage);
             }
+        }
+
+        private void SetLinks()
+        {
+            IList<string> linkValues = GetValues("Link");
+
+            if (linkValues == null || linkValues.Count == 0)
+            {
+                Links = new Link[0];
+                return;
+            }
+
+            var links = new LinkCollection(linkValues);
+            Links = new ReadOnlyCollection<Link>(links.ToList());
         }
     }
 }

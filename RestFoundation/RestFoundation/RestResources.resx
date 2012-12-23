@@ -465,4 +465,8 @@
     <value>Media type parameters are not allowed.</value>
     <comment>Media type parameters are not allowed.</comment>
   </data>
+  <data name="InvalidArgumentValue" xml:space="preserve">
+    <value>The argument contains invalid elements.</value>
+    <comment>The argument contains invalid elements.</comment>
+  </data>
 </root>

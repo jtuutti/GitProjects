@@ -61,12 +61,14 @@
     <Compile Include="Behaviors\Context\MethodAuthorizingContext.cs" />
     <Compile Include="Behaviors\Context\MethodExecutedContext.cs" />
     <Compile Include="Behaviors\Context\MethodExecutingContext.cs" />
+    <Compile Include="Collections\Specialized\LinkCollection.cs" />
     <Compile Include="DependencyBuilder.cs" />
     <Compile Include="ILogWriter.cs" />
     <Compile Include="InstanceLifetime.cs" />
     <Compile Include="IOptionsDescriptor.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="JsonFormatterSettings.cs" />
+    <Compile Include="Runtime\Link.cs" />
     <Compile Include="ResourceState.cs" />
     <Compile Include="RestOptions.cs" />
     <Compile Include="RestResources.Designer.cs">

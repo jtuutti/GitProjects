@@ -26,7 +26,7 @@ namespace RestFoundation.Security
 
             if (cidrSubnet < ipnetwork.Cidr)
             {
-                throw new ArgumentException("cidr");
+                throw new ArgumentOutOfRangeException("cidrSubnet");
             }
 
             m_cidrSubnet = cidrSubnet;

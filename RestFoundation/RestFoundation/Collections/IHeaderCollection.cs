@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Collections
 {
@@ -102,6 +103,11 @@ namespace RestFoundation.Collections
         /// Gets the Content-Language header value as a <see cref="CultureInfo"/> object.
         /// </summary>
         CultureInfo ContentLanguageCulture { get; }
+
+        /// <summary>
+        /// Gets a list of links specified in the Link header.
+        /// </summary>
+        IEnumerable<Link> Links { get; }
 
         /// <summary>
         /// Gets the Authorization header value.

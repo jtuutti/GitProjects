@@ -41,8 +41,8 @@ namespace RestFoundation.Collections
         /// Returns all values associated with the key as a collection.
         /// </summary>
         /// <param name="key">The key.</param>
-        /// <returns>The collection of values for the key.</returns>
-        ICollection<string> GetValues(string key);
+        /// <returns>The list of values for the key.</returns>
+        IList<string> GetValues(string key);
 
         /// <summary>
         /// Returns the pairs of keys and objects as a name-value collection.

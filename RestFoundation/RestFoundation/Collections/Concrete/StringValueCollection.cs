@@ -94,8 +94,8 @@ namespace RestFoundation.Collections.Concrete
         /// Returns all values associated with the key as a collection.
         /// </summary>
         /// <param name="key">The key.</param>
-        /// <returns>The collection of values for the key.</returns>
-        public ICollection<string> GetValues(string key)
+        /// <returns>The list of values for the key.</returns>
+        public IList<string> GetValues(string key)
         {
             if (key == null)
             {

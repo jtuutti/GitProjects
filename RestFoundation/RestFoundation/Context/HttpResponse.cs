@@ -2,6 +2,8 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Net;
 using System.Text;
 using System.Web;
@@ -276,6 +278,96 @@ namespace RestFoundation.Context
 
             cookie.Expires = DateTime.Now.AddDays(-1);
             Context.Response.SetCookie(cookie);
+        }
+
+        /// <summary>
+        /// Sets a link header with the provided href and rel.
+        /// </summary>
+        /// <param name="href">The href URL.</param>
+        /// <param name="rel">The relationship value.</param>
+        /// <exception cref="ArgumentException">If href or rel contain invalid characters.</exception>
+        [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads",
+                         Justification = "There is no reason to duplicate the Uri building logic.")]
+        public void SetLink(string href, string rel)
+        {
+            SetLink(href, rel, null);
+        }
+
+        /// <summary>
+        /// Sets a link header with the provided href, rel and title.
+        /// </summary>
+        /// <param name="href">The href URL.</param>
+        /// <param name="rel">The relationship value.</param>
+        /// <param name="title">The link title.</param>
+        /// <exception cref="ArgumentException">If href or rel contain invalid characters.</exception>
+        public void SetLink(string href, string rel, string title)
+        {
+            if (String.IsNullOrEmpty(href))
+            {
+                throw new ArgumentNullException("href");
+            }
+
+            Uri hrefUrl;
+
+            if (!Uri.TryCreate(href, UriKind.RelativeOrAbsolute, out hrefUrl))
+            {
+                throw new ArgumentException(RestResources.InvalidFilePathOrUrl, "href");
+            }
+
+            SetLink(hrefUrl, rel, title);
+        }
+
+        /// <summary>
+        /// Sets a link header with the provided href and rel.
+        /// </summary>
+        /// <param name="href">The href URL.</param>
+        /// <param name="rel">The relationship value.</param>
+        /// <exception cref="ArgumentException">If href or rel contain invalid characters.</exception>
+        public void SetLink(Uri href, string rel)
+        {
+            SetLink(href, rel, null);
+        }
+
+        /// <summary>
+        /// Sets a link header with the provided href, rel and title.
+        /// </summary>
+        /// <param name="href">The href URL.</param>
+        /// <param name="rel">The relationship value.</param>
+        /// <param name="title">The link title.</param>
+        /// <exception cref="ArgumentException">If href or rel contain invalid characters.</exception>
+        public void SetLink(Uri href, string rel, string title)
+        {
+            if (href == null)
+            {
+                throw new ArgumentNullException("href");
+            }
+
+            if (String.IsNullOrEmpty(rel))
+            {
+                throw new ArgumentNullException("rel");
+            }
+
+            string hrefString = href.ToString();
+
+            if (hrefString.IndexOf('<') >= 0 || hrefString.IndexOf('>') >= 0)
+            {
+                throw new ArgumentException(RestResources.InvalidArgumentValue, "href");
+            }
+
+            if (rel.IndexOf('"') >= 0)
+            {
+                throw new ArgumentException(RestResources.InvalidArgumentValue, "rel");
+            }
+
+            var link = new StringBuilder();
+            link.AppendFormat(CultureInfo.InvariantCulture, "<{0}>; rel=\"{1}\"", hrefString, rel);
+
+            if (!String.IsNullOrWhiteSpace(title))
+            {
+                link.AppendFormat(CultureInfo.InvariantCulture, "; title=\"{0}\"", title.Replace('"', '\''));
+            }
+
+            SetHeader("Link", link.ToString());
         }
 
         /// <summary>
