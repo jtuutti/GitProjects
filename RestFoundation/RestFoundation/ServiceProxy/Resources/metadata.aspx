@@ -11,9 +11,9 @@
     {
         EnableViewState = false;
 
-        Guid operationId;
+        int operationId;
         
-        if (!Guid.TryParse(Request.QueryString["oid"], out operationId) || operationId == Guid.Empty)
+        if (!Int32.TryParse(Request.QueryString["oid"], out operationId) || operationId == 0)
         {
             Response.Redirect("index");
             return;

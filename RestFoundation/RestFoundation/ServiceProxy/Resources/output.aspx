@@ -16,11 +16,11 @@
             Response.ContentType = "text/plain";
         }
 
-        string responseText = Request.Params["txt"];
+        string responseText = Server.UrlDecode(Request.Params["txt"]);
 
         if (responseText != null)
         {
-            Response.Write(Server.UrlDecode(responseText));
+            Response.Write(responseText);
         }
 
         Response.End();

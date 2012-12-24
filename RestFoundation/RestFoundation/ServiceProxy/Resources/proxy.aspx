@@ -15,12 +15,12 @@
     private const string UserAgent = "Rest Foundation Proxy";
 
     private ProxyOperation operation;
-    private Guid operationId;
+    private int operationId;
     private string serviceUrl;
 
     protected void Page_Init(object sender, EventArgs e)
     {
-        if (!Guid.TryParse(Request.QueryString["oid"], out operationId) || operationId == Guid.Empty)
+        if (!Int32.TryParse(Request.QueryString["oid"], out operationId) || operationId == 0)
         {
             Response.Redirect("index");
             return;

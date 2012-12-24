@@ -26,7 +26,7 @@ namespace RestFoundation.ServiceProxy
         /// </summary>
         /// <param name="operationId">The proxy operation ID.</param>
         /// <returns>The proxy operation instance.</returns>
-        public static ProxyOperation Get(Guid operationId)
+        public static ProxyOperation Get(int operationId)
         {
             ServiceMethodMetadata metadata = ServiceMethodRegistry.ServiceMethods.SelectMany(m => m.Value).FirstOrDefault(m => m.ServiceMethodId == operationId);
 
