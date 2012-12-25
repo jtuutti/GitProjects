@@ -4,11 +4,11 @@ using RestFoundation;
 using RestFoundation.Behaviors;
 using RestFoundation.Formatters;
 using RestFoundation.Security;
-using RestTest.Behaviors;
 using RestTest.Security;
 using RestTest.SimpleServices;
 using RestTest.StreamCompressors;
 using RestTestContracts;
+using RestTestContracts.Behaviors;
 using RestTestServices;
 using StructureMap;
 

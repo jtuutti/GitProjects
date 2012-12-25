@@ -3,7 +3,7 @@ using System.Linq;
 using RestFoundation;
 using RestFoundation.Behaviors;
 
-namespace RestTest.Behaviors
+namespace RestTestContracts.Behaviors
 {
     public class StatisticsBehavior : ServiceBehavior
     {

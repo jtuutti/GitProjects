@@ -250,6 +250,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid hash key provided..
+        /// </summary>
+        internal static string InvalidHashKey {
+            get {
+                return ResourceManager.GetString("InvalidHashKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A resource cannot be set for the current HTTP method..
         /// </summary>
         internal static string InvalidHttpMethodForResource {
@@ -777,6 +786,15 @@ namespace RestFoundation {
         internal static string UnsatisfiableRequestedRange {
             get {
                 return ResourceManager.GetString("UnsatisfiableRequestedRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service method behavior attribute class &apos;{0}&apos; should be sealed for performance benefits..
+        /// </summary>
+        internal static string UnsealedBehaviorAttributeClass {
+            get {
+                return ResourceManager.GetString("UnsealedBehaviorAttributeClass", resourceCulture);
             }
         }
         

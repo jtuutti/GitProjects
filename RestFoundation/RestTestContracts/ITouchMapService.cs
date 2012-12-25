@@ -1,5 +1,6 @@
 ﻿using RestFoundation;
 using RestFoundation.ServiceProxy;
+using RestTestContracts.Behaviors;
 using RestTestContracts.Metadata;
 
 namespace RestTestContracts
@@ -8,6 +9,7 @@ namespace RestTestContracts
     public interface ITouchMapService
     {
         [Url(Url.Root)]
+        [T3ContextBehavior]
         object Get();
     }
 }

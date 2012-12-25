@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\LoggingBehavior.cs" />
+    <Compile Include="Behaviors\StatisticsBehavior.cs" />
+    <Compile Include="Behaviors\T3ContextBehaviorAttribute.cs" />
     <Compile Include="IDynamicService.cs" />
     <Compile Include="IIndexService.cs" />
     <Compile Include="ITouchMapService.cs" />

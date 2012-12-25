@@ -10,8 +10,6 @@ namespace RestFoundation.Security
 {
     internal sealed class RijndaelEncryptor
     {
-        private const string InvalidHashKey = "Invalid hash key provided.";
-
         private static readonly byte[] hashBuffer = CreateHashBuffer();
 
         private readonly byte[] m_key;
@@ -40,7 +38,7 @@ namespace RestFoundation.Security
 
             if (m_key == null)
             {
-                throw new InvalidOperationException(InvalidHashKey);
+                throw new InvalidOperationException(RestResources.InvalidHashKey);
             }
 
             byte[] data = Encoding.UTF8.GetBytes(value);
@@ -67,7 +65,7 @@ namespace RestFoundation.Security
 
             if (m_key == null)
             {
-                throw new InvalidOperationException(InvalidHashKey);
+                throw new InvalidOperationException(RestResources.InvalidHashKey);
             }
 
             byte[] cipher = Convert.FromBase64String(encryptedValue);

@@ -469,4 +469,12 @@
     <value>The returned task result cannot be started inside the service. Make sure to define tasks returned from services using the new Task&lt;T&gt;() constructor instead of the Task&lt;T&gt;.Factory.StartNew() method.</value>
     <comment>The returned task result cannot be started inside the service. Make sure to define tasks returned from services using the new Task&lt;T&gt;() constructor instead of the Task&lt;T&gt;.Factory.StartNew() method.</comment>
   </data>
+  <data name="UnsealedBehaviorAttributeClass" xml:space="preserve">
+    <value>Service method behavior attribute class '{0}' should be sealed for performance benefits.</value>
+    <comment>Service method behavior attribute class '{0}' should be sealed for performance benefits.</comment>
+  </data>
+  <data name="InvalidHashKey" xml:space="preserve">
+    <value>Invalid hash key provided.</value>
+    <comment>Invalid hash key provided.</comment>
+  </data>
 </root>

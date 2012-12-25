@@ -6,15 +6,13 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using RestFoundation;
-using RestFoundation.Behaviors;
 using RestTestContracts;
 using RestTestContracts.Resources;
-using RestTestServices.Behaviors;
 using RestTestServices.Utilities;
 
 namespace RestTestServices
 {
-    public class TouchMapService : ITouchMapService, IServiceWithBehaviors
+    public class TouchMapService : ITouchMapService
     {
         private static readonly Dictionary<string, string> environments = new Dictionary<string, string>
         {
@@ -25,22 +23,6 @@ namespace RestTestServices
         }; // web.config mocking
 
         public IServiceContext Context { get; set; }
-
-        public IServiceExceptionHandler ExceptionHandler
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-        public IEnumerable<IServiceBehavior> Behaviors
-        {
-            get
-            {
-                yield return new T3ContextBehavior();
-            }
-        }
 
         public object Get()
         {

@@ -3,10 +3,18 @@ using RestFoundation;
 using RestFoundation.Behaviors;
 using RestTestContracts.Resources;
 
-namespace RestTestServices.Behaviors
+namespace RestTestContracts.Behaviors
 {
-    public class T3ContextBehavior : SecureServiceBehavior
+    public sealed class T3ContextBehaviorAttribute : ServiceMethodBehaviorAttribute
     {
+        public override string StatusDescription
+        {
+            get
+            {
+                return "No valid session context found";
+            }
+        }
+
         public override BehaviorMethodAction OnMethodAuthorizing(IServiceContext serviceContext, MethodAuthorizingContext behaviorContext)
         {
             var sessionInfo = new SessionInfo(serviceContext.Request.Headers.TryGet("X-SpeechCycle-SmartCare-ApplicationID"),
@@ -18,7 +26,6 @@ namespace RestTestServices.Behaviors
             if (String.IsNullOrEmpty(sessionInfo.ApplicationId) || String.IsNullOrEmpty(sessionInfo.CustomerId) ||
                 String.IsNullOrEmpty(sessionInfo.Environment) || sessionInfo.SessionId == Guid.Empty)
             {
-                SetStatusDescription("No valid session context found");
                 return BehaviorMethodAction.Stop;
             }
 

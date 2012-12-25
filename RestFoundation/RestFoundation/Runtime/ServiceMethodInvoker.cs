@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -16,6 +17,8 @@ namespace RestFoundation.Runtime
     /// </summary>
     public class ServiceMethodInvoker : IServiceMethodInvoker
     {
+        private static readonly ConcurrentDictionary<MethodInfo, List<ServiceMethodBehaviorAttribute>> methodBehaviors = new ConcurrentDictionary<MethodInfo, List<ServiceMethodBehaviorAttribute>>();
+
         private readonly IServiceBehaviorInvoker m_behaviorInvoker;
         private readonly IParameterValueProvider m_parameterValueProvider;
 
@@ -65,7 +68,7 @@ namespace RestFoundation.Runtime
             }
 
             List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(method, service, handler);
-            AddServiceBehaviors(method, service, behaviors, handler);
+            AddServiceBehaviors(method, behaviors);
 
             return InvokeAndProcessExceptions(method, service, behaviors, handler);
         }
@@ -79,40 +82,34 @@ namespace RestFoundation.Runtime
             return behaviors;
         }
 
-        private static void AddServiceBehaviors(MethodInfo method, object service, List<IServiceBehavior> behaviors, IRestHandler handler)
+        private static void AddServiceBehaviors(MethodInfo method, List<IServiceBehavior> behaviors)
         {
-            var restService = service as IServiceWithBehaviors;
-
-            if (restService == null || restService.Behaviors == null)
+            List<ServiceMethodBehaviorAttribute> methodBehaviorList = methodBehaviors.GetOrAdd(method, m =>
             {
-                return;
-            }
+                var methodBehaviorAttributes = m.GetCustomAttributes(typeof(ServiceMethodBehaviorAttribute), false)
+                                                .Cast<ServiceMethodBehaviorAttribute>()
+                                                .ToList();
 
-            foreach (IServiceBehavior serviceBehavior in restService.Behaviors)
-            {
-                if (serviceBehavior.AppliesTo(handler.Context, new MethodAppliesContext(service, method)))
+                if (LogUtility.CanLog)
                 {
-                    behaviors.Add(serviceBehavior);
+                    foreach (ServiceMethodBehaviorAttribute methodBehaviorAttribute in methodBehaviorAttributes)
+                    {
+                        Type behaviorAttributeType = methodBehaviorAttribute.GetType();
+
+                        if (!behaviorAttributeType.IsSealed)
+                        {
+                            LogUtility.LogUnsealedBehaviorAttribute(behaviorAttributeType);
+                        }
+                    }
                 }
-            }
-        }
 
-        private static IServiceExceptionHandler GetServiceExceptionHandler(object service, IRestHandler handler)
-        {
-            IServiceExceptionHandler exceptionHandler;
+                return methodBehaviorAttributes;
+            });
 
-            var restService = service as IServiceWithBehaviors;
-
-            if (restService != null && restService.ExceptionHandler != null)
+            foreach (ServiceMethodBehaviorAttribute methodBehavior in methodBehaviorList)
             {
-                exceptionHandler = restService.ExceptionHandler;
+                behaviors.Add(methodBehavior);
             }
-            else
-            {
-                exceptionHandler = ServiceExceptionHandlerRegistry.GetExceptionHandler(handler);
-            }
-
-            return exceptionHandler;
         }
 
         private object InvokeAndProcessExceptions(MethodInfo method, object service, List<IServiceBehavior> behaviors, IRestHandler handler)
@@ -137,7 +134,7 @@ namespace RestFoundation.Runtime
 
                 try
                 {
-                    IServiceExceptionHandler exceptionHandler = GetServiceExceptionHandler(service, handler);
+                    IServiceExceptionHandler exceptionHandler = ServiceExceptionHandlerRegistry.GetExceptionHandler(handler);
 
                     if (exceptionHandler != null && exceptionHandler.Handle(handler.Context, service, method, unwrappedException) == ExceptionAction.Handle)
                     {

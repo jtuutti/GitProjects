@@ -1,7 +1,7 @@
 ﻿using RestFoundation;
 using RestFoundation.Behaviors;
 
-namespace RestTest.Behaviors
+namespace RestTestContracts.Behaviors
 {
     public class LoggingBehavior : ServiceBehavior
     {
