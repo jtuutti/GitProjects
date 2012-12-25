@@ -88,7 +88,7 @@ namespace RestFoundation
                 throw new ArgumentNullException("behaviors");
             }
 
-            if (behaviors.GroupBy(s => s.GetType()).Max(g => g.Count()) > 1)
+            if (behaviors.Length > 1 && behaviors.GroupBy(s => s.GetType()).Max(g => g.Count()) > 1)
             {
                 throw new InvalidOperationException(RestResources.DuplicateRouteBehaviors);
             }
