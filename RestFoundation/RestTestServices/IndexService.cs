@@ -81,6 +81,11 @@ namespace RestTestServices
             return Result.Content("Files: " + String.Join(", ", files.Select(f => f.Name)));
         }
 
+        public RedirectResult RedirectToGet10()
+        {
+            return Result.RedirectToAction<IIndexService>("home", c => c.Get(10, null));
+        }
+
         public IQueryable<Person> GetAll()
         {
             return new List<Person>(people).AsQueryable();
@@ -88,7 +93,7 @@ namespace RestTestServices
 
         public Task<IQueryable<Person>> GetAllAsync()
         {
-            return Task<IQueryable<Person>>.Factory.StartNew(() => new List<Person>(people).AsQueryable());
+            return new Task<IQueryable<Person>>(() => new List<Person>(people).AsQueryable());
         }
 
         public ContentResult Get(int? id, string someGarbage)

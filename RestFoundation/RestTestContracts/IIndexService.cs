@@ -21,6 +21,9 @@ namespace RestTestContracts
         [Url("index/upload", HttpMethod.Post)]
         ContentResult FileUpload(ICollection<IUploadedFile> files);
 
+        [Url("index/get-10", HttpMethod.Get)]
+        RedirectResult RedirectToGet10();
+
         [Url("index/all", "Get, Head")]
         IQueryable<Person> GetAll();
 

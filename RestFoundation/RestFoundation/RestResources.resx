@@ -437,10 +437,6 @@
     <value>Media type is not supported</value>
     <comment>Media type is not supported</comment>
   </data>
-  <data name="UnsupportedAsyncTasks" xml:space="preserve">
-    <value>Task results are not supported in services that are already running asynchronously.</value>
-    <comment>Task results are not supported in services that are already running asynchronously.</comment>
-  </data>
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>Service is not available</value>
     <comment>Service is not available</comment>
@@ -468,5 +464,9 @@
   <data name="InvalidArgumentValue" xml:space="preserve">
     <value>The argument contains invalid elements.</value>
     <comment>The argument contains invalid elements.</comment>
+  </data>
+  <data name="InvalidStateOfReturnedTask" xml:space="preserve">
+    <value>The returned task result cannot be started inside the service. Make sure to define tasks returned from services using the new Task&lt;T&gt;() constructor instead of the Task&lt;T&gt;.Factory.StartNew() method.</value>
+    <comment>The returned task result cannot be started inside the service. Make sure to define tasks returned from services using the new Task&lt;T&gt;() constructor instead of the Task&lt;T&gt;.Factory.StartNew() method.</comment>
   </data>
 </root>

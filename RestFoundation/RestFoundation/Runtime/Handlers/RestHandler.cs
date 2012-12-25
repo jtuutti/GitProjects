@@ -195,28 +195,19 @@ namespace RestFoundation.Runtime.Handlers
             }
         }
 
-        private static Type UnwrapMethodType(Type methodReturnType)
-        {
-            if (methodReturnType == typeof(Task))
-            {
-                return typeof(void);
-            }
-
-            if (methodReturnType.IsGenericType() && methodReturnType.GetGenericTypeDefinition() == typeof(Task<>))
-            {
-                return methodReturnType.GetGenericArguments()[0];
-            }
-
-            return methodReturnType;
-        }
-
         private void ExecuteTaskResult(Task returnedTask, Type methodReturnType)
         {
             HttpContext currentHttpContext = HttpContext.Current;
             Exception taskException = null;
 
+            if (returnedTask.Status != TaskStatus.Created)
+            {
+                throw new InvalidOperationException(RestResources.InvalidStateOfReturnedTask);
+            }
+
             var waitHandler = new ManualResetEvent(false);
 
+            returnedTask.Start();
             returnedTask.ContinueWith(t =>
             {
                 try
@@ -269,7 +260,7 @@ namespace RestFoundation.Runtime.Handlers
 
         private void ExecuteResult(object returnedObj, Type methodReturnType)
         {
-            IResult result = methodReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, UnwrapMethodType(methodReturnType), this) : null;
+            IResult result = methodReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, MethodReturnTypeUnwrapper.Unwrap(methodReturnType), this) : null;
 
             if (!(result is EmptyResult))
             {

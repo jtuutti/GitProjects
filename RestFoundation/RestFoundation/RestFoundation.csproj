@@ -83,7 +83,9 @@
     <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
     <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
     <Compile Include="Runtime\JsonSerializerFactory.cs" />
+    <Compile Include="Runtime\MethodReturnTypeUnwrapper.cs" />
     <Compile Include="Runtime\RouteNameHelper.cs" />
+    <Compile Include="Runtime\TaskExceptionUnwrapper.cs" />
     <Compile Include="ServiceProxy\ProxyJsonConvert.cs" />
     <Compile Include="Runtime\LogUtility.cs" />
     <Compile Include="Runtime\NullLogWriter.cs" />

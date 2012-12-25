@@ -14,6 +14,7 @@ namespace RestTestContracts.Metadata
             ForMethod(x => x.Feed(null)).SetHidden();
             ForMethod(x => x.FileDownload()).SetHidden();
             ForMethod(x => x.FileUpload(null)).SetHidden();
+            ForMethod(x => x.RedirectToGet10()).SetHidden();
 
             ForMethod(x => x.GetAll()).SetDescription("Gets all resources of type 'Person'")
                                       .SetResponseResourceExample(CreatePersonArrayExample());

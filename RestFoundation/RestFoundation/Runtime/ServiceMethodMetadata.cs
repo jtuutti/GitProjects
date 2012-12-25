@@ -9,12 +9,12 @@ namespace RestFoundation.Runtime
 {
     internal struct ServiceMethodMetadata : IEquatable<ServiceMethodMetadata>
     {
-        private static int ServiceMethodIdGenerator;
-
         private readonly int m_serviceMethodId;
         private readonly string m_serviceUrl;
         private readonly MethodInfo m_methodInfo;
         private readonly UrlAttribute m_urlInfo;
+
+        private static int serviceMethodIdGenerator;
 
         public ServiceMethodMetadata(string serviceUrl, MethodInfo methodInfo, UrlAttribute urlInfo)
         {
@@ -33,7 +33,7 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("urlInfo");
             }
 
-            m_serviceMethodId = Interlocked.Increment(ref ServiceMethodIdGenerator);
+            m_serviceMethodId = Interlocked.Increment(ref serviceMethodIdGenerator);
             m_serviceUrl = serviceUrl.Trim();
             m_methodInfo = methodInfo;
             m_urlInfo = urlInfo;

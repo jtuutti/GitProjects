@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Net;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
@@ -216,25 +217,13 @@ namespace RestFoundation.Runtime.Handlers
 
             if (task.IsFaulted && task.Exception != null)
             {
-                throw UnwrapTaskException(task);
+                throw TaskExceptionUnwrapper.Unwrap(task);
             }
 
             if (!(task.Result is EmptyResult))
             {
                 m_resultExecutor.Execute(task.Result, httpArguments.ServiceMethodData.Method.ReturnType, m_serviceContext);
             }
-        }
-
-        private static Exception UnwrapTaskException(Task<IResult> task)
-        {
-            AggregateException taskException = task.Exception;
-
-            if (taskException == null)
-            {
-                return new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.FailedRequest);
-            }
-
-            return ExceptionUnwrapper.IsDirectResponseException(taskException.InnerException) ? taskException.InnerException : taskException;
         }
 
         private static IResult ReturnEmptyResult(object state)
@@ -250,13 +239,28 @@ namespace RestFoundation.Runtime.Handlers
 
             HttpContext.Current = httpArguments.Context;
             object returnedObj = m_methodInvoker.Invoke(httpArguments.ServiceMethodData.Method, httpArguments.ServiceMethodData.Service, this);
+            Type methodReturnType = MethodReturnTypeUnwrapper.Unwrap(httpArguments.ServiceMethodData.Method.ReturnType);
 
-            if (returnedObj is Task)
+            var returnedTask = returnedObj as Task;
+
+            if (returnedTask != null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.UnsupportedAsyncTasks);
+                if (returnedTask.Status != TaskStatus.Created)
+                {
+                    throw new InvalidOperationException(RestResources.InvalidStateOfReturnedTask);
+                }
+
+                returnedTask.RunSynchronously();
+
+                PropertyInfo resultProperty = returnedTask.GetType().GetProperty("Result");
+
+                if (resultProperty != null)
+                {
+                    returnedObj = resultProperty.GetValue(returnedObj, null);
+                }
             }
 
-            return httpArguments.ServiceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, httpArguments.ServiceMethodData.Method.ReturnType, this) : null;
+            return httpArguments.ServiceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, methodReturnType, this) : null;
         }
     }
 }

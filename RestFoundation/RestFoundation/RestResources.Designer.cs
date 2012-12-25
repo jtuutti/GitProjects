@@ -412,6 +412,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The returned task result cannot be started inside the service. Make sure to define tasks returned from services using the new Task&lt;T&gt;() constructor instead of the Task&lt;T&gt;.Factory.StartNew() method..
+        /// </summary>
+        internal static string InvalidStateOfReturnedTask {
+            get {
+                return ResourceManager.GetString("InvalidStateOfReturnedTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The upper bound address is from a different family than the lower bound address..
         /// </summary>
         internal static string InvalidUpperBoundAddress {
@@ -768,15 +777,6 @@ namespace RestFoundation {
         internal static string UnsatisfiableRequestedRange {
             get {
                 return ResourceManager.GetString("UnsatisfiableRequestedRange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Task results are not supported in services that are already running asynchronously..
-        /// </summary>
-        internal static string UnsupportedAsyncTasks {
-            get {
-                return ResourceManager.GetString("UnsupportedAsyncTasks", resourceCulture);
             }
         }
         
