@@ -172,6 +172,7 @@
     <Compile Include="ServiceProxy\ProxyStatus.cs" />
     <Compile Include="ServiceProxy\OperationMetadata\ResourceExampleMetadata.cs" />
     <Compile Include="ServiceProxy\OperationMetadata\StatusCodeMetadata.cs" />
+    <Compile Include="TypeBinderAttribute.cs" />
     <Compile Include="TypeBinderBuilder.cs" />
     <Compile Include="MediaTypeFormatterBuilder.cs" />
     <Compile Include="Formatters\MultiPartFormatter.cs" />

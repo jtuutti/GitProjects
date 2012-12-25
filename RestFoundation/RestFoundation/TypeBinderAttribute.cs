@@ -1,20 +1,24 @@
-﻿// <copyright>
-// Dmitry Starosta, 2012
-// </copyright>
-using System;
+﻿using System;
 
 namespace RestFoundation
 {
     /// <summary>
-    /// Defines a binder for service method parameters of a specific object type.
-    /// The type is specified during the binder registration through a <see cref="Rest"/> instance.
+    /// Represents a type binder for a specific service method parameter.
     /// </summary>
-    public interface ITypeBinder
+    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
+    public abstract class TypeBinderAttribute : Attribute, ITypeBinder
     {
         /// <summary>
         /// Gets a value indicating whether the binded object is a service method resource.
+        /// The default value is false.
         /// </summary>
-        bool IsResource { get; }
+        public virtual bool IsResource
+        {
+            get
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Binds data from an HTTP route, query string or message to a service method parameter.
@@ -23,6 +27,6 @@ namespace RestFoundation
         /// <param name="name">The service method parameter name.</param>
         /// <param name="context">The service context.</param>
         /// <returns>The object instance with the data or null.</returns>
-        object Bind(Type objectType, string name, IServiceContext context);
+        public abstract object Bind(Type objectType, string name, IServiceContext context);
     }
 }

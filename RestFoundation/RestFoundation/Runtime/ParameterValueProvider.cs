@@ -50,11 +50,11 @@ namespace RestFoundation.Runtime
             }
 
             IServiceContext context = handler.Context;
-            ITypeBinder typeBinder = TypeBinderRegistry.GetBinder(parameter.ParameterType);
+            ITypeBinder typeBinder = GetParameterBinder(parameter);
 
             if (typeBinder != null)
             {
-                isResource = false;
+                isResource = typeBinder.IsResource;
                 return typeBinder.Bind(parameter.ParameterType, parameter.Name, context);
             }
 
@@ -170,22 +170,11 @@ namespace RestFoundation.Runtime
             return argumentValue;
         }
 
-        private static void LogRequest(IServiceContext context)
+        private static ITypeBinder GetParameterBinder(ParameterInfo parameter)
         {
-            if (!LogUtility.CanLog)
-            {
-                return;
-            }
+            var typeBinderAttribute = Attribute.GetCustomAttribute(parameter, typeof(TypeBinderAttribute), false) as TypeBinderAttribute;
 
-            using (var dataStream = new MemoryStream())
-            {
-                context.Request.Body.Seek(0, SeekOrigin.Begin);
-                context.Request.Body.CopyTo(dataStream);
-                dataStream.Seek(0, SeekOrigin.Begin);
-
-                var dataReader = new StreamReader(dataStream, context.Request.Headers.ContentCharsetEncoding);
-                LogUtility.LogRequestBody(dataReader.ReadToEnd(), context.Request.Headers.ContentType);
-            }
+            return typeBinderAttribute ?? TypeBinderRegistry.GetBinder(parameter.ParameterType);
         }
 
         private static bool IsResourceParameter(ParameterInfo parameter, IServiceContext context)
@@ -211,6 +200,24 @@ namespace RestFoundation.Runtime
             }
 
             return false;
+        }
+
+        private static void LogRequest(IServiceContext context)
+        {
+            if (!LogUtility.CanLog)
+            {
+                return;
+            }
+
+            using (var dataStream = new MemoryStream())
+            {
+                context.Request.Body.Seek(0, SeekOrigin.Begin);
+                context.Request.Body.CopyTo(dataStream);
+                dataStream.Seek(0, SeekOrigin.Begin);
+
+                var dataReader = new StreamReader(dataStream, context.Request.Headers.ContentCharsetEncoding);
+                LogUtility.LogRequestBody(dataReader.ReadToEnd(), context.Request.Headers.ContentType);
+            }
         }
     }
 }
