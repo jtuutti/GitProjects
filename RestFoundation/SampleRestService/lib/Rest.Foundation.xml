@@ -142,6 +142,95 @@
             Gets the resource object to be passed into the service method.
             </summary>
     </member>
+    <member name="T:RestFoundation.Behaviors.IServiceBehavior">
+      <summary>
+            Defines a service behavior.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.IServiceBehavior.AppliesTo(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAppliesContext)">
+      <summary>
+            Returns a value indicating whether to apply the behavior to the provided method of the specified
+            service type.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="methodContext">The "method applies" context.</param>
+      <returns>true to apply the behavior; false to bypass.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.IServiceBehavior.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+      <summary>
+            Called before a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.IServiceBehavior.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
+      <summary>
+            Called after a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executed" behavior context.</param>
+    </member>
+    <member name="T:RestFoundation.Behaviors.ISecureServiceBehavior">
+      <summary>
+            Defines a secure service behavior.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ISecureServiceBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+      <summary>
+            Called during the authorization process before a service method or behavior is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method authorizing" behavior context.</param>
+    </member>
+    <member name="T:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute">
+      <summary>
+            Represents a service method behavior defined on a service contract.
+            This class cannot be instantiated.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.AppliesTo(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAppliesContext)">
+      <summary>
+            Returns a value indicating whether to apply the behavior to the provided method of the specified
+            service type.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="methodContext">The "method applies" context.</param>
+      <returns>true to apply the behavior; false to bypass.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+      <summary>
+            Called during the authorization process before a service method or behavior is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method authorizing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+      <summary>
+            Called before a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
+      <summary>
+            Called after a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executed" behavior context.</param>
+    </member>
+    <member name="P:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.StatusCode">
+      <summary>
+            Gets the HTTP status code in case of a security exception.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.StatusDescription">
+      <summary>
+            Gets the HTTP status description in case of a security exception.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Collections.Specialized.LinkCollection">
       <summary>
             A collection of Link header values.
@@ -764,6 +853,11 @@
               Looks up a localized string similar to No valid file path/URL provided..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.InvalidHashKey">
+      <summary>
+              Looks up a localized string similar to Invalid hash key provided..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.InvalidHttpMethodForResource">
       <summary>
               Looks up a localized string similar to A resource cannot be set for the current HTTP method..
@@ -852,6 +946,11 @@
     <member name="P:RestFoundation.RestResources.InvalidSocketTimeout">
       <summary>
               Looks up a localized string similar to Socket timeout is invalid..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.InvalidStateOfReturnedTask">
+      <summary>
+              Looks up a localized string similar to The returned task result cannot be started inside the service. Make sure to define tasks returned from services using the new Task&lt;T&gt;() constructor instead of the Task&lt;T&gt;.Factory.StartNew() method..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidUpperBoundAddress">
@@ -1054,9 +1153,9 @@
               Looks up a localized string similar to Range not satisfiable..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedAsyncTasks">
+    <member name="P:RestFoundation.RestResources.UnsealedBehaviorAttributeClass">
       <summary>
-              Looks up a localized string similar to Task results are not supported in services that are already running asynchronously..
+              Looks up a localized string similar to Service method behavior attribute class '{0}' should be sealed for performance benefits..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.UnsupportedContentCharset">
@@ -1286,35 +1385,6 @@
             Handle the exception and stop executing the method.
             </summary>
     </member>
-    <member name="T:RestFoundation.Behaviors.IServiceBehavior">
-      <summary>
-            Defines a service behavior.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Behaviors.IServiceBehavior.AppliesTo(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAppliesContext)">
-      <summary>
-            Returns a value indicating whether to apply the behavior to the provided method of the specified
-            service type.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="methodContext">The "method applies" context.</param>
-      <returns>true to apply the behavior; false to bypass.</returns>
-    </member>
-    <member name="M:RestFoundation.Behaviors.IServiceBehavior.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
-      <summary>
-            Called before a service method is executed.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method executing" behavior context.</param>
-      <returns>A service method action.</returns>
-    </member>
-    <member name="M:RestFoundation.Behaviors.IServiceBehavior.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
-      <summary>
-            Called after a service method is executed.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method executed" behavior context.</param>
-    </member>
     <member name="T:RestFoundation.Behaviors.ServiceBehavior">
       <summary>
             The base service behavior class.
@@ -1344,18 +1414,6 @@
             </summary>
       <param name="serviceContext">The service context.</param>
       <param name="behaviorContext">The "method executed" behavior context.</param>
-    </member>
-    <member name="T:RestFoundation.Behaviors.ISecureServiceBehavior">
-      <summary>
-            Defines a secure service behavior.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Behaviors.ISecureServiceBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
-      <summary>
-            Called during the authorization process before a service method or behavior is executed.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method authorizing" behavior context.</param>
     </member>
     <member name="T:RestFoundation.Behaviors.SecureServiceBehavior">
       <summary>
@@ -1673,24 +1731,25 @@
     </member>
     <member name="F:RestFoundation.Results.RedirectType.Permanent">
       <summary>
-            The resource was moved permanently.
+            The resource was moved permanently. HTTP code: 301.
             </summary>
     </member>
     <member name="F:RestFoundation.Results.RedirectType.Found">
       <summary>
             The resource was found but a different URL should be used for the response.
             This is the standard redirect used by the browsers even though it contradicts
-            the HTTP standard.
+            the HTTP standard. HTTP code: 302.
             </summary>
     </member>
     <member name="F:RestFoundation.Results.RedirectType.SeeOther">
       <summary>
-            The response to the request can be found at another URL.
+            The response to the request can be found at another URL. HTTP code: 303.
             </summary>
     </member>
     <member name="F:RestFoundation.Results.RedirectType.Temporary">
       <summary>
             The resource was moved temporarily. Future requests can still use the original URL.
+            HTTP code: 307.
             </summary>
     </member>
     <member name="T:RestFoundation.RouteBuilder">
@@ -5230,22 +5289,6 @@
             </param>
       <returns>The created parameter value.</returns>
     </member>
-    <member name="T:RestFoundation.IServiceWithBehaviors">
-      <summary>
-            Defines an optional interface for a restful service that allows
-            to associate behaviors to a specific service implementation.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.IServiceWithBehaviors.ExceptionHandler">
-      <summary>
-            Gets an exception handler associated with the service implementation.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.IServiceWithBehaviors.Behaviors">
-      <summary>
-            Gets a sequence of service behaviors associated with the service implementation.
-            </summary>
-    </member>
     <member name="T:RestFoundation.IStreamCompressor">
       <summary>
             Defines a stream compressor.
@@ -6879,6 +6922,111 @@
       <param name="contentDisposition">The content disposition data.</param>
       <returns>The file path result.</returns>
     </member>
+    <member name="M:RestFoundation.Result.RedirectToUrl(System.String)">
+      <summary>
+            Returns a redirect result for the provided URL with the redirect type <see cref="F:RestFoundation.Results.RedirectType.Found" />.
+            </summary>
+      <param name="url">The URL to redirect to.</param>
+      <returns>The redirect result.</returns>
+    </member>
+    <member name="M:RestFoundation.Result.RedirectToUrl(System.String,RestFoundation.Results.RedirectType)">
+      <summary>
+            Returns a redirect result for the provided URL with the provided redirect type.
+            </summary>
+      <param name="url">The URL to redirect to.</param>
+      <param name="redirectType">The redirect type.</param>
+      <returns>The redirect result.</returns>
+    </member>
+    <member name="M:RestFoundation.Result.RedirectToAction``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}})">
+      <summary>
+            Returns a redirect result for the service method with the redirect type <see cref="F:RestFoundation.Results.RedirectType.Found" />.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">The service URL.</param>
+      <param name="serviceMethod">The service method.</param>
+      <returns>The redirect result.</returns>
+      <exception cref="T:System.InvalidOperationException">If the HTTP context cannot be found.</exception>
+    </member>
+    <member name="M:RestFoundation.Result.RedirectToAction``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.Results.RedirectType)">
+      <summary>
+            Returns a redirect result for the service method with the provided redirect type.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">The service URL.</param>
+      <param name="serviceMethod">The service method.</param>
+      <param name="redirectType">The redirect type.</param>
+      <returns>The redirect result.</returns>
+      <exception cref="T:System.InvalidOperationException">If the HTTP context cannot be found.</exception>
+    </member>
+    <member name="M:RestFoundation.Result.RedirectToAction``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},System.Object,RestFoundation.Results.RedirectType)">
+      <summary>
+            Returns a redirect result for the service method with the provided redirect type.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">The service URL.</param>
+      <param name="serviceMethod">The service method.</param>
+      <param name="routeValues">Additional route values.</param>
+      <param name="redirectType">The redirect type.</param>
+      <returns>The redirect result.</returns>
+      <exception cref="T:System.InvalidOperationException">If the HTTP context cannot be found.</exception>
+    </member>
+    <member name="M:RestFoundation.Result.RedirectToAction``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},System.Web.Routing.RouteValueDictionary,RestFoundation.Results.RedirectType)">
+      <summary>
+            Returns a redirect result for the service method with the provided redirect type.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">The service URL.</param>
+      <param name="serviceMethod">The service method.</param>
+      <param name="routeValues">Additional route values.</param>
+      <param name="redirectType">The redirect type.</param>
+      <returns>The redirect result.</returns>
+      <exception cref="T:System.InvalidOperationException">If the HTTP context cannot be found.</exception>
+    </member>
+    <member name="M:RestFoundation.Result.RedirectToAction``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+      <summary>
+            Returns a redirect result for the service method with the redirect type <see cref="F:RestFoundation.Results.RedirectType.Found" />.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">The service URL.</param>
+      <param name="serviceMethod">The service method.</param>
+      <returns>The redirect result.</returns>
+      <exception cref="T:System.InvalidOperationException">If the HTTP context cannot be found.</exception>
+    </member>
+    <member name="M:RestFoundation.Result.RedirectToAction``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.Results.RedirectType)">
+      <summary>
+            Returns a redirect result for the service method with the provided redirect type.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">The service URL.</param>
+      <param name="serviceMethod">The service method.</param>
+      <param name="redirectType">The redirect type.</param>
+      <returns>The redirect result.</returns>
+      <exception cref="T:System.InvalidOperationException">If the HTTP context cannot be found.</exception>
+    </member>
+    <member name="M:RestFoundation.Result.RedirectToAction``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Object,RestFoundation.Results.RedirectType)">
+      <summary>
+            Returns a redirect result for the service method with the provided redirect type.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">The service URL.</param>
+      <param name="serviceMethod">The service method.</param>
+      <param name="routeValues">Additional route values.</param>
+      <param name="redirectType">The redirect type.</param>
+      <returns>The redirect result.</returns>
+      <exception cref="T:System.InvalidOperationException">If the HTTP context cannot be found.</exception>
+    </member>
+    <member name="M:RestFoundation.Result.RedirectToAction``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Web.Routing.RouteValueDictionary,RestFoundation.Results.RedirectType)">
+      <summary>
+            Returns a redirect result for the service method with the provided redirect type.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceUrl">The service URL.</param>
+      <param name="serviceMethod">The service method.</param>
+      <param name="routeValues">Additional route values.</param>
+      <param name="redirectType">The redirect type.</param>
+      <returns>The redirect result.</returns>
+      <exception cref="T:System.InvalidOperationException">If the HTTP context cannot be found.</exception>
+    </member>
     <member name="M:RestFoundation.Result.RemoteFile(System.String)">
       <summary>
             Returns a remote file result.
@@ -8217,7 +8365,7 @@
             Represents a proxy operation generator class.
             </summary>
     </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyOperationGenerator.Get(System.Guid)">
+    <member name="M:RestFoundation.ServiceProxy.ProxyOperationGenerator.Get(System.Int32)">
       <summary>
             Gets a proxy operation by the ID.
             </summary>
@@ -9103,6 +9251,11 @@
       <param name="httpMethods">An comma separated list of HTTP methods as a <see cref="T:System.String" />.</param>
       <exception cref="T:System.InvalidOperationException">If the OPTIONS HTTP method is provided explicitly.</exception>
     </member>
+    <member name="P:RestFoundation.UrlAttribute.HttpMethods">
+      <summary>
+            Gets a sequence of allowed HTTP methods.
+            </summary>
+    </member>
     <member name="P:RestFoundation.UrlAttribute.Priority">
       <summary>
             Gets or sets the URL priority. A larger priority puts the URL route higher in the route collection.
@@ -9112,11 +9265,6 @@
     <member name="P:RestFoundation.UrlAttribute.UrlTemplate">
       <summary>
             Gets the URL template.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.UrlAttribute.HttpMethods">
-      <summary>
-            Gets a sequence of allowed HTTP methods.
             </summary>
     </member>
     <member name="P:RestFoundation.UrlAttribute.WebPageUrl">
