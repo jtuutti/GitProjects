@@ -3,10 +3,12 @@
 // Please see http://www.opensource.org/licenses/MS-PL] for details.
 // All other rights reserved.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace RestFoundation.Odata.Parser
 {
+    [ExcludeFromCodeCoverage]
     internal class FunctionTokenSet : TokenSet
     {
         public override string ToString()

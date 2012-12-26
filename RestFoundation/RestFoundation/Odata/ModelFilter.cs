@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.UI.WebControls;
@@ -12,6 +13,7 @@ using RestFoundation.Odata.Parser;
 
 namespace RestFoundation.Odata
 {
+    [ExcludeFromCodeCoverage]
     internal class ModelFilter<T> : IModelFilter<T>
     {
         private readonly int m_skip;

@@ -62,6 +62,7 @@ namespace TinyIoC
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
@@ -79,6 +80,7 @@ namespace TinyIoC
 #endif
 
     #region SafeDictionary
+    [ExcludeFromCodeCoverage]
     internal class SafeDictionary<TKey, TValue> : IDisposable
     {
         private readonly object _Padlock = new object();
@@ -159,6 +161,7 @@ namespace TinyIoC
     #endregion
 
     #region Extensions
+    [ExcludeFromCodeCoverage]
     internal static class AssemblyExtensions
     {
         internal static Type[] SafeGetTypes(this Assembly assembly)
@@ -187,6 +190,7 @@ namespace TinyIoC
         }
     }
 
+    [ExcludeFromCodeCoverage]
     internal static class TypeExtensions
     {
         private static SafeDictionary<GenericMethodCacheKey, MethodInfo> _genericMethodCache;
@@ -283,6 +287,7 @@ namespace TinyIoC
         }
 #endif
 
+        [ExcludeFromCodeCoverage]
         private sealed class GenericMethodCacheKey
         {
             private readonly Type _sourceType;
@@ -369,6 +374,7 @@ namespace TinyIoC
 
     // @mbrit - 2012-05-22 - shim for ForEach call on List<T>...
 #if NETFX_CORE
+    [ExcludeFromCodeCoverage]
     internal static class ListExtender
     {
         internal static void ForEach<T>(this List<T> list, Action<T> callback)
@@ -383,6 +389,7 @@ namespace TinyIoC
 
     #region TinyIoC Exception Types
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
+    [ExcludeFromCodeCoverage]
     internal class TinyIoCResolutionException : Exception
     {
         private const string ERROR_TEXT = "Unable to resolve type: {0}";
@@ -399,6 +406,7 @@ namespace TinyIoC
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
+    [ExcludeFromCodeCoverage]
     internal class TinyIoCRegistrationTypeException : Exception
     {
         private const string REGISTER_ERROR_TEXT = "Cannot register type {0} - abstract classes or interfaces are not valid implementation types for {1}.";
@@ -415,6 +423,7 @@ namespace TinyIoC
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
+    [ExcludeFromCodeCoverage]
     internal class TinyIoCRegistrationException : Exception
     {
         private const string CONVERT_ERROR_TEXT = "Cannot convert current registration of {0} to {1}";
@@ -442,6 +451,7 @@ namespace TinyIoC
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
+    [ExcludeFromCodeCoverage]
     internal class TinyIoCWeakReferenceException : Exception
     {
         private const string ERROR_TEXT = "Unable to instantiate {0} - referenced object has been reclaimed";
@@ -458,6 +468,7 @@ namespace TinyIoC
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
+    [ExcludeFromCodeCoverage]
     internal class TinyIoCConstructorResolutionException : Exception
     {
         private const string ERROR_TEXT = "Unable to resolve constructor for {0} using provided Expression.";
@@ -484,6 +495,7 @@ namespace TinyIoC
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
+    [ExcludeFromCodeCoverage]
     internal class TinyIoCAutoRegistrationException : Exception
     {
         private const string ERROR_TEXT = "Duplicate implementation of type {0} found ({1}).";
@@ -509,6 +521,7 @@ namespace TinyIoC
     #endregion
 
     #region internal Setup / Settings Classes
+    [ExcludeFromCodeCoverage]
     internal sealed class NamedParameterOverloads : Dictionary<string, object>
     {
         internal static NamedParameterOverloads FromIDictionary(IDictionary<string, object> data)
@@ -549,6 +562,7 @@ namespace TinyIoC
         Fail
     }
 
+    [ExcludeFromCodeCoverage]
     internal sealed class ResolveOptions
     {
         private static readonly ResolveOptions _Default = new ResolveOptions();
@@ -604,6 +618,7 @@ namespace TinyIoC
     }
     #endregion
 
+    [ExcludeFromCodeCoverage]
     internal sealed partial class TinyIoCContainer : IDisposable
     {
         #region Fake NETFX_CORE Classes
@@ -654,6 +669,7 @@ namespace TinyIoC
         #endregion
 
         #region "Fluent" API
+        [ExcludeFromCodeCoverage]
         internal sealed class RegisterOptions
         {
             private TinyIoCContainer _Container;
@@ -749,6 +765,7 @@ namespace TinyIoC
             }
         }
 
+        [ExcludeFromCodeCoverage]
         internal sealed class MultiRegisterOptions
         {
             private IEnumerable<RegisterOptions> _RegisterOptions;
@@ -1462,6 +1479,7 @@ namespace TinyIoC
             void ReleaseObject();
         }
 
+        [ExcludeFromCodeCoverage]
         private abstract class ObjectFactoryBase
         {
             internal virtual bool AssumeConstruction { get { return false; } }
@@ -1518,6 +1536,7 @@ namespace TinyIoC
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private class MultiInstanceFactory : ObjectFactoryBase
         {
             private readonly Type registerType;
@@ -1576,6 +1595,7 @@ namespace TinyIoC
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private class DelegateFactory : ObjectFactoryBase
         {
             private readonly Type registerType;
@@ -1630,6 +1650,7 @@ namespace TinyIoC
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private class WeakDelegateFactory : ObjectFactoryBase
         {
             private readonly Type registerType;
@@ -1694,6 +1715,7 @@ namespace TinyIoC
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private class InstanceFactory : ObjectFactoryBase, IDisposable
         {
             private readonly Type registerType;
@@ -1758,6 +1780,7 @@ namespace TinyIoC
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private class WeakInstanceFactory : ObjectFactoryBase, IDisposable
         {
             private readonly Type registerType;
@@ -1833,6 +1856,7 @@ namespace TinyIoC
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private class SingletonFactory : ObjectFactoryBase, IDisposable
         {
             private readonly Type registerType;
@@ -1916,6 +1940,7 @@ namespace TinyIoC
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private class CustomObjectLifetimeFactory : ObjectFactoryBase, IDisposable
         {
             private readonly object SingletonLock = new object();
@@ -2025,6 +2050,7 @@ namespace TinyIoC
         #endregion
 
         #region Type Registrations
+        [ExcludeFromCodeCoverage]
         internal sealed class TypeRegistration
         {
             private int _hashCode;
@@ -2814,6 +2840,7 @@ namespace TinyIoC
         #endregion
     }
 
+    [ExcludeFromCodeCoverage]
     internal class HttpContextLifetimeProvider : TinyIoCContainer.ITinyIoCObjectLifetimeProvider
     {
         private readonly string m_keyName = String.Format(CultureInfo.InvariantCulture, "TinyIoC.HttpContext.{0}", Guid.NewGuid());
@@ -2851,6 +2878,7 @@ namespace TinyIoC
         }
     }
 
+    [ExcludeFromCodeCoverage]
     internal static class TinyIoCAspNetExtensions
     {
         internal static TinyIoC.TinyIoCContainer.RegisterOptions AsPerRequestSingleton(this TinyIoC.TinyIoCContainer.RegisterOptions registerOptions)
@@ -2864,6 +2892,7 @@ namespace TinyIoC
 #if !NETFX_CORE
 namespace System.Reflection
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     internal static class ReverseTypeExtender
     {
         internal static bool IsClass(this Type type)

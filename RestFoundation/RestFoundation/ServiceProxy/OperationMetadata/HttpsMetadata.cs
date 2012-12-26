@@ -1,8 +1,11 @@
-﻿namespace RestFoundation.ServiceProxy.OperationMetadata
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace RestFoundation.ServiceProxy.OperationMetadata
 {
     /// <summary>
     /// Represents the HTTPS metadata.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public sealed class HttpsMetadata
     {
         /// <summary>

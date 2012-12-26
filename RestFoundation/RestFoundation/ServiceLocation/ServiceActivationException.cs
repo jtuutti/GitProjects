@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace RestFoundation.ServiceLocation
@@ -10,6 +11,7 @@ namespace RestFoundation.ServiceLocation
     /// Represents an exception that gets thrown if service location results in an error.
     /// </summary>
     [Serializable]
+    [ExcludeFromCodeCoverage]
     public class ServiceActivationException : Exception
     {
         /// <summary>

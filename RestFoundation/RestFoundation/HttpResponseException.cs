@@ -16,6 +16,7 @@ namespace RestFoundation
     [Serializable]
     [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors",
                      Justification = "Constructors with a nested exception do not make sense since this is a special type of exception for generating HTTP response")]
+    [ExcludeFromCodeCoverage]
     public sealed class HttpResponseException : Exception
     {
         /// <summary>

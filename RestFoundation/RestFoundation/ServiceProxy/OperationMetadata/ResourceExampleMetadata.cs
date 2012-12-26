@@ -1,10 +1,12 @@
-﻿using System.Xml.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml.Serialization;
 
 namespace RestFoundation.ServiceProxy.OperationMetadata
 {
     /// <summary>
     /// Represents a resource example metadata.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public sealed class ResourceExampleMetadata
     {
         /// <summary>

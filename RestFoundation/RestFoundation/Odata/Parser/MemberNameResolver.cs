@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
@@ -12,6 +13,7 @@ using Newtonsoft.Json;
 
 namespace RestFoundation.Odata.Parser
 {
+    [ExcludeFromCodeCoverage]
     internal class MemberNameResolver : IMemberNameResolver
     {
         private static readonly ConcurrentDictionary<MemberInfo, string> knownMemberNames = new ConcurrentDictionary<MemberInfo, string>();

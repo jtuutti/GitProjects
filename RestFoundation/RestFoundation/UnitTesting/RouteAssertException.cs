@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace RestFoundation.UnitTesting
@@ -10,6 +11,7 @@ namespace RestFoundation.UnitTesting
     /// Represents a failed route assert exception.
     /// </summary>
     [Serializable]
+    [ExcludeFromCodeCoverage]
     public class RouteAssertException : Exception
     {
         /// <summary>

@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,6 +13,7 @@ using System.Web.UI.WebControls;
 
 namespace RestFoundation.Odata.Parser
 {
+    [ExcludeFromCodeCoverage]
     internal class SortExpressionFactory : ISortExpressionFactory
     {
         private static readonly CultureInfo defaultCulture = CultureInfo.GetCultureInfo("en-US");

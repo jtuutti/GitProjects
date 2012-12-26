@@ -3,8 +3,11 @@
 // Please see http://www.opensource.org/licenses/MS-PL] for details.
 // All other rights reserved.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace RestFoundation.Odata
 {
+    [ExcludeFromCodeCoverage]
     internal static class StringConstants
     {
         internal const string OrderByParameter = "$orderby";

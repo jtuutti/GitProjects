@@ -4,10 +4,12 @@
 // All other rights reserved.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace RestFoundation.Odata.Parser
 {
+    [ExcludeFromCodeCoverage]
     internal class TokenSet
     {
         public TokenSet()

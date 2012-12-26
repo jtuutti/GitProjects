@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using RestFoundation.Runtime;
 
@@ -12,6 +13,7 @@ namespace System.ComponentModel.DataAnnotations
     /// validation. The property type must be a class or a struct that can be validated.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class ValidateObjectAttribute : ValidationAttribute
     {
         /// <summary>

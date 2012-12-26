@@ -4,10 +4,12 @@
 // All other rights reserved.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Web.UI.WebControls;
 
 namespace RestFoundation.Odata.Parser
 {
+    [ExcludeFromCodeCoverage]
     internal class SortDescription<T>
     {
         private readonly Func<T, object> m_keySelector;

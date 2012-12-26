@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace RestFoundation.ServiceProxy.OperationMetadata
@@ -6,6 +7,7 @@ namespace RestFoundation.ServiceProxy.OperationMetadata
     /// <summary>
     /// Represents an HTTP header metadata.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public sealed class HeaderMetadata : IEquatable<HeaderMetadata>, IComparable<HeaderMetadata>
     {
         private static readonly StringComparer Comparer = StringComparer.Create(CultureInfo.InvariantCulture, true);

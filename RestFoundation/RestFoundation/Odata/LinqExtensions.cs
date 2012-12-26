@@ -5,11 +5,13 @@
 // Based on code from http://stackoverflow.com/questions/606104/how-to-create-linq-expression-tree-with-anonymous-type-in-it
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace RestFoundation.Odata
 {
+    [ExcludeFromCodeCoverage]
     internal static class LinqExtensions
     {
         public static bool IsAnonymousType(this Type type)

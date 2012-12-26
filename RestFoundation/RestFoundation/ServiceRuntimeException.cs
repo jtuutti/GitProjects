@@ -18,6 +18,7 @@ namespace RestFoundation
     [Serializable]
     [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors",
                      Justification = "This exception is not stand-alone but aggregates other exceptions")]
+    [ExcludeFromCodeCoverage]
     public sealed class ServiceRuntimeException : Exception
     {
         private const string DefaultMessage = "A service exception occurred";

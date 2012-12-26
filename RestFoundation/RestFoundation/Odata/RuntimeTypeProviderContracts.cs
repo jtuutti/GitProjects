@@ -5,10 +5,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace RestFoundation.Odata
 {
+    [ExcludeFromCodeCoverage]
     internal abstract class RuntimeTypeProviderContracts : IRuntimeTypeProvider
     {
         public Type Get(Type sourceType, IEnumerable<MemberInfo> properties)

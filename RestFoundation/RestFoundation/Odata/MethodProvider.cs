@@ -10,6 +10,7 @@ using System.Reflection;
 
 namespace RestFoundation.Odata
 {
+    [ExcludeFromCodeCoverage]
     internal static class MethodProvider
     {
         public static readonly ConstantExpression IgnoreCaseExpression;

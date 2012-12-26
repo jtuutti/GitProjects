@@ -5,10 +5,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace RestFoundation.Odata.Parser
 {
+    [ExcludeFromCodeCoverage]
     internal static class ExpressionTokenizer
     {
         public static IEnumerable<TokenSet> GetTokens(this string expression)

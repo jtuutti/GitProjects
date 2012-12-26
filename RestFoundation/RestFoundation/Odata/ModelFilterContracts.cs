@@ -5,9 +5,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RestFoundation.Odata
 {
+    [ExcludeFromCodeCoverage]
     internal abstract class ModelFilterContracts<T> : IModelFilter<T>
     {
         public IEnumerable<object> Filter(IEnumerable<T> source)

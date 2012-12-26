@@ -5,10 +5,12 @@
 
 using System;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace RestFoundation.Odata.Parser
 {
+    [ExcludeFromCodeCoverage]
     internal class ParameterParser<T> : IParameterParser<T>
     {
         private readonly IFilterExpressionFactory m_filterExpressionFactory;

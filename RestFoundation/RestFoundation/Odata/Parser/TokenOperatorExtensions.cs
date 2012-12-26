@@ -4,11 +4,13 @@
 // All other rights reserved.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace RestFoundation.Odata.Parser
 {
+    [ExcludeFromCodeCoverage]
     internal static class TokenOperatorExtensions
     {
         private static readonly string[] operations = new[] { "eq", "ne", "gt", "ge", "lt", "le", "and", "or", "not" };

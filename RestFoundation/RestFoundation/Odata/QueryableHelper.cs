@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using RestFoundation.Odata.Parser;
 
 namespace RestFoundation.Odata
 {
+    [ExcludeFromCodeCoverage]
     internal static class QueryableHelper
     {
         public static object Filter(object source, NameValueCollection query)

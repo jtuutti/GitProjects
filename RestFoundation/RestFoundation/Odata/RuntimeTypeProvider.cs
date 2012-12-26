@@ -15,6 +15,7 @@ using RestFoundation.Odata.Parser;
 
 namespace RestFoundation.Odata
 {
+    [ExcludeFromCodeCoverage]
     internal class RuntimeTypeProvider : IRuntimeTypeProvider
     {
         private const MethodAttributes GetSetAttr = MethodAttributes.Final | MethodAttributes.Public;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace RestFoundation.ServiceProxy.OperationMetadata
@@ -6,6 +7,7 @@ namespace RestFoundation.ServiceProxy.OperationMetadata
     /// <summary>
     /// Represents an HTTP response status code metadata.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public sealed class StatusCodeMetadata : IComparable<StatusCodeMetadata>, IEquatable<StatusCodeMetadata>
     {
         /// <summary>

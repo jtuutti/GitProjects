@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 
 namespace RestFoundation.Odata.Parser
 {
+    [ExcludeFromCodeCoverage]
     internal class FilterExpressionFactory : IFilterExpressionFactory
     {
         private static readonly CultureInfo defaultCulture = CultureInfo.GetCultureInfo("en-US");

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RestFoundation.ServiceProxy.OperationMetadata
 {
     /// <summary>
     /// Represents a service operation parameter metadata.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public sealed class ParameterMetadata : IEquatable<ParameterMetadata>
     {
         /// <summary>
