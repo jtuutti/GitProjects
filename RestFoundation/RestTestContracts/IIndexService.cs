@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using RestFoundation;
 using RestFoundation.Results;
 using RestFoundation.ServiceProxy;
+using RestFoundation.TypeBinders;
 using RestTestContracts.Metadata;
 using RestTestContracts.Resources;
 
@@ -31,7 +32,7 @@ namespace RestTestContracts
         Task<IQueryable<Person>> GetAllAsync();
 
         [Url("index/{id}")]
-        ContentResult Get([ParameterConstraint(@"\d{1,3}")] int? id, string dummyParam);
+        ContentResult Get([ParameterConstraint(@"\d{1,3}")] int? id, [FromUri] string dummy);
 
         [Url("index")]
         object Post(Person resource);

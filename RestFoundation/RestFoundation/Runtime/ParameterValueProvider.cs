@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Reflection;
@@ -10,6 +11,7 @@ using System.Web;
 using RestFoundation.Collections;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime.Handlers;
+using RestFoundation.TypeBinders;
 
 namespace RestFoundation.Runtime
 {
@@ -54,8 +56,8 @@ namespace RestFoundation.Runtime
 
             if (typeBinder != null)
             {
-                isResource = typeBinder.IsResource;
-                return typeBinder.Bind(parameter.ParameterType, parameter.Name, context);
+                isResource = IsResourceParameter(parameter, context);
+                return typeBinder.Bind(parameter.Name, parameter.ParameterType, context);
             }
 
             object routeValue = TryGetRouteValue(parameter, context.Request.RouteValues);
@@ -172,9 +174,20 @@ namespace RestFoundation.Runtime
 
         private static ITypeBinder GetParameterBinder(ParameterInfo parameter)
         {
-            var typeBinderAttribute = Attribute.GetCustomAttribute(parameter, typeof(TypeBinderAttribute), false) as TypeBinderAttribute;
+            try
+            {
+                var typeBinderAttribute = Attribute.GetCustomAttribute(parameter, typeof(TypeBinderAttribute), false) as TypeBinderAttribute;
 
-            return typeBinderAttribute ?? TypeBinderRegistry.GetBinder(parameter.ParameterType);
+                return typeBinderAttribute ?? TypeBinderRegistry.GetBinder(parameter.ParameterType);
+            }
+            catch (AmbiguousMatchException)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format(CultureInfo.InvariantCulture,
+                                                                                                  RestResources.MultipleTypeBindersPerParameter,
+                                                                                                  parameter.Name,
+                                                                                                  parameter.Member.Name,
+                                                                                                  parameter.Member.DeclaringType != null ? parameter.Member.DeclaringType.Name : String.Empty));
+            }
         }
 
         private static bool IsResourceParameter(ParameterInfo parameter, IServiceContext context)

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using RestFoundation;
 using RestTestContracts;
 
@@ -17,7 +18,7 @@ namespace RestTestServices
 
             dynamic result = new
             {
-                Request.QueryBag.Id,
+                Id = Convert.ToInt32(Request.QueryString.TryGet("id") ?? "0"),
                 resource.Name,
                 resource.Age
             };

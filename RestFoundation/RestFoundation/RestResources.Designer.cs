@@ -259,6 +259,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FromBody type binder requires POST, PUT or PATCH HTTP method..
+        /// </summary>
+        internal static string InvalidHttpMethodForFromBodyBinder {
+            get {
+                return ResourceManager.GetString("InvalidHttpMethodForFromBodyBinder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A resource cannot be set for the current HTTP method..
         /// </summary>
         internal static string InvalidHttpMethodForResource {
@@ -601,6 +610,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter &apos;{0}&apos; of the method &apos;{1}&apos; in the service contract of type &apos;{2}&apos; is decorated with multiple type binder attributes..
+        /// </summary>
+        internal static string MultipleTypeBindersPerParameter {
+            get {
+                return ResourceManager.GetString("MultipleTypeBindersPerParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header..
         /// </summary>
         internal static string NonAcceptedContentCharset {
@@ -813,6 +831,15 @@ namespace RestFoundation {
         internal static string UnsupportedContentLanguage {
             get {
                 return ResourceManager.GetString("UnsupportedContentLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Array parameters are not supported by the FromHeader type binder..
+        /// </summary>
+        internal static string UnsupportedFromHeaderBinderParameter {
+            get {
+                return ResourceManager.GetString("UnsupportedFromHeaderBinderParameter", resourceCulture);
             }
         }
         

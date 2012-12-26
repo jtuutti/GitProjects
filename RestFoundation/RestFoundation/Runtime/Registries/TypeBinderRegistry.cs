@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Concurrent;
+using RestFoundation.TypeBinders;
 
 namespace RestFoundation.Runtime
 {

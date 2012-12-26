@@ -94,17 +94,6 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
-        /// Gets the dynamic query string dictionary.
-        /// </summary>
-        public dynamic QueryBag
-        {
-            get
-            {
-                return ContextContainer.Query ?? (ContextContainer.Query = new DynamicStringCollection(QueryString));
-            }
-        }
-
-        /// <summary>
         /// Gets the dynamic resource object bag.
         /// </summary>
         public dynamic ResourceBag
@@ -246,8 +235,6 @@ namespace RestFoundation.Context
         {
             public ServiceOperationUri Url { get; set; }
             public HttpMethod? Method { get; set; }
-
-            public dynamic Query { get; set; }
 
             public IObjectValueCollection RouteValues { get; set; }
             public IHeaderCollection Headers { get; set; }

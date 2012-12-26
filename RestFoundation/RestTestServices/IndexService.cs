@@ -96,7 +96,7 @@ namespace RestTestServices
             return new Task<IQueryable<Person>>(() => new List<Person>(people).AsQueryable());
         }
 
-        public ContentResult Get(int? id, string someGarbage)
+        public ContentResult Get(int? id, string dummy)
         {
             Context.Response.Output.WriteFormat("GET : {0}", id);
 

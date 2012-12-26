@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using RestFoundation.Runtime;
+using RestFoundation.TypeBinders;
 
 namespace RestFoundation
 {

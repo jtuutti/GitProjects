@@ -3,7 +3,7 @@
 // </copyright>
 using System;
 
-namespace RestFoundation
+namespace RestFoundation.TypeBinders
 {
     /// <summary>
     /// Defines a binder for service method parameters of a specific object type.
@@ -12,17 +12,12 @@ namespace RestFoundation
     public interface ITypeBinder
     {
         /// <summary>
-        /// Gets a value indicating whether the binded object is a service method resource.
-        /// </summary>
-        bool IsResource { get; }
-
-        /// <summary>
         /// Binds data from an HTTP route, query string or message to a service method parameter.
         /// </summary>
-        /// <param name="objectType">The binded object type.</param>
         /// <param name="name">The service method parameter name.</param>
+        /// <param name="objectType">The binded object type.</param>
         /// <param name="context">The service context.</param>
         /// <returns>The object instance with the data or null.</returns>
-        object Bind(Type objectType, string name, IServiceContext context);
+        object Bind(string name, Type objectType, IServiceContext context);
     }
 }

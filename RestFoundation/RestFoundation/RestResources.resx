@@ -477,4 +477,16 @@
     <value>Invalid hash key provided.</value>
     <comment>Invalid hash key provided.</comment>
   </data>
+  <data name="InvalidHttpMethodForFromBodyBinder" xml:space="preserve">
+    <value>FromBody type binder requires POST, PUT or PATCH HTTP method.</value>
+    <comment>FromBody type binder requires POST, PUT or PATCH HTTP method.</comment>
+  </data>
+  <data name="UnsupportedFromHeaderBinderParameter" xml:space="preserve">
+    <value>Array parameters are not supported by the FromHeader type binder.</value>
+    <comment>Array parameters are not supported by the FromHeader type binder.</comment>
+  </data>
+  <data name="MultipleTypeBindersPerParameter" xml:space="preserve">
+    <value>Parameter '{0}' of the method '{1}' in the service contract of type '{2}' is decorated with multiple type binder attributes.</value>
+    <comment>Parameter '{0}' of the method '{1}' in the service contract of type '{2}' is decorated with multiple type binder attributes.</comment>
+  </data>
 </root>

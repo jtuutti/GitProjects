@@ -102,7 +102,7 @@ namespace RestFoundation.Collections.Concrete
                 throw new ArgumentNullException("key");
             }
 
-            return m_values.GetValues(key);
+            return m_values.GetValues(key) ?? new string[0];
         }
 
         /// <summary>
