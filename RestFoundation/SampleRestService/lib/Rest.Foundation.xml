@@ -858,6 +858,11 @@
               Looks up a localized string similar to Invalid hash key provided..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.InvalidHttpMethodForFromBodyBinder">
+      <summary>
+              Looks up a localized string similar to FromBody type binder requires POST, PUT or PATCH HTTP method..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.InvalidHttpMethodForResource">
       <summary>
               Looks up a localized string similar to A resource cannot be set for the current HTTP method..
@@ -1048,6 +1053,11 @@
               Looks up a localized string similar to No supported media type was provided in the Accept or the Content-Type header..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.MultipleTypeBindersPerParameter">
+      <summary>
+              Looks up a localized string similar to Parameter '{0}' of the method '{1}' in the service contract of type '{2}' is decorated with multiple type binder attributes..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.NonAcceptedContentCharset">
       <summary>
               Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header..
@@ -1166,6 +1176,11 @@
     <member name="P:RestFoundation.RestResources.UnsupportedContentLanguage">
       <summary>
               Looks up a localized string similar to The content language provided is not supported..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.UnsupportedFromHeaderBinderParameter">
+      <summary>
+              Looks up a localized string similar to Array parameters are not supported by the FromHeader type binder..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.UnsupportedHttpMethod">
@@ -4988,6 +5003,88 @@
             Gets or sets the condition for the status.
             </summary>
     </member>
+    <member name="T:RestFoundation.TypeBinders.ITypeBinder">
+      <summary>
+            Defines a binder for service method parameters of a specific object type.
+            The type is specified during the binder registration through a <see cref="T:RestFoundation.Rest" /> instance.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.TypeBinders.ITypeBinder.Bind(System.String,System.Type,RestFoundation.IServiceContext)">
+      <summary>
+            Binds data from an HTTP route, query string or message to a service method parameter.
+            </summary>
+      <param name="name">The service method parameter name.</param>
+      <param name="objectType">The binded object type.</param>
+      <param name="context">The service context.</param>
+      <returns>The object instance with the data or null.</returns>
+    </member>
+    <member name="T:RestFoundation.TypeBinders.TypeBinderAttribute">
+      <summary>
+            Represents a type binder for a specific service method parameter.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.TypeBinders.TypeBinderAttribute.Bind(System.String,System.Type,RestFoundation.IServiceContext)">
+      <summary>
+            Binds data from an HTTP route, query string or message to a service method parameter.
+            </summary>
+      <param name="name">The service method parameter name.</param>
+      <param name="objectType">The binded object type.</param>
+      <param name="context">The service context.</param>
+      <returns>The object instance with the data or null.</returns>
+    </member>
+    <member name="T:RestFoundation.TypeBinders.FromBodyAttribute">
+      <summary>
+            Represents a type binder that binds simple types from HTTP body key value pairs.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.TypeBinders.FromBodyAttribute.Bind(System.String,System.Type,RestFoundation.IServiceContext)">
+      <summary>
+            Binds data from an HTTP body key value pair to a service method parameter.
+            </summary>
+      <param name="name">The service method parameter name.</param>
+      <param name="objectType">The binded object type.</param>
+      <param name="context">The service context.</param>
+      <returns>The object instance with the data or null.</returns>
+    </member>
+    <member name="T:RestFoundation.TypeBinders.FromHeaderAttribute">
+      <summary>
+            Represents a type binder that binds simple types from HTTP headers.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.TypeBinders.FromHeaderAttribute.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.TypeBinders.FromHeaderAttribute" /> class.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.TypeBinders.FromHeaderAttribute.Bind(System.String,System.Type,RestFoundation.IServiceContext)">
+      <summary>
+            Binds data from an HTTP header to a service method parameter.
+            </summary>
+      <param name="name">The service method parameter name.</param>
+      <param name="objectType">The binded object type.</param>
+      <param name="context">The service context.</param>
+      <returns>The object instance with the data or null.</returns>
+    </member>
+    <member name="P:RestFoundation.TypeBinders.FromHeaderAttribute.ConvertUnderscoresToDashes">
+      <summary>
+            Gets a value indicating whether to convert underscores in the parameter to dashes
+            when finding the HTTP header. The default value is true.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.TypeBinders.FromUriAttribute">
+      <summary>
+            Represents a type binder that binds simple types from URI query string parameters.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.TypeBinders.FromUriAttribute.Bind(System.String,System.Type,RestFoundation.IServiceContext)">
+      <summary>
+            Binds data from a URI query string parameter to a service method parameter.
+            </summary>
+      <param name="name">The service method parameter name.</param>
+      <param name="objectType">The binded object type.</param>
+      <param name="context">The service context.</param>
+      <returns>The object instance with the data or null.</returns>
+    </member>
     <member name="T:RestFoundation.TypeBinderBuilder">
       <summary>
             Represents a type binder builder.
@@ -5000,7 +5097,7 @@
       <param name="objectType">The object type.</param>
       <returns>The associated type binder or null.</returns>
     </member>
-    <member name="M:RestFoundation.TypeBinderBuilder.Set(System.Type,RestFoundation.ITypeBinder)">
+    <member name="M:RestFoundation.TypeBinderBuilder.Set(System.Type,RestFoundation.TypeBinders.ITypeBinder)">
       <summary>
             Sets a type binder for the provided object type.
             </summary>
@@ -5162,21 +5259,6 @@
             </summary>
       <param name="key">The cache key.</param>
       <returns>The corresponding value.</returns>
-    </member>
-    <member name="T:RestFoundation.ITypeBinder">
-      <summary>
-            Defines a binder for service method parameters of a specific object type.
-            The type is specified during the binder registration through a <see cref="T:RestFoundation.Rest" /> instance.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.ITypeBinder.Bind(System.Type,System.String,RestFoundation.IServiceContext)">
-      <summary>
-            Binds data from an HTTP route, query string or message to a service method parameter.
-            </summary>
-      <param name="objectType">The binded object type.</param>
-      <param name="name">The service method parameter name.</param>
-      <param name="context">The service context.</param>
-      <returns>The object instance with the data or null.</returns>
     </member>
     <member name="T:RestFoundation.IHttpMethodResolver">
       <summary>
@@ -7843,11 +7925,6 @@
             Gets the stream containing the HTTP request body data.
             </summary>
     </member>
-    <member name="P:RestFoundation.IHttpRequest.QueryBag">
-      <summary>
-            Gets the dynamic query string dictionary.
-            </summary>
-    </member>
     <member name="P:RestFoundation.IHttpRequest.ResourceBag">
       <summary>
             Gets the dynamic resource object bag.
@@ -7916,11 +7993,6 @@
     <member name="P:RestFoundation.Context.HttpRequest.Body">
       <summary>
             Gets the stream containing the HTTP request body data.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Context.HttpRequest.QueryBag">
-      <summary>
-            Gets the dynamic query string dictionary.
             </summary>
     </member>
     <member name="P:RestFoundation.Context.HttpRequest.ResourceBag">
