@@ -515,6 +515,34 @@
             instead of the ISO 8601 format. This property is set to false by default.
             </summary>
     </member>
+    <member name="T:RestFoundation.Results.IResult">
+      <summary>
+            Defines a service method result.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Results.IResult.Execute(RestFoundation.IServiceContext)">
+      <summary>
+            Executes the result against the provided service context.
+            </summary>
+      <param name="context">The service context.</param>
+    </member>
+    <member name="T:RestFoundation.Results.ResponseResult">
+      <summary>
+            Represents a result with a custom response action.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Results.ResponseResult.#ctor(System.Action{RestFoundation.IServiceContext})">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Results.ResponseResult" /> class.
+            </summary>
+      <param name="responseAction">The response action.</param>
+    </member>
+    <member name="M:RestFoundation.Results.ResponseResult.Execute(RestFoundation.IServiceContext)">
+      <summary>
+            Executes the result against the provided service context.
+            </summary>
+      <param name="context">The service context.</param>
+    </member>
     <member name="T:RestFoundation.Runtime.Link">
       <summary>
             Represents a Link HTTP header value.
@@ -1701,17 +1729,6 @@
             </summary>
       <param name="result">The result.</param>
       <param name="methodReturnType">The service method return type.</param>
-      <param name="context">The service context.</param>
-    </member>
-    <member name="T:RestFoundation.Results.IResult">
-      <summary>
-            Defines a service method result.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Results.IResult.Execute(RestFoundation.IServiceContext)">
-      <summary>
-            Executes the result against the provided service context.
-            </summary>
       <param name="context">The service context.</param>
     </member>
     <member name="T:RestFoundation.Results.FileResultBase">
@@ -7265,6 +7282,13 @@
       <param name="obj">The object to serialize to JSON or XML.</param>
       <param name="format">The result content format.</param>
       <returns>The JSON or XML result.</returns>
+    </member>
+    <member name="M:RestFoundation.Result.Response(System.Action{RestFoundation.IServiceContext})">
+      <summary>
+            Returns a result with a custom response.
+            </summary>
+      <param name="action">The response action.</param>
+      <returns>The response result.</returns>
     </member>
     <member name="P:RestFoundation.Result.Accepted">
       <summary>
