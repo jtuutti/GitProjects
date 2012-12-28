@@ -374,6 +374,22 @@
       <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
       <exception cref="T:System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
     </member>
+    <member name="T:RestFoundation.Formatters.SupportedMediaTypeAttribute">
+      <summary>
+            Represents a supported media type for a media type formatter.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Formatters.SupportedMediaTypeAttribute.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Formatters.SupportedMediaTypeAttribute" /> class.
+            </summary>
+      <param name="mediaType">The media type.</param>
+    </member>
+    <member name="P:RestFoundation.Formatters.SupportedMediaTypeAttribute.MediaType">
+      <summary>
+            Gets the media type.
+            </summary>
+    </member>
     <member name="T:RestFoundation.ILogWriter">
       <summary>
             Defines a log writer for the services.
@@ -642,11 +658,16 @@
             </summary>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.WithDefaultMediaType(System.String)">
+    <member name="M:RestFoundation.RestOptions.WithDefaultMediaType(System.String,System.Boolean)">
       <summary>
-            Sets the default media type in case the Accept HTTP header is not provided.
+            Sets the default media type in case the Accept HTTP header is not provided or should
+            be ignored.
             </summary>
       <param name="mediaType">The media type.</param>
+      <param name="forceDefaultMediaType">
+            Set to true to always use the provided media type regardless of the Accept HTTP header value;
+            otherwise set to false.
+            </param>
       <returns>The configuration options object.</returns>
     </member>
     <member name="M:RestFoundation.RestOptions.WithGlobalBehaviors(System.Action{RestFoundation.GlobalBehaviorBuilder})">
@@ -1046,6 +1067,11 @@
     <member name="P:RestFoundation.RestResources.MissingServiceContext">
       <summary>
               Looks up a localized string similar to No service context was passed to the service method invoker..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.MissingSupportedMediaTypeForFormatter">
+      <summary>
+              Looks up a localized string similar to No supported media types are defined for the media type formatter of type '{0}'..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.MissingValidMediaType">
@@ -5132,6 +5158,13 @@
       <returns>The associated media type formatter or null.</returns>
       <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
     </member>
+    <member name="M:RestFoundation.MediaTypeFormatterBuilder.Set(RestFoundation.Formatters.IMediaTypeFormatter)">
+      <summary>
+            Sets a formatter for its supported types.
+            </summary>
+      <param name="formatter">The media type formatter.</param>
+      <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
+    </member>
     <member name="M:RestFoundation.MediaTypeFormatterBuilder.Set(System.String,RestFoundation.Formatters.IMediaTypeFormatter)">
       <summary>
             Sets a formatter for the provided media type.
@@ -5832,11 +5865,26 @@
             Represents a route configuration.
             </summary>
     </member>
+    <member name="M:RestFoundation.RouteConfiguration.BlockMediaTypesForFormatter``1">
+      <summary>
+            Prevents media types supported by the provided formatter from being supported by the
+            service through the current route.
+            </summary>
+      <typeparam name="TFormatter">The type of the media type formatter.</typeparam>
+      <returns>The route configuration.</returns>
+    </member>
     <member name="M:RestFoundation.RouteConfiguration.BlockMediaType(System.String)">
       <summary>
             Prevents a provided media type from being supported by the service through the current route.
             </summary>
       <param name="mediaType">The media type.</param>
+      <returns>The route configuration.</returns>
+    </member>
+    <member name="M:RestFoundation.RouteConfiguration.SetMediaTypeFormatter(RestFoundation.Formatters.IMediaTypeFormatter)">
+      <summary>
+            Sets a route specific formatter for its supported media types for the current route.
+            </summary>
+      <param name="formatter">The media formatter.</param>
       <returns>The route configuration.</returns>
     </member>
     <member name="M:RestFoundation.RouteConfiguration.SetMediaTypeFormatter(System.String,RestFoundation.Formatters.IMediaTypeFormatter)">
