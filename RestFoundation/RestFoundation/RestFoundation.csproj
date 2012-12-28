@@ -72,6 +72,7 @@
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="JsonFormatterSettings.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
+    <Compile Include="Results\ResponseResult.cs" />
     <Compile Include="Runtime\ODataHelper.cs" />
     <Compile Include="Runtime\Link.cs" />
     <Compile Include="ResourceState.cs" />
