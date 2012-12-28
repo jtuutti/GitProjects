@@ -26,7 +26,6 @@ namespace RestTest.App_Start
                 // .InitializeWithUnity(CreateUnityContainer())
                 .WithUrls(RegisterUrls)
                 .WithMediaTypeFormatters(RegisterFormatters)
-                .WithDefaultMediaType("application/json", true)
                 .EnableJsonPSupport()               
                 .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
                 .WithResponseHeader("X-Service-Version", "1.0")

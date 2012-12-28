@@ -17,6 +17,16 @@ namespace RestFoundation
     public static class Result
     {
         /// <summary>
+        /// Gets a JSON format value.
+        /// </summary>
+        public const string JsonFormat = "json";
+
+        /// <summary>
+        /// Gets an XML format value.
+        /// </summary>
+        public const string XmlFormat = "xml";
+
+        /// <summary>
         /// Gets a result with the status code set to Accepted (202).
         /// </summary>
         public static StatusResult Accepted
@@ -573,7 +583,7 @@ namespace RestFoundation
             var result = new JsonPResult
             {
                 Content = obj,
-                Callback = callback
+                Callback = callback,
             };
 
             return result;
@@ -590,6 +600,37 @@ namespace RestFoundation
             {
                 Content = obj
             };
+        }
+
+        /// <summary>
+        /// Returns a JSON or an XML result based on the <paramref name="format"/> value.
+        /// Format value must be equal to <see cref="JsonFormat"/> or <see cref="XmlFormat"/>.
+        /// </summary>
+        /// <param name="obj">The object to serialize to JSON or XML.</param>
+        /// <param name="format">The result content format.</param>
+        /// <returns>The JSON or XML result.</returns>
+        public static IResult JsonOrXml(object obj, string format)
+        {
+            if (format == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.InvalidResultContentFormat);
+            }
+
+            switch (format.ToLowerInvariant().Trim())
+            {
+                case JsonFormat:
+                    return new JsonResult
+                    {
+                        Content = obj
+                    };
+                case XmlFormat:
+                    return new XmlResult
+                    {
+                        Content = obj
+                    };
+                default:
+                    throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.InvalidResultContentFormat);
+            }
         }
     }
 }

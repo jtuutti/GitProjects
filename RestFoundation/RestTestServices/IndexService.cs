@@ -91,9 +91,14 @@ namespace RestTestServices
             return new List<Person>(people).AsQueryable();
         }
 
-        public Task<IQueryable<Person>> GetAllAsync()
+        public Task<IEnumerable<Person>> GetAllAsync()
         {
-            return new Task<IQueryable<Person>>(() => new List<Person>(people).AsQueryable());
+            return new Task<IEnumerable<Person>>(() => new List<Person>(people));
+        }
+
+        public IResult GetAllByFormat(string format)
+        {
+            return Result.JsonOrXml(new List<Person>(people).AsQueryable(), format);
         }
 
         public ContentResult Get(int? id, string dummy)

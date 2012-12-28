@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml;
@@ -49,7 +50,7 @@ namespace RestFoundation.Results
 
             if (String.IsNullOrEmpty(ContentType))
             {
-                ContentType = "application/json";
+                ContentType = "application/xml";
             }
             else if (context.Request.Headers.AcceptVersion > 0 && ContentType.IndexOf("version=", StringComparison.OrdinalIgnoreCase) < 0)
             {
@@ -76,13 +77,17 @@ namespace RestFoundation.Results
 
             if (Attribute.IsDefined(Content.GetType(), typeof(CompilerGeneratedAttribute), false))
             {
-                SerializeAnonymousType(xmlWriter, Content);
+                SerializeAsAnonymousType(xmlWriter, Content);
                 return;
             }
 
-            if (ReturnedType != null && ReturnedType.IsGenericType && ReturnedType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            if (ReturnedType == null && Content != null)
             {
-                SerializeChunkedSequence(context, xmlWriter);
+                ReturnedType = Content.GetType();
+            }
+
+            if (ReturnedType != null && ReturnedType.IsGenericType && SerializeAsSpecializedCollection(context, xmlWriter))
+            {
                 return;
             }
 
@@ -109,7 +114,7 @@ namespace RestFoundation.Results
             xmlWriter.Flush();
         }
 
-        private void SerializeAnonymousType(XmlWriter xmlWriter, object obj)
+        private void SerializeAsAnonymousType(XmlWriter xmlWriter, object obj)
         {
             XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings()), "complexType");
             xmlWriter.WriteStartDocument();
@@ -119,7 +124,7 @@ namespace RestFoundation.Results
             LogResponse(xmlDocument);
         }
 
-        private void SerializeChunkedSequence(IServiceContext context, XmlWriter xmlWriter)
+        private void SerializeAsChunkedSequence(IServiceContext context, XmlWriter xmlWriter)
         {
             var enumerableContent = (IEnumerable) Content;
 
@@ -152,6 +157,23 @@ namespace RestFoundation.Results
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndDocument();
             xmlWriter.Flush();
+        }
+
+        private bool SerializeAsSpecializedCollection(IServiceContext context, XmlWriter xmlWriter)
+        {
+            if (ReturnedType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            {
+                SerializeAsChunkedSequence(context, xmlWriter);
+                return true;
+            }
+
+            if (ReturnedType.GetGenericTypeDefinition() == typeof(IQueryable<>) ||
+                ReturnedType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryable<>)))
+            {
+                Content = ODataHelper.PerformOdataOperations(Content, context.Request);
+            }
+
+            return false;
         }
 
         private void LogResponse(object content)

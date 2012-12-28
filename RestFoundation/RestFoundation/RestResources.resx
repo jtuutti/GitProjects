@@ -493,4 +493,8 @@
     <value>No supported media types are defined for the media type formatter of type '{0}'.</value>
     <comment>No supported media types are defined for the media type formatter of type '{0}'.</comment>
   </data>
+  <data name="InvalidResultContentFormat" xml:space="preserve">
+    <value>Invalid content result format provided.</value>
+    <comment>Invalid content result format provided.</comment>
+  </data>
 </root>

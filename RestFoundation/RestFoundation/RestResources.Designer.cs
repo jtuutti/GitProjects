@@ -367,6 +367,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid content result format provided..
+        /// </summary>
+        internal static string InvalidResultContentFormat {
+            get {
+                return ResourceManager.GetString("InvalidResultContentFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Service contract type must be an interface or a concrete class that defines its own contract..
         /// </summary>
         internal static string InvalidServiceContract {

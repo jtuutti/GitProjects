@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Newtonsoft.Json;
 using RestFoundation.Runtime;
 
@@ -53,9 +54,13 @@ namespace RestFoundation.Results
 
             var serializer = JsonSerializerFactory.Create();
 
-            if (ReturnedType != null && ReturnedType.IsGenericType && ReturnedType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            if (ReturnedType == null && Content != null)
             {
-                OutputChunkedSequence(context, serializer);
+                ReturnedType = Content.GetType();
+            }
+
+            if (ReturnedType != null && ReturnedType.IsGenericType && SerializeAsSpecializedCollection(context, serializer))
+            {
                 return;
             }
 
@@ -66,7 +71,7 @@ namespace RestFoundation.Results
             LogResponse(Content);
         }
 
-        private void OutputChunkedSequence(IServiceContext context, JsonSerializer serializer)
+        private void SerializeAsChunkedSequence(IServiceContext context, JsonSerializer serializer)
         {
             var enumerableContent = (IEnumerable) Content;
 
@@ -92,6 +97,23 @@ namespace RestFoundation.Results
             }
 
             context.Response.Output.Write("]");
+        }
+        
+        private bool SerializeAsSpecializedCollection(IServiceContext context, JsonSerializer serializer)
+        {
+            if (ReturnedType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            {
+                SerializeAsChunkedSequence(context, serializer);
+                return true;
+            }
+
+            if (ReturnedType.GetGenericTypeDefinition() == typeof(IQueryable<>) ||
+                ReturnedType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryable<>)))
+            {
+                Content = ODataHelper.PerformOdataOperations(Content, context.Request);
+            }
+
+            return false;
         }
 
         private void LogResponse(object content)
