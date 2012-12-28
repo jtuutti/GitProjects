@@ -601,6 +601,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No supported media types are defined for the media type formatter of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string MissingSupportedMediaTypeForFormatter {
+            get {
+                return ResourceManager.GetString("MissingSupportedMediaTypeForFormatter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No supported media type was provided in the Accept or the Content-Type header..
         /// </summary>
         internal static string MissingValidMediaType {

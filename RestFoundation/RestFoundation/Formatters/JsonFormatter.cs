@@ -12,6 +12,7 @@ namespace RestFoundation.Formatters
     /// <summary>
     /// Represents a JSON media type formatter.
     /// </summary>
+    [SupportedMediaType("application/json")]
     public class JsonFormatter : IMediaTypeFormatter
     {
         private readonly IContentNegotiator m_contentNegotiator;

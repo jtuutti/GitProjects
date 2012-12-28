@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using RestFoundation.Behaviors;
 using RestFoundation.Formatters;
@@ -29,6 +30,31 @@ namespace RestFoundation
         }
 
         /// <summary>
+        /// Prevents media types supported by the provided formatter from being supported by the
+        /// service through the current route.
+        /// </summary>
+        /// <typeparam name="TFormatter">The type of the media type formatter.</typeparam>
+        /// <returns>The route configuration.</returns>
+        public RouteConfiguration BlockMediaTypesForFormatter<TFormatter>()
+            where TFormatter : class, IMediaTypeFormatter
+        {
+            Type formatterType = typeof(TFormatter);
+            var supportedMediaTypes = formatterType.GetCustomAttributes(typeof(SupportedMediaTypeAttribute), false).Cast<SupportedMediaTypeAttribute>().ToList();
+
+            if (supportedMediaTypes.Count == 0)
+            {
+                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, RestResources.MissingSupportedMediaTypeForFormatter, formatterType.Name));
+            }
+
+            foreach (SupportedMediaTypeAttribute supportedMediaType in supportedMediaTypes)
+            {
+                BlockMediaType(supportedMediaType.MediaType);
+            }
+
+            return this;
+        }
+
+        /// <summary>
         /// Prevents a provided media type from being supported by the service through the current route.
         /// </summary>
         /// <param name="mediaType">The media type.</param>
@@ -45,6 +71,34 @@ namespace RestFoundation
             foreach (IRestHandler routeHandler in m_routeHandlers)
             {
                 MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, mediaType.Trim(), blockFormatter);
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets a route specific formatter for its supported media types for the current route.
+        /// </summary>
+        /// <param name="formatter">The media formatter.</param>
+        /// <returns>The route configuration.</returns>
+        public RouteConfiguration SetMediaTypeFormatter(IMediaTypeFormatter formatter)
+        {
+            if (formatter == null)
+            {
+                throw new ArgumentNullException("formatter");
+            }
+
+            Type formatterType = formatter.GetType();
+            var supportedMediaTypes = formatterType.GetCustomAttributes(typeof(SupportedMediaTypeAttribute), false).Cast<SupportedMediaTypeAttribute>().ToList();
+
+            if (supportedMediaTypes.Count == 0)
+            {
+                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, RestResources.MissingSupportedMediaTypeForFormatter, formatterType.Name), "formatter");
+            }
+
+            foreach (SupportedMediaTypeAttribute supportedMediaType in supportedMediaTypes)
+            {
+                SetMediaTypeFormatter(supportedMediaType.MediaType, formatter);
             }
 
             return this;

@@ -43,6 +43,7 @@ namespace RestFoundation
         internal bool IsServiceProxyInitialized { get; set; }
         internal string ServiceProxyRelativeUrl { get; set; }
         internal string DefaultMediaType { get; private set; }
+        internal bool ForceDefaultMediaType { get; private set; }
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
         internal string IndexPageRelativeUrl { get; private set; }
         internal JsonFormatterSettings JsonSettings { get; private set; }
@@ -76,11 +77,16 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Sets the default media type in case the Accept HTTP header is not provided.
+        /// Sets the default media type in case the Accept HTTP header is not provided or should
+        /// be ignored.
         /// </summary>
         /// <param name="mediaType">The media type.</param>
+        /// <param name="forceDefaultMediaType">
+        /// Set to true to always use the provided media type regardless of the Accept HTTP header value;
+        /// otherwise set to false.
+        /// </param>
         /// <returns>The configuration options object.</returns>
-        public RestOptions WithDefaultMediaType(string mediaType)
+        public RestOptions WithDefaultMediaType(string mediaType, bool forceDefaultMediaType)
         {
             if (String.IsNullOrEmpty(mediaType))
             {
@@ -88,6 +94,8 @@ namespace RestFoundation
             }
 
             DefaultMediaType = mediaType;
+            ForceDefaultMediaType = forceDefaultMediaType;
+
             return this;
         }
 

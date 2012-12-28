@@ -2,6 +2,8 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Globalization;
+using System.Linq;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 
@@ -35,6 +37,32 @@ namespace RestFoundation
             }
 
             return MediaTypeFormatterRegistry.GetFormatter(mediaType.Trim());
+        }
+
+        /// <summary>
+        /// Sets a formatter for its supported types.
+        /// </summary>
+        /// <param name="formatter">The media type formatter.</param>
+        /// <exception cref="ArgumentException">If media type parameters are provided.</exception>
+        public void Set(IMediaTypeFormatter formatter)
+        {
+            if (formatter == null)
+            {
+                throw new ArgumentNullException("formatter");
+            }
+
+            Type formatterType = formatter.GetType();
+            var supportedMediaTypes = formatterType.GetCustomAttributes(typeof(SupportedMediaTypeAttribute), false).Cast<SupportedMediaTypeAttribute>().ToList();
+
+            if (supportedMediaTypes.Count == 0)
+            {
+                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, RestResources.MissingSupportedMediaTypeForFormatter, formatterType.Name), "formatter");
+            }
+
+            foreach (SupportedMediaTypeAttribute supportedMediaType in supportedMediaTypes)
+            {
+                Set(supportedMediaType.MediaType, formatter);
+            }
         }
 
         /// <summary>

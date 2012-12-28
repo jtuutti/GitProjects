@@ -12,6 +12,8 @@ namespace RestFoundation.Formatters
     /// <summary>
     /// Represents a JSONP media type formatter.
     /// </summary>
+    [SupportedMediaType("application/javascript")]
+    [SupportedMediaType("text/javascript")]
     public class JsonPFormatter : IMediaTypeFormatter
     {
         /// <summary>

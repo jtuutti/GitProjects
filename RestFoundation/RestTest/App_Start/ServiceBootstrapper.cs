@@ -26,6 +26,7 @@ namespace RestTest.App_Start
                 // .InitializeWithUnity(CreateUnityContainer())
                 .WithUrls(RegisterUrls)
                 .WithMediaTypeFormatters(RegisterFormatters)
+                .WithDefaultMediaType("application/json", true)
                 .EnableJsonPSupport()               
                 .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
                 .WithResponseHeader("X-Service-Version", "1.0")
@@ -74,8 +75,8 @@ namespace RestTest.App_Start
 
         private static void RegisterFormatters(MediaTypeFormatterBuilder builder)
         {
-            builder.Set("application/x-www-form-urlencoded", new FormsFormatter());
-            builder.Set("multipart/form-data", new MultiPartFormatter());
+            builder.Set(new FormsFormatter());
+            builder.Set(new MultiPartFormatter());
         }
 
         private static void RegisterUrls(UrlBuilder urlBuilder)
@@ -92,7 +93,7 @@ namespace RestTest.App_Start
 
             urlBuilder.MapUrl("dynamic")
                       .ToServiceContract<IDynamicService>()
-                      .BlockMediaType("application/x-www-form-urlencoded");
+                      .BlockMediaTypesForFormatter<FormsFormatter>();
 
             urlBuilder.MapUrl("touch-map")
                       .ToServiceContract<ITouchMapService>()

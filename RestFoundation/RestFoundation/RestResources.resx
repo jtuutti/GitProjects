@@ -489,4 +489,8 @@
     <value>Parameter '{0}' of the method '{1}' in the service contract of type '{2}' is decorated with multiple type binder attributes.</value>
     <comment>Parameter '{0}' of the method '{1}' in the service contract of type '{2}' is decorated with multiple type binder attributes.</comment>
   </data>
+  <data name="MissingSupportedMediaTypeForFormatter" xml:space="preserve">
+    <value>No supported media types are defined for the media type formatter of type '{0}'.</value>
+    <comment>No supported media types are defined for the media type formatter of type '{0}'.</comment>
+  </data>
 </root>

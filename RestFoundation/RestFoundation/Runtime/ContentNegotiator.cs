@@ -29,6 +29,11 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("request");
             }
 
+            if (Rest.Configuration.Options.ForceDefaultMediaType)
+            {
+                return Rest.Configuration.Options.DefaultMediaType;
+            }
+
             string acceptValue = request.QueryString.TryGet(AcceptOverrideQuery);
 
             if (!String.IsNullOrEmpty(acceptValue))

@@ -13,6 +13,8 @@ namespace RestFoundation.Formatters
     /// <summary>
     /// Represents an XML media type formatter.
     /// </summary>
+    [SupportedMediaType("application/xml")]
+    [SupportedMediaType("text/xml")]
     public class XmlFormatter : IMediaTypeFormatter
     {
         private readonly IContentNegotiator m_contentNegotiator;

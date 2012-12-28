@@ -17,6 +17,7 @@ namespace RestFoundation.Formatters
     /// <summary>
     /// Represents an HTTP form data formatter.
     /// </summary>
+    [SupportedMediaType("application/x-www-form-urlencoded")]
     public class FormsFormatter : IMediaTypeFormatter
     {
         /// <summary>
