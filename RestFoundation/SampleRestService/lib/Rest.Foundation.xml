@@ -939,6 +939,11 @@
               Looks up a localized string similar to A resource example type must be a class implementing the RestFoundation.ServiceProxy.IResourceExample interface..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.InvalidResultContentFormat">
+      <summary>
+              Looks up a localized string similar to Invalid content result format provided..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.InvalidServiceContract">
       <summary>
               Looks up a localized string similar to Service contract type must be an interface or a concrete class that defines its own contract..
@@ -7004,6 +7009,16 @@
             Represents results to return from service methods.
             </summary>
     </member>
+    <member name="F:RestFoundation.Result.JsonFormat">
+      <summary>
+            Gets a JSON format value.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.Result.XmlFormat">
+      <summary>
+            Gets an XML format value.
+            </summary>
+    </member>
     <member name="M:RestFoundation.Result.Content(System.String)">
       <summary>
             Returns a content result.
@@ -7241,6 +7256,15 @@
             </summary>
       <param name="obj">The object to serialize to XML.</param>
       <returns>The XML result.</returns>
+    </member>
+    <member name="M:RestFoundation.Result.JsonOrXml(System.Object,System.String)">
+      <summary>
+            Returns a JSON or an XML result based on the <paramref name="format" /> value.
+            Format value must be equal to <see cref="F:RestFoundation.Result.JsonFormat" /> or <see cref="F:RestFoundation.Result.XmlFormat" />.
+            </summary>
+      <param name="obj">The object to serialize to JSON or XML.</param>
+      <param name="format">The result content format.</param>
+      <returns>The JSON or XML result.</returns>
     </member>
     <member name="P:RestFoundation.Result.Accepted">
       <summary>
