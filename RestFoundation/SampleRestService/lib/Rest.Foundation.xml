@@ -1252,6 +1252,11 @@
               Looks up a localized string similar to Media type is not supported.
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.UnsupportedObjectTypeForOData">
+      <summary>
+              Looks up a localized string similar to OData operations are not supported for anonymous objects..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.UnsupportedOperation">
       <summary>
               Looks up a localized string similar to Unsupported operation.
