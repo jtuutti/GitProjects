@@ -497,4 +497,8 @@
     <value>Invalid content result format provided.</value>
     <comment>Invalid content result format provided.</comment>
   </data>
+  <data name="UnsupportedObjectTypeForOData" xml:space="preserve">
+    <value>OData operations are not supported for anonymous objects.</value>
+    <comment>OData operations are not supported for anonymous objects.</comment>
+  </data>
 </root>

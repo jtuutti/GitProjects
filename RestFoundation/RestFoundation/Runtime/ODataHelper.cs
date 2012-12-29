@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Runtime.CompilerServices;
 using RestFoundation.Odata;
 
 namespace RestFoundation.Runtime
@@ -36,6 +37,12 @@ namespace RestFoundation.Runtime
             }
 
             Type returnItemType = filteredResultArray[0].GetType();
+
+            if (returnItemType.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.UnsupportedObjectTypeForOData);
+            }
+
             Type filteredResultListType = typeof(List<>).MakeGenericType(returnItemType);
 
             object filteredResultList = Activator.CreateInstance(filteredResultListType);

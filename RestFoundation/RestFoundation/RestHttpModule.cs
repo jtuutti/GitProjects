@@ -85,6 +85,8 @@ namespace RestFoundation
 
         private void CompleteRequestOnError()
         {
+            m_context.Response.Filter = null;
+
             Exception exception = m_context.Server.GetLastError();
 
             if (exception is HttpUnhandledException && exception.InnerException != null)

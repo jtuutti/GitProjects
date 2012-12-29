@@ -880,6 +880,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OData operations are not supported for anonymous objects..
+        /// </summary>
+        internal static string UnsupportedObjectTypeForOData {
+            get {
+                return ResourceManager.GetString("UnsupportedObjectTypeForOData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unsupported operation.
         /// </summary>
         internal static string UnsupportedOperation {
