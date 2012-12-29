@@ -75,15 +75,23 @@ namespace RestFoundation.Results
                 return;
             }
 
-            if (Attribute.IsDefined(Content.GetType(), typeof(CompilerGeneratedAttribute), false))
+            Type contentObjectType = Content.GetType();
+
+            if (Attribute.IsDefined(contentObjectType, typeof(CompilerGeneratedAttribute), false))
             {
                 SerializeAsAnonymousType(xmlWriter, Content);
                 return;
             }
 
+            if (IsGenericAnonymousCollectionType(contentObjectType)) 
+            {
+                SerializeAsAnonymousCollection(xmlWriter, Content);
+                return;
+            }
+
             if (ReturnedType == null && Content != null)
             {
-                ReturnedType = Content.GetType();
+                ReturnedType = contentObjectType;
             }
 
             if (ReturnedType != null && ReturnedType.IsGenericType && SerializeAsSpecializedCollection(context, xmlWriter))
@@ -103,6 +111,39 @@ namespace RestFoundation.Results
             LogResponse(Content);
         }
 
+        private static bool IsGenericAnonymousCollectionType(Type objectType)
+        {
+            if (objectType.IsArray && Attribute.IsDefined(objectType.GetElementType(), typeof(CompilerGeneratedAttribute), false))
+            {
+                return true;
+            }
+
+            if (!objectType.IsGenericType)
+            {
+                return false;
+            }
+
+            Type genericType = objectType.GetGenericTypeDefinition();
+            Type[] typeArguments = objectType.GetGenericArguments();
+
+            if (typeArguments.Length != 1)
+            {
+                return false;
+            }
+
+            if (genericType == typeof(IQueryable<>) || genericType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryable<>)))
+            {
+                return false;
+            }
+
+            if (genericType != typeof(IEnumerable<>) && genericType.GetInterfaces().All(i => !i.IsGenericType || i.GetGenericTypeDefinition() != typeof(IEnumerable<>)))
+            {
+                return false;
+            }
+
+            return typeArguments[0] == typeof(object) || Attribute.IsDefined(typeArguments[0], typeof(CompilerGeneratedAttribute), false);
+        }
+
         private static void SerializeNullObject(XmlWriter xmlWriter)
         {
             xmlWriter.WriteStartDocument();
@@ -117,6 +158,21 @@ namespace RestFoundation.Results
         private void SerializeAsAnonymousType(XmlWriter xmlWriter, object obj)
         {
             XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings()), "complexType");
+            xmlWriter.WriteStartDocument();
+            xmlWriter.WriteRaw(xmlDocument.OuterXml);
+            xmlWriter.Flush();
+
+            LogResponse(xmlDocument);
+        }
+
+        private void SerializeAsAnonymousCollection(XmlWriter xmlWriter, object obj)
+        {
+            var wrapperObject = new
+            {
+                complexType = obj
+            };
+
+            XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(wrapperObject, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings()), "complexTypes");
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteRaw(xmlDocument.OuterXml);
             xmlWriter.Flush();

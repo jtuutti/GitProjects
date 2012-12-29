@@ -85,8 +85,6 @@ namespace RestFoundation
 
         private void CompleteRequestOnError()
         {
-            m_context.Response.Filter = null;
-
             Exception exception = m_context.Server.GetLastError();
 
             if (exception is HttpUnhandledException && exception.InnerException != null)
@@ -101,6 +99,8 @@ namespace RestFoundation
                 SetResponseStatus(responseException.StatusCode, responseException.StatusDescription);
                 return;
             }
+
+            TryClearCompressionFilter();
 
             if (exception != null && LogUtility.CanLog)
             {
@@ -133,6 +133,20 @@ namespace RestFoundation
                 {
                     SetResponseStatus(HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
                 }
+            }
+        }
+
+        private void TryClearCompressionFilter()
+        {
+            try
+            {
+                if (m_context.Response.Filter != null && m_context.Response.Filter.GetType().Namespace != typeof(HttpResponse).Namespace)
+                {
+                    m_context.Response.Filter = null;
+                }
+            }
+            catch (Exception)
+            {
             }
         }
 
