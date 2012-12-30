@@ -7,11 +7,12 @@ using System.Net;
 namespace RestFoundation.Behaviors
 {
     /// <summary>
-    /// Represents a secure behavior for a service or a service method that rejects responses
-    /// not generated using AJAX. A non-AJAX HTTP request will set a 404 (Not Found) HTTP
-    /// status code.
+    /// Represents a service method that can only be called using AJAX.
+    /// HTTP connection will set a 404 (Not Found) HTTP status code if the service method
+    /// was not called using AJAX.
     /// </summary>
-    public class AjaxOnlyBehavior : SecureServiceBehavior
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    public sealed class AjaxOnlyAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
@@ -28,7 +29,7 @@ namespace RestFoundation.Behaviors
 
             if (!serviceContext.Request.IsAjax)
             {
-                SetStatus(HttpStatusCode.NotFound, RestResources.NotFound);
+                serviceContext.Response.SetStatus(HttpStatusCode.NotFound, RestResources.NotFound);
                 return BehaviorMethodAction.Stop;
             }
 

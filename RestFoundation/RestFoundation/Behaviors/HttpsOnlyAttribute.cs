@@ -2,14 +2,16 @@
 // Dmitry Starosta, 2012
 // </copyright>
 using System;
+using System.Net;
 
 namespace RestFoundation.Behaviors
 {
     /// <summary>
-    /// Represents an HTTPS secure behavior for a service or a service method. Any unsecure
+    /// Represents a service method that can only be called over HTTPS/SSL.
     /// HTTP connection will set a 403 (Forbidden) HTTP status code if the connection is not secure.
     /// </summary>
-    public class HttpsOnlyBehavior : SecureServiceBehavior
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    public sealed class HttpsOnlyAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
@@ -26,7 +28,7 @@ namespace RestFoundation.Behaviors
 
             if (!String.Equals("https", serviceContext.Request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
             {
-                SetStatusDescription(RestResources.HttpsRequiredStatusDescription);
+                serviceContext.Response.SetStatus(HttpStatusCode.Forbidden, RestResources.HttpsRequiredStatusDescription);
                 return BehaviorMethodAction.Stop;
             }
 

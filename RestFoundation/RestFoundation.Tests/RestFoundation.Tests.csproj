@@ -68,7 +68,6 @@
     <Compile Include="Behaviors\ResourceValidationBehaviorTests.cs" />
     <Compile Include="Formatters\FormsFormatterTests.cs" />
     <Compile Include="Implementation\Authorization\TestAuthorizationManager.cs" />
-    <Compile Include="Behaviors\AjaxOnlyBehaviorTests.cs" />
     <Compile Include="Behaviors\HttpsOnlyBehaviorTests.cs" />
     <Compile Include="ContentNegotiators\ContentNegotiatorTests.cs" />
     <Compile Include="Cache\CacheTests.cs" />

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using RestFoundation;
+using RestFoundation.Behaviors;
 using RestFoundation.Results;
 using RestFoundation.ServiceProxy;
 using RestFoundation.TypeBinders;
@@ -25,7 +26,7 @@ namespace RestTestContracts
         [Url("index/get-10", HttpMethod.Get)]
         RedirectResult RedirectToGet10();
 
-        [Url("index/all", "Get, Head")]
+        [Url("index/all", "Get, Head"), HttpsOnly]
         IQueryable<Person> GetAll();
 
         [Url("index/all-async", "Get, Head")]
