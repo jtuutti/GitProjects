@@ -88,6 +88,7 @@ namespace RestFoundation.Runtime
             {
                 var methodBehaviorAttributes = m.GetCustomAttributes(typeof(ServiceMethodBehaviorAttribute), false)
                                                 .Cast<ServiceMethodBehaviorAttribute>()
+                                                .OrderBy(b => b.Order)
                                                 .ToList();
 
                 if (LogUtility.CanLog)

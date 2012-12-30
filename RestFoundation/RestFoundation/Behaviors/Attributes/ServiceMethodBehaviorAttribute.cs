@@ -15,6 +15,11 @@ namespace RestFoundation.Behaviors
     public abstract class ServiceMethodBehaviorAttribute : Attribute, ISecureServiceBehavior
     {
         /// <summary>
+        /// Represents an order to execute service behavior attributes.
+        /// </summary>
+        public int Order { get; set; }
+
+        /// <summary>
         /// Gets the HTTP status code in case of a security exception.
         /// </summary>
         public virtual HttpStatusCode StatusCode

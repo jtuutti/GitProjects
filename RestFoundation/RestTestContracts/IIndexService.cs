@@ -26,7 +26,7 @@ namespace RestTestContracts
         [Url("index/get-10", HttpMethod.Get)]
         RedirectResult RedirectToGet10();
 
-        [Url("index/all", "Get, Head"), HttpsOnly]
+        [Url("index/all", "Get, Head")]
         IQueryable<Person> GetAll();
 
         [Url("index/all-async", "Get, Head")]

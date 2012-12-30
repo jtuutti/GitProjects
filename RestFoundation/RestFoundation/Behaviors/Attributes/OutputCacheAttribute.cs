@@ -9,14 +9,15 @@ using RestFoundation.Runtime;
 namespace RestFoundation.Behaviors
 {
     /// <summary>
-    /// Represents an output cache behavior for a service or a service method.
+    /// Represents a service method with a specific HTTP caching behavior.
     /// </summary>
-    public class OutputCacheBehavior : ServiceBehavior
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    public sealed class OutputCacheAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OutputCacheBehavior"/> class.
+        /// Initializes a new instance of the <see cref="OutputCacheAttribute"/> class.
         /// </summary>
-        public OutputCacheBehavior()
+        public OutputCacheAttribute()
         {
             CacheSettings = new OutputCacheParameters();
             VaryByParam = "none";
@@ -25,15 +26,15 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Gets or sets the amount of time that a cache entry is to remain in the output cache.
         /// </summary>
-        public TimeSpan DurationInSeconds
+        public int DurationInSeconds
         {
             get
             {
-                return TimeSpan.FromSeconds(CacheSettings.Duration);
+                return CacheSettings.Duration;
             }
             set
             {
-                CacheSettings.Duration = Convert.ToInt32(value.TotalSeconds);
+                CacheSettings.Duration = value;
             }
         }
 
