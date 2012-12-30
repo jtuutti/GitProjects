@@ -4,6 +4,254 @@
     <name>Rest.Foundation</name>
   </assembly>
   <members>
+    <member name="T:RestFoundation.Behaviors.IServiceBehavior">
+      <summary>
+            Defines a service behavior.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.IServiceBehavior.AppliesTo(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAppliesContext)">
+      <summary>
+            Returns a value indicating whether to apply the behavior to the provided method of the specified
+            service type.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="methodContext">The "method applies" context.</param>
+      <returns>true to apply the behavior; false to bypass.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.IServiceBehavior.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+      <summary>
+            Called before a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.IServiceBehavior.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
+      <summary>
+            Called after a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executed" behavior context.</param>
+    </member>
+    <member name="T:RestFoundation.Behaviors.ServiceBehavior">
+      <summary>
+            The base service behavior class.
+            This class cannot be instantiated.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ServiceBehavior.AppliesTo(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAppliesContext)">
+      <summary>
+            Returns a value indicating whether to apply the behavior to the provided method of the specified
+            service type.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="methodContext">The "method applies" context.</param>
+      <returns>true to apply the behavior; false to bypass.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ServiceBehavior.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+      <summary>
+            Called before a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ServiceBehavior.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
+      <summary>
+            Called after a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executed" behavior context.</param>
+    </member>
+    <member name="T:RestFoundation.Behaviors.ISecureServiceBehavior">
+      <summary>
+            Defines a secure service behavior.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ISecureServiceBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+      <summary>
+            Called during the authorization process before a service method or behavior is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method authorizing" behavior context.</param>
+    </member>
+    <member name="T:RestFoundation.Behaviors.SecureServiceBehavior">
+      <summary>
+            The base secure service behavior class. It is highly recommended to inherit this class
+            instead of implementing the <see cref="T:RestFoundation.Behaviors.ISecureServiceBehavior" /> interface to avoid
+            output caching security problems.
+            This class cannot be instantiated.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.SecureServiceBehavior.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.SecureServiceBehavior" /> class.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.SecureServiceBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+      <summary>
+            Called during the authorization process before a service method or behavior is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method authorizing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.SecureServiceBehavior.SetStatus(System.Net.HttpStatusCode,System.String)">
+      <summary>
+            Sets an HTTP status code and description in case of a security exception.
+            </summary>
+      <param name="statusCode">The status code.</param>
+      <param name="description">The status description.</param>
+      <exception cref="T:System.ArgumentOutOfRangeException">If the status code is less than 400.</exception>
+    </member>
+    <member name="M:RestFoundation.Behaviors.SecureServiceBehavior.SetStatusCode(System.Net.HttpStatusCode)">
+      <summary>
+            Sets an HTTP status code in case of a security exception.
+            </summary>
+      <param name="statusCode">The status code.</param>
+      <exception cref="T:System.ArgumentOutOfRangeException">If the status code is less than 400.</exception>
+    </member>
+    <member name="M:RestFoundation.Behaviors.SecureServiceBehavior.SetStatusDescription(System.String)">
+      <summary>
+            Sets an HTTP status description in case of a security exception.
+            </summary>
+      <param name="description">The status description.</param>
+    </member>
+    <member name="T:RestFoundation.Behaviors.AjaxOnlyBehavior">
+      <summary>
+            Represents a secure behavior for a service or a service method that rejects responses
+            not generated using AJAX. A non-AJAX HTTP request will set a 404 (Not Found) HTTP
+            status code.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.AjaxOnlyBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+      <summary>
+            Called during the authorization process before a service method or behavior is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method authorizing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="T:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute">
+      <summary>
+            Represents a service method behavior defined on a service contract.
+            This class cannot be instantiated.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.AppliesTo(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAppliesContext)">
+      <summary>
+            Returns a value indicating whether to apply the behavior to the provided method of the specified
+            service type.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="methodContext">The "method applies" context.</param>
+      <returns>true to apply the behavior; false to bypass.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+      <summary>
+            Called during the authorization process before a service method or behavior is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method authorizing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+      <summary>
+            Called before a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
+      <summary>
+            Called after a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executed" behavior context.</param>
+    </member>
+    <member name="P:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.Order">
+      <summary>
+            Represents an order to execute service behavior attributes.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.StatusCode">
+      <summary>
+            Gets the HTTP status code in case of a security exception.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.StatusDescription">
+      <summary>
+            Gets the HTTP status description in case of a security exception.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.Behaviors.AjaxOnlyAttribute">
+      <summary>
+            Represents a service method that can only be called using AJAX.
+            HTTP connection will set a 404 (Not Found) HTTP status code if the service method
+            was not called using AJAX.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.AjaxOnlyAttribute.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+      <summary>
+            Called during the authorization process before a service method or behavior is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method authorizing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="T:RestFoundation.Behaviors.OutputCacheAttribute">
+      <summary>
+            Represents a service method with a specific HTTP caching behavior.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.OutputCacheAttribute.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.OutputCacheAttribute" /> class.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.OutputCacheAttribute.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
+      <summary>
+            Called after a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executed" behavior context.</param>
+    </member>
+    <member name="P:RestFoundation.Behaviors.OutputCacheAttribute.DurationInSeconds">
+      <summary>
+            Gets or sets the amount of time that a cache entry is to remain in the output cache.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.OutputCacheAttribute.Location">
+      <summary>
+            Gets or sets a value that determines the location of the cache entry.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.OutputCacheAttribute.NoStore">
+      <summary>
+            Gets or sets a value indicating whether HTTP cache-control: no-store directive is set.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.OutputCacheAttribute.VaryByContentEncoding">
+      <summary>
+            Gets or sets a comma delimited set of character sets (content encodings) used to vary the cache entry.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.OutputCacheAttribute.VaryByCustom">
+      <summary>
+            Gets or sets a comma delimited set of custom strings used to vary the cache entry.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.OutputCacheAttribute.VaryByHeader">
+      <summary>
+            Gets or sets a comma delimited set of HTTP header names associated with the request used to vary the cache entry.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.OutputCacheAttribute.VaryByParam">
+      <summary>
+            Gets or sets a comma delimited set of query string or form POST parameters used to vary the cache entry.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Behaviors.BehaviorContext">
       <summary>
             The base class for a behavior context.
@@ -142,63 +390,13 @@
             Gets the resource object to be passed into the service method.
             </summary>
     </member>
-    <member name="T:RestFoundation.Behaviors.IServiceBehavior">
+    <member name="T:RestFoundation.Behaviors.HttpsOnlyAttribute">
       <summary>
-            Defines a service behavior.
+            Represents a service method that can only be called over HTTPS/SSL.
+            HTTP connection will set a 403 (Forbidden) HTTP status code if the connection is not secure.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.IServiceBehavior.AppliesTo(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAppliesContext)">
-      <summary>
-            Returns a value indicating whether to apply the behavior to the provided method of the specified
-            service type.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="methodContext">The "method applies" context.</param>
-      <returns>true to apply the behavior; false to bypass.</returns>
-    </member>
-    <member name="M:RestFoundation.Behaviors.IServiceBehavior.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
-      <summary>
-            Called before a service method is executed.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method executing" behavior context.</param>
-      <returns>A service method action.</returns>
-    </member>
-    <member name="M:RestFoundation.Behaviors.IServiceBehavior.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
-      <summary>
-            Called after a service method is executed.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method executed" behavior context.</param>
-    </member>
-    <member name="T:RestFoundation.Behaviors.ISecureServiceBehavior">
-      <summary>
-            Defines a secure service behavior.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Behaviors.ISecureServiceBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
-      <summary>
-            Called during the authorization process before a service method or behavior is executed.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method authorizing" behavior context.</param>
-    </member>
-    <member name="T:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute">
-      <summary>
-            Represents a service method behavior defined on a service contract.
-            This class cannot be instantiated.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.AppliesTo(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAppliesContext)">
-      <summary>
-            Returns a value indicating whether to apply the behavior to the provided method of the specified
-            service type.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="methodContext">The "method applies" context.</param>
-      <returns>true to apply the behavior; false to bypass.</returns>
-    </member>
-    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+    <member name="M:RestFoundation.Behaviors.HttpsOnlyAttribute.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
       <summary>
             Called during the authorization process before a service method or behavior is executed.
             </summary>
@@ -206,30 +404,17 @@
       <param name="behaviorContext">The "method authorizing" behavior context.</param>
       <returns>A service method action.</returns>
     </member>
-    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+    <member name="T:RestFoundation.Behaviors.NoCacheAttribute">
       <summary>
-            Called before a service method is executed.
+            Represents a service method that prevents HTTP caching.
             </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method executing" behavior context.</param>
-      <returns>A service method action.</returns>
     </member>
-    <member name="M:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
+    <member name="M:RestFoundation.Behaviors.NoCacheAttribute.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
       <summary>
             Called after a service method is executed.
             </summary>
       <param name="serviceContext">The service context.</param>
       <param name="behaviorContext">The "method executed" behavior context.</param>
-    </member>
-    <member name="P:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.StatusCode">
-      <summary>
-            Gets the HTTP status code in case of a security exception.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Behaviors.ServiceMethodBehaviorAttribute.StatusDescription">
-      <summary>
-            Gets the HTTP status description in case of a security exception.
-            </summary>
     </member>
     <member name="T:RestFoundation.Collections.Specialized.LinkCollection">
       <summary>
@@ -1464,78 +1649,6 @@
             Handle the exception and stop executing the method.
             </summary>
     </member>
-    <member name="T:RestFoundation.Behaviors.ServiceBehavior">
-      <summary>
-            The base service behavior class.
-            This class cannot be instantiated.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Behaviors.ServiceBehavior.AppliesTo(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAppliesContext)">
-      <summary>
-            Returns a value indicating whether to apply the behavior to the provided method of the specified
-            service type.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="methodContext">The "method applies" context.</param>
-      <returns>true to apply the behavior; false to bypass.</returns>
-    </member>
-    <member name="M:RestFoundation.Behaviors.ServiceBehavior.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
-      <summary>
-            Called before a service method is executed.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method executing" behavior context.</param>
-      <returns>A service method action.</returns>
-    </member>
-    <member name="M:RestFoundation.Behaviors.ServiceBehavior.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
-      <summary>
-            Called after a service method is executed.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method executed" behavior context.</param>
-    </member>
-    <member name="T:RestFoundation.Behaviors.SecureServiceBehavior">
-      <summary>
-            The base secure service behavior class. It is highly recommended to inherit this class
-            instead of implementing the <see cref="T:RestFoundation.Behaviors.ISecureServiceBehavior" /> interface to avoid
-            output caching security problems.
-            This class cannot be instantiated.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Behaviors.SecureServiceBehavior.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.SecureServiceBehavior" /> class.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Behaviors.SecureServiceBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
-      <summary>
-            Called during the authorization process before a service method or behavior is executed.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method authorizing" behavior context.</param>
-      <returns>A service method action.</returns>
-    </member>
-    <member name="M:RestFoundation.Behaviors.SecureServiceBehavior.SetStatus(System.Net.HttpStatusCode,System.String)">
-      <summary>
-            Sets an HTTP status code and description in case of a security exception.
-            </summary>
-      <param name="statusCode">The status code.</param>
-      <param name="description">The status description.</param>
-      <exception cref="T:System.ArgumentOutOfRangeException">If the status code is less than 400.</exception>
-    </member>
-    <member name="M:RestFoundation.Behaviors.SecureServiceBehavior.SetStatusCode(System.Net.HttpStatusCode)">
-      <summary>
-            Sets an HTTP status code in case of a security exception.
-            </summary>
-      <param name="statusCode">The status code.</param>
-      <exception cref="T:System.ArgumentOutOfRangeException">If the status code is less than 400.</exception>
-    </member>
-    <member name="M:RestFoundation.Behaviors.SecureServiceBehavior.SetStatusDescription(System.String)">
-      <summary>
-            Sets an HTTP status description in case of a security exception.
-            </summary>
-      <param name="description">The status description.</param>
-    </member>
     <member name="T:RestFoundation.Behaviors.AuthorizationBehavior">
       <summary>
             Represents a role based authorization behavior for a service or a service method.
@@ -1575,21 +1688,6 @@
       <summary>
             Stop executing the method.
             </summary>
-    </member>
-    <member name="T:RestFoundation.Behaviors.AjaxOnlyBehavior">
-      <summary>
-            Represents a secure behavior for a service or a service method that rejects responses
-            not generated using AJAX. A non-AJAX HTTP request will set a 404 (Not Found) HTTP
-            status code.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Behaviors.AjaxOnlyBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
-      <summary>
-            Called during the authorization process before a service method or behavior is executed.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method authorizing" behavior context.</param>
-      <returns>A service method action.</returns>
     </member>
     <member name="T:RestFoundation.Formatters.IMediaTypeFormatter">
       <summary>
@@ -2665,58 +2763,6 @@
             Gets or sets the quality of protection value.
             </summary>
     </member>
-    <member name="T:RestFoundation.Behaviors.OutputCacheBehavior">
-      <summary>
-            Represents an output cache behavior for a service or a service method.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Behaviors.OutputCacheBehavior.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.OutputCacheBehavior" /> class.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Behaviors.OutputCacheBehavior.OnMethodExecuted(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutedContext)">
-      <summary>
-            Called after a service method is executed.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="behaviorContext">The "method executed" behavior context.</param>
-    </member>
-    <member name="P:RestFoundation.Behaviors.OutputCacheBehavior.DurationInSeconds">
-      <summary>
-            Gets or sets the amount of time that a cache entry is to remain in the output cache.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Behaviors.OutputCacheBehavior.Location">
-      <summary>
-            Gets or sets a value that determines the location of the cache entry.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Behaviors.OutputCacheBehavior.NoStore">
-      <summary>
-            Gets or sets a value indicating whether HTTP cache-control: no-store directive is set.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Behaviors.OutputCacheBehavior.VaryByContentEncoding">
-      <summary>
-            Gets or sets a comma delimited set of character sets (content encodings) used to vary the cache entry.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Behaviors.OutputCacheBehavior.VaryByCustom">
-      <summary>
-            Gets or sets a comma delimited set of custom strings used to vary the cache entry.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Behaviors.OutputCacheBehavior.VaryByHeader">
-      <summary>
-            Gets or sets a comma delimited set of HTTP header names associated with the request used to vary the cache entry.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Behaviors.OutputCacheBehavior.VaryByParam">
-      <summary>
-            Gets or sets a comma delimited set of query string or form POST parameters used to vary the cache entry.
-            </summary>
-    </member>
     <member name="T:RestFoundation.Collections.IStringValueCollection">
       <summary>
             Defines an string value collection.
@@ -3027,7 +3073,7 @@
     <member name="T:RestFoundation.Behaviors.HttpsOnlyBehavior">
       <summary>
             Represents an HTTPS secure behavior for a service or a service method. Any unsecure
-            HTTP connection will set a 403 (Forbidden) HTTP status code.
+            HTTP connection will set a 403 (Forbidden) HTTP status code if the connection is not secure.
             </summary>
     </member>
     <member name="M:RestFoundation.Behaviors.HttpsOnlyBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
