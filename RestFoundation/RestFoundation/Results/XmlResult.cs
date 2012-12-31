@@ -147,7 +147,7 @@ namespace RestFoundation.Results
         private static void SerializeNullObject(XmlWriter xmlWriter)
         {
             xmlWriter.WriteStartDocument();
-            xmlWriter.WriteStartElement("anyType");
+            xmlWriter.WriteStartElement("AnyType");
             xmlWriter.WriteAttributeString("xmlns", "xsi", "http://www.w3.org/2000/xmlns/", XmlSchema.InstanceNamespace);
             xmlWriter.WriteAttributeString("xsi", "nil", XmlSchema.InstanceNamespace, "true");
             xmlWriter.WriteEndElement();
@@ -157,7 +157,7 @@ namespace RestFoundation.Results
 
         private void SerializeAsAnonymousType(XmlWriter xmlWriter, object obj)
         {
-            XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings()), "complexType");
+            XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(obj, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings()), "ComplexType");
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteRaw(xmlDocument.OuterXml);
             xmlWriter.Flush();
@@ -169,10 +169,10 @@ namespace RestFoundation.Results
         {
             var wrapperObject = new
             {
-                complexType = obj
+                ComplexType = obj
             };
 
-            XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(wrapperObject, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings()), "complexTypes");
+            XmlDocument xmlDocument = JsonConvert.DeserializeXmlNode(JsonConvert.SerializeObject(wrapperObject, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings()), "ComplexTypes");
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteRaw(xmlDocument.OuterXml);
             xmlWriter.Flush();

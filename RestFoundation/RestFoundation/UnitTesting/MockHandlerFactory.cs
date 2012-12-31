@@ -10,7 +10,6 @@ using System.Reflection;
 using System.Text;
 using System.Web.Routing;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
 using RestFoundation.Client;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;

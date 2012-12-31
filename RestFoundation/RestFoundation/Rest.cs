@@ -21,7 +21,6 @@ namespace RestFoundation
     /// </summary>
     public sealed class Rest
     {
-        private static readonly object syncRoot = new object();
         private static readonly ICollection<Type> serviceContextTypes = new ReadOnlyCollection<Type>(new[]
         {
             typeof(IServiceContext),
@@ -31,7 +30,11 @@ namespace RestFoundation
             typeof(IServiceCache)
         });
 
-        private static Rest configuration;
+        private static readonly Lazy<Rest> configurationBuilder = new Lazy<Rest>(() =>
+        {
+            RequestValidator.Current = new ServiceRequestValidator();
+            return new Rest();
+        }, true);
 
         private RestOptions m_options;
 
@@ -68,17 +71,7 @@ namespace RestFoundation
         {
             get
             {
-                if (configuration != null)
-                {
-                    return configuration;
-                }
-
-                lock (syncRoot)
-                {
-                    RequestValidator.Current = new ServiceRequestValidator();
-
-                    return configuration ?? (configuration = new Rest());
-                }
+                return configurationBuilder.Value;
             }
         }
 
