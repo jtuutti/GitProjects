@@ -5,7 +5,7 @@ namespace RestFoundation.Tests.Implementation.Models
     public class Model
     {
         [Required]
-        public int? ID { get; set; }
+        public int? Id { get; set; }
 
         [Required, StringLength(25, MinimumLength = 1)]
         public string Name { get; set; }

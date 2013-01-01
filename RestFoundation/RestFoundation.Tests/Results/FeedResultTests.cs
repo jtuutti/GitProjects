@@ -107,8 +107,8 @@ namespace RestFoundation.Tests.Results
         {
             var resources = new[]
                 {
-                    new Model { ID = 1, Name = "Joe Bloe", Items = new[] { "Owner" } },
-                    new Model { ID = 2, Name = "Jane Bloe", Items = new[] { "Secretary" } }
+                    new Model { Id = 1, Name = "Joe Bloe", Items = new[] { "Owner" } },
+                    new Model { Id = 2, Name = "Jane Bloe", Items = new[] { "Secretary" } }
                 };
 
             var feedItems = new List<SyndicationItem>(resources.Length);

@@ -494,7 +494,7 @@ namespace RestFoundation.Tests.Routes
         {
             return new Model
             {
-                ID = 1,
+                Id = 1,
                 Name = "Joe Bloe"
             };
         }

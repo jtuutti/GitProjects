@@ -44,7 +44,7 @@ namespace RestFoundation.Tests.Behaviors
 
             var resource = new Model
             {
-                ID = 1,
+                Id = 1,
                 Name = "Joe Bloe"
             };
 
@@ -90,7 +90,7 @@ namespace RestFoundation.Tests.Behaviors
 
             var resource = new Model
             {
-                ID = 1,
+                Id = 1,
                 Name = ""
             };
 
@@ -107,7 +107,7 @@ namespace RestFoundation.Tests.Behaviors
 
             var resource = new Model
             {
-                ID = 1,
+                Id = 1,
                 Name = "Abcdefghijklmnopqrstuvwxyz"
             };
 
@@ -124,7 +124,7 @@ namespace RestFoundation.Tests.Behaviors
 
             var resource = new Model
             {
-                ID = 1,
+                Id = 1,
                 Name = "Abcdefghijklmnopqrstuvwxy"
             };
 

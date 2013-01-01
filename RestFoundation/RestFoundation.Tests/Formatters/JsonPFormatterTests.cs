@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Web.Script.Serialization;
 using NUnit.Framework;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using RestFoundation.Formatters;
 using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
@@ -49,7 +50,7 @@ namespace RestFoundation.Tests.Formatters
             var resource = formatter.FormatRequest(m_context, typeof(Model)) as Model;
 
             Assert.That(resource, Is.Not.Null);
-            Assert.That(resource.ID, Is.EqualTo(model.ID));
+            Assert.That(resource.Id, Is.EqualTo(model.Id));
             Assert.That(resource.Name, Is.EqualTo(model.Name));
             Assert.That(resource.Items, Is.Not.Null);
             CollectionAssert.AreEqual(model.Items, resource.Items);
@@ -82,7 +83,7 @@ namespace RestFoundation.Tests.Formatters
         {
             var model = new Model
             {
-                ID = 1,
+                Id = 1,
                 Name = "John Doe",
                 Items = new[] { "A", "B", "C" }
             };
@@ -92,14 +93,17 @@ namespace RestFoundation.Tests.Formatters
 
         private static string SerializeModel(Model model, bool jsonP)
         {
-            var serializer = new JavaScriptSerializer();
+            var serializedModel = JsonConvert.SerializeObject(model, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
 
             if (!jsonP)
             {
-                return serializer.Serialize(model);
+                return serializedModel;
             }
 
-            return String.Format("{0}({1});", CallbackFunction, serializer.Serialize(model));
+            return String.Format("{0}({1});", CallbackFunction, serializedModel);
         }
 
         private void WriteBodyAsJson(Model model)

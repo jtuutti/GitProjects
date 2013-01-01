@@ -44,7 +44,7 @@ namespace RestFoundation.Tests.Formatters
             var resource = formatter.FormatRequest(m_context, typeof(Model)) as Model;
 
             Assert.That(resource, Is.Not.Null);
-            Assert.That(resource.ID, Is.EqualTo(model.ID));
+            Assert.That(resource.Id, Is.EqualTo(model.Id));
             Assert.That(resource.Name, Is.EqualTo(model.Name));
             Assert.That(resource.Items, Is.Not.Null);
             CollectionAssert.AreEqual(model.Items, resource.Items);
@@ -65,7 +65,7 @@ namespace RestFoundation.Tests.Formatters
         {
             var model = new Model
             {
-                ID = 1,
+                Id = 1,
                 Name = "John Doe",
                 Items = new[] { "A", "B", "C" }
             };
@@ -76,7 +76,7 @@ namespace RestFoundation.Tests.Formatters
         private void WriteBodyAsFormsEncodedString(Model model)
         {
             var nameValueBuilder = new StringBuilder();
-            nameValueBuilder.Append("ID=").Append(HttpUtility.UrlEncode(model.ID.ToString()));
+            nameValueBuilder.Append("ID=").Append(HttpUtility.UrlEncode(model.Id.ToString()));
             nameValueBuilder.Append("&Name=").Append(HttpUtility.UrlEncode(model.Name));
 
             foreach (string item in model.Items)

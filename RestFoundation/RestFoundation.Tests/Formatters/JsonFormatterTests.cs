@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
-using System.Web.Script.Serialization;
 using NUnit.Framework;
+using Newtonsoft.Json;
 using RestFoundation.Formatters;
 using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
@@ -46,7 +46,7 @@ namespace RestFoundation.Tests.Formatters
             var resource = formatter.FormatRequest(m_context, typeof(Model)) as Model;
 
             Assert.That(resource, Is.Not.Null);
-            Assert.That(resource.ID, Is.EqualTo(model.ID));
+            Assert.That(resource.Id, Is.EqualTo(model.Id));
             Assert.That(resource.Name, Is.EqualTo(model.Name));
             Assert.That(resource.Items, Is.Not.Null);
             CollectionAssert.AreEqual(model.Items, resource.Items);
@@ -76,7 +76,7 @@ namespace RestFoundation.Tests.Formatters
         {
             var model = new Model
             {
-                ID = 1,
+                Id = 1,
                 Name = "John Doe",
                 Items = new[] { "A", "B", "C" }
             };
@@ -86,9 +86,7 @@ namespace RestFoundation.Tests.Formatters
 
         private static string SerializeModel(Model model)
         {
-            var serializer = new JavaScriptSerializer();
-
-            return serializer.Serialize(model);
+            return JsonConvert.SerializeObject(model);
         }
 
         private void WriteBodyAsJson(Model model)
