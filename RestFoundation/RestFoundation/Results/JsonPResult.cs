@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
@@ -69,9 +70,12 @@ namespace RestFoundation.Results
 
             OutputCompressionManager.FilterResponse(context);
 
+            var settings = Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings();
+            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
             string response = new StringBuilder().Append(Callback)
                                                  .Append("(")
-                                                 .Append(Content != null ? JsonConvert.SerializeObject(Content, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings()) : "null")
+                                                 .Append(Content != null ? JsonConvert.SerializeObject(Content, settings) : "null")
                                                  .Append(");")
                                                  .ToString();
 

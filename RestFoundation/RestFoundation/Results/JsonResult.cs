@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
@@ -53,6 +54,11 @@ namespace RestFoundation.Results
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
 
             var serializer = JsonSerializerFactory.Create();
+
+            if (context.Request.IsAjax)
+            {
+                serializer.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            }
 
             if (ReturnedType == null && Content != null)
             {
