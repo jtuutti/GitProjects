@@ -269,7 +269,7 @@
     <Compile Include="Results\IResult.cs" />
     <Compile Include="Results\IResultFactory.cs" />
     <Compile Include="Runtime\Handlers\RestAsyncHandler.cs" />
-    <Compile Include="Runtime\DynamicDictionaryObject.cs" />
+    <Compile Include="Results\DynamicResult.cs" />
     <Compile Include="Formatters\FormsFormatter.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="Results\RedirectResult.cs" />

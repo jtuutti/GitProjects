@@ -59,7 +59,7 @@ namespace RestFoundation.Formatters
                 return resource;
             }
 
-            dynamic dynamicResource = resource as DynamicDictionaryObject;
+            dynamic dynamicResource = resource as DynamicResult;
 
             if (dynamicResource != null)
             {
@@ -86,15 +86,13 @@ namespace RestFoundation.Formatters
 
         private static NameValueCollection PopulateFormData(IServiceContext context)
         {
-            NameValueCollection formData;
-
             if (context.Request.Body.CanSeek)
             {
                 context.Request.Body.Seek(0, SeekOrigin.Begin);
             }
 
             var streamReader = new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding);
-            formData = ParseFormData(streamReader.ReadToEnd());
+            NameValueCollection formData = ParseFormData(streamReader.ReadToEnd());
 
             return formData;
         }
@@ -103,7 +101,7 @@ namespace RestFoundation.Formatters
         {
             if (objectType == typeof(object))
             {
-                return new DynamicDictionaryObject();
+                return new DynamicResult();
             }
 
             try
@@ -149,7 +147,7 @@ namespace RestFoundation.Formatters
                 return;
             }
 
-            string name = HttpUtility.UrlDecode(nameValueArray[0]).Trim();
+            string name = (HttpUtility.UrlDecode(nameValueArray[0]) ?? String.Empty).Trim();
             string value = HttpUtility.UrlDecode(nameValueArray[1]);
 
             if (!String.IsNullOrEmpty(name))
@@ -158,7 +156,7 @@ namespace RestFoundation.Formatters
             }
         }
 
-        private static void PopulateDynamicResourceData(DynamicDictionaryObject resource, NameValueCollection formData)
+        private static void PopulateDynamicResourceData(DynamicResult resource, NameValueCollection formData)
         {
             foreach (string name in formData.AllKeys)
             {

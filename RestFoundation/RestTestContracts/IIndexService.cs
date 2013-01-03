@@ -25,6 +25,9 @@ namespace RestTestContracts
         [Url("index/get-10", HttpMethod.Get)]
         RedirectResult RedirectToGet10();
 
+        [Url("dyn")]
+        dynamic GetDynamicDict();
+
         [Url("index/all", "Get, Head")]
         IQueryable<Person> GetAll();
 

@@ -6,6 +6,7 @@ using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using RestFoundation;
+using RestFoundation.Formatters;
 using RestFoundation.Results;
 using RestTestContracts;
 using RestTestContracts.Resources;
@@ -84,6 +85,17 @@ namespace RestTestServices
         public RedirectResult RedirectToGet10()
         {
             return Result.RedirectToAction<IIndexService>("home", c => c.Get(10, null));
+        }
+
+        public dynamic GetDynamicDict()
+        {
+            dynamic result = new DynamicResult();
+            result.Name = new DynamicResult();
+            result.Name.First = "Mike";
+            result.Name.Last = "Hunt";
+            result.Dat2 = new DateTime(2012, 12, 12);
+            result.Url = new Uri("http://google.com?ab=c");
+            return result;
         }
 
         public IQueryable<Person> GetAll()
