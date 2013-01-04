@@ -6913,17 +6913,17 @@
             Gets a relative URL template.
             </summary>
     </member>
-    <member name="T:RestFoundation.Formatters.DynamicDictionaryObject">
+    <member name="T:RestFoundation.Results.DynamicResult">
       <summary>
-            Represents a dynamic dictionary object.
+            Represents a dynamic dictionary result.
             </summary>
     </member>
-    <member name="M:RestFoundation.Formatters.DynamicDictionaryObject.#ctor">
+    <member name="M:RestFoundation.Results.DynamicResult.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Formatters.DynamicDictionaryObject" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Results.DynamicResult" /> class.
             </summary>
     </member>
-    <member name="M:RestFoundation.Formatters.DynamicDictionaryObject.Contains(System.String)">
+    <member name="M:RestFoundation.Results.DynamicResult.Contains(System.String)">
       <summary>
             Returns a <see cref="T:System.Boolean" /> indicating whether the object contains a property with the provided name.
             </summary>
@@ -6931,7 +6931,7 @@
       <returns>
         <see langword="true" /> if the object contains the property; <see langword="false" /> otherwise.</returns>
     </member>
-    <member name="M:RestFoundation.Formatters.DynamicDictionaryObject.Add(System.String,System.Object)">
+    <member name="M:RestFoundation.Results.DynamicResult.Add(System.String,System.Object)">
       <summary>
             Adds a property with the provided name and value.
             </summary>
@@ -6940,7 +6940,7 @@
       <returns>
         <see langword="true" /> if the property did not exist and was added; <see langword="false" /> otherwise.</returns>
     </member>
-    <member name="M:RestFoundation.Formatters.DynamicDictionaryObject.Remove(System.String)">
+    <member name="M:RestFoundation.Results.DynamicResult.Remove(System.String)">
       <summary>
             Removes a property with the provided name.
             </summary>
@@ -6948,18 +6948,18 @@
       <returns>
         <see langword="true" /> if the property was removed; <see langword="false" /> otherwise.</returns>
     </member>
-    <member name="M:RestFoundation.Formatters.DynamicDictionaryObject.ToDictionary">
+    <member name="M:RestFoundation.Results.DynamicResult.ToDictionary">
       <summary>
             Returns a dictionary of property names and values.
             </summary>
       <returns>A dictionary of property names and values.</returns>
     </member>
-    <member name="M:RestFoundation.Formatters.DynamicDictionaryObject.Clear">
+    <member name="M:RestFoundation.Results.DynamicResult.Clear">
       <summary>
             Clears all the object properties.
             </summary>
     </member>
-    <member name="M:RestFoundation.Formatters.DynamicDictionaryObject.TryGetMember(System.Dynamic.GetMemberBinder,System.Object@)">
+    <member name="M:RestFoundation.Results.DynamicResult.TryGetMember(System.Dynamic.GetMemberBinder,System.Object@)">
       <summary>
             Provides the implementation for operations that get member values. Classes derived from the
             <see cref="T:System.Dynamic.DynamicObject" /> class can override this method to specify dynamic
@@ -6981,7 +6981,7 @@
             to <paramref name="result" />.
             </param>
     </member>
-    <member name="M:RestFoundation.Formatters.DynamicDictionaryObject.TrySetMember(System.Dynamic.SetMemberBinder,System.Object)">
+    <member name="M:RestFoundation.Results.DynamicResult.TrySetMember(System.Dynamic.SetMemberBinder,System.Object)">
       <summary>
             Provides the implementation for operations that set member values. Classes derived from the
             <see cref="T:System.Dynamic.DynamicObject" /> class can override this method to specify dynamic behavior for operations
@@ -7002,7 +7002,7 @@
             of the class derived from the <see cref="T:System.Dynamic.DynamicObject" /> class, the <paramref name="value" /> is "Test".
             </param>
     </member>
-    <member name="M:RestFoundation.Formatters.DynamicDictionaryObject.TryInvokeMember(System.Dynamic.InvokeMemberBinder,System.Object[],System.Object@)">
+    <member name="M:RestFoundation.Results.DynamicResult.TryInvokeMember(System.Dynamic.InvokeMemberBinder,System.Object[],System.Object@)">
       <summary>
             Provides the implementation for operations that invoke a member. Classes derived from the
             <see cref="T:System.Dynamic.DynamicObject" /> class can override this method to specify dynamic behavior for operations
@@ -7024,7 +7024,7 @@
             <paramref name="args" />[0] is equal to 100.</param>
       <param name="result">The result of the member invocation.</param>
     </member>
-    <member name="M:RestFoundation.Formatters.DynamicDictionaryObject.TryDeleteMember(System.Dynamic.DeleteMemberBinder)">
+    <member name="M:RestFoundation.Results.DynamicResult.TryDeleteMember(System.Dynamic.DeleteMemberBinder)">
       <summary>
             Provides the implementation for operations that delete an object member. This method is not intended for use in C# or
             Visual Basic.
@@ -7035,7 +7035,7 @@
             </returns>
       <param name="binder">Provides information about the deletion.</param>
     </member>
-    <member name="M:RestFoundation.Formatters.DynamicDictionaryObject.GetDynamicMemberNames">
+    <member name="M:RestFoundation.Results.DynamicResult.GetDynamicMemberNames">
       <summary>
             Returns the enumeration of all dynamic member names. 
             </summary>
@@ -7043,7 +7043,33 @@
             A sequence that contains dynamic member names.
             </returns>
     </member>
-    <member name="P:RestFoundation.Formatters.DynamicDictionaryObject.Count">
+    <member name="M:RestFoundation.Results.DynamicResult.GetSchema">
+      <summary>
+            This method is reserved and should not be used. When implementing the IXmlSerializable interface,
+            you should return null (Nothing in Visual Basic) from this method, and instead, if specifying
+            a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute" />
+            to the class.
+            </summary>
+      <returns>
+            An <see cref="T:System.Xml.Schema.XmlSchema" /> that describes the XML representation of the object
+            that is produced by the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)" />
+            method and consumed by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)" />
+            method.
+            </returns>
+    </member>
+    <member name="M:RestFoundation.Results.DynamicResult.ReadXml(System.Xml.XmlReader)">
+      <summary>
+            Generates an object from its XML representation.
+            </summary>
+      <param name="reader">The <see cref="T:System.Xml.XmlReader" /> stream from which the object is deserialized.</param>
+    </member>
+    <member name="M:RestFoundation.Results.DynamicResult.WriteXml(System.Xml.XmlWriter)">
+      <summary>
+            Converts an object into its XML representation.
+            </summary>
+      <param name="writer">The <see cref="T:System.Xml.XmlWriter" /> stream to which the object is serialized.</param>
+    </member>
+    <member name="P:RestFoundation.Results.DynamicResult.Count">
       <summary>
             Gets a count of properties.
             </summary>
