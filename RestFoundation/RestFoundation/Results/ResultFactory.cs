@@ -59,7 +59,7 @@ namespace RestFoundation.Results
 
             if (formatter == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.MissingValidMediaType);
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.MissingOrInvalidAcceptType);
             }
 
             return formatter.FormatResponse(handler.Context, methodReturnType, returnedObj);

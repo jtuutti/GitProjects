@@ -133,12 +133,17 @@ namespace RestFoundation.Runtime
 
             string contentType = handler.Context.Request.Headers.ContentType;
 
+            if (String.IsNullOrEmpty(contentType))
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.MissingOrInvalidContentType);
+            }
+
             IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, contentType) ??
                                             MediaTypeFormatterRegistry.GetFormatter(contentType);
 
             if (formatter == null || formatter is BlockFormatter)
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.MissingValidMediaType);
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.MissingOrInvalidContentType);
             }
 
             object argumentValue;

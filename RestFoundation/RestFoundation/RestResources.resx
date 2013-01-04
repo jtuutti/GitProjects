@@ -281,9 +281,9 @@
     <value>HTTP headers cannot be empty or have white-space in the name.</value>
     <comment>HTTP headers cannot be empty or have white-space in the name.</comment>
   </data>
-  <data name="MissingValidMediaType" xml:space="preserve">
-    <value>No supported media type was provided in the Accept or the Content-Type header.</value>
-    <comment>No supported media type was provided in the Accept or the Content-Type header.</comment>
+  <data name="MissingOrInvalidContentType" xml:space="preserve">
+    <value>No supported media type was provided in the Content-Type header.</value>
+    <comment>No supported media type was provided in the Content-Type header.</comment>
   </data>
   <data name="InvalidIUploadedFileCollectionType" xml:space="preserve">
     <value>Object type must be IEnumerable&lt;IUploadedFile&gt; or ICollection&lt;IUploadedFile&gt; for the media type.</value>
@@ -500,5 +500,9 @@
   <data name="UnsupportedObjectTypeForOData" xml:space="preserve">
     <value>OData operations are not supported for anonymous objects.</value>
     <comment>OData operations are not supported for anonymous objects.</comment>
+  </data>
+  <data name="MissingOrInvalidAcceptType" xml:space="preserve">
+    <value>No supported media type was provided in the Accept header.</value>
+    <comment>No supported media type was provided in the Accept header.</comment>
   </data>
 </root>

@@ -565,6 +565,24 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No supported media type was provided in the Accept header..
+        /// </summary>
+        internal static string MissingOrInvalidAcceptType {
+            get {
+                return ResourceManager.GetString("MissingOrInvalidAcceptType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No supported media type was provided in the Content-Type header..
+        /// </summary>
+        internal static string MissingOrInvalidContentType {
+            get {
+                return ResourceManager.GetString("MissingOrInvalidContentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Properties must have at least 1 property definition..
         /// </summary>
         internal static string MissingPropertyDefinition {
@@ -615,15 +633,6 @@ namespace RestFoundation {
         internal static string MissingSupportedMediaTypeForFormatter {
             get {
                 return ResourceManager.GetString("MissingSupportedMediaTypeForFormatter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No supported media type was provided in the Accept or the Content-Type header..
-        /// </summary>
-        internal static string MissingValidMediaType {
-            get {
-                return ResourceManager.GetString("MissingValidMediaType", resourceCulture);
             }
         }
         
