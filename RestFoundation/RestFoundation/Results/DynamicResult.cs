@@ -148,15 +148,7 @@ namespace RestFoundation.Results
                 throw new ArgumentNullException("binder");
             }
 
-            if (m_dictionary.ContainsKey(binder.Name))
-            {
-                result = m_dictionary[binder.Name];
-            }
-            else
-            {
-                result = null;
-            }
-
+            m_dictionary.TryGetValue(binder.Name, out result);
             return true;
         }
 
@@ -186,15 +178,7 @@ namespace RestFoundation.Results
                 throw new ArgumentNullException("binder");
             }
 
-            if (!m_dictionary.ContainsKey(binder.Name))
-            {
-                m_dictionary.Add(binder.Name, value);
-            }
-            else
-            {
-                m_dictionary[binder.Name] = value;
-            }
-
+            m_dictionary[binder.Name] = value;
             return true;
         }
 

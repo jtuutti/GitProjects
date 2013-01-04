@@ -6,7 +6,6 @@ using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using RestFoundation;
-using RestFoundation.Formatters;
 using RestFoundation.Results;
 using RestTestContracts;
 using RestTestContracts.Resources;
