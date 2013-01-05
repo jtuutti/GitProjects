@@ -505,4 +505,8 @@
     <value>No supported media type was provided in the Accept header.</value>
     <comment>No supported media type was provided in the Accept header.</comment>
   </data>
+  <data name="MissingAmbiguousServiceUrl" xml:space="preserve">
+    <value>An ambiguous route match was found for the service method. A specific 'serviceUrl' parameter must be specified.</value>
+    <comment>An ambiguous route match was found for the service method. A specific 'serviceUrl' parameter must be specified.</comment>
+  </data>
 </root>

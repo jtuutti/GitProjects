@@ -83,7 +83,7 @@ namespace RestTestServices
 
         public RedirectResult RedirectToGet10()
         {
-            return Result.RedirectToAction<IIndexService>("home", c => c.Get(10, null));
+            return Result.RedirectToAction<IIndexService>(c => c.Get(10, null));
         }
 
         public dynamic GetDynamicDict()

@@ -41,5 +41,15 @@ namespace RestFoundation.Runtime
 
             return null;
         }
+
+        public static IList<ServiceMethodMetadata> GetMethodMetadata(MethodInfo serviceMethod)
+        {
+            if (serviceMethod == null)
+            {
+                throw new ArgumentNullException("serviceMethod");
+            }
+
+            return serviceMethods.Values.SelectMany(m => m).Where(m => m.MethodInfo == serviceMethod).ToList();
+        }
     }
 }

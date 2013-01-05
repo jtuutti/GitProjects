@@ -520,6 +520,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An ambiguous route match was found for the service method. A specific &apos;serviceUrl&apos; parameter must be specified..
+        /// </summary>
+        internal static string MissingAmbiguousServiceUrl {
+            get {
+                return ResourceManager.GetString("MissingAmbiguousServiceUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No authorization manager could be found..
         /// </summary>
         internal static string MissingAuthorizationManager {

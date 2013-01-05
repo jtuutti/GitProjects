@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Principal;
 using System.Threading;
@@ -123,13 +124,42 @@ namespace RestFoundation.Context
         /// Gets the application path for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <returns>The application path for the service method.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        public string GetPath<TContract>(Expression<Action<TContract>> serviceMethod)
+        {
+            return GetPath(null, serviceMethod, new RouteValueDictionary());
+        }
+
+        /// <summary>
+        /// Gets the application path for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <param name="routeValues">Additional route values based on the object properties.</param>
+        /// <returns>The application path for the service method.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        public string GetPath<TContract>(Expression<Action<TContract>> serviceMethod, object routeValues)
+        {
+            return GetPath(null, serviceMethod, new RouteValueDictionary(routeValues));
+        }
+
+        /// <summary>
+        /// Gets the application path for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
         /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service URL or the service method provided.
+        /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod)
         {
@@ -147,7 +177,7 @@ namespace RestFoundation.Context
         /// <param name="routeValues">Additional route values based on the object properties.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service URL or the service method provided.
+        /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, object routeValues)
         {
@@ -165,15 +195,10 @@ namespace RestFoundation.Context
         /// <param name="routeValues">Additional route values.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service URL or the service method provided.
+        /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteValueDictionary routeValues)
         {
-            if (String.IsNullOrEmpty(serviceUrl))
-            {
-                throw new ArgumentNullException("serviceUrl");
-            }
-
             if (serviceMethod == null)
             {
                 throw new ArgumentNullException("serviceMethod");
@@ -186,7 +211,41 @@ namespace RestFoundation.Context
                 throw new ArgumentException(RestResources.InvalidServiceMethodExpression, "serviceMethod");
             }
 
+            if (serviceUrl == null)
+            {
+                serviceUrl = TryGetMatchingServiceUrl(methodExpression);
+            }
+
             return GetPathFromMethodExpression(serviceUrl, methodExpression, routeValues);
+        }
+
+        /// <summary>
+        /// Gets the application path for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <returns>The application path for the service method.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        public string GetPath<TContract>(Expression<Func<TContract, object>> serviceMethod)
+        {
+            return GetPath(null, serviceMethod, new RouteValueDictionary());
+        }
+
+        /// <summary>
+        /// Gets the application path for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <param name="routeValues">Additional route values based on the object properties.</param>
+        /// <returns>The application path for the service method.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        public string GetPath<TContract>(Expression<Func<TContract, object>> serviceMethod, object routeValues)
+        {
+            return GetPath(null, serviceMethod, new RouteValueDictionary(routeValues));
         }
 
         /// <summary>
@@ -199,7 +258,7 @@ namespace RestFoundation.Context
         /// <param name="serviceMethod">The service contract method.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service URL or the service method provided.
+        /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod)
         {
@@ -217,7 +276,7 @@ namespace RestFoundation.Context
         /// <param name="routeValues">Additional route values based on the object properties.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service URL or the service method provided.
+        /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, object routeValues)
         {
@@ -235,15 +294,10 @@ namespace RestFoundation.Context
         /// <param name="routeValues">Additional route values.</param>
         /// <returns>The application path for the service method.</returns>
         /// <exception cref="InvalidOperationException">
-        /// If an invalid service URL or the service method provided.
+        /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteValueDictionary routeValues)
         {
-            if (String.IsNullOrEmpty(serviceUrl))
-            {
-                throw new ArgumentNullException("serviceUrl");
-            }
-
             if (serviceMethod == null)
             {
                 throw new ArgumentNullException("serviceMethod");
@@ -253,7 +307,12 @@ namespace RestFoundation.Context
 
             if (methodExpression == null || methodExpression.Method == null)
             {
-                throw new ArgumentException(RestResources.InvalidServiceMethodExpression, "serviceMethod");
+                throw new InvalidOperationException(RestResources.InvalidServiceMethodExpression);
+            }
+
+            if (serviceUrl == null)
+            {
+                serviceUrl = TryGetMatchingServiceUrl(methodExpression);
             }
 
             return GetPathFromMethodExpression(serviceUrl, methodExpression, routeValues);
@@ -276,6 +335,57 @@ namespace RestFoundation.Context
         public HttpContextBase GetHttpContext()
         {
             return Context;
+        }
+
+        private string TryGetMatchingServiceUrl(MethodCallExpression methodExpression)
+        {
+            IList<ServiceMethodMetadata> serviceMethodList = ServiceMethodRegistry.GetMethodMetadata(methodExpression.Method);
+
+            if (serviceMethodList.Count == 0)
+            {
+                throw new InvalidOperationException(RestResources.InvalidServiceMethodExpression);
+            }
+
+            if (serviceMethodList.Count > 1)
+            {
+                string serviceUrl;
+
+                if (TryGetCurrentServiceUrl(serviceMethodList, out serviceUrl))
+                {
+                    return serviceUrl;
+                }
+
+                throw new InvalidOperationException(RestResources.MissingAmbiguousServiceUrl);
+            }
+
+            return serviceMethodList[0].ServiceUrl;
+        }
+
+        private bool TryGetCurrentServiceUrl(IEnumerable<ServiceMethodMetadata> serviceMethodList, out string serviceUrl)
+        {
+            var routeTable = RouteTable.Routes.GetRouteData(Context);
+
+            if (routeTable == null)
+            {
+                serviceUrl = null;
+                return false;
+            }
+
+            object currentServiceUrl;
+
+            if (routeTable.Values.TryGetValue(RouteConstants.ServiceUrl, out currentServiceUrl) && currentServiceUrl != null)
+            {
+                var serviceMethod = serviceMethodList.FirstOrDefault(m => String.Equals(currentServiceUrl.ToString(), m.ServiceUrl, StringComparison.OrdinalIgnoreCase));
+
+                if (!String.IsNullOrEmpty(serviceMethod.ServiceUrl))
+                {
+                    serviceUrl = serviceMethod.ServiceUrl;
+                    return true;
+                }
+            }
+
+            serviceUrl = null;
+            return false;
         }
 
         private string GetPathFromMethodExpression(string serviceUrl, MethodCallExpression methodExpression, RouteValueDictionary routeValues)
