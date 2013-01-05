@@ -24,6 +24,11 @@ namespace RestFoundation.Runtime
             return serviceContractTypes.GetOrAdd(typeAssemblyName, t => Type.GetType(typeAssemblyName, true));
         }
 
+        public static bool IsServiceContract(Type contractType)
+        {
+            return serviceContractTypes.Values.Contains(contractType);
+        }
+
         public static ICollection<Type> GetContractTypes()
         {
             return new HashSet<Type>(serviceContractTypes.Values);

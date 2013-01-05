@@ -5,7 +5,6 @@ using System;
 using System.Linq.Expressions;
 using System.Security.Principal;
 using System.Web;
-using System.Web.Routing;
 
 namespace RestFoundation
 {
@@ -60,12 +59,12 @@ namespace RestFoundation
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceMethod">The service contract method.</param>
-        /// <param name="routeValues">Additional route values based on the object properties.</param>
+        /// <param name="routeValues">Additional route values.</param>
         /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(Expression<Action<TContract>> serviceMethod, object routeValues);
+        string GetPath<TContract>(Expression<Action<TContract>> serviceMethod, RouteHash routeValues);
 
         /// <summary>
         /// Gets the application relative URL for a service contract method.
@@ -89,43 +88,12 @@ namespace RestFoundation
         /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
-        /// <param name="routeValues">Additional route values based on the object properties.</param>
-        /// <returns>The application relative URL for the service method.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// If an invalid service URL or a service method provided.
-        /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, object routeValues);
-
-        /// <summary>
-        /// Gets the application relative URL for a service contract method.
-        /// </summary>
-        /// <typeparam name="TContract">The service contract type.</typeparam>
-        /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
-        /// </param>
-        /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
         /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteValueDictionary routeValues);
-
-        /// <summary>
-        /// Gets the application absolute URL for a service contract method.
-        /// </summary>
-        /// <typeparam name="TContract">The service contract type.</typeparam>
-        /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
-        /// </param>
-        /// <param name="serviceMethod">The service contract method.</param>
-        /// <param name="routeValues">Additional route values based on the object properties.</param>
-        /// <param name="scheme">The protocol scheme to construct a full absolute URL.</param>
-        /// <returns>The application absolute URL for the service method.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// If an invalid service URL or a service method provided.
-        /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, object routeValues, HttpScheme scheme);
+        string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues);
 
         /// <summary>
         /// Gets the application absolute URL for a service contract method.
@@ -136,12 +104,12 @@ namespace RestFoundation
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
-        /// <param name="scheme">The protocol scheme to construct a full absolute URL.</param>
+        /// <param name="segments">URI segments necessary to generate an absolute URL. Set it to null to generate a relative URL.</param>
         /// <returns>The application absolute URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteValueDictionary routeValues, HttpScheme scheme);
+        string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues, UriSegments segments);
 
         /// <summary>
         /// Gets the application relative URL for a service contract method.
@@ -153,18 +121,18 @@ namespace RestFoundation
         /// If an invalid service URL or a service method provided.
         /// </exception>
         string GetPath<TContract>(Expression<Func<TContract, object>> serviceMethod);
-
+       
         /// <summary>
         /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceMethod">The service contract method.</param>
-        /// <param name="routeValues">Additional route values based on the object properties.</param>
+        /// <param name="routeValues">Additional route values.</param>
         /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(Expression<Func<TContract, object>> serviceMethod, object routeValues);
+        string GetPath<TContract>(Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues);
 
         /// <summary>
         /// Gets the application relative URL for a service contract method.
@@ -188,43 +156,12 @@ namespace RestFoundation
         /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
-        /// <param name="routeValues">Additional route values based on the object properties.</param>
-        /// <returns>The application relative URL for the service method.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// If an invalid service URL or a service method provided.
-        /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, object routeValues);
-
-        /// <summary>
-        /// Gets the application relative URL for a service contract method.
-        /// </summary>
-        /// <typeparam name="TContract">The service contract type.</typeparam>
-        /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
-        /// </param>
-        /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
         /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteValueDictionary routeValues);
-
-        /// <summary>
-        /// Gets the application absolute URL for a service contract method.
-        /// </summary>
-        /// <typeparam name="TContract">The service contract type.</typeparam>
-        /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
-        /// </param>
-        /// <param name="serviceMethod">The service contract method.</param>
-        /// <param name="routeValues">Additional route values based on the object properties.</param>
-        /// <param name="scheme">The protocol scheme to construct a full absolute URL.</param>
-        /// <returns>The application absolute URL for the service method.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// If an invalid service URL or a service method provided.
-        /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, object routeValues, HttpScheme scheme);
+        string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues);
 
         /// <summary>
         /// Gets the application absolute URL for a service contract method.
@@ -235,12 +172,12 @@ namespace RestFoundation
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
-        /// <param name="scheme">The protocol scheme to construct a full absolute URL.</param>
+        /// <param name="segments">URI segments necessary to generate an absolute URL. Set it to null to generate a relative URL.</param>
         /// <returns>The application absolute URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteValueDictionary routeValues, HttpScheme scheme);
+        string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues, UriSegments segments);
 
         /// <summary>
         /// Returns the physical path associated to the virtual path of the file.

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net;
 using System.ServiceModel.Syndication;
-using System.Web.Routing;
 using RestFoundation.Results;
 
 namespace RestFoundation
@@ -300,7 +299,7 @@ namespace RestFoundation
         /// </exception>
         public static RedirectResult RedirectToAction<TContract>(Expression<Action<TContract>> serviceMethod)
         {
-            return RedirectToAction(null, serviceMethod, new RouteValueDictionary(), RedirectType.Found);
+            return RedirectToAction(null, serviceMethod, new RouteHash(), RedirectType.Found);
         }
 
         /// <summary>
@@ -308,14 +307,30 @@ namespace RestFoundation
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceMethod">The service method.</param>
+        /// <param name="routeValues">Additional route values.</param>
+        /// <returns>The redirect result.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If the HTTP context cannot be found; an invalid service URL or a service method provided.
+        /// </exception>
+        public static RedirectResult RedirectToAction<TContract>(Expression<Action<TContract>> serviceMethod, RouteHash routeValues)
+        {
+            return RedirectToAction(null, serviceMethod, routeValues, RedirectType.Found);
+        }
+
+        /// <summary>
+        /// Returns a redirect result for the service method with the provided redirect type.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceMethod">The service method.</param>
+        /// <param name="routeValues">Additional route values.</param>
         /// <param name="redirectType">The redirect type.</param>
         /// <returns>The redirect result.</returns>
         /// <exception cref="InvalidOperationException">
         /// If the HTTP context cannot be found; an invalid service URL or a service method provided.
         /// </exception>
-        public static RedirectResult RedirectToAction<TContract>(Expression<Action<TContract>> serviceMethod, RedirectType redirectType)
+        public static RedirectResult RedirectToAction<TContract>(Expression<Action<TContract>> serviceMethod, RouteHash routeValues, RedirectType redirectType)
         {
-            return RedirectToAction(null, serviceMethod, new RouteValueDictionary(), redirectType);
+            return RedirectToAction(null, serviceMethod, routeValues, redirectType);
         }
 
         /// <summary>
@@ -330,39 +345,23 @@ namespace RestFoundation
         /// </exception>
         public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod)
         {
-            return RedirectToAction(serviceUrl, serviceMethod, new RouteValueDictionary(), RedirectType.Found);
+            return RedirectToAction(serviceUrl, serviceMethod, new RouteHash(), RedirectType.Found);
         }
 
         /// <summary>
-        /// Returns a redirect result for the service method with the provided redirect type.
-        /// </summary>
-        /// <typeparam name="TContract">The service contract type.</typeparam>
-        /// <param name="serviceMethod">The service method.</param>
-        /// <param name="routeValues">Additional route values.</param>
-        /// <param name="redirectType">The redirect type.</param>
-        /// <returns>The redirect result.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// If the HTTP context cannot be found; an invalid service URL or a service method provided.
-        /// </exception>
-        public static RedirectResult RedirectToAction<TContract>(Expression<Action<TContract>> serviceMethod, object routeValues, RedirectType redirectType)
-        {
-            return RedirectToAction(null, serviceMethod, new RouteValueDictionary(routeValues), redirectType);
-        }
-
-        /// <summary>
-        /// Returns a redirect result for the service method with the provided redirect type.
+        /// Returns a redirect result for the service method with the redirect type <see cref="RedirectType.Found"/>.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">The service URL.</param>
         /// <param name="serviceMethod">The service method.</param>
-        /// <param name="redirectType">The redirect type.</param>
+        /// <param name="routeValues">Additional route values.</param>
         /// <returns>The redirect result.</returns>
         /// <exception cref="InvalidOperationException">
         /// If the HTTP context cannot be found; an invalid service URL or a service method provided.
         /// </exception>
-        public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RedirectType redirectType)
+        public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues)
         {
-            return RedirectToAction(serviceUrl, serviceMethod, new RouteValueDictionary(), redirectType);
+            return RedirectToAction(serviceUrl, serviceMethod, routeValues, RedirectType.Found);
         }
 
         /// <summary>
@@ -377,24 +376,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If the HTTP context cannot be found; an invalid service URL or a service method provided.
         /// </exception>
-        public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, object routeValues, RedirectType redirectType)
-        {
-            return RedirectToAction(serviceUrl, serviceMethod, new RouteValueDictionary(routeValues), redirectType);
-        }
-
-        /// <summary>
-        /// Returns a redirect result for the service method with the provided redirect type.
-        /// </summary>
-        /// <typeparam name="TContract">The service contract type.</typeparam>
-        /// <param name="serviceUrl">The service URL.</param>
-        /// <param name="serviceMethod">The service method.</param>
-        /// <param name="routeValues">Additional route values.</param>
-        /// <param name="redirectType">The redirect type.</param>
-        /// <returns>The redirect result.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// If the HTTP context cannot be found; an invalid service URL or a service method provided.
-        /// </exception>
-        public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteValueDictionary routeValues, RedirectType redirectType)
+        public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues, RedirectType redirectType)
         {
             if (serviceMethod == null)
             {
@@ -426,26 +408,26 @@ namespace RestFoundation
         /// </exception>
         public static RedirectResult RedirectToAction<TContract>(Expression<Func<TContract, object>> serviceMethod)
         {
-            return RedirectToAction(null, serviceMethod, new RouteValueDictionary(), RedirectType.Found);
+            return RedirectToAction(null, serviceMethod, new RouteHash(), RedirectType.Found);
         }
 
         /// <summary>
-        /// Returns a redirect result for the service method with the provided redirect type.
+        /// Returns a redirect result for the service method with the redirect type <see cref="RedirectType.Found"/>.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceMethod">The service method.</param>
-        /// <param name="redirectType">The redirect type.</param>
+        /// <param name="routeValues">Additional route values.</param>
         /// <returns>The redirect result.</returns>
         /// <exception cref="InvalidOperationException">
         /// If the HTTP context cannot be found; an invalid service URL or a service method provided.
         /// </exception>
-        public static RedirectResult RedirectToAction<TContract>(Expression<Func<TContract, object>> serviceMethod, RedirectType redirectType)
+        public static RedirectResult RedirectToAction<TContract>(Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues)
         {
-            return RedirectToAction(null, serviceMethod, new RouteValueDictionary(), redirectType);
+            return RedirectToAction(null, serviceMethod, routeValues, RedirectType.Found);
         }
 
         /// <summary>
-        /// Returns a redirect result for the service method with the provided redirect type.
+        /// Returns a redirect result for the service method with the redirect type <see cref="RedirectType.Found"/>.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceMethod">The service method.</param>
@@ -455,9 +437,9 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If the HTTP context cannot be found; an invalid service URL or a service method provided.
         /// </exception>
-        public static RedirectResult RedirectToAction<TContract>(Expression<Func<TContract, object>> serviceMethod, object routeValues, RedirectType redirectType)
+        public static RedirectResult RedirectToAction<TContract>(Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues, RedirectType redirectType)
         {
-            return RedirectToAction(null, serviceMethod, new RouteValueDictionary(routeValues), redirectType);
+            return RedirectToAction(null, serviceMethod, routeValues, redirectType);
         }
 
         /// <summary>
@@ -472,23 +454,23 @@ namespace RestFoundation
         /// </exception>
         public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod)
         {
-            return RedirectToAction(serviceUrl, serviceMethod, new RouteValueDictionary(), RedirectType.Found);
+            return RedirectToAction(serviceUrl, serviceMethod, new RouteHash(), RedirectType.Found);
         }
 
         /// <summary>
-        /// Returns a redirect result for the service method with the provided redirect type.
+        /// Returns a redirect result for the service method with the redirect type <see cref="RedirectType.Found"/>.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">The service URL.</param>
         /// <param name="serviceMethod">The service method.</param>
-        /// <param name="redirectType">The redirect type.</param>
+        /// <param name="routeValues">Additional route values.</param>
         /// <returns>The redirect result.</returns>
         /// <exception cref="InvalidOperationException">
         /// If the HTTP context cannot be found; an invalid service URL or a service method provided.
         /// </exception>
-        public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RedirectType redirectType)
+        public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues)
         {
-            return RedirectToAction(serviceUrl, serviceMethod, new RouteValueDictionary(), redirectType);
+            return RedirectToAction(serviceUrl, serviceMethod, routeValues, RedirectType.Found);
         }
 
         /// <summary>
@@ -503,24 +485,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If the HTTP context cannot be found; an invalid service URL or a service method provided.
         /// </exception>
-        public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, object routeValues, RedirectType redirectType)
-        {
-            return RedirectToAction(serviceUrl, serviceMethod, new RouteValueDictionary(routeValues), redirectType);
-        }
-
-        /// <summary>
-        /// Returns a redirect result for the service method with the provided redirect type.
-        /// </summary>
-        /// <typeparam name="TContract">The service contract type.</typeparam>
-        /// <param name="serviceUrl">The service URL.</param>
-        /// <param name="serviceMethod">The service method.</param>
-        /// <param name="routeValues">Additional route values.</param>
-        /// <param name="redirectType">The redirect type.</param>
-        /// <returns>The redirect result.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// If the HTTP context cannot be found; an invalid service URL or a service method provided.
-        /// </exception>
-        public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteValueDictionary routeValues, RedirectType redirectType)
+        public static RedirectResult RedirectToAction<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues, RedirectType redirectType)
         {
             if (serviceMethod == null)
             {

@@ -71,7 +71,6 @@
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
     <Compile Include="DependencyBuilder.cs" />
     <Compile Include="Formatters\SupportedMediaTypeAttribute.cs" />
-    <Compile Include="HttpScheme.cs" />
     <Compile Include="ILogWriter.cs" />
     <Compile Include="InstanceLifetime.cs" />
     <Compile Include="IOptionsDescriptor.cs" />
@@ -79,6 +78,7 @@
     <Compile Include="JsonFormatterSettings.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
     <Compile Include="Results\ResponseResult.cs" />
+    <Compile Include="RouteHash.cs" />
     <Compile Include="Runtime\ODataHelper.cs" />
     <Compile Include="Runtime\Link.cs" />
     <Compile Include="ResourceState.cs" />
@@ -197,6 +197,7 @@
     <Compile Include="IStreamCompressor.cs" />
     <Compile Include="Behaviors\ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
+    <Compile Include="UriSegments.cs" />
     <Compile Include="Validation\IResourceValidator.cs" />
     <Compile Include="IUploadedFile.cs" />
     <Compile Include="Odata\IModelFilter.cs" />

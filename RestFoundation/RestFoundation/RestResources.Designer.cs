@@ -385,6 +385,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type &apos;{0}&apos; is not a service contract..
+        /// </summary>
+        internal static string InvalidServiceContractType {
+            get {
+                return ResourceManager.GetString("InvalidServiceContractType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A service implementation that defines its own contract must be non-abstract and marked with the &apos;ServiceContract&apos; attribute..
         /// </summary>
         internal static string InvalidServiceImplementation {
@@ -813,6 +822,15 @@ namespace RestFoundation {
         internal static string Unauthorized {
             get {
                 return ResourceManager.GetString("Unauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not determine the URI host name..
+        /// </summary>
+        internal static string UndeterminedUriHostName {
+            get {
+                return ResourceManager.GetString("UndeterminedUriHostName", resourceCulture);
             }
         }
         

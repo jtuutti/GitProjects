@@ -509,4 +509,12 @@
     <value>An ambiguous route match was found for the service method. A specific 'serviceUrl' parameter must be specified.</value>
     <comment>An ambiguous route match was found for the service method. A specific 'serviceUrl' parameter must be specified.</comment>
   </data>
+  <data name="UndeterminedUriHostName" xml:space="preserve">
+    <value>Could not determine the URI host name.</value>
+    <comment>Could not determine the URI host name.</comment>
+  </data>
+  <data name="InvalidServiceContractType" xml:space="preserve">
+    <value>Type '{0}' is not a service contract.</value>
+    <comment>Type '{0}' is not a service contract.</comment>
+  </data>
 </root>

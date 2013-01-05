@@ -7,7 +7,7 @@ namespace RestTest.SimpleServices
     [ServiceContract]
     public class HelloService : ProxyMetadata<HelloService>
     {
-        [Url("", HttpMethod.Get)]
+        [Url(Url.Root)]
         public ContentResult Get()
         {
             return Result.Content("Hello world!", true, "text/plain");
