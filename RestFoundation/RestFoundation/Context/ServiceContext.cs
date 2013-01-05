@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Principal;
@@ -121,53 +122,53 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
-        /// Gets the application path for a service contract method.
+        /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceMethod">The service contract method.</param>
-        /// <returns>The application path for the service method.</returns>
+        /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(Expression<Action<TContract>> serviceMethod)
         {
-            return GetPath(null, serviceMethod, new RouteValueDictionary());
+            return GetPath(null, serviceMethod, new RouteValueDictionary(), HttpScheme.None);
         }
 
         /// <summary>
-        /// Gets the application path for a service contract method.
+        /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values based on the object properties.</param>
-        /// <returns>The application path for the service method.</returns>
+        /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(Expression<Action<TContract>> serviceMethod, object routeValues)
         {
-            return GetPath(null, serviceMethod, new RouteValueDictionary(routeValues));
+            return GetPath(null, serviceMethod, new RouteValueDictionary(routeValues), HttpScheme.None);
         }
 
         /// <summary>
-        /// Gets the application path for a service contract method.
+        /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
         /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
-        /// <returns>The application path for the service method.</returns>
+        /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod)
         {
-            return GetPath(serviceUrl, serviceMethod, new RouteValueDictionary());
+            return GetPath(serviceUrl, serviceMethod, new RouteValueDictionary(), HttpScheme.None);
         }
 
         /// <summary>
-        /// Gets the application path for a service contract method.
+        /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
@@ -175,17 +176,17 @@ namespace RestFoundation.Context
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values based on the object properties.</param>
-        /// <returns>The application path for the service method.</returns>
+        /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, object routeValues)
         {
-            return GetPath(serviceUrl, serviceMethod, new RouteValueDictionary(routeValues));
+            return GetPath(serviceUrl, serviceMethod, routeValues, HttpScheme.None);
         }
 
         /// <summary>
-        /// Gets the application path for a service contract method.
+        /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
@@ -193,11 +194,49 @@ namespace RestFoundation.Context
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
-        /// <returns>The application path for the service method.</returns>
+        /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteValueDictionary routeValues)
+        {
+            return GetPath(serviceUrl, serviceMethod, routeValues, HttpScheme.None);
+        }
+
+        /// <summary>
+        /// Gets the absolute relative URL for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceUrl">
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// </param>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <param name="routeValues">Additional route values based on the object properties.</param>
+        /// <param name="scheme">The protocol scheme to construct a full absolute URL.</param>
+        /// <returns>The application absolute URL for the service method.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        public string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, object routeValues, HttpScheme scheme)
+        {
+            return GetPath(serviceUrl, serviceMethod, new RouteValueDictionary(routeValues), scheme);
+        }
+
+        /// <summary>
+        /// Gets the application absolute URL for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceUrl">
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// </param>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <param name="routeValues">Additional route values.</param>
+        /// <param name="scheme">The protocol scheme to construct a full absolute URL.</param>
+        /// <returns>The application absolute URL for the service method.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        public string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteValueDictionary routeValues, HttpScheme scheme)
         {
             if (serviceMethod == null)
             {
@@ -216,57 +255,57 @@ namespace RestFoundation.Context
                 serviceUrl = TryGetMatchingServiceUrl(methodExpression);
             }
 
-            return GetPathFromMethodExpression(serviceUrl, methodExpression, routeValues);
+            return GetPathFromMethodExpression(serviceUrl, methodExpression, routeValues, scheme);
         }
 
         /// <summary>
-        /// Gets the application path for a service contract method.
+        /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceMethod">The service contract method.</param>
-        /// <returns>The application path for the service method.</returns>
+        /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(Expression<Func<TContract, object>> serviceMethod)
         {
-            return GetPath(null, serviceMethod, new RouteValueDictionary());
+            return GetPath(null, serviceMethod, new RouteValueDictionary(), HttpScheme.None);
         }
 
         /// <summary>
-        /// Gets the application path for a service contract method.
+        /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values based on the object properties.</param>
-        /// <returns>The application path for the service method.</returns>
+        /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(Expression<Func<TContract, object>> serviceMethod, object routeValues)
         {
-            return GetPath(null, serviceMethod, new RouteValueDictionary(routeValues));
+            return GetPath(null, serviceMethod, new RouteValueDictionary(routeValues), HttpScheme.None);
         }
 
         /// <summary>
-        /// Gets the application path for a service contract method.
+        /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
         /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
-        /// <returns>The application path for the service method.</returns>
+        /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod)
         {
-            return GetPath(serviceUrl, serviceMethod, new RouteValueDictionary());
+            return GetPath(serviceUrl, serviceMethod, new RouteValueDictionary(), HttpScheme.None);
         }
 
         /// <summary>
-        /// Gets the application path for a service contract method.
+        /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
@@ -274,17 +313,17 @@ namespace RestFoundation.Context
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values based on the object properties.</param>
-        /// <returns>The application path for the service method.</returns>
+        /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, object routeValues)
         {
-            return GetPath(serviceUrl, serviceMethod, new RouteValueDictionary(routeValues));
+            return GetPath(serviceUrl, serviceMethod, routeValues, HttpScheme.None);
         }
 
         /// <summary>
-        /// Gets the application path for a service contract method.
+        /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
@@ -292,11 +331,49 @@ namespace RestFoundation.Context
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
-        /// <returns>The application path for the service method.</returns>
+        /// <returns>The application relative URL for the service method.</returns>
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
         public string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteValueDictionary routeValues)
+        {
+            return GetPath(serviceUrl, serviceMethod, routeValues, HttpScheme.None);
+        }
+
+        /// <summary>
+        /// Gets the application absolute URL for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceUrl">
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// </param>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <param name="routeValues">Additional route values based on the object properties.</param>
+        /// <param name="scheme">The protocol scheme to construct a full absolute URL.</param>
+        /// <returns>The application absolute URL for the service method.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        public string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, object routeValues, HttpScheme scheme)
+        {
+            return GetPath(serviceUrl, serviceMethod, new RouteValueDictionary(routeValues), scheme);
+        }
+
+        /// <summary>
+        /// Gets the application absolute URL for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceUrl">
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// </param>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <param name="routeValues">Additional route values.</param>
+        /// <param name="scheme">The protocol scheme to construct a full absolute URL.</param>
+        /// <returns>The application absolute URL for the service method.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        public string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteValueDictionary routeValues, HttpScheme scheme)
         {
             if (serviceMethod == null)
             {
@@ -315,7 +392,7 @@ namespace RestFoundation.Context
                 serviceUrl = TryGetMatchingServiceUrl(methodExpression);
             }
 
-            return GetPathFromMethodExpression(serviceUrl, methodExpression, routeValues);
+            return GetPathFromMethodExpression(serviceUrl, methodExpression, routeValues, scheme);
         }
 
         /// <summary>
@@ -388,7 +465,7 @@ namespace RestFoundation.Context
             return false;
         }
 
-        private string GetPathFromMethodExpression(string serviceUrl, MethodCallExpression methodExpression, RouteValueDictionary routeValues)
+        private string GetPathFromMethodExpression(string serviceUrl, MethodCallExpression methodExpression, RouteValueDictionary routeValues, HttpScheme scheme)
         {
             string routeName = RouteNameHelper.GetRouteName(serviceUrl, methodExpression.Method);
 
@@ -407,10 +484,10 @@ namespace RestFoundation.Context
                 }
             }
 
-            return GetPathFromRoute(routeValues, routeName);
+            return GetPathFromRoute(routeValues, routeName, scheme);
         }
 
-        private string GetPathFromRoute(RouteValueDictionary routeValues, string routeName)
+        private string GetPathFromRoute(RouteValueDictionary routeValues, string routeName, HttpScheme scheme)
         {
             RouteData routeData = RouteTable.Routes.GetRouteData(Context);
 
@@ -436,7 +513,22 @@ namespace RestFoundation.Context
                 throw new InvalidOperationException(RestResources.InvalidServiceUrlOrMethodExpression);
             }
 
-            return VirtualPathUtility.ToAbsolute(methodRoute.VirtualPath, Context.Request.ApplicationPath);
+            string relativeUrl = VirtualPathUtility.ToAbsolute(methodRoute.VirtualPath, Context.Request.ApplicationPath);
+
+            if (Context.Request.Url == null)
+            {
+                return relativeUrl;
+            }
+
+            switch (scheme)
+            {
+                case HttpScheme.Http:
+                    return String.Format(CultureInfo.InvariantCulture, "http://{0}{1}", Context.Request.Url.Host, relativeUrl);
+                case HttpScheme.Https:
+                    return String.Format(CultureInfo.InvariantCulture, "https://{0}{1}", Context.Request.Url.Host, relativeUrl);
+                default:
+                    return relativeUrl;
+            }
         }
     }
 }

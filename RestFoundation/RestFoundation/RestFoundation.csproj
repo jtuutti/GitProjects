@@ -71,6 +71,7 @@
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
     <Compile Include="DependencyBuilder.cs" />
     <Compile Include="Formatters\SupportedMediaTypeAttribute.cs" />
+    <Compile Include="HttpScheme.cs" />
     <Compile Include="ILogWriter.cs" />
     <Compile Include="InstanceLifetime.cs" />
     <Compile Include="IOptionsDescriptor.cs" />
