@@ -16,9 +16,19 @@ namespace RestFoundation.Validation
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationError"/> struct.
         /// </summary>
+        /// <param name="message">The error message.</param>
+        public ValidationError(string message)
+        {
+            m_propertyName = null;
+            m_message = message;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidationError"/> struct.
+        /// </summary>
         /// <param name="propertyName">The property name.</param>
         /// <param name="message">The error message.</param>
-        public ValidationError(string propertyName, string message) : this()
+        public ValidationError(string propertyName, string message)
         {
             m_propertyName = propertyName;
             m_message = message;

@@ -517,4 +517,8 @@
     <value>Type '{0}' is not a service contract.</value>
     <comment>Type '{0}' is not a service contract.</comment>
   </data>
+  <data name="ResourceValidationFailed" xml:space="preserve">
+    <value>Validation Failed</value>
+    <comment>Validation Failed</comment>
+  </data>
 </root>
