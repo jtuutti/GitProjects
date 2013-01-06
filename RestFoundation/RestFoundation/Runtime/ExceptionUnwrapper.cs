@@ -11,7 +11,7 @@ namespace RestFoundation.Runtime
     {
         public static bool IsDirectResponseException(Exception ex)
         {
-            return ex is HttpResponseException || ex is HttpRequestValidationException;
+            return ex is HttpResponseException || ex is HttpResourceFaultException || ex is HttpRequestValidationException;
         }
 
         public static Exception Unwrap(Exception ex)

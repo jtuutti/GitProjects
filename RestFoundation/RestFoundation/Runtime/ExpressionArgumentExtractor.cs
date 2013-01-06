@@ -217,7 +217,7 @@ namespace RestFoundation.Runtime
             const BindingFlags BindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 
             var constants = new List<object>();
-            var constExpression = (ConstantExpression) memberExpression.Expression;
+            var constExpression = memberExpression.Expression as ConstantExpression;
 
             Type declaringType;
             object declaringObject;
@@ -230,7 +230,7 @@ namespace RestFoundation.Runtime
             else
             {
                 declaringType = memberExpression.Member.DeclaringType;
-                declaringObject = memberExpression.Member.DeclaringType;
+                declaringObject = ExtractValues(memberExpression.Expression).FirstOrDefault();
             }
 
             if (declaringType == null)

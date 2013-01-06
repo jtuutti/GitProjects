@@ -77,7 +77,6 @@
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="JsonFormatterSettings.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
-    <Compile Include="Results\FaultResult.cs" />
     <Compile Include="Results\ResponseResult.cs" />
     <Compile Include="RouteHash.cs" />
     <Compile Include="Runtime\Fault.cs" />
@@ -201,6 +200,7 @@
     <Compile Include="Behaviors\ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
     <Compile Include="UriSegments.cs" />
+    <Compile Include="HttpResourceFaultException.cs" />
     <Compile Include="Validation\IResourceValidator.cs" />
     <Compile Include="IUploadedFile.cs" />
     <Compile Include="Odata\IModelFilter.cs" />

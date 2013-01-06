@@ -3,10 +3,14 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.UI;
+using RestFoundation.Formatters;
+using RestFoundation.Results;
 using RestFoundation.Runtime;
+using RestFoundation.Validation;
 
 namespace RestFoundation
 {
@@ -68,19 +72,68 @@ namespace RestFoundation
         {
         }
 
+        private static void OutputResourceValidationFaults(HttpResourceFaultException faultException)
+        {
+            var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
+            var faultCollection = GenerateFaultCollection(context, faultException);
+
+            if (faultCollection.General.Length == 0 && faultCollection.Resource.Length == 0)
+            {
+                return;
+            }
+
+            var contentNegotiator = Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>();
+            var formatter = MediaTypeFormatterRegistry.GetFormatter(contentNegotiator.GetPreferredMediaType(context.Request));
+
+            if (formatter != null)
+            {
+                ExecuteFaultResult(formatter, context, faultCollection);
+            }
+        }
+
+        private static FaultCollection GenerateFaultCollection(IServiceContext context, HttpResourceFaultException faultException)
+        {
+            var validationErrors = new List<ValidationError>();
+            validationErrors.AddRange(faultException.FaultMessages.Where(m => !String.IsNullOrEmpty(m)).Select(m => new ValidationError(m)));
+            validationErrors.AddRange(context.Request.ResourceState ?? new ResourceState(new ValidationError[0]));
+
+            if (validationErrors.Count == 0)
+            {
+                return new FaultCollection();
+            }
+
+            return new FaultCollection
+            {
+                General = validationErrors.Where(e => String.IsNullOrEmpty(e.PropertyName)).Select(e => new Fault
+                {
+                    PropertyName = e.PropertyName,
+                    Message = e.Message
+                }).ToArray(),
+                Resource = validationErrors.Where(e => !String.IsNullOrEmpty(e.PropertyName)).Select(e => new Fault
+                {
+                    PropertyName = e.PropertyName,
+                    Message = e.Message
+                }).ToArray()
+            };
+        }
+
+        private static void ExecuteFaultResult(IMediaTypeFormatter formatter, IServiceContext context, FaultCollection faultCollection)
+        {
+            IResult result = formatter.FormatResponse(context, faultCollection.GetType(), faultCollection);
+
+            if (result != null)
+            {
+                result.Execute(context);
+            }
+        }
+
         private void SetResponseStatus(HttpStatusCode statusCode, string statusDescription)
         {
-            try
-            {
-                m_context.Response.Clear();
-                m_context.Response.StatusCode = (int) statusCode;
-                m_context.Response.StatusDescription = HttpUtility.HtmlEncode(statusDescription);
-                m_context.Server.ClearError();
-                m_context.CompleteRequest();
-            }
-            catch (Exception)
-            {
-            }
+            m_context.Response.Clear();
+            m_context.Response.StatusCode = (int) statusCode;
+            m_context.Response.StatusDescription = HttpUtility.HtmlEncode(statusDescription);
+            m_context.Server.ClearError();
+            m_context.CompleteRequest();
         }
 
         private void CompleteRequestOnError()
@@ -97,6 +150,14 @@ namespace RestFoundation
             if (responseException != null)
             {
                 SetResponseStatus(responseException.StatusCode, responseException.StatusDescription);
+                return;
+            }
+
+            var faultException = exception as HttpResourceFaultException;
+
+            if (faultException != null)
+            {
+                SetFaultResponse(faultException);
                 return;
             }
 
@@ -194,6 +255,24 @@ namespace RestFoundation
 
                 m_context.Response.AppendHeader(header.Key, header.Value);
             }
+        }
+
+        private void SetFaultResponse(HttpResourceFaultException faultException)
+        {
+            m_context.Server.ClearError();
+            m_context.Response.Clear();
+            m_context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+            m_context.Response.StatusDescription = RestResources.ResourceValidationFailed;
+
+            if ("POST".Equals(m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) || "PUT".Equals(m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) ||
+                "PATCH".Equals(m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            {
+                m_context.Response.TrySkipIisCustomErrors = true;
+
+                OutputResourceValidationFaults(faultException);
+            }
+
+            m_context.CompleteRequest();
         }
     }
 }

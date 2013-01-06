@@ -3,12 +3,10 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.ServiceModel.Syndication;
 using RestFoundation.Results;
-using RestFoundation.Validation;
 
 namespace RestFoundation
 {
@@ -709,47 +707,6 @@ namespace RestFoundation
             }
 
             return new ResponseResult(action);
-        }
-
-        /// <summary>
-        /// Returns a result with all the resource state validation faults.
-        /// </summary>
-        /// <returns>The fault result.</returns>
-        public static IResult Fault()
-        {
-            return new FaultResult();
-        }
-
-        /// <summary>
-        /// Returns a result with the provided general fault message along with the
-        /// resource state validation faults.
-        /// </summary>
-        /// <param name="message">The general fault message.</param>
-        /// <returns>The fault result.</returns>
-        public static IResult Fault(string message)
-        {
-            if (String.IsNullOrEmpty(message))
-            {
-                return new FaultResult();
-            }
-
-            return new FaultResult(new ValidationError(message));
-        }
-
-        /// <summary>
-        /// Returns a result with the provided general faults along with the resource state
-        /// validation faults.
-        /// </summary>
-        /// <param name="messages">The general fault message.</param>
-        /// <returns>The fault result.</returns>
-        public static IResult Fault(IEnumerable<string> messages)
-        {
-            if (messages == null)
-            {
-                throw new ArgumentNullException("messages");
-            }
-
-            return new FaultResult(messages.Where(m => !String.IsNullOrEmpty(m)).Select(m => new ValidationError(m)));
         }
     }
 }

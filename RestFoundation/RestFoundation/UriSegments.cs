@@ -7,16 +7,6 @@ namespace RestFoundation
     /// </summary>
     public sealed class UriSegments
     {
-        /// <summary>
-        /// Represents an absolute URL for the current host over HTTP.
-        /// </summary>
-        public static readonly UriSegments CurrentHost = new UriSegments(false);
-
-        /// <summary>
-        /// Represents an absolute URL for the current host over HTTPS.
-        /// </summary>
-        public static readonly UriSegments CurrentHostOverHttps = new UriSegments(true);
-
         private readonly bool m_usesHttps;
         private readonly string m_host;
         private readonly int? m_port;
@@ -65,6 +55,21 @@ namespace RestFoundation
             m_usesHttps = usesHttps;
             m_host = host;
             m_port = port;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="UriSegments"/> instance from the provided <see cref="IHttpRequest"/> information.
+        /// </summary>
+        /// <param name="request">The current HTTP request.</param>
+        /// <returns>The generated <see cref="UriSegments"/> instance.</returns>
+        public static UriSegments CreateFromHttpRequest(IHttpRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
+            return new UriSegments(request.IsSecure, request.ServerVariables.ServerName, request.ServerVariables.ServerPort);
         }
 
         /// <summary>
