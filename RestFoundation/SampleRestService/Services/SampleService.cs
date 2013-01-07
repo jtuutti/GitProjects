@@ -11,20 +11,14 @@ namespace SampleRestService.Services
 {
     public class SampleService : ISampleService
     {
-        private readonly IHttpRequest m_request;
-        private readonly IHttpResponse m_response;
+        private readonly IServiceContext m_context;
         private readonly ProductRepository m_repository;
 
-        public SampleService(IHttpRequest request, IHttpResponse response, ProductRepository repository)
+        public SampleService(IServiceContext context, ProductRepository repository)
         {
-            if (request == null)
+            if (context == null)
             {
-                throw new ArgumentNullException("request");
-            }
-
-            if (response == null)
-            {
-                throw new ArgumentNullException("response");
+                throw new ArgumentNullException("context");
             }
 
             if (repository == null)
@@ -32,8 +26,7 @@ namespace SampleRestService.Services
                 throw new ArgumentNullException("repository");
             }
 
-            m_request = request;
-            m_response = response;
+            m_context = context;
             m_repository = repository;
         }
 
@@ -43,7 +36,7 @@ namespace SampleRestService.Services
 
             if (product == null)
             {
-                m_response.SetStatus(HttpStatusCode.NotFound, "Product not found");
+                m_context.Response.SetStatus(HttpStatusCode.NotFound, "Product not found");
             }
 
             return product;
@@ -56,28 +49,27 @@ namespace SampleRestService.Services
 
         public Product Post(Product resource)
         {
-            if (!m_request.ResourceState.IsValid)
+            if (!m_context.Request.ResourceState.IsValid)
             {
-                HandleValidationErrors();
-                return null;
+                // Iterate through m_context.Request.ResourceState to handle or log errors
+
+                throw new HttpResourceFaultException();
             }
 
             try
             {
                 m_repository.Add(resource);
-                
-                // TODO: add location header
-                m_response.SetStatus(HttpStatusCode.Created, "Product added");
+
+                // string relativeLocationUrl = m_context.GetPath<ISampleService>(m => m.GetById(resource.ID);
+
+                string absoluteLocationUrl = m_context.GetPath<ISampleService>(null, m => m.GetById(resource.ID), null, UriSegments.CreateFromHttpRequest(m_context.Request));
+
+                m_context.Response.SetHeader(m_context.Response.HeaderNames.Location, absoluteLocationUrl);
+                m_context.Response.SetStatus(HttpStatusCode.Created, "Product added");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException ex) // invalid input arguments passed to the repository
             {
-                m_response.SetStatus(HttpStatusCode.BadRequest, ex.Message);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                m_response.SetStatus(HttpStatusCode.InternalServerError, ex.Message);
-                return null;
+                throw new HttpResourceFaultException(new[] { ex.Message });
             }
 
             return m_repository.GetAll().FirstOrDefault(p => p.ID == resource.ID);
@@ -85,26 +77,21 @@ namespace SampleRestService.Services
 
         public Product Put(int id, Product resource)
         {
-            if (!m_request.ResourceState.IsValid)
+            if (!m_context.Request.ResourceState.IsValid)
             {
-                HandleValidationErrors();
-                return null;
+                // Iterate through m_context.Request.ResourceState to handle or log errors
+
+                throw new HttpResourceFaultException();
             }
 
             try
             {
                 m_repository.Update(resource);
-                m_response.SetStatus(HttpStatusCode.OK, "Product updated");
+                m_context.Response.SetStatus(HttpStatusCode.OK, "Product updated");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException ex) // invalid input arguments passed to the repository
             {
-                m_response.SetStatus(HttpStatusCode.BadRequest, ex.Message);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                m_response.SetStatus(HttpStatusCode.InternalServerError, ex.Message);
-                return null;
+                throw new HttpResourceFaultException(new[] { ex.Message });
             }
 
             return m_repository.GetAll().FirstOrDefault(p => p.ID == resource.ID);
@@ -114,24 +101,19 @@ namespace SampleRestService.Services
         {
             if (!inStock.HasValue)
             {
-                m_response.SetStatus(HttpStatusCode.BadRequest, "No InStock value was provided");
-                return null;
+                // Iterate through m_context.Request.ResourceState to handle or log errors
+
+                throw new HttpResourceFaultException();
             }
 
             try
             {
                 m_repository.UpdateInStockStatus(id, inStock.Value);
-                m_response.SetStatus(HttpStatusCode.OK, "Product updated");
+                m_context.Response.SetStatus(HttpStatusCode.OK, "Product updated");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException ex) // invalid input arguments passed to the repository
             {
-                m_response.SetStatus(HttpStatusCode.BadRequest, ex.Message);
-                return null;
-            }
-            catch (Exception ex)
-            {
-                m_response.SetStatus(HttpStatusCode.InternalServerError, ex.Message);
-                return null;
+                throw new HttpResourceFaultException(new[] { ex.Message });
             }
 
             return m_repository.GetAll().FirstOrDefault(p => p.ID == id);
@@ -146,24 +128,10 @@ namespace SampleRestService.Services
 
                 return Result.ResponseStatus(HttpStatusCode.NoContent, "Product deleted");
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException ex) // invalid input arguments passed to the repository
             {
                 return Result.ResponseStatus(HttpStatusCode.BadRequest, ex.Message);
             }
-            catch (Exception ex)
-            {
-                return Result.ResponseStatus(HttpStatusCode.InternalServerError, ex.Message);
-            }
-        }
-
-        private void HandleValidationErrors()
-        {
-            foreach (var error in m_request.ResourceState)
-            {
-                // handle errors
-            }
-
-            m_response.SetStatus(HttpStatusCode.BadRequest, "Product resource validation failed");
         }
     }
 }

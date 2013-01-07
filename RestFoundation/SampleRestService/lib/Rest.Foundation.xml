@@ -745,6 +745,42 @@
             </summary>
       <param name="valueDictionary">A dictionary of route values.</param>
     </member>
+    <member name="T:RestFoundation.Runtime.Fault">
+      <summary>
+            Represents a general or a resource fault.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Runtime.Fault.ShouldSerializePropertyName">
+      <summary>
+            A serializer helper method.
+            </summary>
+      <returns>A value indicating whether the property name should be serialized.</returns>
+    </member>
+    <member name="P:RestFoundation.Runtime.Fault.PropertyName">
+      <summary>
+            Gets or sets the property name.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Fault.Message">
+      <summary>
+            Gets or sets the fault message.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.Runtime.FaultCollection">
+      <summary>
+            Represents a fault collection.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.FaultCollection.General">
+      <summary>
+            Gets or sets an array of general faults.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.FaultCollection.Resource">
+      <summary>
+            Gets or sets an array of resource faults.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Runtime.Link">
       <summary>
             Represents a Link HTTP header value.
@@ -1382,6 +1418,11 @@
     <member name="P:RestFoundation.RestResources.ProxyAlreadyInitialized">
       <summary>
               Looks up a localized string similar to Service proxy UI is already enabled..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.ResourceValidationFailed">
+      <summary>
+              Looks up a localized string similar to Validation Failed.
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.ServiceCallEnded">
@@ -5718,16 +5759,6 @@
             Contains URI segments to generate an absolute URI from a relative path.
             </summary>
     </member>
-    <member name="F:RestFoundation.UriSegments.CurrentHost">
-      <summary>
-            Represents an absolute URL for the current host over HTTP.
-            </summary>
-    </member>
-    <member name="F:RestFoundation.UriSegments.CurrentHostOverHttps">
-      <summary>
-            Represents an absolute URL for the current host over HTTPS.
-            </summary>
-    </member>
     <member name="M:RestFoundation.UriSegments.#ctor(System.Boolean)">
       <summary>
             Initializes a new instance of the <see cref="T:RestFoundation.UriSegments" /> class.
@@ -5756,6 +5787,13 @@
       <param name="host">Specifies a different host name for the URI.</param>
       <param name="port">Specifies a different HTTP/S port for the URI.</param>
     </member>
+    <member name="M:RestFoundation.UriSegments.CreateFromHttpRequest(RestFoundation.IHttpRequest)">
+      <summary>
+            Creates a <see cref="T:RestFoundation.UriSegments" /> instance from the provided <see cref="T:RestFoundation.IHttpRequest" /> information.
+            </summary>
+      <param name="request">The current HTTP request.</param>
+      <returns>The generated <see cref="T:RestFoundation.UriSegments" /> instance.</returns>
+    </member>
     <member name="M:RestFoundation.UriSegments.GenerateUri(System.String)">
       <summary>
             Returns an absolute URI generated from the segments and the provided relative path.
@@ -5763,6 +5801,70 @@
       <param name="relativePath">A relative path.</param>
       <returns>A <see cref="T:System.String" /> containg the generated URI.</returns>
       <exception cref="T:System.InvalidOperationException">If no host name could be determined.</exception>
+    </member>
+    <member name="T:RestFoundation.HttpResourceFaultException">
+      <summary>
+            Represents an HTTP resource fault exception. This is a special type of exception that is used
+            to return a collection of resource validation faults to the REST client. It does not get caught
+            by the service behaviors.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.HttpResourceFaultException.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.HttpResourceFaultException" /> class.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.HttpResourceFaultException.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.HttpResourceFaultException" /> class with the provided general fault
+            messages.
+            </summary>
+      <param name="faultMessages">A sequence of fault messages.</param>
+    </member>
+    <member name="M:RestFoundation.HttpResourceFaultException.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.HttpResourceFaultException" /> class with the provided message.
+            </summary>
+      <param name="message">The exception message.</param>
+    </member>
+    <member name="M:RestFoundation.HttpResourceFaultException.#ctor(System.String,System.Exception)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.HttpResourceFaultException" /> class with the provided message
+            and a reference to the exception that is the cause of the current exception.
+            </summary>
+      <param name="message">The exception message.</param>
+      <param name="innerException">The exception that is the cause of the current exception, or a null reference.</param>
+    </member>
+    <member name="M:RestFoundation.HttpResourceFaultException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.HttpResourceFaultException" /> class with serialized data.
+            </summary>
+      <param name="info">
+            The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown.
+            </param>
+      <param name="context">
+            The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information about the source or destination.
+            </param>
+      <exception cref="T:System.Runtime.Serialization.SerializationException">
+            The class name is null or <see cref="P:System.Exception.HResult" /> is zero (0).
+            </exception>
+    </member>
+    <member name="M:RestFoundation.HttpResourceFaultException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+      <summary>
+            Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with information about the exception.
+            </summary>
+      <param name="info">
+            The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown.
+            </param>
+      <param name="context">
+            The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information about the source or destination.
+            </param>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="P:RestFoundation.HttpResourceFaultException.FaultMessages">
+      <summary>
+            Gets a list of the exception specific general fault messages.
+            </summary>
     </member>
     <member name="T:RestFoundation.Validation.IResourceValidator">
       <summary>
@@ -9799,6 +9901,12 @@
       <summary>
             Represents a validation error.
             </summary>
+    </member>
+    <member name="M:RestFoundation.Validation.ValidationError.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Validation.ValidationError" /> struct.
+            </summary>
+      <param name="message">The error message.</param>
     </member>
     <member name="M:RestFoundation.Validation.ValidationError.#ctor(System.String,System.String)">
       <summary>
