@@ -1,5 +1,5 @@
 ﻿// <copyright>
-// Dmitry Starosta, 2012
+// Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
 using System.Diagnostics.CodeAnalysis;
