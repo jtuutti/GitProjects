@@ -50,7 +50,7 @@ namespace RestFoundation.ServiceProxy
                                 };
 
                 var namespaces = new XmlSerializerNamespaces();
-                namespaces.Add(String.Empty, String.Empty);
+                namespaces.Add(String.Empty, XmlNameSpaceExtractor.Get());
 
                 serializer.Serialize(xmlWriter, obj, namespaces);
                 xmlWriter.Flush();

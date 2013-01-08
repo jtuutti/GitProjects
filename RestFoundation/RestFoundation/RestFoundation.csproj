@@ -100,6 +100,7 @@
     <Compile Include="Runtime\MethodReturnTypeUnwrapper.cs" />
     <Compile Include="Runtime\RouteNameHelper.cs" />
     <Compile Include="Runtime\TaskExceptionUnwrapper.cs" />
+    <Compile Include="Runtime\XmlNameSpaceExtractor.cs" />
     <Compile Include="ServiceProxy\ProxyJsonConvert.cs" />
     <Compile Include="Runtime\LogUtility.cs" />
     <Compile Include="Runtime\NullLogWriter.cs" />
@@ -358,6 +359,7 @@
     <Compile Include="ParameterConstraintAttribute.cs" />
     <Compile Include="Validation\ValidateObjectAttribute.cs" />
     <Compile Include="Validation\ValidationError.cs" />
+    <Compile Include="XmlFormatterSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="RestResources.resx">

@@ -47,6 +47,7 @@ namespace RestFoundation
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
         internal string IndexPageRelativeUrl { get; private set; }
         internal JsonFormatterSettings JsonSettings { get; private set; }
+        internal XmlFormatterSettings XmlSettings { get; private set; }
 
         /// <summary>
         /// Calls the provided service proxy configuration object to set up service help and proxy UI for the services.
@@ -282,6 +283,22 @@ namespace RestFoundation
             }
 
             JsonSettings = settings;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets custom XML formatter and result settings.
+        /// </summary>
+        /// <param name="settings">The XML formatter settings.</param>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions UseXmlFormatterSettings(XmlFormatterSettings settings)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException("settings");
+            }
+
+            XmlSettings = settings;
             return this;
         }
     }

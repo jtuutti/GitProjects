@@ -132,10 +132,10 @@ namespace RestFoundation.UnitTesting
             {
                 Context.Request.Headers.Add("Content-Type", "application/xml; charset=utf-8");
 
-                var serializer = new XmlSerializer(resource.GetType());
+                var serializer = XmlSerializerRegistry.Get(resource.GetType());
                 var writer = new StreamWriter(Context.Request.InputStream, Encoding.UTF8);
                 var namespaces = new XmlSerializerNamespaces();
-                namespaces.Add(String.Empty, String.Empty);
+                namespaces.Add(String.Empty, XmlNameSpaceExtractor.Get());
                 serializer.Serialize(writer, resource, namespaces);
                 writer.Flush();
             }

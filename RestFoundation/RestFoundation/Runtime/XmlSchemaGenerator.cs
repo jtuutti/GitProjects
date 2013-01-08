@@ -109,7 +109,7 @@ namespace RestFoundation.Runtime
             {
                 try
                 {
-                    var serializer = new XmlSerializer(model.GetType());
+                    var serializer = XmlSerializerRegistry.Get(model.GetType());
                     serializer.Serialize(stream, model);
                 }
                 catch (Exception)

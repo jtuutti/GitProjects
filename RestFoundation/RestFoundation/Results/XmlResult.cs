@@ -104,7 +104,7 @@ namespace RestFoundation.Results
             XmlSerializer serializer = XmlSerializerRegistry.Get(Content.GetType());
 
             var namespaces = new XmlSerializerNamespaces();
-            namespaces.Add(String.Empty, String.Empty);
+            namespaces.Add(String.Empty, XmlNameSpaceExtractor.Get());
 
             serializer.Serialize(xmlWriter, Content, namespaces);
 
@@ -202,7 +202,7 @@ namespace RestFoundation.Results
                 XmlSerializer serializer = XmlSerializerRegistry.Get(enumeratedContent.GetType());
 
                 var namespaces = new XmlSerializerNamespaces();
-                namespaces.Add(String.Empty, String.Empty);
+                namespaces.Add(String.Empty, XmlNameSpaceExtractor.Get());
 
                 serializer.Serialize(xmlWriter, enumeratedContent, namespaces);
                 context.Response.Output.Flush();
@@ -266,7 +266,7 @@ namespace RestFoundation.Results
                                 };
 
                 var namespaces = new XmlSerializerNamespaces();
-                namespaces.Add(String.Empty, String.Empty);
+                namespaces.Add(String.Empty, XmlNameSpaceExtractor.Get());
 
                 serializer.Serialize(xmlWriter, content, namespaces);
                 xmlWriter.Flush();

@@ -4,7 +4,6 @@
 using System;
 using System.IO;
 using System.Xml;
-using System.Xml.Serialization;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
 
@@ -72,20 +71,9 @@ namespace RestFoundation.Formatters
                 context.Request.Body.Seek(0, SeekOrigin.Begin);
             }
 
-            XmlSerializer serializer;
-
-            try
-            {
-                serializer = new XmlSerializer(objectType);
-            }
-            catch (NotSupportedException) // cannot find a serializer for the type
-            {
-                return null;
-            }
-
             var reader = XmlReader.Create(new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding));
 
-            return serializer.Deserialize(reader);
+            return XmlSerializerRegistry.Get(objectType).Deserialize(reader);
         }
 
         /// <summary>
