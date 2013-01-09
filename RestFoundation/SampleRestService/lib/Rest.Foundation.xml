@@ -1004,6 +1004,13 @@
       <param name="settings">The JSON formatter settings.</param>
       <returns>The configuration options object.</returns>
     </member>
+    <member name="M:RestFoundation.RestOptions.UseXmlFormatterSettings(RestFoundation.XmlFormatterSettings)">
+      <summary>
+            Sets custom XML formatter and result settings.
+            </summary>
+      <param name="settings">The XML formatter settings.</param>
+      <returns>The configuration options object.</returns>
+    </member>
     <member name="P:RestFoundation.RestOptions.ServiceProxyHttpsOnly">
       <summary>
             Gets a value indicating whether the service proxy must be accessed through the HTTPS protocol only.
@@ -9967,6 +9974,16 @@
     <member name="P:RestFoundation.Validation.ValidationError.Message">
       <summary>
             Gets the error message.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.XmlFormatterSettings">
+      <summary>
+            Contains settings used by XML formatters and results.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.XmlFormatterSettings.NameSpace">
+      <summary>
+            Gets or sets the XML namespace
             </summary>
     </member>
     <member name="T:Newtonsoft.Json.JsonReader">
