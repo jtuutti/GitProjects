@@ -200,6 +200,7 @@
     <Compile Include="IStreamCompressor.cs" />
     <Compile Include="Behaviors\ISecureServiceBehavior.cs" />
     <Compile Include="IServiceContext.cs" />
+    <Compile Include="UnitTesting\MockContextManager.cs" />
     <Compile Include="UriSegments.cs" />
     <Compile Include="HttpResourceFaultException.cs" />
     <Compile Include="Validation\IResourceValidator.cs" />

@@ -44,6 +44,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\Dependencies\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <HintPath>..\Dependencies\IoC\StructureMap.dll</HintPath>
     </Reference>
@@ -86,6 +89,9 @@
     <Compile Include="Implementation\Services\TestService.cs" />
     <Compile Include="SetUpFixture.cs" />
     <Compile Include="Formatters\XmlFormatterTests.cs" />
+    <Compile Include="TypeBinders\FromHeaderBinderTests.cs" />
+    <Compile Include="TypeBinders\FromBodyBinderTests.cs" />
+    <Compile Include="TypeBinders\FromUriBinderTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestFoundation.StructureMap\RestFoundation.StructureMap.csproj">

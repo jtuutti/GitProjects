@@ -23,8 +23,6 @@ namespace RestFoundation.UnitTesting
     {
         private static readonly object syncRoot = new object();
 
-        internal static TestHttpContext Context { get; private set; }
-
         /// <summary>
         /// Creates a REST handler that executes that provided service method at the specified virtual URL.
         /// </summary>
@@ -112,28 +110,30 @@ namespace RestFoundation.UnitTesting
                 throw new ArgumentNullException("resource");
             }
 
-            if (!String.Equals(Context.Request.HttpMethod, "POST", StringComparison.OrdinalIgnoreCase) &&
-                !String.Equals(Context.Request.HttpMethod, "PUT", StringComparison.OrdinalIgnoreCase) &&
-                !String.Equals(Context.Request.HttpMethod, "PATCH", StringComparison.OrdinalIgnoreCase))
+            var context = TestHttpContext.Context;
+
+            if (!String.Equals(context.Request.HttpMethod, "POST", StringComparison.OrdinalIgnoreCase) &&
+                !String.Equals(context.Request.HttpMethod, "PUT", StringComparison.OrdinalIgnoreCase) &&
+                !String.Equals(context.Request.HttpMethod, "PATCH", StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidOperationException(RestResources.InvalidHttpMethodForResource);
             }
 
             if (resourceType == RestResourceType.Json)
             {
-                Context.Request.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                context.Request.Headers.Add("Content-Type", "application/json; charset=utf-8");
 
                 var serializer = JsonSerializerFactory.Create();
-                var writer = new StreamWriter(Context.Request.InputStream, Encoding.UTF8);
+                var writer = new StreamWriter(context.Request.InputStream, Encoding.UTF8);
                 serializer.Serialize(writer, resource);
                 writer.Flush();
             }
             else
             {
-                Context.Request.Headers.Add("Content-Type", "application/xml; charset=utf-8");
+                context.Request.Headers.Add("Content-Type", "application/xml; charset=utf-8");
 
                 var serializer = XmlSerializerRegistry.Get(resource.GetType());
-                var writer = new StreamWriter(Context.Request.InputStream, Encoding.UTF8);
+                var writer = new StreamWriter(context.Request.InputStream, Encoding.UTF8);
                 var namespaces = new XmlSerializerNamespaces();
                 namespaces.Add(String.Empty, XmlNameSpaceExtractor.Get());
                 serializer.Serialize(writer, resource, namespaces);
@@ -147,20 +147,20 @@ namespace RestFoundation.UnitTesting
         /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
-            if (Context == null)
+            if (TestHttpContext.Context == null)
             {
                 return;
             }
 
             lock (syncRoot)
             {
-                if (Context == null)
+                if (TestHttpContext.Context == null)
                 {
                     return;
                 }
 
-                Context.Dispose();
-                Context = null;
+                TestHttpContext.Context.Dispose();
+                TestHttpContext.Context = null;
             }
         }
 
@@ -240,9 +240,9 @@ namespace RestFoundation.UnitTesting
 
             lock (syncRoot)
             {
-                Context = new TestHttpContext(virtualUrl, httpMethod.ToString().ToUpperInvariant());
+                TestHttpContext.Context = new TestHttpContext(virtualUrl, httpMethod.ToString().ToUpperInvariant());
 
-                RouteData routeData = routes.GetRouteData(Context);
+                RouteData routeData = routes.GetRouteData(TestHttpContext.Context);
 
                 if (routeData == null)
                 {
@@ -251,7 +251,7 @@ namespace RestFoundation.UnitTesting
 
                 AssertRouteParameters(serviceMethod, routeData);
 
-                return new RequestContext(Context, routeData);
+                return new RequestContext(TestHttpContext.Context, routeData);
             }
         }
 
