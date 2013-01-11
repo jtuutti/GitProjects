@@ -521,4 +521,8 @@
     <value>Validation Failed</value>
     <comment>Validation Failed</comment>
   </data>
+  <data name="AlreadyInitializedHttpContext" xml:space="preserve">
+    <value>HTTP context has already been initialized.</value>
+    <comment>HTTP context has already been initialized.</comment>
+  </data>
 </root>

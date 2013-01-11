@@ -27,20 +27,17 @@ namespace RestFoundation.Tests.TypeBinders
         [Test]
         public void Test_Object_Binding()
         {
-            var httpContext = m_context.GetHttpContext().Request;
-            Assert.That(httpContext, Is.Not.Null);
+            MockContextManager.SetFormData("name", "Dmitry");
+            MockContextManager.SetFormData("age", "15");
+            MockContextManager.SetFormData("id", Guid.NewGuid().ToString());
 
-            var formData = httpContext.Form;
-            formData.Add("name", "Dmitry");
-            formData.Add("age", "15");
-            formData.Add("id", Guid.NewGuid().ToString());
-
-            Assert.That(httpContext.Form["name"], Is.Not.Null);
-            Assert.That(httpContext.Form["name"], Is.Not.Empty);
-            Assert.That(httpContext.Form["age"], Is.Not.Null);
-            Assert.That(httpContext.Form["age"], Is.Not.Empty);
-            Assert.That(httpContext.Form["id"], Is.Not.Null);
-            Assert.That(httpContext.Form["id"], Is.Not.Empty);
+            var formData = m_context.GetHttpContext().Request.Form;
+            Assert.That(formData["name"], Is.Not.Null);
+            Assert.That(formData["name"], Is.Not.Empty);
+            Assert.That(formData["age"], Is.Not.Null);
+            Assert.That(formData["age"], Is.Not.Empty);
+            Assert.That(formData["id"], Is.Not.Null);
+            Assert.That(formData["id"], Is.Not.Empty);
 
             var name = m_binder.Bind("name", typeof(string), m_context) as string;
             Assert.That(name, Is.Not.Null);
@@ -56,14 +53,12 @@ namespace RestFoundation.Tests.TypeBinders
         [Test]
         public void Test_Array_Binding()
         {
-            var httpContext = m_context.GetHttpContext().Request;
-            Assert.That(httpContext, Is.Not.Null);
+            MockContextManager.SetFormData("id", "5");
+            MockContextManager.SetFormData("id", "10");
+            MockContextManager.SetFormData("id", "20");
+            MockContextManager.SetFormData("id", "50");
 
-            var formData = httpContext.Form;
-            formData.Add("id", "5");
-            formData.Add("id", "10");
-            formData.Add("id", "50");
-            formData.Add("id", "20");
+            var formData = m_context.GetHttpContext().Request.Form;
 
             var idValues = formData.GetValues("id");
             Assert.That(idValues, Is.Not.Null);

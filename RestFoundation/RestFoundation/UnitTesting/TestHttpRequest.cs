@@ -21,7 +21,6 @@ namespace RestFoundation.UnitTesting
         private readonly NameValueCollection m_headers;
         private readonly NameValueCollection m_queryString;
         private readonly NameValueCollection m_serverVariables;
-        private readonly NameValueCollection m_params;
         private readonly Stream m_body;
         private Stream m_filter;
         private bool m_isDisposed;
@@ -49,7 +48,6 @@ namespace RestFoundation.UnitTesting
             m_headers = new NameValueCollection();
             m_queryString = new NameValueCollection();
             m_serverVariables = new NameValueCollection();
-            m_params = new NameValueCollection();
             m_body = new MemoryStream();
             m_filter = new MemoryStream();
 
@@ -227,7 +225,13 @@ namespace RestFoundation.UnitTesting
         {
             get
             {
-                return m_params;
+                return new NameValueCollection
+                {
+                    QueryString,
+                    Form,
+                    GetCookies(),
+                    ServerVariables
+                };
             }
         }
 
@@ -257,6 +261,18 @@ namespace RestFoundation.UnitTesting
             m_body.Dispose();
             m_filter.Dispose();
             m_isDisposed = true;
+        }
+
+        private NameValueCollection GetCookies()
+        {
+            var cookieCollection = new NameValueCollection();
+
+            foreach (HttpCookie cookie in Cookies)
+            {
+                cookieCollection.Add(cookie.Name, cookie.Value);
+            }
+
+            return cookieCollection;
         }
 
         private void PopulateServerVariables()

@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.Collections.Specialized;
 
 namespace RestFoundation.UnitTesting
 {
@@ -50,7 +51,7 @@ namespace RestFoundation.UnitTesting
         {
             if (TestHttpContext.Context != null)
             {
-                throw new InvalidOperationException("HTTP context has already been initialized");
+                throw new InvalidOperationException(RestResources.AlreadyInitializedHttpContext);
             }
 
             TestHttpContext.Context = new TestHttpContext(virtualPath, method.ToString().ToUpperInvariant());
@@ -64,6 +65,146 @@ namespace RestFoundation.UnitTesting
         public static void DestroyContext()
         {
             TestHttpContext.Context = null;
+        }
+
+        /// <summary>
+        /// Sets a header with the provided name and value to the generated HTTP Context.
+        /// </summary>
+        /// <param name="name">The header name.</param>
+        /// <param name="value">The header value.</param>
+        public static void SetHeader(string name, string value)
+        {
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            ValidateContext();
+
+            TestHttpContext.Context.Request.Headers.Add(name, value);
+        }
+
+        /// <summary>
+        /// Sets the provided headers to the generated HTTP Context.
+        /// </summary>
+        /// <param name="headers">The headers.</param>
+        public static void SetHeaders(NameValueCollection headers)
+        {
+            if (headers == null)
+            {
+                return;
+            }
+
+            ValidateContext();
+
+            TestHttpContext.Context.Request.Headers.Add(headers);
+        }
+
+        /// <summary>
+        /// Sets a form data item with the provided name and value to the generated HTTP Context.
+        /// </summary>
+        /// <param name="name">The form data item name.</param>
+        /// <param name="value">The form data item value.</param>
+        public static void SetFormData(string name, string value)
+        {
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            ValidateContext();
+
+            TestHttpContext.Context.Request.Form.Add(name, value);
+        }
+
+        /// <summary>
+        /// Sets the provided form data collection to the generated HTTP Context.
+        /// </summary>
+        /// <param name="formData">The form data collection.</param>
+        public static void SetFormData(NameValueCollection formData)
+        {
+            if (formData == null)
+            {
+                return;
+            }
+
+            ValidateContext();
+
+            TestHttpContext.Context.Request.Form.Add(formData);
+        }
+
+        /// <summary>
+        /// Sets a query string item with the provided name and value to the generated HTTP Context.
+        /// </summary>
+        /// <param name="name">The query string name.</param>
+        /// <param name="value">The query string value.</param>
+        public static void SetQuery(string name, string value)
+        {
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            ValidateContext();
+
+            TestHttpContext.Context.Request.QueryString.Add(name, value);
+        }
+
+        /// <summary>
+        /// Sets the provided query string to the generated HTTP Context.
+        /// </summary>
+        /// <param name="queryString">The query string keys and values.</param>
+        public static void SetQuery(NameValueCollection queryString)
+        {
+            if (queryString == null)
+            {
+                return;
+            }
+
+            ValidateContext();
+
+            TestHttpContext.Context.Request.QueryString.Add(queryString);
+        }
+
+        /// <summary>
+        /// Sets a server variable with the provided name and value to the generated HTTP Context.
+        /// </summary>
+        /// <param name="name">The server variable name.</param>
+        /// <param name="value">The server variable value.</param>
+        public static void SetServerVariable(string name, string value)
+        {
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            ValidateContext();
+
+            TestHttpContext.Context.Request.ServerVariables.Add(name, value);
+        }
+
+        /// <summary>
+        /// Sets the provided server variable to the generated HTTP Context.
+        /// </summary>
+        /// <param name="queryString">The server variable keys and values.</param>
+        public static void SetServerVariables(NameValueCollection queryString)
+        {
+            if (queryString == null)
+            {
+                return;
+            }
+
+            ValidateContext();
+
+            TestHttpContext.Context.Request.ServerVariables.Add(queryString);
+        }
+
+        private static void ValidateContext()
+        {
+            if (TestHttpContext.Context == null)
+            {
+                throw new InvalidOperationException(RestResources.MissingHttpContext);
+            }
         }
     }
 }

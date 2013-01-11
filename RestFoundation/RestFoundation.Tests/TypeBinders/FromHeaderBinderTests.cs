@@ -27,45 +27,38 @@ namespace RestFoundation.Tests.TypeBinders
         [Test]
         public void Test_Object_Binding()
         {
-            var httpContext = m_context.GetHttpContext().Request;
-            Assert.That(httpContext, Is.Not.Null);
+            MockContextManager.SetHeader("X-Name", "Dmitry");
+            MockContextManager.SetHeader("X-Age", "15");
+            MockContextManager.SetHeader("X-Id", Guid.NewGuid().ToString());
 
-            var headerData = httpContext.Headers;
-            headerData.Add("X-Name", "Dmitry");
-            headerData.Add("X-Age", "15");
-            headerData.Add("X-Id", Guid.NewGuid().ToString());
-
-            Assert.That(m_context.Request.Headers.TryGet("X-Name"), Is.Not.Null);
-            Assert.That(m_context.Request.Headers.TryGet("X-Name"), Is.Not.Empty);
-            Assert.That(m_context.Request.Headers.TryGet("X-Age"), Is.Not.Null);
-            Assert.That(m_context.Request.Headers.TryGet("X-Age"), Is.Not.Empty);
-            Assert.That(m_context.Request.Headers.TryGet("X-Id"), Is.Not.Null);
-            Assert.That(m_context.Request.Headers.TryGet("X-Id"), Is.Not.Empty);
+            var headers = m_context.Request.Headers;
+            Assert.That(headers.TryGet("X-Name"), Is.Not.Null);
+            Assert.That(headers.TryGet("X-Name"), Is.Not.Empty);
+            Assert.That(headers.TryGet("X-Age"), Is.Not.Null);
+            Assert.That(headers.TryGet("X-Age"), Is.Not.Empty);
+            Assert.That(headers.TryGet("X-Id"), Is.Not.Null);
+            Assert.That(headers.TryGet("X-Id"), Is.Not.Empty);
 
             var name = m_binder.Bind("X-Name", typeof(string), m_context) as string;
             Assert.That(name, Is.Not.Null);
-            Assert.That(name, Is.EqualTo(headerData["X-Name"]));
+            Assert.That(name, Is.EqualTo(headers.Get("X-Name")));
 
             var age = (int) m_binder.Bind("X-Age", typeof(int), m_context);
-            Assert.That(age, Is.EqualTo(Int32.Parse(headerData["X-Age"])));
+            Assert.That(age, Is.EqualTo(Int32.Parse(headers.Get("X-Age"))));
 
             var id = (Guid) m_binder.Bind("X-Id", typeof(Guid), m_context);
-            Assert.That(id, Is.EqualTo(Guid.Parse(headerData["X-Id"])));
+            Assert.That(id, Is.EqualTo(Guid.Parse(headers.Get("X-Id"))));
         }
 
         [Test]
         public void Test_Array_Binding()
         {
-            var httpContext = m_context.GetHttpContext().Request;
-            Assert.That(httpContext, Is.Not.Null);
+            MockContextManager.SetHeader("X-Id", "5");
+            MockContextManager.SetHeader("X-Id", "10");
+            MockContextManager.SetHeader("X-Id", "20");
+            MockContextManager.SetHeader("X-Id", "50");
 
-            var queryData = httpContext.QueryString;
-            queryData.Add("X-Id", "5");
-            queryData.Add("X-Id", "10");
-            queryData.Add("X-Id", "50");
-            queryData.Add("X-Id", "20");
-
-            var idValues = m_context.Request.QueryString.GetValues("X-Id");
+            var idValues = m_context.Request.Headers.GetValues("X-Id");
             Assert.That(idValues, Is.Not.Null);
             Assert.That(idValues.Count, Is.EqualTo(4));
 

@@ -27,43 +27,36 @@ namespace RestFoundation.Tests.TypeBinders
         [Test]
         public void Test_Object_Binding()
         {
-            var httpContext = m_context.GetHttpContext().Request;
-            Assert.That(httpContext, Is.Not.Null);
+            MockContextManager.SetQuery("name", "Dmitry");
+            MockContextManager.SetQuery("age", "15");
+            MockContextManager.SetQuery("id", Guid.NewGuid().ToString());
 
-            var queryData = httpContext.QueryString;
-            queryData.Add("name", "Dmitry");
-            queryData.Add("age", "15");
-            queryData.Add("id", Guid.NewGuid().ToString());
-
-            Assert.That(m_context.Request.QueryString.TryGet("name"), Is.Not.Null);
-            Assert.That(m_context.Request.QueryString.TryGet("name"), Is.Not.Empty);
-            Assert.That(m_context.Request.QueryString.TryGet("age"), Is.Not.Null);
-            Assert.That(m_context.Request.QueryString.TryGet("age"), Is.Not.Empty);
-            Assert.That(m_context.Request.QueryString.TryGet("id"), Is.Not.Null);
-            Assert.That(m_context.Request.QueryString.TryGet("id"), Is.Not.Empty);
+            var queryString = m_context.Request.QueryString;
+            Assert.That(queryString.TryGet("name"), Is.Not.Null);
+            Assert.That(queryString.TryGet("name"), Is.Not.Empty);
+            Assert.That(queryString.TryGet("age"), Is.Not.Null);
+            Assert.That(queryString.TryGet("age"), Is.Not.Empty);
+            Assert.That(queryString.TryGet("id"), Is.Not.Null);
+            Assert.That(queryString.TryGet("id"), Is.Not.Empty);
 
             var name = m_binder.Bind("name", typeof(string), m_context) as string;
             Assert.That(name, Is.Not.Null);
-            Assert.That(name, Is.EqualTo(queryData["name"]));
+            Assert.That(name, Is.EqualTo(queryString.Get("name")));
 
             var age = (int) m_binder.Bind("age", typeof(int), m_context);
-            Assert.That(age, Is.EqualTo(Int32.Parse(queryData["age"])));
+            Assert.That(age, Is.EqualTo(Int32.Parse(queryString.Get("age"))));
 
             var id = (Guid) m_binder.Bind("id", typeof(Guid), m_context);
-            Assert.That(id, Is.EqualTo(Guid.Parse(queryData["id"])));
+            Assert.That(id, Is.EqualTo(Guid.Parse(queryString.Get("id"))));
         }
 
         [Test]
         public void Test_Array_Binding()
         {
-            var httpContext = m_context.GetHttpContext().Request;
-            Assert.That(httpContext, Is.Not.Null);
-
-            var queryData = httpContext.QueryString;
-            queryData.Add("id", "5");
-            queryData.Add("id", "10");
-            queryData.Add("id", "50");
-            queryData.Add("id", "20");
+            MockContextManager.SetQuery("id", "5");
+            MockContextManager.SetQuery("id", "10");
+            MockContextManager.SetQuery("id", "20");
+            MockContextManager.SetQuery("id", "50");
 
             var idValues = m_context.Request.QueryString.GetValues("id");
             Assert.That(idValues, Is.Not.Null);
