@@ -116,6 +116,11 @@ namespace RestTestServices
         {
             Context.Response.Output.WriteFormat("GET : {0}", id);
 
+            if (!String.IsNullOrEmpty(dummy))
+            {
+                Context.Response.Output.WriteFormat("<br/><br/>Dummy variable: {0}", dummy);
+            }
+
             return Result.Content("<br/><br/>GET completed", false);
         }
 

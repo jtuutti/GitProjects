@@ -22,8 +22,15 @@ namespace RestFoundation.TypeBinders
         }
 
         /// <summary>
+        /// Gets or sets a name to resolve from the HTTP headers.
+        /// If this value is not set, the parameter name will be used.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Gets a value indicating whether to convert underscores in the parameter to dashes
-        /// when finding the HTTP header. The default value is true.
+        /// when finding the HTTP header. The default value is true. This value has no effect
+        /// if the <see cref="Name"/> property is set.
         /// </summary>
         public bool ConvertUnderscoresToDashes { get; set; }
 
@@ -59,14 +66,19 @@ namespace RestFoundation.TypeBinders
             return BindObject(name, objectType, context);
         }
 
-        private string FormatHeaderName(string name)
+        private string GetHeaderName(string name)
         {
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                return Name.Trim();
+            }
+
             return ConvertUnderscoresToDashes ? name.Replace("_", "-") : name;
         }
 
         private object BindObject(string name, Type objectType, IServiceContext context)
         {
-            string value = context.Request.Headers.TryGet(FormatHeaderName(name));
+            string value = context.Request.Headers.TryGet(GetHeaderName(name));
             object changedValue;
 
             return SafeConvert.TryChangeType(value, objectType, out changedValue) ? changedValue : null;

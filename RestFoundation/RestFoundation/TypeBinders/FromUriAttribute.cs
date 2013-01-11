@@ -14,6 +14,12 @@ namespace RestFoundation.TypeBinders
     public sealed class FromUriAttribute : TypeBinderAttribute
     {
         /// <summary>
+        /// Gets or sets a name to resolve from the URI query.
+        /// If this value is not set, the parameter name will be used.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Binds data from a URI query string parameter to a service method parameter.
         /// </summary>
         /// <param name="name">The service method parameter name.</param>
@@ -35,6 +41,11 @@ namespace RestFoundation.TypeBinders
             if (context == null)
             {
                 throw new ArgumentNullException("context");
+            }
+
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                name = Name.Trim();
             }
 
             return objectType.IsArray ? BindArray(name, objectType, context) : BindObject(name, objectType, context);

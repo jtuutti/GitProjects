@@ -14,6 +14,12 @@ namespace RestFoundation.TypeBinders
     public sealed class FromBodyAttribute : TypeBinderAttribute
     {
         /// <summary>
+        /// Gets or sets a name to resolve from the HTTP body.
+        /// If this value is not set, the parameter name will be used.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Binds data from an HTTP body key value pair to a service method parameter.
         /// </summary>
         /// <param name="name">The service method parameter name.</param>
@@ -40,6 +46,11 @@ namespace RestFoundation.TypeBinders
             if (context.Request.Method != HttpMethod.Post && context.Request.Method != HttpMethod.Put && context.Request.Method != HttpMethod.Patch)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.InvalidHttpMethodForFromBodyBinder);
+            }
+
+            if (!String.IsNullOrWhiteSpace(Name))
+            {
+                name = Name.Trim();
             }
 
             return objectType.IsArray ? BindArray(name, objectType, context) : BindObject(name, objectType, context);
