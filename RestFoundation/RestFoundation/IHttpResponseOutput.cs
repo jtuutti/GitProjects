@@ -27,6 +27,11 @@ namespace RestFoundation
         TextWriter Writer { get; }
 
         /// <summary>
+        /// Gets the log writer.
+        /// </summary>
+        ILogWriter LogWriter { get; }
+
+        /// <summary>
         /// Gets or sets a filter stream that modifies the output during the data transmission.
         /// </summary>
         Stream Filter { get; set; }

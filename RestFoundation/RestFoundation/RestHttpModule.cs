@@ -10,6 +10,7 @@ using System.Web.UI;
 using RestFoundation.Formatters;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
+using RestFoundation.Runtime.Handlers;
 using RestFoundation.Validation;
 
 namespace RestFoundation
@@ -21,9 +22,6 @@ namespace RestFoundation
     {
         private const string DangerousRequestMessage = "A potentially dangerous Request.Path value was detected from the client";
         private const string RequestTimeoutMessage = "Request timed out";
-
-        private HttpApplication m_context;
-        private bool m_integratedPipeline;
 
         internal static bool IsInitialized { get; set; }
 
@@ -43,26 +41,10 @@ namespace RestFoundation
 
             IsInitialized = true;
 
-            m_context = context;
-            m_integratedPipeline = HttpRuntime.UsingIntegratedPipeline;
-
-            context.Error += (sender, args) => CompleteRequestOnError();
-            context.PreRequestHandlerExecute += (sender, args) => IngestPageDependencies();
-            context.PreSendRequestHeaders += (sender, args) =>
-            {
-                RemoveServerHeaders();
-                SetResponseHeaders();
-            };
-            context.EndRequest += (sender, args) =>
-            {
-                if (LogUtility.CanLog)
-                {
-                    LogUtility.Writer.WriteInfo(String.Empty)
-                                     .WriteInfo("--- SERVICE CALL ENDED ---")
-                                     .WriteInfo(String.Empty)
-                                     .Flush();
-                }
-            };
+            context.PreRequestHandlerExecute += (sender, args) => OnPreRequestHandlerExecute(sender);
+            context.PreSendRequestHeaders += (sender, args) => OnPreSendRequestHeaders(sender);
+            context.EndRequest += (sender, args) => OnEndRequest(sender);
+            context.Error += (sender, args) => OnError(sender);
         }
 
         /// <summary>
@@ -70,6 +52,233 @@ namespace RestFoundation
         /// </summary>
         public void Dispose()
         {
+        }
+
+        private static void OnPreRequestHandlerExecute(object sender)
+        {
+            var application = sender as HttpApplication;
+
+            if (application == null)
+            {
+                return;
+            }
+
+            if (IsRestHandler(application))
+            {
+                Rest.Configuration.Options.BeginRequestAction(Rest.Configuration.ServiceLocator.GetService<IServiceContext>());
+            }
+            else
+            {
+                TryIngestPageDependencies(application);
+            }
+        }
+
+        private static void OnPreSendRequestHeaders(object sender)
+        {
+            var application = sender as HttpApplication;
+
+            if (application == null)
+            {
+                return;
+            }
+
+            RemoveServerHeaders(application);
+            SetResponseHeaders(application);
+        }
+
+        private static void OnEndRequest(object sender)
+        {
+            var application = sender as HttpApplication;
+
+            if (application == null || !IsRestHandler(application))
+            {
+                return;
+            }
+
+            try
+            {
+                Rest.Configuration.Options.EndRequestAction(Rest.Configuration.ServiceLocator.GetService<IServiceContext>());
+            }
+            catch (Exception ex)
+            {
+                LogException(ex);
+                throw;
+            }
+            finally
+            {
+                LogServiceCallEnd();
+            }
+        }
+
+        private static void OnError(object sender)
+        {
+            var application = sender as HttpApplication;
+
+            if (application == null || !IsRestHandler(application))
+            {
+                return;
+            }
+
+            Exception exception = TryGetException(application);
+
+            if (exception != null)
+            {
+                Rest.Configuration.Options.ExceptionAction(Rest.Configuration.ServiceLocator.GetService<IServiceContext>(), exception);
+            }
+        }
+
+        private static bool IsRestHandler(HttpApplication application)
+        {
+            IHttpHandler handler = application.Context.CurrentHandler;
+
+            return handler is IRestHandler && !(handler is RootRouteHandler);
+        }
+
+        private static void TryIngestPageDependencies(HttpApplication application)
+        {
+            var handler = application.Context.CurrentHandler as Page;
+
+            if (handler == null)
+            {
+                return;
+            }
+
+            WebFormsInjectionHelper.InjectControlDependencies(handler);
+
+            handler.PreInit += (s, e) => WebFormsInjectionHelper.InitializeChildControls(handler);
+        }
+
+        private static void SetResponseHeaders(HttpApplication application)
+        {
+            IDictionary<string, string> responseHeaders = Rest.Configuration.Options.ResponseHeaders;
+
+            if (responseHeaders == null || responseHeaders.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var header in responseHeaders)
+            {
+                if (!HeaderNameValidator.IsValid(header.Key))
+                {
+                    throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.EmptyHttpHeader);
+                }
+
+                application.Response.AppendHeader(header.Key, header.Value);
+            }
+        }
+
+        private static void RemoveServerHeaders(HttpApplication application)
+        {
+            if (!HttpRuntime.UsingIntegratedPipeline)
+            {
+                return;
+            }
+
+            application.Response.Headers.Remove("Server");
+            application.Response.Headers.Remove("X-AspNet-Version");
+            application.Response.Headers.Remove("X-Powered-By");
+        }
+
+        private static Exception TryGetException(HttpApplication application)
+        {
+            Exception exception = application.Server.GetLastError();
+
+            if (exception is HttpUnhandledException && exception.InnerException != null)
+            {
+                exception = exception.InnerException;
+            }
+
+            var responseException = exception as HttpResponseException;
+
+            if (responseException != null)
+            {
+                SetResponseStatus(application, responseException.StatusCode, responseException.StatusDescription);
+                return null;
+            }
+
+            var faultException = exception as HttpResourceFaultException;
+
+            if (faultException != null)
+            {
+                SetFaultResponse(application, faultException);
+                return null;
+            }
+
+            TryClearCompressionFilter(application);
+
+            if (exception != null)
+            {
+                LogException(exception);
+            }
+
+            var validationException = exception as HttpRequestValidationException;
+
+            if (validationException != null)
+            {
+                SetResponseStatus(application, HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
+                return null;
+            }
+
+            var httpException = exception as HttpException;
+
+            if (httpException != null)
+            {
+                if (httpException.Message.Contains(DangerousRequestMessage))
+                {
+                    SetResponseStatus(application, HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
+                    return null;
+                }
+
+                if (httpException.Message.Contains(RequestTimeoutMessage))
+                {
+                    SetResponseStatus(application, HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
+                    return null;
+                }
+            }
+
+            return exception;
+        }
+
+        private static void SetResponseStatus(HttpApplication application, HttpStatusCode statusCode, string statusDescription)
+        {
+            application.Response.Clear();
+            application.Response.StatusCode = (int) statusCode;
+            application.Response.StatusDescription = HttpUtility.HtmlEncode(statusDescription);
+            application.Server.ClearError();
+            application.CompleteRequest();
+        }
+
+        private static void SetFaultResponse(HttpApplication application, HttpResourceFaultException faultException)
+        {
+            application.Server.ClearError();
+            application.Response.Clear();
+            application.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+            application.Response.StatusDescription = RestResources.ResourceValidationFailed;
+
+            if ("POST".Equals(application.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) || "PUT".Equals(application.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) ||
+                "PATCH".Equals(application.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            {
+                application.Response.TrySkipIisCustomErrors = true;
+
+                OutputResourceValidationFaults(faultException);
+            }
+
+            application.CompleteRequest();
+        }
+
+        private static void TryClearCompressionFilter(HttpApplication application)
+        {
+            try
+            {
+                if (application.Response.Filter != null && application.Response.Filter.GetType().Namespace != typeof(HttpResponse).Namespace)
+                {
+                    application.Response.Filter = null;
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
 
         private static void OutputResourceValidationFaults(HttpResourceFaultException faultException)
@@ -127,152 +336,31 @@ namespace RestFoundation
             }
         }
 
-        private void SetResponseStatus(HttpStatusCode statusCode, string statusDescription)
+        private static void LogServiceCallEnd()
         {
-            m_context.Response.Clear();
-            m_context.Response.StatusCode = (int) statusCode;
-            m_context.Response.StatusDescription = HttpUtility.HtmlEncode(statusDescription);
-            m_context.Server.ClearError();
-            m_context.CompleteRequest();
-        }
-
-        private void CompleteRequestOnError()
-        {
-            Exception exception = m_context.Server.GetLastError();
-
-            if (exception is HttpUnhandledException && exception.InnerException != null)
+            if (LogUtility.CanLog)
             {
-                exception = exception.InnerException;
-            }
-
-            var responseException = exception as HttpResponseException;
-
-            if (responseException != null)
-            {
-                SetResponseStatus(responseException.StatusCode, responseException.StatusDescription);
-                return;
-            }
-
-            var faultException = exception as HttpResourceFaultException;
-
-            if (faultException != null)
-            {
-                SetFaultResponse(faultException);
-                return;
-            }
-
-            TryClearCompressionFilter();
-
-            if (exception != null && LogUtility.CanLog)
-            {
-                LogUtility.Writer.WriteInfo("EXCEPTION OCCURRED:")
-                                 .WriteInfo(exception.ToString())
-                                 .WriteInfo(String.Empty);
-
-                LogUtility.Writer.WriteError("EXCEPTION OCCURRED:")
-                                 .WriteError(exception.ToString())
-                                 .WriteError(String.Empty);
-            }
-
-            var validationException = exception as HttpRequestValidationException;
-
-            if (validationException != null)
-            {
-                SetResponseStatus(HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
-                return;
-            }
-
-            var httpException = exception as HttpException;
-
-            if (httpException != null)
-            {
-                if (httpException.Message.Contains(DangerousRequestMessage))
-                {
-                    SetResponseStatus(HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
-                }
-                else if (httpException.Message.Contains(RequestTimeoutMessage))
-                {
-                    SetResponseStatus(HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
-                }
+                LogUtility.Writer.WriteInfo(String.Empty)
+                            .WriteInfo("--- SERVICE CALL ENDED ---")
+                            .WriteInfo(String.Empty)
+                            .Flush();
             }
         }
 
-        private void TryClearCompressionFilter()
+        private static void LogException(Exception exception)
         {
-            try
-            {
-                if (m_context.Response.Filter != null && m_context.Response.Filter.GetType().Namespace != typeof(HttpResponse).Namespace)
-                {
-                    m_context.Response.Filter = null;
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-        private void IngestPageDependencies()
-        {
-            var handler = m_context.Context.CurrentHandler as Page;
-
-            if (handler == null)
+            if (!LogUtility.CanLog)
             {
                 return;
             }
 
-            WebFormsInjectionHelper.InjectControlDependencies(handler);
+            LogUtility.Writer.WriteInfo("EXCEPTION OCCURRED:")
+                      .WriteInfo(exception.ToString())
+                      .WriteInfo(String.Empty);
 
-            handler.PreInit += (s, e) => WebFormsInjectionHelper.InitializeChildControls(handler);
-        }
-
-        private void RemoveServerHeaders()
-        {
-            if (!m_integratedPipeline)
-            {
-                return;
-            }
-
-            m_context.Response.Headers.Remove("Server");
-            m_context.Response.Headers.Remove("X-AspNet-Version");
-            m_context.Response.Headers.Remove("X-Powered-By");
-        }
-
-        private void SetResponseHeaders()
-        {
-            IDictionary<string, string> responseHeaders = Rest.Configuration.Options.ResponseHeaders;
-
-            if (responseHeaders == null || responseHeaders.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var header in responseHeaders)
-            {
-                if (!HeaderNameValidator.IsValid(header.Key))
-                {
-                    throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.EmptyHttpHeader);
-                }
-
-                m_context.Response.AppendHeader(header.Key, header.Value);
-            }
-        }
-
-        private void SetFaultResponse(HttpResourceFaultException faultException)
-        {
-            m_context.Server.ClearError();
-            m_context.Response.Clear();
-            m_context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
-            m_context.Response.StatusDescription = RestResources.ResourceValidationFailed;
-
-            if ("POST".Equals(m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) || "PUT".Equals(m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) ||
-                "PATCH".Equals(m_context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
-            {
-                m_context.Response.TrySkipIisCustomErrors = true;
-
-                OutputResourceValidationFaults(faultException);
-            }
-
-            m_context.CompleteRequest();
+            LogUtility.Writer.WriteError("EXCEPTION OCCURRED:")
+                      .WriteError(exception.ToString())
+                      .WriteError(String.Empty);
         }
     }
 }

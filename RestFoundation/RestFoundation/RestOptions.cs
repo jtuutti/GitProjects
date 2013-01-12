@@ -20,6 +20,10 @@ namespace RestFoundation
         internal RestOptions()
         {
             JsonSettings = new JsonFormatterSettings();
+
+            BeginRequestAction = context => { };
+            EndRequestAction = context => { };
+            ExceptionAction = (context, Exception) => { };
         }
 
         /// <summary>
@@ -48,6 +52,9 @@ namespace RestFoundation
         internal string IndexPageRelativeUrl { get; private set; }
         internal JsonFormatterSettings JsonSettings { get; private set; }
         internal XmlFormatterSettings XmlSettings { get; private set; }
+        internal Action<IServiceContext> BeginRequestAction { get; private set; }
+        internal Action<IServiceContext> EndRequestAction { get; private set; }
+        internal Action<IServiceContext, Exception> ExceptionAction { get; private set; }
 
         /// <summary>
         /// Calls the provided service proxy configuration object to set up service help and proxy UI for the services.
@@ -299,6 +306,54 @@ namespace RestFoundation
             }
 
             XmlSettings = settings;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets an action to execute when a REST service request begins.
+        /// </summary>
+        /// <param name="action">The action delegate.</param>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions OnBeginRequest(Action<IServiceContext> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException("action");
+            }
+
+            BeginRequestAction = action;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets an action to execute when a REST service request ends.
+        /// </summary>
+        /// <param name="action">The action delegate.</param>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions OnEndRequest(Action<IServiceContext> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException("action");
+            }
+
+            EndRequestAction = action;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets an action to execute when a REST service method throws an exception.
+        /// </summary>
+        /// <param name="action">The action delegate.</param>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions OnException(Action<IServiceContext, Exception> action)
+        {
+            if (action == null)
+            {
+                throw new ArgumentNullException("action");
+            }
+
+            ExceptionAction = action;
             return this;
         }
     }

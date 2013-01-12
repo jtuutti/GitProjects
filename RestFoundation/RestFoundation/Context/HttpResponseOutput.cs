@@ -13,6 +13,17 @@ namespace RestFoundation.Context
     {
         private const string LineBreak = "<br/>";
 
+        private readonly ILogWriter m_logWriter;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpResponseOutput"/> class.
+        /// </summary>
+        /// <param name="logWriter">The log writer.</param>
+        public HttpResponseOutput(ILogWriter logWriter)
+        {
+            m_logWriter = logWriter;
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether the output should be buffered.
         /// </summary>
@@ -47,6 +58,17 @@ namespace RestFoundation.Context
             get
             {
                 return Context.Response.Output;
+            }
+        }
+
+        /// <summary>
+        /// Gets the log writer.
+        /// </summary>
+        public ILogWriter LogWriter
+        {
+            get
+            {
+                return m_logWriter;
             }
         }
 

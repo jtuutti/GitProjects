@@ -29,8 +29,6 @@ namespace RestFoundation.UnitTesting
             m_user = new GenericPrincipal(new GenericIdentity("Test"), new[] { "Testers" });
         }
 
-        internal static TestHttpContext Context { get; set; }
-
         public override HttpApplication ApplicationInstance
         {
             get
@@ -82,6 +80,8 @@ namespace RestFoundation.UnitTesting
                 m_user = value;
             }
         }
+
+        internal static TestHttpContext Context { get; set; }
 
         public override void ClearError()
         {
