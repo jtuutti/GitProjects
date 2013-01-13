@@ -114,14 +114,14 @@ namespace RestFoundation
         {
             var application = sender as HttpApplication;
 
-            if (application == null || !IsRestHandler(application))
+            if (application == null)
             {
                 return;
             }
 
             Exception exception = TryGetException(application);
 
-            if (exception != null)
+            if (exception != null && IsRestHandler(application))
             {
                 Rest.Configuration.Options.ExceptionAction(Rest.Configuration.ServiceLocator.GetService<IServiceContext>(), exception);
             }
