@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web;
-using RestFoundation;
-using SampleRestService.Contracts;
+using SampleRestService.App_Start;
 
 namespace SampleRestService
 {
@@ -9,15 +8,7 @@ namespace SampleRestService
     {
         protected void Application_Start(object sender, EventArgs e)
         {
-            Rest.Configuration
-                .Initialize(typeof(Global).Assembly)
-                .ConfigureServiceHelpAndProxy(c => c.Enable().WithServiceDescription("A sample REST service"))
-                .WithUrls(RegisterUrls);
-        }
-
-        private static void RegisterUrls(UrlBuilder builder)
-        {
-            builder.MapUrl("sample").ToServiceContract<ISampleService>();
+            RestConfig.Initialize();
         }
     }
 }

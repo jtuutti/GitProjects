@@ -68,6 +68,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\RestConfig.cs" />
     <Compile Include="Contracts\ISampleService.cs" />
     <Compile Include="Contracts\Metadata\SampleServiceMetadata.cs" />
     <Compile Include="DataAccess\ProductRepository.cs" />
