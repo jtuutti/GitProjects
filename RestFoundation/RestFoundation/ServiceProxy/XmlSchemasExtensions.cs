@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity.Design.PluralizationServices;
 using System.Globalization;
 using System.IO;
@@ -18,6 +19,7 @@ namespace RestFoundation.ServiceProxy
     /// <summary>
     /// Contains extensions for the <see cref="XmlSchemas"/> class.
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class XmlSchemasExtensions
     {
         private static readonly Regex arrayPattern = new Regex("ArrayOf([A-Za-z0-9_]+)", RegexOptions.Compiled);

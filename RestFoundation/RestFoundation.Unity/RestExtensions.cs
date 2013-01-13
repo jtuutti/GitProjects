@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Practices.Unity;
 using RestFoundation.Unity;
@@ -11,6 +12,7 @@ namespace RestFoundation
     /// <summary>
     /// Defines extensions for a <see cref="Rest"/> object to configure REST Foundation to use a Unity container.
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class RestExtensions
     {
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Globalization;
 
 namespace RestFoundation
@@ -6,6 +7,7 @@ namespace RestFoundation
     /// <summary>
     /// Contains <see cref="ILogWriter"/> extensions.
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class LogWriterExtensions
     {
         /// <summary>

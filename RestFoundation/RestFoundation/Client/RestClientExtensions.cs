@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Net;
 using System.Security;
 using System.Web;
@@ -13,6 +14,7 @@ namespace RestFoundation.Client
     /// <summary>
     /// Provides extension methods to the <see cref="IRestClient"/> interface.
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class RestClientExtensions
     {
         /// <summary>

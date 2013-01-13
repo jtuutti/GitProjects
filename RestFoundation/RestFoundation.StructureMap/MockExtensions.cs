@@ -2,10 +2,12 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using RestFoundation.ServiceLocation;
 using RestFoundation.StructureMap;
-using StructureMap;
+using Container = StructureMap.Container;
+using IContainer = StructureMap.IContainer;
 
 namespace RestFoundation.UnitTesting
 {
@@ -13,6 +15,7 @@ namespace RestFoundation.UnitTesting
     /// Defines extensions for a <see cref="Rest"/> object to configure REST Foundation for unit testing
     /// to use a StructureMap container.
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class MockExtensions
     {
         /// <summary>

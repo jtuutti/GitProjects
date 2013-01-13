@@ -2,15 +2,17 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using RestFoundation.StructureMap;
-using StructureMap;
+using IContainer = StructureMap.IContainer;
 
 namespace RestFoundation
 {
     /// <summary>
     /// Defines extensions for a <see cref="Rest"/> object to configure REST Foundation to use a StructureMap container.
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class RestExtensions
     {
         /// <summary>

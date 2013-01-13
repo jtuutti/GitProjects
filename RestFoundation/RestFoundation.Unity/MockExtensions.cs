@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Practices.Unity;
 using RestFoundation.ServiceLocation;
@@ -13,6 +14,7 @@ namespace RestFoundation.UnitTesting
     /// Defines extensions for a <see cref="Rest"/> object to configure REST Foundation for unit testing
     /// to use a Unity container.
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class MockExtensions
     {
         /// <summary>
