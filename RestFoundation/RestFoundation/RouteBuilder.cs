@@ -180,6 +180,11 @@ namespace RestFoundation
                     var methodMetadata = new ServiceMethodMetadata(url, method, urlAttribute);
                     var httpMethods = urlAttribute.HttpMethods ?? (urlAttribute.HttpMethods = httpMethodResolver.Resolve(method));
 
+                    if (urlAttribute.Priority == 0 && method.GetParameters().Any(x => x.DefaultValue != DBNull.Value))
+                    {
+                        urlAttribute.Priority = -1;
+                    }
+
                     urlAttributes.Add(methodMetadata);
 
                     HttpMethodRegistry.HttpMethods.AddOrUpdate(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlAttribute.UrlTemplate),

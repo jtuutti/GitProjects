@@ -57,7 +57,7 @@ namespace RestFoundation.Runtime
             if (typeBinder != null)
             {
                 isResource = IsResourceParameter(parameter, context);
-                return typeBinder.Bind(parameter.Name, parameter.ParameterType, context);
+                return GetTypeBindedValue(parameter, typeBinder, context);
             }
 
             object routeValue = TryGetRouteValue(parameter, context.Request.RouteValues);
@@ -76,6 +76,40 @@ namespace RestFoundation.Runtime
 
             isResource = false;
             return null;
+        }
+
+        /// <summary>
+        /// Gets a value from the associated <see cref="ITypeBinder"/> object.
+        /// </summary>
+        /// <param name="parameter">The service method parameter.</param>
+        /// <param name="typeBinder">The associated type binder.</param>
+        /// <param name="context">The service context.</param>
+        /// <returns>The parameter value.</returns>
+        protected virtual object GetTypeBindedValue(ParameterInfo parameter, ITypeBinder typeBinder, IServiceContext context)
+        {
+            if (parameter == null)
+            {
+                throw new ArgumentNullException("parameter");
+            }
+
+            if (typeBinder == null)
+            {
+                throw new ArgumentNullException("typeBinder");
+            }
+
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            object value = typeBinder.Bind(parameter.Name, parameter.ParameterType, context);
+
+            if (value == null && parameter.DefaultValue != DBNull.Value)
+            {
+                return parameter.DefaultValue;
+            }
+
+            return value;
         }
 
         /// <summary>
