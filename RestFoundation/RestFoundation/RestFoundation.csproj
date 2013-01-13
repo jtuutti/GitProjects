@@ -76,6 +76,7 @@
     <Compile Include="IOptionsDescriptor.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="JsonFormatterSettings.cs" />
+    <Compile Include="LogWriterExtensions.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
     <Compile Include="Results\ResponseResult.cs" />
     <Compile Include="RouteHash.cs" />
