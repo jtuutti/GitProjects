@@ -23,7 +23,7 @@ namespace SampleRestService.Contracts
         Product Put(int id, Product resource);
 
         [Url("product/{id}/in-stock/{inStock}")]
-        Product PatchStockStatus(int id, bool? inStock);
+        Product PatchStockStatus(int id, bool inStock = true);
 
         [Url("product/{id}")]
         StatusResult DeleteById(int id);

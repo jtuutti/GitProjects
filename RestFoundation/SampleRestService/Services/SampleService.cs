@@ -97,18 +97,11 @@ namespace SampleRestService.Services
             return m_repository.GetAll().FirstOrDefault(p => p.ID == resource.ID);
         }
 
-        public Product PatchStockStatus(int id, bool? inStock)
+        public Product PatchStockStatus(int id, bool inStock)
         {
-            if (!inStock.HasValue)
-            {
-                // Iterate through m_context.Request.ResourceState to handle or log errors
-
-                throw new HttpResourceFaultException();
-            }
-
             try
             {
-                m_repository.UpdateInStockStatus(id, inStock.Value);
+                m_repository.UpdateInStockStatus(id, inStock);
                 m_context.Response.SetStatus(HttpStatusCode.OK, "Product updated");
             }
             catch (ArgumentException ex) // invalid input arguments passed to the repository

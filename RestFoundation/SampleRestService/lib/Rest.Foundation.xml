@@ -700,6 +700,151 @@
             instead of the ISO 8601 format. This property is set to false by default.
             </summary>
     </member>
+    <member name="T:RestFoundation.LogWriterExtensions">
+      <summary>
+            Contains <see cref="T:RestFoundation.ILogWriter" /> extensions.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteDebugIf(RestFoundation.ILogWriter,System.Boolean,System.String)">
+      <summary>
+            Writes a debug message into the log buffer if the provided <paramref name="condition" />
+            evaluates to true.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="condition">The condition to evaluate.</param>
+      <param name="debug">The debug message.</param>
+      <returns>The log writer instance.</returns>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteErrorIf(RestFoundation.ILogWriter,System.Boolean,System.String)">
+      <summary>
+            Writes an error message into the log buffer if the provided <paramref name="condition" />
+            evaluates to true.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="condition">The condition to evaluate.</param>
+      <param name="error">The error message.</param>
+      <returns>The log writer instance.</returns>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteInfoIf(RestFoundation.ILogWriter,System.Boolean,System.String)">
+      <summary>
+            Writes an info message into the log buffer if the provided <paramref name="condition" />
+            evaluates to true.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="condition">The condition to evaluate.</param>
+      <param name="info">The info message.</param>
+      <returns>The log writer instance.</returns>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteWarningIf(RestFoundation.ILogWriter,System.Boolean,System.String)">
+      <summary>
+            Writes a warning message into the log buffer if the provided <paramref name="condition" />
+            evaluates to true.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="condition">The condition to evaluate.</param>
+      <param name="warning">The warning message.</param>
+      <returns>The log writer instance.</returns>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteDebugFormat(RestFoundation.ILogWriter,System.String,System.Object[])">
+      <summary>
+            Writes a debug message generated from the <paramref name="format" /> string and the provided arguments.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="format">The format string.</param>
+      <param name="args">The format arguments.</param>
+      <returns>The log writer instance.</returns>
+      <exception cref="T:System.FormatException">
+            If the <paramref name="format" /> string does not match the arguments.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteDebugFormat(RestFoundation.ILogWriter,System.IFormatProvider,System.String,System.Object[])">
+      <summary>
+            Writes a debug message generated from the <paramref name="format" /> string and the provided arguments.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="provider">The format provider.</param>
+      <param name="format">The format string.</param>
+      <param name="args">The format arguments.</param>
+      <returns>The log writer instance.</returns>
+      <exception cref="T:System.FormatException">
+            If the <paramref name="format" /> string does not match the arguments.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteErrorFormat(RestFoundation.ILogWriter,System.String,System.Object[])">
+      <summary>
+            Writes an error message generated from the <paramref name="format" /> string and the provided arguments.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="format">The format string.</param>
+      <param name="args">The format arguments.</param>
+      <returns>The log writer instance.</returns>
+      <exception cref="T:System.FormatException">
+            If the <paramref name="format" /> string does not match the arguments.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteErrorFormat(RestFoundation.ILogWriter,System.IFormatProvider,System.String,System.Object[])">
+      <summary>
+            Writes an error message generated from the <paramref name="format" /> string and the provided arguments.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="provider">The format provider.</param>
+      <param name="format">The format string.</param>
+      <param name="args">The format arguments.</param>
+      <returns>The log writer instance.</returns>
+      <exception cref="T:System.FormatException">
+            If the <paramref name="format" /> string does not match the arguments.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteInfoFormat(RestFoundation.ILogWriter,System.String,System.Object[])">
+      <summary>
+            Writes an info message generated from the <paramref name="format" /> string and the provided arguments.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="format">The format string.</param>
+      <param name="args">The format arguments.</param>
+      <returns>The log writer instance.</returns>
+      <exception cref="T:System.FormatException">
+            If the <paramref name="format" /> string does not match the arguments.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteInfoFormat(RestFoundation.ILogWriter,System.IFormatProvider,System.String,System.Object[])">
+      <summary>
+            Writes an info message generated from the <paramref name="format" /> string and the provided arguments.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="provider">The format provider.</param>
+      <param name="format">The format string.</param>
+      <param name="args">The format arguments.</param>
+      <returns>The log writer instance.</returns>
+      <exception cref="T:System.FormatException">
+            If the <paramref name="format" /> string does not match the arguments.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteWarningFormat(RestFoundation.ILogWriter,System.String,System.Object[])">
+      <summary>
+            Writes a warning message generated from the <paramref name="format" /> string and the provided arguments.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="format">The format string.</param>
+      <param name="args">The format arguments.</param>
+      <returns>The log writer instance.</returns>
+      <exception cref="T:System.FormatException">
+            If the <paramref name="format" /> string does not match the arguments.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.LogWriterExtensions.WriteWarningFormat(RestFoundation.ILogWriter,System.IFormatProvider,System.String,System.Object[])">
+      <summary>
+            Writes a warning message generated from the <paramref name="format" /> string and the provided arguments.
+            </summary>
+      <param name="writer">The log writer.</param>
+      <param name="provider">The format provider.</param>
+      <param name="format">The format string.</param>
+      <param name="args">The format arguments.</param>
+      <returns>The log writer instance.</returns>
+      <exception cref="T:System.FormatException">
+            If the <paramref name="format" /> string does not match the arguments.
+            </exception>
+    </member>
     <member name="T:RestFoundation.Results.IResult">
       <summary>
             Defines a service method result.
@@ -1011,6 +1156,27 @@
       <param name="settings">The XML formatter settings.</param>
       <returns>The configuration options object.</returns>
     </member>
+    <member name="M:RestFoundation.RestOptions.OnBeginRequest(System.Action{RestFoundation.IServiceContext})">
+      <summary>
+            Sets an action to execute when a REST service request begins.
+            </summary>
+      <param name="action">The action delegate.</param>
+      <returns>The configuration options object.</returns>
+    </member>
+    <member name="M:RestFoundation.RestOptions.OnEndRequest(System.Action{RestFoundation.IServiceContext})">
+      <summary>
+            Sets an action to execute when a REST service request ends.
+            </summary>
+      <param name="action">The action delegate.</param>
+      <returns>The configuration options object.</returns>
+    </member>
+    <member name="M:RestFoundation.RestOptions.OnException(System.Action{RestFoundation.IServiceContext,System.Exception})">
+      <summary>
+            Sets an action to execute when a REST service method throws an exception.
+            </summary>
+      <param name="action">The action delegate.</param>
+      <returns>The configuration options object.</returns>
+    </member>
     <member name="P:RestFoundation.RestOptions.ServiceProxyHttpsOnly">
       <summary>
             Gets a value indicating whether the service proxy must be accessed through the HTTPS protocol only.
@@ -1045,6 +1211,11 @@
     <member name="P:RestFoundation.RestResources.AlreadyConfigured">
       <summary>
               Looks up a localized string similar to REST Foundation has already been configured..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.AlreadyInitializedHttpContext">
+      <summary>
+              Looks up a localized string similar to HTTP context has already been initialized..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.AlreadyMapped">
@@ -4867,6 +5038,11 @@
             or a query string parameter (false).
             </summary>
     </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.IsOptionalParameter">
+      <summary>
+            Gets or sets a value indicating whether the parameter is optional.
+            </summary>
+    </member>
     <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.ExampleValue">
       <summary>
             Gets or sets a parameter example value.
@@ -5230,6 +5406,12 @@
       <param name="context">The service context.</param>
       <returns>The object instance with the data or null.</returns>
     </member>
+    <member name="P:RestFoundation.TypeBinders.FromBodyAttribute.Name">
+      <summary>
+            Gets or sets a name to resolve from the HTTP body.
+            If this value is not set, the parameter name will be used.
+            </summary>
+    </member>
     <member name="T:RestFoundation.TypeBinders.FromHeaderAttribute">
       <summary>
             Represents a type binder that binds simple types from HTTP headers.
@@ -5249,10 +5431,17 @@
       <param name="context">The service context.</param>
       <returns>The object instance with the data or null.</returns>
     </member>
+    <member name="P:RestFoundation.TypeBinders.FromHeaderAttribute.Name">
+      <summary>
+            Gets or sets a name to resolve from the HTTP headers.
+            If this value is not set, the parameter name will be used.
+            </summary>
+    </member>
     <member name="P:RestFoundation.TypeBinders.FromHeaderAttribute.ConvertUnderscoresToDashes">
       <summary>
             Gets a value indicating whether to convert underscores in the parameter to dashes
-            when finding the HTTP header. The default value is true.
+            when finding the HTTP header. The default value is true. This value has no effect
+            if the <see cref="P:RestFoundation.TypeBinders.FromHeaderAttribute.Name" /> property is set.
             </summary>
     </member>
     <member name="T:RestFoundation.TypeBinders.FromUriAttribute">
@@ -5268,6 +5457,12 @@
       <param name="objectType">The binded object type.</param>
       <param name="context">The service context.</param>
       <returns>The object instance with the data or null.</returns>
+    </member>
+    <member name="P:RestFoundation.TypeBinders.FromUriAttribute.Name">
+      <summary>
+            Gets or sets a name to resolve from the URI query.
+            If this value is not set, the parameter name will be used.
+            </summary>
     </member>
     <member name="T:RestFoundation.TypeBinderBuilder">
       <summary>
@@ -5539,6 +5734,11 @@
             Gets the output writer.
             </summary>
     </member>
+    <member name="P:RestFoundation.IHttpResponseOutput.LogWriter">
+      <summary>
+            Gets the log writer.
+            </summary>
+    </member>
     <member name="P:RestFoundation.IHttpResponseOutput.Filter">
       <summary>
             Gets or sets a filter stream that modifies the output during the data transmission.
@@ -5760,6 +5960,98 @@
       <summary>
             Gets a value indicating whether there is an authenticated user associated with the HTTP request.
             </summary>
+    </member>
+    <member name="T:RestFoundation.UnitTesting.MockContextManager">
+      <summary>
+            Represents a mock service context manager.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.GenerateContext">
+      <summary>
+            Creates the current HTTP context.
+            </summary>
+      <returns>The service context.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If the current HTTP context has already been initialized.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.GenerateContext(RestFoundation.HttpMethod)">
+      <summary>
+            Creates the current HTTP context with the provided HTTP method.
+            </summary>
+      <param name="method">The HTTP method.</param>
+      <returns>The service context.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If the current HTTP context has already been initialized.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.GenerateContext(System.String,RestFoundation.HttpMethod)">
+      <summary>
+            Creates the current HTTP context with the provided virtual path and the HTTP method.
+            </summary>
+      <param name="virtualPath">The virtual path.</param>
+      <param name="method">The HTTP method.</param>
+      <returns>The service context.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If the current HTTP context has already been initialized.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.DestroyContext">
+      <summary>
+            Destroys the current HTTP context.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.SetHeader(System.String,System.String)">
+      <summary>
+            Sets a header with the provided name and value to the generated HTTP Context.
+            </summary>
+      <param name="name">The header name.</param>
+      <param name="value">The header value.</param>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.SetHeaders(System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Sets the provided headers to the generated HTTP Context.
+            </summary>
+      <param name="headers">The headers.</param>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.SetFormData(System.String,System.String)">
+      <summary>
+            Sets a form data item with the provided name and value to the generated HTTP Context.
+            </summary>
+      <param name="name">The form data item name.</param>
+      <param name="value">The form data item value.</param>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.SetFormData(System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Sets the provided form data collection to the generated HTTP Context.
+            </summary>
+      <param name="formData">The form data collection.</param>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.SetQuery(System.String,System.String)">
+      <summary>
+            Sets a query string item with the provided name and value to the generated HTTP Context.
+            </summary>
+      <param name="name">The query string name.</param>
+      <param name="value">The query string value.</param>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.SetQuery(System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Sets the provided query string to the generated HTTP Context.
+            </summary>
+      <param name="queryString">The query string keys and values.</param>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.SetServerVariable(System.String,System.String)">
+      <summary>
+            Sets a server variable with the provided name and value to the generated HTTP Context.
+            </summary>
+      <param name="name">The server variable name.</param>
+      <param name="value">The server variable value.</param>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.SetServerVariables(System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Sets the provided server variable to the generated HTTP Context.
+            </summary>
+      <param name="queryString">The server variable keys and values.</param>
     </member>
     <member name="T:RestFoundation.UriSegments">
       <summary>
@@ -6712,6 +7004,12 @@
             Represents the output of an HTTP response.
             </summary>
     </member>
+    <member name="M:RestFoundation.Context.HttpResponseOutput.#ctor(RestFoundation.ILogWriter)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Context.HttpResponseOutput" /> class.
+            </summary>
+      <param name="logWriter">The log writer.</param>
+    </member>
     <member name="M:RestFoundation.Context.HttpResponseOutput.Flush">
       <summary>
             Sends all the buffered output the the client.
@@ -6780,6 +7078,11 @@
             Gets the output writer.
             </summary>
     </member>
+    <member name="P:RestFoundation.Context.HttpResponseOutput.LogWriter">
+      <summary>
+            Gets the log writer.
+            </summary>
+    </member>
     <member name="P:RestFoundation.Context.HttpResponseOutput.Filter">
       <summary>
             Gets or sets a filter stream that modifies the output during the data transmission.
@@ -6810,6 +7113,15 @@
             service method is allowed.
             </param>
       <returns>The created parameter value.</returns>
+    </member>
+    <member name="M:RestFoundation.Runtime.ParameterValueProvider.GetTypeBindedValue(System.Reflection.ParameterInfo,RestFoundation.TypeBinders.ITypeBinder,RestFoundation.IServiceContext)">
+      <summary>
+            Gets a value from the associated <see cref="T:RestFoundation.TypeBinders.ITypeBinder" /> object.
+            </summary>
+      <param name="parameter">The service method parameter.</param>
+      <param name="typeBinder">The associated type binder.</param>
+      <param name="context">The service context.</param>
+      <returns>The parameter value.</returns>
     </member>
     <member name="M:RestFoundation.Runtime.ParameterValueProvider.TryGetRouteValue(System.Reflection.ParameterInfo,RestFoundation.Collections.IObjectValueCollection)">
       <summary>
@@ -9729,6 +10041,12 @@
       <summary>
             Represents a mock HTTP response output.
             </summary>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockHttpResponseOutput.#ctor(RestFoundation.ILogWriter)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.UnitTesting.MockHttpResponseOutput" /> class.
+            </summary>
+      <param name="logWriter">The log writer.</param>
     </member>
     <member name="P:RestFoundation.UnitTesting.MockHttpResponseOutput.Context">
       <summary>
