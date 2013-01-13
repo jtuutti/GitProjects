@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -100,6 +99,14 @@ namespace RestFoundation.Runtime
             return routeParameters;
         }
 
+        private static void SetMethodConstraintFailedIfNecessary(HttpContextBase httpContext)
+        {
+            if (httpContext.Items[RouteConstants.RouteMethodConstraintFailed] == null)
+            {
+                httpContext.Items[RouteConstants.RouteMethodConstraintFailed] = true;
+            }
+        }
+
         private bool ValidateHttpMethod(HttpContextBase httpContext, Type serviceContractType, string urlTemplate)
         {
             HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
@@ -109,7 +116,8 @@ namespace RestFoundation.Runtime
             {
                 if (!allowedHttpMethods.Contains(httpMethod))
                 {
-                    throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, RestResources.DisallowedHttpMethod);
+                    SetMethodConstraintFailedIfNecessary(httpContext);
+                    return false;
                 }
 
                 if (!m_httpMethods.Contains(httpMethod))
@@ -118,6 +126,7 @@ namespace RestFoundation.Runtime
                 }
             }
 
+            httpContext.Items[RouteConstants.RouteMethodConstraintFailed] = false;
             return true;
         }
 

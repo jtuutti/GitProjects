@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -90,7 +91,24 @@ namespace RestFoundation
         {
             var application = sender as HttpApplication;
 
-            if (application == null || !IsRestHandler(application))
+            if (application == null)
+            {
+                return;
+            }
+
+            if (application.Response.StatusCode == (int) HttpStatusCode.NotFound)
+            {
+                object constraintFailedFlag = application.Context.Items[RouteConstants.RouteMethodConstraintFailed];
+
+                if (constraintFailedFlag != null && Convert.ToBoolean(constraintFailedFlag, CultureInfo.InvariantCulture))
+                {
+                    application.Response.StatusCode = (int) HttpStatusCode.MethodNotAllowed;
+                    application.Response.StatusDescription = RestResources.DisallowedHttpMethod;
+                    return;
+                }
+            }
+
+            if (!IsRestHandler(application))
             {
                 return;
             }

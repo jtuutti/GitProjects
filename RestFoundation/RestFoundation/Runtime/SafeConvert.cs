@@ -24,7 +24,7 @@ namespace RestFoundation.Runtime
         /// <returns>The changed value</returns>
         public static bool TryChangeType(object value, Type conversionType, out object changedValue)
         {
-            if (value == null)
+            if (value == null || value is UrlParameter)
             {
                 changedValue = null;
                 return true;

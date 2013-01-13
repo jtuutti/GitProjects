@@ -172,6 +172,7 @@
         <th>URL parameter</th>
         <th>Query parameter?</th>
         <th>Type</th>
+        <th>Optional?</th>
         <th>Constraint</th>
         <th>Allowed values</th>
         <th>Example</th>
@@ -181,6 +182,7 @@
         <td><%: "{" + routeParameter.Name + "}" %></td>
         <td><%: routeParameter.IsRouteParameter ? "N" : "Y" %></td>
         <td><%: routeParameter.GetTypeDescription() %></td>
+        <td><%: routeParameter.IsOptionalParameter ? "Y" : "N" %></td>
         <td><%: routeParameter.RegexConstraint ?? String.Empty %></td>
         <td><%: routeParameter.AllowedValues ?? String.Empty %></td>
         <td><%: routeParameter.ExampleValue ?? String.Empty %></td>

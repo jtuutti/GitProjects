@@ -11,5 +11,6 @@ namespace RestFoundation.Runtime
         public const string WebPageUrl = "_webPageUrl";
         public const string BrowserConstraint = "_browserConstraint";
         public const string RouteConstraint = "_routeConstraint";
+        public const string RouteMethodConstraintFailed = "_routeMethodConstraintFailed";
     }
 }

@@ -26,6 +26,11 @@ namespace RestFoundation.ServiceProxy.OperationMetadata
         public bool IsRouteParameter { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the parameter is optional.
+        /// </summary>
+        public bool IsOptionalParameter { get; set; }
+
+        /// <summary>
         /// Gets or sets a parameter example value.
         /// </summary>
         public object ExampleValue { get; set; }

@@ -178,6 +178,7 @@ namespace RestFoundation.ServiceProxy
                     Name = parameter.Name.ToLowerInvariant(),
                     Type = parameter.ParameterType,
                     IsRouteParameter = true,
+                    IsOptionalParameter = parameter.DefaultValue != DBNull.Value,
                     RegexConstraint = GetParameterConstraint(parameter),
                     ExampleValue = parameterMetadata != null ? parameterMetadata.ExampleValue : null,
                     AllowedValues = parameterMetadata != null ? parameterMetadata.AllowedValues : null
@@ -204,6 +205,7 @@ namespace RestFoundation.ServiceProxy
                 {
                     Name = queryParameter.Name.ToLowerInvariant(),
                     Type = queryParameter.Type,
+                    IsOptionalParameter = queryParameter.IsOptionalParameter,
                     RegexConstraint = queryParameter.RegexConstraint,
                     ExampleValue = queryParameter.ExampleValue,
                     AllowedValues = queryParameter.AllowedValues

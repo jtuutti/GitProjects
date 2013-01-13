@@ -101,6 +101,7 @@
     <Compile Include="Runtime\MethodReturnTypeUnwrapper.cs" />
     <Compile Include="Runtime\RouteNameHelper.cs" />
     <Compile Include="Runtime\TaskExceptionUnwrapper.cs" />
+    <Compile Include="Runtime\UrlParameter.cs" />
     <Compile Include="Runtime\XmlNameSpaceExtractor.cs" />
     <Compile Include="ServiceProxy\ProxyJsonConvert.cs" />
     <Compile Include="Runtime\LogUtility.cs" />

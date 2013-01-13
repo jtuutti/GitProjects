@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web.Routing;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
@@ -22,6 +23,7 @@ namespace RestFoundation
 
         private static readonly Type urlAttributeType = typeof(UrlAttribute);
         private static readonly object syncRoot = new object();
+        private static readonly Regex urlParameterRegex = new Regex(@"\{([_a-zA-Z0-9]+)\}", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         private readonly string m_relativeUrl;
         private readonly RouteCollection m_routes;
@@ -189,6 +191,30 @@ namespace RestFoundation
             return urlAttributes;
         }
 
+        private static void ConfigureOptionalRouteParameters(ServiceMethodMetadata metadata, RouteValueDictionary defaults)
+        {
+            var routeParameters = urlParameterRegex.Matches(metadata.UrlInfo.UrlTemplate);
+
+            for (int i = 0; i < routeParameters.Count; i++)
+            {
+                ParameterInfo methodParameter = metadata.MethodInfo.GetParameters().FirstOrDefault(p => p.Name == routeParameters[i].Groups[1].Value);
+
+                if (methodParameter == null || methodParameter.DefaultValue == DBNull.Value)
+                {
+                    continue;
+                }
+
+                if (methodParameter.DefaultValue == null)
+                {
+                    defaults[methodParameter.Name] = UrlParameter.Optional;
+                }
+                else
+                {
+                    defaults[methodParameter.Name] = methodParameter.DefaultValue;
+                }
+            }
+        }
+
         private RouteConfiguration MapUrl(Type contractType)
         {
             if (contractType == null)
@@ -271,6 +297,8 @@ namespace RestFoundation
                 {
                     { RouteConstants.RouteConstraint, new ServiceRouteConstraint(metadata) }
                 };
+
+                ConfigureOptionalRouteParameters(metadata, defaults);
 
                 IRestHandler routeHandler = CreateRouteHandler();
                 routeHandlers.Add(routeHandler);

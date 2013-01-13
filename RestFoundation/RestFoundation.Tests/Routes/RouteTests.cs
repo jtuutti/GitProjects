@@ -74,8 +74,8 @@ namespace RestFoundation.Tests.Routes
             RouteAssert.Url("~/test-ok-fail/ok").WithHttpMethod(HttpMethod.Get).Invokes<TestSelfContainedService>(s => s.GetOK());
             RouteAssert.Url("~/test-ok-fail/fail").WithHttpMethod(HttpMethod.Get).Invokes<TestSelfContainedService>(s => s.GetFail());
 
-            // mismatched http method (HTTP 405 since there is no matching route)
-            Assert.Throws(typeof(HttpResponseException), () => RouteAssert.Url("~/test-ok-fail/fail").WithHttpMethod(HttpMethod.Head).Invokes<TestSelfContainedService>(s => s.GetFail()));
+            // mismatched http method
+            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test-ok-fail/fail").WithHttpMethod(HttpMethod.Head).Invokes<TestSelfContainedService>(s => s.GetFail()));
 
             // invalid relative url
             Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test-ok-fail/ok").WithHttpMethod(HttpMethod.Get).Invokes<TestSelfContainedService>(s => s.GetFail()));
