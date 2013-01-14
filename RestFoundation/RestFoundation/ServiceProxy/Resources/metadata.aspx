@@ -46,7 +46,7 @@
                 {
                     try
                     {
-                        requestJsonExample = ProxyJsonConvert.SerializeObject(requestObj, true);
+                        requestJsonExample = ProxyJsonConvert.SerializeObject(requestObj, true, false);
                     }
                     catch (Exception)
                     {
@@ -97,7 +97,7 @@
                 {
                     try
                     {
-                        responseJsonExample = ProxyJsonConvert.SerializeObject(responseObj, true);
+                        responseJsonExample = ProxyJsonConvert.SerializeObject(responseObj, true, true);
                     }
                     catch (Exception)
                     {

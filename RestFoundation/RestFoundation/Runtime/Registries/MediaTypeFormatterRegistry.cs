@@ -91,11 +91,21 @@ namespace RestFoundation.Runtime
         private static ConcurrentDictionary<string, IMediaTypeFormatter> InitializeDefaultFormatters()
         {
             var defaultFormatters = new ConcurrentDictionary<string, IMediaTypeFormatter>(StringComparer.OrdinalIgnoreCase);
-            defaultFormatters.TryAdd("application/json", new JsonFormatter());
-            defaultFormatters.TryAdd("application/xml", new XmlFormatter());
-            defaultFormatters.TryAdd("text/xml", new XmlFormatter());
+
+            InitializeFormatter(new JsonFormatter(), defaultFormatters);
+            InitializeFormatter(new XmlFormatter(), defaultFormatters);
 
             return defaultFormatters;
+        }
+
+        private static void InitializeFormatter(IMediaTypeFormatter formatter, ConcurrentDictionary<string, IMediaTypeFormatter> defaultFormatters)
+        {
+            var mediaTypes = formatter.GetType().GetCustomAttributes(typeof(SupportedMediaTypeAttribute), false).Cast<SupportedMediaTypeAttribute>();
+
+            foreach (SupportedMediaTypeAttribute mediaType in mediaTypes)
+            {
+                defaultFormatters.TryAdd(mediaType.MediaType, formatter);
+            }
         }
     }
 }

@@ -16,16 +16,6 @@ namespace RestFoundation.ServiceProxy
     public static class ProxyXmlConvert
     {
         /// <summary>
-        /// Converts an object into XML.
-        /// </summary>
-        /// <param name="obj">The object to serialize.</param>
-        /// <returns>The <see cref="String"/> value containing the serialized object.</returns>
-        public static string SerializeObject(object obj)
-        {
-            return SerializeObject(obj, false);
-        }
-
-        /// <summary>
         /// Converts an object into XML with the provided formatting options.
         /// </summary>
         /// <param name="obj">The object to serialize.</param>

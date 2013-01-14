@@ -50,12 +50,34 @@ namespace RestFoundation.Results
             return result ?? CreateFormatterResult(returnedObj, methodReturnType, handler);
         }
 
+        private static IMediaTypeFormatter TryNegotiateMediaType(IRestHandler handler)
+        {
+            if (handler.Context.Request.Headers.AcceptTypes == null)
+            {
+                return null;
+            }
+
+            foreach (string acceptType in handler.Context.Request.Headers.AcceptTypes)
+            {
+                IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, acceptType) ??
+                                                MediaTypeFormatterRegistry.GetFormatter(acceptType);
+
+                if (formatter != null)
+                {
+                    return formatter;
+                }
+            }
+
+            return null;
+        }
+
         private IResult CreateFormatterResult(object returnedObj, Type methodReturnType, IRestHandler handler)
         {
             string acceptType = m_contentNegotiator.GetPreferredMediaType(handler.Context.Request);
 
             IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, acceptType) ??
-                                            MediaTypeFormatterRegistry.GetFormatter(acceptType);
+                                            MediaTypeFormatterRegistry.GetFormatter(acceptType) ??
+                                            TryNegotiateMediaType(handler);
 
             if (formatter == null)
             {

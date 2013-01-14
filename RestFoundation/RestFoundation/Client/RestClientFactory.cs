@@ -16,7 +16,7 @@ namespace RestFoundation.Client
         private static readonly IDictionary<RestResourceType, string> defaultResourceTypes = new Dictionary<RestResourceType, string>
                                                                                              {
                                                                                                  { RestResourceType.Json, "application/json" },
-                                                                                                 { RestResourceType.Xml, "text/xml" }
+                                                                                                 { RestResourceType.Xml, "application/xml" }
                                                                                              };
 
         /// <summary>

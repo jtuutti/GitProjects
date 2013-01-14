@@ -2,7 +2,9 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
@@ -15,6 +17,8 @@ namespace RestFoundation.Formatters
     [SupportedMediaType("application/json")]
     public class JsonFormatter : IMediaTypeFormatter
     {
+        private static readonly HashSet<string> supportedMediaTypes = GetSupportedMediaTypes();
+
         private readonly IContentNegotiator m_contentNegotiator;
 
         /// <summary>
@@ -92,9 +96,23 @@ namespace RestFoundation.Formatters
             return new JsonResult
             {
                 Content = obj,
-                ContentType = m_contentNegotiator.GetPreferredMediaType(context.Request),
+                ContentType = GetFormatterMediaType(context.Request),
                 ReturnedType = methodReturnType
             };
+        }
+
+        private static HashSet<string> GetSupportedMediaTypes()
+        {
+            var supportedMediaTypeAttributes = typeof(JsonFormatter).GetCustomAttributes(typeof(SupportedMediaTypeAttribute), false).Cast<SupportedMediaTypeAttribute>();
+
+            return new HashSet<string>(supportedMediaTypeAttributes.Select(a => a.MediaType), StringComparer.OrdinalIgnoreCase);
+        }
+
+        private string GetFormatterMediaType(IHttpRequest request)
+        {
+            string preferredMediaType = m_contentNegotiator.GetPreferredMediaType(request);
+
+            return supportedMediaTypes.Contains(preferredMediaType) ? preferredMediaType : supportedMediaTypes.First();
         }
     }
 }

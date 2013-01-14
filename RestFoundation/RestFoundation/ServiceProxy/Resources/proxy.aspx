@@ -121,7 +121,7 @@
                     {
                         try
                         {
-                            RequestText.Value = ProxyJsonConvert.SerializeObject(requestObj, true);
+                            RequestText.Value = ProxyJsonConvert.SerializeObject(requestObj, true, false);
                         }
                         catch (Exception)
                         {
