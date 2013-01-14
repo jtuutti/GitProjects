@@ -18,6 +18,24 @@ namespace RestFoundation.Results
     [XmlRoot("ComplexType")]
     public class DynamicResult : DynamicObject, IXmlSerializable
     {
+        private static readonly HashSet<Type> knownSimpleTypes = new HashSet<Type>
+        {
+            typeof(string),
+            typeof(decimal),
+            typeof(decimal?),
+            typeof(Guid),
+            typeof(Guid?),
+            typeof(DateTime),
+            typeof(DateTime?),
+            typeof(DateTimeOffset),
+            typeof(DateTimeOffset?),
+            typeof(TimeSpan),
+            typeof(TimeSpan?),
+            typeof(TimeZoneInfo),
+            typeof(CultureInfo),
+            typeof(Uri)
+        };
+
         private readonly IDictionary<string, object> m_dictionary;
 
         /// <summary>
@@ -317,10 +335,7 @@ namespace RestFoundation.Results
         {
             Type propertyType = property.Value.GetType();
 
-            if (propertyType.IsPrimitive || propertyType == typeof(string) || propertyType == typeof(decimal) || propertyType == typeof(decimal?) ||
-                propertyType == typeof(Guid) || propertyType == typeof(Guid?) || propertyType == typeof(DateTime) || propertyType == typeof(DateTime?) ||
-                propertyType == typeof(TimeSpan) || propertyType == typeof(TimeSpan?) || propertyType == typeof(DateTimeOffset) || propertyType == typeof(DateTimeOffset?) ||
-                propertyType == typeof(CultureInfo) || propertyType == typeof(Uri))
+            if (propertyType.IsPrimitive || knownSimpleTypes.Contains(propertyType))
             {
                 writer.WriteValue(property.Value);
                 return;
