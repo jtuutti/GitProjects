@@ -126,9 +126,14 @@ namespace RestTestServices
 
         public object Post(Person resource)
         {
-            if (resource == null || !Context.Request.ResourceState.IsValid)
+            if (resource == null)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
+            }
+
+            if (!Context.Request.ResourceState.IsValid)
+            {
+                throw new HttpResourceFaultException();
             }
 
             resource.Values = new[] { "New person added" };
@@ -141,9 +146,14 @@ namespace RestTestServices
 
         public Person Put(int? id, Person personToUpdate)
         {
-            if (personToUpdate == null || !Context.Request.ResourceState.IsValid)
+            if (personToUpdate == null)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
+            }
+
+            if (!Context.Request.ResourceState.IsValid)
+            {
+                throw new HttpResourceFaultException();
             }
 
             personToUpdate.Values = new[] { String.Format("Person #{0} updated", id) };
@@ -153,9 +163,14 @@ namespace RestTestServices
 
         public Person Patch(int? id, Person resource)
         {
-            if (resource == null || !Context.Request.ResourceState.IsValid)
+            if (resource == null)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
+            }
+
+            if (!Context.Request.ResourceState.IsValid)
+            {
+                throw new HttpResourceFaultException();
             }
 
             resource.Values = new[] { String.Format("Person #{0} partially updated", id) };

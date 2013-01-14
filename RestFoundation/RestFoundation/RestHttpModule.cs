@@ -8,7 +8,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.UI;
-using RestFoundation.Formatters;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
@@ -279,7 +278,7 @@ namespace RestFoundation
             {
                 application.Response.TrySkipIisCustomErrors = true;
 
-                OutputResourceValidationFaults(faultException);
+                OutputResourceValidationFaults(application, faultException);
             }
 
             application.CompleteRequest();
@@ -299,22 +298,22 @@ namespace RestFoundation
             }
         }
 
-        private static void OutputResourceValidationFaults(HttpResourceFaultException faultException)
+        private static void OutputResourceValidationFaults(HttpApplication application, HttpResourceFaultException faultException)
         {
             var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
-            var faultCollection = GenerateFaultCollection(context, faultException);
+            FaultCollection faultCollection = GenerateFaultCollection(context, faultException);
 
             if (faultCollection.General.Length == 0 && faultCollection.Resource.Length == 0)
             {
                 return;
             }
 
-            var contentNegotiator = Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>();
-            var formatter = MediaTypeFormatterRegistry.GetFormatter(contentNegotiator.GetPreferredMediaType(context.Request));
+            var resultFactory = new ResultFactory(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>());
+            IResult result = resultFactory.Create(faultCollection, faultCollection.GetType(), (IRestHandler) application.Context.CurrentHandler);
 
-            if (formatter != null)
+            if (result != null)
             {
-                ExecuteFaultResult(formatter, context, faultCollection);
+                result.Execute(context);
             }
         }
 
@@ -342,16 +341,6 @@ namespace RestFoundation
                     Message = e.Message
                 }).ToArray()
             };
-        }
-
-        private static void ExecuteFaultResult(IMediaTypeFormatter formatter, IServiceContext context, FaultCollection faultCollection)
-        {
-            IResult result = formatter.FormatResponse(context, faultCollection.GetType(), faultCollection);
-
-            if (result != null)
-            {
-                result.Execute(context);
-            }
         }
 
         private static void LogServiceCallEnd()
