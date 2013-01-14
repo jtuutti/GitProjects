@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using RestFoundation;
@@ -59,20 +60,23 @@ namespace SampleRestService.Services
             try
             {
                 m_repository.Add(resource);
-
-                // string relativeLocationUrl = m_context.GetPath<ISampleService>(m => m.GetById(resource.ID);
-
-                string absoluteLocationUrl = m_context.GetPath<ISampleService>(null, m => m.GetById(resource.ID), null, UriSegments.CreateFromHttpRequest(m_context.Request));
-
-                m_context.Response.SetHeader(m_context.Response.HeaderNames.Location, absoluteLocationUrl);
-                m_context.Response.SetStatus(HttpStatusCode.Created, "Product added");
             }
             catch (ArgumentException ex) // invalid input arguments passed to the repository
             {
                 throw new HttpResourceFaultException(new[] { ex.Message });
             }
 
-            return m_repository.GetAll().FirstOrDefault(p => p.ID == resource.ID);
+            Product addedResource = m_repository.GetAll().FirstOrDefault(p => p.ID == resource.ID);
+
+            var responseHeaders = new Dictionary<string, string>
+            {
+                { // Location header with a fully qualified GET URL pointing to the resource by its ID
+                    m_context.Response.HeaderNames.Location,
+                    m_context.GetPath<ISampleService>(null, m => m.GetById(resource.ID), null, UriSegments.CreateFromHttpRequest(m_context.Request))
+                }
+            };
+
+            return Result.ObjectWithResponseStatus(addedResource, HttpStatusCode.Created, "Product added", responseHeaders);
         }
 
         public Product Put(int id, Product resource)
@@ -87,14 +91,15 @@ namespace SampleRestService.Services
             try
             {
                 m_repository.Update(resource);
-                m_context.Response.SetStatus(HttpStatusCode.OK, "Product updated");
             }
             catch (ArgumentException ex) // invalid input arguments passed to the repository
             {
                 throw new HttpResourceFaultException(new[] { ex.Message });
             }
 
-            return m_repository.GetAll().FirstOrDefault(p => p.ID == resource.ID);
+            Product updatedResource = m_repository.GetAll().FirstOrDefault(p => p.ID == resource.ID);
+
+            return Result.ObjectWithResponseStatus(updatedResource, HttpStatusCode.OK, "Product updated");
         }
 
         public Product PatchStockStatus(int id, bool inStock)
@@ -102,14 +107,15 @@ namespace SampleRestService.Services
             try
             {
                 m_repository.UpdateInStockStatus(id, inStock);
-                m_context.Response.SetStatus(HttpStatusCode.OK, "Product updated");
             }
             catch (ArgumentException ex) // invalid input arguments passed to the repository
             {
                 throw new HttpResourceFaultException(new[] { ex.Message });
             }
 
-            return m_repository.GetAll().FirstOrDefault(p => p.ID == id);
+            Product updatedResource = m_repository.GetAll().FirstOrDefault(p => p.ID == id);
+
+            return Result.ObjectWithResponseStatus(updatedResource, HttpStatusCode.OK, "Product updated");
         }
 
         public StatusResult DeleteById(int id)

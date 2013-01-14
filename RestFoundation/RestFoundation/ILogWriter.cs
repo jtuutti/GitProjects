@@ -18,7 +18,7 @@ namespace RestFoundation
         /// Writes a debug message into the log buffer.
         /// The implementation should add a line break at the end of the message.
         /// </summary>
-        /// <param name="debug">A debug message.</param>
+        /// <param name="debug">The debug message.</param>
         /// <returns>The log writer instance.</returns>
         ILogWriter WriteDebug(string debug);
 
@@ -26,7 +26,7 @@ namespace RestFoundation
         /// Writes an error message into the log buffer.
         /// The implementation should add a line break at the end of the message.
         /// </summary>
-        /// <param name="error">An error message.</param>
+        /// <param name="error">The error message.</param>
         /// <returns>The log writer instance.</returns>
         ILogWriter WriteError(string error);
 
@@ -34,7 +34,7 @@ namespace RestFoundation
         /// Writes an information message into the log buffer.
         /// The implementation should add a line break at the end of the message.
         /// </summary>
-        /// <param name="info">An information message.</param>
+        /// <param name="info">The information message.</param>
         /// <returns>The log writer instance.</returns>
         ILogWriter WriteInfo(string info);
 
@@ -42,7 +42,7 @@ namespace RestFoundation
         /// Writes a warning message into the log buffer.
         /// The implementation should add a line break at the end of the message.
         /// </summary>
-        /// <param name="warning">A warning message.</param>
+        /// <param name="warning">The warning message.</param>
         /// <returns>The log writer instance.</returns>
         ILogWriter WriteWarning(string warning);
 

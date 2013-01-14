@@ -585,7 +585,7 @@
             Writes a debug message into the log buffer.
             The implementation should add a line break at the end of the message.
             </summary>
-      <param name="debug">A debug message.</param>
+      <param name="debug">The debug message.</param>
       <returns>The log writer instance.</returns>
     </member>
     <member name="M:RestFoundation.ILogWriter.WriteError(System.String)">
@@ -593,7 +593,7 @@
             Writes an error message into the log buffer.
             The implementation should add a line break at the end of the message.
             </summary>
-      <param name="error">An error message.</param>
+      <param name="error">The error message.</param>
       <returns>The log writer instance.</returns>
     </member>
     <member name="M:RestFoundation.ILogWriter.WriteInfo(System.String)">
@@ -601,7 +601,7 @@
             Writes an information message into the log buffer.
             The implementation should add a line break at the end of the message.
             </summary>
-      <param name="info">An information message.</param>
+      <param name="info">The information message.</param>
       <returns>The log writer instance.</returns>
     </member>
     <member name="M:RestFoundation.ILogWriter.WriteWarning(System.String)">
@@ -609,7 +609,7 @@
             Writes a warning message into the log buffer.
             The implementation should add a line break at the end of the message.
             </summary>
-      <param name="warning">A warning message.</param>
+      <param name="warning">The warning message.</param>
       <returns>The log writer instance.</returns>
     </member>
     <member name="M:RestFoundation.ILogWriter.Flush">
@@ -7968,7 +7968,7 @@
             </summary>
       <param name="code">The HTTP status code.</param>
       <param name="description">The HTTP status description.</param>
-      <returns>The response status result</returns>
+      <returns>The response status result.</returns>
     </member>
     <member name="M:RestFoundation.Result.ResponseStatus(System.Net.HttpStatusCode,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
       <summary>
@@ -7977,7 +7977,37 @@
       <param name="code">The HTTP status code.</param>
       <param name="description">The HTTP status description.</param>
       <param name="responseHeaders">A dictionary of response headers.</param>
-      <returns>The response status result</returns>
+      <returns>The response status result.</returns>
+    </member>
+    <member name="M:RestFoundation.Result.ObjectWithResponseStatus``1(``0,System.Net.HttpStatusCode)">
+      <summary>
+            Returns the provided object and sets the provided response status code.
+            </summary>
+      <typeparam name="T">The object type.</typeparam>
+      <param name="obj">The object to return.</param>
+      <param name="code">The HTTP status code.</param>
+      <returns>The object.</returns>
+    </member>
+    <member name="M:RestFoundation.Result.ObjectWithResponseStatus``1(``0,System.Net.HttpStatusCode,System.String)">
+      <summary>
+            Returns the provided object and sets the provided response status code and description.
+            </summary>
+      <typeparam name="T">The object type.</typeparam>
+      <param name="obj">The object to return.</param>
+      <param name="code">The HTTP status code.</param>
+      <param name="description">The HTTP status description.</param>
+      <returns>The object.</returns>
+    </member>
+    <member name="M:RestFoundation.Result.ObjectWithResponseStatus``1(``0,System.Net.HttpStatusCode,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+      <summary>
+            Returns the provided object and sets the provided response status code and description.
+            </summary>
+      <typeparam name="T">The object type.</typeparam>
+      <param name="obj">The object to return.</param>
+      <param name="code">The HTTP status code.</param>
+      <param name="description">The HTTP status description.</param>
+      <param name="responseHeaders">A dictionary of response headers.</param>
+      <returns>The object.</returns>
     </member>
     <member name="M:RestFoundation.Result.Feed(System.ServiceModel.Syndication.SyndicationFeed,RestFoundation.Results.FeedResult.SyndicationFormat)">
       <summary>

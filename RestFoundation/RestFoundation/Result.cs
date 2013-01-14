@@ -561,7 +561,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="code">The HTTP status code.</param>
         /// <param name="description">The HTTP status description.</param>
-        /// <returns>The response status result</returns>
+        /// <returns>The response status result.</returns>
         public static StatusResult ResponseStatus(HttpStatusCode code, string description)
         {
             return ResponseStatus(code, description, null);
@@ -573,7 +573,7 @@ namespace RestFoundation
         /// <param name="code">The HTTP status code.</param>
         /// <param name="description">The HTTP status description.</param>
         /// <param name="responseHeaders">A dictionary of response headers.</param>
-        /// <returns>The response status result</returns>
+        /// <returns>The response status result.</returns>
         public static StatusResult ResponseStatus(HttpStatusCode code, string description, IDictionary<string, string> responseHeaders)
         {
             var result = new StatusResult
@@ -591,6 +591,62 @@ namespace RestFoundation
             }
 
             return result;
+        }
+    
+        /// <summary>
+        /// Returns the provided object and sets the provided response status code.
+        /// </summary>
+        /// <typeparam name="T">The object type.</typeparam>
+        /// <param name="obj">The object to return.</param>
+        /// <param name="code">The HTTP status code.</param>
+        /// <returns>The object.</returns>
+        public static T ObjectWithResponseStatus<T>(T obj, HttpStatusCode code)
+        {
+            return ObjectWithResponseStatus(obj, code, null, null);
+        }
+
+        /// <summary>
+        /// Returns the provided object and sets the provided response status code and description.
+        /// </summary>
+        /// <typeparam name="T">The object type.</typeparam>
+        /// <param name="obj">The object to return.</param>
+        /// <param name="code">The HTTP status code.</param>
+        /// <param name="description">The HTTP status description.</param>
+        /// <returns>The object.</returns>
+        public static T ObjectWithResponseStatus<T>(T obj, HttpStatusCode code, string description)
+        {
+            return ObjectWithResponseStatus(obj, code, description, null);
+        }
+
+        /// <summary>
+        /// Returns the provided object and sets the provided response status code and description.
+        /// </summary>
+        /// <typeparam name="T">The object type.</typeparam>
+        /// <param name="obj">The object to return.</param>
+        /// <param name="code">The HTTP status code.</param>
+        /// <param name="description">The HTTP status description.</param>
+        /// <param name="responseHeaders">A dictionary of response headers.</param>
+        /// <returns>The object.</returns>
+        public static T ObjectWithResponseStatus<T>(T obj, HttpStatusCode code, string description, IDictionary<string, string> responseHeaders)
+        {
+            var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
+
+            if (context == null)
+            {
+                throw new InvalidOperationException(RestResources.MissingHttpContext);
+            }
+
+            context.Response.SetStatus(code, description ?? String.Empty);
+
+            if (responseHeaders != null)
+            {
+                foreach (var header in responseHeaders)
+                {
+                    context.Response.SetHeader(header.Key, header.Value);
+                }
+            }
+
+            return obj;
         }
 
         /// <summary>
