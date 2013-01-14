@@ -41,6 +41,11 @@ namespace RestFoundation
         /// </summary>
         public bool UseMicrosoftStyleDates { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to wrap a JSON response.
+        /// </summary>
+        public bool WrapContentResponse { get; set; }
+
         internal JsonSerializerSettings ToJsonSerializerSettings()
         {
             return new JsonSerializerSettings

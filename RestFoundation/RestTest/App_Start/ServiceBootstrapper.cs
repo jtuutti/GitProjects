@@ -26,6 +26,7 @@ namespace RestTest.App_Start
                 // .InitializeWithUnity(CreateUnityContainer())
                 .WithUrls(RegisterUrls)
                 .WithMediaTypeFormatters(RegisterFormatters)
+                .UseJsonFormatterSettings(new JsonFormatterSettings { WrapContentResponse = true })
                 .UseXmlFormatterSettings(new XmlFormatterSettings { NameSpace = "urn:com.rest-test.resources" })
                 .EnableJsonPSupport()               
                 .WithResponseHeader("X-Service-Name", "Rest Foundation Test")

@@ -18,6 +18,14 @@ namespace RestFoundation.Results
     public class JsonResult : IResult
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="JsonResult"/> class.
+        /// </summary>
+        public JsonResult()
+        {
+            WrapContent = Rest.Configuration.Options.JsonSettings.WrapContentResponse;
+        }
+
+        /// <summary>
         /// Gets or sets the object to serialize to JSON.
         /// </summary>
         public object Content { get; set; }
@@ -26,6 +34,11 @@ namespace RestFoundation.Results
         /// Gets or sets the content type. The "application/json" content type is used by default.
         /// </summary>
         public string ContentType { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to wrap the content.
+        /// </summary>
+        public bool WrapContent { get; set; }
 
         internal Type ReturnedType { get; set; }
 
@@ -72,7 +85,7 @@ namespace RestFoundation.Results
 
             OutputCompressionManager.FilterResponse(context);
 
-            serializer.Serialize(context.Response.Output.Writer, Content);
+            serializer.Serialize(context.Response.Output.Writer, WrapContent ? new { d = Content } : Content);
 
             LogResponse(Content);
         }
@@ -80,8 +93,7 @@ namespace RestFoundation.Results
         private void SerializeAsChunkedSequence(IServiceContext context, JsonSerializer serializer)
         {
             var enumerableContent = (IEnumerable) Content;
-
-            context.Response.Output.Write("[").Flush();
+            context.Response.Output.Write(WrapContent ? "{\"d\":[" : "[").Flush();
 
             bool arrayStart = true;
 
@@ -102,9 +114,9 @@ namespace RestFoundation.Results
                 LogResponse(enumerableContent);
             }
 
-            context.Response.Output.Write("]");
+            context.Response.Output.Write(WrapContent ? "]}" : "]");
         }
-        
+
         private bool SerializeAsSpecializedCollection(IServiceContext context, JsonSerializer serializer)
         {
             if (ReturnedType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
@@ -132,7 +144,7 @@ namespace RestFoundation.Results
             var options = Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings();
             options.Formatting = Formatting.Indented;
 
-            string serializedContent = JsonConvert.SerializeObject(content, options);
+            string serializedContent = JsonConvert.SerializeObject(WrapContent ? new { d = content } : content, options);
             LogUtility.LogResponseBody(serializedContent, ContentType);
         }
     }
