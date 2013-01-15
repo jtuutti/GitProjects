@@ -308,8 +308,15 @@ namespace RestFoundation
                 return;
             }
 
-            var resultFactory = new ResultFactory(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>());
-            IResult result = resultFactory.Create(faultCollection, faultCollection.GetType(), (IRestHandler) application.Context.CurrentHandler);
+            var handler = application.Context.CurrentHandler as IRestHandler;
+
+            if (handler == null)
+            {
+                return;
+            }
+
+            var resultFactory = Rest.Configuration.ServiceLocator.GetService<IResultFactory>();
+            IResult result = resultFactory.Create(faultCollection, faultCollection.GetType(), handler);
 
             if (result != null)
             {
