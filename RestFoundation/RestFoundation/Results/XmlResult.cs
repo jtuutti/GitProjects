@@ -15,6 +15,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using RestFoundation.Runtime;
 using Formatting = System.Xml.Formatting;
+using XmlNamespaceManager = RestFoundation.Runtime.XmlNamespaceManager;
 
 namespace RestFoundation.Results
 {
@@ -102,11 +103,7 @@ namespace RestFoundation.Results
             OutputCompressionManager.FilterResponse(context);
 
             XmlSerializer serializer = XmlSerializerRegistry.Get(Content.GetType());
-
-            var namespaces = new XmlSerializerNamespaces();
-            namespaces.Add(String.Empty, XmlNameSpaceExtractor.Get());
-
-            serializer.Serialize(xmlWriter, Content, namespaces);
+            serializer.Serialize(xmlWriter, Content, XmlNamespaceManager.Generate());
 
             LogResponse(Content);
         }
@@ -200,11 +197,7 @@ namespace RestFoundation.Results
                 }
 
                 XmlSerializer serializer = XmlSerializerRegistry.Get(enumeratedContent.GetType());
-
-                var namespaces = new XmlSerializerNamespaces();
-                namespaces.Add(String.Empty, XmlNameSpaceExtractor.Get());
-
-                serializer.Serialize(xmlWriter, enumeratedContent, namespaces);
+                serializer.Serialize(xmlWriter, enumeratedContent, XmlNamespaceManager.Generate());
                 context.Response.Output.Flush();
 
                 LogResponse(enumerableContent);
@@ -265,10 +258,7 @@ namespace RestFoundation.Results
                                     Formatting = Formatting.Indented
                                 };
 
-                var namespaces = new XmlSerializerNamespaces();
-                namespaces.Add(String.Empty, XmlNameSpaceExtractor.Get());
-
-                serializer.Serialize(xmlWriter, content, namespaces);
+                serializer.Serialize(xmlWriter, content, XmlNamespaceManager.Generate());
                 xmlWriter.Flush();
 
                 stream.Seek(0, SeekOrigin.Begin);

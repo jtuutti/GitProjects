@@ -102,7 +102,7 @@
     <Compile Include="Runtime\RouteNameHelper.cs" />
     <Compile Include="Runtime\TaskExceptionUnwrapper.cs" />
     <Compile Include="Runtime\UrlParameter.cs" />
-    <Compile Include="Runtime\XmlNameSpaceExtractor.cs" />
+    <Compile Include="Runtime\XmlNamespaceManager.cs" />
     <Compile Include="ServiceProxy\ProxyJsonConvert.cs" />
     <Compile Include="Runtime\LogUtility.cs" />
     <Compile Include="Runtime\NullLogWriter.cs" />

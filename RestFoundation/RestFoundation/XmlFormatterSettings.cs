@@ -8,7 +8,7 @@
         /// <summary>
         /// Gets or sets the XML namespace
         /// </summary>
-        public string NameSpace
+        public string Namespace
         {
             get;
             set;

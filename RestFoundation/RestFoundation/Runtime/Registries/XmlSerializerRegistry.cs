@@ -34,26 +34,26 @@ namespace RestFoundation.Runtime
                 return GetSerializerForCollection(objectType, objectType.GetGenericArguments()[0]);
             }
 
-            string rootNameSpace = XmlNameSpaceExtractor.Get();
+            string rootNamespace = XmlNamespaceManager.GetDefault();
 
-            return !String.IsNullOrWhiteSpace(rootNameSpace) ? new XmlSerializer(objectType, rootNameSpace) : new XmlSerializer(objectType);
+            return !String.IsNullOrWhiteSpace(rootNamespace) ? new XmlSerializer(objectType, rootNamespace) : new XmlSerializer(objectType);
         }
 
         private static XmlSerializer GetSerializerForCollection(Type objectType, Type elementType)
         {
-            string rootNameSpace;
-            string rootElementName = XmlRootElementInspector.GetRootElementName(elementType, out rootNameSpace);
+            string rootNamespace;
+            string rootElementName = XmlRootElementInspector.GetRootElementName(elementType, out rootNamespace);
 
-            if (String.IsNullOrWhiteSpace(rootNameSpace))
+            if (String.IsNullOrWhiteSpace(rootNamespace))
             {
-                rootNameSpace = XmlNameSpaceExtractor.Get();
+                rootNamespace = XmlNamespaceManager.GetDefault();
             }
 
             XmlSerializer serializer;
 
-            if (!String.IsNullOrEmpty(rootNameSpace))
+            if (!String.IsNullOrWhiteSpace(rootNamespace))
             {
-                serializer = new XmlSerializer(objectType, new XmlRootAttribute(rootElementName) { Namespace = rootNameSpace });
+                serializer = new XmlSerializer(objectType, new XmlRootAttribute(rootElementName) { Namespace = rootNamespace });
             }
             else
             {

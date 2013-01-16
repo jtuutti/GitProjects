@@ -10,7 +10,7 @@ namespace RestFoundation.Runtime
 {
     internal static class XmlRootElementInspector
     {
-        public static string GetRootElementName(Type objectType, out string rootNameSpace)
+        public static string GetRootElementName(Type objectType, out string rootNamespace)
         {           
             var xmlRootAttribute = Attribute.GetCustomAttribute(objectType, typeof(XmlRootAttribute), true) as XmlRootAttribute;
 
@@ -19,12 +19,12 @@ namespace RestFoundation.Runtime
             if (xmlRootAttribute != null && !String.IsNullOrEmpty(xmlRootAttribute.ElementName))
             {
                 elementName = xmlRootAttribute.ElementName;
-                rootNameSpace = xmlRootAttribute.Namespace;
+                rootNamespace = xmlRootAttribute.Namespace;
             }
             else
             {
                 elementName = objectType.Name;
-                rootNameSpace = null;
+                rootNamespace = null;
             }
 
             var pluralization = PluralizationService.CreateService(CultureInfo.CurrentCulture);

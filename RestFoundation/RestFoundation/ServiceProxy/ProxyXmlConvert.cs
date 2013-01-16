@@ -7,6 +7,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using RestFoundation.Runtime;
+using XmlNamespaceManager = RestFoundation.Runtime.XmlNamespaceManager;
 
 namespace RestFoundation.ServiceProxy
 {
@@ -39,10 +40,7 @@ namespace RestFoundation.ServiceProxy
                                     Formatting = isFormatted ? Formatting.Indented : Formatting.None
                                 };
 
-                var namespaces = new XmlSerializerNamespaces();
-                namespaces.Add(String.Empty, XmlNameSpaceExtractor.Get());
-
-                serializer.Serialize(xmlWriter, obj, namespaces);
+                serializer.Serialize(xmlWriter, obj, XmlNamespaceManager.Generate());
                 xmlWriter.Flush();
 
                 stream.Seek(0, SeekOrigin.Begin);

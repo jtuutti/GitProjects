@@ -134,9 +134,7 @@ namespace RestFoundation.UnitTesting
 
                 var serializer = XmlSerializerRegistry.Get(resource.GetType());
                 var writer = new StreamWriter(context.Request.InputStream, Encoding.UTF8);
-                var namespaces = new XmlSerializerNamespaces();
-                namespaces.Add(String.Empty, XmlNameSpaceExtractor.Get());
-                serializer.Serialize(writer, resource, namespaces);
+                serializer.Serialize(writer, resource, XmlNamespaceManager.Generate());
                 writer.Flush();
             }
         }
