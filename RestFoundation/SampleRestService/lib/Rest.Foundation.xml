@@ -700,6 +700,11 @@
             instead of the ISO 8601 format. This property is set to false by default.
             </summary>
     </member>
+    <member name="P:RestFoundation.JsonFormatterSettings.WrapContentResponse">
+      <summary>
+            Gets or sets a value indicating whether to wrap a JSON response.
+            </summary>
+    </member>
     <member name="T:RestFoundation.LogWriterExtensions">
       <summary>
             Contains <see cref="T:RestFoundation.ILogWriter" /> extensions.
@@ -1811,20 +1816,16 @@
             Represents an JSON object converter.
             </summary>
     </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyJsonConvert.SerializeObject(System.Object)">
-      <summary>
-            Converts an object into JSON.
-            </summary>
-      <param name="value">The object to serialize.</param>
-      <returns>The <see cref="T:System.String" /> value containing the serialized object.</returns>
-    </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyJsonConvert.SerializeObject(System.Object,System.Boolean)">
+    <member name="M:RestFoundation.ServiceProxy.ProxyJsonConvert.SerializeObject(System.Object,System.Boolean,System.Boolean)">
       <summary>
             Converts an object into JSON with the provided formatting options.
             </summary>
       <param name="value">The object to serialize.</param>
       <param name="isFormatted">
             A <see cref="T:System.Boolean" /> indicating whether the serialized object is formatted for output.
+            </param>
+      <param name="isResponse">
+            A <see cref="T:System.Boolean" /> indicating whether the serialized object is generated as a service response.
             </param>
       <returns>The <see cref="T:System.String" /> value containing the serialized object.</returns>
     </member>
@@ -6454,6 +6455,11 @@
             Represents a JSON result.
             </summary>
     </member>
+    <member name="M:RestFoundation.Results.JsonResult.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Results.JsonResult" /> class.
+            </summary>
+    </member>
     <member name="M:RestFoundation.Results.JsonResult.Execute(RestFoundation.IServiceContext)">
       <summary>
             Executes the result against the provided service context.
@@ -6468,6 +6474,11 @@
     <member name="P:RestFoundation.Results.JsonResult.ContentType">
       <summary>
             Gets or sets the content type. The "application/json" content type is used by default.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Results.JsonResult.WrapContent">
+      <summary>
+            Gets or sets a value indicating whether to wrap the content.
             </summary>
     </member>
     <member name="T:RestFoundation.RouteConfiguration">
@@ -9431,13 +9442,6 @@
             Represents an XML object converter.
             </summary>
     </member>
-    <member name="M:RestFoundation.ServiceProxy.ProxyXmlConvert.SerializeObject(System.Object)">
-      <summary>
-            Converts an object into XML.
-            </summary>
-      <param name="obj">The object to serialize.</param>
-      <returns>The <see cref="T:System.String" /> value containing the serialized object.</returns>
-    </member>
     <member name="M:RestFoundation.ServiceProxy.ProxyXmlConvert.SerializeObject(System.Object,System.Boolean)">
       <summary>
             Converts an object into XML with the provided formatting options.
@@ -10329,7 +10333,7 @@
             Contains settings used by XML formatters and results.
             </summary>
     </member>
-    <member name="P:RestFoundation.XmlFormatterSettings.NameSpace">
+    <member name="P:RestFoundation.XmlFormatterSettings.Namespace">
       <summary>
             Gets or sets the XML namespace
             </summary>
