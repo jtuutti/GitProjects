@@ -1568,6 +1568,11 @@
               Looks up a localized string similar to Resulting media type is not accepted by the client.
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.NonErrorHttpStatusCode">
+      <summary>
+              Looks up a localized string similar to The HTTP status code is not an error code..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.NonStringOutputType">
       <summary>
               Looks up a localized string similar to The output type is not a string..
@@ -8329,6 +8334,7 @@
             </summary>
       <param name="statusCode">The status code.</param>
       <param name="statusDescription">The status description.</param>
+      <exception cref="T:System.ArgumentException">If the status code is not an error code.</exception>
     </member>
     <member name="M:RestFoundation.HttpResponseException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
       <summary>
