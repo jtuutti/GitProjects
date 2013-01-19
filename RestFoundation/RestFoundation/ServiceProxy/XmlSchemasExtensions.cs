@@ -22,7 +22,7 @@ namespace RestFoundation.ServiceProxy
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class XmlSchemasExtensions
     {
-        private static readonly Regex arrayPattern = new Regex("ArrayOf([A-Za-z0-9_]+)", RegexOptions.Compiled);
+        private static readonly Regex arrayPattern = new Regex("ArrayOf([A-Za-z0-9_]+)", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         /// <summary>
         /// Serializes schemas into a list of <see cref="string"/> objects.

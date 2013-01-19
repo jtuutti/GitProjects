@@ -700,6 +700,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The HTTP status code is not an error code..
+        /// </summary>
+        internal static string NonErrorHttpStatusCode {
+            get {
+                return ResourceManager.GetString("NonErrorHttpStatusCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The output type is not a string..
         /// </summary>
         internal static string NonStringOutputType {

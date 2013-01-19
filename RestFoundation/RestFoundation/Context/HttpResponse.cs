@@ -213,7 +213,7 @@ namespace RestFoundation.Context
         /// <param name="statusCode">The status code.</param>
         public void SetStatus(HttpStatusCode statusCode)
         {
-            SetStatus(statusCode, String.Empty);
+            SetStatus(statusCode, PascalCaseToSentenceConverter.Convert(statusCode.ToString()));
         }
 
         /// <summary>

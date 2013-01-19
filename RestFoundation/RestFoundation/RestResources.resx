@@ -525,4 +525,8 @@
     <value>HTTP context has already been initialized.</value>
     <comment>HTTP context has already been initialized.</comment>
   </data>
+  <data name="NonErrorHttpStatusCode" xml:space="preserve">
+    <value>The HTTP status code is not an error code.</value>
+    <comment>The HTTP status code is not an error code.</comment>
+  </data>
 </root>

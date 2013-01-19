@@ -27,7 +27,7 @@ namespace RestFoundation.Collections.Specialized
         private const string Semicolon = ";";
         private const string Space = " ";
 
-        private static readonly Regex ValueGroupRegex = new Regex(@"=\s*\""([^\""]*[,;][^\""]*)+\""", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static readonly Regex valueGroupRegex = new Regex(@"=\s*\""([^\""]*[,;][^\""]*)+\""", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         private readonly IEnumerable<string> m_linkValues;
 
@@ -89,7 +89,7 @@ namespace RestFoundation.Collections.Specialized
             {
                 string linkValue = linkValues[i].TrimEnd(Comma[0], Space[0]);
 
-                linkValue = ValueGroupRegex.Replace(linkValue, m => m.Value.Replace(Comma, CommaPlaceholder).Replace(Semicolon, SemicolonPlaceholder));
+                linkValue = valueGroupRegex.Replace(linkValue, m => m.Value.Replace(Comma, CommaPlaceholder).Replace(Semicolon, SemicolonPlaceholder));
 
                 if (linkValue.IndexOf(Comma, StringComparison.Ordinal) >= 0)
                 {

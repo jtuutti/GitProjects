@@ -553,7 +553,7 @@ namespace RestFoundation
         /// <returns>The response status result</returns>
         public static StatusResult ResponseStatus(HttpStatusCode code)
         {
-            return ResponseStatus(code, String.Empty, null);
+            return ResponseStatus(code, null, null);
         }
 
         /// <summary>

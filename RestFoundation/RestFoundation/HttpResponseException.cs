@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using System.Runtime.Serialization;
+using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
@@ -19,6 +20,8 @@ namespace RestFoundation
     [ExcludeFromCodeCoverage]
     public sealed class HttpResponseException : Exception
     {
+        private const int MinErrorStatusCode = 400;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpResponseException"/> class.
         /// </summary>
@@ -39,7 +42,7 @@ namespace RestFoundation
         /// Initializes a new instance of the <see cref="HttpResponseException"/> class with the HTTP status code.
         /// </summary>
         /// <param name="statusCode">The status code.</param>
-        public HttpResponseException(HttpStatusCode statusCode) : this(statusCode, String.Empty)
+        public HttpResponseException(HttpStatusCode statusCode) : this(statusCode, PascalCaseToSentenceConverter.Convert(statusCode.ToString()))
         {
         }
 
@@ -48,9 +51,15 @@ namespace RestFoundation
         /// </summary>
         /// <param name="statusCode">The status code.</param>
         /// <param name="statusDescription">The status description.</param>
+        /// <exception cref="ArgumentException">If the status code is not an error code.</exception>
         public HttpResponseException(HttpStatusCode statusCode, string statusDescription) :
-            base(String.Format(CultureInfo.InvariantCulture, "Http Status Exception: ({0}) {1}", (int) statusCode, statusDescription ?? String.Empty))
+            base(String.Format(CultureInfo.InvariantCulture, "HTTP Status Exception: ({0}) {1}", (int) statusCode, statusDescription ?? String.Empty))
         {
+            if ((int) statusCode < MinErrorStatusCode)
+            {
+                throw new ArgumentException(RestResources.NonErrorHttpStatusCode, "statusCode");
+            }
+
             StatusCode = statusCode;
             StatusDescription = statusDescription ?? String.Empty;
         }

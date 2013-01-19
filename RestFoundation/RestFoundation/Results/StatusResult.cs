@@ -56,7 +56,14 @@ namespace RestFoundation.Results
                 context.Response.SetHeader(header.Key, header.Value);
             }
 
-            context.Response.SetStatus(StatusCode, StatusDescription ?? String.Empty);
+            if (!String.IsNullOrWhiteSpace(StatusDescription))
+            {
+                context.Response.SetStatus(StatusCode, StatusDescription);
+            }
+            else
+            {
+                context.Response.SetStatus(StatusCode);
+            }
         }
     }
 }

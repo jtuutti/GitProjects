@@ -99,6 +99,7 @@
     <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
     <Compile Include="Runtime\JsonSerializerFactory.cs" />
     <Compile Include="Runtime\MethodReturnTypeUnwrapper.cs" />
+    <Compile Include="Runtime\StatusCodeFormatter.cs" />
     <Compile Include="Runtime\RouteNameHelper.cs" />
     <Compile Include="Runtime\TaskExceptionUnwrapper.cs" />
     <Compile Include="Runtime\UrlParameter.cs" />
