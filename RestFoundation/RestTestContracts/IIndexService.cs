@@ -45,7 +45,7 @@ namespace RestTestContracts
         object Post(Person resource);
 
         [Url("index/{id}")]
-        Person Put([ParameterConstraint(@"\d{1,3}")] int? id, [ResourceParameter] Person personToUpdate);
+        Person Put([ParameterConstraint(@"\d{1,3}")] int? id, [Resource] Person personToUpdate);
 
         [Url("index/{id}")]
         Person Patch([ParameterConstraint(@"\d{1,3}")] int? id, Person resource);

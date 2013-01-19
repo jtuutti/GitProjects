@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace RestFoundation.Runtime
@@ -29,6 +30,27 @@ namespace RestFoundation.Runtime
             }
 
             return Rest.Configuration.Options.XmlSettings.Namespace;
+        }
+
+        public static void AddNamespaces(XmlDocument document)
+        {
+            string serviceNamespace = Rest.Configuration.Options.XmlSettings != null && !String.IsNullOrWhiteSpace(Rest.Configuration.Options.XmlSettings.Namespace) ?
+                                      Rest.Configuration.Options.XmlSettings.Namespace :
+                                      null;
+
+            if (String.IsNullOrWhiteSpace(serviceNamespace))
+            {
+                return;
+            }
+
+            XmlElement documentElement = document.DocumentElement;
+
+            if (documentElement == null)
+            {
+                return;
+            }
+
+            documentElement.SetAttribute("xmlns", serviceNamespace);
         }
     }
 }

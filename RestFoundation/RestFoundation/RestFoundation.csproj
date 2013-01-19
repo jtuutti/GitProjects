@@ -150,7 +150,7 @@
     <Compile Include="Behaviors\HttpsOnlyBehavior.cs" />
     <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
     <Compile Include="Behaviors\SecureServiceBehavior.cs" />
-    <Compile Include="ResourceParameterAttribute.cs" />
+    <Compile Include="ResourceAttribute.cs" />
     <Compile Include="Client\RestClientExtensions.cs" />
     <Compile Include="Client\RestClientFactory.cs" />
     <Compile Include="Client\IRestSerializerFactory.cs" />

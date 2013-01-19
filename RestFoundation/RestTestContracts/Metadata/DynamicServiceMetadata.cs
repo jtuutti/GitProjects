@@ -8,12 +8,12 @@ namespace RestTestContracts.Metadata
         public override void Initialize()
         {
             ForMethod(x => x.Post(null)).SetDescription("Makes use of dynamically typed resource capabilities")
-                                        .SetRequestResourceExample(new complexType
+                                        .SetRequestResourceExample(new ComplexType
                                         {
                                             Name = "Joe Doe",
                                             Age = 40
                                         })
-                                        .SetResponseResourceExample(new complexType
+                                        .SetResponseResourceExample(new ComplexType
                                         {
                                             Id = "2",
                                             Name = "Joe Doe",
@@ -23,7 +23,7 @@ namespace RestTestContracts.Metadata
 
         }
 
-        public class complexType
+        public class ComplexType
         {
             public string Id { get; set; }
             public string Name { get; set; }

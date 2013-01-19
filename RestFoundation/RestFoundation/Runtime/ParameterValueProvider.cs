@@ -19,7 +19,7 @@ namespace RestFoundation.Runtime
     /// Represents the default parameter value provider that tries to bind a value
     /// using an associated type binder. If no binder is associated with the parameter
     /// type, a route value is used. If a parameter is named "resource" or is
-    /// decorated with the <see cref="ResourceParameterAttribute"/>, a content
+    /// decorated with the <see cref="ResourceAttribute"/>, a content
     /// formatter is used to bind the data.
     /// </summary>
     public class ParameterValueProvider : IParameterValueProvider
@@ -241,7 +241,7 @@ namespace RestFoundation.Runtime
                 return true;
             }
 
-            if (Attribute.IsDefined(parameter, typeof(ResourceParameterAttribute), false))
+            if (Attribute.IsDefined(parameter, typeof(ResourceAttribute), false))
             {
                 return true;
             }

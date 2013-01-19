@@ -263,7 +263,7 @@ namespace RestFoundation.Runtime
         private static bool IsResource(ParameterInfo parameter)
         {
             return String.Equals(ParameterValueProvider.ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase) ||
-                   Attribute.IsDefined(parameter, typeof(ResourceParameterAttribute), false);
+                   Attribute.IsDefined(parameter, typeof(ResourceAttribute), false);
         }
         // ReSharper restore ConditionIsAlwaysTrueOrFalse
     }

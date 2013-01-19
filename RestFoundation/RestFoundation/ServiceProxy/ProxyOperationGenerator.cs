@@ -272,7 +272,7 @@ namespace RestFoundation.ServiceProxy
                 return true;
             }
 
-            return methodParameters.Any(p => Attribute.IsDefined(p, typeof(ResourceParameterAttribute), false));
+            return methodParameters.Any(p => Attribute.IsDefined(p, typeof(ResourceAttribute), false));
         }
 
         private static ProxyOperation GenerateProxyOperation(ServiceMethodMetadata metadata)

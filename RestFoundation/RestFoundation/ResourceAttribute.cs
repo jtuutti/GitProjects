@@ -11,7 +11,7 @@ namespace RestFoundation
     /// is allowed per a service method.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
-    public sealed class ResourceParameterAttribute : Attribute
+    public sealed class ResourceAttribute : Attribute
     {
     }
 }
