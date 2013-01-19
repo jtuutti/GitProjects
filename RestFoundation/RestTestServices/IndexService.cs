@@ -187,5 +187,20 @@ namespace RestTestServices
 
             return Result.ResponseStatus(HttpStatusCode.NoContent, String.Format("Person '{0}' deleted", name));
         }
+
+        public Person PostMultipleParameters(string name, int age, DateTime? timestamp)
+        {          
+            if (String.IsNullOrWhiteSpace(name))
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person's name provided");
+            }
+
+            return new Person
+            {
+                Name = name,
+                Age = age,
+                TimeStamp = timestamp.HasValue ? timestamp.Value : DateTime.MinValue
+            };
+        }
     }
 }

@@ -11,14 +11,6 @@ namespace RestFoundation
     public sealed class JsonFormatterSettings
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="JsonFormatterSettings"/> class.
-        /// </summary>
-        public JsonFormatterSettings()
-        {
-            UseLocalTimeZone = true;
-        }
-
-        /// <summary>
         /// Gets or sets an optional maximum depth of the object graph.
         /// </summary>
         public int? MaxDepth { get; set; }

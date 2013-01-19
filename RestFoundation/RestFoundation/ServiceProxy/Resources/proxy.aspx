@@ -89,47 +89,54 @@
             HeaderText.Value += String.Concat(header.Name, ": ", header.Value, Environment.NewLine);
         }
 
-        if (operation.HasResource && operation.RequestResourceExample != null)
+        if (operation.RequestResourceExample == null)
         {
-            if (operation.RequestResourceExample != null)
+            return;
+        }
+
+        object requestObj;
+
+        try
+        {
+            requestObj = operation.RequestResourceExample.Instance;
+        }
+        catch (Exception)
+        {
+            requestObj = null;
+        }
+
+        if (requestObj == null)
+        {
+            return;
+        }
+
+        if (!operation.HasResource)
+        {
+            RequestText.Value = requestObj.ToString();
+            return;
+        }
+
+        if (String.Equals("xml", format, StringComparison.OrdinalIgnoreCase))
+        {
+            try
             {
-                object requestObj;
-
-                try
-                {
-                    requestObj = operation.RequestResourceExample.Instance;
-                }
-                catch (Exception)
-                {
-                    requestObj = null;
-                }
-
-                if (requestObj != null)
-                {
-                    if (String.Equals("xml", format, StringComparison.OrdinalIgnoreCase))
-                    {
-                        try
-                        {
-                            RequestText.Value = ProxyXmlConvert.SerializeObject(requestObj, true);
-                        }
-                        catch (Exception)
-                        {
-                            RequestText.Value = String.Empty;
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            RequestText.Value = ProxyJsonConvert.SerializeObject(requestObj, true, false);
-                        }
-                        catch (Exception)
-                        {
-                            RequestText.Value = String.Empty;
-                        } 
-                    }
-                }
+                RequestText.Value = ProxyXmlConvert.SerializeObject(requestObj, true);
             }
+            catch (Exception)
+            {
+                RequestText.Value = String.Empty;
+            }
+        }
+        else
+        {
+            try
+            {
+                RequestText.Value = ProxyJsonConvert.SerializeObject(requestObj, true, false);
+            }
+            catch (Exception)
+            {
+                RequestText.Value = String.Empty;
+            } 
         }
     }
 

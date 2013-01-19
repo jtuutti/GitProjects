@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RestFoundation;
@@ -51,5 +52,8 @@ namespace RestTestContracts
 
         [Url("index/{name}")]
         StatusResult Delete(string name);
+
+        [Url("index/form-data")]
+        Person PostMultipleParameters([FromBody] string name, [FromBody] int age, [FromBody] DateTime? timestamp);
     }
 }

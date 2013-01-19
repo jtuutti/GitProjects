@@ -42,6 +42,10 @@ namespace RestTestContracts.Metadata
 
             ForMethod(x => x.Delete("John Doe")).SetDescription("Deletes an existing resource of type 'Person' by name")
                                                 .SetResponseStatus(HttpStatusCode.NoContent, "Resource is deleted");
+
+            ForMethod(x => x.PostMultipleParameters(null, 0, null)).SetDescription("Creates a new resource of type 'Person' from the body name-value attributes.")
+                                                                   .SetHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
+                                                                   .SetRequestResourceExample("name=John+Doe&age=30&timestamp=2012-12-31+22:15:00");
         }
 
         private static Person[] CreatePersonArrayExample()
