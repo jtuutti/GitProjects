@@ -61,11 +61,11 @@ namespace RestTestServices
             return Result.Feed(feed, feedFormat);
         }
 
-        public FileResultBase FileDownload()
+        public FileResultBase FileDownload(string fileName)
         {
             return new FilePathResult
             {
-                FilePath = @"D:\american_pie_5.avi",
+                FilePath = fileName,
                 ContentType = "video/x-ms-wmv",
                 ContentDisposition = "attachment; filename=movie.avi"
             };

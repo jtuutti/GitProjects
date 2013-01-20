@@ -2,7 +2,9 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Net;
 using System.Web.Routing;
 using RestFoundation.Collections;
 using RestFoundation.Collections.Concrete;
@@ -21,6 +23,7 @@ namespace RestFoundation.Context
         private const string AjaxHeaderName = "X-Requested-With";
         private const string AjaxHeaderValue = "XMLHttpRequest";
         private const string ContextContainerKey = "REST_Context";
+        private const string FormDataMediaType = "application/x-www-form-urlencoded";
 
         /// <summary>
         /// Gets a value indicating whether the request was initiated through AJAX.
@@ -154,6 +157,25 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
+        /// Gets the form name/value collection.
+        /// </summary>
+        [SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations",
+                         Justification = "This is a special type of exception that will be handled by the HTTP module.")]
+        public IStringValueCollection Form
+        {
+            get
+            {
+                if (ContextContainer.Form == null &&
+                    (Context.Request.ContentType == null || Context.Request.ContentType.IndexOf(FormDataMediaType, StringComparison.OrdinalIgnoreCase) < 0))
+                {
+                    throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.UnsupportedFormData);
+                }
+
+                return ContextContainer.Form ?? (ContextContainer.Form = new StringValueCollection(Context.Request.Form));
+            }
+        }
+
+        /// <summary>
         /// Gets the server variable collection.
         /// </summary>
         public IServerVariableCollection ServerVariables
@@ -239,6 +261,7 @@ namespace RestFoundation.Context
             public IObjectValueCollection RouteValues { get; set; }
             public IHeaderCollection Headers { get; set; }
             public IStringValueCollection QueryString { get; set; }
+            public IStringValueCollection Form { get; set; }
             public IServerVariableCollection ServerVariables { get; set; }
             public ICookieValueCollection Cookies { get; set; }
         }

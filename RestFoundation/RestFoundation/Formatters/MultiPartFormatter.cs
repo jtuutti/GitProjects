@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Net;
 using System.Web;
 using RestFoundation.Results;
@@ -36,20 +35,22 @@ namespace RestFoundation.Formatters
                 throw new ArgumentNullException("objectType");
             }
 
-            if (objectType != typeof(IEnumerable<IUploadedFile>) && objectType != typeof(ICollection<IUploadedFile>))
+            if (objectType == typeof(IUploadedFile))
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.InvalidIUploadedFileCollectionType);
+                object uploadedFile;
+
+                if (TryGenerateUploadedFile(context, out uploadedFile))
+                {
+                    return uploadedFile;
+                }
             }
 
-            var fileList = new List<IUploadedFile>();
-            HttpContextBase httpContext = context.GetHttpContext();
-
-            foreach (string fileName in httpContext.Request.Files.AllKeys)
+            if (objectType == typeof(IEnumerable<IUploadedFile>) || objectType.GetInterface(typeof(IEnumerable<IUploadedFile>).Name) != null)
             {
-                fileList.Add(new UploadedFile(httpContext.Request.Files.Get(fileName)));
+                return GenerateUploadedFileCollection(objectType, context);
             }
 
-            return new ReadOnlyCollection<IUploadedFile>(fileList);
+            throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.InvalidUploadedFileType);
         }
 
         /// <summary>
@@ -63,6 +64,47 @@ namespace RestFoundation.Formatters
         public virtual IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj)
         {
             throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.MissingOrInvalidAcceptType);
+        }
+
+        private static bool TryGenerateUploadedFile(IServiceContext context, out object uploadedFile)
+        {
+            HttpContextBase httpContext = context.GetHttpContext();
+            HttpPostedFileBase file = null;
+
+            foreach (string fileName in httpContext.Request.Files.AllKeys)
+            {
+                HttpPostedFileBase currentFile = httpContext.Request.Files.Get(fileName);
+
+                if (currentFile == null || String.IsNullOrEmpty(currentFile.FileName))
+                {
+                    continue;
+                }
+
+                file = currentFile;
+                break;
+            }
+
+            if (file == null)
+            {
+                uploadedFile = null;
+                return false;
+            }
+
+            uploadedFile = new UploadedFile(file);
+            return true;
+        }
+
+        private static object GenerateUploadedFileCollection(Type collectionType, IServiceContext context)
+        {
+            HttpContextBase httpContext = context.GetHttpContext();
+            var fileList = !collectionType.IsInterface ? (ICollection<IUploadedFile>) Activator.CreateInstance(collectionType) : new List<IUploadedFile>();
+
+            foreach (string fileName in httpContext.Request.Files.AllKeys)
+            {
+                fileList.Add(new UploadedFile(httpContext.Request.Files.Get(fileName)));
+            }
+
+            return fileList;
         }
     }
 }

@@ -246,7 +246,8 @@ namespace RestFoundation.Runtime
                 return true;
             }
 
-            if (parameter.ParameterType == typeof(IEnumerable<IUploadedFile>) || parameter.ParameterType == typeof(ICollection<IUploadedFile>))
+            if (parameter.ParameterType == typeof(IUploadedFile) || parameter.ParameterType == typeof(IEnumerable<IUploadedFile>) ||
+                parameter.ParameterType.GetInterface(typeof(IEnumerable<IUploadedFile>).Name) != null)
             {
                 return true;
             }

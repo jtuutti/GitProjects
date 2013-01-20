@@ -268,15 +268,6 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FromBody type binder requires POST, PUT or PATCH HTTP method..
-        /// </summary>
-        internal static string InvalidHttpMethodForFromBodyBinder {
-            get {
-                return ResourceManager.GetString("InvalidHttpMethodForFromBodyBinder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A resource cannot be set for the current HTTP method..
         /// </summary>
         internal static string InvalidHttpMethodForResource {
@@ -291,15 +282,6 @@ namespace RestFoundation {
         internal static string InvalidIndexFileException {
             get {
                 return ResourceManager.GetString("InvalidIndexFileException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Object type must be IEnumerable&lt;IUploadedFile&gt; or ICollection&lt;IUploadedFile&gt; for the media type..
-        /// </summary>
-        internal static string InvalidIUploadedFileCollectionType {
-            get {
-                return ResourceManager.GetString("InvalidIUploadedFileCollectionType", resourceCulture);
             }
         }
         
@@ -462,6 +444,15 @@ namespace RestFoundation {
         internal static string InvalidStateOfReturnedTask {
             get {
                 return ResourceManager.GetString("InvalidStateOfReturnedTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The resource type must be IUploadedFile or a collection that implements IEnumerable&lt;IUploadedFile&gt;..
+        /// </summary>
+        internal static string InvalidUploadedFileType {
+            get {
+                return ResourceManager.GetString("InvalidUploadedFileType", resourceCulture);
             }
         }
         
@@ -912,6 +903,15 @@ namespace RestFoundation {
         internal static string UnsupportedContentLanguage {
             get {
                 return ResourceManager.GetString("UnsupportedContentLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The current service method does not support HTTP body form data..
+        /// </summary>
+        internal static string UnsupportedFormData {
+            get {
+                return ResourceManager.GetString("UnsupportedFormData", resourceCulture);
             }
         }
         

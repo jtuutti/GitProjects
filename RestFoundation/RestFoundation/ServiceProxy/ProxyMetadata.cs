@@ -224,6 +224,25 @@ namespace RestFoundation.ServiceProxy
         }
 
         /// <summary>
+        /// Returns a stub value for the argument of the specified type.
+        /// </summary>
+        /// <typeparam name="TArgument">The argument type.</typeparam>
+        /// <returns>A stub value for the argument type.</returns>
+        public TArgument Arg<TArgument>()
+        {
+            return default(TArgument);
+        }
+
+        /// <summary>
+        /// Returns a stub value for a dynamic argument.
+        /// </summary>
+        /// <returns>A stubbed dynamic value.</returns>
+        public object DynamicArg()
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Initializes the service contract metadata.
         /// </summary>
         public abstract void Initialize();

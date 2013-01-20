@@ -285,9 +285,9 @@
     <value>No supported media type was provided in the Content-Type header.</value>
     <comment>No supported media type was provided in the Content-Type header.</comment>
   </data>
-  <data name="InvalidIUploadedFileCollectionType" xml:space="preserve">
-    <value>Object type must be IEnumerable&lt;IUploadedFile&gt; or ICollection&lt;IUploadedFile&gt; for the media type.</value>
-    <comment>Object type must be IEnumerable&lt;IUploadedFile&gt; or ICollection&lt;IUploadedFile&gt; for the media type.</comment>
+  <data name="InvalidUploadedFileType" xml:space="preserve">
+    <value>The resource type must be IUploadedFile or a collection that implements IEnumerable&lt;IUploadedFile&gt;.</value>
+    <comment>The resource type must be IUploadedFile or a collection that implements IEnumerable&lt;IUploadedFile&gt;.</comment>
   </data>
   <data name="InvalidFilePathOrUrl" xml:space="preserve">
     <value>No valid file path/URL provided.</value>
@@ -477,10 +477,6 @@
     <value>Invalid hash key provided.</value>
     <comment>Invalid hash key provided.</comment>
   </data>
-  <data name="InvalidHttpMethodForFromBodyBinder" xml:space="preserve">
-    <value>FromBody type binder requires POST, PUT or PATCH HTTP method.</value>
-    <comment>FromBody type binder requires POST, PUT or PATCH HTTP method.</comment>
-  </data>
   <data name="UnsupportedFromHeaderBinderParameter" xml:space="preserve">
     <value>Array parameters are not supported by the FromHeader type binder.</value>
     <comment>Array parameters are not supported by the FromHeader type binder.</comment>
@@ -528,5 +524,9 @@
   <data name="NonErrorHttpStatusCode" xml:space="preserve">
     <value>The HTTP status code is not an error code.</value>
     <comment>The HTTP status code is not an error code.</comment>
+  </data>
+  <data name="UnsupportedFormData" xml:space="preserve">
+    <value>The current service method does not support HTTP body form data.</value>
+    <comment>The current service method does not support HTTP body form data.</comment>
   </data>
 </root>

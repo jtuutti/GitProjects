@@ -41,7 +41,7 @@ namespace RestFoundation.Results
 
             if (file == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.InvalidFilePathOrUrl);
+                throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.InvalidFilePathOrUrl);
             }
 
             context.Response.Output.Buffer = false;

@@ -18,7 +18,7 @@ namespace RestTestContracts
         FeedResult Feed(string format);
 
         [Url("index/download", HttpMethod.Get)]
-        FileResultBase FileDownload();
+        FileResultBase FileDownload([FromUri] string fileName);
 
         [Url("index/upload", HttpMethod.Post)]
         ContentResult FileUpload(ICollection<IUploadedFile> files);

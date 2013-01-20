@@ -11,6 +11,7 @@ namespace RestFoundation.Context
     internal static class HttpContextExtensions
     {
         private const string HttpMethodOverrideHeader = "X-HTTP-Method-Override";
+        private const string FormDataMediaType = "application/x-www-form-urlencoded";
 
         public static HttpMethod GetOverriddenHttpMethod(this HttpContextBase context)
         {
@@ -26,7 +27,7 @@ namespace RestFoundation.Context
                 httpMethodString = context.Request.Headers.Get(HttpMethodOverrideHeader);
 
                 if (String.IsNullOrEmpty(httpMethodString) && context.Request.AcceptTypes != null &&
-                    context.Request.AcceptTypes.Contains("application/x-www-form-urlencoded", StringComparer.OrdinalIgnoreCase))
+                    context.Request.AcceptTypes.Contains(FormDataMediaType, StringComparer.OrdinalIgnoreCase))
                 {
                     httpMethodString = context.Request.Form.Get(HttpMethodOverrideHeader);
                 }

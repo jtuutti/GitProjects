@@ -67,6 +67,11 @@ namespace RestFoundation
         IStringValueCollection QueryString { get; }
 
         /// <summary>
+        /// Gets the form name/value collection.
+        /// </summary>
+        IStringValueCollection Form { get; }
+
+        /// <summary>
         /// Gets the server variable collection.
         /// </summary>
         IServerVariableCollection ServerVariables { get; }

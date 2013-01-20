@@ -13,6 +13,8 @@ namespace RestFoundation.TypeBinders
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
     public sealed class FromBodyAttribute : TypeBinderAttribute
     {
+        private const string FormDataMediaType = "application/x-www-form-urlencoded";
+
         /// <summary>
         /// Gets or sets a name to resolve from the HTTP body.
         /// If this value is not set, the parameter name will be used.
@@ -43,9 +45,9 @@ namespace RestFoundation.TypeBinders
                 throw new ArgumentNullException("context");
             }
 
-            if (context.Request.Method != HttpMethod.Post && context.Request.Method != HttpMethod.Put && context.Request.Method != HttpMethod.Patch)
+            if (context.Request.Headers.ContentType == null || context.Request.Headers.ContentType.IndexOf(FormDataMediaType, StringComparison.OrdinalIgnoreCase) < 0)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.InvalidHttpMethodForFromBodyBinder);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.UnsupportedFormData);
             }
 
             if (!String.IsNullOrWhiteSpace(Name))
