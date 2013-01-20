@@ -29,15 +29,15 @@ namespace SampleRestService.Contracts.Metadata
             ForMethod(x => x.GetAll()).SetDescription("Gets all products")
                                       .SetResponseResourceExample(GetProductArray());
 
-            ForMethod(x => x.Post(null)).SetDescription("Creates a new product")
-                                        .SetRequestResourceExample(CreateNewProduct())
-                                        .SetResponseResourceExample(GetProduct())
-                                        .SetResponseStatus(HttpStatusCode.Created, "Product created");
+            ForMethod(x => x.Post(Arg<Product>())).SetDescription("Creates a new product")
+                                                  .SetRequestResourceExample(CreateNewProduct())
+                                                  .SetResponseResourceExample(GetProduct())
+                                                  .SetResponseStatus(HttpStatusCode.Created, "Product created");
 
-            ForMethod(x => x.Put(1, null)).SetDescription("Updates a product")
-                                          .SetRequestResourceExample(GetProduct())
-                                          .SetResponseResourceExample(GetProduct())
-                                          .SetResponseStatus(HttpStatusCode.OK, "Product updated");
+            ForMethod(x => x.Put(1, Arg<Product>())).SetDescription("Updates a product")
+                                                    .SetRequestResourceExample(GetProduct())
+                                                    .SetResponseResourceExample(GetProduct())
+                                                    .SetResponseStatus(HttpStatusCode.OK, "Product updated");
 
             ForMethod(x => x.PatchStockStatus(1, true)).SetDescription("Modifies product stock status")
                                                        .SetResponseResourceExample(GetProduct())
@@ -47,7 +47,7 @@ namespace SampleRestService.Contracts.Metadata
                                            .SetResponseStatus(HttpStatusCode.NoContent, "Product deleted");
         }
 
-        private Product CreateNewProduct()
+        private static Product CreateNewProduct()
         {
             return new Product
             {
