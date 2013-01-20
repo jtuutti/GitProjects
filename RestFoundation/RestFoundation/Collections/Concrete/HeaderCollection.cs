@@ -26,8 +26,11 @@ namespace RestFoundation.Collections.Concrete
 
         internal HeaderCollection(NameValueCollection values) : base(values)
         {
+            AccessControlRequestHeaders = TryGet("Access-Control-Request-Headers");
+            AccessControlRequestMethod = TryGet("Access-Control-Request-Method");
             Authorization = TryGet("Authorization");
             Host = TryGet("Host");
+            Origin = TryGet("Origin");
             Referrer = TryGet("Referrer");
             UserAgent = TryGet("User-Agent");
 
@@ -103,6 +106,16 @@ namespace RestFoundation.Collections.Concrete
         public decimal AcceptVersion { get; protected set; }
 
         /// <summary>
+        /// Gets the Access-Control-Request-Headers header value.
+        /// </summary>
+        public string AccessControlRequestHeaders { get; protected set; }
+
+        /// <summary>
+        /// Gets the Access-Control-Request-Method header value.
+        /// </summary>
+        public string AccessControlRequestMethod { get; protected set; }
+
+        /// <summary>
         /// Gets the Content-Type header value.
         /// </summary>
         public string ContentType { get; protected set; }
@@ -151,6 +164,11 @@ namespace RestFoundation.Collections.Concrete
         /// Gets the Host header value.
         /// </summary>
         public string Host { get; protected set; }
+
+        /// <summary>
+        /// Gets the Origin header value.
+        /// </summary>
+        public string Origin { get; protected set; }
 
         /// <summary>
         /// Gets the Referrer header value.

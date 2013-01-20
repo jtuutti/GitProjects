@@ -14,6 +14,31 @@ namespace RestFoundation
         public readonly string AcceptRanges = "Accept-Ranges";
 
         /// <summary>
+        /// Access-Control-Allow-Credentials
+        /// </summary>
+        public readonly string AccessControlAllowCredentials = "Access-Control-Allow-Credentials";
+
+        /// <summary>
+        /// Access-Control-Allow-Headers
+        /// </summary>
+        public readonly string AccessControlAllowHeaders = "Access-Control-Allow-Headers";
+
+        /// <summary>
+        /// Access-Control-Allow-Methods
+        /// </summary>
+        public readonly string AccessControlAllowMethods = "Access-Control-Allow-Methods";
+
+        /// <summary>
+        /// Access-Control-Allow-Origin
+        /// </summary>
+        public readonly string AccessControlAllowOrigin = "Access-Control-Allow-Origin";
+
+        /// <summary>
+        /// Access-Control-Max-Age
+        /// </summary>
+        public readonly string AccessControlMaxAge = "Access-Control-Max-Age";
+
+        /// <summary>
         /// Content-Length
         /// </summary>
         public readonly string ContentLength = "Content-Length";

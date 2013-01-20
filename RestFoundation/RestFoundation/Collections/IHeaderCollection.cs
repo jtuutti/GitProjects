@@ -70,6 +70,16 @@ namespace RestFoundation.Collections
         decimal AcceptVersion { get; }
 
         /// <summary>
+        /// Gets the Access-Control-Request-Headers header value.
+        /// </summary>
+        string AccessControlRequestHeaders { get; }
+
+        /// <summary>
+        /// Gets the Access-Control-Request-Method header value.
+        /// </summary>
+        string AccessControlRequestMethod { get; }
+
+        /// <summary>
         /// Gets the Content-Type header value.
         /// </summary>
         string ContentType { get; }
@@ -118,6 +128,11 @@ namespace RestFoundation.Collections
         /// Gets the Host header value.
         /// </summary>
         string Host { get; }
+
+        /// <summary>
+        /// Gets the Origin header value.
+        /// </summary>
+        string Origin { get; }
 
         /// <summary>
         /// Gets the Referrer header value.

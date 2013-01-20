@@ -120,7 +120,7 @@ namespace RestFoundation.UnitTesting
             ValidateContext();
 
             TestHttpContext.Context.Request.ContentEncoding = contentEncoding;
-            TestHttpContext.Context.Request.Headers["Content-Language"] = contentEncoding.BodyName;
+            TestHttpContext.Context.Request.Headers["Content-Language"] = contentEncoding.WebName;
         }
 
         /// <summary>
