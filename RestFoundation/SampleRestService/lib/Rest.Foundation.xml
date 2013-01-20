@@ -672,11 +672,6 @@
             Contains settings used by JSON formatters and results.
             </summary>
     </member>
-    <member name="M:RestFoundation.JsonFormatterSettings.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.JsonFormatterSettings" /> class.
-            </summary>
-    </member>
     <member name="P:RestFoundation.JsonFormatterSettings.MaxDepth">
       <summary>
             Gets or sets an optional maximum depth of the object graph.
@@ -1328,11 +1323,6 @@
               Looks up a localized string similar to Invalid hash key provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidHttpMethodForFromBodyBinder">
-      <summary>
-              Looks up a localized string similar to FromBody type binder requires POST, PUT or PATCH HTTP method..
-            </summary>
-    </member>
     <member name="P:RestFoundation.RestResources.InvalidHttpMethodForResource">
       <summary>
               Looks up a localized string similar to A resource cannot be set for the current HTTP method..
@@ -1341,11 +1331,6 @@
     <member name="P:RestFoundation.RestResources.InvalidIndexFileException">
       <summary>
               Looks up a localized string similar to Index files can only have .html or .htm extensions..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.RestResources.InvalidIUploadedFileCollectionType">
-      <summary>
-              Looks up a localized string similar to Object type must be IEnumerable&lt;IUploadedFile&gt; or ICollection&lt;IUploadedFile&gt; for the media type..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidJsonPCallback">
@@ -1436,6 +1421,11 @@
     <member name="P:RestFoundation.RestResources.InvalidStateOfReturnedTask">
       <summary>
               Looks up a localized string similar to The returned task result cannot be started inside the service. Make sure to define tasks returned from services using the new Task&lt;T&gt;() constructor instead of the Task&lt;T&gt;.Factory.StartNew() method..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.InvalidUploadedFileType">
+      <summary>
+              Looks up a localized string similar to The resource type must be IUploadedFile or a collection that implements IEnumerable&lt;IUploadedFile&gt;..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidUpperBoundAddress">
@@ -1686,6 +1676,11 @@
     <member name="P:RestFoundation.RestResources.UnsupportedContentLanguage">
       <summary>
               Looks up a localized string similar to The content language provided is not supported..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.UnsupportedFormData">
+      <summary>
+              Looks up a localized string similar to The current service method does not support HTTP body form data..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.UnsupportedFromHeaderBinderParameter">
@@ -3229,6 +3224,31 @@
             Accept-Ranges
             </summary>
     </member>
+    <member name="F:RestFoundation.ResponseHeaderNames.AccessControlAllowCredentials">
+      <summary>
+            Access-Control-Allow-Credentials
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ResponseHeaderNames.AccessControlAllowHeaders">
+      <summary>
+            Access-Control-Allow-Headers
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ResponseHeaderNames.AccessControlAllowMethods">
+      <summary>
+            Access-Control-Allow-Methods
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ResponseHeaderNames.AccessControlAllowOrigin">
+      <summary>
+            Access-Control-Allow-Origin
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ResponseHeaderNames.AccessControlMaxAge">
+      <summary>
+            Access-Control-Max-Age
+            </summary>
+    </member>
     <member name="F:RestFoundation.ResponseHeaderNames.ContentLength">
       <summary>
             Content-Length
@@ -3371,7 +3391,7 @@
       <param name="behaviorContext">The "method executing" behavior context.</param>
       <returns>A service method action.</returns>
     </member>
-    <member name="T:RestFoundation.ResourceParameterAttribute">
+    <member name="T:RestFoundation.ResourceAttribute">
       <summary>
             Represents a service contract method parameter attribute that indicates that the parameter
             is used to bind the resource for POST, PATCH and PUT HTTP methods. Only one resource parameter
@@ -4122,6 +4142,16 @@
             Accept header value. This value defaults to 0 if no version was specified.
             </summary>
     </member>
+    <member name="P:RestFoundation.Collections.IHeaderCollection.AccessControlRequestHeaders">
+      <summary>
+            Gets the Access-Control-Request-Headers header value.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Collections.IHeaderCollection.AccessControlRequestMethod">
+      <summary>
+            Gets the Access-Control-Request-Method header value.
+            </summary>
+    </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.ContentType">
       <summary>
             Gets the Content-Type header value.
@@ -4170,6 +4200,11 @@
     <member name="P:RestFoundation.Collections.IHeaderCollection.Host">
       <summary>
             Gets the Host header value.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Collections.IHeaderCollection.Origin">
+      <summary>
+            Gets the Origin header value.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.Referrer">
@@ -4243,6 +4278,16 @@
             Accept header value. This value defaults to 0 if no version was specified.
             </summary>
     </member>
+    <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AccessControlRequestHeaders">
+      <summary>
+            Gets the Access-Control-Request-Headers header value.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AccessControlRequestMethod">
+      <summary>
+            Gets the Access-Control-Request-Method header value.
+            </summary>
+    </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.ContentType">
       <summary>
             Gets the Content-Type header value.
@@ -4291,6 +4336,11 @@
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.Host">
       <summary>
             Gets the Host header value.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.Origin">
+      <summary>
+            Gets the Origin header value.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.Referrer">
@@ -5206,6 +5256,19 @@
       <param name="serviceMethod">The service method.</param>
       <returns>The service method metadata.</returns>
     </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.Arg``1">
+      <summary>
+            Returns a stub value for the argument of the specified type.
+            </summary>
+      <typeparam name="TArgument">The argument type.</typeparam>
+      <returns>A stub value for the argument type.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.DynamicArg">
+      <summary>
+            Returns a stub value for a dynamic argument.
+            </summary>
+      <returns>A stubbed dynamic value.</returns>
+    </member>
     <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.Initialize">
       <summary>
             Initializes the service contract metadata.
@@ -6007,55 +6070,73 @@
             Destroys the current HTTP context.
             </summary>
     </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.SetAcceptTypes(System.String[])">
+      <summary>
+            Sets the provided accept media types to the generated HTTP context.
+            </summary>
+      <param name="acceptTypes">The accepted media types.</param>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.SetContentType(System.String)">
+      <summary>
+            Sets the provided content type to the generated HTTP context.
+            </summary>
+      <param name="contentType">The content type.</param>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.SetContentEncoding(System.Text.Encoding)">
+      <summary>
+            Sets the provided content encoding to the generated HTTP context.
+            </summary>
+      <param name="contentEncoding">The content encoding.</param>
+    </member>
     <member name="M:RestFoundation.UnitTesting.MockContextManager.SetHeader(System.String,System.String)">
       <summary>
-            Sets a header with the provided name and value to the generated HTTP Context.
+            Sets a header with the provided name and value to the generated HTTP context.
             </summary>
       <param name="name">The header name.</param>
       <param name="value">The header value.</param>
     </member>
     <member name="M:RestFoundation.UnitTesting.MockContextManager.SetHeaders(System.Collections.Specialized.NameValueCollection)">
       <summary>
-            Sets the provided headers to the generated HTTP Context.
+            Sets the provided headers to the generated HTTP context.
             </summary>
       <param name="headers">The headers.</param>
     </member>
     <member name="M:RestFoundation.UnitTesting.MockContextManager.SetFormData(System.String,System.String)">
       <summary>
-            Sets a form data item with the provided name and value to the generated HTTP Context.
+            Sets a form data item with the provided name and value to the generated HTTP context.
             </summary>
       <param name="name">The form data item name.</param>
       <param name="value">The form data item value.</param>
     </member>
     <member name="M:RestFoundation.UnitTesting.MockContextManager.SetFormData(System.Collections.Specialized.NameValueCollection)">
       <summary>
-            Sets the provided form data collection to the generated HTTP Context.
+            Sets the provided form data collection to the generated HTTP context.
             </summary>
       <param name="formData">The form data collection.</param>
     </member>
     <member name="M:RestFoundation.UnitTesting.MockContextManager.SetQuery(System.String,System.String)">
       <summary>
-            Sets a query string item with the provided name and value to the generated HTTP Context.
+            Sets a query string item with the provided name and value to the generated HTTP context.
             </summary>
       <param name="name">The query string name.</param>
       <param name="value">The query string value.</param>
     </member>
     <member name="M:RestFoundation.UnitTesting.MockContextManager.SetQuery(System.Collections.Specialized.NameValueCollection)">
       <summary>
-            Sets the provided query string to the generated HTTP Context.
+            Sets the provided query string to the generated HTTP context.
             </summary>
       <param name="queryString">The query string keys and values.</param>
     </member>
     <member name="M:RestFoundation.UnitTesting.MockContextManager.SetServerVariable(System.String,System.String)">
       <summary>
-            Sets a server variable with the provided name and value to the generated HTTP Context.
+            Sets a server variable with the provided name and value to the generated HTTP context.
             </summary>
       <param name="name">The server variable name.</param>
       <param name="value">The server variable value.</param>
     </member>
     <member name="M:RestFoundation.UnitTesting.MockContextManager.SetServerVariables(System.Collections.Specialized.NameValueCollection)">
       <summary>
-            Sets the provided server variable to the generated HTTP Context.
+            Sets the provided server variable to the generated HTTP context.
             </summary>
       <param name="queryString">The server variable keys and values.</param>
     </member>
@@ -7109,7 +7190,7 @@
             Represents the default parameter value provider that tries to bind a value
             using an associated type binder. If no binder is associated with the parameter
             type, a route value is used. If a parameter is named "resource" or is
-            decorated with the <see cref="T:RestFoundation.ResourceParameterAttribute" />, a content
+            decorated with the <see cref="T:RestFoundation.ResourceAttribute" />, a content
             formatter is used to bind the data.
             </summary>
     </member>
@@ -8835,6 +8916,11 @@
             Gets the query string collection.
             </summary>
     </member>
+    <member name="P:RestFoundation.IHttpRequest.Form">
+      <summary>
+            Gets the form name/value collection.
+            </summary>
+    </member>
     <member name="P:RestFoundation.IHttpRequest.ServerVariables">
       <summary>
             Gets the server variable collection.
@@ -8903,6 +8989,11 @@
     <member name="P:RestFoundation.Context.HttpRequest.QueryString">
       <summary>
             Gets the query string collection.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Context.HttpRequest.Form">
+      <summary>
+            Gets the form name/value collection.
             </summary>
     </member>
     <member name="P:RestFoundation.Context.HttpRequest.ServerVariables">
