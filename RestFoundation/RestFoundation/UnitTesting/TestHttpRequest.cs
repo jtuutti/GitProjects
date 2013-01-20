@@ -23,6 +23,7 @@ namespace RestFoundation.UnitTesting
         private readonly NameValueCollection m_serverVariables;
         private readonly Stream m_body;
         private Stream m_filter;
+        private string[] m_acceptTypes;
         private bool m_isDisposed;
 
         internal TestHttpRequest(string virtualUrl, string httpMethod)
@@ -50,12 +51,21 @@ namespace RestFoundation.UnitTesting
             m_serverVariables = new NameValueCollection();
             m_body = new MemoryStream();
             m_filter = new MemoryStream();
+            m_acceptTypes = new string[0];
 
             PopulateServerVariables();
         }
 
         public override Encoding ContentEncoding { get; set; }
         public override string ContentType { get; set; }
+
+        public override string[] AcceptTypes
+        {
+            get
+            {
+                return m_acceptTypes;
+            }
+        }
 
         public override bool IsLocal
         {
@@ -98,14 +108,6 @@ namespace RestFoundation.UnitTesting
             set
             {
                 m_filter = value;
-            }
-        }
-
-        public override string[] AcceptTypes
-        {
-            get
-            {
-                return new string[0];
             }
         }
 
@@ -261,6 +263,16 @@ namespace RestFoundation.UnitTesting
             m_body.Dispose();
             m_filter.Dispose();
             m_isDisposed = true;
+        }
+
+        internal void SetAcceptTypes(string[] acceptTypes)
+        {
+            if (acceptTypes == null)
+            {
+                throw new ArgumentNullException("acceptTypes");
+            }
+
+            m_acceptTypes = acceptTypes;
         }
 
         private NameValueCollection GetCookies()

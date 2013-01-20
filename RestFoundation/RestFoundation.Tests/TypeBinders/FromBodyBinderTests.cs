@@ -27,6 +27,8 @@ namespace RestFoundation.Tests.TypeBinders
         [Test]
         public void Test_Object_Binding()
         {
+            MockContextManager.SetContentType("application/x-www-form-urlencoded; charset=utf-8");
+
             MockContextManager.SetFormData("name", "Dmitry");
             MockContextManager.SetFormData("age", "15");
             MockContextManager.SetFormData("id", Guid.NewGuid().ToString());
@@ -53,6 +55,8 @@ namespace RestFoundation.Tests.TypeBinders
         [Test]
         public void Test_Array_Binding()
         {
+            MockContextManager.SetContentType("application/x-www-form-urlencoded; charset=utf-8");
+
             MockContextManager.SetFormData("id", "5");
             MockContextManager.SetFormData("id", "10");
             MockContextManager.SetFormData("id", "20");

@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Specialized;
+using System.Text;
 
 namespace RestFoundation.UnitTesting
 {
@@ -68,7 +69,62 @@ namespace RestFoundation.UnitTesting
         }
 
         /// <summary>
-        /// Sets a header with the provided name and value to the generated HTTP Context.
+        /// Sets the provided accept media types to the generated HTTP context.
+        /// </summary>
+        /// <param name="acceptTypes">The accepted media types.</param>
+        public static void SetAcceptTypes(string[] acceptTypes)
+        {
+            if (acceptTypes == null)
+            {
+                throw new ArgumentNullException("acceptTypes");
+            }
+
+            ValidateContext();
+
+            ((TestHttpRequest) TestHttpContext.Context.Request).SetAcceptTypes(acceptTypes);
+
+            if (acceptTypes.Length > 0)
+            {
+                TestHttpContext.Context.Request.Headers["Accept"] = String.Join(",", acceptTypes);
+            }
+        }
+
+        /// <summary>
+        /// Sets the provided content type to the generated HTTP context.
+        /// </summary>
+        /// <param name="contentType">The content type.</param>
+        public static void SetContentType(string contentType)
+        {
+            if (String.IsNullOrEmpty(contentType))
+            {
+                throw new ArgumentNullException("contentType");
+            }
+
+            ValidateContext();
+
+            TestHttpContext.Context.Request.ContentType = contentType;
+            TestHttpContext.Context.Request.Headers["Content-Type"] = contentType;
+        }
+
+        /// <summary>
+        /// Sets the provided content encoding to the generated HTTP context.
+        /// </summary>
+        /// <param name="contentEncoding">The content encoding.</param>
+        public static void SetContentEncoding(Encoding contentEncoding)
+        {
+            if (contentEncoding == null)
+            {
+                throw new ArgumentNullException("contentEncoding");
+            }
+
+            ValidateContext();
+
+            TestHttpContext.Context.Request.ContentEncoding = contentEncoding;
+            TestHttpContext.Context.Request.Headers["Content-Language"] = contentEncoding.BodyName;
+        }
+
+        /// <summary>
+        /// Sets a header with the provided name and value to the generated HTTP context.
         /// </summary>
         /// <param name="name">The header name.</param>
         /// <param name="value">The header value.</param>
@@ -85,7 +141,7 @@ namespace RestFoundation.UnitTesting
         }
 
         /// <summary>
-        /// Sets the provided headers to the generated HTTP Context.
+        /// Sets the provided headers to the generated HTTP context.
         /// </summary>
         /// <param name="headers">The headers.</param>
         public static void SetHeaders(NameValueCollection headers)
@@ -101,7 +157,7 @@ namespace RestFoundation.UnitTesting
         }
 
         /// <summary>
-        /// Sets a form data item with the provided name and value to the generated HTTP Context.
+        /// Sets a form data item with the provided name and value to the generated HTTP context.
         /// </summary>
         /// <param name="name">The form data item name.</param>
         /// <param name="value">The form data item value.</param>
@@ -118,7 +174,7 @@ namespace RestFoundation.UnitTesting
         }
 
         /// <summary>
-        /// Sets the provided form data collection to the generated HTTP Context.
+        /// Sets the provided form data collection to the generated HTTP context.
         /// </summary>
         /// <param name="formData">The form data collection.</param>
         public static void SetFormData(NameValueCollection formData)
@@ -134,7 +190,7 @@ namespace RestFoundation.UnitTesting
         }
 
         /// <summary>
-        /// Sets a query string item with the provided name and value to the generated HTTP Context.
+        /// Sets a query string item with the provided name and value to the generated HTTP context.
         /// </summary>
         /// <param name="name">The query string name.</param>
         /// <param name="value">The query string value.</param>
@@ -151,7 +207,7 @@ namespace RestFoundation.UnitTesting
         }
 
         /// <summary>
-        /// Sets the provided query string to the generated HTTP Context.
+        /// Sets the provided query string to the generated HTTP context.
         /// </summary>
         /// <param name="queryString">The query string keys and values.</param>
         public static void SetQuery(NameValueCollection queryString)
@@ -167,7 +223,7 @@ namespace RestFoundation.UnitTesting
         }
 
         /// <summary>
-        /// Sets a server variable with the provided name and value to the generated HTTP Context.
+        /// Sets a server variable with the provided name and value to the generated HTTP context.
         /// </summary>
         /// <param name="name">The server variable name.</param>
         /// <param name="value">The server variable value.</param>
@@ -184,7 +240,7 @@ namespace RestFoundation.UnitTesting
         }
 
         /// <summary>
-        /// Sets the provided server variable to the generated HTTP Context.
+        /// Sets the provided server variable to the generated HTTP context.
         /// </summary>
         /// <param name="queryString">The server variable keys and values.</param>
         public static void SetServerVariables(NameValueCollection queryString)
