@@ -26,15 +26,15 @@ ul.auto-list > li:hover,ul.auto-list > li[data-selected=true]{color:#fff;backgro
 .heading1 a:link,.heading1 a:visited,.heading1 a:active{color:#fff;font-family:Tahoma;font-size:26px;font-weight:400;text-decoration:none}
 .heading2{display:block;font-family:Verdana;font-size:12px;padding-top:5px}
 .hidden{width:0;height:0;font-size:0;color:transparent;background-color:transparent;border:none;margin:0;padding:0}
-.input-validation-error{border:1px solid red!important;background-color:#fee}
-.ip-filtered,.error-response-code{color:maroon}
+.input-validation-error{border:1px solid #f00!important;background-color:#fee}
+.ip-filtered,.error-response-code{color:#800}
 .operation_uri,.operation_uri-custom{white-space:nowrap;vertical-align:middle}
 .operation_uri-custom a:link,.operation_uri-custom a:visited,.operation_uri-custom a:active{color:#036}
 .parameters{margin-bottom:15px}
 .schemaSection{padding-top:20px}
 .spacer{padding-left:30px}
 .toggleOption{float:left;margin:13px 0 0 30px}
-.validation-summary-errors{font-weight:700;color:red}
+.validation-summary-errors{font-weight:700;color:#f00}
 #content{margin-left:30px;font-size:.70em}
 #footer{font-family:Verdana;font-size:11px;color:#666;padding:25px 0 10px 30px}
 #footer a:hover{color:#666;text-decoration:underline}
