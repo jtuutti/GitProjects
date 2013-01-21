@@ -1,6 +1,7 @@
 ﻿<%@ Page Language="C#" MasterPageFile="help.master" ClientIDMode="Static" ValidateRequest="false" EnableViewStateMac="false" EnableEventValidation="false" %>
 <%@ Import Namespace="System.Diagnostics" %>
 <%@ Import Namespace="System.Globalization" %>
+<%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
 <%@ Import Namespace="System.Net.Security" %>
 <%@ Import Namespace="RestFoundation.Runtime" %>
@@ -269,33 +270,6 @@
         return response != null ? String.Format(CultureInfo.InvariantCulture, "{0} - {1}", (int) response.StatusCode, DecodeHttpStatus(response.StatusCode, response.StatusDescription)) : null;
     }
 
-    private static string GetHttpError(WebException ex)
-    {
-        var webResponse = ex.Response as ProxyWebResponse;
-
-        if (webResponse != null)
-        {
-            return String.Format(CultureInfo.InvariantCulture,
-                                 "HTTP/{0}: {1} - {2}",
-                                 webResponse.ProtocolVersion,
-                                 (int) webResponse.StatusCode,
-                                 DecodeHttpStatus(webResponse.StatusCode, webResponse.StatusDescription));
-        }
-
-        var httpResponse = ex.Response as HttpWebResponse;
-
-        if (httpResponse != null)
-        {
-            return String.Format(CultureInfo.InvariantCulture,
-                                 "HTTP/{0}: {1} - {2}",
-                                 httpResponse.ProtocolVersion,
-                                 (int) httpResponse.StatusCode,
-                                 DecodeHttpStatus(httpResponse.StatusCode, httpResponse.StatusDescription));
-        }
-
-        return ex.Message;
-    }
-
     private static string DecodeHttpStatus(HttpStatusCode statusCode, string statusDescription)
     {
         if (String.IsNullOrEmpty(statusDescription))
@@ -482,6 +456,76 @@
         else if ("JSON".Equals(ResourceFormat.Text))
         {
             client.Headers[ContentTypeHeader] = "application/json; charset=utf-8";
+        }
+    }
+
+    private string GetHttpError(WebException ex)
+    {
+        var webResponse = ex.Response as ProxyWebResponse;
+
+        var errorString = new StringBuilder();
+        errorString.AppendLine("ERROR RESPONSE");
+        CreateOutputSeparator(errorString);
+        errorString.Append("URL: ").AppendLine(String.Concat(serviceUrl, OperationUrl.Value.Replace("+", "%20")));
+
+        if (webResponse != null)
+        {
+            errorString.AppendFormat("HTTP/{0}: {1} - {2}",
+                                     webResponse.ProtocolVersion,
+                                     (int) webResponse.StatusCode,
+                                     DecodeHttpStatus(webResponse.StatusCode, webResponse.StatusDescription));
+        }
+        else
+        {
+            var httpResponse = ex.Response as HttpWebResponse;
+
+            if (httpResponse != null)
+            {
+                errorString.AppendFormat("HTTP/{0}: {1} - {2}",
+                                         httpResponse.ProtocolVersion,
+                                         (int) httpResponse.StatusCode,
+                                         DecodeHttpStatus(httpResponse.StatusCode, httpResponse.StatusDescription));
+            }
+        }
+
+        string responseData = GetErrorResponseData(ex);
+
+        if (!String.IsNullOrWhiteSpace(responseData))
+        {
+            errorString.AppendLine().AppendLine().AppendLine("ERROR BODY");
+            CreateOutputSeparator(errorString);
+            errorString.Append(responseData);
+        }
+
+        return errorString.ToString();
+    }
+
+    private string GetErrorResponseData(WebException ex)
+    {
+        var responseStream = ex.Response.GetResponseStream();
+
+        if (responseStream == null ||
+            ex.Response.ContentType == null ||
+            ex.Response.ContentType.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0 ||
+            ex.Response.ContentType.IndexOf("application/xhtml+xml", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            return String.Empty;
+        }
+
+        try
+        {
+            string data = new StreamReader(responseStream).ReadToEnd();
+
+            if (!DoNotFormatBody.Checked)
+            {
+                return FormatBody(data, ContentType.Value);
+            }
+
+            return data;
+        }
+        catch (Exception)
+        {
+            return String.Empty;
         }
     }
 
