@@ -261,7 +261,7 @@ namespace RestFoundation
         {
             application.Response.Clear();
             application.Response.StatusCode = (int) statusCode;
-            application.Response.StatusDescription = HttpUtility.HtmlEncode(statusDescription);
+            application.Response.StatusDescription = StatusDescriptionFormatter.Format(statusDescription);
             application.Server.ClearError();
             application.CompleteRequest();
         }

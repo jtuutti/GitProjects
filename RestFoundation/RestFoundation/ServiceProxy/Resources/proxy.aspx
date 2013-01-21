@@ -558,6 +558,11 @@
             return String.Empty;
         }
 
+        if (String.IsNullOrEmpty(ContentType.Value))
+        {
+            ContentType.Value = ex.Response.ContentType;
+        }
+
         try
         {
             string data = new StreamReader(responseStream).ReadToEnd();

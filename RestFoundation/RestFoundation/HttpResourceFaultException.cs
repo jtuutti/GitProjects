@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace RestFoundation
@@ -38,7 +39,7 @@ namespace RestFoundation
                 throw new ArgumentNullException("faultMessages");
             }
 
-            m_faultMessages.AddRange(faultMessages);
+            m_faultMessages.AddRange(faultMessages.Select(x => x.Replace("\r", String.Empty).Replace("\n", " ")));
         }
 
         /// <summary>

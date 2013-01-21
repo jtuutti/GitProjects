@@ -224,7 +224,7 @@ namespace RestFoundation.Context
         public void SetStatus(HttpStatusCode statusCode, string statusDescription)
         {
             Context.Response.StatusCode = (int) statusCode;
-            Context.Response.StatusDescription = FormatStatusDescription(statusDescription);
+            Context.Response.StatusDescription = StatusDescriptionFormatter.Format(statusDescription);
         }
 
         /// <summary>
@@ -425,30 +425,6 @@ namespace RestFoundation.Context
                     Context.Response.Cache.VaryByHeaders[headerName] = true;
                 }
             }
-        }
-
-        private static string FormatStatusDescription(string statusDescription)
-        {
-            if (statusDescription == null)
-            {
-                return String.Empty;
-            }
-
-            var lineBreakCharacters = new[] { '\r', '\n' };
-
-            if (statusDescription.IndexOfAny(lineBreakCharacters) >= 0)
-            {
-                statusDescription = statusDescription.Split(lineBreakCharacters, StringSplitOptions.None)[0];
-            }
-
-            const int MaxStatusDescriptionLength = 512;
-
-            if (statusDescription.Length > MaxStatusDescriptionLength)
-            {
-                statusDescription = statusDescription.Substring(0, MaxStatusDescriptionLength);
-            }
-
-            return statusDescription.Trim();
         }
     }
 }
