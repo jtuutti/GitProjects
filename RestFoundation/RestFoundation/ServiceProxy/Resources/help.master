@@ -1,8 +1,8 @@
 ﻿<%@ Master Language="C#" %>
 <%@ Import Namespace="System.Globalization" %>
-<%@ Import Namespace="System.Web.Routing" %>
 <%@ Import Namespace="RestFoundation" %>
 <%@ Import Namespace="RestFoundation.Security" %>
+<%@ Import Namespace="RestFoundation.ServiceProxy" %>
 
 <script runat="server" language="C#">
     private readonly RestOptions configurationOptions = Rest.Configuration.Options;    
@@ -88,23 +88,6 @@
         Response.StatusDescription = "Unauthorized";
         Response.End();
     }
-
-    private string GetUrlFromRoute(string routeName)
-    {
-        VirtualPathData pathData = RouteTable.Routes.GetVirtualPath(null, routeName, new RouteValueDictionary());
-
-        if (pathData != null && !String.IsNullOrEmpty(pathData.VirtualPath))
-        {
-            return pathData.VirtualPath;
-        }
-
-        Response.Clear();
-        Response.StatusCode = 404;
-        Response.StatusDescription = String.Format(CultureInfo.InvariantCulture, "Invalid route '{0}' specified", routeName);
-        Response.End();
-
-        return null;
-    }
 </script>
 
 <!DOCTYPE html>
@@ -112,8 +95,8 @@
 <head>
     <title>Service Proxy</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link type="text/css" rel="stylesheet" href="<%= GetUrlFromRoute("ProxyCss") %>" />
-    <script type="text/javascript" src="<%= GetUrlFromRoute("ProxyJQuery") %>"></script>
+    <link type="text/css" rel="stylesheet" href="<%= ProxyUrlHelper.GetByRouteName(Response, "ProxyCss") %>" />
+    <script type="text/javascript" src="<%= ProxyUrlHelper.GetByRouteName(Response, "ProxyJQuery") %>"></script>
 </head>
 <body>
 <p class="heading1">

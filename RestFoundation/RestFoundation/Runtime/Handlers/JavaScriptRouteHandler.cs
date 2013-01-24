@@ -1,12 +1,23 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
+using System.Net;
 using System.Web;
 using System.Web.Routing;
 
 namespace RestFoundation.Runtime.Handlers
 {
-    internal class JQueryRouteHandler : IRouteHandler, IHttpHandler
+    internal class JavaScriptRouteHandler : IRouteHandler, IHttpHandler
     {
+        private const string JavaScriptContentType = "application/x-javascript; charset=utf-8";
+
+        private readonly string m_filename;
+
+        public JavaScriptRouteHandler(string filename)
+        {
+            m_filename = filename;
+        }
+
         public bool IsReusable
         {
             get
@@ -27,20 +38,20 @@ namespace RestFoundation.Runtime.Handlers
                 throw new ArgumentNullException("context");
             }
 
-            using (var jqueryStream = typeof(Rest).Assembly.GetManifestResourceStream("RestFoundation.ServiceProxy.Resources.jquery-1.8.3.min.js"))
+            using (Stream stream = typeof(Rest).Assembly.GetManifestResourceStream(String.Concat("RestFoundation.ServiceProxy.Resources.", m_filename)))
             {
-                if (jqueryStream == null)
+                if (stream == null)
                 {
-                    throw new HttpException(404, "JQuery resource not found");
+                    throw new HttpException((int) HttpStatusCode.NotFound, RestResources.MissingJavaScriptResource);
                 }
 
-                context.Response.ContentType = "application/x-javascript; charset=utf-8";
+                context.Response.ContentType = JavaScriptContentType;
                 context.Response.Cache.SetCacheability(HttpCacheability.Public);
                 context.Response.Cache.SetETag(GetAssemblyVersionAsEtag());
                 context.Response.Cache.SetExpires(DateTime.Now.AddYears(1));
                 context.Response.Cache.SetValidUntilExpires(true);
 
-                jqueryStream.CopyTo(context.Response.OutputStream);
+                stream.CopyTo(context.Response.OutputStream);
             }
         }
 
@@ -49,7 +60,7 @@ namespace RestFoundation.Runtime.Handlers
             Version assemblyVersion = GetType().Assembly.GetName().Version;
 
             return String.Format(CultureInfo.InvariantCulture,
-                                 "\"JQ-{0}-{1}-{2}-{3}\"",
+                                 "\"JS-{0}-{1}-{2}-{3}\"",
                                  assemblyVersion.Major,
                                  assemblyVersion.Minor,
                                  assemblyVersion.Build,

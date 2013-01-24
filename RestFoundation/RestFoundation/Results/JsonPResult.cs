@@ -71,7 +71,11 @@ namespace RestFoundation.Results
             OutputCompressionManager.FilterResponse(context);
 
             var settings = Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings();
-            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            if (Rest.Configuration.Options.JsonSettings.LowerPropertiesForAjax)
+            {
+                settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            }
 
             string response = new StringBuilder().Append(Callback)
                                                  .Append("(")

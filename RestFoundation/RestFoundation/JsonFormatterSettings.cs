@@ -11,6 +11,14 @@ namespace RestFoundation
     public sealed class JsonFormatterSettings
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="JsonFormatterSettings"/> class.
+        /// </summary>
+        public JsonFormatterSettings()
+        {
+            LowerPropertiesForAjax = true;
+        }
+
+        /// <summary>
         /// Gets or sets an optional maximum depth of the object graph.
         /// </summary>
         public int? MaxDepth { get; set; }
@@ -20,6 +28,12 @@ namespace RestFoundation
         /// This property is set to false by default.
         /// </summary>
         public bool IncludeNullValues { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating that properties should be in lower case for AJAX
+        /// requests.
+        /// </summary>
+        public bool LowerPropertiesForAjax { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating that dates must be serialized in the local server

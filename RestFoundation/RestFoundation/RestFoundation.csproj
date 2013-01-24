@@ -94,11 +94,12 @@
     <Compile Include="Runtime\AllowHeaderGenerator.cs" />
     <Compile Include="Runtime\ExpressionArgument.cs" />
     <Compile Include="Runtime\Handlers\CssRouteHandler.cs" />
-    <Compile Include="Runtime\Handlers\JQueryRouteHandler.cs" />
+    <Compile Include="Runtime\Handlers\JavaScriptRouteHandler.cs" />
     <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
     <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
     <Compile Include="Runtime\JsonSerializerFactory.cs" />
     <Compile Include="Runtime\MethodReturnTypeUnwrapper.cs" />
+    <Compile Include="ServiceProxy\ProxyUrlHelper.cs" />
     <Compile Include="Runtime\StatusCodeFormatter.cs" />
     <Compile Include="Runtime\RouteNameHelper.cs" />
     <Compile Include="Runtime\StatusDescriptionFormatter.cs" />
@@ -401,6 +402,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ServiceProxy\Resources\help.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ServiceProxy\Resources\proxy.op.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ServiceProxy\Resources\metadata.op.min.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

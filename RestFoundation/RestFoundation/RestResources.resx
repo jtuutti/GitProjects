@@ -529,4 +529,16 @@
     <value>The current service method does not support HTTP body form data.</value>
     <comment>The current service method does not support HTTP body form data.</comment>
   </data>
+  <data name="MissingJavaScriptResource" xml:space="preserve">
+    <value>JavaScript resource not found.</value>
+    <comment>JavaScript resource not found.</comment>
+  </data>
+  <data name="MissingCssResource" xml:space="preserve">
+    <value>CSS resource not found.</value>
+    <comment>CSS resource not found.</comment>
+  </data>
+  <data name="InvalidNamedRoute" xml:space="preserve">
+    <value>Invalid route '{0}' specified.</value>
+    <comment>Invalid route '{0}' specified.</comment>
+  </data>
 </root>

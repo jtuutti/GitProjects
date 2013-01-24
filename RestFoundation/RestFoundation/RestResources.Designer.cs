@@ -313,6 +313,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid route &apos;{0}&apos; specified..
+        /// </summary>
+        internal static string InvalidNamedRoute {
+            get {
+                return ResourceManager.GetString("InvalidNamedRoute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid OData parameters provided..
         /// </summary>
         internal static string InvalidODataParameters {
@@ -547,6 +556,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CSS resource not found..
+        /// </summary>
+        internal static string MissingCssResource {
+            get {
+                return ResourceManager.GetString("MissingCssResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No current service method has been set..
         /// </summary>
         internal static string MissingCurrentServiceMethod {
@@ -579,6 +597,15 @@ namespace RestFoundation {
         internal static string MissingHttpContext {
             get {
                 return ResourceManager.GetString("MissingHttpContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to JavaScript resource not found..
+        /// </summary>
+        internal static string MissingJavaScriptResource {
+            get {
+                return ResourceManager.GetString("MissingJavaScriptResource", resourceCulture);
             }
         }
         

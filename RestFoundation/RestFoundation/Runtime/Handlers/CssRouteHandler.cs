@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
+using System.Net;
 using System.Web;
 using System.Web.Routing;
 
@@ -7,6 +9,15 @@ namespace RestFoundation.Runtime.Handlers
 {
     internal class CssRouteHandler : IRouteHandler, IHttpHandler
     {
+        private const string CssContentType = "text/css";
+
+        private readonly string m_filename;
+
+        public CssRouteHandler(string filename)
+        {
+            m_filename = filename;
+        }
+
         public bool IsReusable
         {
             get
@@ -27,20 +38,20 @@ namespace RestFoundation.Runtime.Handlers
                 throw new ArgumentNullException("context");
             }
 
-            using (var jqueryStream = typeof(Rest).Assembly.GetManifestResourceStream("RestFoundation.ServiceProxy.Resources.help.css"))
+            using (Stream stream = typeof(Rest).Assembly.GetManifestResourceStream(String.Concat("RestFoundation.ServiceProxy.Resources.", m_filename)))
             {
-                if (jqueryStream == null)
+                if (stream == null)
                 {
-                    throw new HttpException(404, "CSS resource not found");
+                    throw new HttpException((int) HttpStatusCode.NotFound, RestResources.MissingCssResource);
                 }
 
-                context.Response.ContentType = "text/css";
+                context.Response.ContentType = CssContentType;
                 context.Response.Cache.SetCacheability(HttpCacheability.Public);
                 context.Response.Cache.SetETag(GetAssemblyVersionAsEtag());
                 context.Response.Cache.SetExpires(DateTime.Now.AddYears(1));
                 context.Response.Cache.SetValidUntilExpires(true);
 
-                jqueryStream.CopyTo(context.Response.OutputStream);
+                stream.CopyTo(context.Response.OutputStream);
             }
         }
 

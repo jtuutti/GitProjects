@@ -68,7 +68,7 @@ namespace RestFoundation.Results
 
             var serializer = JsonSerializerFactory.Create();
 
-            if (context.Request.IsAjax)
+            if (context.Request.IsAjax && Rest.Configuration.Options.JsonSettings.LowerPropertiesForAjax)
             {
                 serializer.ContractResolver = new CamelCasePropertyNamesContractResolver();
             }
