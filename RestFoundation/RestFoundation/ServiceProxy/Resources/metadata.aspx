@@ -272,7 +272,7 @@
     </tr>
     <% } %>
     </table>
-    <table id="responseCodes">
+    <table id="ResponseCodes">
     <tr>
         <th>Response code</th>
         <th>Condition</th>
@@ -286,14 +286,14 @@
     </table>
     <% if (operation.RequestResourceExample != null && operation.RequestResourceExample.Instance != null) { %>
     <% if (!String.IsNullOrEmpty(requestJsonExample)) { %>
-    <div class="schemaSection">
+    <div class="schema-section">
         <a name="request-json"></a>The following is an example JSON serialized request:
         <pre id="JsonRequest"><%: requestJsonExample %></pre>
         <a id="ViewJsonRequest" href="#">View Request</a>
     </div>
     <% } %>
     <% if (!String.IsNullOrEmpty(requestXmlExample)) { %>
-    <div class="schemaSection">
+    <div class="schema-section">
         <a name="request-xml"></a>The following is an example XML serialized request:
         <pre id="XmlRequest"><%: requestXmlExample %></pre>
         <a id="ViewXmlRequest" href="#">View Request</a>
@@ -302,14 +302,14 @@
     <% } %>
     <% if (operation.ResponseResourceExample != null && operation.ResponseResourceExample.Instance != null) { %>
     <% if (!String.IsNullOrEmpty(responseJsonExample)) { %>
-    <div class="schemaSection">
+    <div class="schema-section">
         <a name="response-json"></a>The following is an example JSON serialized response:
         <pre id="JsonResponse"><%: responseJsonExample %></pre>
         <a id="ViewJsonResponse" href="#">View Response</a>
     </div>
     <% } %>
     <% if (!String.IsNullOrEmpty(responseXmlExample)) { %>
-    <div class="schemaSection">
+    <div class="schema-section">
         <a name="response-xml"></a>The following is an example XML serialized response:
         <pre id="XmlResponse"><%: responseXmlExample %></pre>
         <a id="ViewXmlResponse" href="#">View Response</a>
@@ -317,13 +317,13 @@
     <% } %>
     <% } %>
     <% if (requestXmlSchemas != null && requestXmlSchemas.Count > 0) { %>
-    <div class="schemaSection">
+    <div class="schema-section">
     <a name="request-schema"></a>The following is the request model XSD Schema:         
     <pre id="RequestSchema"><%: requestXmlSchemas[0] %></pre>
     <a id="ViewRequestSchema" href="#">View Schema</a>
     </div>
     <% if (requestXmlSchemas.Count > 1) { %>
-    <div class="schemaSection">
+    <div class="schema-section">
     <span>Additional request XSD Schemas:</span>
     <% for (int i = 1; i < requestXmlSchemas.Count; i++) { %>
         <pre id="RequestSchema<%: i %>"><%: requestXmlSchemas[i] %></pre>
@@ -333,13 +333,13 @@
     <% } %>
     <% } %>
     <% if (responseXmlSchemas != null && responseXmlSchemas.Count > 0) { %>
-    <div class="schemaSection">
+    <div class="schema-section">
     <a name="response-schema"></a>The following is the response model XSD Schema:
     <pre id="ResponseSchema"><%: responseXmlSchemas[0] %></pre>
     <a id="ViewResponseSchema" href="#">Response Schema</a>
     </div>
     <% if (responseXmlSchemas.Count > 1) { %>
-    <div class="schemaSection">
+    <div class="schema-section">
     <span>Additional response XSD Schemas:</span>
     <% for (int i = 1; i < responseXmlSchemas.Count; i++) { %>
         <pre id="ResponseSchema<%: i %>"><%: responseXmlSchemas[i] %></pre>

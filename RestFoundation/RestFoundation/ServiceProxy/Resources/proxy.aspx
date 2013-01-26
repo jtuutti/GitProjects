@@ -83,7 +83,7 @@
         }
 
         ResourceFormat.Text = format.ToUpperInvariant();
-        HttpMethod.Value = operation.HttpMethod.ToString().ToUpperInvariant();
+        HttpMethod.SelectedValue = operation.HttpMethod.ToString().ToUpperInvariant();
 
         foreach (HeaderMetadata header in operation.AdditionalHeaders)
         {
@@ -187,15 +187,15 @@
                 AddHeaders(client);
                 SetEncoding(client);
 
-                if ("GET".Equals(HttpMethod.Value) || "HEAD".Equals(HttpMethod.Value) || "OPTIONS".Equals(HttpMethod.Value))
+                if ("GET".Equals(HttpMethod.SelectedValue) || "HEAD".Equals(HttpMethod.SelectedValue) || "OPTIONS".Equals(HttpMethod.SelectedValue))
                 {
                     data = PerformGetHeadOptionsRequest(url, client, out duration, out protocolVersion, out responseCode);
                 }
-                else if ("POST".Equals(HttpMethod.Value) || "PUT".Equals(HttpMethod.Value) || "PATCH".Equals(HttpMethod.Value))
+                else if ("POST".Equals(HttpMethod.SelectedValue) || "PUT".Equals(HttpMethod.SelectedValue) || "PATCH".Equals(HttpMethod.SelectedValue))
                 {
                     data = PerformPostPutPatchRequest(url, client, out duration, out protocolVersion, out responseCode);
                 }
-                else if ("DELETE".Equals(HttpMethod.Value))
+                else if ("DELETE".Equals(HttpMethod.SelectedValue))
                 {
                     data = PerformDeleteRequest(url, client, out duration, out protocolVersion, out responseCode);
                 }
@@ -253,6 +253,48 @@
             {
                 ServicePointManager.ServerCertificateValidationCallback = validationCallback;
             }
+        }
+    }
+
+    protected void ExportSession(object sender, EventArgs args)
+    {
+        var session = new ProxySession
+        {
+            ServiceUrl = serviceUrl,
+            OperationUrl = OperationUrl.Value,
+            Format = ResourceFormat.SelectedValue,
+            Method = HttpMethod.SelectedValue,
+            Headers = HeaderText.Value.Trim(),
+            Body = RequestText.Value.Trim(),
+        };
+
+        DateTime now = DateTime.Now;
+
+        Response.Clear();        
+        Response.ContentEncoding = Encoding.UTF8;
+        Response.ContentType = "application/json";
+        Response.AppendHeader("Content-Disposition", String.Format(
+                                                            CultureInfo.InvariantCulture,
+                                                            "attachment; filename=session.{0:D4}{1:D2}{2:D2}{3:D2}{4:D2}{5:D2}{6:D3}.dat",
+                                                            now.Year,
+                                                            now.Month,
+                                                            now.Day,
+                                                            now.Hour,
+                                                            now.Minute,
+                                                            now.Second,
+                                                            now.Millisecond));
+
+        string serializedSession = ProxyJsonConvert.SerializeObject(session, false, false);
+
+        Response.Output.Write(serializedSession);
+        Response.Output.Flush();
+
+        try
+        {
+            Response.End();
+        }
+        catch (Exception)
+        {
         }
     }
 
@@ -444,7 +486,7 @@
             return;
         }
 
-        if (!"POST".Equals(HttpMethod.Value) && !"PUT".Equals(HttpMethod.Value) && !"PATCH".Equals(HttpMethod.Value))
+        if (!"POST".Equals(HttpMethod.SelectedValue) && !"PUT".Equals(HttpMethod.SelectedValue) && !"PATCH".Equals(HttpMethod.SelectedValue))
         {
             return;
         }
@@ -587,11 +629,11 @@
 
         try
         {
-            if (String.Equals("OPTIONS", HttpMethod.Value))
+            if (String.Equals("OPTIONS", HttpMethod.SelectedValue))
             {
                 client.Options = true;
             }
-            else if (String.Equals("HEAD", HttpMethod.Value))
+            else if (String.Equals("HEAD", HttpMethod.SelectedValue))
             {
                 client.HeadOnly = true;
             }
@@ -623,7 +665,7 @@
 
         try
         {
-            data = client.UploadString(url, HttpMethod.Value, RequestText.Value);
+            data = client.UploadString(url, HttpMethod.SelectedValue, RequestText.Value);
             responseCode = GetStatusCode(client);
             protocolVersion = GetProtocolVersion(client);
         }
@@ -650,7 +692,7 @@
 
         try
         {
-            data = client.UploadString(url, HttpMethod.Value, String.Empty);
+            data = client.UploadString(url, HttpMethod.SelectedValue, String.Empty);
             responseCode = GetStatusCode(client);
             protocolVersion = GetProtocolVersion(client);
         }
@@ -673,7 +715,7 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="bodyPlaceholder">
 <form runat="server" id="bodyForm" autocomplete="off">
-    <div id="main">
+    <div id="Main">
         <div ><em><%: operation.Description %></em></div>
         <div>
             <h1>URL</h1>
@@ -695,21 +737,28 @@
                 <asp:ListItem>JSON</asp:ListItem>
                 <asp:ListItem>XML</asp:ListItem>
             </asp:DropDownList>
-            <select id="HttpMethod" runat="server">
-                <option>GET</option>
-                <option>POST</option>
-                <option>PUT</option>
-                <option>DELETE</option>
-                <option>PATCH</option>
-                <option>HEAD</option>
-                <option>OPTIONS</option>
-            </select>
+            <asp:DropDownList id="HttpMethod" runat="server">
+                <asp:ListItem>GET</asp:ListItem>
+                <asp:ListItem>POST</asp:ListItem>
+                <asp:ListItem>PUT</asp:ListItem>
+                <asp:ListItem>DELETE</asp:ListItem>
+                <asp:ListItem>PATCH</asp:ListItem>
+                <asp:ListItem>HEAD</asp:ListItem>
+                <asp:ListItem>OPTIONS</asp:ListItem>
+            </asp:DropDownList>
             <span id="ConnectToProxy" runat="server">
                 <span>Proxy port:</span>
                 <input type="text" id="ProxyPort" runat="server" />
             </span>
             <asp:Button runat="server" ID="Execute" Text="Execute" />
-            <input type="button" runat="server" id="Reload" value="Reload" />
+            <span id="PersistenceControls" class="button-separator">
+                <input type="button" id="Import" value="Import" />
+                <asp:Button runat="server" ID="Export" Text="Export" OnClick="ExportSession" />
+                <input type="file" id="File" class="invisible" />
+            </span>
+            <span class="button-separator">
+                <input type="button" runat="server" id="Reload" value="Reload" />
+            </span>
         </div>
         <div>
             <h1>Headers</h1>
@@ -723,18 +772,20 @@
             <div id="ResponseHeader">
                 <h1>Response</h1>
             </div>
-            <div id="ResponseHeaderToggle" class="toggleOption">
+            <div id="ResponseHeaderToggle" class="toggle-option">
                 <asp:CheckBox id="DisplayResponseHeaders" runat="server" />
-                <label for="DisplayResponseHeaders"><span style="text-decoration: underline">A</span>lways display response headers</label>
+                <label for="DisplayResponseHeaders"><span class="underlined">A</span>lways display response headers</label>
             </div>
-            <div id="FormatBodyToggle" class="toggleOption">
+            <div id="FormatBodyToggle" class="toggle-option">
                 <asp:CheckBox id="DoNotFormatBody" runat="server" />
-                <label for="DoNotFormatBody"><span style="text-decoration: underline">D</span>o not format body</label>
+                <label for="DoNotFormatBody"><span class="underlined">D</span>o not format body</label>
             </div>
             <div id="ResponseHeightControls">
-                <a id="ViewResponse" runat="server" href="#" style="margin-right: 25px;">View in Browser</a>
-                <a id="DecreaseResponseHeight" href="#">Decrease Height</a>
-                <a id="IncreaseResponseHeight" href="#">Increase Height</a>
+                <a id="ViewResponse" runat="server" href="#">View in Browser</a>
+                <span class="button-separator">
+                    <a id="DecreaseResponseHeight" href="#">Decrease Height</a>
+                    <a id="IncreaseResponseHeight" href="#">Increase Height</a>
+                </span>
             </div>
             <div class="clear"></div>
             <textarea id="ResponseText" runat="server" readonly="readonly" rows="80" cols="25" spellcheck="false"></textarea>
