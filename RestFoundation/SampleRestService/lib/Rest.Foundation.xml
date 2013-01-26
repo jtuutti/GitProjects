@@ -672,6 +672,11 @@
             Contains settings used by JSON formatters and results.
             </summary>
     </member>
+    <member name="M:RestFoundation.JsonFormatterSettings.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.JsonFormatterSettings" /> class.
+            </summary>
+    </member>
     <member name="P:RestFoundation.JsonFormatterSettings.MaxDepth">
       <summary>
             Gets or sets an optional maximum depth of the object graph.
@@ -681,6 +686,12 @@
       <summary>
             Gets or sets a value indicating that properties with null values must be serialized.
             This property is set to false by default.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.JsonFormatterSettings.LowerPropertiesForAjax">
+      <summary>
+            Gets or sets a value indicating that properties should be in lower case for AJAX
+            requests.
             </summary>
     </member>
     <member name="P:RestFoundation.JsonFormatterSettings.UseLocalTimeZone">
@@ -1348,6 +1359,11 @@
               Looks up a localized string similar to Invalid method parameter name provided..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.InvalidNamedRoute">
+      <summary>
+              Looks up a localized string similar to Invalid route '{0}' specified..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.InvalidODataParameters">
       <summary>
               Looks up a localized string similar to Invalid OData parameters provided..
@@ -1478,6 +1494,11 @@
               Looks up a localized string similar to No authorization manager could be found..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.MissingCssResource">
+      <summary>
+              Looks up a localized string similar to CSS resource not found..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.MissingCurrentServiceMethod">
       <summary>
               Looks up a localized string similar to No current service method has been set..
@@ -1496,6 +1517,11 @@
     <member name="P:RestFoundation.RestResources.MissingHttpContext">
       <summary>
               Looks up a localized string similar to No HTTP context was found..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.MissingJavaScriptResource">
+      <summary>
+              Looks up a localized string similar to JavaScript resource not found..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.MissingOrInvalidAcceptType">
@@ -1810,6 +1836,54 @@
             Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
             </summary>
       <filterpriority>2</filterpriority>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.ProxySession">
+      <summary>
+            Represents a service proxy session data.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxySession.ServiceUrl">
+      <summary>
+            Gets or sets the base service URL.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxySession.OperationUrl">
+      <summary>
+            Gets or sets the relative endpoint URL.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxySession.Format">
+      <summary>
+            Gets or sets the resource format.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxySession.Method">
+      <summary>
+            Gets or sets the HTTP verb.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxySession.Headers">
+      <summary>
+            Gets or sets the headers associated with the service operation.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxySession.Body">
+      <summary>
+            Gets or sets the resource body.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.ServiceProxy.ProxyUrlHelper">
+      <summary>
+            Represents a service proxy helper that generates URLs from name route names.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyUrlHelper.GetByRouteName(System.Web.HttpResponse,System.String)">
+      <summary>
+            Gets the URL represented by the named route.
+            </summary>
+      <param name="response">The HTTP context response.</param>
+      <param name="routeName">The route name.</param>
+      <returns>The generated URL.</returns>
     </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyJsonConvert">
       <summary>

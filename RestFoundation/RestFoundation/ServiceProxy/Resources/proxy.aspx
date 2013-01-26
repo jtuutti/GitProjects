@@ -751,13 +751,13 @@
                 <input type="text" id="ProxyPort" runat="server" />
             </span>
             <asp:Button runat="server" ID="Execute" Text="Execute" />
+            <span class="button-separator">
+                <input type="button" runat="server" id="Reload" value="Reload" />
+            </span>
             <span id="PersistenceControls" class="button-separator">
                 <input type="button" id="Import" value="Import" />
                 <asp:Button runat="server" ID="Export" Text="Export" OnClick="ExportSession" />
                 <input type="file" id="File" class="invisible" />
-            </span>
-            <span class="button-separator">
-                <input type="button" runat="server" id="Reload" value="Reload" />
             </span>
         </div>
         <div>
