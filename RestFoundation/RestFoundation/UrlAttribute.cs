@@ -34,6 +34,8 @@ namespace RestFoundation
             }
 
             UrlTemplate = urlTemplate.Trim();
+            ValidateUrlTemplate();
+
             HttpMethods = (httpMethods != null && httpMethods.Length > 0) ? httpMethods.Distinct() : null;
         }
 
@@ -52,6 +54,7 @@ namespace RestFoundation
             }
 
             UrlTemplate = urlTemplate.Trim();
+            ValidateUrlTemplate();
 
             if (String.IsNullOrEmpty(httpMethods))
             {
@@ -112,6 +115,14 @@ namespace RestFoundation
             }
 
             return httpMethodList;
+        }
+
+        private void ValidateUrlTemplate()
+        {
+            if (UrlTemplate.IndexOf('*') >= 0)
+            {
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidCatchAllUrlTemplate, UrlTemplate));
+            }
         }
     }
 }

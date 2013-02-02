@@ -2,6 +2,8 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Web.Routing;
 
 namespace RestFoundation
@@ -11,6 +13,8 @@ namespace RestFoundation
     /// </summary>
     public sealed class UrlBuilder
     {
+        private static readonly Regex serviceNameRegex = new Regex(@"^[_a-zA-Z0-9\-]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
         private readonly RouteCollection m_routes;
 
         internal UrlBuilder(RouteCollection routes)
@@ -30,9 +34,14 @@ namespace RestFoundation
         /// <returns>The URL builder.</returns>
         public RouteBuilder MapUrl(string serviceUrl)
         {
-            if (String.IsNullOrEmpty(serviceUrl))
+            if (serviceUrl == null)
             {
                 throw new ArgumentNullException("serviceUrl");
+            }
+
+            if (!serviceNameRegex.IsMatch(serviceUrl))
+            {
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidServiceName, serviceUrl));
             }
 
             return new RouteBuilder(serviceUrl, m_routes, null);

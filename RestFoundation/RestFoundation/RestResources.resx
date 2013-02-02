@@ -541,4 +541,12 @@
     <value>Invalid route '{0}' specified.</value>
     <comment>Invalid route '{0}' specified.</comment>
   </data>
+  <data name="InvalidServiceName" xml:space="preserve">
+    <value>Invalid relative service URL name '{0}' provided. It can only contain letters, digits, underscores and dashes.</value>
+    <comment>Invalid relative service URL name '{0}' provided. It can only contain letters, digits, underscores and dashes.</comment>
+  </data>
+  <data name="InvalidCatchAllUrlTemplate" xml:space="preserve">
+    <value>URL templates cannot contain catch-all parameters. Template: '{0}'</value>
+    <comment>URL templates cannot contain catch-all parameters. Template: '{0}'</comment>
+  </data>
 </root>

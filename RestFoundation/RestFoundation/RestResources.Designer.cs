@@ -241,6 +241,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to URL templates cannot contain catch-all parameters. Template: &apos;{0}&apos;.
+        /// </summary>
+        internal static string InvalidCatchAllUrlTemplate {
+            get {
+                return ResourceManager.GetString("InvalidCatchAllUrlTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection timeout is invalid..
         /// </summary>
         internal static string InvalidConnectionTimeout {
@@ -426,6 +435,15 @@ namespace RestFoundation {
         internal static string InvalidServiceMethodExpression {
             get {
                 return ResourceManager.GetString("InvalidServiceMethodExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid relative service URL name &apos;{0}&apos; provided. It can only contain letters, digits, underscores and dashes..
+        /// </summary>
+        internal static string InvalidServiceName {
+            get {
+                return ResourceManager.GetString("InvalidServiceName", resourceCulture);
             }
         }
         
