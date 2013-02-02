@@ -53,7 +53,7 @@ namespace RestTestContracts
         [Url("index/{name}")]
         StatusResult Delete(string name);
 
-        [Url("index/form-data")]
+        [Url("index/form-data", Priority = 10 /* need to be above the parameterized methods */ )]
         Person PostMultipleParameters([FromBody] string name, [FromBody] int age, [FromBody] DateTime? timestamp);
     }
 }

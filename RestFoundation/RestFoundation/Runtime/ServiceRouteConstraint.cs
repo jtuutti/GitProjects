@@ -99,14 +99,6 @@ namespace RestFoundation.Runtime
             return routeParameters;
         }
 
-        private static void SetMethodConstraintFailedIfNecessary(HttpContextBase httpContext)
-        {
-            if (httpContext.Items[RouteConstants.RouteMethodConstraintFailed] == null)
-            {
-                httpContext.Items[RouteConstants.RouteMethodConstraintFailed] = true;
-            }
-        }
-
         private bool ValidateHttpMethod(HttpContextBase httpContext, Type serviceContractType, string urlTemplate)
         {
             HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
@@ -116,7 +108,7 @@ namespace RestFoundation.Runtime
             {
                 if (!allowedHttpMethods.Contains(httpMethod))
                 {
-                    SetMethodConstraintFailedIfNecessary(httpContext);
+                    httpContext.Items[RouteConstants.RouteMethodConstraintFailed] = true;
                     return false;
                 }
 
@@ -126,7 +118,6 @@ namespace RestFoundation.Runtime
                 }
             }
 
-            httpContext.Items[RouteConstants.RouteMethodConstraintFailed] = false;
             return true;
         }
 
