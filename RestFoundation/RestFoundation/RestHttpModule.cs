@@ -23,9 +23,10 @@ namespace RestFoundation
     {
         private const string DangerousRequestMessage = "A potentially dangerous Request.Path value was detected from the client";
         private const string RequestTimeoutMessage = "Request timed out";
+        private const string CatchAllRoute = "catch-all-route";
 
         private static readonly object syncRoot = new object();
-        private static bool catchAllRouteInitialized = false;
+        private static bool catchAllRouteInitialized;
 
         internal static bool IsInitialized { get; set; }
 
@@ -66,8 +67,6 @@ namespace RestFoundation
                 return;
             }
 
-            const string catchAllRoute = "catch-all-route";
-
             var application = sender as HttpApplication;
 
             if (application == null || application.Context == null)
@@ -87,13 +86,13 @@ namespace RestFoundation
                 if (RouteTable.Routes.Any(x =>
                 {
                     RouteData routeData = x.GetRouteData(context);
-                    return routeData != null && Convert.ToBoolean(routeData.DataTokens[catchAllRoute], CultureInfo.InvariantCulture);
+                    return routeData != null && Convert.ToBoolean(routeData.DataTokens[CatchAllRoute], CultureInfo.InvariantCulture);
                 }))
                 {
                     return;
                 }
 
-                RouteTable.Routes.Add(new Route("{*url}", null, null, new RouteValueDictionary { { catchAllRoute, true } }, new NotFoundHandler()));
+                RouteTable.Routes.Add(new Route("{*url}", null, null, new RouteValueDictionary { { CatchAllRoute, true } }, new NotFoundHandler()));
 
                 catchAllRouteInitialized = true;
             }
@@ -232,7 +231,7 @@ namespace RestFoundation
 
         private static void RemoveServerHeaders(HttpApplication application)
         {
-            if (!HttpRuntime.UsingIntegratedPipeline)
+            if (!HttpRuntime.UsingIntegratedPipeline || Rest.Configuration.Options.RetainWebServerHeaders)
             {
                 return;
             }
