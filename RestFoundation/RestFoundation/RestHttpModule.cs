@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Routing;
 using System.Web.UI;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
@@ -22,6 +23,9 @@ namespace RestFoundation
     {
         private const string DangerousRequestMessage = "A potentially dangerous Request.Path value was detected from the client";
         private const string RequestTimeoutMessage = "Request timed out";
+
+        private static readonly object syncRoot = new object();
+        private static bool catchAllRouteInitialized = false;
 
         internal static bool IsInitialized { get; set; }
 
@@ -41,6 +45,7 @@ namespace RestFoundation
 
             IsInitialized = true;
 
+            context.BeginRequest += (sender, args) => OnBeginRequest(sender);
             context.PreRequestHandlerExecute += (sender, args) => OnPreRequestHandlerExecute(sender);
             context.PreSendRequestHeaders += (sender, args) => OnPreSendRequestHeaders(sender);
             context.EndRequest += (sender, args) => OnEndRequest(sender);
@@ -52,6 +57,46 @@ namespace RestFoundation
         /// </summary>
         public void Dispose()
         {
+        }
+
+        private static void OnBeginRequest(object sender)
+        {
+            if (catchAllRouteInitialized)
+            {
+                return;
+            }
+
+            const string catchAllRoute = "catch-all-route";
+
+            var application = sender as HttpApplication;
+
+            if (application == null || application.Context == null)
+            {
+                return;
+            }
+
+            lock (syncRoot)
+            {
+                if (catchAllRouteInitialized)
+                {
+                    return;
+                }
+
+                var context = new HttpContextWrapper(application.Context);
+
+                if (RouteTable.Routes.Any(x =>
+                {
+                    RouteData routeData = x.GetRouteData(context);
+                    return routeData != null && Convert.ToBoolean(routeData.DataTokens[catchAllRoute], CultureInfo.InvariantCulture);
+                }))
+                {
+                    return;
+                }
+
+                RouteTable.Routes.Add(new Route("{*url}", null, null, new RouteValueDictionary { { catchAllRoute, true } }, new NotFoundHandler()));
+
+                catchAllRouteInitialized = true;
+            }
         }
 
         private static void OnPreRequestHandlerExecute(object sender)
