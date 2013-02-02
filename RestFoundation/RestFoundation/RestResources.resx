@@ -549,4 +549,8 @@
     <value>URL templates cannot contain catch-all parameters. Template: '{0}'</value>
     <comment>URL templates cannot contain catch-all parameters. Template: '{0}'</comment>
   </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Internal Server Error</value>
+    <comment>Internal Server Error</comment>
+  </data>
 </root>

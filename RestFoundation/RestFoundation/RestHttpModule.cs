@@ -21,6 +21,7 @@ namespace RestFoundation
     /// </summary>
     public sealed class RestHttpModule : IHttpModule
     {
+        private const int MinErrorStatusCode = 400;
         private const string DangerousRequestMessage = "A potentially dangerous Request.Path value was detected from the client";
         private const string RequestTimeoutMessage = "Request timed out";
         private const string CatchAllRoute = "catch-all-route";
@@ -134,24 +135,7 @@ namespace RestFoundation
         {
             var application = sender as HttpApplication;
 
-            if (application == null)
-            {
-                return;
-            }
-
-            if (application.Response.StatusCode == (int) HttpStatusCode.NotFound)
-            {
-                object constraintFailedFlag = application.Context.Items[RouteConstants.RouteMethodConstraintFailed];
-
-                if (constraintFailedFlag != null && Convert.ToBoolean(constraintFailedFlag, CultureInfo.InvariantCulture))
-                {
-                    application.Response.StatusCode = (int) HttpStatusCode.MethodNotAllowed;
-                    application.Response.StatusDescription = RestResources.DisallowedHttpMethod;
-                    return;
-                }
-            }
-
-            if (!IsRestHandler(application))
+            if (application == null || !IsRestHandler(application))
             {
                 return;
             }
@@ -163,6 +147,8 @@ namespace RestFoundation
             catch (Exception ex)
             {
                 LogException(ex);
+                OutputInternalException(application, ex);
+
                 throw;
             }
             finally
@@ -182,10 +168,14 @@ namespace RestFoundation
 
             Exception exception = TryGetException(application);
 
-            if (exception != null && IsRestHandler(application))
+            if (exception == null || !IsRestHandler(application))
             {
-                Rest.Configuration.Options.ExceptionAction(Rest.Configuration.ServiceLocator.GetService<IServiceContext>(), exception);
+                return;
             }
+
+            Rest.Configuration.Options.ExceptionAction(Rest.Configuration.ServiceLocator.GetService<IServiceContext>(), exception);
+
+            OutputInternalException(application, exception);
         }
 
         private static bool IsRestHandler(HttpApplication application)
@@ -222,7 +212,8 @@ namespace RestFoundation
             {
                 if (!HeaderNameValidator.IsValid(header.Key))
                 {
-                    throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.EmptyHttpHeader);
+                    OutputStatus(application, HttpStatusCode.InternalServerError, RestResources.EmptyHttpHeader);
+                    return;
                 }
 
                 application.Response.AppendHeader(header.Key, header.Value);
@@ -254,7 +245,7 @@ namespace RestFoundation
 
             if (responseException != null)
             {
-                SetResponseStatus(application, responseException.StatusCode, responseException.StatusDescription);
+                OutputStatus(application, responseException.StatusCode, responseException.StatusDescription);
                 return null;
             }
 
@@ -262,7 +253,7 @@ namespace RestFoundation
 
             if (faultException != null)
             {
-                SetFaultResponse(application, faultException);
+                OutputValidationFaults(application, faultException);
                 return null;
             }
 
@@ -277,7 +268,7 @@ namespace RestFoundation
 
             if (validationException != null)
             {
-                SetResponseStatus(application, HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
+                OutputStatus(application, HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
                 return null;
             }
 
@@ -287,45 +278,18 @@ namespace RestFoundation
             {
                 if (httpException.Message.Contains(DangerousRequestMessage))
                 {
-                    SetResponseStatus(application, HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
+                    OutputStatus(application, HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
                     return null;
                 }
 
                 if (httpException.Message.Contains(RequestTimeoutMessage))
                 {
-                    SetResponseStatus(application, HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
+                    OutputStatus(application, HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
                     return null;
                 }
             }
 
             return exception;
-        }
-
-        private static void SetResponseStatus(HttpApplication application, HttpStatusCode statusCode, string statusDescription)
-        {
-            application.Response.Clear();
-            application.Response.StatusCode = (int) statusCode;
-            application.Response.StatusDescription = StatusDescriptionFormatter.Format(statusDescription);
-            application.Server.ClearError();
-            application.CompleteRequest();
-        }
-
-        private static void SetFaultResponse(HttpApplication application, HttpResourceFaultException faultException)
-        {
-            application.Server.ClearError();
-            application.Response.Clear();
-            application.Response.StatusCode = (int) HttpStatusCode.BadRequest;
-            application.Response.StatusDescription = RestResources.ResourceValidationFailed;
-
-            if ("POST".Equals(application.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) || "PUT".Equals(application.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) ||
-                "PATCH".Equals(application.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
-            {
-                application.Response.TrySkipIisCustomErrors = true;
-
-                OutputResourceValidationFaults(application, faultException);
-            }
-
-            application.CompleteRequest();
         }
 
         private static void TryClearCompressionFilter(HttpApplication application)
@@ -342,30 +306,128 @@ namespace RestFoundation
             }
         }
 
-        private static void OutputResourceValidationFaults(HttpApplication application, HttpResourceFaultException faultException)
+        private static void HandleNotSupportedHttpMethod(HttpApplication application, FaultCollection faults, ref HttpStatusCode statusCode, ref string statusDescription)
+        {
+            if (statusCode != HttpStatusCode.NotFound)
+            {
+                return;
+            }
+
+            object constraintFailedFlag = application.Context.Items[RouteConstants.RouteMethodConstraintFailed];
+
+            if (constraintFailedFlag == null || !Convert.ToBoolean(constraintFailedFlag, CultureInfo.InvariantCulture))
+            {
+                return;
+            }
+
+            Fault statusFault = faults.General.FirstOrDefault(f => f.Message == RestResources.NotFound);
+
+            if (statusFault != null)
+            {
+                statusFault.Message = RestResources.DisallowedHttpMethod;
+            }
+
+            statusCode = HttpStatusCode.MethodNotAllowed;
+            statusDescription = RestResources.DisallowedHttpMethod;
+        }
+
+        private static void OutputFaults(HttpApplication application, HttpStatusCode statusCode, string statusDescription, FaultCollection faults)
+        {
+            if (faults == null)
+            {
+                throw new ArgumentNullException("faults");
+            }
+
+            var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
+            var handler = application.Context.CurrentHandler as IRestHandler ?? new ContextRestHandler(context);
+
+            application.Server.ClearError();
+            context.Response.Output.Clear();
+
+            HandleNotSupportedHttpMethod(application, faults, ref statusCode, ref statusDescription);
+            context.Response.SetStatus(statusCode, statusDescription);
+
+            var contextNegotiator = Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>();
+
+            if (!contextNegotiator.IsBrowserRequest(context.Request))
+            {
+                context.Response.TrySkipIisCustomErrors = true;
+
+                if (faults.General.Length > 0 || faults.Resource.Length > 0)
+                {
+                    var resultFactory = Rest.Configuration.ServiceLocator.GetService<IResultFactory>();
+
+                    IResult result = resultFactory.Create(faults, faults.GetType(), handler);
+
+                    if (result != null)
+                    {
+                        result.Execute(context);
+                    }
+                }
+            }
+
+            application.CompleteRequest();
+        }
+
+        private static void OutputStatus(HttpApplication application, HttpStatusCode statusCode, string statusDescription)
+        {
+            var faults = new FaultCollection();
+
+            if ((int) statusCode >= MinErrorStatusCode)
+            {
+                faults.General = new[]
+                {
+                    new Fault
+                    {
+                        Message = statusDescription
+                    }
+                };
+            }
+
+            OutputFaults(application, statusCode, statusDescription, faults);
+        }
+
+        private static void OutputInternalException(HttpApplication application, Exception exception)
         {
             var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
-            FaultCollection faultCollection = GenerateFaultCollection(context, faultException);
 
-            if (faultCollection.General.Length == 0 && faultCollection.Resource.Length == 0)
+            if (!context.Request.IsLocal)
             {
                 return;
             }
 
-            var handler = application.Context.CurrentHandler as IRestHandler;
+            var contextNegotiator = Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>();
 
-            if (handler == null)
+            if (contextNegotiator.IsBrowserRequest(context.Request))
             {
                 return;
             }
 
-            var resultFactory = Rest.Configuration.ServiceLocator.GetService<IResultFactory>();
-            IResult result = resultFactory.Create(faultCollection, faultCollection.GetType(), handler);
-
-            if (result != null)
+            var faults = new FaultCollection
             {
-                result.Execute(context);
+                General = new[]
+                {
+                    new Fault
+                    {
+                        Message = String.Concat(exception.Message, Environment.NewLine, exception.ToString())
+                    }
+                }
+            };
+
+            OutputFaults(application, HttpStatusCode.InternalServerError, RestResources.InternalServerError, faults);
+        }
+
+        private static void OutputValidationFaults(HttpApplication application, HttpResourceFaultException faultException)
+        {
+            var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
+            FaultCollection faults = GenerateFaultCollection(context, faultException);
+
+            if (faults.General.Length == 0 && faults.Resource.Length == 0)
+            {
+                return;
             }
+
+            OutputFaults(application, HttpStatusCode.BadRequest, RestResources.ResourceValidationFailed, faults);
         }
 
         private static FaultCollection GenerateFaultCollection(IServiceContext context, HttpResourceFaultException faultException)

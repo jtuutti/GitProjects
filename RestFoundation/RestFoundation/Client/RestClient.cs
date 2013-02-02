@@ -16,7 +16,7 @@ namespace RestFoundation.Client
 {
     internal sealed class RestClient : IRestClient
     {
-        private const int MinErrorCode = 400;
+        private const int MinErrorStatusCode = 400;
         private const string ContentEncodingHeader = "Content-Encoding";
 
         private readonly IRestSerializerFactory m_factory;
@@ -346,7 +346,7 @@ namespace RestFoundation.Client
                     LastStatusCode = (int) response.StatusCode;
                     LastStatusDescription = response.StatusDescription;
 
-                    if (LastStatusCode >= MinErrorCode)
+                    if (LastStatusCode >= MinErrorStatusCode)
                     {
                         throw new HttpException(LastStatusCode, response.StatusDescription);
                     }
@@ -413,7 +413,7 @@ namespace RestFoundation.Client
                     LastStatusCode = (int)response.StatusCode;
                     LastStatusDescription = response.StatusDescription;
 
-                    if (LastStatusCode >= MinErrorCode)
+                    if (LastStatusCode >= MinErrorStatusCode)
                     {
                         throw new HttpException(LastStatusCode, response.StatusDescription);
                     }
