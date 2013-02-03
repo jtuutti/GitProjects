@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Linq;
 
 namespace MessageBus.Msmq.Helpers
 {
@@ -16,7 +15,7 @@ namespace MessageBus.Msmq.Helpers
 
             if (!cachedNames.TryGetValue(type, out name))
             {
-                var nameAttribute = type.GetCustomAttributes(typeof(QueueNameAttribute), true).OfType<QueueNameAttribute>().SingleOrDefault();
+                var nameAttribute = Attribute.GetCustomAttribute(type, typeof(QueueNameAttribute), false) as QueueNameAttribute;
                 name = nameAttribute != null ? nameAttribute.Name : type.Name;
 
                 cachedNames.TryAdd(type, name);

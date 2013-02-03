@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Messaging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -170,15 +171,16 @@ namespace MessageBus.Msmq
         {
             Validate(message);
 
-            var task = Task<object>.Factory.StartNew(f =>
+            var task = Task<object>.Factory.StartNew(m =>
                                                      {
-                                                         message.Headers[SystemHeaders.RequestResponse] = Boolean.TrueString;
+                                                         var messageToSend = (IMessage) m;
+                                                         messageToSend.Headers[SystemHeaders.RequestResponse] = Boolean.TrueString;
 
-                                                         string messageId = SendOneWay(message);
-                                                         message.Headers[SystemHeaders.MessageID] = messageId;
+                                                         string messageId = SendOneWay(messageToSend);
+                                                         messageToSend.Headers[SystemHeaders.MessageID] = messageId;
 
                                                          TimeSpan responseTimeout = Settings.ResponseTimeout;
-                                                         var saga = message as ISaga;
+                                                         var saga = messageToSend as ISaga;
 
                                                          if (saga != null && saga.Timeout > TimeSpan.Zero)
                                                          {
@@ -187,11 +189,11 @@ namespace MessageBus.Msmq
 
                                                          try
                                                          {
-                                                             return GetResponse(messageId, message, responseTimeout);
+                                                             return GetResponse(messageId, messageToSend, responseTimeout);
                                                          }
                                                          catch (Exception ex)
                                                          {
-                                                            ((BusEvents) Events).OnFaultOccurred(messageId, message, ex);
+                                                            ((BusEvents) Events).OnFaultOccurred(messageId, messageToSend, ex);
                                                             return null;
                                                          }
                                                      }, message);
@@ -251,7 +253,8 @@ namespace MessageBus.Msmq
             var task = result as Task<object>;
             if (task == null) throw new InvalidOperationException("Invalid async result returned");
 
-            return (TResponse) ConversionHelper.ChangeType(task.Result, typeof(TResponse));
+            object response = ConversionHelper.ChangeType(task.Result, typeof(TResponse));
+            return !ReferenceEquals(null, response) ? (TResponse) response : default(TResponse);
         }
 
         public void Reply<TResponse>(IMessage message, TResponse value)
@@ -417,7 +420,9 @@ namespace MessageBus.Msmq
 
             if (String.IsNullOrWhiteSpace(messageId))
             {
-                throw new InvalidOperationException(String.Format("Message of type '{0}' cannot be resent.", messageType.FullName));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
+                                                                  "Message of type '{0}' cannot be resent.",
+                                                                  messageType.FullName));
             }
 
             message.Headers[SystemHeaders.Sent] = DateTime.UtcNow.ToString("o");

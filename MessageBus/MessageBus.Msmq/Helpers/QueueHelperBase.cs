@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Messaging;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -47,12 +48,16 @@ namespace MessageBus.Msmq.Helpers
         {
             if (String.IsNullOrWhiteSpace(queueName))
             {
-                throw new InvalidOperationException(String.Format("Message of type '{0}' does not have a queue name assigned.", messageType.Name));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
+                                                                  "Message of type '{0}' does not have a queue name assigned.",
+                                                                  messageType.Name));
             }
 
             if (!queueNameRegEx.IsMatch(queueName))
             {
-                throw new InvalidOperationException(String.Format("Message of type '{0}' does not have valid queue name assigned. It must only contain numbers, digits or dots and be from 3 to 50 characters long.", messageType.Name));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, 
+                                                                  "Message of type '{0}' does not have valid queue name assigned. It must only contain numbers, digits or dots and be from 3 to 50 characters long.",
+                                                                  messageType.Name));
             }
 
             return GetOrCreateQueue(queueName);

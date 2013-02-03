@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace MessageBus
 {
@@ -8,7 +9,9 @@ namespace MessageBus
         {
             if (!messageType.IsClass || messageType.IsAbstract || messageType.GetInterface(typeof(IMessage).FullName) == null)
             {
-                throw new InvalidOperationException(String.Format("Invalid message type '{0}' provided. It must be a concrete class that implements the IMessage interface.", messageType.Name));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
+                                                                  "Invalid message type '{0}' provided. It must be a concrete class that implements the IMessage interface.",
+                                                                  messageType.Name));
             }
         }
     }

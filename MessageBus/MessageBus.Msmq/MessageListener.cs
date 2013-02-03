@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Messaging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,14 +28,18 @@ namespace MessageBus.Msmq
 
             if (cancellations.ContainsKey(messageType))
             {
-                throw new InvalidOperationException(String.Format("Message of type '{0}' is already subscribed to the bus", messageType.Name));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
+                                                                  "Message of type '{0}' is already subscribed to the bus",
+                                                                  messageType.Name));
             }
 
             string queueName = QueueNameHelper.GetName(messageType);
 
             if (!queueNames.Add(queueName))
             {
-                throw new InvalidOperationException(String.Format("A message with queue name '{0}' is already subscribed to the bus", queueName.ToLowerInvariant()));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
+                                                                  "A message with queue name '{0}' is already subscribed to the bus",
+                                                                  queueName.ToLowerInvariant()));
             }
 
             Listen(messageType);
@@ -46,7 +51,9 @@ namespace MessageBus.Msmq
 
             if (!cancellations.TryRemove(messageType, out cancellationSource))
             {
-                throw new InvalidOperationException(String.Format("Message of type '{0}' was not subscribed to the bus", messageType.Name));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
+                                                                  "Message of type '{0}' was not subscribed to the bus",
+                                                                  messageType.Name));
             }
 
             cancellationSource.Cancel();
@@ -69,13 +76,14 @@ namespace MessageBus.Msmq
             var cancellationSource = new CancellationTokenSource();
             cancellations.TryAdd(messageType, cancellationSource);
 
-            Task<Message> task = Task.Factory.StartNew(() => !cancellationSource.Token.IsCancellationRequested ? GetFromQueue(messageType) : null, cancellationSource.Token);
+            Task<Message> task = Task.Factory.StartNew(t => !cancellationSource.Token.IsCancellationRequested ? GetFromQueue(messageType) : null, messageType, cancellationSource.Token);
 
             task.ContinueWith(t =>
             {
                 CancellationTokenSource removedCancellationSource;
+                var messageTypeToReceive = (Type) t.AsyncState;
 
-                if (!cancellations.TryRemove(messageType, out removedCancellationSource))
+                if (!cancellations.TryRemove(messageTypeToReceive, out removedCancellationSource))
                 {
                     removedCancellationSource = null;
                 }
@@ -95,14 +103,14 @@ namespace MessageBus.Msmq
                     }
                     else
                     {
-                        processor.ProcessMessage(messageType, t);
+                        processor.ProcessMessage(messageTypeToReceive, t);
                     }
                 }
                 catch (Exception ex)
                 {
                     try
                     {
-                        processor.ProcessFault(messageType, t, ex);
+                        processor.ProcessFault(messageTypeToReceive, t, ex);
                     }
                     catch
                     {
@@ -111,7 +119,7 @@ namespace MessageBus.Msmq
                 }
                 finally
                 {
-                    Listen(messageType);
+                    Listen(messageTypeToReceive);
                 }
             });
         }

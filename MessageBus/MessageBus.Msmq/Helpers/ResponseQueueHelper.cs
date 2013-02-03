@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Messaging;
 
 namespace MessageBus.Msmq.Helpers
@@ -13,7 +14,7 @@ namespace MessageBus.Msmq.Helpers
         {
             if (messageType == null) throw new ArgumentNullException("messageType");
 
-            string queueName = String.Format("{0}.response", QueueNameHelper.GetName(messageType));
+            string queueName = String.Format(CultureInfo.InvariantCulture, "{0}.response", QueueNameHelper.GetName(messageType));
 
             return GetOrCreateQueue(messageType, queueName);
         }

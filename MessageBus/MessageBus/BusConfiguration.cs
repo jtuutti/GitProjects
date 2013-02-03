@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using MessageBus.Loggers;
 
@@ -88,7 +89,9 @@ namespace MessageBus
 
             if (registeredHandlers.ContainsKey(handler.MessageType))
             {
-                throw new InvalidOperationException(String.Format("There is already a registered handler for the messages of type '{0}'", handler.MessageType.Name));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
+                                                                  "There is already a registered handler for the messages of type '{0}'",
+                                                                  handler.MessageType.Name));
             }
 
             registeredHandlers.Add(handler.MessageType, handler);
