@@ -592,10 +592,7 @@
     {
         var responseStream = ex.Response.GetResponseStream();
 
-        if (responseStream == null ||
-            ex.Response.ContentType == null ||
-            ex.Response.ContentType.IndexOf("text/html", StringComparison.OrdinalIgnoreCase) >= 0 ||
-            ex.Response.ContentType.IndexOf("application/xhtml+xml", StringComparison.OrdinalIgnoreCase) >= 0)
+        if (responseStream == null)
         {
             return String.Empty;
         }

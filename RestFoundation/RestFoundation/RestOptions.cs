@@ -19,6 +19,7 @@ namespace RestFoundation
     {
         internal RestOptions()
         {
+            FaultDetail = FaultDetail.DetailedInDebugMode;
             JsonSettings = new JsonFormatterSettings();
 
             BeginRequestAction = context => { };
@@ -48,6 +49,7 @@ namespace RestFoundation
         internal string ServiceProxyRelativeUrl { get; set; }
         internal string DefaultMediaType { get; private set; }
         internal bool ForceDefaultMediaType { get; private set; }
+        internal FaultDetail FaultDetail { get; private set; }
         internal bool RetainWebServerHeaders { get; private set; }
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
         internal string IndexPageRelativeUrl { get; private set; }
@@ -105,6 +107,23 @@ namespace RestFoundation
             DefaultMediaType = mediaType;
             ForceDefaultMediaType = forceDefaultMediaType;
 
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the detail of information being returned in the fault collection object during an unhandled service
+        /// exception.
+        /// </summary>
+        /// <param name="detail">The detail of fault information.</param>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions WithFaultDetail(FaultDetail detail)
+        {
+            if (!Enum.IsDefined(typeof(FaultDetail), detail))
+            {
+                throw new ArgumentOutOfRangeException("detail");
+            }
+
+            FaultDetail = detail;
             return this;
         }
 

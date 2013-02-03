@@ -409,7 +409,7 @@ namespace RestFoundation
                 {
                     new Fault
                     {
-                        Message = String.Concat(exception.Message, Environment.NewLine, exception.ToString())
+                        Message = GenerateExceptionMessage(application, exception)
                     }
                 }
             };
@@ -428,6 +428,18 @@ namespace RestFoundation
             }
 
             OutputFaults(application, HttpStatusCode.BadRequest, RestResources.ResourceValidationFailed, faults);
+        }
+
+        private static string GenerateExceptionMessage(HttpApplication application, Exception exception)
+        {
+            FaultDetail detail = Rest.Configuration.Options.FaultDetail;
+
+            if (detail == FaultDetail.MessageOnly || (detail == FaultDetail.DetailedInDebugMode && !application.Context.IsDebuggingEnabled))
+            {
+                return exception.Message;
+            }
+
+            return String.Concat(exception.Message, Environment.NewLine, exception.ToString());
         }
 
         private static FaultCollection GenerateFaultCollection(IServiceContext context, HttpResourceFaultException faultException)

@@ -70,6 +70,7 @@
     <Compile Include="Behaviors\Attributes\ServiceMethodBehaviorAttribute.cs" />
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
     <Compile Include="DependencyBuilder.cs" />
+    <Compile Include="FaultDetail.cs" />
     <Compile Include="Formatters\SupportedMediaTypeAttribute.cs" />
     <Compile Include="ILogWriter.cs" />
     <Compile Include="InstanceLifetime.cs" />
