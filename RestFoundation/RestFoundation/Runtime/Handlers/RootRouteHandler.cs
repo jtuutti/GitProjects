@@ -206,13 +206,20 @@ namespace RestFoundation.Runtime.Handlers
                 }
             }
 
-            if (options.IsServiceProxyInitialized && !String.IsNullOrWhiteSpace(options.ServiceProxyRelativeUrl))
+            if (!options.IsServiceProxyInitialized || String.IsNullOrWhiteSpace(options.ServiceProxyRelativeUrl))
             {
-                context.Response.Redirect(String.Concat(m_serviceContext.Request.Url.ToString().TrimEnd(Slash), Slash, options.ServiceProxyRelativeUrl, "/index"), false);
-                return true;
+                return false;
             }
 
-            return false;
+            context.Response.Redirect(GenerateProxyUrl(options), false);
+            return true;
+        }
+
+        private string GenerateProxyUrl(RestOptions options)
+        {
+            string serviceUrl = m_serviceContext.Request.Url.GetLeftPart(UriPartial.Path);
+
+            return String.Concat(serviceUrl.TrimEnd(Slash), Slash, options.ServiceProxyRelativeUrl, Slash, "index");
         }
 
         private void ProcessResult()
