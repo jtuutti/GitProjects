@@ -22,6 +22,7 @@ namespace RestFoundation
     public sealed class RestHttpModule : IHttpModule
     {
         private const int MinErrorStatusCode = 400;
+        private const int UnauthorizedStatusCode = 401;
         private const string DangerousRequestMessage = "A potentially dangerous Request.Path value was detected from the client";
         private const string RequestTimeoutMessage = "Request timed out";
         private const string CatchAllRoute = "catch-all-route";
@@ -372,8 +373,9 @@ namespace RestFoundation
         private static void OutputStatus(HttpApplication application, HttpStatusCode statusCode, string statusDescription)
         {
             var faults = new FaultCollection();
+            var numericStatusCode = (int) statusCode;
 
-            if ((int) statusCode >= MinErrorStatusCode)
+            if (numericStatusCode >= MinErrorStatusCode && numericStatusCode != UnauthorizedStatusCode)
             {
                 faults.General = new[]
                 {

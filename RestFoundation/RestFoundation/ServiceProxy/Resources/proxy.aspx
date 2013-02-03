@@ -35,8 +35,8 @@
             return;
         }
 
-        if (!Request.IsLocal || String.Equals(Request.Url.Host, "localhost", StringComparison.OrdinalIgnoreCase) ||
-            String.Equals(Request.Url.Host, "127.0.0.1"))
+        if (!Request.IsLocal || String.Equals("localhost", Request.Url.Host, StringComparison.OrdinalIgnoreCase) ||
+            String.Equals("127.0.0.1", Request.Url.Host) || String.Equals("::1", Request.Url.Host))
         {
             ConnectToProxy.Visible = false;
         }
@@ -162,9 +162,6 @@
         {
             using (var client = new ProxyWebClient())
             {
-                string data, protocolVersion, responseCode;
-                TimeSpan duration;
-
                 string url = String.Concat(serviceUrl, OperationUrl.Value.Replace("+", "%20"));
 
                 if (operation.Credentials != null && !String.IsNullOrWhiteSpace(UserName.Value) && !String.IsNullOrEmpty(Password.Value))
@@ -187,28 +184,10 @@
                 AddHeaders(client);
                 SetEncoding(client);
 
-                if ("GET".Equals(HttpMethod.SelectedValue) || "HEAD".Equals(HttpMethod.SelectedValue) || "OPTIONS".Equals(HttpMethod.SelectedValue))
-                {
-                    data = PerformGetHeadOptionsRequest(url, client, out duration, out protocolVersion, out responseCode);
-                }
-                else if ("POST".Equals(HttpMethod.SelectedValue) || "PUT".Equals(HttpMethod.SelectedValue) || "PATCH".Equals(HttpMethod.SelectedValue))
-                {
-                    data = PerformPostPutPatchRequest(url, client, out duration, out protocolVersion, out responseCode);
-                }
-                else if ("DELETE".Equals(HttpMethod.SelectedValue))
-                {
-                    data = PerformDeleteRequest(url, client, out duration, out protocolVersion, out responseCode);
-                }
-                else
-                {
-                    throw new HttpException((int) HttpStatusCode.MethodNotAllowed, "Invalid HTTP method provided");
-                }
+                string protocolVersion, responseCode;
+                TimeSpan duration;
 
-                if (data == null)
-                {
-                    data = String.Empty;
-                }
-
+                string data = PerformRequest(url, HttpMethod.SelectedValue, client, out duration, out protocolVersion, out responseCode) ?? String.Empty;
                 bool hasData = data.Trim().Length > 0;
 
                 if (hasData)
@@ -298,18 +277,18 @@
         }
     }
 
-    private static string GetProtocolVersion(ProxyWebClient client)
+    private static string GetProtocolVersion(WebResponse response)
     {
-        ProxyWebResponse response = client.WebResponse;
-                
-        return response != null ? response.ProtocolVersion.ToString() : null;
+        var proxyResponse = response as ProxyWebResponse ?? new ProxyWebResponse(response);
+
+        return proxyResponse.ProtocolVersion.ToString();
     }
 
-    private static string GetStatusCode(ProxyWebClient client)
+    private static string GetStatusCode(WebResponse response)
     {
-        ProxyWebResponse response = client.WebResponse;
+        var proxyResponse = response as ProxyWebResponse ?? new ProxyWebResponse(response);
 
-        return response != null ? String.Format(CultureInfo.InvariantCulture, "{0} - {1}", (int) response.StatusCode, DecodeHttpStatus(response.StatusCode, response.StatusDescription)) : null;
+        return String.Format(CultureInfo.InvariantCulture, "{0} - {1}", (int) proxyResponse.StatusCode, DecodeHttpStatus(proxyResponse.StatusCode, proxyResponse.StatusDescription));
     }
 
     private static string DecodeHttpStatus(HttpStatusCode statusCode, string statusDescription)
@@ -340,11 +319,6 @@
 
     private static string GetResponseHeaders(String url, NameValueCollection headerCollection, TimeSpan duration, string protocolVersion, string responseCode, bool hasOutput)
     {
-        if (headerCollection == null || headerCollection.Count == 0)
-        {
-            return String.Empty;
-        }
-
         var headerString = new StringBuilder();
 
         headerString.AppendLine("RESPONSE");
@@ -362,9 +336,14 @@
             headerString.AppendLine();
         }
 
-        headerString.AppendFormat("Duration: {0} ms", Convert.ToInt32(duration.TotalMilliseconds)).AppendLine().AppendLine();
+        headerString.AppendFormat("Duration: {0} ms", Convert.ToInt32(duration.TotalMilliseconds));
 
-        headerString.AppendLine("HEADERS");
+        if (headerCollection == null || headerCollection.Count == 0)
+        {
+            return String.Empty;
+        }
+
+        headerString.AppendLine().AppendLine().AppendLine("HEADERS");
         CreateOutputSeparator(headerString);
 
         var headerNames = headerCollection.AllKeys.OrderBy(k => k).ToList();
@@ -501,100 +480,20 @@
         }
     }
 
-    private string GetHttpError(WebException ex, TimeSpan duration)
+    private string GetExceptionResponseData(WebException ex, out NameValueCollection headers)
     {
-        ClientScript.RegisterStartupScript(GetType(), "HttpErrorScript", "$('#ResponseText').addClass('input-validation-error')", true);
-        
-        var webResponse = ex.Response as ProxyWebResponse;
+        headers = new NameValueCollection();
 
-        var errorString = new StringBuilder();
-        errorString.AppendLine("RESPONSE");
-        CreateOutputSeparator(errorString);
-        errorString.Append("URL: ").AppendLine(String.Concat(serviceUrl, OperationUrl.Value.Replace("+", "%20")));
-
-        if (webResponse != null)
-        {
-            errorString.AppendFormat("HTTP/{0}: {1} - {2}",
-                                     webResponse.ProtocolVersion,
-                                     (int) webResponse.StatusCode,
-                                     DecodeHttpStatus(webResponse.StatusCode, webResponse.StatusDescription));
-        }
-        else
-        {
-            var httpResponse = ex.Response as HttpWebResponse;
-
-            if (httpResponse != null)
-            {
-                errorString.AppendFormat("HTTP/{0}: {1} - {2}",
-                                         httpResponse.ProtocolVersion,
-                                         (int) httpResponse.StatusCode,
-                                         DecodeHttpStatus(httpResponse.StatusCode, httpResponse.StatusDescription));
-            }
-        }
-        
-        errorString.AppendLine().AppendFormat("Duration: {0} ms", Convert.ToInt32(duration.TotalMilliseconds));
-        errorString.Append(GetErrorResponseHeaders(ex));
-
-        string responseData = GetErrorResponseData(ex);
-
-        if (!String.IsNullOrWhiteSpace(responseData))
-        {
-            errorString.AppendLine().AppendLine().AppendLine("BODY");
-            CreateOutputSeparator(errorString);
-            errorString.Append(responseData);
-        }
-
-        return errorString.ToString();
-    }
-
-    private string GetErrorResponseHeaders(WebException ex)
-    {
-        if (!DisplayResponseHeaders.Checked)
-        {
-            return String.Empty;
-        }
-
-        var headerString = new StringBuilder();
-               
-        headerString.AppendLine().AppendLine().AppendLine("HEADERS");
-        CreateOutputSeparator(headerString);
-        
-        var headerNames = ex.Response.Headers.AllKeys.OrderBy(k => k).ToList();
-
-        for (int i = 0; i < headerNames.Count; i++)
-        {
-            string headerName = headerNames[i];
-
-            if (String.IsNullOrWhiteSpace(headerName))
-            {
-                continue;
-            }
-
-            string headerValue = ex.Response.Headers[headerName];
-
-            if (String.IsNullOrWhiteSpace(headerName) || headerName.Equals("set-cookie", StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-
-            headerString.AppendFormat("{0}: {1}", headerName, headerValue);
-
-            if (i < headerNames.Count - 1)
-            {
-                headerString.AppendLine();
-            }
-        }
-
-        return headerString.ToString();
-    }
-
-    private string GetErrorResponseData(WebException ex)
-    {
         var responseStream = ex.Response.GetResponseStream();
 
         if (responseStream == null)
         {
             return String.Empty;
+        }
+
+        if (ex.Response.Headers != null)
+        {
+            headers.Add(ex.Response.Headers);
         }
 
         if (String.IsNullOrEmpty(ContentType.Value))
@@ -619,86 +518,52 @@
         }
     }
 
-    private string PerformGetHeadOptionsRequest(string url, ProxyWebClient client, out TimeSpan duration, out string protocolVersion, out string responseCode)
+    private string PerformRequest(string url, string httpMethod, ProxyWebClient client, out TimeSpan duration, out string protocolVersion, out string responseCode)
     {
         var timer = Stopwatch.StartNew();
         string data;
 
         try
         {
-            if (String.Equals("OPTIONS", HttpMethod.SelectedValue))
+            switch (httpMethod.ToUpperInvariant())
             {
-                client.Options = true;
+                case "DELETE":
+                    data = client.UploadString(url, HttpMethod.SelectedValue, String.Empty);
+                    break;
+                case "GET":
+                    data = client.DownloadString(url);
+                    break;
+                case "HEAD":
+                    client.HeadOnly = true;
+                    data = client.DownloadString(url);
+                    break;
+                case "OPTIONS":
+                    client.Options = true;
+                    data = client.DownloadString(url);
+                    break;
+                case "PATCH":
+                case "POST":
+                case "PUT":
+                    data = client.UploadString(url, HttpMethod.SelectedValue, RequestText.Value);
+                    break;
+                default:
+                    throw new HttpException((int) HttpStatusCode.MethodNotAllowed, "Invalid HTTP method provided");
             }
-            else if (String.Equals("HEAD", HttpMethod.SelectedValue))
-            {
-                client.HeadOnly = true;
-            }
 
-            data = client.DownloadString(url);
-            responseCode = GetStatusCode(client);
-            protocolVersion = GetProtocolVersion(client);
+            responseCode = GetStatusCode(client.WebResponse);
+            protocolVersion = GetProtocolVersion(client.WebResponse);
         }
         catch (WebException ex)
         {
-            data = GetHttpError(ex, timer.Elapsed);
+            NameValueCollection headers;
+            data = GetExceptionResponseData(ex, out headers);
+            client.ResponseHeaders.Clear();
+            client.ResponseHeaders.Add(headers);
 
-            responseCode = null;
-            protocolVersion = String.Empty;
-        }
-        finally
-        {
-            timer.Stop();
-            duration = timer.Elapsed;
-        }
-
-        return data;
-    }
-
-    private string PerformPostPutPatchRequest(string url, ProxyWebClient client, out TimeSpan duration, out string protocolVersion, out string responseCode)
-    {
-        var timer = Stopwatch.StartNew();
-        string data;
-
-        try
-        {
-            data = client.UploadString(url, HttpMethod.SelectedValue, RequestText.Value);
-            responseCode = GetStatusCode(client);
-            protocolVersion = GetProtocolVersion(client);
-        }
-        catch (WebException ex)
-        {
-            data = GetHttpError(ex, timer.Elapsed);
-
-            responseCode = null;
-            protocolVersion = String.Empty;
-        }
-        finally
-        {
-            timer.Stop();
-            duration = timer.Elapsed;
-        }
-
-        return data;
-    }
-
-    private string PerformDeleteRequest(string url, ProxyWebClient client, out TimeSpan duration, out string protocolVersion, out string responseCode)
-    {
-        var timer = Stopwatch.StartNew();
-        string data;
-
-        try
-        {
-            data = client.UploadString(url, HttpMethod.SelectedValue, String.Empty);
-            responseCode = GetStatusCode(client);
-            protocolVersion = GetProtocolVersion(client);
-        }
-        catch (WebException ex)
-        {
-            data = GetHttpError(ex, timer.Elapsed);
-
-            responseCode = null;
-            protocolVersion = String.Empty;
+            responseCode = GetStatusCode(ex.Response);
+            protocolVersion = GetProtocolVersion(ex.Response);
+            
+            ClientScript.RegisterStartupScript(GetType(), "HttpErrorScript", "$('#ResponseText').addClass('input-validation-error')", true);
         }
         finally
         {

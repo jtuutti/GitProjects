@@ -13,6 +13,7 @@ namespace RestFoundation.ServiceProxy
     {
         private const string IfModifiedSinceHeader = "If-Modified-Since";
 
+        private WebHeaderCollection m_responseHeaders;
         private bool m_isDisposed;
 
         /// <summary>
@@ -29,6 +30,22 @@ namespace RestFoundation.ServiceProxy
         /// Gets the service proxy web response.
         /// </summary>
         public ProxyWebResponse WebResponse { get; private set; }
+
+        /// <summary>
+        /// Gets the response headers.
+        /// </summary>
+        public new WebHeaderCollection ResponseHeaders
+        {
+            get
+            {
+                if (base.ResponseHeaders != null)
+                {
+                    return base.ResponseHeaders;
+                }
+
+                return m_responseHeaders ?? (m_responseHeaders = new WebHeaderCollection());
+            }
+        }
 
         /// <summary>
         /// Returns a <see cref="T:System.Net.WebRequest"/> object for the specified resource.
