@@ -559,6 +559,29 @@
       <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
       <exception cref="T:System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
     </member>
+    <member name="T:RestFoundation.FaultDetail">
+      <summary>
+            Defines the detail of information returned in the fault collection object during an
+            unhandled service exception.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.FaultDetail.MessageOnly">
+      <summary>
+            Only the exception message is returned.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.FaultDetail.DetailedInDebugMode">
+      <summary>
+            The exception message and the stack trace are returned in the debug mode.
+            Only the exception message is returned in the release mode.
+            This is the default setting.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.FaultDetail.Detailed">
+      <summary>
+            The exception message and the stack trace are always returned.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Formatters.SupportedMediaTypeAttribute">
       <summary>
             Represents a supported media type for a media type formatter.
@@ -906,11 +929,29 @@
             Represents a general or a resource fault.
             </summary>
     </member>
-    <member name="M:RestFoundation.Runtime.Fault.ShouldSerializePropertyName">
+    <member name="M:RestFoundation.Runtime.Fault.GetSchema">
       <summary>
-            A serializer helper method.
+            This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return
+            null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the
+            <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute" /> to the class.
             </summary>
-      <returns>A value indicating whether the property name should be serialized.</returns>
+      <returns>
+            An <see cref="T:System.Xml.Schema.XmlSchema" /> that describes the XML representation of the object that is produced
+            by the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)" /> method and consumed
+            by the <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)" /> method.
+            </returns>
+    </member>
+    <member name="M:RestFoundation.Runtime.Fault.ReadXml(System.Xml.XmlReader)">
+      <summary>
+            Generates an object from its XML representation.
+            </summary>
+      <param name="reader">The <see cref="T:System.Xml.XmlReader" /> stream from which the object is deserialized.</param>
+    </member>
+    <member name="M:RestFoundation.Runtime.Fault.WriteXml(System.Xml.XmlWriter)">
+      <summary>
+            Converts an object into its XML representation.
+            </summary>
+      <param name="writer">The <see cref="T:System.Xml.XmlWriter" /> stream to which the object is serialized.</param>
     </member>
     <member name="P:RestFoundation.Runtime.Fault.PropertyName">
       <summary>
@@ -935,6 +976,31 @@
     <member name="P:RestFoundation.Runtime.FaultCollection.Resource">
       <summary>
             Gets or sets an array of resource faults.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.Runtime.Handlers.IRestHandler">
+      <summary>
+            Defines a REST service handler.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.Context">
+      <summary>
+            Gets the service context.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.ServiceUrl">
+      <summary>
+            Gets the service URL.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.ServiceContractTypeName">
+      <summary>
+            Gets a fully qualified name of the interface type defining the service contract.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.UrlTemplate">
+      <summary>
+            Gets a relative URL template.
             </summary>
     </member>
     <member name="T:RestFoundation.Runtime.Link">
@@ -1092,6 +1158,14 @@
             </param>
       <returns>The configuration options object.</returns>
     </member>
+    <member name="M:RestFoundation.RestOptions.WithFaultDetail(RestFoundation.FaultDetail)">
+      <summary>
+            Sets the detail of information being returned in the fault collection object during an unhandled service
+            exception.
+            </summary>
+      <param name="detail">The detail of fault information.</param>
+      <returns>The configuration options object.</returns>
+    </member>
     <member name="M:RestFoundation.RestOptions.WithGlobalBehaviors(System.Action{RestFoundation.GlobalBehaviorBuilder})">
       <summary>
             Calls the provided global behavior builder delegate to set or remove behaviors global to all services.
@@ -1165,6 +1239,14 @@
             Sets custom XML formatter and result settings.
             </summary>
       <param name="settings">The XML formatter settings.</param>
+      <returns>The configuration options object.</returns>
+    </member>
+    <member name="M:RestFoundation.RestOptions.DoNotRemoveWebServerHeaders">
+      <summary>
+            Retains the HTTP response headers generated by the IIS server and ASP .NET framework.
+            It is not recommended to retain these headers because they expose the technology
+            the services are implemented in to the user.
+            </summary>
       <returns>The configuration options object.</returns>
     </member>
     <member name="M:RestFoundation.RestOptions.OnBeginRequest(System.Action{RestFoundation.IServiceContext})">
@@ -1309,6 +1391,11 @@
               Looks up a localized string similar to HTTPS required.
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.InternalServerError">
+      <summary>
+              Looks up a localized string similar to Internal Server Error.
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.InvalidArgumentValue">
       <summary>
               Looks up a localized string similar to The argument contains invalid elements..
@@ -1317,6 +1404,11 @@
     <member name="P:RestFoundation.RestResources.InvalidAsyncServiceTimeout">
       <summary>
               Looks up a localized string similar to Invalid asynchronous service method timeout provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.InvalidCatchAllUrlTemplate">
+      <summary>
+              Looks up a localized string similar to URL templates cannot contain catch-all parameters. Template: '{0}'.
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidConnectionTimeout">
@@ -1422,6 +1514,11 @@
     <member name="P:RestFoundation.RestResources.InvalidServiceMethodExpression">
       <summary>
               Looks up a localized string similar to Invalid service method lambda expression provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.InvalidServiceName">
+      <summary>
+              Looks up a localized string similar to Invalid relative service URL name '{0}' provided. It can only contain letters, digits, underscores and dashes..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidServiceUrlOrMethodExpression">
@@ -2338,31 +2435,6 @@
       <returns>
             true if the HTTP request came from a web browser; otherwise, false.
             </returns>
-    </member>
-    <member name="T:RestFoundation.Runtime.Handlers.IRestHandler">
-      <summary>
-            Defines a REST service handler.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.Context">
-      <summary>
-            Gets the service context.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.ServiceUrl">
-      <summary>
-            Gets the service URL.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.ServiceContractTypeName">
-      <summary>
-            Gets a fully qualified name of the interface type defining the service contract.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.UrlTemplate">
-      <summary>
-            Gets a relative URL template.
-            </summary>
     </member>
     <member name="T:RestFoundation.Runtime.Handlers.IRestAsyncHandler">
       <summary>
@@ -9668,6 +9740,11 @@
     <member name="P:RestFoundation.ServiceProxy.ProxyWebClient.WebResponse">
       <summary>
             Gets the service proxy web response.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxyWebClient.ResponseHeaders">
+      <summary>
+            Gets the response headers.
             </summary>
     </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyWebResponse">
