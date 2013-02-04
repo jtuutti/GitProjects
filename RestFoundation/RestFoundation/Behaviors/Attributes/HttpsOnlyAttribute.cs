@@ -14,6 +14,28 @@ namespace RestFoundation.Behaviors
     public sealed class HttpsOnlyAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>
+        /// Gets the HTTP status code in case of a security exception.
+        /// </summary>
+        public override HttpStatusCode StatusCode
+        {
+            get
+            {
+                return HttpStatusCode.Forbidden;
+            }
+        }
+
+        /// <summary>
+        /// Gets the HTTP status description in case of a security exception.
+        /// </summary>
+        public override string StatusDescription
+        {
+            get
+            {
+                return RestResources.HttpsRequiredStatusDescription;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the load balancer support for forwarding HTTPS traffic
         /// over HTTP channel is allowed.
         /// </summary>
@@ -34,13 +56,11 @@ namespace RestFoundation.Behaviors
 
             if (EnableLoadBalancerSupport && !serviceContext.Request.IsSecure)
             {
-                serviceContext.Response.SetStatus(HttpStatusCode.Forbidden, RestResources.HttpsRequiredStatusDescription);
                 return BehaviorMethodAction.Stop;
             }
 
             if (!EnableLoadBalancerSupport && !String.Equals("https", serviceContext.Request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
             {
-                serviceContext.Response.SetStatus(HttpStatusCode.Forbidden, RestResources.HttpsRequiredStatusDescription);
                 return BehaviorMethodAction.Stop;
             }
 

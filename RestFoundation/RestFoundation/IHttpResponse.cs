@@ -108,6 +108,13 @@ namespace RestFoundation
         void SetStatus(HttpStatusCode statusCode, string statusDescription);
 
         /// <summary>
+        /// Sets the HTTP status code and description.
+        /// </summary>
+        /// <param name="statusCode">The status code.</param>
+        /// <param name="statusDescription">The status description.</param>
+        void SetStatus(int statusCode, string statusDescription);
+
+        /// <summary>
         /// Gets a collection of all response cookies set by the service.
         /// </summary>
         /// <returns>A list of response cookies.</returns>

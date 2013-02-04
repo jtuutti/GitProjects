@@ -59,6 +59,7 @@
     <Compile Include="Behaviors\AjaxOnlyBehavior.cs" />
     <Compile Include="Behaviors\Attributes\AjaxOnlyAttribute.cs" />
     <Compile Include="Behaviors\Attributes\OutputCacheAttribute.cs" />
+    <Compile Include="Behaviors\Attributes\ThrottlingAttribute.cs" />
     <Compile Include="Behaviors\CacheValidationHandlerData.cs" />
     <Compile Include="Behaviors\Context\BehaviorContext.cs" />
     <Compile Include="Behaviors\Context\MethodAppliesContext.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Behaviors\Attributes\HttpsOnlyAttribute.cs" />
     <Compile Include="Behaviors\Attributes\NoCacheAttribute.cs" />
     <Compile Include="Behaviors\Attributes\ServiceMethodBehaviorAttribute.cs" />
+    <Compile Include="Behaviors\ThrottlingBehavior.cs" />
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
     <Compile Include="DependencyBuilder.cs" />
     <Compile Include="FaultDetail.cs" />

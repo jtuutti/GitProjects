@@ -15,6 +15,28 @@ namespace RestFoundation.Behaviors
     public sealed class AjaxOnlyAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>
+        /// Gets the HTTP status code in case of a security exception.
+        /// </summary>
+        public override HttpStatusCode StatusCode
+        {
+            get
+            {
+                return HttpStatusCode.NotFound;
+            }
+        }
+
+        /// <summary>
+        /// Gets the HTTP status description in case of a security exception.
+        /// </summary>
+        public override string StatusDescription
+        {
+            get
+            {
+                return RestResources.NotFound;
+            }
+        }
+
+        /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
         /// </summary>
         /// <param name="serviceContext">The service context.</param>
@@ -29,7 +51,6 @@ namespace RestFoundation.Behaviors
 
             if (!serviceContext.Request.IsAjax)
             {
-                serviceContext.Response.SetStatus(HttpStatusCode.NotFound, RestResources.NotFound);
                 return BehaviorMethodAction.Stop;
             }
 

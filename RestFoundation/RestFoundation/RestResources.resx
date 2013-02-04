@@ -553,4 +553,8 @@
     <value>Internal Server Error</value>
     <comment>Internal Server Error</comment>
   </data>
+  <data name="TooManyRequests" xml:space="preserve">
+    <value>Too many requests</value>
+    <comment>Too many requests</comment>
+  </data>
 </root>

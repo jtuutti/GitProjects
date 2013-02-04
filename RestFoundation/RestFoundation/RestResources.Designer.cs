@@ -871,6 +871,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Too many requests.
+        /// </summary>
+        internal static string TooManyRequests {
+            get {
+                return ResourceManager.GetString("TooManyRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cache could not be initialized..
         /// </summary>
         internal static string UnableToInitializeCache {

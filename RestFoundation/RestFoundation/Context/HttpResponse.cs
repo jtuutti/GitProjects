@@ -228,6 +228,22 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
+        /// Sets the HTTP status code and description.
+        /// </summary>
+        /// <param name="statusCode">The status code.</param>
+        /// <param name="statusDescription">The status description.</param>
+        public void SetStatus(int statusCode, string statusDescription)
+        {
+            if (statusCode < 100 || statusCode >= 600)
+            {
+                throw new ArgumentOutOfRangeException("statusCode");
+            }
+
+            Context.Response.StatusCode = statusCode;
+            Context.Response.StatusDescription = StatusDescriptionFormatter.Format(statusDescription);
+        }
+
+        /// <summary>
         /// Gets a collection of all response cookies set by the service.
         /// </summary>
         /// <returns>A list of response cookies.</returns>
