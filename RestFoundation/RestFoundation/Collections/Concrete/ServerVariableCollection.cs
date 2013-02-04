@@ -16,7 +16,7 @@ namespace RestFoundation.Collections.Concrete
             ApplicationPoolId = TryGet("APP_POOL_ID");
             HttpVersion = TryGet("HTTP_VERSION");
             LocalAddress = TryGet("LOCAL_ADDR");
-            RemoteAddress = TryGet("REMOTE_ADDR");
+            RemoteAddress = TryGet("HTTP_X_FORWARDED_FOR") ?? TryGet("REMOTE_ADDR");
             RemoteUser = TryGet("REMOTE_USER");
             ServerName = TryGet("SERVER_NAME");
 
