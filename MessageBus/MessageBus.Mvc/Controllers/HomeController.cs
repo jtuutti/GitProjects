@@ -31,20 +31,20 @@ namespace MessageBus.Mvc.Controllers
 
             var command = new Command { Id = number };
 
-            bus.SendAsync(command, ar =>
+            bus.SendAsync(command, r =>
                                    {
                                        try
                                        {
-                                           var response = bus.SendComplete<MessageTypeEnum>(ar);
-
-                                           AsyncManager.Parameters["response"] = response;
+                                           AsyncManager.Parameters["response"] = bus.SendComplete<MessageTypeEnum>(r);
                                        }
                                        catch (Exception ex)
                                        {
                                            AsyncManager.Parameters["ex"] = ex;
                                        }
-
-                                       AsyncManager.OutstandingOperations.Decrement();
+									   finally
+									   {
+                                           AsyncManager.OutstandingOperations.Decrement();
+									   }
                                    });
         }
 
