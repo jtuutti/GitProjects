@@ -24,6 +24,7 @@ namespace RestFoundation.Context
         private const string AjaxHeaderValue = "XMLHttpRequest";
         private const string ContextContainerKey = "REST_Context";
         private const string FormDataMediaType = "application/x-www-form-urlencoded";
+        private const string ForwardedProtocolHeaderName = "X-Forwarded-Proto";
 
         /// <summary>
         /// Gets a value indicating whether the request was initiated through AJAX.
@@ -54,7 +55,7 @@ namespace RestFoundation.Context
         {
             get
             {
-                return Context.Request.IsSecureConnection;
+                return Context.Request.IsSecureConnection || String.Equals("https", Headers.TryGet(ForwardedProtocolHeaderName), StringComparison.OrdinalIgnoreCase);
             }
         }
 

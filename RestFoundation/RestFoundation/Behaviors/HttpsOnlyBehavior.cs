@@ -11,6 +11,28 @@ namespace RestFoundation.Behaviors
     /// </summary>
     public class HttpsOnlyBehavior : SecureServiceBehavior
     {
+        private readonly bool m_enableLoadBalancerSupport;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpsOnlyBehavior"/> class.
+        /// Load balancer support is disabled by default.
+        /// </summary>
+        public HttpsOnlyBehavior() : this(false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpsOnlyBehavior"/> class.
+        /// </summary>
+        /// <param name="enableLoadBalancerSupport">
+        /// A value indicating whether the load balancer support for forwarding HTTPS traffic over an HTTP
+        /// channel is allowed.
+        /// </param>
+        public HttpsOnlyBehavior(bool enableLoadBalancerSupport)
+        {
+            m_enableLoadBalancerSupport = enableLoadBalancerSupport;
+        }
+
         /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
         /// </summary>
@@ -24,10 +46,16 @@ namespace RestFoundation.Behaviors
                 throw new ArgumentNullException("serviceContext");
             }
 
-            if (!String.Equals("https", serviceContext.Request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
+            if (m_enableLoadBalancerSupport && !serviceContext.Request.IsSecure)
             {
                 SetStatusDescription(RestResources.HttpsRequiredStatusDescription);
-                return BehaviorMethodAction.Stop;
+                return BehaviorMethodAction.Stop;               
+            }
+
+            if (!m_enableLoadBalancerSupport && !String.Equals("https", serviceContext.Request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
+            {
+                SetStatusDescription(RestResources.HttpsRequiredStatusDescription);
+                return BehaviorMethodAction.Stop;               
             }
 
             return BehaviorMethodAction.Execute;

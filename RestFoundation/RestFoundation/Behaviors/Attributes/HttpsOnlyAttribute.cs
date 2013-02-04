@@ -14,6 +14,12 @@ namespace RestFoundation.Behaviors
     public sealed class HttpsOnlyAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>
+        /// Gets or sets a value indicating whether the load balancer support for forwarding HTTPS traffic
+        /// over HTTP channel is allowed.
+        /// </summary>
+        public bool EnableLoadBalancerSupport { get; set; }
+
+        /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
         /// </summary>
         /// <param name="serviceContext">The service context.</param>
@@ -26,7 +32,13 @@ namespace RestFoundation.Behaviors
                 throw new ArgumentNullException("serviceContext");
             }
 
-            if (!String.Equals("https", serviceContext.Request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
+            if (EnableLoadBalancerSupport && !serviceContext.Request.IsSecure)
+            {
+                serviceContext.Response.SetStatus(HttpStatusCode.Forbidden, RestResources.HttpsRequiredStatusDescription);
+                return BehaviorMethodAction.Stop;
+            }
+
+            if (!EnableLoadBalancerSupport && !String.Equals("https", serviceContext.Request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
             {
                 serviceContext.Response.SetStatus(HttpStatusCode.Forbidden, RestResources.HttpsRequiredStatusDescription);
                 return BehaviorMethodAction.Stop;
