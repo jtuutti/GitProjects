@@ -11,12 +11,14 @@ namespace RestFoundation.Collections.Concrete
     /// </summary>
     public class ServerVariableCollection : StringValueCollection, IServerVariableCollection
     {
+        private const char ForwardedAddressSeparator = ',';
+
         internal ServerVariableCollection(NameValueCollection values) : base(values)
         {
             ApplicationPoolId = TryGet("APP_POOL_ID");
             HttpVersion = TryGet("HTTP_VERSION");
             LocalAddress = TryGet("LOCAL_ADDR");
-            RemoteAddress = TryGet("HTTP_X_FORWARDED_FOR") ?? TryGet("REMOTE_ADDR");
+            RemoteAddress = TryGetRemoteAddress();
             RemoteUser = TryGet("REMOTE_USER");
             ServerName = TryGet("SERVER_NAME");
 
@@ -62,6 +64,25 @@ namespace RestFoundation.Collections.Concrete
         /// Gets the server port.
         /// </summary>
         public int ServerPort { get; protected set; }
+
+        private string TryGetRemoteAddress()
+        {
+            string forwardedAddress = TryGet("HTTP_X_FORWARDED_FOR");
+
+            if (String.IsNullOrWhiteSpace(forwardedAddress) || forwardedAddress.IndexOf(ForwardedAddressSeparator) == 0)
+            {
+                return TryGet("REMOTE_ADDR");
+            }
+
+            if (forwardedAddress.IndexOf(ForwardedAddressSeparator) > 0)
+            {
+                string[] forwardedAddresses = forwardedAddress.Split(new[] { ForwardedAddressSeparator }, StringSplitOptions.RemoveEmptyEntries);
+
+                return forwardedAddresses[0].Trim();
+            }
+
+            return forwardedAddress;
+        }
 
         private void SetPorts()
         {
