@@ -200,6 +200,16 @@
       <param name="behaviorContext">The "method authorizing" behavior context.</param>
       <returns>A service method action.</returns>
     </member>
+    <member name="P:RestFoundation.Behaviors.AjaxOnlyAttribute.StatusCode">
+      <summary>
+            Gets the HTTP status code in case of a security exception.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.AjaxOnlyAttribute.StatusDescription">
+      <summary>
+            Gets the HTTP status description in case of a security exception.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Behaviors.OutputCacheAttribute">
       <summary>
             Represents a service method with a specific HTTP caching behavior.
@@ -250,6 +260,45 @@
     <member name="P:RestFoundation.Behaviors.OutputCacheAttribute.VaryByParam">
       <summary>
             Gets or sets a comma delimited set of query string or form POST parameters used to vary the cache entry.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.Behaviors.Attributes.ThrottlingAttribute">
+      <summary>
+            Represents a bandwidth throttling behavior for a service method.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.Attributes.ThrottlingAttribute.#ctor(System.Int32)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.ThrottlingAttribute" /> class.
+            </summary>
+      <param name="delayInMilliseconds">
+            The number of milliseconds allowed between the calls for a user.
+            </param>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+            If the delay is a non-positive number.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Behaviors.Attributes.ThrottlingAttribute.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+      <summary>
+            Called during the authorization process before a service method or behavior is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method authorizing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="P:RestFoundation.Behaviors.Attributes.ThrottlingAttribute.StatusCode">
+      <summary>
+            Gets the HTTP status code in case of a security exception.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.Attributes.ThrottlingAttribute.StatusDescription">
+      <summary>
+            Gets the HTTP status description in case of a security exception.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.Attributes.ThrottlingAttribute.DelayInMilliseconds">
+      <summary>
+            Gets the number of milliseconds allowed between the calls for a user.
             </summary>
     </member>
     <member name="T:RestFoundation.Behaviors.BehaviorContext">
@@ -404,6 +453,22 @@
       <param name="behaviorContext">The "method authorizing" behavior context.</param>
       <returns>A service method action.</returns>
     </member>
+    <member name="P:RestFoundation.Behaviors.HttpsOnlyAttribute.StatusCode">
+      <summary>
+            Gets the HTTP status code in case of a security exception.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.HttpsOnlyAttribute.StatusDescription">
+      <summary>
+            Gets the HTTP status description in case of a security exception.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.HttpsOnlyAttribute.EnableLoadBalancerSupport">
+      <summary>
+            Gets or sets a value indicating whether the load balancer support for forwarding HTTPS traffic
+            over HTTP channel is allowed.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Behaviors.NoCacheAttribute">
       <summary>
             Represents a service method that prevents HTTP caching.
@@ -415,6 +480,30 @@
             </summary>
       <param name="serviceContext">The service context.</param>
       <param name="behaviorContext">The "method executed" behavior context.</param>
+    </member>
+    <member name="T:RestFoundation.Behaviors.ThrottlingBehavior">
+      <summary>
+            Represents a bandwidth throttling behavior for a service.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ThrottlingBehavior.#ctor(System.Int32)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.ThrottlingBehavior" /> class.
+            </summary>
+      <param name="delayInMilliseconds">
+            The number of milliseconds allowed between the calls for a user.
+            </param>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+            If the delay is a non-positive number.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Behaviors.ThrottlingBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+      <summary>
+            Called during the authorization process before a service method or behavior is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method authorizing" behavior context.</param>
+      <returns>A service method action.</returns>
     </member>
     <member name="T:RestFoundation.Collections.Specialized.LinkCollection">
       <summary>
@@ -1749,6 +1838,11 @@
     <member name="P:RestFoundation.RestResources.SuccessfulOperation">
       <summary>
               Looks up a localized string similar to Operation is successful.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.TooManyRequests">
+      <summary>
+              Looks up a localized string similar to Too many requests.
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.UnableToInitializeCache">
@@ -3503,6 +3597,21 @@
             Represents an HTTPS secure behavior for a service or a service method. Any unsecure
             HTTP connection will set a 403 (Forbidden) HTTP status code if the connection is not secure.
             </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.HttpsOnlyBehavior.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.HttpsOnlyBehavior" /> class.
+            Load balancer support is disabled by default.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.HttpsOnlyBehavior.#ctor(System.Boolean)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.HttpsOnlyBehavior" /> class.
+            </summary>
+      <param name="enableLoadBalancerSupport">
+            A value indicating whether the load balancer support for forwarding HTTPS traffic over an HTTP
+            channel is allowed.
+            </param>
     </member>
     <member name="M:RestFoundation.Behaviors.HttpsOnlyBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
       <summary>
@@ -8662,6 +8771,13 @@
       <param name="statusCode">The status code.</param>
       <param name="statusDescription">The status description.</param>
     </member>
+    <member name="M:RestFoundation.IHttpResponse.SetStatus(System.Int32,System.String)">
+      <summary>
+            Sets the HTTP status code and description.
+            </summary>
+      <param name="statusCode">The status code.</param>
+      <param name="statusDescription">The status description.</param>
+    </member>
     <member name="M:RestFoundation.IHttpResponse.GetCookies">
       <summary>
             Gets a collection of all response cookies set by the service.
@@ -9229,6 +9345,13 @@
       <param name="statusCode">The status code.</param>
     </member>
     <member name="M:RestFoundation.Context.HttpResponse.SetStatus(System.Net.HttpStatusCode,System.String)">
+      <summary>
+            Sets the HTTP status code and description.
+            </summary>
+      <param name="statusCode">The status code.</param>
+      <param name="statusDescription">The status description.</param>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponse.SetStatus(System.Int32,System.String)">
       <summary>
             Sets the HTTP status code and description.
             </summary>
