@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Xml;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace RestFoundation.Runtime
@@ -51,6 +52,17 @@ namespace RestFoundation.Runtime
             }
 
             documentElement.SetAttribute("xmlns", serviceNamespace);
+        }
+
+        public static void AddNamespaces(XmlWriter writer)
+        {
+            if (Rest.Configuration.Options.XmlSettings == null || String.IsNullOrWhiteSpace(Rest.Configuration.Options.XmlSettings.Namespace))
+            {
+                return;
+            }
+
+            writer.WriteAttributeString("xmlns", "xsd", String.Empty, XmlSchema.Namespace);
+            writer.WriteAttributeString("xmlns", "xsi", String.Empty, XmlSchema.InstanceNamespace);
         }
     }
 }

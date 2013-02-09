@@ -190,8 +190,11 @@ namespace RestFoundation.Results
 
             xmlWriter.WriteStartDocument();
             xmlWriter.WriteStartElement(rootElementName);
+            XmlNamespaceManager.AddNamespaces(xmlWriter);
             xmlWriter.Flush();
             context.Response.Output.Flush();
+
+            XmlSerializerNamespaces enumerableNamespaces = XmlNamespaceManager.Generate();
 
             foreach (object enumeratedContent in enumerableContent)
             {
@@ -201,7 +204,7 @@ namespace RestFoundation.Results
                 }
 
                 XmlSerializer serializer = XmlSerializerRegistry.Get(enumeratedContent.GetType());
-                serializer.Serialize(xmlWriter, enumeratedContent, XmlNamespaceManager.Generate());
+                serializer.Serialize(xmlWriter, enumeratedContent, enumerableNamespaces);
                 context.Response.Output.Flush();
 
                 LogResponse(enumerableContent);
