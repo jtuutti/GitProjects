@@ -1490,11 +1490,6 @@
               Looks up a localized string similar to The argument contains invalid elements..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidAsyncServiceTimeout">
-      <summary>
-              Looks up a localized string similar to Invalid asynchronous service method timeout provided..
-            </summary>
-    </member>
     <member name="P:RestFoundation.RestResources.InvalidCatchAllUrlTemplate">
       <summary>
               Looks up a localized string similar to URL templates cannot contain catch-all parameters. Template: '{0}'.
@@ -1618,11 +1613,6 @@
     <member name="P:RestFoundation.RestResources.InvalidSocketTimeout">
       <summary>
               Looks up a localized string similar to Socket timeout is invalid..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.RestResources.InvalidStateOfReturnedTask">
-      <summary>
-              Looks up a localized string similar to The returned task result cannot be started inside the service. Make sure to define tasks returned from services using the new Task&lt;T&gt;() constructor instead of the Task&lt;T&gt;.Factory.StartNew() method..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidUploadedFileType">
@@ -2452,6 +2442,7 @@
             that can block the worker process or cause the server to run out of the ASP .NET thread pool.
             This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
             make web forms pages asynchronous.
+            The result timeout will be set to 100 seconds.
             </summary>
       <returns>The route builder.</returns>
     </member>
@@ -2463,9 +2454,9 @@
             This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
             make web forms pages asynchronous. In case of a time out, it may take additional time to cancel the operation.
             </summary>
-      <param name="timeout">The async service method timeout.</param>
+      <param name="timeout">The async service method timeout. The value of 0 means no timeout.</param>
       <returns>The route builder.</returns>
-      <exception cref="T:System.ArgumentOutOfRangeException">If the timeout is less than 1 second.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">If the timeout is a negative number.</exception>
     </member>
     <member name="M:RestFoundation.RouteBuilder.WithAsyncHandler(System.Int32)">
       <summary>
@@ -2529,100 +2520,6 @@
       <returns>
             true if the HTTP request came from a web browser; otherwise, false.
             </returns>
-    </member>
-    <member name="T:RestFoundation.Runtime.Handlers.IRestAsyncHandler">
-      <summary>
-            Defines an asynchronous REST service handler.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler">
-      <summary>
-            Represents an asynchronous REST service handler implementation that can be
-            cancelled by an async timeout.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler.#ctor(RestFoundation.IServiceContext,RestFoundation.IServiceMethodLocator,RestFoundation.IServiceMethodInvoker,RestFoundation.Results.IResultFactory,RestFoundation.Results.IResultExecutor)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler" /> class.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="methodLocator">The service method locator.</param>
-      <param name="methodInvoker">The service method invoker.</param>
-      <param name="resultFactory">The service method result factory.</param>
-      <param name="resultExecutor">The service method result executor.</param>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler.GetHttpHandler(System.Web.Routing.RequestContext)">
-      <summary>
-            Provides the object that processes the request.
-            </summary>
-      <returns>
-            An object that processes the request.
-            </returns>
-      <param name="requestContext">An object that encapsulates information about the request.</param>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler.ProcessRequest(System.Web.HttpContext)">
-      <summary>
-            Enables processing of HTTP Web requests by a custom HttpHandler that implements the <see cref="T:System.Web.IHttpHandler" /> interface.
-            </summary>
-      <param name="context">
-            An <see cref="T:System.Web.HttpContext" /> object that provides references to the intrinsic server objects (for example, Request, Response,
-            Session, and Server) used to service HTTP requests.
-            </param>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler.BeginProcessRequest(System.Web.HttpContext,System.AsyncCallback,System.Object)">
-      <summary>
-            Initiates an asynchronous call to the HTTP handler.
-            </summary>
-      <returns>
-            An <see cref="T:System.IAsyncResult" /> that contains information about the status of the process.
-            </returns>
-      <param name="context">
-            An <see cref="T:System.Web.HttpContext" /> object that provides references to intrinsic server objects (for example, Request, Response,
-            Session, and Server) used to service HTTP requests. </param>
-      <param name="cb">The <see cref="T:System.AsyncCallback" /> to call when the
-            asynchronous method call is complete. If <paramref name="cb" /> is null, the delegate is not called.
-            </param>
-      <param name="extraData">Any extra data needed to process the request.</param>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler.EndProcessRequest(System.IAsyncResult)">
-      <summary>
-            Provides an asynchronous process End method when the process ends.
-            </summary>
-      <param name="result">An <see cref="T:System.IAsyncResult" /> that contains information about the status of the process.</param>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler.Context">
-      <summary>
-            Gets the service context.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler.IsReusable">
-      <summary>
-            Gets a value indicating whether another request can use the <see cref="T:System.Web.IHttpHandler" /> instance.
-            </summary>
-      <returns>
-            true if the <see cref="T:System.Web.IHttpHandler" /> instance is reusable; otherwise, false.
-            </returns>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler.AsyncTimeout">
-      <summary>
-            Gets or sets the asynchronous service method timeout.
-            It may take some extra time to stop the pending operation.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler.ServiceUrl">
-      <summary>
-            Gets the service URL.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler.ServiceContractTypeName">
-      <summary>
-            Gets a fully qualified name of the interface type defining the service contract.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncCancellableHandler.UrlTemplate">
-      <summary>
-            Gets a relative URL template.
-            </summary>
     </member>
     <member name="T:RestFoundation.IServiceBehaviorInvoker">
       <summary>
@@ -3537,6 +3434,11 @@
     <member name="F:RestFoundation.ResponseHeaderNames.Warning">
       <summary>
             Warning
+            </summary>
+    </member>
+    <member name="T:RestFoundation.Runtime.Handlers.IRestAsyncHandler">
+      <summary>
+            Defines an asynchronous REST service handler.
             </summary>
     </member>
     <member name="T:RestFoundation.GlobalBehaviorBuilder">
@@ -6285,6 +6187,11 @@
             Gets a value indicating whether there is an authenticated user associated with the HTTP request.
             </summary>
     </member>
+    <member name="P:RestFoundation.IServiceContext.IsDebug">
+      <summary>
+            Gets a value indicating whether the service is running in debug mode.
+            </summary>
+    </member>
     <member name="T:RestFoundation.UnitTesting.MockContextManager">
       <summary>
             Represents a mock service context manager.
@@ -7725,6 +7632,11 @@
             Gets a value indicating whether there is an authenticated user associated with the HTTP request.
             </summary>
     </member>
+    <member name="P:RestFoundation.Context.ServiceContext.IsDebug">
+      <summary>
+            Gets a value indicating whether the service is running in debug mode.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Runtime.ServiceRequestValidator">
       <summary>
             Represents an HTTP request validator for the REST Foundation services and web pages.
@@ -7854,6 +7766,11 @@
       <returns>
             true if the <see cref="T:System.Web.IHttpHandler" /> instance is reusable; otherwise, false.
             </returns>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncHandler.AsyncTimeout">
+      <summary>
+            Gets or sets the asynchronous service result timeout. The default timeout is 100 seconds.
+            </summary>
     </member>
     <member name="P:RestFoundation.Runtime.Handlers.RestAsyncHandler.ServiceUrl">
       <summary>
