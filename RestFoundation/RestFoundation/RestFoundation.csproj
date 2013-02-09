@@ -104,6 +104,7 @@
     <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
     <Compile Include="Runtime\JsonSerializerFactory.cs" />
     <Compile Include="Runtime\MethodReturnTypeUnwrapper.cs" />
+    <Compile Include="Runtime\TaskProcessor.cs" />
     <Compile Include="ServiceProxy\ProxySession.cs" />
     <Compile Include="ServiceProxy\ProxyUrlHelper.cs" />
     <Compile Include="Runtime\StatusCodeFormatter.cs" />
@@ -135,9 +136,7 @@
     <Compile Include="RouteBuilder.cs" />
     <Compile Include="Runtime\ContentNegotiator.cs" />
     <Compile Include="Runtime\Handlers\BrowserRedirectHandler.cs" />
-    <Compile Include="Runtime\Handlers\CancellationOperation.cs" />
     <Compile Include="Runtime\Handlers\HttpArguments.cs" />
-    <Compile Include="Runtime\Handlers\RestAsyncCancellableHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
     <Compile Include="IServiceBehaviorInvoker.cs" />
     <Compile Include="Runtime\Registries\ServiceExceptionHandlerRegistry.cs" />

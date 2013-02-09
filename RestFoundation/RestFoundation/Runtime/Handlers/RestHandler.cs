@@ -3,8 +3,6 @@
 // </copyright>
 using System;
 using System.Net;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
@@ -183,83 +181,19 @@ namespace RestFoundation.Runtime.Handlers
                 LogUtility.LogResponseData(m_serviceContext.GetHttpContext());
             }
 
+            ExecuteTask(returnedObj, serviceMethodData);
+        }
+
+        private void ExecuteTask(object returnedObj, ServiceMethodLocatorData serviceMethodData)
+        {
             var returnedTask = returnedObj as Task;
 
             if (returnedTask != null)
             {
-                ExecuteTaskResult(returnedTask, serviceMethodData.Method.ReturnType);
-            }
-            else
-            {
-                ExecuteResult(returnedObj, serviceMethodData.Method.ReturnType);
-            }
-        }
-
-        private void ExecuteTaskResult(Task returnedTask, Type methodReturnType)
-        {
-            HttpContext currentHttpContext = HttpContext.Current;
-            Exception taskException = null;
-
-            if (returnedTask.Status != TaskStatus.Created)
-            {
-                throw new InvalidOperationException(RestResources.InvalidStateOfReturnedTask);
+                returnedObj = TaskProcessor.Complete(returnedTask, m_serviceContext.ServiceTimeout);
             }
 
-            var waitHandler = new ManualResetEvent(false);
-
-            returnedTask.Start();
-            returnedTask.ContinueWith(t =>
-            {
-                try
-                {
-                    if (t.IsFaulted && t.Exception != null)
-                    {
-                        taskException = t.Exception.InnerException;
-                        return;
-                    }
-
-                    if (t.IsCanceled)
-                    {
-                        taskException = new HttpResponseException(HttpStatusCode.ServiceUnavailable, RestResources.ServiceUnavailable);
-                        return;
-                    }
-
-                    HttpContext.Current = currentHttpContext;
-
-                    PropertyInfo resultProperty = t.GetType().GetProperty("Result");
-
-                    if (resultProperty != null)
-                    {
-                        ExecuteResult(resultProperty.GetValue(t, null), methodReturnType);
-                    }
-                }
-                finally
-                {
-                    waitHandler.Set();
-                }
-            });
-
-            // keeping the HTTP channel open until the result executes
-            if (!currentHttpContext.IsDebuggingEnabled && currentHttpContext.Server.ScriptTimeout > 0)
-            {
-                if (!waitHandler.WaitOne(TimeSpan.FromSeconds(currentHttpContext.Server.ScriptTimeout)))
-                {
-                    throw new HttpResponseException(HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
-                }
-            }
-            else
-            {
-                waitHandler.WaitOne();
-            }
-
-            if (taskException != null)
-            {
-                throw taskException;
-            }
-        }
-
-        private void ExecuteResult(object returnedObj, Type methodReturnType)
-        {
+            Type methodReturnType = serviceMethodData.Method.ReturnType;
             IResult result = methodReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, MethodReturnTypeUnwrapper.Unwrap(methodReturnType), this) : null;
 
             if (!(result is EmptyResult))

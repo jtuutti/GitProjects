@@ -201,10 +201,6 @@
     <value>The relative URL '{0}' has already been mapped.</value>
     <comment>The relative URL '{0}' has already been mapped.</comment>
   </data>
-  <data name="InvalidAsyncServiceTimeout" xml:space="preserve">
-    <value>Invalid asynchronous service method timeout provided.</value>
-    <comment>Invalid asynchronous service method timeout provided.</comment>
-  </data>
   <data name="DuplicateAuthenticationBehavior" xml:space="preserve">
     <value>Only a single authentication behavior can be associated with a service method. That includes global behaviors.</value>
     <comment>Only a single authentication behavior can be associated with a service method. That includes global behaviors.</comment>
@@ -224,10 +220,6 @@
   <data name="UnsupportedRequestedFormat" xml:space="preserve">
     <value>The service is configured not to list its contents in the requested format.</value>
     <comment>The service is configured not to list its contents in the requested format.</comment>
-  </data>
-  <data name="UnsupportedSyncRequestForAsyncHandler" xml:space="preserve">
-    <value>Async route handler does not support synchronous requests.</value>
-    <comment>Async route handler does not support synchronous requests.</comment>
   </data>
   <data name="InvalidUpperBoundAddress" xml:space="preserve">
     <value>The upper bound address is from a different family than the lower bound address.</value>
@@ -465,10 +457,6 @@
     <value>The argument contains invalid elements.</value>
     <comment>The argument contains invalid elements.</comment>
   </data>
-  <data name="InvalidStateOfReturnedTask" xml:space="preserve">
-    <value>The returned task result cannot be started inside the service. Make sure to define tasks returned from services using the new Task&lt;T&gt;() constructor instead of the Task&lt;T&gt;.Factory.StartNew() method.</value>
-    <comment>The returned task result cannot be started inside the service. Make sure to define tasks returned from services using the new Task&lt;T&gt;() constructor instead of the Task&lt;T&gt;.Factory.StartNew() method.</comment>
-  </data>
   <data name="UnsealedBehaviorAttributeClass" xml:space="preserve">
     <value>Service method behavior attribute class '{0}' should be sealed for performance benefits.</value>
     <comment>Service method behavior attribute class '{0}' should be sealed for performance benefits.</comment>
@@ -556,5 +544,9 @@
   <data name="TooManyRequests" xml:space="preserve">
     <value>Too many requests</value>
     <comment>Too many requests</comment>
+  </data>
+  <data name="UnsupportedSyncRequestForAsyncHandler" xml:space="preserve">
+    <value>Async route handler does not support synchronous requests.</value>
+    <comment>Async route handler does not support synchronous requests.</comment>
   </data>
 </root>

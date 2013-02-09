@@ -122,6 +122,17 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
+        /// Gets a value indicating whether the service is running in debug mode.
+        /// </summary>
+        public bool IsDebug
+        {
+            get
+            {
+                return Context.IsDebuggingEnabled;
+            }
+        }
+
+        /// <summary>
         /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>

@@ -139,6 +139,8 @@
                 RequestText.Value = String.Empty;
             } 
         }
+        
+        Server.ScriptTimeout = 125;
     }
 
     protected void Page_Load(object sender, EventArgs e)

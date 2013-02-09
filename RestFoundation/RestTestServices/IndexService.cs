@@ -104,7 +104,7 @@ namespace RestTestServices
 
         public Task<IEnumerable<Person>> GetAllAsync()
         {
-            return new Task<IEnumerable<Person>>(() => new List<Person>(people));
+            return Task<IEnumerable<Person>>.Factory.StartNew(() => new List<Person>(people));
         }
 
         public IResult GetAllByFormat(string format)

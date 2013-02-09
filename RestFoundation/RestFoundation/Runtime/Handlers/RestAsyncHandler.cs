@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Net;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
@@ -16,6 +15,8 @@ namespace RestFoundation.Runtime.Handlers
     /// </summary>
     public class RestAsyncHandler : IRestAsyncHandler
     {
+        internal const double DefaultTimeoutInSeconds = 100;
+
         private readonly IServiceContext m_serviceContext;
         private readonly IServiceMethodLocator m_methodLocator;
         private readonly IServiceMethodInvoker m_methodInvoker;
@@ -66,6 +67,8 @@ namespace RestFoundation.Runtime.Handlers
             m_methodInvoker = methodInvoker;
             m_resultFactory = resultFactory;
             m_resultExecutor = resultExecutor;
+
+            AsyncTimeout = TimeSpan.FromSeconds(DefaultTimeoutInSeconds);
         }
 
         /// <summary>
@@ -92,6 +95,11 @@ namespace RestFoundation.Runtime.Handlers
                 return false;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the asynchronous service result timeout. The default timeout is 100 seconds.
+        /// </summary>
+        public TimeSpan AsyncTimeout { get; set; }
 
         /// <summary>
         /// Gets the service URL.
@@ -187,11 +195,11 @@ namespace RestFoundation.Runtime.Handlers
             if (serviceMethodData == ServiceMethodLocatorData.Options)
             {
                 return Task<IResult>.Factory.StartNew(ReturnEmptyResult, new HttpArguments(HttpContext.Current, null))
-                                            .ContinueWith(action => cb(action));
+                                    .ContinueWith(action => cb(action));
             }
 
             return Task<IResult>.Factory.StartNew(ExecuteServiceMethod, new HttpArguments(HttpContext.Current, serviceMethodData))
-                                        .ContinueWith(action => cb(action));
+                                .ContinueWith(action => cb(action));
         }
 
         /// <summary>
@@ -236,8 +244,8 @@ namespace RestFoundation.Runtime.Handlers
         private IResult ExecuteServiceMethod(object state)
         {
             var httpArguments = (HttpArguments) state;
-
             HttpContext.Current = httpArguments.Context;
+
             object returnedObj = m_methodInvoker.Invoke(httpArguments.ServiceMethodData.Method, httpArguments.ServiceMethodData.Service, this);
             Type methodReturnType = MethodReturnTypeUnwrapper.Unwrap(httpArguments.ServiceMethodData.Method.ReturnType);
 
@@ -245,19 +253,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (returnedTask != null)
             {
-                if (returnedTask.Status != TaskStatus.Created)
-                {
-                    throw new InvalidOperationException(RestResources.InvalidStateOfReturnedTask);
-                }
-
-                returnedTask.RunSynchronously();
-
-                PropertyInfo resultProperty = returnedTask.GetType().GetProperty("Result");
-
-                if (resultProperty != null)
-                {
-                    returnedObj = resultProperty.GetValue(returnedObj, null);
-                }
+                returnedObj = TaskProcessor.Complete(returnedTask, AsyncTimeout);
             }
 
             return httpArguments.ServiceMethodData.Method.ReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, methodReturnType, this) : null;

@@ -241,15 +241,6 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid asynchronous service method timeout provided..
-        /// </summary>
-        internal static string InvalidAsyncServiceTimeout {
-            get {
-                return ResourceManager.GetString("InvalidAsyncServiceTimeout", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to URL templates cannot contain catch-all parameters. Template: &apos;{0}&apos;.
         /// </summary>
         internal static string InvalidCatchAllUrlTemplate {
@@ -471,15 +462,6 @@ namespace RestFoundation {
         internal static string InvalidSocketTimeout {
             get {
                 return ResourceManager.GetString("InvalidSocketTimeout", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The returned task result cannot be started inside the service. Make sure to define tasks returned from services using the new Task&lt;T&gt;() constructor instead of the Task&lt;T&gt;.Factory.StartNew() method..
-        /// </summary>
-        internal static string InvalidStateOfReturnedTask {
-            get {
-                return ResourceManager.GetString("InvalidStateOfReturnedTask", resourceCulture);
             }
         }
         

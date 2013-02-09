@@ -71,6 +71,8 @@ namespace RestFoundation.ServiceProxy
                 return null;
             }
 
+            request.Timeout = 120000;
+
             if (modifiedSince > DateTime.MinValue)
             {
                 ((HttpWebRequest) request).IfModifiedSince = modifiedSince;

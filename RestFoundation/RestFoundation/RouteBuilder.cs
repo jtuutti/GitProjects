@@ -52,11 +52,12 @@ namespace RestFoundation
         /// that can block the worker process or cause the server to run out of the ASP .NET thread pool.
         /// This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
         /// make web forms pages asynchronous.
+        /// The result timeout will be set to 100 seconds.
         /// </summary>
         /// <returns>The route builder.</returns>
         public RouteBuilder WithAsyncHandler()
         {
-            return new RouteBuilder(m_relativeUrl, m_routes, TimeSpan.Zero);
+            return new RouteBuilder(m_relativeUrl, m_routes, TimeSpan.FromSeconds(RestAsyncHandler.DefaultTimeoutInSeconds));
         }
 
         /// <summary>
@@ -66,12 +67,12 @@ namespace RestFoundation
         /// This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
         /// make web forms pages asynchronous. In case of a time out, it may take additional time to cancel the operation.
         /// </summary>
-        /// <param name="timeout">The async service method timeout.</param>
+        /// <param name="timeout">The async service method timeout. The value of 0 means no timeout.</param>
         /// <returns>The route builder.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the timeout is less than 1 second.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If the timeout is a negative number.</exception>
         public RouteBuilder WithAsyncHandler(TimeSpan timeout)
         {
-            if (timeout.TotalMilliseconds < CancellationOperation.MinTimeoutInMilliseconds)
+            if (timeout.Seconds < 0)
             {
                 throw new ArgumentOutOfRangeException("timeout", timeout.TotalSeconds, RestResources.OutOfRangeAsyncServiceTimeout);
             }
@@ -262,18 +263,11 @@ namespace RestFoundation
 
             if (m_asyncTimeout.HasValue)
             {
-                if (m_asyncTimeout.Value.TotalMilliseconds >= CancellationOperation.MinTimeoutInMilliseconds)
+                routeHandler = Rest.Configuration.ServiceLocator.GetService<RestAsyncHandler>();
+
+                if (m_asyncTimeout.Value.Seconds >= 0)
                 {
-                    routeHandler = Rest.Configuration.ServiceLocator.GetService<RestAsyncCancellableHandler>();
-                    ((RestAsyncCancellableHandler) routeHandler).AsyncTimeout = m_asyncTimeout.Value;
-                }
-                else if (m_asyncTimeout.Value == TimeSpan.Zero)
-                {
-                    routeHandler = Rest.Configuration.ServiceLocator.GetService<RestAsyncHandler>();
-                }
-                else
-                {
-                    throw new InvalidOperationException(RestResources.InvalidAsyncServiceTimeout);
+                    ((RestAsyncHandler) routeHandler).AsyncTimeout = m_asyncTimeout.Value;
                 }
             }
             else

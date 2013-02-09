@@ -37,6 +37,14 @@ namespace RestFoundation.UnitTesting
             }
         }
 
+        public override bool IsDebuggingEnabled
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public override HttpRequestBase Request
         {
             get

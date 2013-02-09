@@ -44,6 +44,11 @@ namespace RestFoundation
         bool IsAuthenticated { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the service is running in debug mode.
+        /// </summary>
+        bool IsDebug { get; }
+
+        /// <summary>
         /// Gets the application relative URL for a service contract method.
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
