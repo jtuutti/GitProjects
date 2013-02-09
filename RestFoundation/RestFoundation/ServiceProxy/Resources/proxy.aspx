@@ -484,11 +484,16 @@
     {
         headers = new NameValueCollection();
 
+        if (ex.Response == null)
+        {
+            return ex.Message;
+        }
+
         var responseStream = ex.Response.GetResponseStream();
 
         if (responseStream == null)
         {
-            return String.Empty;
+            return ex.Message;
         }
 
         if (ex.Response.Headers != null)
@@ -514,7 +519,7 @@
         }
         catch (Exception)
         {
-            return String.Empty;
+            return ex.Message;
         }
     }
 
@@ -558,11 +563,27 @@
             NameValueCollection headers;
             data = GetExceptionResponseData(ex, out headers);
             client.ResponseHeaders.Clear();
-            client.ResponseHeaders.Add(headers);
 
-            responseCode = GetStatusCode(ex.Response);
-            protocolVersion = GetProtocolVersion(ex.Response);
-            
+            if (ex.Response != null)
+            {
+                client.ResponseHeaders.Add(headers);
+                responseCode = GetStatusCode(ex.Response);
+                protocolVersion = GetProtocolVersion(ex.Response);
+            }
+            else
+            {
+                client.ResponseHeaders.Add(Context.Response.Headers);
+                responseCode = "500 - Internal Server Error";
+                protocolVersion = Context.Request.ServerVariables["SERVER_PROTOCOL"];
+
+                int indexOfSeparator = protocolVersion.IndexOf('/');
+                
+                if (indexOfSeparator > 0 && indexOfSeparator < protocolVersion.Length - 1)
+                {
+                    protocolVersion = protocolVersion.Substring(indexOfSeparator + 1);
+                }
+            }
+
             ClientScript.RegisterStartupScript(GetType(), "HttpErrorScript", "$('#ResponseText').addClass('input-validation-error')", true);
         }
         finally
