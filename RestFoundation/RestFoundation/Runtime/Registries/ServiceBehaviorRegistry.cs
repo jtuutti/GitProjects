@@ -21,7 +21,7 @@ namespace RestFoundation.Runtime
         private static readonly object globalSyncRoot = new object();
         private static readonly object handlerSyncRoot = new object();
 
-        public static List<IServiceBehavior> GetBehaviors(IRestServiceHandler handler)
+        public static IList<IServiceBehavior> GetBehaviors(IRestServiceHandler handler)
         {
             var allBehaviors = new List<IServiceBehavior>(globalBehaviors);
             List<IServiceBehavior> serviceBehaviors;
@@ -79,7 +79,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public static List<IServiceBehavior> GetGlobalBehaviors()
+        public static IList<IServiceBehavior> GetGlobalBehaviors()
         {
             return new List<IServiceBehavior>(globalBehaviors);
         }

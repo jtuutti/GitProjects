@@ -19,7 +19,7 @@ namespace RestFoundation
     /// <summary>
     /// Represents the REST Framework configuration class.
     /// </summary>
-    public sealed class Rest
+    public sealed class Rest : IDisposable
     {
         private static readonly ICollection<Type> serviceContextTypes = new ReadOnlyCollection<Type>(new[]
         {
@@ -193,6 +193,18 @@ namespace RestFoundation
 
             m_options = new RestOptions();
             return m_options;
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <filterpriority>2</filterpriority>
+        public void Dispose()
+        {
+            if (ServiceLocator != null)
+            {
+                ServiceLocator.Dispose();
+            }
         }
 
         private static void RegisterDependencies(TinyIoCContainer container, bool mockContext, Func<Type, bool> registrationValidator)

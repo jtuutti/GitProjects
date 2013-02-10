@@ -101,7 +101,7 @@ namespace RestFoundation.Runtime
 
         private bool ValidateHttpMethod(HttpContextBase httpContext, Type serviceContractType, string urlTemplate)
         {
-            HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
+            ICollection<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
             HttpMethod httpMethod = httpContext.GetOverriddenHttpMethod();
 
             if (httpMethod != HttpMethod.Options)

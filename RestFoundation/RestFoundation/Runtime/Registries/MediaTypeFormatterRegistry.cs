@@ -27,7 +27,7 @@ namespace RestFoundation.Runtime
             return formatters.TryGetValue(mediaType, out formatter) ? formatter : null;
         }
 
-        public static IList<string> GetMediaTypes()
+        public static ICollection<string> GetMediaTypes()
         {
             return formatters.Keys.ToArray();
         }

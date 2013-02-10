@@ -18,7 +18,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public static HashSet<HttpMethod> GetHttpMethods(RouteMetadata metadata)
+        public static ICollection<HttpMethod> GetHttpMethods(RouteMetadata metadata)
         {
             HashSet<HttpMethod> allowedMethods;
             return httpMethods.TryGetValue(metadata, out allowedMethods) ? allowedMethods : new HashSet<HttpMethod>();

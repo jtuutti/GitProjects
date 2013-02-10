@@ -580,7 +580,7 @@
       <typeparam name="TContract">The service contract type.</typeparam>
       <typeparam name="TImplementation">The service implementation type.</typeparam>
       <returns>The dependency builder.</returns>
-      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registring the service.</exception>
+      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
     <member name="M:RestFoundation.DependencyBuilder.Register``2(RestFoundation.InstanceLifetime)">
       <summary>
@@ -590,7 +590,7 @@
       <typeparam name="TImplementation">The service implementation type.</typeparam>
       <param name="lifetime">The instance lifetime.</param>
       <returns>The dependency builder.</returns>
-      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registring the service.</exception>
+      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
     <member name="M:RestFoundation.DependencyBuilder.Register(System.Type,System.Type)">
       <summary>
@@ -599,7 +599,7 @@
       <param name="contractType">The service contract type.</param>
       <param name="implementationType">The service implementation type.</param>
       <returns>The dependency builder.</returns>
-      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registring the service.</exception>
+      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
     <member name="M:RestFoundation.DependencyBuilder.Register(System.Type,System.Type,RestFoundation.InstanceLifetime)">
       <summary>
@@ -609,7 +609,7 @@
       <param name="implementationType">The service implementation type.</param>
       <param name="lifetime">The instance lifetime.</param>
       <returns>The dependency builder.</returns>
-      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registring the service.</exception>
+      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
     <member name="M:RestFoundation.DependencyBuilder.Register``1(``0)">
       <summary>
@@ -618,7 +618,7 @@
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="instance">The service instance.</param>
       <returns>The dependency builder.</returns>
-      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registring the service.</exception>
+      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
     <member name="M:RestFoundation.DependencyBuilder.Register(System.Type,System.Object)">
       <summary>
@@ -627,7 +627,7 @@
       <param name="contractType">The service contract type.</param>
       <param name="instance">The service instance.</param>
       <returns>The dependency builder.</returns>
-      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registring the service.</exception>
+      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
     <member name="M:RestFoundation.DependencyBuilder.ScanAssemblies(System.Reflection.Assembly[])">
       <summary>
@@ -635,7 +635,7 @@
             </summary>
       <param name="assemblies">An array of assemblies to scan.</param>
       <returns>The dependency builder.</returns>
-      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registring the service.</exception>
+      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
     <member name="M:RestFoundation.DependencyBuilder.ScanAssemblies(System.Reflection.Assembly[],System.Func{System.Type,System.Boolean})">
       <summary>
@@ -645,7 +645,7 @@
       <param name="assemblies">An array of assemblies to scan.</param>
       <param name="registrationPredicate">The registration predicate.</param>
       <returns>The dependency builder.</returns>
-      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registring the service.</exception>
+      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
     <member name="M:RestFoundation.DependencyBuilder.ScanAssemblies(System.String[])">
       <summary>
@@ -653,7 +653,7 @@
             </summary>
       <param name="assemblyNames">An array of assembly names to scan.</param>
       <returns>The dependency builder.</returns>
-      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registring the service.</exception>
+      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
       <exception cref="T:System.IO.FileNotFoundException">An assembly specified in <paramref name="assemblyNames" /> is not found.</exception>
       <exception cref="T:System.BadImageFormatException">An assembly specified in <paramref name="assemblyNames" /> is not a valid assembly.</exception>
       <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
@@ -667,7 +667,7 @@
       <param name="assemblyNames">An array of assembly names to scan.</param>
       <param name="registrationPredicate">The registration predicate.</param>
       <returns>The dependency builder.</returns>
-      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registring the service.</exception>
+      <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
       <exception cref="T:System.IO.FileNotFoundException">An assembly specified in <paramref name="assemblyNames" /> is not found.</exception>
       <exception cref="T:System.BadImageFormatException">An assembly specified in <paramref name="assemblyNames" /> is not a valid assembly.</exception>
       <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
@@ -2265,7 +2265,7 @@
     </member>
     <member name="T:RestFoundation.ServiceContractAttribute">
       <summary>
-            Respresents a REST service implementation that defines its own contract.
+            Represents a REST service implementation that defines its own contract.
             </summary>
     </member>
     <member name="T:RestFoundation.ExceptionAction">
@@ -2845,7 +2845,7 @@
       <param name="ipaddress">The address.</param>
       <param name="netmask">The netmask.</param>
       <param name="ipnetwork">The network object.</param>
-      <returns>true if the address was parsed sucessfully; otherwise, false.</returns>
+      <returns>true if the address was parsed successfully; otherwise, false.</returns>
     </member>
     <member name="M:RestFoundation.Security.IPNetwork.TryParse(System.String,System.Byte,RestFoundation.Security.IPNetwork@)">
       <summary>
@@ -2854,7 +2854,7 @@
       <param name="ipaddress">The address.</param>
       <param name="cidr">The CIDR byte.</param>
       <param name="ipnetwork">The network object.</param>
-      <returns>true if the address was parsed sucessfully; otherwise, false.</returns>
+      <returns>true if the address was parsed successfully; otherwise, false.</returns>
     </member>
     <member name="M:RestFoundation.Security.IPNetwork.TryParse(System.String,RestFoundation.Security.IPNetwork@)">
       <summary>
@@ -2862,7 +2862,7 @@
             </summary>
       <param name="network">The network string.</param>
       <param name="ipnetwork">The network object.</param>
-      <returns>true if the address was parsed sucessfully; otherwise, false.</returns>
+      <returns>true if the address was parsed successfully; otherwise, false.</returns>
     </member>
     <member name="M:RestFoundation.Security.IPNetwork.TryParse(System.Net.IPAddress,System.Net.IPAddress,RestFoundation.Security.IPNetwork@)">
       <summary>
@@ -2871,7 +2871,7 @@
       <param name="ipaddress">The address.</param>
       <param name="netmask">The netmask.</param>
       <param name="ipnetwork">The network object.</param>
-      <returns>true if the address was parsed sucessfully; otherwise, false.</returns>
+      <returns>true if the address was parsed successfully; otherwise, false.</returns>
     </member>
     <member name="M:RestFoundation.Security.IPNetwork.Supernet(RestFoundation.Security.IPNetwork[])">
       <summary>
@@ -2886,7 +2886,7 @@
             </summary>
       <param name="ipnetworks">An array of networks.</param>
       <param name="supernet">An array of super networks.</param>
-      <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
+      <returns>true if the operation was performed successfully; otherwise, false.</returns>
     </member>
     <member name="M:RestFoundation.Security.IPNetwork.InternalSupernet(System.Boolean,RestFoundation.Security.IPNetwork[],RestFoundation.Security.IPNetwork[]@)">
       <summary>
@@ -2895,7 +2895,7 @@
       <param name="trySupernet">A value indicating whether to try to get the supernet.</param>
       <param name="ipnetworks">An array of networks.</param>
       <param name="supernet">An array of super networks.</param>
-      <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
+      <returns>true if the operation was performed successfully; otherwise, false.</returns>
     </member>
     <member name="M:RestFoundation.Security.IPNetwork.ToUint(System.Net.IPAddress)">
       <summary>
@@ -2910,7 +2910,7 @@
             </summary>
       <param name="ipaddress">The IP address.</param>
       <param name="uintIPAddress">The <see cref="T:System.UInt32" /> value.</param>
-      <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
+      <returns>true if the operation was performed successfully; otherwise, false.</returns>
     </member>
     <member name="M:RestFoundation.Security.IPNetwork.ToCidr(System.Net.IPAddress)">
       <summary>
@@ -2925,7 +2925,7 @@
             </summary>
       <param name="netmask">The net mask.</param>
       <param name="cidr">The CIDR byte.</param>
-      <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
+      <returns>true if the operation was performed successfully; otherwise, false.</returns>
     </member>
     <member name="M:RestFoundation.Security.IPNetwork.ToNetmask(System.Byte)">
       <summary>
@@ -2940,7 +2940,7 @@
             </summary>
       <param name="cidr">The CIDR byte.</param>
       <param name="netmask">The net mask.</param>
-      <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
+      <returns>true if the operation was performed successfully; otherwise, false.</returns>
     </member>
     <member name="M:RestFoundation.Security.IPNetwork.BitsSet(System.Net.IPAddress)">
       <summary>
@@ -2962,7 +2962,7 @@
             </summary>
       <param name="cidr">The CIDR byte.</param>
       <param name="uintNetmask">The <see cref="T:System.UInt32" /> value.</param>
-      <returns>true if the operation was performed sucessfully; otherwise, false.</returns>
+      <returns>true if the operation was performed successfully; otherwise, false.</returns>
     </member>
     <member name="M:RestFoundation.Security.IPNetwork.ValidNetmask(System.Net.IPAddress)">
       <summary>
@@ -3187,6 +3187,7 @@
             Gets the current IP network in the collection.
             </summary>
       <param name="i">A collection index value.</param>
+      <returns>The IP network value.</returns>
     </member>
     <member name="T:RestFoundation.Behaviors.AclBehavior">
       <summary>
@@ -6270,11 +6271,6 @@
             Gets the service cache.
             </summary>
     </member>
-    <member name="P:RestFoundation.IServiceContext.ServiceTimeout">
-      <summary>
-            Gets or sets a time span before a service times out.
-            </summary>
-    </member>
     <member name="P:RestFoundation.IServiceContext.User">
       <summary>
             Gets or sets security information for the current HTTP request.
@@ -6640,6 +6636,12 @@
             </summary>
       <param name="serviceLocator">A service locator instance.</param>
       <returns>The configuration options object.</returns>
+    </member>
+    <member name="M:RestFoundation.Rest.Dispose">
+      <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+      <filterpriority>2</filterpriority>
     </member>
     <member name="P:RestFoundation.Rest.FoundationAssembly">
       <summary>
@@ -7713,11 +7715,6 @@
     <member name="P:RestFoundation.Context.ServiceContext.Cache">
       <summary>
             Gets the service cache.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Context.ServiceContext.ServiceTimeout">
-      <summary>
-            Gets or sets a time span before a service times out.
             </summary>
     </member>
     <member name="P:RestFoundation.Context.ServiceContext.User">

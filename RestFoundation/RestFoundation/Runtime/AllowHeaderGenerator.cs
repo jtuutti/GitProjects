@@ -42,11 +42,11 @@ namespace RestFoundation.Runtime
 
         public void SetAllowHeader(string urlTemplate, Type serviceContractType)
         {
-            HashSet<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
+            ICollection<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
             WriteAllowHeader(allowedHttpMethods);
         }
 
-        private void WriteAllowHeader(HashSet<HttpMethod> allowedHttpMethods)
+        private void WriteAllowHeader(ICollection<HttpMethod> allowedHttpMethods)
         {
             if (allowedHttpMethods.Count == 0)
             {
