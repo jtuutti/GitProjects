@@ -16,8 +16,8 @@ namespace RestFoundation.Results
         /// </summary>
         /// <param name="returnedObj">The returned object.</param>
         /// <param name="methodReturnType">The method return type.</param>
-        /// <param name="handler">The REST handler.</param>
+        /// <param name="handler">The service context handler.</param>
         /// <returns>The created result instance.</returns>
-        IResult Create(object returnedObj, Type methodReturnType, IRestHandler handler);
+        IResult Create(object returnedObj, Type methodReturnType, IServiceContextHandler handler);
     }
 }

@@ -17,9 +17,9 @@ namespace RestFoundation
     /// </summary>
     public sealed class RouteConfiguration
     {
-        private readonly IEnumerable<IRestHandler> m_routeHandlers;
+        private readonly IEnumerable<IRestServiceHandler> m_routeHandlers;
 
-        internal RouteConfiguration(IEnumerable<IRestHandler> routeHandlers)
+        internal RouteConfiguration(IEnumerable<IRestServiceHandler> routeHandlers)
         {
             if (routeHandlers == null)
             {
@@ -68,7 +68,7 @@ namespace RestFoundation
 
             var blockFormatter = new BlockFormatter();
 
-            foreach (IRestHandler routeHandler in m_routeHandlers)
+            foreach (IRestServiceHandler routeHandler in m_routeHandlers)
             {
                 MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, mediaType.Trim(), blockFormatter);
             }
@@ -122,7 +122,7 @@ namespace RestFoundation
                 throw new ArgumentNullException("formatter");
             }
 
-            foreach (IRestHandler routeHandler in m_routeHandlers)
+            foreach (IRestServiceHandler routeHandler in m_routeHandlers)
             {
                 MediaTypeFormatterRegistry.AddHandlerFormatter(routeHandler, mediaType.Trim(), formatter);
             }
@@ -147,7 +147,7 @@ namespace RestFoundation
                 throw new InvalidOperationException(RestResources.DuplicateRouteBehaviors);
             }
 
-            foreach (IRestHandler routeHandler in m_routeHandlers)
+            foreach (IRestServiceHandler routeHandler in m_routeHandlers)
             {
                 for (int i = 0; i < behaviors.Length; i++)
                 {
@@ -175,7 +175,7 @@ namespace RestFoundation
                 throw new ArgumentNullException("exceptionHandler");
             }
 
-            foreach (IRestHandler routeHandler in m_routeHandlers)
+            foreach (IRestServiceHandler routeHandler in m_routeHandlers)
             {
                 ServiceExceptionHandlerRegistry.SetExceptionHandler(routeHandler, exceptionHandler);
             }
@@ -196,7 +196,7 @@ namespace RestFoundation
                 throw new ArgumentNullException("nameValueSectionName");
             }
 
-            foreach (IRestHandler routeHandler in m_routeHandlers)
+            foreach (IRestServiceHandler routeHandler in m_routeHandlers)
             {
                 ServiceBehaviorRegistry.AddBehavior(routeHandler, new AclBehavior(nameValueSectionName));
             }
@@ -210,7 +210,7 @@ namespace RestFoundation
         /// <returns>The route configuration.</returns>
         public RouteConfiguration DoNotValidateRequests()
         {           
-            foreach (IRestHandler routeHandler in m_routeHandlers)
+            foreach (IRestServiceHandler routeHandler in m_routeHandlers)
             {
                 UnvalidatedHandlerRegistry.Add(routeHandler);
             }

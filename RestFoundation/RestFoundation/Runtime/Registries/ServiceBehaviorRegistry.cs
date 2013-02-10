@@ -17,11 +17,11 @@ namespace RestFoundation.Runtime
             new ResourceValidationBehavior()
         };
 
-        private static readonly ConcurrentDictionary<IRestHandler, List<IServiceBehavior>> handlerBehaviors = new ConcurrentDictionary<IRestHandler, List<IServiceBehavior>>();
+        private static readonly ConcurrentDictionary<IRestServiceHandler, List<IServiceBehavior>> handlerBehaviors = new ConcurrentDictionary<IRestServiceHandler, List<IServiceBehavior>>();
         private static readonly object globalSyncRoot = new object();
         private static readonly object handlerSyncRoot = new object();
 
-        public static List<IServiceBehavior> GetBehaviors(IRestHandler handler)
+        public static List<IServiceBehavior> GetBehaviors(IRestServiceHandler handler)
         {
             var allBehaviors = new List<IServiceBehavior>(globalBehaviors);
             List<IServiceBehavior> serviceBehaviors;
@@ -40,7 +40,7 @@ namespace RestFoundation.Runtime
             return allBehaviors;
         }
 
-        public static void AddBehavior(IRestHandler handler, IServiceBehavior behavior)
+        public static void AddBehavior(IRestServiceHandler handler, IServiceBehavior behavior)
         {
             handlerBehaviors.AddOrUpdate(handler,
                                          handlerToAdd =>

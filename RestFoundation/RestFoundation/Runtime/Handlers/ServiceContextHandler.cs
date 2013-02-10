@@ -7,9 +7,9 @@ using System.Web.Routing;
 
 namespace RestFoundation.Runtime.Handlers
 {
-    internal sealed class ContextRestHandler : IRestHandler
+    internal sealed class ServiceContextHandler : IServiceContextHandler
     {
-        public ContextRestHandler(IServiceContext context)
+        public ServiceContextHandler(IServiceContext context)
         {
             if (context == null)
             {
@@ -26,30 +26,6 @@ namespace RestFoundation.Runtime.Handlers
             get
             {
                 return false;
-            }
-        }
-
-        public string ServiceUrl
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-        public string ServiceContractTypeName
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-        public string UrlTemplate
-        {
-            get
-            {
-                return null;
             }
         }
 

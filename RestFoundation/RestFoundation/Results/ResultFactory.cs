@@ -38,7 +38,7 @@ namespace RestFoundation.Results
         /// <param name="methodReturnType">The method return type.</param>
         /// <param name="handler">The REST handler.</param>
         /// <returns>The created result instance.</returns>
-        public virtual IResult Create(object returnedObj, Type methodReturnType, IRestHandler handler)
+        public virtual IResult Create(object returnedObj, Type methodReturnType, IServiceContextHandler handler)
         {
             if (handler == null)
             {
@@ -50,7 +50,7 @@ namespace RestFoundation.Results
             return result ?? CreateFormatterResult(returnedObj, methodReturnType, handler);
         }
 
-        private static IMediaTypeFormatter TryNegotiateMediaType(IRestHandler handler)
+        private static IMediaTypeFormatter TryNegotiateMediaType(IServiceContextHandler handler)
         {
             if (handler.Context.Request.Headers.AcceptTypes == null)
             {
@@ -71,7 +71,7 @@ namespace RestFoundation.Results
             return null;
         }
 
-        private IResult CreateFormatterResult(object returnedObj, Type methodReturnType, IRestHandler handler)
+        private IResult CreateFormatterResult(object returnedObj, Type methodReturnType, IServiceContextHandler handler)
         {
             string acceptType = m_contentNegotiator.GetPreferredMediaType(handler.Context.Request);
 

@@ -16,7 +16,7 @@ namespace RestFoundation.Tests.Results
         {
             m_factory = new MockHandlerFactory();
 
-            IRestHandler handler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post(null));
+            IRestServiceHandler handler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post(null));
             Assert.That(handler, Is.Not.Null);
             Assert.That(handler.Context, Is.Not.Null);
             

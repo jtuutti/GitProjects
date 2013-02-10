@@ -39,7 +39,7 @@ namespace RestFoundation.Runtime
         /// service method is allowed.
         /// </param>
         /// <returns>The created parameter value.</returns>
-        public virtual object CreateValue(ParameterInfo parameter, IRestHandler handler, out bool isResource)
+        public virtual object CreateValue(ParameterInfo parameter, IRestServiceHandler handler, out bool isResource)
         {
             if (handler == null)
             {
@@ -153,7 +153,7 @@ namespace RestFoundation.Runtime
         /// <param name="parameter">The service method parameter.</param>
         /// <param name="handler">The REST handler.</param>
         /// <returns>The resource value.</returns>
-        protected virtual object GetResourceValue(ParameterInfo parameter, IRestHandler handler)
+        protected virtual object GetResourceValue(ParameterInfo parameter, IRestServiceHandler handler)
         {
             if (parameter == null)
             {

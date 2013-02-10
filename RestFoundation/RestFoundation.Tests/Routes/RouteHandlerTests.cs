@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using RestFoundation.Client;
 using RestFoundation.Runtime.Handlers;
@@ -13,40 +14,16 @@ namespace RestFoundation.Tests.Routes
     public class RouteHandlerTests
     {
         [Test]
-        public void GetMethodWithSyncHandler()
+        public void GetMethod()
         {
             const string url = "~/test-service/1";
             const HttpMethod method = HttpMethod.Get;
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.Get(1));
+                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.Get(1));
                 Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestHandler>());
-                Assert.That(handler.Context, Is.Not.Null);
-                Assert.That(handler.Context.Request, Is.Not.Null);
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Request.Url, Is.EqualTo(ToAbsoluteUri(url)));
-                Assert.That(handler.Context.Request.Method, Is.EqualTo(method));
-
-                ProcessRequest(handler);
-
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
-            }
-        }
-
-        [Test]
-        public void GetMethodWithAsyncHandler()
-        {
-            const string url = "~/test-service/1";
-            const HttpMethod method = HttpMethod.Get;
-
-            using (var factory = new MockHandlerFactory())
-            {
-                IRestHandler handler = factory.CreateAsync<ITestService>(url, m => m.Get(1));
-                Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestAsyncHandler>());
+                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
                 Assert.That(handler.Context.Request, Is.Not.Null);
                 Assert.That(handler.Context.Response, Is.Not.Null);
@@ -61,16 +38,16 @@ namespace RestFoundation.Tests.Routes
         }
 
         [Test, ExpectedException(typeof(HttpResponseException))]
-        public void GetMethodWithSyncHandler_ShouldFailDueToMismatchedRoute()
+        public void GetMethod_ShouldFailDueToMismatchedRoute()
         {
             const string url = "~/test-service/a/b";
             const HttpMethod method = HttpMethod.Get;
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.Get(1));
+                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.Get(1));
                 Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestHandler>());
+                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
                 Assert.That(handler.Context.Request, Is.Not.Null);
                 Assert.That(handler.Context.Response, Is.Not.Null);
@@ -85,16 +62,16 @@ namespace RestFoundation.Tests.Routes
         }
 
         [Test, ExpectedException(typeof(HttpResponseException))]
-        public void GetMethodWithSyncHandler_ShouldFailDueToNegativeIdValue()
+        public void GetMethod_ShouldFailDueToNegativeIdValue()
         {
             const string url = "~/test-service/-1";
             const HttpMethod method = HttpMethod.Get;
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.Get(-1));
+                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.Get(-1));
                 Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestHandler>());
+                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
                 Assert.That(handler.Context.Request, Is.Not.Null);
                 Assert.That(handler.Context.Response, Is.Not.Null);
@@ -109,16 +86,16 @@ namespace RestFoundation.Tests.Routes
         }
 
         [Test, ExpectedException(typeof(RouteAssertException))]
-        public void GetMethodWithSyncHandler_ShouldFailDueToInvalidServiceMethod()
+        public void GetMethod_ShouldFailDueToInvalidServiceMethod()
         {
             const string url = "~/test-service/1";
             const HttpMethod method = HttpMethod.Get;
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.GetAll("1"));
+                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.GetAll("1"));
                 Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestHandler>());
+                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
                 Assert.That(handler.Context.Request, Is.Not.Null);
                 Assert.That(handler.Context.Response, Is.Not.Null);
@@ -133,16 +110,16 @@ namespace RestFoundation.Tests.Routes
         }
 
         [Test]
-        public void HeadMethodWithSyncHandler()
+        public void HeadMethod()
         {
             const string url = "~/test-service/all/Name";
             const HttpMethod method = HttpMethod.Head;
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.GetAll("Name"), method);
+                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.GetAll("Name"), method);
                 Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestHandler>());
+                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
                 Assert.That(handler.Context.Request, Is.Not.Null);
                 Assert.That(handler.Context.Response, Is.Not.Null);
@@ -157,40 +134,16 @@ namespace RestFoundation.Tests.Routes
         }
 
         [Test]
-        public void HeadMethodWithAsyncHandler()
-        {
-            const string url = "~/test-service/all/Name";
-            const HttpMethod method = HttpMethod.Head;
-
-            using (var factory = new MockHandlerFactory())
-            {
-                IRestHandler handler = factory.CreateAsync<ITestService>(url, m => m.GetAll("Name"), method);
-                Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestAsyncHandler>());
-                Assert.That(handler.Context, Is.Not.Null);
-                Assert.That(handler.Context.Request, Is.Not.Null);
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Request.Url, Is.EqualTo(ToAbsoluteUri(url)));
-                Assert.That(handler.Context.Request.Method, Is.EqualTo(method));
-
-                ProcessRequest(handler);
-
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
-            }
-        }
-
-        [Test]
-        public void PostMethodWithSyncHandler()
+        public void PostMethod()
         {
             const string url = "~/test-service/new";
             const HttpMethod method = HttpMethod.Post;
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.Post(null), method);
+                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.Post(null), method);
                 Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestHandler>());
+                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
                 Assert.That(handler.Context.Request, Is.Not.Null);
                 Assert.That(handler.Context.Response, Is.Not.Null);
@@ -207,44 +160,17 @@ namespace RestFoundation.Tests.Routes
             }
         }
 
-        [Test]
-        public void PostMethodWithAsyncHandler()
-        {
-            const string url = "~/test-service/new";
-            const HttpMethod method = HttpMethod.Post;
-
-            using (var factory = new MockHandlerFactory())
-            {
-                IRestHandler handler = factory.CreateAsync<ITestService>(url, m => m.Post(null), method);
-                Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestAsyncHandler>());
-                Assert.That(handler.Context, Is.Not.Null);
-                Assert.That(handler.Context.Request, Is.Not.Null);
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Request.Url, Is.EqualTo(ToAbsoluteUri(url)));
-                Assert.That(handler.Context.Request.Method, Is.EqualTo(method));
-
-                factory.SetResource(CreateResource(), RestResourceType.Xml);
-
-                ProcessRequest(handler);
-
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Response.GetStatusCode(), Is.EqualTo(HttpStatusCode.Created));
-                Assert.That(handler.Context.Response.GetHeader("Location"), Is.EqualTo(String.Concat(handler.Context.Request.Url.OperationUrl, "/1")));
-            }
-        }
-
         [Test, ExpectedException(typeof(HttpResponseException))]
-        public void PostMethodWithSyncHandler_ShouldFailDueToMismatchedUrlTemplate()
+        public void PostMethod_ShouldFailDueToMismatchedUrlTemplate()
         {
             const string url = "~/test-service/1";
             const HttpMethod method = HttpMethod.Post;
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.Post(null), method);
+                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.Post(null), method);
                 Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestHandler>());
+                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
                 Assert.That(handler.Context.Request, Is.Not.Null);
                 Assert.That(handler.Context.Response, Is.Not.Null);
@@ -260,16 +186,16 @@ namespace RestFoundation.Tests.Routes
         }
 
         [Test]
-        public void PutMethodWithSyncHandler()
+        public void PutMethod()
         {
             const string url = "~/test-service/1";
             const HttpMethod method = HttpMethod.Put;
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.Put(1));
+                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.Put(1));
                 Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestHandler>());
+                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
                 Assert.That(handler.Context.Request, Is.Not.Null);
                 Assert.That(handler.Context.Response, Is.Not.Null);
@@ -284,40 +210,16 @@ namespace RestFoundation.Tests.Routes
         }
 
         [Test]
-        public void PutMethodWithAsyncHandler()
-        {
-            const string url = "~/test-service/1";
-            const HttpMethod method = HttpMethod.Put;
-
-            using (var factory = new MockHandlerFactory())
-            {
-                IRestHandler handler = factory.CreateAsync<ITestService>(url, m => m.Put(1));
-                Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestAsyncHandler>());
-                Assert.That(handler.Context, Is.Not.Null);
-                Assert.That(handler.Context.Request, Is.Not.Null);
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Request.Url, Is.EqualTo(ToAbsoluteUri(url)));
-                Assert.That(handler.Context.Request.Method, Is.EqualTo(method));
-
-                ProcessRequest(handler);
-
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
-            }
-        }
-
-        [Test]
-        public void PatchMethodWithSyncHandler()
+        public void PatchMethod()
         {
             const string url = "~/test-service/1";
             const HttpMethod method = HttpMethod.Patch;
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.Patch(1));
+                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.Patch(1));
                 Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestHandler>());
+                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
                 Assert.That(handler.Context.Request, Is.Not.Null);
                 Assert.That(handler.Context.Response, Is.Not.Null);
@@ -332,40 +234,16 @@ namespace RestFoundation.Tests.Routes
         }
 
         [Test]
-        public void PatchMethodWithAsyncHandler()
-        {
-            const string url = "~/test-service/1";
-            const HttpMethod method = HttpMethod.Patch;
-
-            using (var factory = new MockHandlerFactory())
-            {
-                IRestHandler handler = factory.CreateAsync<ITestService>(url, m => m.Patch(1));
-                Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestAsyncHandler>());
-                Assert.That(handler.Context, Is.Not.Null);
-                Assert.That(handler.Context.Request, Is.Not.Null);
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Request.Url, Is.EqualTo(ToAbsoluteUri(url)));
-                Assert.That(handler.Context.Request.Method, Is.EqualTo(method));
-
-                ProcessRequest(handler);
-
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
-            }
-        }
-
-        [Test]
-        public void DeleteMethodWithSyncHandler()
+        public void DeleteMethod()
         {
             const string url = "~/test-service/1";
             const HttpMethod method = HttpMethod.Delete;
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.Delete(1));
+                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.Delete(1));
                 Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestHandler>());
+                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
                 Assert.That(handler.Context.Request, Is.Not.Null);
                 Assert.That(handler.Context.Response, Is.Not.Null);
@@ -380,40 +258,16 @@ namespace RestFoundation.Tests.Routes
         }
 
         [Test]
-        public void DeleteMethodWithAsyncHandler()
-        {
-            const string url = "~/test-service/1";
-            const HttpMethod method = HttpMethod.Delete;
-
-            using (var factory = new MockHandlerFactory())
-            {
-                IRestHandler handler = factory.CreateAsync<ITestService>(url, m => m.Delete(1));
-                Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestAsyncHandler>());
-                Assert.That(handler.Context, Is.Not.Null);
-                Assert.That(handler.Context.Request, Is.Not.Null);
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Request.Url, Is.EqualTo(ToAbsoluteUri(url)));
-                Assert.That(handler.Context.Request.Method, Is.EqualTo(method));
-
-                ProcessRequest(handler);
-
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Response.GetStatusCode(), Is.EqualTo(HttpStatusCode.NoContent));
-            }
-        }
-
-        [Test]
-        public void OptionsMethodWithSyncHandler()
+        public void OptionsMethod()
         {
             const string url = "~/test-service/1";
             const HttpMethod method = HttpMethod.Options;
 
             using (var factory = new MockHandlerFactory())
             {
-                IRestHandler handler = factory.Create<ITestService>(url, m => m.Get(1), method);
+                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.Get(1), method);
                 Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestHandler>());
+                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
                 Assert.That(handler.Context, Is.Not.Null);
                 Assert.That(handler.Context.Request, Is.Not.Null);
                 Assert.That(handler.Context.Response, Is.Not.Null);
@@ -428,60 +282,17 @@ namespace RestFoundation.Tests.Routes
             }
         }
 
-        [Test]
-        public void OptionsMethodWithAsyncHandler()
+        private static void ProcessRequest(IRestServiceHandler handler)
         {
-            const string url = "~/test-service/new";
-            const HttpMethod method = HttpMethod.Options;
+            Task handlerTask = handler.ProcessRequestAsync(null);
 
-            using (var factory = new MockHandlerFactory())
+            try
             {
-                IRestHandler handler = factory.CreateAsync<ITestService>(url, m => m.Post(null), method);
-                Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestAsyncHandler>());
-                Assert.That(handler.Context, Is.Not.Null);
-                Assert.That(handler.Context.Request, Is.Not.Null);
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Request.Url, Is.EqualTo(ToAbsoluteUri(url)));
-                Assert.That(handler.Context.Request.Method, Is.EqualTo(method));
-
-                ProcessRequest(handler);
-
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(handler.Context.Response.GetHeader("Allow"), Is.EqualTo("POST"));
+                handlerTask.Wait();
             }
-        }
-
-        private static void ProcessRequest(IRestHandler handler)
-        {
-            var asyncHandler = handler as IRestAsyncHandler;
-
-            if (asyncHandler == null)
+            catch (AggregateException ex)
             {
-                handler.ProcessRequest(null);
-                return;
-            }
-
-            Exception asyncException = null;
-
-            IAsyncResult result = asyncHandler.BeginProcessRequest(null, callback =>
-                                                                         {
-                                                                             try
-                                                                             {
-                                                                                 asyncHandler.EndProcessRequest(callback);
-                                                                             }
-                                                                             catch (Exception ex)
-                                                                             {
-                                                                                 asyncException = ex;
-                                                                             }
-                                                                         }, null);
-
-            result.AsyncWaitHandle.WaitOne();
-
-            if (asyncException != null)
-            {
-                throw asyncException;
+                throw ex.InnerException;
             }
         }
 

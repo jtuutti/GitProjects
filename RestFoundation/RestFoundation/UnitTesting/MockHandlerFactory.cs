@@ -9,7 +9,6 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Web.Routing;
-using System.Xml.Serialization;
 using RestFoundation.Client;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
@@ -30,7 +29,7 @@ namespace RestFoundation.UnitTesting
         /// <param name="virtualUrl">The virtual service URL.</param>
         /// <param name="serviceMethodDelegate">The service method delegate.</param>
         /// <returns>The REST handler./</returns>
-        public IRestHandler Create<T>(string virtualUrl, Expression<Action<T>> serviceMethodDelegate)
+        public IRestServiceHandler Create<T>(string virtualUrl, Expression<Action<T>> serviceMethodDelegate)
         {
             return Create(virtualUrl, serviceMethodDelegate, null);
         }
@@ -43,7 +42,7 @@ namespace RestFoundation.UnitTesting
         /// <param name="serviceMethodDelegate">The service method delegate.</param>
         /// <param name="httpMethod">The HTTP method.</param>
         /// <returns>The REST handler./</returns>
-        public IRestHandler Create<T>(string virtualUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
+        public IRestServiceHandler Create<T>(string virtualUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
         {
             if (serviceMethodDelegate == null)
             {
@@ -57,44 +56,7 @@ namespace RestFoundation.UnitTesting
 
             RequestContext requestContext = CreateContext(virtualUrl, serviceMethodDelegate, httpMethod);
 
-            return new MockRestHandler().GetHttpHandler(requestContext) as IRestHandler;
-        }
-
-        /// <summary>
-        /// Creates an asyncronous REST handler that executes that provided service method at the specified virtual URL.
-        /// </summary>
-        /// <typeparam name="T">The service contract type.</typeparam>
-        /// <param name="virtualUrl">The virtual service URL.</param>
-        /// <param name="serviceMethodDelegate">The service method delegate.</param>
-        /// <returns>The asynchronous REST handler./</returns>
-        public IRestAsyncHandler CreateAsync<T>(string virtualUrl, Expression<Action<T>> serviceMethodDelegate)
-        {
-            return CreateAsync(virtualUrl, serviceMethodDelegate, null);
-        }
-
-        /// <summary>
-        /// Creates an asyncronous REST handler that executes that provided service method at the specified virtual URL.
-        /// </summary>
-        /// <typeparam name="T">The service contract type.</typeparam>
-        /// <param name="virtualUrl">The virtual service URL.</param>
-        /// <param name="serviceMethodDelegate">The service method delegate.</param>
-        /// <param name="httpMethod">The HTTP method.</param>
-        /// <returns>The asynchronous REST handler./</returns>
-        public IRestAsyncHandler CreateAsync<T>(string virtualUrl, Expression<Action<T>> serviceMethodDelegate, HttpMethod? httpMethod)
-        {
-            if (serviceMethodDelegate == null)
-            {
-                throw new ArgumentNullException("serviceMethodDelegate");
-            }
-
-            if (String.IsNullOrEmpty(virtualUrl))
-            {
-                throw new ArgumentNullException("virtualUrl");
-            }
-
-            RequestContext requestContext = CreateContext(virtualUrl, serviceMethodDelegate, httpMethod);
-
-            return new MockRestAsyncHandler().GetHttpHandler(requestContext) as IRestAsyncHandler;
+            return new MockRestHandler().GetHttpHandler(requestContext) as IRestServiceHandler;
         }
 
         /// <summary>

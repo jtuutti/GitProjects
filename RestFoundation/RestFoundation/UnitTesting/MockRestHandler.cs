@@ -10,7 +10,7 @@ namespace RestFoundation.UnitTesting
     /// <summary>
     /// Represents a mock REST handler.
     /// </summary>
-    public class MockRestHandler : RestHandler, IEquatable<MockRestHandler>
+    public class MockRestHandler : RestServiceHandler, IEquatable<MockRestHandler>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MockRestHandler"/> class.

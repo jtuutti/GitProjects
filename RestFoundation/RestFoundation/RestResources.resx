@@ -306,8 +306,8 @@
     <comment>No REST HTTP module detected. Make sure to add a reference to the RestFoundation.RestHttpModule HTTP module in the Web.config file.</comment>
   </data>
   <data name="ServiceTimedOut" xml:space="preserve">
-    <value>Service timed out.</value>
-    <comment>Service timed out.</comment>
+    <value>Service timed out</value>
+    <comment>Service timed out</comment>
   </data>
   <data name="FailedRequest" xml:space="preserve">
     <value>HTTP request failed to process.</value>
@@ -548,5 +548,13 @@
   <data name="UnsupportedSyncRequestForAsyncHandler" xml:space="preserve">
     <value>Async route handler does not support synchronous requests.</value>
     <comment>Async route handler does not support synchronous requests.</comment>
+  </data>
+  <data name="InvalidIAsyncResultReturned" xml:space="preserve">
+    <value>A service method result cannot implement the IAsyncResult interface. REST Foundation will execute the service method result asynchronously whenever possible.</value>
+    <comment>A service method result cannot implement the IAsyncResult interface. REST Foundation will execute the service method result asynchronously whenever possible.</comment>
+  </data>
+  <data name="InvalidServiceMethodTimeout" xml:space="preserve">
+    <value>Invalid service method timeout value provided.</value>
+    <comment>Invalid service method timeout value provided.</comment>
   </data>
 </root>

@@ -286,6 +286,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A service method result cannot implement the IAsyncResult interface. REST Foundation will execute the service method result asynchronously whenever possible..
+        /// </summary>
+        internal static string InvalidIAsyncResultReturned {
+            get {
+                return ResourceManager.GetString("InvalidIAsyncResultReturned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Index files can only have .html or .htm extensions..
         /// </summary>
         internal static string InvalidIndexFileException {
@@ -435,6 +444,15 @@ namespace RestFoundation {
         internal static string InvalidServiceMethodExpression {
             get {
                 return ResourceManager.GetString("InvalidServiceMethodExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid service method timeout value provided..
+        /// </summary>
+        internal static string InvalidServiceMethodTimeout {
+            get {
+                return ResourceManager.GetString("InvalidServiceMethodTimeout", resourceCulture);
             }
         }
         
@@ -826,7 +844,7 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Service timed out..
+        ///   Looks up a localized string similar to Service timed out.
         /// </summary>
         internal static string ServiceTimedOut {
             get {

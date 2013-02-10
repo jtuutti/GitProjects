@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using System;
+using Microsoft.Practices.Unity;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
 using RestFoundation.Behaviors;
@@ -86,8 +87,7 @@ namespace RestTest.App_Start
                       .WithBehaviors(new StatisticsBehavior(), new LoggingBehavior())
                       .DoNotValidateRequests();
 
-            urlBuilder.MapUrl("async")
-                      .WithAsyncHandler()
+            urlBuilder.MapUrl("secure")
                       .ToServiceContract<IIndexService>()
                       .WithBehaviors(new DigestAuthenticationBehavior(), new AuthorizationBehavior("administrators"), new StatisticsBehavior(), new LoggingBehavior());
 

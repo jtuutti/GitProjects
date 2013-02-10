@@ -22,6 +22,6 @@ namespace RestFoundation
         /// service method is allowed.
         /// </param>
         /// <returns>The created parameter value.</returns>
-        object CreateValue(ParameterInfo parameter, IRestHandler handler, out bool isResource);
+        object CreateValue(ParameterInfo parameter, IRestServiceHandler handler, out bool isResource);
     }
 }

@@ -53,8 +53,7 @@ namespace RestFoundation.ServiceLocation
 
             m_transientServices = new Dictionary<Type, Type>
             {
-                { typeof(IRestAsyncHandler), typeof(RestAsyncHandler) },
-                { typeof(IRestHandler), typeof(RestHandler) },
+                { typeof(IRestServiceHandler), typeof(RestServiceHandler) },
                 { typeof(IServiceBehaviorInvoker), typeof(ServiceBehaviorInvoker) },
                 { typeof(IServiceFactory), typeof(ServiceFactory) },
                 { typeof(IServiceMethodInvoker), typeof(ServiceMethodInvoker) },

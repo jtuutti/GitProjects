@@ -11,7 +11,7 @@ namespace RestTestContracts.Metadata
     {
         public override void Initialize()
         {
-            SetAuthentication(AuthenticationType.Digest, "admin", "~/async");
+            SetAuthentication(AuthenticationType.Digest, "admin", "~/secure");
 
             ForMethod(x => x.Feed(Arg<string>())).SetHidden();
             ForMethod(x => x.FileDownload(Arg<string>())).SetHidden();
@@ -21,9 +21,6 @@ namespace RestTestContracts.Metadata
 
             ForMethod(x => x.GetAll()).SetDescription("Gets all resources of type 'Person'")
                                       .SetResponseResourceExample(CreatePersonArrayExample());
-
-            ForMethod(x => x.GetAllAsync()).SetDescription("Gets all resources of type 'Person' using an asynchronous task")
-                                           .SetResponseResourceExample(CreatePersonArrayExample());
 
             ForMethod(x => x.Get(1, Arg<string>())).SetDescription("Gets resources of type 'Person' by ID");
 

@@ -8,14 +8,14 @@ namespace RestFoundation.Runtime
 {
     internal static class UnvalidatedHandlerRegistry
     {
-        private static readonly HashSet<IRestHandler> unvalidatedHandlers = new HashSet<IRestHandler>();
+        private static readonly HashSet<IRestServiceHandler> unvalidatedHandlers = new HashSet<IRestServiceHandler>();
 
-        public static bool IsUnvalidated(IRestHandler handler)
+        public static bool IsUnvalidated(IRestServiceHandler handler)
         {
             return unvalidatedHandlers.Contains(handler);
         }
 
-        public static void Add(IRestHandler handler)
+        public static void Add(IRestServiceHandler handler)
         {
             unvalidatedHandlers.Add(handler);
         }

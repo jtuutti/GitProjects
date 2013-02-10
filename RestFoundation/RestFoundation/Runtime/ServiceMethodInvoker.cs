@@ -46,11 +46,11 @@ namespace RestFoundation.Runtime
         /// <summary>
         /// Invokes the service method.
         /// </summary>
-        /// <param name="method">The service method.</param>
         /// <param name="service">The service instance.</param>
+        /// <param name="method">The service method.</param>
         /// <param name="handler">The REST handler associated with the HTTP request.</param>
         /// <returns>The return value of the executed service method.</returns>
-        public virtual object Invoke(MethodInfo method, object service, IRestHandler handler)
+        public virtual object Invoke(object service, MethodInfo method, IRestServiceHandler handler)
         {
             if (service == null || method == null)
             {
@@ -67,13 +67,13 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingServiceContext);
             }
 
-            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(method, service, handler);
+            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(service, method, handler);
             AddServiceBehaviors(method, behaviors);
 
-            return InvokeAndProcessExceptions(method, service, behaviors, handler);
+            return InvokeAndProcessExceptions(service, method, behaviors, handler);
         }
 
-        private static List<IServiceBehavior> GetServiceMethodBehaviors(MethodInfo method, object service, IRestHandler handler)
+        private static List<IServiceBehavior> GetServiceMethodBehaviors(object service, MethodInfo method, IRestServiceHandler handler)
         {
             List<IServiceBehavior> behaviors = ServiceBehaviorRegistry.GetBehaviors(handler)
                                                                       .Where(behavior => behavior.AppliesTo(handler.Context, new MethodAppliesContext(service, method)))
@@ -113,11 +113,11 @@ namespace RestFoundation.Runtime
             }
         }
 
-        private object InvokeAndProcessExceptions(MethodInfo method, object service, List<IServiceBehavior> behaviors, IRestHandler handler)
+        private object InvokeAndProcessExceptions(object service, MethodInfo method, List<IServiceBehavior> behaviors, IRestServiceHandler handler)
         {
             try
             {
-                return InvokeWithBehaviors(method, service, behaviors, handler);
+                return InvokeWithBehaviors(service, method, behaviors, handler);
             }
             catch (Exception ex)
             {
@@ -155,7 +155,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        private object InvokeWithBehaviors(MethodInfo method, object service, List<IServiceBehavior> behaviors, IRestHandler handler)
+        private object InvokeWithBehaviors(object service, MethodInfo method, List<IServiceBehavior> behaviors, IRestServiceHandler handler)
         {
             m_behaviorInvoker.InvokeOnAuthorizingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList(), service, method);
 
@@ -178,7 +178,7 @@ namespace RestFoundation.Runtime
             return result;
         }
 
-        private object[] GenerateMethodArguments(MethodInfo method, IRestHandler handler, out object resource)
+        private object[] GenerateMethodArguments(MethodInfo method, IRestServiceHandler handler, out object resource)
         {
             var methodArguments = new List<object>();
             resource = null;

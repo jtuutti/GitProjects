@@ -14,10 +14,10 @@ namespace RestFoundation
         /// <summary>
         /// Invokes the service method.
         /// </summary>
-        /// <param name="method">The service method.</param>
         /// <param name="service">The service instance.</param>
+        /// <param name="method">The service method.</param>
         /// <param name="handler">The REST handler associated with the HTTP request.</param>
         /// <returns>The return value of the executed service method.</returns>
-        object Invoke(MethodInfo method, object service, IRestHandler handler);
+        object Invoke(object service, MethodInfo method, IRestServiceHandler handler);
     }
 }

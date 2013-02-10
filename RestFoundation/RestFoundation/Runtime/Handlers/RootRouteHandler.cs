@@ -14,7 +14,7 @@ namespace RestFoundation.Runtime.Handlers
     /// <summary>
     /// Represents a service root route handler.
     /// </summary>
-    public class RootRouteHandler : IRestHandler
+    public class RootRouteHandler : IServiceContextHandler
     {
         private const char Slash = '/';
 
@@ -72,39 +72,6 @@ namespace RestFoundation.Runtime.Handlers
             get
             {
                 return false;
-            }
-        }
-
-        /// <summary>
-        /// Gets the service URL.
-        /// </summary>
-        public string ServiceUrl
-        {
-            get
-            {
-                return String.Empty;
-            }
-        }
-
-        /// <summary>
-        /// Gets a fully qualified name of the interface type defining the service contract.
-        /// </summary>
-        public string ServiceContractTypeName
-        {
-            get
-            {
-                throw new NotSupportedException();
-            }
-        }
-
-        /// <summary>
-        /// Gets a relative URL template.
-        /// </summary>
-        public string UrlTemplate
-        {
-            get
-            {
-                throw new NotSupportedException();
             }
         }
 

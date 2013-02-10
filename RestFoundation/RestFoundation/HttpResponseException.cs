@@ -25,7 +25,7 @@ namespace RestFoundation
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpResponseException"/> class.
         /// </summary>
-        public HttpResponseException() : this(HttpStatusCode.InternalServerError, String.Empty)
+        public HttpResponseException() : this(HttpStatusCode.InternalServerError, null)
         {
         }
 
@@ -42,7 +42,7 @@ namespace RestFoundation
         /// Initializes a new instance of the <see cref="HttpResponseException"/> class with the HTTP status code.
         /// </summary>
         /// <param name="statusCode">The status code.</param>
-        public HttpResponseException(HttpStatusCode statusCode) : this(statusCode, PascalCaseToSentenceConverter.Convert(statusCode.ToString()))
+        public HttpResponseException(HttpStatusCode statusCode) : this(statusCode, null)
         {
         }
 
@@ -53,7 +53,7 @@ namespace RestFoundation
         /// <param name="statusDescription">The status description.</param>
         /// <exception cref="ArgumentException">If the status code is not an error code.</exception>
         public HttpResponseException(HttpStatusCode statusCode, string statusDescription) :
-            base(String.Format(CultureInfo.InvariantCulture, "HTTP Status Exception: ({0}) {1}", (int) statusCode, statusDescription ?? String.Empty))
+            base(String.Format(CultureInfo.InvariantCulture, "HTTP Status Exception: ({0}) {1}", (int) statusCode, statusDescription ?? PascalCaseToSentenceConverter.Convert(statusCode.ToString())))
         {
             if ((int) statusCode < MinErrorStatusCode)
             {
@@ -61,7 +61,7 @@ namespace RestFoundation
             }
 
             StatusCode = statusCode;
-            StatusDescription = statusDescription ?? String.Empty;
+            StatusDescription = statusDescription ?? PascalCaseToSentenceConverter.Convert(statusCode.ToString());
         }
 
         private HttpResponseException(SerializationInfo info, StreamingContext context) : base(info, context)

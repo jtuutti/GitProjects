@@ -183,7 +183,7 @@ namespace RestFoundation
         {
             IHttpHandler handler = application.Context.CurrentHandler;
 
-            return handler is IRestHandler && !(handler is RootRouteHandler);
+            return handler is IRestServiceHandler && !(handler is RootRouteHandler);
         }
 
         private static void TryIngestPageDependencies(HttpApplication application)
@@ -340,7 +340,7 @@ namespace RestFoundation
             }
 
             var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
-            var handler = application.Context.CurrentHandler as IRestHandler ?? new ContextRestHandler(context);
+            var handler = application.Context.CurrentHandler as IServiceContextHandler ?? new ServiceContextHandler(context);
 
             application.Server.ClearError();
             context.Response.Output.Clear();

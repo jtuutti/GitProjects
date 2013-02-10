@@ -4,13 +4,12 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using RestFoundation.Results;
 
 namespace RestFoundation.Runtime
 {
     internal static class TaskExceptionUnwrapper
     {
-        public static Exception Unwrap(Task<IResult> task)
+        public static Exception Unwrap(Task task)
         {
             AggregateException taskException = task.Exception;
 

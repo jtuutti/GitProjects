@@ -45,7 +45,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         /// <param name="handler">A REST handler associated with HTTP request.</param>
         /// <returns>The service method data.</returns>
-        public virtual ServiceMethodLocatorData Locate(IRestHandler handler)
+        public virtual ServiceMethodLocatorData Locate(IRestServiceHandler handler)
         {
             if (handler == null)
             {

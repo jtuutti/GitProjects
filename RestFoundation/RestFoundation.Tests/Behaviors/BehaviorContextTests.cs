@@ -21,11 +21,11 @@ namespace RestFoundation.Tests.Behaviors
         {
             m_factory = new MockHandlerFactory();
 
-            IRestHandler testHandler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post(null));
+            IRestServiceHandler testHandler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post(null));
             Assert.That(testHandler, Is.Not.Null);
             Assert.That(testHandler.Context, Is.Not.Null);
 
-            IRestHandler selfContainedHandler = m_factory.Create<TestSelfContainedService>("~/test-ok-fail/ok", m => m.GetOK());
+            IRestServiceHandler selfContainedHandler = m_factory.Create<TestSelfContainedService>("~/test-ok-fail/ok", m => m.GetOK());
             Assert.That(selfContainedHandler, Is.Not.Null);
             Assert.That(selfContainedHandler.Context, Is.Not.Null);
         }

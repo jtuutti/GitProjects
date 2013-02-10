@@ -16,6 +16,6 @@ namespace RestFoundation
         /// </summary>
         /// <param name="handler">A REST handler associated with HTTP request.</param>
         /// <returns>The service method data.</returns>
-        ServiceMethodLocatorData Locate(IRestHandler handler);
+        ServiceMethodLocatorData Locate(IRestServiceHandler handler);
     }
 }

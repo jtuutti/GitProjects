@@ -44,7 +44,7 @@ namespace RestFoundation
                 throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidServiceName, serviceUrl));
             }
 
-            return new RouteBuilder(serviceUrl, m_routes, null);
+            return new RouteBuilder(serviceUrl, m_routes);
         }
     }
 }

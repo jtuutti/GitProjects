@@ -27,9 +27,9 @@ namespace RestFoundation
 
         private readonly string m_relativeUrl;
         private readonly RouteCollection m_routes;
-        private readonly TimeSpan? m_asyncTimeout;
+        private TimeSpan? m_serviceTimeout, m_resultTimeout;
 
-        internal RouteBuilder(string relativeUrl, RouteCollection routes, TimeSpan? asyncTimeout)
+        internal RouteBuilder(string relativeUrl, RouteCollection routes)
         {
             if (String.IsNullOrEmpty(relativeUrl))
             {
@@ -43,56 +43,40 @@ namespace RestFoundation
 
             m_relativeUrl = relativeUrl.Trim();
             m_routes = routes;
-            m_asyncTimeout = asyncTimeout;
         }
 
         /// <summary>
-        /// Specifies that the URL should be mapped to the service using an asynchronous REST HTTP handler.
-        /// It is only recommended to use asynchronous handlers for services that perform heavy operations
-        /// that can block the worker process or cause the server to run out of the ASP .NET thread pool.
-        /// This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
-        /// make web forms pages asynchronous.
-        /// The result timeout will be set to 100 seconds.
+        /// Sets a service method execution timeout for the mapped URL. The default value is 60 seconds.
         /// </summary>
+        /// <param name="timeout">The timeout value.</param>
         /// <returns>The route builder.</returns>
-        public RouteBuilder WithAsyncHandler()
+        /// <exception cref="ArgumentOutOfRangeException">If a negative, non-infinite timeout is provided.</exception>
+        public RouteBuilder WithServiceTimeout(TimeSpan timeout)
         {
-            return new RouteBuilder(m_relativeUrl, m_routes, TimeSpan.FromSeconds(RestAsyncHandler.DefaultTimeoutInSeconds));
-        }
-
-        /// <summary>
-        /// Specifies that the URL should be mapped to the service using an asynchronous REST HTTP handler.
-        /// It is only recommended to use asynchronous handlers for services that perform heavy operations
-        /// that can block the worker process or cause the server to run out of the ASP .NET thread pool.
-        /// This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
-        /// make web forms pages asynchronous. In case of a time out, it may take additional time to cancel the operation.
-        /// </summary>
-        /// <param name="timeout">The async service method timeout. The value of 0 means no timeout.</param>
-        /// <returns>The route builder.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the timeout is a negative number.</exception>
-        public RouteBuilder WithAsyncHandler(TimeSpan timeout)
-        {
-            if (timeout.Seconds < 0)
+            if (timeout.TotalSeconds < -1)
             {
-                throw new ArgumentOutOfRangeException("timeout", timeout.TotalSeconds, RestResources.OutOfRangeAsyncServiceTimeout);
+                throw new ArgumentOutOfRangeException("timeout", RestResources.InvalidServiceMethodTimeout);
             }
 
-            return new RouteBuilder(m_relativeUrl, m_routes, timeout);
+            m_serviceTimeout = timeout.TotalSeconds > 0 ? timeout : TimeSpan.Zero;
+            return this;
         }
 
         /// <summary>
-        /// Specifies that the URL should be mapped to the service using an asynchronous REST HTTP handler.
-        /// It is only recommended to use asynchronous handlers for services that perform heavy operations
-        /// that can block the worker process or cause the server to run out of the ASP .NET thread pool.
-        /// This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
-        /// make web forms pages asynchronous. In case of a time out, it may take additional time to cancel the operation.
+        /// Sets a service method result processing timeout for the mapped URL. The default value is 30 seconds.
         /// </summary>
-        /// <param name="timeoutInMilliseconds">The async service method timeout in milliseconds.</param>
+        /// <param name="timeout">The timeout value.</param>
         /// <returns>The route builder.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If the timeout is less than 1 second.</exception>
-        public RouteBuilder WithAsyncHandler(int timeoutInMilliseconds)
+        /// <exception cref="ArgumentOutOfRangeException">If a negative, non-infinite timeout is provided.</exception>
+        public RouteBuilder WithResultTimeout(TimeSpan timeout)
         {
-            return WithAsyncHandler(TimeSpan.FromMilliseconds(timeoutInMilliseconds));
+            if (timeout.TotalSeconds < -1)
+            {
+                throw new ArgumentOutOfRangeException("timeout", RestResources.InvalidServiceMethodTimeout);
+            }
+
+            m_resultTimeout = timeout.TotalSeconds > 0 ? timeout : TimeSpan.Zero;
+            return this;
         }
 
         /// <summary>
@@ -253,34 +237,13 @@ namespace RestFoundation
                 ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, m_relativeUrl), t => methodMetadata, (t, u) => methodMetadata);
             }
 
-            IEnumerable<IRestHandler> routeHandlers = MapRoutes(methodMetadata, contractType);
+            IEnumerable<IRestServiceHandler> routeHandlers = MapRoutes(methodMetadata, contractType);
             return new RouteConfiguration(routeHandlers);
         }
 
-        private IRestHandler CreateRouteHandler()
+        private IEnumerable<IRestServiceHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, Type serviceContractType)
         {
-            IRestHandler routeHandler;
-
-            if (m_asyncTimeout.HasValue)
-            {
-                routeHandler = Rest.Configuration.ServiceLocator.GetService<RestAsyncHandler>();
-
-                if (m_asyncTimeout.Value.Seconds >= 0)
-                {
-                    ((RestAsyncHandler) routeHandler).AsyncTimeout = m_asyncTimeout.Value;
-                }
-            }
-            else
-            {
-                routeHandler = Rest.Configuration.ServiceLocator.GetService<RestHandler>();
-            }
-
-            return routeHandler;
-        }
-
-        private IEnumerable<IRestHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, Type serviceContractType)
-        {
-            var routeHandlers = new List<IRestHandler>();
+            var routeHandlers = new List<IRestServiceHandler>();
             var orderedMethodMetadata = methodMetadata.OrderByDescending(m => m.UrlInfo.Priority);
 
             foreach (ServiceMethodMetadata metadata in orderedMethodMetadata)
@@ -299,7 +262,18 @@ namespace RestFoundation
 
                 ConfigureOptionalRouteParameters(metadata, defaults);
 
-                IRestHandler routeHandler = CreateRouteHandler();
+                var routeHandler = Rest.Configuration.ServiceLocator.GetService<IRestServiceHandler>();
+
+                if (m_serviceTimeout.HasValue)
+                {
+                    routeHandler.ServiceTimeout = m_serviceTimeout.Value;
+                }
+
+                if (m_resultTimeout.HasValue)
+                {
+                    routeHandler.ResultTimeout = m_resultTimeout.Value;
+                }
+
                 routeHandlers.Add(routeHandler);
 
                 string serviceUrl = ConcatUrl(m_relativeUrl, metadata.UrlInfo.UrlTemplate.Trim());

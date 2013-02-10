@@ -37,8 +37,7 @@ namespace RestFoundation.Tests.IoC
                 TestTransient<IHttpRequest>(serviceLocator);
                 TestTransient<IHttpResponse>(serviceLocator);
                 TestTransient<IHttpResponseOutput>(serviceLocator);
-                TestTransient<IRestAsyncHandler>(serviceLocator);
-                TestTransient<IRestHandler>(serviceLocator);
+                TestTransient<IRestServiceHandler>(serviceLocator);
                 TestTransient<IServiceContext>(serviceLocator);
                 TestTransient<IServiceMethodInvoker>(serviceLocator);
                 TestTransient<IServiceMethodLocator>(serviceLocator);
@@ -62,8 +61,7 @@ namespace RestFoundation.Tests.IoC
                 TestImplementation<IHttpRequest, HttpRequest>(serviceLocator);
                 TestImplementation<IHttpResponse, HttpResponse>(serviceLocator);
                 TestImplementation<IHttpResponseOutput, HttpResponseOutput>(serviceLocator);
-                TestImplementation<IRestAsyncHandler, RestAsyncHandler>(serviceLocator);
-                TestImplementation<IRestHandler, RestHandler>(serviceLocator);
+                TestImplementation<IRestServiceHandler, RestServiceHandler>(serviceLocator);
                 TestImplementation<IServiceContext, ServiceContext>(serviceLocator);
                 TestImplementation<IServiceMethodInvoker, ServiceMethodInvoker>(serviceLocator);
                 TestImplementation<IServiceMethodLocator, ServiceMethodLocator>(serviceLocator);
@@ -150,8 +148,7 @@ namespace RestFoundation.Tests.IoC
                 TestTransient<IHttpRequest>(serviceLocator);
                 TestTransient<IHttpResponse>(serviceLocator);
                 TestTransient<IHttpResponseOutput>(serviceLocator);
-                TestTransient<IRestAsyncHandler>(serviceLocator);
-                TestTransient<IRestHandler>(serviceLocator);
+                TestTransient<IRestServiceHandler>(serviceLocator);
                 TestTransient<IServiceContext>(serviceLocator);
                 TestTransient<IServiceMethodInvoker>(serviceLocator);
                 TestTransient<IServiceMethodLocator>(serviceLocator);
@@ -175,8 +172,7 @@ namespace RestFoundation.Tests.IoC
                 TestImplementation<IHttpRequest, HttpRequest>(serviceLocator);
                 TestImplementation<IHttpResponse, HttpResponse>(serviceLocator);
                 TestImplementation<IHttpResponseOutput, HttpResponseOutput>(serviceLocator);
-                TestImplementation<IRestAsyncHandler, RestAsyncHandler>(serviceLocator);
-                TestImplementation<IRestHandler, RestHandler>(serviceLocator);
+                TestImplementation<IRestServiceHandler, RestServiceHandler>(serviceLocator);
                 TestImplementation<IServiceContext, ServiceContext>(serviceLocator);
                 TestImplementation<IServiceMethodInvoker, ServiceMethodInvoker>(serviceLocator);
                 TestImplementation<IServiceMethodLocator, ServiceMethodLocator>(serviceLocator);

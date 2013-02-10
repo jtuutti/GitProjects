@@ -13,7 +13,7 @@ namespace RestFoundation.Runtime
     internal static class MediaTypeFormatterRegistry
     {
         private static readonly ConcurrentDictionary<string, IMediaTypeFormatter> formatters = InitializeDefaultFormatters();
-        private static readonly ConcurrentDictionary<IRestHandler, Dictionary<string, IMediaTypeFormatter>> handlerFormatters = new ConcurrentDictionary<IRestHandler, Dictionary<string, IMediaTypeFormatter>>();
+        private static readonly ConcurrentDictionary<IServiceContextHandler, Dictionary<string, IMediaTypeFormatter>> handlerFormatters = new ConcurrentDictionary<IServiceContextHandler, Dictionary<string, IMediaTypeFormatter>>();
 
         public static IMediaTypeFormatter GetFormatter(string mediaType)
         {
@@ -54,7 +54,7 @@ namespace RestFoundation.Runtime
             formatters.Clear();
         }
 
-        public static IMediaTypeFormatter GetHandlerFormatter(IRestHandler handler, string mediaType)
+        public static IMediaTypeFormatter GetHandlerFormatter(IServiceContextHandler handler, string mediaType)
         {
             Dictionary<string, IMediaTypeFormatter> formatterDictionary;
 
@@ -68,7 +68,7 @@ namespace RestFoundation.Runtime
             return formatterDictionary.TryGetValue(mediaType, out formatter) ? formatter : null;
         }
 
-        public static void AddHandlerFormatter(IRestHandler handler, string mediaType, IMediaTypeFormatter formatter)
+        public static void AddHandlerFormatter(IServiceContextHandler handler, string mediaType, IMediaTypeFormatter formatter)
         {
             handlerFormatters.AddOrUpdate(handler,
                                           handlerToAdd =>

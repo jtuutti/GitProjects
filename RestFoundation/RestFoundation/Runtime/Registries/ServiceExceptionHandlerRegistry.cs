@@ -8,10 +8,10 @@ namespace RestFoundation.Runtime
 {
     internal static class ServiceExceptionHandlerRegistry
     {
-        private static readonly ConcurrentDictionary<IRestHandler, IServiceExceptionHandler> handlerExceptionHandlers = new ConcurrentDictionary<IRestHandler, IServiceExceptionHandler>();
+        private static readonly ConcurrentDictionary<IRestServiceHandler, IServiceExceptionHandler> handlerExceptionHandlers = new ConcurrentDictionary<IRestServiceHandler, IServiceExceptionHandler>();
         private static IServiceExceptionHandler globalExceptionHandler;
 
-        public static IServiceExceptionHandler GetExceptionHandler(IRestHandler handler)
+        public static IServiceExceptionHandler GetExceptionHandler(IRestServiceHandler handler)
         {
             IServiceExceptionHandler exceptionHandler;
 
@@ -23,7 +23,7 @@ namespace RestFoundation.Runtime
             globalExceptionHandler = exceptionHandler;
         }
 
-        public static void SetExceptionHandler(IRestHandler handler, IServiceExceptionHandler exceptionHandler)
+        public static void SetExceptionHandler(IRestServiceHandler handler, IServiceExceptionHandler exceptionHandler)
         {
             handlerExceptionHandlers.AddOrUpdate(handler, handlerToAdd => exceptionHandler, (handlerToUpdate, exceptionHandlerToUpdate) => exceptionHandler);
         }
