@@ -9,12 +9,12 @@ namespace RestFoundation.Runtime
 {
     internal struct ServiceMethodMetadata : IEquatable<ServiceMethodMetadata>
     {
+        private static int serviceMethodIdGenerator;
+
         private readonly int m_serviceMethodId;
         private readonly string m_serviceUrl;
         private readonly MethodInfo m_methodInfo;
         private readonly UrlAttribute m_urlInfo;
-
-        private static int serviceMethodIdGenerator;
 
         public ServiceMethodMetadata(string serviceUrl, MethodInfo methodInfo, UrlAttribute urlInfo)
         {
