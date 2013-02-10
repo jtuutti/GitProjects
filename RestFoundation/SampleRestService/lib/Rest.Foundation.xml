@@ -262,6 +262,31 @@
             Gets or sets a comma delimited set of query string or form POST parameters used to vary the cache entry.
             </summary>
     </member>
+    <member name="T:RestFoundation.Behaviors.Attributes.ServiceMethodTimeoutAttribute">
+      <summary>
+            Represents service method execution and result processing timeouts.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.Attributes.ServiceMethodTimeoutAttribute.#ctor(System.Int32)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.ServiceMethodTimeoutAttribute" /> class.
+            </summary>
+      <param name="serviceTimeoutInSeconds">
+            The service method execution timeout value in seconds. Set the value to <see cref="F:System.TimeSpan.Zero" />
+            for an infinite timeout.
+            </param>
+    </member>
+    <member name="P:RestFoundation.Behaviors.Attributes.ServiceMethodTimeoutAttribute.ServiceTimeoutInSeconds">
+      <summary>
+            Gets the service method execution timeout value in seconds.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.Attributes.ServiceMethodTimeoutAttribute.ResultTimeoutInSeconds">
+      <summary>
+            Gets or sets the service method execution timeout value in seconds. Set the value to <see cref="F:System.TimeSpan.Zero" />
+            for an infinite timeout. A null value means the default timeout value of 30 seconds.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Behaviors.Attributes.ThrottlingAttribute">
       <summary>
             Represents a bandwidth throttling behavior for a service method.
@@ -1067,29 +1092,116 @@
             Gets or sets an array of resource faults.
             </summary>
     </member>
-    <member name="T:RestFoundation.Runtime.Handlers.IRestHandler">
+    <member name="T:RestFoundation.Runtime.Handlers.IServiceContextHandler">
       <summary>
-            Defines a REST service handler.
+            Defines a service context dependent handler.
             </summary>
     </member>
-    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.Context">
+    <member name="P:RestFoundation.Runtime.Handlers.IServiceContextHandler.Context">
       <summary>
             Gets the service context.
             </summary>
     </member>
-    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.ServiceUrl">
+    <member name="T:RestFoundation.Runtime.Handlers.IRestServiceHandler">
+      <summary>
+            Defines a REST service handler.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Runtime.Handlers.IRestServiceHandler.ProcessRequestAsync(System.Web.HttpContext)">
+      <summary>
+            When overridden in a derived class, provides code that handles an asynchronous task.
+            </summary>
+      <returns>The asynchronous task.</returns>
+      <param name="context">The HTTP context.</param>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.IRestServiceHandler.ServiceUrl">
       <summary>
             Gets the service URL.
             </summary>
     </member>
-    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.ServiceContractTypeName">
+    <member name="P:RestFoundation.Runtime.Handlers.IRestServiceHandler.ServiceContractTypeName">
       <summary>
             Gets a fully qualified name of the interface type defining the service contract.
             </summary>
     </member>
-    <member name="P:RestFoundation.Runtime.Handlers.IRestHandler.UrlTemplate">
+    <member name="P:RestFoundation.Runtime.Handlers.IRestServiceHandler.UrlTemplate">
       <summary>
             Gets a relative URL template.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.IRestServiceHandler.ServiceTimeout">
+      <summary>
+            Gets or sets a value representing the service method execution timeout.
+            Setting the value to <see cref="F:System.TimeSpan.Zero" /> indicates no timeout.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.IRestServiceHandler.ResultTimeout">
+      <summary>
+            Gets or sets a value representing the service method result execution timeout.
+            Setting the value to <see cref="F:System.TimeSpan.Zero" /> indicates no timeout.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.Runtime.Handlers.RestServiceHandler">
+      <summary>
+            Represents a REST service handler implementation.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Runtime.Handlers.RestServiceHandler.#ctor(RestFoundation.IServiceContext,RestFoundation.IServiceMethodLocator,RestFoundation.IServiceMethodInvoker,RestFoundation.Results.IResultFactory,RestFoundation.Results.IResultExecutor)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.Handlers.RestServiceHandler" /> class.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="methodLocator">The service method locator.</param>
+      <param name="methodInvoker">The service method invoker.</param>
+      <param name="resultFactory">The service method result factory.</param>
+      <param name="resultExecutor">The service method result executor.</param>
+    </member>
+    <member name="M:RestFoundation.Runtime.Handlers.RestServiceHandler.GetHttpHandler(System.Web.Routing.RequestContext)">
+      <summary>
+            Provides the object that processes the request.
+            </summary>
+      <returns>
+            An object that processes the request.
+            </returns>
+      <param name="requestContext">An object that encapsulates information about the request.</param>
+    </member>
+    <member name="M:RestFoundation.Runtime.Handlers.RestServiceHandler.ProcessRequestAsync(System.Web.HttpContext)">
+      <summary>
+            When overridden in a derived class, provides code that handles an asynchronous task.
+            </summary>
+      <returns>The asynchronous task.</returns>
+      <param name="context">The HTTP context.</param>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.RestServiceHandler.Context">
+      <summary>
+            Gets the service context.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.RestServiceHandler.ServiceUrl">
+      <summary>
+            Gets the service URL.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.RestServiceHandler.ServiceContractTypeName">
+      <summary>
+            Gets a fully qualified name of the interface type defining the service contract.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.RestServiceHandler.UrlTemplate">
+      <summary>
+            Gets a relative URL template.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.RestServiceHandler.ServiceTimeout">
+      <summary>
+            Gets or sets a value representing the service method execution timeout.
+            Setting the value to <see cref="F:System.TimeSpan.Zero" /> indicates no timeout.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Handlers.RestServiceHandler.ResultTimeout">
+      <summary>
+            Gets or sets a value representing the service method result execution timeout.
+            Setting the value to <see cref="F:System.TimeSpan.Zero" /> indicates no timeout.
             </summary>
     </member>
     <member name="T:RestFoundation.Runtime.Link">
@@ -1515,6 +1627,11 @@
               Looks up a localized string similar to A resource cannot be set for the current HTTP method..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.InvalidIAsyncResultReturned">
+      <summary>
+              Looks up a localized string similar to A service method result cannot implement the IAsyncResult interface. REST Foundation will execute the service method result asynchronously whenever possible..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.InvalidIndexFileException">
       <summary>
               Looks up a localized string similar to Index files can only have .html or .htm extensions..
@@ -1598,6 +1715,11 @@
     <member name="P:RestFoundation.RestResources.InvalidServiceMethodExpression">
       <summary>
               Looks up a localized string similar to Invalid service method lambda expression provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.InvalidServiceMethodTimeout">
+      <summary>
+              Looks up a localized string similar to Invalid service method timeout value provided..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidServiceName">
@@ -1817,7 +1939,7 @@
     </member>
     <member name="P:RestFoundation.RestResources.ServiceTimedOut">
       <summary>
-              Looks up a localized string similar to Service timed out..
+              Looks up a localized string similar to Service timed out.
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.ServiceUnavailable">
@@ -2326,7 +2448,7 @@
             Defines a service method locator.
             </summary>
     </member>
-    <member name="M:RestFoundation.IServiceMethodLocator.Locate(RestFoundation.Runtime.Handlers.IRestHandler)">
+    <member name="M:RestFoundation.IServiceMethodLocator.Locate(RestFoundation.Runtime.Handlers.IRestServiceHandler)">
       <summary>
             Locates the service method associated with the provided REST handler and returns the associated data.
             </summary>
@@ -2435,40 +2557,21 @@
             Represents a route builder for the specified relative URL.
             </summary>
     </member>
-    <member name="M:RestFoundation.RouteBuilder.WithAsyncHandler">
+    <member name="M:RestFoundation.RouteBuilder.WithServiceTimeout(System.TimeSpan)">
       <summary>
-            Specifies that the URL should be mapped to the service using an asynchronous REST HTTP handler.
-            It is only recommended to use asynchronous handlers for services that perform heavy operations
-            that can block the worker process or cause the server to run out of the ASP .NET thread pool.
-            This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
-            make web forms pages asynchronous.
-            The result timeout will be set to 100 seconds.
+            Sets a service method execution timeout for the mapped URL. The default value is 60 seconds.
             </summary>
+      <param name="timeout">The timeout value.</param>
       <returns>The route builder.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">If a negative, non-infinite timeout is provided.</exception>
     </member>
-    <member name="M:RestFoundation.RouteBuilder.WithAsyncHandler(System.TimeSpan)">
+    <member name="M:RestFoundation.RouteBuilder.WithResultTimeout(System.TimeSpan)">
       <summary>
-            Specifies that the URL should be mapped to the service using an asynchronous REST HTTP handler.
-            It is only recommended to use asynchronous handlers for services that perform heavy operations
-            that can block the worker process or cause the server to run out of the ASP .NET thread pool.
-            This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
-            make web forms pages asynchronous. In case of a time out, it may take additional time to cancel the operation.
+            Sets a service method result processing timeout for the mapped URL. The default value is 30 seconds.
             </summary>
-      <param name="timeout">The async service method timeout. The value of 0 means no timeout.</param>
+      <param name="timeout">The timeout value.</param>
       <returns>The route builder.</returns>
-      <exception cref="T:System.ArgumentOutOfRangeException">If the timeout is a negative number.</exception>
-    </member>
-    <member name="M:RestFoundation.RouteBuilder.WithAsyncHandler(System.Int32)">
-      <summary>
-            Specifies that the URL should be mapped to the service using an asynchronous REST HTTP handler.
-            It is only recommended to use asynchronous handlers for services that perform heavy operations
-            that can block the worker process or cause the server to run out of the ASP .NET thread pool.
-            This method has no effect on web forms pages. Use the <code>async="true"</code> directive to
-            make web forms pages asynchronous. In case of a time out, it may take additional time to cancel the operation.
-            </summary>
-      <param name="timeoutInMilliseconds">The async service method timeout in milliseconds.</param>
-      <returns>The route builder.</returns>
-      <exception cref="T:System.ArgumentOutOfRangeException">If the timeout is less than 1 second.</exception>
+      <exception cref="T:System.ArgumentOutOfRangeException">If a negative, non-infinite timeout is provided.</exception>
     </member>
     <member name="M:RestFoundation.RouteBuilder.ToServiceContract(System.Type)">
       <summary>
@@ -3434,11 +3537,6 @@
     <member name="F:RestFoundation.ResponseHeaderNames.Warning">
       <summary>
             Warning
-            </summary>
-    </member>
-    <member name="T:RestFoundation.Runtime.Handlers.IRestAsyncHandler">
-      <summary>
-            Defines an asynchronous REST service handler.
             </summary>
     </member>
     <member name="T:RestFoundation.GlobalBehaviorBuilder">
@@ -5976,7 +6074,7 @@
             object binders, route and HTTP request data to populate service method parameter values.
             </summary>
     </member>
-    <member name="M:RestFoundation.IParameterValueProvider.CreateValue(System.Reflection.ParameterInfo,RestFoundation.Runtime.Handlers.IRestHandler,System.Boolean@)">
+    <member name="M:RestFoundation.IParameterValueProvider.CreateValue(System.Reflection.ParameterInfo,RestFoundation.Runtime.Handlers.IRestServiceHandler,System.Boolean@)">
       <summary>
             Creates a parameter value based on the routing and HTTP data.
             </summary>
@@ -7113,7 +7211,7 @@
       <param name="serviceContext">The service context.</param>
       <param name="serviceFactory">The service factory.</param>
     </member>
-    <member name="M:RestFoundation.Runtime.ServiceMethodLocator.Locate(RestFoundation.Runtime.Handlers.IRestHandler)">
+    <member name="M:RestFoundation.Runtime.ServiceMethodLocator.Locate(RestFoundation.Runtime.Handlers.IRestServiceHandler)">
       <summary>
             Locates the service method associated with the provided REST handler and returns the associated data.
             </summary>
@@ -7361,7 +7459,7 @@
             Gets the resource parameter name.
             </summary>
     </member>
-    <member name="M:RestFoundation.Runtime.ParameterValueProvider.CreateValue(System.Reflection.ParameterInfo,RestFoundation.Runtime.Handlers.IRestHandler,System.Boolean@)">
+    <member name="M:RestFoundation.Runtime.ParameterValueProvider.CreateValue(System.Reflection.ParameterInfo,RestFoundation.Runtime.Handlers.IRestServiceHandler,System.Boolean@)">
       <summary>
             Creates a parameter value based on the routing and HTTP data.
             </summary>
@@ -7390,7 +7488,7 @@
       <param name="routeValues">The collection of route values.</param>
       <returns>The route value or null.</returns>
     </member>
-    <member name="M:RestFoundation.Runtime.ParameterValueProvider.GetResourceValue(System.Reflection.ParameterInfo,RestFoundation.Runtime.Handlers.IRestHandler)">
+    <member name="M:RestFoundation.Runtime.ParameterValueProvider.GetResourceValue(System.Reflection.ParameterInfo,RestFoundation.Runtime.Handlers.IRestServiceHandler)">
       <summary>
             Gets the resource value for the service method parameter.
             </summary>
@@ -7670,13 +7768,13 @@
             Defines a result factory.
             </summary>
     </member>
-    <member name="M:RestFoundation.Results.IResultFactory.Create(System.Object,System.Type,RestFoundation.Runtime.Handlers.IRestHandler)">
+    <member name="M:RestFoundation.Results.IResultFactory.Create(System.Object,System.Type,RestFoundation.Runtime.Handlers.IServiceContextHandler)">
       <summary>
             Creates an <see cref="T:RestFoundation.Results.IResult" /> instance from a POCO object returned by the service method.
             </summary>
       <param name="returnedObj">The returned object.</param>
       <param name="methodReturnType">The method return type.</param>
-      <param name="handler">The REST handler.</param>
+      <param name="handler">The service context handler.</param>
       <returns>The created result instance.</returns>
     </member>
     <member name="T:RestFoundation.Results.ResultFactory">
@@ -7691,7 +7789,7 @@
             </summary>
       <param name="contentNegotiator">The content negotiator.</param>
     </member>
-    <member name="M:RestFoundation.Results.ResultFactory.Create(System.Object,System.Type,RestFoundation.Runtime.Handlers.IRestHandler)">
+    <member name="M:RestFoundation.Results.ResultFactory.Create(System.Object,System.Type,RestFoundation.Runtime.Handlers.IServiceContextHandler)">
       <summary>
             Creates an <see cref="T:RestFoundation.Results.IResult" /> instance from a POCO object returned by the service method.
             </summary>
@@ -7699,93 +7797,6 @@
       <param name="methodReturnType">The method return type.</param>
       <param name="handler">The REST handler.</param>
       <returns>The created result instance.</returns>
-    </member>
-    <member name="T:RestFoundation.Runtime.Handlers.RestAsyncHandler">
-      <summary>
-            Represents an asynchronous REST service handler implementation.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestAsyncHandler.#ctor(RestFoundation.IServiceContext,RestFoundation.IServiceMethodLocator,RestFoundation.IServiceMethodInvoker,RestFoundation.Results.IResultFactory,RestFoundation.Results.IResultExecutor)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.Handlers.RestAsyncHandler" /> class.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="methodLocator">The service method locator.</param>
-      <param name="methodInvoker">The service method invoker.</param>
-      <param name="resultFactory">The service method result factory.</param>
-      <param name="resultExecutor">The service method result executor.</param>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestAsyncHandler.GetHttpHandler(System.Web.Routing.RequestContext)">
-      <summary>
-            Provides the object that processes the request.
-            </summary>
-      <returns>
-            An object that processes the request.
-            </returns>
-      <param name="requestContext">An object that encapsulates information about the request.</param>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestAsyncHandler.ProcessRequest(System.Web.HttpContext)">
-      <summary>
-            Enables processing of HTTP Web requests by a custom HttpHandler that implements the <see cref="T:System.Web.IHttpHandler" /> interface.
-            </summary>
-      <param name="context">
-            An <see cref="T:System.Web.HttpContext" /> object that provides references to the intrinsic server objects (for example, Request, Response,
-            Session, and Server) used to service HTTP requests.
-            </param>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestAsyncHandler.BeginProcessRequest(System.Web.HttpContext,System.AsyncCallback,System.Object)">
-      <summary>
-            Initiates an asynchronous call to the HTTP handler.
-            </summary>
-      <returns>
-            An <see cref="T:System.IAsyncResult" /> that contains information about the status of the process.
-            </returns>
-      <param name="context">
-            An <see cref="T:System.Web.HttpContext" /> object that provides references to intrinsic server objects (for example, Request, Response,
-            Session, and Server) used to service HTTP requests. </param>
-      <param name="cb">The <see cref="T:System.AsyncCallback" /> to call when the
-            asynchronous method call is complete. If <paramref name="cb" /> is null, the delegate is not called.
-            </param>
-      <param name="extraData">Any extra data needed to process the request.</param>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestAsyncHandler.EndProcessRequest(System.IAsyncResult)">
-      <summary>
-            Provides an asynchronous process End method when the process ends.
-            </summary>
-      <param name="result">An <see cref="T:System.IAsyncResult" /> that contains information about the status of the process.</param>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncHandler.Context">
-      <summary>
-            Gets the service context.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncHandler.IsReusable">
-      <summary>
-            Gets a value indicating whether another request can use the <see cref="T:System.Web.IHttpHandler" /> instance.
-            </summary>
-      <returns>
-            true if the <see cref="T:System.Web.IHttpHandler" /> instance is reusable; otherwise, false.
-            </returns>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncHandler.AsyncTimeout">
-      <summary>
-            Gets or sets the asynchronous service result timeout. The default timeout is 100 seconds.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncHandler.ServiceUrl">
-      <summary>
-            Gets the service URL.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncHandler.ServiceContractTypeName">
-      <summary>
-            Gets a fully qualified name of the interface type defining the service contract.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestAsyncHandler.UrlTemplate">
-      <summary>
-            Gets a relative URL template.
-            </summary>
     </member>
     <member name="T:RestFoundation.Results.DynamicResult">
       <summary>
@@ -9026,12 +9037,12 @@
             Defines a service method invoker.
             </summary>
     </member>
-    <member name="M:RestFoundation.IServiceMethodInvoker.Invoke(System.Reflection.MethodInfo,System.Object,RestFoundation.Runtime.Handlers.IRestHandler)">
+    <member name="M:RestFoundation.IServiceMethodInvoker.Invoke(System.Object,System.Reflection.MethodInfo,RestFoundation.Runtime.Handlers.IRestServiceHandler)">
       <summary>
             Invokes the service method.
             </summary>
-      <param name="method">The service method.</param>
       <param name="service">The service instance.</param>
+      <param name="method">The service method.</param>
       <param name="handler">The REST handler associated with the HTTP request.</param>
       <returns>The return value of the executed service method.</returns>
     </member>
@@ -9705,21 +9716,6 @@
             true if the <see cref="T:System.Web.IHttpHandler" /> instance is reusable; otherwise, false.
             </returns>
     </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RootRouteHandler.ServiceUrl">
-      <summary>
-            Gets the service URL.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RootRouteHandler.ServiceContractTypeName">
-      <summary>
-            Gets a fully qualified name of the interface type defining the service contract.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RootRouteHandler.UrlTemplate">
-      <summary>
-            Gets a relative URL template.
-            </summary>
-    </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyXmlConvert">
       <summary>
             Represents an XML object converter.
@@ -10046,76 +10042,14 @@
       <param name="behaviorInvoker">The service behavior invoker.</param>
       <param name="parameterValueProvider">The parameter value provider.</param>
     </member>
-    <member name="M:RestFoundation.Runtime.ServiceMethodInvoker.Invoke(System.Reflection.MethodInfo,System.Object,RestFoundation.Runtime.Handlers.IRestHandler)">
+    <member name="M:RestFoundation.Runtime.ServiceMethodInvoker.Invoke(System.Object,System.Reflection.MethodInfo,RestFoundation.Runtime.Handlers.IRestServiceHandler)">
       <summary>
             Invokes the service method.
             </summary>
-      <param name="method">The service method.</param>
       <param name="service">The service instance.</param>
+      <param name="method">The service method.</param>
       <param name="handler">The REST handler associated with the HTTP request.</param>
       <returns>The return value of the executed service method.</returns>
-    </member>
-    <member name="T:RestFoundation.Runtime.Handlers.RestHandler">
-      <summary>
-            Represents an synchronous REST service handler implementation.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestHandler.#ctor(RestFoundation.IServiceContext,RestFoundation.IServiceMethodLocator,RestFoundation.IServiceMethodInvoker,RestFoundation.Results.IResultFactory,RestFoundation.Results.IResultExecutor)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.Handlers.RestHandler" /> class.
-            </summary>
-      <param name="serviceContext">The service context.</param>
-      <param name="methodLocator">The service method locator.</param>
-      <param name="methodInvoker">The service method invoker.</param>
-      <param name="resultFactory">The service method result factory.</param>
-      <param name="resultExecutor">The service method result executor.</param>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestHandler.GetHttpHandler(System.Web.Routing.RequestContext)">
-      <summary>
-            Provides the object that processes the request.
-            </summary>
-      <returns>
-            An object that processes the request.
-            </returns>
-      <param name="requestContext">An object that encapsulates information about the request.</param>
-    </member>
-    <member name="M:RestFoundation.Runtime.Handlers.RestHandler.ProcessRequest(System.Web.HttpContext)">
-      <summary>
-            Enables processing of HTTP Web requests by a custom HttpHandler that implements the <see cref="T:System.Web.IHttpHandler" />
-            interface.
-            </summary>
-      <param name="context">
-            An <see cref="T:System.Web.HttpContext" /> object that provides references to the intrinsic server objects
-            (for example, Request, Response, Session, and Server) used to service HTTP requests.
-            </param>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestHandler.Context">
-      <summary>
-            Gets the service context.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestHandler.IsReusable">
-      <summary>
-            Gets a value indicating whether another request can use the <see cref="T:System.Web.IHttpHandler" /> instance.
-            </summary>
-      <returns>
-            true if the <see cref="T:System.Web.IHttpHandler" /> instance is reusable; otherwise, false.
-            </returns>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestHandler.ServiceUrl">
-      <summary>
-            Gets the service URL.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestHandler.ServiceContractTypeName">
-      <summary>
-            Gets a fully qualified name of the interface type defining the service contract.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestHandler.UrlTemplate">
-      <summary>
-            Gets a relative URL template.
-            </summary>
     </member>
     <member name="T:RestFoundation.HttpMethod">
       <summary>
@@ -10212,25 +10146,6 @@
       <param name="httpMethod">The HTTP method.</param>
       <returns>The REST handler./</returns>
     </member>
-    <member name="M:RestFoundation.UnitTesting.MockHandlerFactory.CreateAsync``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}})">
-      <summary>
-            Creates an asyncronous REST handler that executes that provided service method at the specified virtual URL.
-            </summary>
-      <typeparam name="T">The service contract type.</typeparam>
-      <param name="virtualUrl">The virtual service URL.</param>
-      <param name="serviceMethodDelegate">The service method delegate.</param>
-      <returns>The asynchronous REST handler./</returns>
-    </member>
-    <member name="M:RestFoundation.UnitTesting.MockHandlerFactory.CreateAsync``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},System.Nullable{RestFoundation.HttpMethod})">
-      <summary>
-            Creates an asyncronous REST handler that executes that provided service method at the specified virtual URL.
-            </summary>
-      <typeparam name="T">The service contract type.</typeparam>
-      <param name="virtualUrl">The virtual service URL.</param>
-      <param name="serviceMethodDelegate">The service method delegate.</param>
-      <param name="httpMethod">The HTTP method.</param>
-      <returns>The asynchronous REST handler./</returns>
-    </member>
     <member name="M:RestFoundation.UnitTesting.MockHandlerFactory.SetResource(System.Object,RestFoundation.Client.RestResourceType)">
       <summary>
             Sets a response object of the provided type as the body of the request.
@@ -10243,44 +10158,6 @@
       <summary>
             Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
             </summary>
-      <filterpriority>2</filterpriority>
-    </member>
-    <member name="T:RestFoundation.UnitTesting.MockRestAsyncHandler">
-      <summary>
-            Represents a mock REST async handler.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.UnitTesting.MockRestAsyncHandler.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.UnitTesting.MockRestAsyncHandler" /> class.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.UnitTesting.MockRestAsyncHandler.Equals(RestFoundation.UnitTesting.MockRestAsyncHandler)">
-      <summary>
-            Indicates whether the current object is equal to another object of the same type.
-            </summary>
-      <returns>
-            true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
-            </returns>
-      <param name="other">An object to compare with this object.</param>
-    </member>
-    <member name="M:RestFoundation.UnitTesting.MockRestAsyncHandler.Equals(System.Object)">
-      <summary>
-            Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.
-            </summary>
-      <returns>
-            true if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />; otherwise, false.
-            </returns>
-      <param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />.</param>
-      <filterpriority>2</filterpriority>
-    </member>
-    <member name="M:RestFoundation.UnitTesting.MockRestAsyncHandler.GetHashCode">
-      <summary>
-            Serves as a hash function for a particular type. 
-            </summary>
-      <returns>
-            A hash code for the current <see cref="T:System.Object" />.
-            </returns>
       <filterpriority>2</filterpriority>
     </member>
     <member name="T:RestFoundation.UnitTesting.MockRestHandler">

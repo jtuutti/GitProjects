@@ -22,7 +22,7 @@ goto end
 echo.
 echo Performing IL Merge
 cd .\RestFoundation\bin\Release
-ilmerge /out:Rest.Foundation.dll RestFoundation.dll Newtonsoft.Json.dll /ver:1.2.5.0 /t:library /internalize /targetplatform="v4,C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /keyfile:..\..\..\RestFoundation.snk /xmldocs
+ilmerge /out:Rest.Foundation.dll RestFoundation.dll Newtonsoft.Json.dll /ver:2.0.0.0 /t:library /internalize /targetplatform="v4,C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5" /keyfile:..\..\..\RestFoundation.snk /xmldocs
 echo.
 copy Rest.Foundation.* ..\..\..\build\ /y
 echo.
