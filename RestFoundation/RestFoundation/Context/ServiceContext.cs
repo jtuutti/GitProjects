@@ -80,21 +80,6 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
-        /// Gets or sets a time span before a service times out.
-        /// </summary>
-        public TimeSpan ServiceTimeout
-        {
-            get
-            {
-                return TimeSpan.FromSeconds(Context.Server.ScriptTimeout);
-            }
-            set
-            {
-                Context.Server.ScriptTimeout = Convert.ToInt32(value.TotalSeconds);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets security information for the current HTTP request.
         /// </summary>
         public IPrincipal User

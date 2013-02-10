@@ -29,11 +29,6 @@ namespace RestFoundation
         IServiceCache Cache { get; }
 
         /// <summary>
-        /// Gets or sets a time span before a service times out.
-        /// </summary>
-        TimeSpan ServiceTimeout { get; set; }
-
-        /// <summary>
         /// Gets or sets security information for the current HTTP request.
         /// </summary>
         IPrincipal User { get; set; }
