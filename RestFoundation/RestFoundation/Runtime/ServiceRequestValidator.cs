@@ -36,7 +36,11 @@ namespace RestFoundation.Runtime
         /// When this method returns, indicates the zero-based starting point of the problematic or invalid text in the request
         /// collection. This parameter is passed uninitialized.
         /// </param>
-        protected override bool IsValidRequestString(HttpContext context, string value, RequestValidationSource requestValidationSource, string collectionKey, out int validationFailureIndex)
+        protected override bool IsValidRequestString(HttpContext context,
+                                                     string value,
+                                                     RequestValidationSource requestValidationSource,
+                                                     string collectionKey,
+                                                     out int validationFailureIndex)
         {
             if (context == null)
             {
@@ -52,9 +56,9 @@ namespace RestFoundation.Runtime
             string serviceProxyRelativeUrl = Rest.Configuration.Options.ServiceProxyRelativeUrl;
 
             if (!String.IsNullOrEmpty(serviceProxyRelativeUrl) &&
-                context.Request.AppRelativeCurrentExecutionFilePath.Equals(String.Format(CultureInfo.InvariantCulture,
-                                                                                         "~/{0}/proxy", serviceProxyRelativeUrl),
-                                                                                         StringComparison.OrdinalIgnoreCase))
+                String.Equals(context.Request.AppRelativeCurrentExecutionFilePath,
+                              String.Format(CultureInfo.InvariantCulture, "~/{0}/proxy", serviceProxyRelativeUrl),
+                              StringComparison.OrdinalIgnoreCase))
             {
                 validationFailureIndex = 0;
                 return true;

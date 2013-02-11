@@ -86,7 +86,7 @@ namespace RestFoundation.Runtime
             if (serviceContractType == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format(CultureInfo.InvariantCulture,
-                                                                                                  "Service contract of type '{0}' could not be determined",
+                                                                                                  RestResources.UndeterminedServiceContract,
                                                                                                   serviceTypeContractName));
             }
 
@@ -100,7 +100,7 @@ namespace RestFoundation.Runtime
             if (method == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format(CultureInfo.InvariantCulture,
-                                                                                                  "Service with contract of type '{0}' could not match the URL with a method",
+                                                                                                  RestResources.UndefinedServiceMethodUrl,
                                                                                                   serviceContractType.Name));
             }
 
@@ -114,7 +114,7 @@ namespace RestFoundation.Runtime
             if (service == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format(CultureInfo.InvariantCulture,
-                                                                                                  "Service with contract of type '{0}' could not be created",
+                                                                                                  RestResources.UnableToCreateServiceType,
                                                                                                   serviceContractType.Name));
             }
 

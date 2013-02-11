@@ -898,6 +898,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service with contract of type &apos;{0}&apos; could not be created..
+        /// </summary>
+        internal static string UnableToCreateServiceType {
+            get {
+                return ResourceManager.GetString("UnableToCreateServiceType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cache could not be initialized..
         /// </summary>
         internal static string UnableToInitializeCache {
@@ -921,6 +930,33 @@ namespace RestFoundation {
         internal static string Unauthorized {
             get {
                 return ResourceManager.GetString("Unauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method &apos;{0}&apos; of the service contract type &apos;{1}&apos; does not have any HTTP methods defined in the UrlAttribute declaration..
+        /// </summary>
+        internal static string UndefinedHttpMethodsForServiceMethod {
+            get {
+                return ResourceManager.GetString("UndefinedHttpMethodsForServiceMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service with contract of type &apos;{0}&apos; could not match the URL with a method..
+        /// </summary>
+        internal static string UndefinedServiceMethodUrl {
+            get {
+                return ResourceManager.GetString("UndefinedServiceMethodUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service contract of type &apos;{0}&apos; could not be determined..
+        /// </summary>
+        internal static string UndeterminedServiceContract {
+            get {
+                return ResourceManager.GetString("UndeterminedServiceContract", resourceCulture);
             }
         }
         
@@ -1056,6 +1092,15 @@ namespace RestFoundation {
         internal static string UnsupportedSyncRequestForAsyncHandler {
             get {
                 return ResourceManager.GetString("UnsupportedSyncRequestForAsyncHandler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation for &apos;{0}&apos; failed..
+        /// </summary>
+        internal static string ValidationFailed {
+            get {
+                return ResourceManager.GetString("ValidationFailed", resourceCulture);
             }
         }
         

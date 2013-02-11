@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Caching;
@@ -33,8 +34,8 @@ namespace RestFoundation.UnitTesting
 
             m_output.AutoFlush = true;
 
-            StatusCode = 200;
-            StatusDescription = "OK";
+            StatusCode = (int) HttpStatusCode.OK;
+            StatusDescription = RestResources.OK;
         }
 
         public override string Charset { get; set; }

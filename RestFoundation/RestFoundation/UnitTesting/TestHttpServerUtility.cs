@@ -9,7 +9,6 @@ namespace RestFoundation.UnitTesting
     internal sealed class TestHttpServerUtility : HttpServerUtilityBase
     {
         private readonly string m_virtualUrl;
-        private int m_scriptTimeout;
 
         internal TestHttpServerUtility(string virtualUrl)
         {
@@ -19,19 +18,6 @@ namespace RestFoundation.UnitTesting
             }
 
             m_virtualUrl = virtualUrl.TrimStart('~', '/', ' ');
-            m_scriptTimeout = 60;
-        }
-
-        public override int ScriptTimeout
-        {
-            get
-            {
-                return m_scriptTimeout;
-            }
-            set
-            {
-                m_scriptTimeout = value;
-            }
         }
 
         public override string MapPath(string path)

@@ -565,4 +565,24 @@
     <value>OK</value>
     <comment>OK</comment>
   </data>
+  <data name="UndefinedHttpMethodsForServiceMethod" xml:space="preserve">
+    <value>Method '{0}' of the service contract type '{1}' does not have any HTTP methods defined in the UrlAttribute declaration.</value>
+    <comment>Method '{0}' of the service contract type '{1}' does not have any HTTP methods defined in the UrlAttribute declaration.</comment>
+  </data>
+  <data name="UndeterminedServiceContract" xml:space="preserve">
+    <value>Service contract of type '{0}' could not be determined.</value>
+    <comment>Service contract of type '{0}' could not be determined.</comment>
+  </data>
+  <data name="UndefinedServiceMethodUrl" xml:space="preserve">
+    <value>Service with contract of type '{0}' could not match the URL with a method.</value>
+    <comment>Service with contract of type '{0}' could not match the URL with a method.</comment>
+  </data>
+  <data name="UnableToCreateServiceType" xml:space="preserve">
+    <value>Service with contract of type '{0}' could not be created.</value>
+    <comment>Service with contract of type '{0}' could not be created.</comment>
+  </data>
+  <data name="ValidationFailed" xml:space="preserve">
+    <value>Validation for '{0}' failed.</value>
+    <comment>Validation for '{0}' failed.</comment>
+  </data>
 </root>
