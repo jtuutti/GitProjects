@@ -273,13 +273,15 @@ namespace RestFoundation.Runtime.Handlers
 
         private void ExecuteResult(object returnedObj, Type methodReturnType)
         {
-            if (methodReturnType == null || methodReturnType == typeof(void))
+            if (methodReturnType != null && methodReturnType != typeof(void))
             {
-                return;
+                IResult result = m_resultFactory.Create(returnedObj, methodReturnType, this);
+                m_resultExecutor.Execute(result, methodReturnType, m_serviceContext);
             }
-
-            IResult result = m_resultFactory.Create(returnedObj, methodReturnType, this);
-            m_resultExecutor.Execute(result, methodReturnType, m_serviceContext);
+            else
+            {
+                m_resultExecutor.ExecuteNoContent(m_serviceContext);
+            }
         }
 
         private void LogResponse()

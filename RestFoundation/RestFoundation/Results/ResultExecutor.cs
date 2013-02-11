@@ -12,7 +12,24 @@ namespace RestFoundation.Results
     public class ResultExecutor : IResultExecutor
     {
         /// <summary>
-        /// Executes the result in the provided service context.
+        /// Executes a no-content result in the provided service context.
+        /// </summary>
+        /// <param name="context">The service context.</param>
+        public void ExecuteNoContent(IServiceContext context)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException("context");
+            }
+
+            if (context.Response.GetStatusCode() == HttpStatusCode.OK)
+            {
+                context.Response.SetStatus(HttpStatusCode.NoContent, RestResources.NoContent);
+            }
+        }
+
+        /// <summary>
+        /// Executes a result in the provided service context.
         /// </summary>
         /// <param name="result">The result.</param>
         /// <param name="methodReturnType">The service method return type.</param>
@@ -24,15 +41,13 @@ namespace RestFoundation.Results
                 throw new ArgumentNullException("context");
             }
 
-            if (result != null)
+            if (result == null)
             {
-                result.Execute(context);
-                DisposeIfNecessary(result);
+                return;
             }
-            else if (context.Response.GetStatusCode() == HttpStatusCode.OK && methodReturnType == typeof(void))
-            {
-                context.Response.SetStatus(HttpStatusCode.NoContent, "No Content");
-            }
+
+            result.Execute(context);
+            DisposeIfNecessary(result);
         }
 
         private static void DisposeIfNecessary(IResult result)

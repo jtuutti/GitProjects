@@ -718,6 +718,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Content.
+        /// </summary>
+        internal static string NoContent {
+            get {
+                return ResourceManager.GetString("NoContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header..
         /// </summary>
         internal static string NonAcceptedContentCharset {

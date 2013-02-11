@@ -557,4 +557,8 @@
     <value>Invalid service method timeout value provided.</value>
     <comment>Invalid service method timeout value provided.</comment>
   </data>
+  <data name="NoContent" xml:space="preserve">
+    <value>No Content</value>
+    <comment>No Content</comment>
+  </data>
 </root>

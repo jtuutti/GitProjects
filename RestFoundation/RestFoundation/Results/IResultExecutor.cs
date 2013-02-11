@@ -11,7 +11,13 @@ namespace RestFoundation.Results
     public interface IResultExecutor
     {
         /// <summary>
-        /// Executes the result in the provided service context.
+        /// Executes a no-content result in the provided service context.
+        /// </summary>
+        /// <param name="context">The service context.</param>
+        void ExecuteNoContent(IServiceContext context);
+
+        /// <summary>
+        /// Executes a result in the provided service context.
         /// </summary>
         /// <param name="result">The result.</param>
         /// <param name="methodReturnType">The service method return type.</param>
