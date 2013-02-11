@@ -171,46 +171,17 @@ namespace RestFoundation.Runtime.Handlers
                 return;
             }
 
+            TrySetServiceMethodTimeout(serviceMethodData.Method);
+
             LogRequest();
 
-            TrySetServiceMethodTimeout(serviceMethodData.Method);
-                
-            var invocationTaskCancellation = new CancellationTokenSource();
-            Task<object> invocationTask = GenerateMethodInvocationTask(serviceMethodData, context, invocationTaskCancellation);
-
-            if (ServiceTimeout.TotalMilliseconds > 0)
-            {
-                await Task.WhenAny(invocationTask, Task.Delay(ServiceTimeout)).ConfigureAwait(false);
-            }
-            else
-            {
-                await invocationTask.ConfigureAwait(false);
-            }
-
-            ValidateTask(invocationTask, invocationTaskCancellation);
+            var returnedObj = await InvokeServiceMethod(context, serviceMethodData);
 
             LogResponse();
 
-            if (invocationTask.Result is IAsyncResult)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.InvalidIAsyncResultReturned);
-            }
-
-            var resultTaskCancellation = new CancellationTokenSource();
-            Task resultTask = GenerateResultTask(invocationTask.Result, serviceMethodData, context, resultTaskCancellation);
-
-            if (ResultTimeout.TotalMilliseconds > 0)
-            {
-                await Task.WhenAny(resultTask, Task.Delay(ResultTimeout)).ConfigureAwait(false);
-            }
-            else
-            {
-                await resultTask.ConfigureAwait(false);
-            }
-
-            ValidateTask(resultTask, resultTaskCancellation);
+            await ProcessResult(context, returnedObj, serviceMethodData);
         }
-
+        
         private static void ValidateTask(Task task, CancellationTokenSource cancellation)
         {
             if (task.IsFaulted)
@@ -232,6 +203,57 @@ namespace RestFoundation.Runtime.Handlers
             }
         }
 
+        private async Task<object> InvokeServiceMethod(HttpContext context, ServiceMethodLocatorData serviceMethodData)
+        {
+            var cancellation = new CancellationTokenSource();
+
+            var task = Task<object>.Factory.StartNew(ctx =>
+            {
+                HttpContext.Current = ctx as HttpContext;
+                return m_methodInvoker.Invoke(serviceMethodData.Service, serviceMethodData.Method, this); 
+            }, context, cancellation.Token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
+
+            if (ServiceTimeout.TotalMilliseconds > 0)
+            {
+                await Task.WhenAny(task, Task.Delay(ServiceTimeout)).ConfigureAwait(false);
+            }
+            else
+            {
+                await task.ConfigureAwait(false);
+            }
+
+            ValidateTask(task, cancellation);
+
+            if (task.Result is IAsyncResult)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.InvalidIAsyncResultReturned);
+            }
+
+            return task.Result;
+        }
+
+        private async Task ProcessResult(HttpContext context, object returnedObj, ServiceMethodLocatorData serviceMethodData)
+        {
+            var cancellation = new CancellationTokenSource();
+
+            var task = Task.Factory.StartNew(ctx =>
+            {
+                HttpContext.Current = ctx as HttpContext;
+                ExecuteResult(returnedObj, serviceMethodData.Method.ReturnType);
+            }, context, cancellation.Token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
+
+            if (ResultTimeout.TotalMilliseconds > 0)
+            {
+                await Task.WhenAny(task, Task.Delay(ResultTimeout)).ConfigureAwait(false);
+            }
+            else
+            {
+                await task.ConfigureAwait(false);
+            }
+
+            ValidateTask(task, cancellation);
+        }
+
         private void TrySetServiceMethodTimeout(MethodInfo method)
         {
             var timeoutAttribute = Attribute.GetCustomAttribute(method, typeof(ServiceMethodTimeoutAttribute), false) as ServiceMethodTimeoutAttribute;
@@ -249,44 +271,15 @@ namespace RestFoundation.Runtime.Handlers
             }
         }
 
-        private Task<object> GenerateMethodInvocationTask(ServiceMethodLocatorData serviceMethodData, HttpContext context, CancellationTokenSource cancellation)
-        {
-            var invocationTask = Task<object>.Factory.StartNew(ctx =>
-            {
-                if (ctx != null)
-                {
-                    HttpContext.Current = (HttpContext) ctx;
-                }
-
-                return m_methodInvoker.Invoke(serviceMethodData.Service, serviceMethodData.Method, this); 
-            }, context, cancellation.Token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
-
-            return invocationTask;
-        }
-
-        private Task GenerateResultTask(object returnedObj, ServiceMethodLocatorData serviceMethodData, HttpContext context, CancellationTokenSource cancellation)
-        {
-            var resultTask = Task.Factory.StartNew(ctx =>
-            {
-                if (ctx != null)
-                {
-                    HttpContext.Current = (HttpContext) ctx;
-                }
-
-                ExecuteResult(returnedObj, serviceMethodData.Method.ReturnType);
-            }, context, cancellation.Token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
-
-            return resultTask;
-        }
-
         private void ExecuteResult(object returnedObj, Type methodReturnType)
         {
-            IResult result = methodReturnType != null && methodReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, methodReturnType, this) : null;
-
-            if (!(result is EmptyResult))
+            if (methodReturnType == null || methodReturnType == typeof(void))
             {
-                m_resultExecutor.Execute(result, methodReturnType, m_serviceContext);
+                return;
             }
+
+            IResult result = m_resultFactory.Create(returnedObj, methodReturnType, this);
+            m_resultExecutor.Execute(result, methodReturnType, m_serviceContext);
         }
 
         private void LogResponse()

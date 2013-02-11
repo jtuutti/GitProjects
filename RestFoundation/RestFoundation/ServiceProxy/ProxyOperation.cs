@@ -124,7 +124,7 @@ namespace RestFoundation.ServiceProxy
         {
             get
             {
-                return ResultType != null && ResultType != typeof(void) && ResultType != typeof(EmptyResult) && ResultType != typeof(StatusResult);
+                return ResultType != null && ResultType != typeof(void) && ResultType != typeof(StatusResult);
             }
         }
 

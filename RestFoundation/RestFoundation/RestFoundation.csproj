@@ -244,7 +244,6 @@
     <Compile Include="Odata\StringConstants.cs" />
     <Compile Include="Rest.cs" />
     <Compile Include="Results\ContentResult.cs" />
-    <Compile Include="Results\EmptyResult.cs" />
     <Compile Include="Results\FeedResult.cs" />
     <Compile Include="Results\XmlResult.cs" />
     <Compile Include="Results\FileUrlResult.cs" />
