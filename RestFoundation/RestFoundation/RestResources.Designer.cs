@@ -799,6 +799,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string OK {
+            get {
+                return ResourceManager.GetString("OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Asynchronous service method timeout cannot be less than 1 second..
         /// </summary>
         internal static string OutOfRangeAsyncServiceTimeout {

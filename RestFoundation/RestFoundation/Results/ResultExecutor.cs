@@ -22,10 +22,18 @@ namespace RestFoundation.Results
                 throw new ArgumentNullException("context");
             }
 
-            if (context.Response.GetStatusCode() == HttpStatusCode.OK)
+            if (context.Response.GetStatusCode() != HttpStatusCode.OK)
             {
-                context.Response.SetStatus(HttpStatusCode.NoContent, RestResources.NoContent);
+                return;
             }
+
+            string currentStatusDescription = context.Response.GetStatusDescription();
+            string statusDescription = !String.Equals(RestResources.OK, currentStatusDescription, StringComparison.OrdinalIgnoreCase) ?
+                                           currentStatusDescription :
+                                           RestResources.NoContent;
+
+            context.Response.Output.Clear();
+            context.Response.SetStatus(HttpStatusCode.NoContent, statusDescription);
         }
 
         /// <summary>
