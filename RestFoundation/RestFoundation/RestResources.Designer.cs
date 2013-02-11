@@ -772,6 +772,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No resource provided.
+        /// </summary>
+        internal static string NoResourceProvided {
+            get {
+                return ResourceManager.GetString("NoResourceProvided", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Found.
         /// </summary>
         internal static string NotFound {

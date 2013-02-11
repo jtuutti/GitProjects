@@ -585,4 +585,8 @@
     <value>Validation for '{0}' failed.</value>
     <comment>Validation for '{0}' failed.</comment>
   </data>
+  <data name="NoResourceProvided" xml:space="preserve">
+    <value>No resource provided</value>
+    <comment>No resource provided</comment>
+  </data>
 </root>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using RestFoundation;
 using RestFoundation.Results;
@@ -121,16 +120,6 @@ namespace RestTestServices
 
         public object Post(Person resource)
         {
-            if (resource == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
-            }
-
-            if (!Context.Request.ResourceState.IsValid)
-            {
-                throw new HttpResourceFaultException();
-            }
-
             resource.Values = new[] { "New person added" };
 
             Context.Response.SetHeader("Location", Context.Request.Url.ToAbsoluteUrl("~/home/index/999"));
@@ -141,16 +130,6 @@ namespace RestTestServices
 
         public Person Put(int? id, Person personToUpdate)
         {
-            if (personToUpdate == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
-            }
-
-            if (!Context.Request.ResourceState.IsValid)
-            {
-                throw new HttpResourceFaultException();
-            }
-
             personToUpdate.Values = new[] { String.Format("Person #{0} updated", id) };
 
             return personToUpdate;
@@ -158,16 +137,6 @@ namespace RestTestServices
 
         public Person Patch(int? id, Person resource)
         {
-            if (resource == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, "Invalid person data provided");
-            }
-
-            if (!Context.Request.ResourceState.IsValid)
-            {
-                throw new HttpResourceFaultException();
-            }
-
             resource.Values = new[] { String.Format("Person #{0} partially updated", id) };
 
             return resource;

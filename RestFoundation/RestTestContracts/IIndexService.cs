@@ -39,13 +39,13 @@ namespace RestTestContracts
         [Url("index/{id}")]
         ContentResult Get(int? id = 1, [FromUri] string dummy = "N/A");
 
-        [Url("index")]
+        [Url("index"), ValidateResource(true)]
         object Post(Person resource);
 
-        [Url("index/{id}")]
+        [Url("index/{id}"), ValidateResource(true)]
         Person Put([ParameterConstraint(@"\d{1,3}")] int? id, [Resource] Person personToUpdate);
 
-        [Url("index/{id}")]
+        [Url("index/{id}"), ValidateResource(true)]
         Person Patch([ParameterConstraint(@"\d{1,3}")] int? id, Person resource);
 
         [Url("index/{name}")]
