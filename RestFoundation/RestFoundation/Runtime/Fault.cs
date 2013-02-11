@@ -26,6 +26,11 @@ namespace RestFoundation.Runtime
         public string Message { get; set; }
 
         /// <summary>
+        /// Gets or sets the fault details.
+        /// </summary>
+        public string Detail { get; set; }
+
+        /// <summary>
         /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return
         /// null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the
         /// <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
@@ -61,6 +66,13 @@ namespace RestFoundation.Runtime
             {
                 Message = messageNode.Value;
             }
+
+            XPathNavigator detailNode = navigator.SelectSingleNode("//Fault/Detail");
+
+            if (detailNode != null)
+            {
+                Detail = detailNode.Value;
+            }
         }
 
         /// <summary>
@@ -76,8 +88,15 @@ namespace RestFoundation.Runtime
                 writer.WriteElementString("PropertyName", PropertyName);
             }
 
-            writer.WriteStartElement("Message");
-            writer.WriteCData(Message ?? String.Empty);
+            writer.WriteElementString("Message", Message ?? String.Empty);
+
+            if (Detail == null)
+            {
+                return;
+            }
+
+            writer.WriteStartElement("Detail");
+            writer.WriteCData(Detail);
             writer.WriteEndElement();
         }
     }

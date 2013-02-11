@@ -405,13 +405,16 @@ namespace RestFoundation
                 return;
             }
 
+            var unwrappedException = ExceptionUnwrapper.Unwrap(exception);
+
             var faults = new FaultCollection
             {
                 General = new[]
                 {
                     new Fault
                     {
-                        Message = GenerateExceptionMessage(application, exception)
+                        Message = unwrappedException.Message,
+                        Detail = GetExceptionDetail(application, unwrappedException)
                     }
                 }
             };
@@ -432,16 +435,16 @@ namespace RestFoundation
             OutputFaults(application, HttpStatusCode.BadRequest, RestResources.ResourceValidationFailed, faults);
         }
 
-        private static string GenerateExceptionMessage(HttpApplication application, Exception exception)
+        private static string GetExceptionDetail(HttpApplication application, Exception exception)
         {
             FaultDetail detail = Rest.Configuration.Options.FaultDetail;
 
             if (detail == FaultDetail.MessageOnly || (detail == FaultDetail.DetailedInDebugMode && !application.Context.IsDebuggingEnabled))
             {
-                return exception.Message;
+                return null;
             }
 
-            return String.Concat(exception.Message, Environment.NewLine, exception.ToString());
+            return exception.ToString();
         }
 
         private static FaultCollection GenerateFaultCollection(IServiceContext context, HttpResourceFaultException faultException)
