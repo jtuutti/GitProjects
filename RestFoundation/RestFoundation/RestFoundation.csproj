@@ -109,7 +109,6 @@
     <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
     <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
     <Compile Include="Runtime\JsonSerializerFactory.cs" />
-    <Compile Include="Runtime\MethodReturnTypeUnwrapper.cs" />
     <Compile Include="ServiceProxy\ProxySession.cs" />
     <Compile Include="ServiceProxy\ProxyUrlHelper.cs" />
     <Compile Include="Runtime\StatusCodeFormatter.cs" />

@@ -173,7 +173,7 @@ namespace RestFoundation.Client
                 throw new ArgumentNullException("url");
             }
 
-            return Task<RestResource<TOutput>>.Factory.StartNew(() => Execute<TOutput>(url, method, outputType, null));
+            return Task<RestResource<TOutput>>.Run(() => Execute<TOutput>(url, method, outputType, null));
         }
 
         public Task<RestResource<TOutput>> ExecuteAsync<TOutput>(Uri url, HttpMethod method, RestResourceType outputType, NameValueCollection headers)
@@ -183,7 +183,7 @@ namespace RestFoundation.Client
                 throw new ArgumentNullException("url");
             }
 
-            return Task<RestResource<TOutput>>.Factory.StartNew(() => Execute<TOutput>(url, method, outputType, headers));
+            return Task<RestResource<TOutput>>.Run(() => Execute<TOutput>(url, method, outputType, headers));
         }
 
         public Task<RestResource<TOutput>> ExecuteAsync<TInput, TOutput>(Uri url, HttpMethod method, RestResource<TInput> resource, RestResourceType outputType)
@@ -203,7 +203,7 @@ namespace RestFoundation.Client
                 throw new ArgumentException(RestResources.NullResourceBody, "resource");
             }
 
-            return Task<RestResource<TOutput>>.Factory.StartNew(() => Execute<TInput, TOutput>(url, method, resource, outputType));
+            return Task<RestResource<TOutput>>.Run(() => Execute<TInput, TOutput>(url, method, resource, outputType));
         }
 
         private static void MergeHeaders(NameValueCollection headers, RestResource emptyResource)

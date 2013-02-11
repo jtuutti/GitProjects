@@ -259,7 +259,7 @@ namespace RestFoundation.Runtime.Handlers
                 }
 
                 return m_methodInvoker.Invoke(serviceMethodData.Service, serviceMethodData.Method, this); 
-            }, context, cancellation.Token);
+            }, context, cancellation.Token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
 
             return invocationTask;
         }
@@ -274,14 +274,14 @@ namespace RestFoundation.Runtime.Handlers
                 }
 
                 ExecuteResult(returnedObj, serviceMethodData.Method.ReturnType);
-            }, context, cancellation.Token);
+            }, context, cancellation.Token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
 
             return resultTask;
         }
 
         private void ExecuteResult(object returnedObj, Type methodReturnType)
         {
-            IResult result = methodReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, MethodReturnTypeUnwrapper.Unwrap(methodReturnType), this) : null;
+            IResult result = methodReturnType != null && methodReturnType != typeof(void) ? m_resultFactory.Create(returnedObj, methodReturnType, this) : null;
 
             if (!(result is EmptyResult))
             {
