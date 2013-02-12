@@ -21,6 +21,8 @@ namespace RestFoundation.Runtime.Handlers
         private const int DefaultServiceTimeoutInSeconds = 60;
         private const int DefaultResultTimeoutInSeconds = 30;
 
+        private static readonly object guidSyncRoot = new Object();
+
         private readonly IServiceContext m_serviceContext;
         private readonly IServiceMethodLocator m_methodLocator;
         private readonly IServiceMethodInvoker m_methodInvoker;
@@ -152,6 +154,11 @@ namespace RestFoundation.Runtime.Handlers
                 throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.NotFound);
             }
 
+            lock (guidSyncRoot)
+            {
+                m_serviceContext.Request.ResourceBag.ServiceExecutionId = Guid.NewGuid();
+            }
+
             return this;
         }
 
@@ -162,8 +169,6 @@ namespace RestFoundation.Runtime.Handlers
         /// <param name="context">The HTTP context.</param>
         public override async Task ProcessRequestAsync(HttpContext context)
         {
-            m_serviceContext.Request.ResourceBag.ServiceExecutionId = Guid.NewGuid();
-
             ServiceMethodLocatorData serviceMethodData = m_methodLocator.Locate(this);
 
             if (serviceMethodData == ServiceMethodLocatorData.Options)
