@@ -175,11 +175,39 @@ namespace RestFoundation.Runtime.Handlers
 
             LogRequest();
 
-            var returnedObj = await InvokeServiceMethod(context, serviceMethodData);
+            CancellationTokenSource methodCancellation, resultCancellation;
+            Task<object> methodTask = CreateMethodInvocationTask(context, serviceMethodData, out methodCancellation);
+
+            if (ServiceTimeout.TotalMilliseconds > 0)
+            {
+                await Task.WhenAny(methodTask, Task.Delay(ServiceTimeout)).ConfigureAwait(false);
+            }
+            else
+            {
+                await methodTask.ConfigureAwait(false);
+            }
+
+            ValidateTask(methodTask, methodCancellation);
+
+            if (methodTask.Result is IAsyncResult)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.InvalidIAsyncResultReturned);
+            }
 
             LogResponse();
 
-            await ProcessResult(context, returnedObj, serviceMethodData);
+            Task resultTask = CreateResultProcessingTask(context, methodTask.Result, serviceMethodData, out resultCancellation);
+
+            if (ResultTimeout.TotalMilliseconds > 0)
+            {
+                await Task.WhenAny(resultTask, Task.Delay(ResultTimeout)).ConfigureAwait(false);
+            }
+            else
+            {
+                await resultTask.ConfigureAwait(false);
+            }
+
+            ValidateTask(resultTask, resultCancellation);
         }
         
         private static void ValidateTask(Task task, CancellationTokenSource cancellation)
@@ -203,57 +231,6 @@ namespace RestFoundation.Runtime.Handlers
             }
         }
 
-        private async Task<object> InvokeServiceMethod(HttpContext context, ServiceMethodLocatorData serviceMethodData)
-        {
-            var cancellation = new CancellationTokenSource();
-
-            var task = Task<object>.Factory.StartNew(ctx =>
-            {
-                HttpContext.Current = ctx as HttpContext;
-                return m_methodInvoker.Invoke(serviceMethodData.Service, serviceMethodData.Method, this); 
-            }, context, cancellation.Token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
-
-            if (ServiceTimeout.TotalMilliseconds > 0)
-            {
-                await Task.WhenAny(task, Task.Delay(ServiceTimeout)).ConfigureAwait(false);
-            }
-            else
-            {
-                await task.ConfigureAwait(false);
-            }
-
-            ValidateTask(task, cancellation);
-
-            if (task.Result is IAsyncResult)
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.InvalidIAsyncResultReturned);
-            }
-
-            return task.Result;
-        }
-
-        private async Task ProcessResult(HttpContext context, object returnedObj, ServiceMethodLocatorData serviceMethodData)
-        {
-            var cancellation = new CancellationTokenSource();
-
-            var task = Task.Factory.StartNew(ctx =>
-            {
-                HttpContext.Current = ctx as HttpContext;
-                ExecuteResult(returnedObj, serviceMethodData.Method.ReturnType);
-            }, context, cancellation.Token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
-
-            if (ResultTimeout.TotalMilliseconds > 0)
-            {
-                await Task.WhenAny(task, Task.Delay(ResultTimeout)).ConfigureAwait(false);
-            }
-            else
-            {
-                await task.ConfigureAwait(false);
-            }
-
-            ValidateTask(task, cancellation);
-        }
-
         private void TrySetServiceMethodTimeout(MethodInfo method)
         {
             var timeoutAttribute = Attribute.GetCustomAttribute(method, typeof(ServiceMethodTimeoutAttribute), false) as ServiceMethodTimeoutAttribute;
@@ -269,6 +246,36 @@ namespace RestFoundation.Runtime.Handlers
             {
                 ResultTimeout = TimeSpan.FromSeconds(timeoutAttribute.ResultTimeoutInSeconds.Value);
             }
+        }
+
+        private Task<object> CreateMethodInvocationTask(HttpContext context, ServiceMethodLocatorData serviceMethodData, out CancellationTokenSource methodCancellation)
+        {
+            methodCancellation = new CancellationTokenSource();
+
+            CancellationToken token = methodCancellation.Token;
+
+            return Task<object>.Factory.StartNew(ctx =>
+            {
+                token.ThrowIfCancellationRequested();
+
+                HttpContext.Current = ctx as HttpContext;
+                return m_methodInvoker.Invoke(serviceMethodData.Service, serviceMethodData.Method, this); 
+            }, context, token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
+        }
+
+        private Task CreateResultProcessingTask(HttpContext context, object returnedObj, ServiceMethodLocatorData serviceMethodData, out CancellationTokenSource resultCancellation)
+        {
+            resultCancellation = new CancellationTokenSource();
+
+            CancellationToken token = resultCancellation.Token;
+
+            return Task.Factory.StartNew(ctx =>
+            {
+                token.ThrowIfCancellationRequested();
+
+                HttpContext.Current = ctx as HttpContext;
+                ExecuteResult(returnedObj, serviceMethodData.Method.ReturnType);
+            }, context, token, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
         }
 
         private void ExecuteResult(object returnedObj, Type methodReturnType)
