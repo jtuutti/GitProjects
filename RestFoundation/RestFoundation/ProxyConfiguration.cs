@@ -70,7 +70,7 @@ namespace RestFoundation
             SetAllowUnsafeHeaderParsing();
 
             RouteTable.Routes.Add("ProxyCss", new Route(relativeUrl + "/help.css", new CssRouteHandler("help.css")));
-            RouteTable.Routes.Add("ProxyJQuery", new Route(relativeUrl + "/jquery.js", new JavaScriptRouteHandler("jquery-1.8.3.min.js")));
+            RouteTable.Routes.Add("ProxyJQuery", new Route(relativeUrl + "/jquery.js", new JavaScriptRouteHandler("jquery-1.9.1.min.js")));
             RouteTable.Routes.Add("ProxyMetadataOp", new Route(relativeUrl + "/metadata.op.js", new JavaScriptRouteHandler("metadata.op.min.js")));
             RouteTable.Routes.Add("ProxyProxyOp", new Route(relativeUrl + "/proxy.op.js", new JavaScriptRouteHandler("proxy.op.min.js")));
             RouteTable.Routes.MapPageRoute("ProxyIndex", relativeUrl + "/index", "~/index.aspx");
