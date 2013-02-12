@@ -835,6 +835,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Partial Content.
+        /// </summary>
+        internal static string PartialContent {
+            get {
+                return ResourceManager.GetString("PartialContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Service proxy UI is already enabled..
         /// </summary>
         internal static string ProxyAlreadyInitialized {

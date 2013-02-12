@@ -50,12 +50,7 @@ namespace SampleRestService.Services
 
         public Product Post(Product resource)
         {
-            if (!m_context.Request.ResourceState.IsValid)
-            {
-                // Iterate through m_context.Request.ResourceState to handle or log errors
-
-                throw new HttpResourceFaultException();
-            }
+            // resource validation is happening in the ValidateResourceAttribute defined on the service contract
 
             try
             {
@@ -81,15 +76,11 @@ namespace SampleRestService.Services
 
         public Product Put(int id, Product resource)
         {
-            if (!m_context.Request.ResourceState.IsValid)
-            {
-                // Iterate through m_context.Request.ResourceState to handle or log errors
-
-                throw new HttpResourceFaultException();
-            }
+            // resource validation is happening in the ValidateResourceAttribute defined on the service contract
 
             try
             {
+                resource.ID = id;
                 m_repository.Update(resource);
             }
             catch (ArgumentException ex) // invalid input arguments passed to the repository

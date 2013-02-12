@@ -326,6 +326,38 @@
             Gets the number of milliseconds allowed between the calls for a user.
             </summary>
     </member>
+    <member name="T:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute">
+      <summary>
+            Represents a service method that creates and returns a fault collection if the resource validation
+            failed before the method execution.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute" /> class.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute.#ctor(System.Boolean)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute" /> class.
+            </summary>
+      <param name="throwOnNullResource">
+            A value indicating whether there should be a fault created if the resource is null.
+            </param>
+    </member>
+    <member name="M:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+      <summary>
+            Called before a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="P:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute.ThrowOnNullResource">
+      <summary>
+            Gets a value indicating whether a null resource is allowed.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Behaviors.BehaviorContext">
       <summary>
             The base class for a behavior context.
@@ -1075,6 +1107,11 @@
     <member name="P:RestFoundation.Runtime.Fault.Message">
       <summary>
             Gets or sets the fault message.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.Fault.Detail">
+      <summary>
+            Gets or sets the fault details.
             </summary>
     </member>
     <member name="T:RestFoundation.Runtime.FaultCollection">
@@ -1867,6 +1904,11 @@
               Looks up a localized string similar to Parameter '{0}' of the method '{1}' in the service contract of type '{2}' is decorated with multiple type binder attributes..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.NoContent">
+      <summary>
+              Looks up a localized string similar to No Content.
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.NonAcceptedContentCharset">
       <summary>
               Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header..
@@ -1892,6 +1934,11 @@
               Looks up a localized string similar to The output type is not a string..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.NoResourceProvided">
+      <summary>
+              Looks up a localized string similar to No resource provided.
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.NotFound">
       <summary>
               Looks up a localized string similar to Not Found.
@@ -1907,6 +1954,11 @@
               Looks up a localized string similar to Resource body cannot be null..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.OK">
+      <summary>
+              Looks up a localized string similar to OK.
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.OutOfRangeAsyncServiceTimeout">
       <summary>
               Looks up a localized string similar to Asynchronous service method timeout cannot be less than 1 second..
@@ -1915,6 +1967,11 @@
     <member name="P:RestFoundation.RestResources.OvercomplicatedMethodArgument">
       <summary>
               Looks up a localized string similar to Method argument '{0}' has a value that is to complex to process. It must be a simple constant or variable value..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.PartialContent">
+      <summary>
+              Looks up a localized string similar to Partial Content.
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.ProxyAlreadyInitialized">
@@ -1957,6 +2014,11 @@
               Looks up a localized string similar to Too many requests.
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.UnableToCreateServiceType">
+      <summary>
+              Looks up a localized string similar to Service with contract of type '{0}' could not be created..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.UnableToInitializeCache">
       <summary>
               Looks up a localized string similar to Cache could not be initialized..
@@ -1970,6 +2032,21 @@
     <member name="P:RestFoundation.RestResources.Unauthorized">
       <summary>
               Looks up a localized string similar to Unauthorized.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.UndefinedHttpMethodsForServiceMethod">
+      <summary>
+              Looks up a localized string similar to Method '{0}' of the service contract type '{1}' does not have any HTTP methods defined in the UrlAttribute declaration..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.UndefinedServiceMethodUrl">
+      <summary>
+              Looks up a localized string similar to Service with contract of type '{0}' could not match the URL with a method..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.UndeterminedServiceContract">
+      <summary>
+              Looks up a localized string similar to Service contract of type '{0}' could not be determined..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.UndeterminedUriHostName">
@@ -2045,6 +2122,11 @@
     <member name="P:RestFoundation.RestResources.UnsupportedSyncRequestForAsyncHandler">
       <summary>
               Looks up a localized string similar to Async route handler does not support synchronous requests..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.RestResources.ValidationFailed">
+      <summary>
+              Looks up a localized string similar to Validation for '{0}' failed..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.ValidationRequestFailed">
@@ -2460,9 +2542,15 @@
             Defines a service method result executor.
             </summary>
     </member>
+    <member name="M:RestFoundation.Results.IResultExecutor.ExecuteNoContent(RestFoundation.IServiceContext)">
+      <summary>
+            Executes a no-content result in the provided service context.
+            </summary>
+      <param name="context">The service context.</param>
+    </member>
     <member name="M:RestFoundation.Results.IResultExecutor.Execute(RestFoundation.Results.IResult,System.Type,RestFoundation.IServiceContext)">
       <summary>
-            Executes the result in the provided service context.
+            Executes a result in the provided service context.
             </summary>
       <param name="result">The result.</param>
       <param name="methodReturnType">The service method return type.</param>
@@ -6705,18 +6793,6 @@
             Gets or sets a value indicating whether the response output should be cleared.
             </summary>
     </member>
-    <member name="T:RestFoundation.Results.EmptyResult">
-      <summary>
-            Represents an empty result that will not be processed.
-            It is not that same as returning the null value which can be serialized.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Results.EmptyResult.Execute(RestFoundation.IServiceContext)">
-      <summary>
-            Executes the result against the provided service context.
-            </summary>
-      <param name="context">The service context.</param>
-    </member>
     <member name="T:RestFoundation.Results.FeedResult">
       <summary>
             Represents an RSS/Atom feed result.
@@ -7077,9 +7153,15 @@
             Represents the default result executor.
             </summary>
     </member>
+    <member name="M:RestFoundation.Results.ResultExecutor.ExecuteNoContent(RestFoundation.IServiceContext)">
+      <summary>
+            Executes a no-content result in the provided service context.
+            </summary>
+      <param name="context">The service context.</param>
+    </member>
     <member name="M:RestFoundation.Results.ResultExecutor.Execute(RestFoundation.Results.IResult,System.Type,RestFoundation.IServiceContext)">
       <summary>
-            Executes the result in the provided service context.
+            Executes a result in the provided service context.
             </summary>
       <param name="result">The result.</param>
       <param name="methodReturnType">The service method return type.</param>

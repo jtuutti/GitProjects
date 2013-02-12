@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using RestFoundation;
+using RestFoundation.Behaviors.Attributes;
 using RestFoundation.Results;
 using RestFoundation.ServiceProxy;
 using SampleRestService.Contracts.Metadata;
@@ -16,10 +17,10 @@ namespace SampleRestService.Contracts
         [Url("products")]
         IQueryable<Product> GetAll();
 
-        [Url("product")]
+        [Url("product"), ValidateResource(true)]
         Product Post(Product resource);
 
-        [Url("product/{id}")]
+        [Url("product/{id}"), ValidateResource(true)]
         Product Put(int id, Product resource);
 
         [Url("product/{id}/in-stock/{inStock}")]

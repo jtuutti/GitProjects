@@ -16,6 +16,8 @@ namespace RestFoundation.Results
     /// </summary>
     public abstract class FileResultBase : IResult
     {
+        private const string DefaultBinaryContentType = "application/octet-stream";
+
         /// <summary>
         /// Gets or sets the content type.
         /// </summary>
@@ -49,7 +51,7 @@ namespace RestFoundation.Results
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
             context.Response.SetHeader(context.Response.HeaderNames.AcceptRanges, "bytes");
             context.Response.SetHeader(context.Response.HeaderNames.ContentLength, file.Length.ToString(CultureInfo.InvariantCulture));
-            context.Response.SetHeader(context.Response.HeaderNames.ContentType, ContentType ?? "application/octet-stream");
+            context.Response.SetHeader(context.Response.HeaderNames.ContentType, ContentType ?? DefaultBinaryContentType);
             context.Response.SetHeader(context.Response.HeaderNames.ETag, GenerateETag(file));
 
             if (!String.IsNullOrEmpty(ContentDisposition))
@@ -120,7 +122,7 @@ namespace RestFoundation.Results
 
             context.Response.SetHeader(context.Response.HeaderNames.ContentLength, (end - start + 1).ToString(CultureInfo.InvariantCulture));
             context.Response.SetHeader(context.Response.HeaderNames.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes {0}-{1}/{2}", start, end, stream.Length));
-            context.Response.SetStatus(HttpStatusCode.PartialContent, "Partial content");
+            context.Response.SetStatus(HttpStatusCode.PartialContent, RestResources.PartialContent);
         }
 
         private static string GenerateETag(FileInfo file)

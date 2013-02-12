@@ -589,4 +589,8 @@
     <value>No resource provided</value>
     <comment>No resource provided</comment>
   </data>
+  <data name="PartialContent" xml:space="preserve">
+    <value>Partial Content</value>
+    <comment>Partial Content</comment>
+  </data>
 </root>
