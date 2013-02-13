@@ -104,13 +104,10 @@ namespace RestFoundation.Context
         {
             get
             {
-                lock (Context.Items)
-                {
-                    dynamic resourceDictionary = new DynamicDictionary(Context.Items);
-                    resourceDictionary.GetResource = new Func<dynamic>(() => GetResource());
+                dynamic resourceDictionary = new DynamicDictionary(() => Context.Items);
+                resourceDictionary.GetResource = new Func<dynamic>(() => GetResource());
 
-                    return resourceDictionary;
-                }
+                return resourceDictionary;
             }
         }
 
@@ -205,15 +202,18 @@ namespace RestFoundation.Context
         {
             get
             {
-                var items = Context.Items[ContextContainerKey] as HttpRequestContainer;
-
-                if (items == null)
+                lock (Context.Items)
                 {
-                    items = new HttpRequestContainer();
-                    Context.Items[ContextContainerKey] = items;
-                }
+                    var items = Context.Items[ContextContainerKey] as HttpRequestContainer;
 
-                return items;
+                    if (items == null)
+                    {
+                        items = new HttpRequestContainer();
+                        Context.Items[ContextContainerKey] = items;
+                    }
+
+                    return items;
+                }
             }
         }
 

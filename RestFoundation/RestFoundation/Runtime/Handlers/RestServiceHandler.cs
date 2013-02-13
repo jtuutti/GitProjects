@@ -20,6 +20,7 @@ namespace RestFoundation.Runtime.Handlers
     {
         private const int DefaultServiceTimeoutInSeconds = 60;
         private const int DefaultResultTimeoutInSeconds = 30;
+        private const string ServiceExecutionId = "ServiceExecutionId";
 
         private readonly IServiceContext m_serviceContext;
         private readonly IServiceMethodLocator m_methodLocator;
@@ -152,7 +153,7 @@ namespace RestFoundation.Runtime.Handlers
                 throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.NotFound);
             }
 
-            m_serviceContext.GetHttpContext().Items["ServiceExecutionId"] = Guid.NewGuid();
+            requestContext.HttpContext.Items[ServiceExecutionId] = Guid.NewGuid();
 
             return this;
         }
