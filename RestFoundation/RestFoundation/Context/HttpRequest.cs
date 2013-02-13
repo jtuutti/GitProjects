@@ -104,10 +104,13 @@ namespace RestFoundation.Context
         {
             get
             {
-                dynamic resourceDictionary = new DynamicDictionary(Context.Items);
-                resourceDictionary.GetResource = new Func<dynamic>(() => GetResource());
+                lock (Context.Items)
+                {
+                    dynamic resourceDictionary = new DynamicDictionary(Context.Items);
+                    resourceDictionary.GetResource = new Func<dynamic>(() => GetResource());
 
-                return resourceDictionary;
+                    return resourceDictionary;
+                }
             }
         }
 
