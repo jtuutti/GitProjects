@@ -13,7 +13,7 @@ namespace RestFoundation.Collections.Concrete
     {
         private const char ForwardedAddressSeparator = ',';
 
-        internal ServerVariableCollection(NameValueCollection values) : base(values)
+        internal ServerVariableCollection(NameValueCollection collection) : base(collection)
         {
             ApplicationPoolId = TryGet("APP_POOL_ID");
             HttpVersion = TryGet("HTTP_VERSION");

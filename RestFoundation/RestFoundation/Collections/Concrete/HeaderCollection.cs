@@ -24,7 +24,7 @@ namespace RestFoundation.Collections.Concrete
     {
         private const string Utf8Charset = "utf-8";
 
-        internal HeaderCollection(NameValueCollection values) : base(values)
+        internal HeaderCollection(NameValueCollection collection) : base(collection)
         {
             AccessControlRequestHeaders = TryGet("Access-Control-Request-Headers");
             AccessControlRequestMethod = TryGet("Access-Control-Request-Method");

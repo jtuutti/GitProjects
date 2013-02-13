@@ -303,12 +303,11 @@
     <Compile Include="IHttpResponse.cs" />
     <Compile Include="Runtime\Registries\ServiceBehaviorRegistry.cs" />
     <Compile Include="Runtime\ServiceMethodMetadata.cs" />
-    <Compile Include="Collections\Specialized\DynamicStringCollection.cs" />
     <Compile Include="Collections\Concrete\CookieValueCollection.cs" />
     <Compile Include="Collections\ICookieValueCollection.cs" />
-    <Compile Include="Collections\Concrete\ObjectValueCollection.cs" />
+    <Compile Include="Collections\Concrete\RouteValueCollection.cs" />
     <Compile Include="Collections\Concrete\StringValueCollection.cs" />
-    <Compile Include="Collections\IObjectValueCollection.cs" />
+    <Compile Include="Collections\IRouteValueCollection.cs" />
     <Compile Include="Collections\IStringValueCollection.cs" />
     <Compile Include="IServiceMethodInvoker.cs" />
     <Compile Include="Runtime\Registries\ServiceMethodRegistry.cs" />

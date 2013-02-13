@@ -13,18 +13,18 @@ namespace RestFoundation.Collections.Concrete
     /// Represents an object value collection.
     /// </summary>
     [DebuggerDisplay("Count = {Count}")]
-    public class ObjectValueCollection : IObjectValueCollection
+    public class RouteValueCollection : IRouteValueCollection
     {
-        private readonly IDictionary<string, object> m_values;
+        private readonly IDictionary<string, object> m_collection;
 
-        internal ObjectValueCollection(IDictionary<string, object> values)
+        internal RouteValueCollection(IDictionary<string, object> collection)
         {
-            if (values == null)
+            if (collection == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException("collection");
             }
 
-            m_values = values;
+            m_collection = collection;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace RestFoundation.Collections.Concrete
         {
             get
             {
-                return new ReadOnlyCollection<string>(new List<string>(m_values.Keys));
+                return new ReadOnlyCollection<string>(new List<string>(m_collection.Keys));
             }
         }
 
@@ -45,7 +45,7 @@ namespace RestFoundation.Collections.Concrete
         {
             get
             {
-                return m_values.Count;
+                return m_collection.Count;
             }
         }
 
@@ -58,7 +58,7 @@ namespace RestFoundation.Collections.Concrete
         /// <filterpriority>1</filterpriority>
         public IEnumerator<object> GetEnumerator()
         {
-            return new ObjectValueEnumerator(m_values.GetEnumerator());
+            return new ObjectValueEnumerator(m_collection.GetEnumerator());
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace RestFoundation.Collections.Concrete
         public object TryGet(string key)
         {
             object value;
-            return m_values.TryGetValue(key, out value) ? value : null;
+            return m_collection.TryGetValue(key, out value) ? value : null;
         }
 
         /// <summary>
@@ -96,12 +96,12 @@ namespace RestFoundation.Collections.Concrete
         /// <returns>The dictionary of keys and objects.</returns>
         public IDictionary<string, object> ToDictionary()
         {
-            return new Dictionary<string, object>(m_values, StringComparer.OrdinalIgnoreCase);
+            return new Dictionary<string, object>(m_collection, StringComparer.OrdinalIgnoreCase);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return m_values.GetEnumerator();
+            return m_collection.GetEnumerator();
         }
 
         private class ObjectValueEnumerator : IEnumerator<object>

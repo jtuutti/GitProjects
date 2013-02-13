@@ -16,16 +16,16 @@ namespace RestFoundation.Collections.Concrete
     [DebuggerDisplay("Count = {Count}")]
     public class StringValueCollection : IStringValueCollection
     {
-        private readonly NameValueCollection m_values;
+        private readonly NameValueCollection m_collection;
 
-        internal StringValueCollection(NameValueCollection values)
+        internal StringValueCollection(NameValueCollection collection)
         {
-            if (values == null)
+            if (collection == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException("collection");
             }
 
-            m_values = values;
+            m_collection = collection;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace RestFoundation.Collections.Concrete
         {
             get
             {
-                return new ReadOnlyCollection<string>(m_values.AllKeys);
+                return new ReadOnlyCollection<string>(m_collection.AllKeys);
             }
         }
 
@@ -46,7 +46,7 @@ namespace RestFoundation.Collections.Concrete
         {
             get
             {
-                return m_values.Count;
+                return m_collection.Count;
             }
         }
 
@@ -59,7 +59,7 @@ namespace RestFoundation.Collections.Concrete
         /// <filterpriority>1</filterpriority>
         public IEnumerator<string> GetEnumerator()
         {
-            return new StringValueEnumerator(m_values.GetEnumerator());
+            return new StringValueEnumerator(m_collection.GetEnumerator());
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace RestFoundation.Collections.Concrete
         /// <returns>The corresponding value.</returns>
         public string TryGet(string key)
         {
-            return m_values.Get(key);
+            return m_collection.Get(key);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace RestFoundation.Collections.Concrete
                 throw new ArgumentNullException("key");
             }
 
-            return m_values.GetValues(key) ?? new string[0];
+            return m_collection.GetValues(key) ?? new string[0];
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace RestFoundation.Collections.Concrete
         /// <returns>The name-value collection of keys and objects.</returns>
         public NameValueCollection ToNameValueCollection()
         {
-            return new NameValueCollection(m_values);
+            return new NameValueCollection(m_collection);
         }
 
         /// <summary>
@@ -123,12 +123,12 @@ namespace RestFoundation.Collections.Concrete
         /// <filterpriority>2</filterpriority>
         public override string ToString()
         {
-            return m_values.ToString();
+            return m_collection.ToString();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return m_values.GetEnumerator();
+            return m_collection.GetEnumerator();
         }
 
         private class StringValueEnumerator : IEnumerator<string>

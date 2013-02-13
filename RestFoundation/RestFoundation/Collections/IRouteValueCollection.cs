@@ -7,9 +7,9 @@ using System.Collections.Generic;
 namespace RestFoundation.Collections
 {
     /// <summary>
-    /// Defines an object value collection.
+    /// Defines a route value collection.
     /// </summary>
-    public interface IObjectValueCollection : IEnumerable<object>
+    public interface IRouteValueCollection : IEnumerable<object>
     {
         /// <summary>
         /// Gets a collection of all collection keys.

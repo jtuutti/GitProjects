@@ -54,7 +54,7 @@ namespace RestFoundation
         /// <summary>
         /// Gets the route collection.
         /// </summary>
-        IObjectValueCollection RouteValues { get; }
+        IRouteValueCollection RouteValues { get; }
 
         /// <summary>
         /// Gets the request header collection.

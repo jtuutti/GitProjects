@@ -16,16 +16,16 @@ namespace RestFoundation.Collections.Concrete
     [DebuggerDisplay("Count = {Count}")]
     public class CookieValueCollection : ICookieValueCollection
     {
-        private readonly HttpCookieCollection m_values;
+        private readonly HttpCookieCollection m_collection;
 
-        internal CookieValueCollection(HttpCookieCollection values)
+        internal CookieValueCollection(HttpCookieCollection collection)
         {
-            if (values == null)
+            if (collection == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException("collection");
             }
 
-            m_values = values;
+            m_collection = collection;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace RestFoundation.Collections.Concrete
         {
             get
             {
-                return new ReadOnlyCollection<string>(m_values.AllKeys);
+                return new ReadOnlyCollection<string>(m_collection.AllKeys);
             }
         }
 
@@ -46,7 +46,7 @@ namespace RestFoundation.Collections.Concrete
         {
             get
             {
-                return m_values.Count;
+                return m_collection.Count;
             }
         }
 
@@ -59,7 +59,7 @@ namespace RestFoundation.Collections.Concrete
         /// <filterpriority>1</filterpriority>
         public IEnumerator<HttpCookie> GetEnumerator()
         {
-            return new CookieValueEnumerator(m_values.GetEnumerator());
+            return new CookieValueEnumerator(m_collection.GetEnumerator());
         }
 
         /// <summary>
@@ -97,12 +97,12 @@ namespace RestFoundation.Collections.Concrete
                 throw new ArgumentNullException("key");
             }
 
-            return m_values.Get(key);
+            return m_collection.Get(key);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return m_values.GetEnumerator();
+            return m_collection.GetEnumerator();
         }
 
         private class CookieValueEnumerator : IEnumerator<HttpCookie>

@@ -118,7 +118,7 @@ namespace RestFoundation.Runtime
         /// <param name="parameter">The service method parameter.</param>
         /// <param name="routeValues">The collection of route values.</param>
         /// <returns>The route value or null.</returns>
-        protected virtual object TryGetRouteValue(ParameterInfo parameter, IObjectValueCollection routeValues)
+        protected virtual object TryGetRouteValue(ParameterInfo parameter, IRouteValueCollection routeValues)
         {
             if (parameter == null)
             {
