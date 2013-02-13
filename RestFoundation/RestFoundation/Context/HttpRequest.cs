@@ -26,6 +26,9 @@ namespace RestFoundation.Context
         private const string FormDataMediaType = "application/x-www-form-urlencoded";
         private const string ForwardedProtocolHeaderName = "X-Forwarded-Proto";
 
+        private readonly object m_resourceBagSyncRoot = new Object();
+        private DynamicDictionary m_resourceBag;
+
         /// <summary>
         /// Gets a value indicating whether the request was initiated through AJAX.
         /// </summary>
@@ -104,10 +107,24 @@ namespace RestFoundation.Context
         {
             get
             {
-                dynamic resourceDictionary = new DynamicDictionary(() => Context.Items);
-                resourceDictionary.GetResource = new Func<dynamic>(() => GetResource());
+                if (m_resourceBag != null)
+                {
+                    return m_resourceBag;
+                }
 
-                return resourceDictionary;
+                lock (m_resourceBagSyncRoot)
+                {
+                    if (m_resourceBag != null)
+                    {
+                        return m_resourceBag;
+                    }
+
+                    dynamic resourceDictionary = new DynamicDictionary(() => Context.Items);
+                    resourceDictionary.GetResource = new Func<dynamic>(() => GetResource());
+
+                    m_resourceBag = resourceDictionary;
+                    return resourceDictionary;
+                }
             }
         }
 
