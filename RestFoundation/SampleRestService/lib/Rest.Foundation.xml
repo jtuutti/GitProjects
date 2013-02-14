@@ -7564,7 +7564,7 @@
       <param name="context">The service context.</param>
       <returns>The parameter value.</returns>
     </member>
-    <member name="M:RestFoundation.Runtime.ParameterValueProvider.TryGetRouteValue(System.Reflection.ParameterInfo,RestFoundation.Collections.IObjectValueCollection)">
+    <member name="M:RestFoundation.Runtime.ParameterValueProvider.TryGetRouteValue(System.Reflection.ParameterInfo,RestFoundation.Collections.IRouteValueCollection)">
       <summary>
             Returns a route value for the service method parameter or null.
             </summary>
@@ -8885,82 +8885,6 @@
             Gets response header names.
             </summary>
     </member>
-    <member name="T:RestFoundation.Collections.Specialized.DynamicStringCollection">
-      <summary>
-            Represents a dynamic string collection.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Collections.Specialized.DynamicStringCollection.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Collections.Specialized.DynamicStringCollection" /> class.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Collections.Specialized.DynamicStringCollection.#ctor(RestFoundation.Collections.IStringValueCollection)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Collections.Specialized.DynamicStringCollection" /> class.
-            </summary>
-      <param name="collection">The static string value collection to convert to dynamic.</param>
-    </member>
-    <member name="M:RestFoundation.Collections.Specialized.DynamicStringCollection.TryGetMember(System.Dynamic.GetMemberBinder,System.Object@)">
-      <summary>
-            Provides the implementation for operations that get member values. Classes derived from the <see cref="T:RestFoundation.Collections.Specialized.DynamicStringCollection" />
-            class can override this method to specify dynamic behavior for operations such as getting a value for a property.
-            </summary>
-      <returns>true if the operation is successful; otherwise, false.</returns>
-      <param name="binder">Provides information about the object that called the dynamic operation.</param>
-      <param name="result">The result of the get operation.</param>
-    </member>
-    <member name="M:RestFoundation.Collections.Specialized.DynamicStringCollection.TrySetMember(System.Dynamic.SetMemberBinder,System.Object)">
-      <summary>
-            Provides the implementation for operations that set member values. Classes derived from the <see cref="T:RestFoundation.Collections.Specialized.DynamicStringCollection" />
-            class can override this method to specify dynamic behavior for operations such as setting a value for a property.
-            </summary>
-      <returns>true if the operation is successful; otherwise, false.</returns>
-      <param name="binder">
-            Provides information about the object that called the dynamic operation.The binder.Name property provides the name
-            of the member to which the value is being assigned.
-            </param>
-      <param name="value">The value to set to the member</param>
-    </member>
-    <member name="M:RestFoundation.Collections.Specialized.DynamicStringCollection.TryInvokeMember(System.Dynamic.InvokeMemberBinder,System.Object[],System.Object@)">
-      <summary>
-            Provides the implementation for operations that invoke a member. Classes derived from the <see cref="T:RestFoundation.Collections.Specialized.DynamicStringCollection" />
-            class can override this method to specify dynamic behavior for operations such as calling a method.
-            </summary>
-      <returns>true if the operation is successful; otherwise, false.</returns>
-      <param name="binder">Provides information about the dynamic operation.</param>
-      <param name="args">The arguments that are passed to the object member during the invoke operation.</param>
-      <param name="result">The result of the member invocation.</param>
-    </member>
-    <member name="M:RestFoundation.Collections.Specialized.DynamicStringCollection.TryDeleteMember(System.Dynamic.DeleteMemberBinder)">
-      <summary>
-            Provides the implementation for operations that delete an object member.
-            </summary>
-      <returns>true if the operation is successful; otherwise, false.</returns>
-      <param name="binder">Provides information about the deletion.</param>
-    </member>
-    <member name="M:RestFoundation.Collections.Specialized.DynamicStringCollection.GetDynamicMemberNames">
-      <summary>
-            Returns the enumeration of all dynamic member names. 
-            </summary>
-      <returns>
-            A sequence that contains dynamic member names.
-            </returns>
-    </member>
-    <member name="M:RestFoundation.Collections.Specialized.DynamicStringCollection.ToString">
-      <summary>
-            Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
-            </summary>
-      <returns>
-            A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
-            </returns>
-      <filterpriority>2</filterpriority>
-    </member>
-    <member name="P:RestFoundation.Collections.Specialized.DynamicStringCollection.Count">
-      <summary>
-            Gets a value containing the count of items in the collection.
-            </summary>
-    </member>
     <member name="T:RestFoundation.Collections.ICookieValueCollection">
       <summary>
             Defines a cookie collection.
@@ -9020,6 +8944,15 @@
       <param name="key">The key.</param>
       <returns>The corresponding value.</returns>
     </member>
+    <member name="M:RestFoundation.Collections.Concrete.CookieValueCollection.ToString">
+      <summary>
+            Returns a string that represents the current object.
+            </summary>
+      <returns>
+            A string that represents the current object.
+            </returns>
+      <filterpriority>2</filterpriority>
+    </member>
     <member name="P:RestFoundation.Collections.Concrete.CookieValueCollection.Keys">
       <summary>
             Gets a collection of all collection keys.
@@ -9030,12 +8963,12 @@
             Gets a value containing the count of all collection items.
             </summary>
     </member>
-    <member name="T:RestFoundation.Collections.IObjectValueCollection">
+    <member name="T:RestFoundation.Collections.IRouteValueCollection">
       <summary>
-            Defines an object value collection.
+            Defines a route value collection.
             </summary>
     </member>
-    <member name="M:RestFoundation.Collections.IObjectValueCollection.Get(System.String)">
+    <member name="M:RestFoundation.Collections.IRouteValueCollection.Get(System.String)">
       <summary>
             Gets a value by the key in the collection.
             </summary>
@@ -9043,35 +8976,35 @@
       <returns>The corresponding value.</returns>
       <exception cref="T:System.ArgumentOutOfRangeException">If the key is not a part of the collection.</exception>
     </member>
-    <member name="M:RestFoundation.Collections.IObjectValueCollection.TryGet(System.String)">
+    <member name="M:RestFoundation.Collections.IRouteValueCollection.TryGet(System.String)">
       <summary>
             Gets a value by the key in the collection or null if the key is not a part of the collection.
             </summary>
       <param name="key">The key.</param>
       <returns>The corresponding value.</returns>
     </member>
-    <member name="M:RestFoundation.Collections.IObjectValueCollection.ToDictionary">
+    <member name="M:RestFoundation.Collections.IRouteValueCollection.ToDictionary">
       <summary>
             Returns the pairs of keys and objects as a dictionary.
             </summary>
       <returns>The dictionary of keys and objects.</returns>
     </member>
-    <member name="P:RestFoundation.Collections.IObjectValueCollection.Keys">
+    <member name="P:RestFoundation.Collections.IRouteValueCollection.Keys">
       <summary>
             Gets a collection of all collection keys.
             </summary>
     </member>
-    <member name="P:RestFoundation.Collections.IObjectValueCollection.Count">
+    <member name="P:RestFoundation.Collections.IRouteValueCollection.Count">
       <summary>
             Gets a value containing the count of all collection items.
             </summary>
     </member>
-    <member name="T:RestFoundation.Collections.Concrete.ObjectValueCollection">
+    <member name="T:RestFoundation.Collections.Concrete.RouteValueCollection">
       <summary>
             Represents an object value collection.
             </summary>
     </member>
-    <member name="M:RestFoundation.Collections.Concrete.ObjectValueCollection.GetEnumerator">
+    <member name="M:RestFoundation.Collections.Concrete.RouteValueCollection.GetEnumerator">
       <summary>
             Returns an enumerator that iterates through the collection.
             </summary>
@@ -9080,7 +9013,7 @@
             </returns>
       <filterpriority>1</filterpriority>
     </member>
-    <member name="M:RestFoundation.Collections.Concrete.ObjectValueCollection.Get(System.String)">
+    <member name="M:RestFoundation.Collections.Concrete.RouteValueCollection.Get(System.String)">
       <summary>
             Gets a value by the key in the collection.
             </summary>
@@ -9088,25 +9021,34 @@
       <returns>The corresponding value.</returns>
       <exception cref="T:System.ArgumentOutOfRangeException">If the key is not a part of the collection.</exception>
     </member>
-    <member name="M:RestFoundation.Collections.Concrete.ObjectValueCollection.TryGet(System.String)">
+    <member name="M:RestFoundation.Collections.Concrete.RouteValueCollection.TryGet(System.String)">
       <summary>
             Gets a value by the key in the collection or null if the key is not a part of the collection.
             </summary>
       <param name="key">The key.</param>
       <returns>The corresponding value.</returns>
     </member>
-    <member name="M:RestFoundation.Collections.Concrete.ObjectValueCollection.ToDictionary">
+    <member name="M:RestFoundation.Collections.Concrete.RouteValueCollection.ToDictionary">
       <summary>
             Returns the pairs of keys and objects as a dictionary.
             </summary>
       <returns>The dictionary of keys and objects.</returns>
     </member>
-    <member name="P:RestFoundation.Collections.Concrete.ObjectValueCollection.Keys">
+    <member name="M:RestFoundation.Collections.Concrete.RouteValueCollection.ToString">
+      <summary>
+            Returns a string that represents the current object.
+            </summary>
+      <returns>
+            A string that represents the current object.
+            </returns>
+      <filterpriority>2</filterpriority>
+    </member>
+    <member name="P:RestFoundation.Collections.Concrete.RouteValueCollection.Keys">
       <summary>
             Gets a collection of all collection keys.
             </summary>
     </member>
-    <member name="P:RestFoundation.Collections.Concrete.ObjectValueCollection.Count">
+    <member name="P:RestFoundation.Collections.Concrete.RouteValueCollection.Count">
       <summary>
             Gets a value containing the count of all collection items.
             </summary>
@@ -9203,6 +9145,11 @@
     <member name="T:RestFoundation.Context.HttpRequest">
       <summary>
             Represents an HTTP request.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Context.HttpRequest.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Context.HttpRequest" /> class.
             </summary>
     </member>
     <member name="P:RestFoundation.Context.HttpRequest.IsAjax">

@@ -1,9 +1,10 @@
-﻿<%@ Page Language="C#" MasterPageFile="help.master" ClientIDMode="Static" ValidateRequest="false" EnableViewStateMac="false" EnableEventValidation="false" %>
+﻿<%@ Page Language="C#" MasterPageFile="help.master" ClientIDMode="Static" Async="true" ValidateRequest="false" EnableViewStateMac="false" EnableEventValidation="false" %>
 <%@ Import Namespace="System.Diagnostics" %>
 <%@ Import Namespace="System.Globalization" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Net" %>
 <%@ Import Namespace="System.Net.Security" %>
+<%@ Import Namespace="System.Threading.Tasks" %>
 <%@ Import Namespace="RestFoundation.Runtime" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy.OperationMetadata" %>
@@ -143,7 +144,7 @@
         Server.ScriptTimeout = 125;
     }
 
-    protected void Page_Load(object sender, EventArgs e)
+    protected async void Page_Load(object sender, EventArgs e)
     {
         ViewResponse.Visible = false;
 
@@ -186,15 +187,12 @@
                 AddHeaders(client);
                 SetEncoding(client);
 
-                string protocolVersion, responseCode;
-                TimeSpan duration;
-
-                string data = PerformRequest(url, HttpMethod.SelectedValue, client, out duration, out protocolVersion, out responseCode) ?? String.Empty;
-                bool hasData = data.Trim().Length > 0;
+                ProxyResponseData response = await PerformRequest(url, HttpMethod.SelectedValue, client);
+                bool hasData = response.Data.Trim().Length > 0;
 
                 if (hasData)
                 {
-                    ResponseData.Value = data;
+                    ResponseData.Value = response.Data;
                 }
                 
                 if (client.ResponseHeaders != null)
@@ -204,15 +202,15 @@
 
                 if (hasData && !DoNotFormatBody.Checked)
                 {
-                    data = FormatBody(data, ContentType.Value);
+                    response.Data = FormatBody(response.Data, ContentType.Value);
                 }
 
                 if (!hasData || DisplayResponseHeaders.Checked)
                 {
-                    data = GetResponseHeaders(url, client.ResponseHeaders, duration, protocolVersion, responseCode, hasData) + data;
+                    response.Data = GetResponseHeaders(url, client.ResponseHeaders, response, hasData) + response.Data;
                 }
 
-                ResponseText.Value = data;
+                ResponseText.Value = response.Data;
 
                 if (hasData)
                 {
@@ -223,10 +221,12 @@
         catch (HttpException ex)
         {
             ResponseText.Value = String.Format(CultureInfo.InvariantCulture, "HTTP/1.1: {0} - {1}", ex.GetHttpCode(), ex.Message);
+            RegisterErrorHighlightScript();
         }
         catch (Exception ex)
         {
             ResponseText.Value = String.Format(CultureInfo.InvariantCulture, "HTTP/1.1: 500 - {0}", ex.Message);
+            RegisterErrorHighlightScript();
         }
         finally
         {
@@ -319,7 +319,7 @@
         return data;
     }
 
-    private static string GetResponseHeaders(String url, NameValueCollection headerCollection, TimeSpan duration, string protocolVersion, string responseCode, bool hasOutput)
+    private static string GetResponseHeaders(String url, NameValueCollection headerCollection, ProxyResponseData response, bool hasOutput)
     {
         var headerString = new StringBuilder();
 
@@ -327,18 +327,18 @@
         CreateOutputSeparator(headerString);
 
         headerString.Append("URL: ").AppendLine(url.Replace("%20", "+"));
-        headerString.Append("HTTP/").Append(protocolVersion);
+        headerString.Append("HTTP/").Append(response.ProtocolVersion);
 
-        if (!String.IsNullOrEmpty(responseCode))
+        if (!String.IsNullOrEmpty(response.Code))
         {
-            headerString.Append(": ").AppendLine(responseCode);
+            headerString.Append(": ").AppendLine(response.Code);
         }
         else
         {
             headerString.AppendLine();
         }
 
-        headerString.AppendFormat("Duration: {0} ms", Convert.ToInt32(duration.TotalMilliseconds));
+        headerString.AppendFormat("Duration: {0} ms", Convert.ToInt32(response.Duration.TotalMilliseconds));
 
         if (headerCollection == null || headerCollection.Count == 0)
         {
@@ -525,76 +525,89 @@
         }
     }
 
-    private string PerformRequest(string url, string httpMethod, ProxyWebClient client, out TimeSpan duration, out string protocolVersion, out string responseCode)
+    private async Task<ProxyResponseData> PerformRequest(string url, string httpMethod, ProxyWebClient client)
     {
+        var response = new ProxyResponseData();
         var timer = Stopwatch.StartNew();
-        string data;
 
         try
         {
             switch (httpMethod.ToUpperInvariant())
             {
                 case "DELETE":
-                    data = client.UploadString(url, HttpMethod.SelectedValue, String.Empty);
+                    response.Data = await client.UploadStringTaskAsync(url, HttpMethod.SelectedValue, String.Empty).ConfigureAwait(false);
                     break;
                 case "GET":
-                    data = client.DownloadString(url);
+                    response.Data = await client.DownloadStringTaskAsync(url).ConfigureAwait(false);
                     break;
                 case "HEAD":
                     client.HeadOnly = true;
-                    data = client.DownloadString(url);
+                    response.Data = await client.DownloadStringTaskAsync(url).ConfigureAwait(false);
                     break;
                 case "OPTIONS":
                     client.Options = true;
-                    data = client.DownloadString(url);
+                    response.Data = await client.DownloadStringTaskAsync(url).ConfigureAwait(false);
                     break;
                 case "PATCH":
                 case "POST":
                 case "PUT":
-                    data = client.UploadString(url, HttpMethod.SelectedValue, RequestText.Value);
+                    response.Data = await client.UploadStringTaskAsync(url, HttpMethod.SelectedValue, RequestText.Value).ConfigureAwait(false);
                     break;
                 default:
                     throw new HttpException((int) HttpStatusCode.MethodNotAllowed, "Invalid HTTP method provided");
             }
 
-            responseCode = GetStatusCode(client.WebResponse);
-            protocolVersion = GetProtocolVersion(client.WebResponse);
+            response.Code = GetStatusCode(client.WebResponse);
+            response.ProtocolVersion = GetProtocolVersion(client.WebResponse);
         }
         catch (WebException ex)
         {
             NameValueCollection headers;
-            data = GetExceptionResponseData(ex, out headers);
             client.ResponseHeaders.Clear();
+
+            response.Data = GetExceptionResponseData(ex, out headers);
 
             if (ex.Response != null)
             {
                 client.ResponseHeaders.Add(headers);
-                responseCode = GetStatusCode(ex.Response);
-                protocolVersion = GetProtocolVersion(ex.Response);
+
+                response.Code = GetStatusCode(ex.Response);
+                response.ProtocolVersion = GetProtocolVersion(ex.Response);
             }
             else
             {
                 client.ResponseHeaders.Add(Context.Response.Headers);
-                responseCode = "500 - Internal Server Error";
-                protocolVersion = Context.Request.ServerVariables["SERVER_PROTOCOL"];
 
-                int indexOfSeparator = protocolVersion.IndexOf('/');
+                response.Code = "500 - Internal Server Error";
+                response.ProtocolVersion = Context.Request.ServerVariables["SERVER_PROTOCOL"];
+
+                int indexOfSeparator = response.ProtocolVersion.IndexOf('/');
                 
-                if (indexOfSeparator > 0 && indexOfSeparator < protocolVersion.Length - 1)
+                if (indexOfSeparator > 0 && indexOfSeparator < response.ProtocolVersion.Length - 1)
                 {
-                    protocolVersion = protocolVersion.Substring(indexOfSeparator + 1);
+                    response.ProtocolVersion = response.ProtocolVersion.Substring(indexOfSeparator + 1);
                 }
             }
 
-            ClientScript.RegisterStartupScript(GetType(), "HttpErrorScript", "$('#ResponseText').addClass('input-validation-error')", true);
+            RegisterErrorHighlightScript();
         }
         finally
         {
             timer.Stop();
-            duration = timer.Elapsed;
+            response.Duration = timer.Elapsed;
         }
 
-        return data;
+        if (response.Data == null)
+        {
+            response.Data = String.Empty;
+        }
+
+        return response;
+    }
+
+    private void RegisterErrorHighlightScript()
+    {
+        ClientScript.RegisterStartupScript(GetType(), "RegisterErrorHighlightScript", "$('#ResponseText').addClass('input-validation-error')", true);
     }
 </script>
 
