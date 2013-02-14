@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Text;
 using System.Web;
 
 namespace RestFoundation.Collections.Concrete
@@ -98,6 +99,30 @@ namespace RestFoundation.Collections.Concrete
             }
 
             return m_collection.Get(key);
+        }
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current object.
+        /// </returns>
+        /// <filterpriority>2</filterpriority>
+        public override string ToString()
+        {
+            var collectionStringBuilder = new StringBuilder();
+
+            foreach (HttpCookie item in m_collection)
+            {
+                if (collectionStringBuilder.Length > 0)
+                {
+                    collectionStringBuilder.Append("&");
+                }
+
+                collectionStringBuilder.AppendFormat("{0}={1}", item.Name, item.Value ?? String.Empty);
+            }
+
+            return collectionStringBuilder.ToString();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

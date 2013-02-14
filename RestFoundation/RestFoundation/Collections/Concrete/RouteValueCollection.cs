@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Text;
 
 namespace RestFoundation.Collections.Concrete
 {
@@ -97,6 +98,30 @@ namespace RestFoundation.Collections.Concrete
         public IDictionary<string, object> ToDictionary()
         {
             return new Dictionary<string, object>(m_collection, StringComparer.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current object.
+        /// </returns>
+        /// <filterpriority>2</filterpriority>
+        public override string ToString()
+        {
+            var collectionStringBuilder = new StringBuilder();
+
+            foreach (KeyValuePair<string, object> item in m_collection)
+            {
+                if (collectionStringBuilder.Length > 0)
+                {
+                    collectionStringBuilder.Append("&");
+                }
+
+                collectionStringBuilder.AppendFormat("{0}={1}", item.Key, item.Value ?? String.Empty);
+            }
+
+            return collectionStringBuilder.ToString();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

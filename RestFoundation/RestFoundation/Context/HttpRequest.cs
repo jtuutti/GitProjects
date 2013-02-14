@@ -35,14 +35,16 @@ namespace RestFoundation.Context
         private readonly object m_formCollectionSyncRoot = new Object();
         private readonly object m_serverVariablesCollectionSyncRoot = new Object();
 
-        private ServiceOperationUri m_uri;
-        private HttpMethod? m_method;
+        private readonly ContextContainer m_contextContainer;
         private DynamicDictionary m_resourceBag;
-        private IHeaderCollection m_headerCollection;
-        private ICookieValueCollection m_cookieCollection;
-        private IRouteValueCollection m_routeCollection;
-        private IStringValueCollection m_queryStringCollection, m_formCollection;
-        private IServerVariableCollection m_serverVariableCollection;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpRequest"/> class.
+        /// </summary>
+        public HttpRequest()
+        {
+            m_contextContainer = new ContextContainer(() => Context.Items);
+        }
 
         /// <summary>
         /// Gets a value indicating whether the request was initiated through AJAX.
@@ -84,14 +86,14 @@ namespace RestFoundation.Context
         {
             get
             {
-                if (m_uri != null)
+                if (m_contextContainer.Uri != null)
                 {
-                    return m_uri;
+                    return m_contextContainer.Uri;
                 }
 
                 lock (m_uriSyncRoot)
                 {
-                    return m_uri ?? (m_uri = new ServiceOperationUri(Context.Request.Url, Context.Request.ApplicationPath));
+                    return m_contextContainer.Uri ?? (m_contextContainer.Uri = new ServiceOperationUri(Context.Request.Url, Context.Request.ApplicationPath));
                 }
             }
         }
@@ -103,14 +105,14 @@ namespace RestFoundation.Context
         {
             get
             {
-                if (m_method.HasValue)
+                if (m_contextContainer.Method.HasValue)
                 {
-                    return m_method.Value;
+                    return m_contextContainer.Method.Value;
                 }
 
                 lock (m_methodSyncRoot)
                 {
-                    return m_method.HasValue ? m_method.Value : (m_method = Context.GetOverriddenHttpMethod()).Value;
+                    return m_contextContainer.Method.HasValue ? m_contextContainer.Method.Value : (m_contextContainer.Method = Context.GetOverriddenHttpMethod()).Value;
                 }
             }
         }
@@ -174,20 +176,22 @@ namespace RestFoundation.Context
         {
             get
             {
-                if (m_routeCollection != null)
+                if (m_contextContainer.RouteValues != null)
                 {
-                    return m_routeCollection;
+                    return m_contextContainer.RouteValues;
                 }
 
                 lock (m_routeCollectionSyncRoot)
                 {
-                    if (m_routeCollection != null)
+                    if (m_contextContainer.RouteValues != null)
                     {
-                        return m_routeCollection;
+                        return m_contextContainer.RouteValues;
                     }
 
-                    m_routeCollection = new RouteValueCollection(GetRouteValues());
-                    return m_routeCollection;
+                    IRouteValueCollection routeCollection = new RouteValueCollection(GetRouteValues());
+                    m_contextContainer.RouteValues = routeCollection;
+
+                    return routeCollection;
                 }
             }
         }
@@ -199,20 +203,20 @@ namespace RestFoundation.Context
         {
             get
             {
-                if (m_headerCollection != null)
+                if (m_contextContainer.Headers != null)
                 {
-                    return m_headerCollection;
+                    return m_contextContainer.Headers;
                 }
 
                 lock (m_headerCollectionSyncRoot)
                 {
-                    if (m_headerCollection != null)
+                    if (m_contextContainer.Headers != null)
                     {
-                        return m_headerCollection;
+                        return m_contextContainer.Headers;
                     }
 
-                    m_headerCollection = new HeaderCollection(Context.Request.Headers);
-                    return m_headerCollection;
+                    m_contextContainer.Headers = new HeaderCollection(Context.Request.Headers);
+                    return m_contextContainer.Headers;
                 }
             }
         }
@@ -224,20 +228,20 @@ namespace RestFoundation.Context
         {
             get
             {
-                if (m_queryStringCollection != null)
+                if (m_contextContainer.QueryString != null)
                 {
-                    return m_queryStringCollection;
+                    return m_contextContainer.QueryString;
                 }
 
                 lock (m_queryStringCollectionSyncRoot)
                 {
-                    if (m_queryStringCollection != null)
+                    if (m_contextContainer.QueryString != null)
                     {
-                        return m_queryStringCollection;
+                        return m_contextContainer.QueryString;
                     }
 
-                    m_queryStringCollection = new StringValueCollection(Context.Request.QueryString);
-                    return m_queryStringCollection;
+                    m_contextContainer.QueryString = new StringValueCollection(Context.Request.QueryString);
+                    return m_contextContainer.QueryString;
                 }
             }
         }
@@ -256,20 +260,20 @@ namespace RestFoundation.Context
                     throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.UnsupportedFormData);
                 }
 
-                if (m_formCollection != null)
+                if (m_contextContainer.Form != null)
                 {
-                    return m_formCollection;
+                    return m_contextContainer.Form;
                 }
 
                 lock (m_formCollectionSyncRoot)
                 {
-                    if (m_formCollection != null)
+                    if (m_contextContainer.Form != null)
                     {
-                        return m_formCollection;
+                        return m_contextContainer.Form;
                     }
 
-                    m_formCollection = new StringValueCollection(Context.Request.Form);
-                    return m_formCollection;
+                    m_contextContainer.Form = new StringValueCollection(Context.Request.Form);
+                    return m_contextContainer.Form;
                 }
             }
         }
@@ -281,20 +285,20 @@ namespace RestFoundation.Context
         {
             get
             {
-                if (m_serverVariableCollection != null)
+                if (m_contextContainer.ServerVariables != null)
                 {
-                    return m_serverVariableCollection;
+                    return m_contextContainer.ServerVariables;
                 }
 
                 lock (m_serverVariablesCollectionSyncRoot)
                 {
-                    if (m_serverVariableCollection != null)
+                    if (m_contextContainer.ServerVariables != null)
                     {
-                        return m_serverVariableCollection;
+                        return m_contextContainer.ServerVariables;
                     }
 
-                    m_serverVariableCollection = new ServerVariableCollection(Context.Request.ServerVariables);
-                    return m_serverVariableCollection;
+                    m_contextContainer.ServerVariables = new ServerVariableCollection(Context.Request.ServerVariables);
+                    return m_contextContainer.ServerVariables;
                 }
             }
         }
@@ -306,20 +310,20 @@ namespace RestFoundation.Context
         {
             get
             {
-                if (m_cookieCollection != null)
+                if (m_contextContainer.Cookies != null)
                 {
-                    return m_cookieCollection;
+                    return m_contextContainer.Cookies;
                 }
 
                 lock (m_cookieCollectionSyncRoot)
                 {
-                    if (m_cookieCollection != null)
+                    if (m_contextContainer.Cookies != null)
                     {
-                        return m_cookieCollection;
+                        return m_contextContainer.Cookies;
                     }
 
-                    m_cookieCollection = new CookieValueCollection(Context.Request.Cookies);
-                    return m_cookieCollection;
+                    m_contextContainer.Cookies = new CookieValueCollection(Context.Request.Cookies);
+                    return m_contextContainer.Cookies;
                 }
             }
         }
