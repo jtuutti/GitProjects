@@ -4,6 +4,11 @@ del .\RestFoundation\obj\Release\*.* /f /q
 mkdir .\build > nul
 del .\build\Rest.Foundation.* /f /q > nul
 
+set errorlevel=1
+if %errorlevel% neq 1 
+echo ##teamcity[buildStatus status='FAILURE' text='{build.status.text} in compilation']
+goto exit
+
 C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild RestFoundation\RestFoundation.csproj /t:Rebuild /p:Configuration=Release
 C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild RestFoundation.Tests\RestFoundation.Tests.csproj /t:Rebuild /p:Configuration=Release
 
