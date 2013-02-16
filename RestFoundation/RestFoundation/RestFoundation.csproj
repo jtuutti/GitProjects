@@ -91,6 +91,8 @@
     <Compile Include="RouteHash.cs" />
     <Compile Include="Runtime\Fault.cs" />
     <Compile Include="Runtime\FaultCollection.cs" />
+    <Compile Include="Runtime\Handlers\RestServiceRouteInfo.cs" />
+    <Compile Include="Runtime\Handlers\RestServiceRouteInitializer.cs" />
     <Compile Include="Runtime\Handlers\ServiceContextHandler.cs" />
     <Compile Include="Runtime\Handlers\IServiceContextHandler.cs" />
     <Compile Include="Runtime\Handlers\NotFoundHandler.cs" />
@@ -136,7 +138,6 @@
     <Compile Include="IContentNegotiator.cs" />
     <Compile Include="IServiceExceptionHandler.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
-    <Compile Include="Results\IResultExecutor.cs" />
     <Compile Include="Results\FileResultBase.cs" />
     <Compile Include="Results\JsonPResult.cs" />
     <Compile Include="Results\RedirectType.cs" />
@@ -257,7 +258,7 @@
     <Compile Include="Runtime\AcceptValueOptionType.cs" />
     <Compile Include="Runtime\BrowserRouteConstraint.cs" />
     <Compile Include="Runtime\ExceptionUnwrapper.cs" />
-    <Compile Include="Results\ResultExecutor.cs" />
+    <Compile Include="Runtime\ResultInvoker.cs" />
     <Compile Include="Security\AuthorizationHeader.cs" />
     <Compile Include="Security\AuthorizationHeaderParser.cs" />
     <Compile Include="Security\AuthorizationManager.cs" />
@@ -286,9 +287,9 @@
     <Compile Include="Runtime\OutputCachedPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Results\ResultFactory.cs" />
+    <Compile Include="Runtime\ResultFactory.cs" />
     <Compile Include="Results\IResult.cs" />
-    <Compile Include="Results\IResultFactory.cs" />
+    <Compile Include="IResultFactory.cs" />
     <Compile Include="Results\DynamicResult.cs" />
     <Compile Include="Formatters\FormsFormatter.cs" />
     <Compile Include="Result.cs" />

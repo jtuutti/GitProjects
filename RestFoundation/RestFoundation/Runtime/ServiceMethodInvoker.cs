@@ -7,7 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web;
 using RestFoundation.Behaviors;
+using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation.Runtime
@@ -21,13 +25,15 @@ namespace RestFoundation.Runtime
 
         private readonly IServiceBehaviorInvoker m_behaviorInvoker;
         private readonly IParameterValueProvider m_parameterValueProvider;
+        private readonly IResultFactory m_resultFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceMethodInvoker"/> class.
         /// </summary>
         /// <param name="behaviorInvoker">The service behavior invoker.</param>
         /// <param name="parameterValueProvider">The parameter value provider.</param>
-        public ServiceMethodInvoker(IServiceBehaviorInvoker behaviorInvoker, IParameterValueProvider parameterValueProvider)
+        /// <param name="resultFactory">The service method result factory.</param>
+        public ServiceMethodInvoker(IServiceBehaviorInvoker behaviorInvoker, IParameterValueProvider parameterValueProvider, IResultFactory resultFactory)
         {
             if (behaviorInvoker == null)
             {
@@ -39,8 +45,14 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("parameterValueProvider");
             }
 
+            if (resultFactory == null)
+            {
+                throw new ArgumentNullException("resultFactory");
+            }
+
             m_behaviorInvoker = behaviorInvoker;
             m_parameterValueProvider = parameterValueProvider;
+            m_resultFactory = resultFactory;
         }
 
         /// <summary>
@@ -49,8 +61,9 @@ namespace RestFoundation.Runtime
         /// <param name="service">The service instance.</param>
         /// <param name="method">The service method.</param>
         /// <param name="handler">The REST handler associated with the HTTP request.</param>
-        /// <returns>The return value of the executed service method.</returns>
-        public virtual object Invoke(object service, MethodInfo method, IRestServiceHandler handler)
+        /// <param name="token">The cancellation token for the returned task.</param>
+        /// <returns>A task that invokes the service method.</returns>
+        public virtual Task Invoke(object service, MethodInfo method, IRestServiceHandler handler, CancellationToken token)
         {
             if (service == null || method == null)
             {
@@ -67,10 +80,30 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingServiceContext);
             }
 
-            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(service, method, handler);
-            AddServiceBehaviors(method, behaviors);
+            var invocationTask = new Task(ctx =>
+            {
+                TrySetHttpContext(ctx);
 
-            return InvokeAndProcessExceptions(service, method, behaviors, handler);
+                List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(service, method, handler);
+                AddServiceBehaviors(method, behaviors);
+
+                LogUtility.LogRequestData(handler.Context.GetHttpContext());
+
+                object returnedObject = InvokeAndProcessExceptions(service, method, behaviors, handler);
+                CreateResultTask(returnedObject, method, handler);
+
+                LogUtility.LogResponseData(handler.Context.GetHttpContext());
+            }, HttpContext.Current, token);
+
+            return invocationTask;
+        }
+
+        private static void TrySetHttpContext(object context)
+        {
+            if (context != null && HttpContext.Current == null)
+            {
+                HttpContext.Current = (HttpContext) context;
+            }
         }
 
         private static List<IServiceBehavior> GetServiceMethodBehaviors(object service, MethodInfo method, IRestServiceHandler handler)
@@ -197,6 +230,20 @@ namespace RestFoundation.Runtime
             }
 
             return methodArguments.ToArray();
+        }
+
+        private void CreateResultTask(object returnedObject, MethodInfo method, IRestServiceHandler handler)
+        {
+            var resultInvoker = new ResultExecutor();
+
+            if (method.ReturnType == typeof(void))
+            {
+                resultInvoker.ExecuteNoContent(handler.Context);
+            }
+
+            IResult result = m_resultFactory.Create(returnedObject, method.ReturnType, handler);
+
+            resultInvoker.Execute(result, handler.Context);
         }
     }
 }

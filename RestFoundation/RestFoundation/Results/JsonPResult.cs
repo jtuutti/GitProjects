@@ -85,15 +85,7 @@ namespace RestFoundation.Results
 
             context.Response.Output.Write(response);
 
-            LogResponse(response);
-        }
-
-        private void LogResponse(string response)
-        {
-            if (LogUtility.CanLog)
-            {
-                LogUtility.LogResponseBody(response, ContentType);
-            }
+            LogUtility.LogResponseBody(response, ContentType);
         }
     }
 }

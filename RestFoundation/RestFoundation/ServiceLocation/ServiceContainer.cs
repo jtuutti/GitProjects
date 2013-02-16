@@ -45,7 +45,6 @@ namespace RestFoundation.ServiceLocation
                 { typeof(IParameterValueProvider), typeof(ParameterValueProvider) },
                 { typeof(IResourceValidator), typeof(ResourceValidator) },
                 { typeof(IRestSerializerFactory), typeof(RestSerializerFactory) },
-                { typeof(IResultExecutor), typeof(ResultExecutor) },
                 { typeof(IResultFactory), typeof(ResultFactory) },
                 { typeof(IServiceCache), typeof(ServiceCache) },
                 { typeof(IStreamCompressor), typeof(StreamCompressor) }

@@ -27,7 +27,7 @@ namespace RestFoundation
 
         private readonly string m_relativeUrl;
         private readonly RouteCollection m_routes;
-        private TimeSpan? m_serviceTimeout, m_resultTimeout;
+        private TimeSpan? m_serviceTimeout;
 
         internal RouteBuilder(string relativeUrl, RouteCollection routes)
         {
@@ -59,23 +59,6 @@ namespace RestFoundation
             }
 
             m_serviceTimeout = timeout.TotalSeconds > 0 ? timeout : TimeSpan.Zero;
-            return this;
-        }
-
-        /// <summary>
-        /// Sets a service method result processing timeout for the mapped URL. The default value is 30 seconds.
-        /// </summary>
-        /// <param name="timeout">The timeout value.</param>
-        /// <returns>The route builder.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If a negative, non-infinite timeout is provided.</exception>
-        public RouteBuilder WithResultTimeout(TimeSpan timeout)
-        {
-            if (timeout.TotalSeconds < -1)
-            {
-                throw new ArgumentOutOfRangeException("timeout", RestResources.InvalidServiceMethodTimeout);
-            }
-
-            m_resultTimeout = timeout.TotalSeconds > 0 ? timeout : TimeSpan.Zero;
             return this;
         }
 
@@ -267,11 +250,6 @@ namespace RestFoundation
                 if (m_serviceTimeout.HasValue)
                 {
                     routeHandler.ServiceTimeout = m_serviceTimeout.Value;
-                }
-
-                if (m_resultTimeout.HasValue)
-                {
-                    routeHandler.ResultTimeout = m_resultTimeout.Value;
                 }
 
                 routeHandlers.Add(routeHandler);

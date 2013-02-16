@@ -2,9 +2,10 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
 
-namespace RestFoundation.Results
+namespace RestFoundation
 {
     /// <summary>
     /// Defines a result factory.

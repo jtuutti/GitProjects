@@ -2,7 +2,6 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
-using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
 
 namespace RestFoundation.UnitTesting
@@ -18,9 +17,7 @@ namespace RestFoundation.UnitTesting
         public MockRestHandler() :
             base(Rest.Configuration.ServiceLocator.GetService<IServiceContext>(),
                  Rest.Configuration.ServiceLocator.GetService<IServiceMethodLocator>(),
-                 Rest.Configuration.ServiceLocator.GetService<IServiceMethodInvoker>(),
-                 Rest.Configuration.ServiceLocator.GetService<IResultFactory>(),
-                 Rest.Configuration.ServiceLocator.GetService<IResultExecutor>())
+                 Rest.Configuration.ServiceLocator.GetService<IServiceMethodInvoker>())
         {
         }
 

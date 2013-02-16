@@ -3,18 +3,12 @@
 // </copyright>
 using System;
 using System.Net;
+using RestFoundation.Results;
 
-namespace RestFoundation.Results
+namespace RestFoundation.Runtime
 {
-    /// <summary>
-    /// Represents the default result executor.
-    /// </summary>
-    public class ResultExecutor : IResultExecutor
+    internal sealed class ResultExecutor
     {
-        /// <summary>
-        /// Executes a no-content result in the provided service context.
-        /// </summary>
-        /// <param name="context">The service context.</param>
         public void ExecuteNoContent(IServiceContext context)
         {
             if (context == null)
@@ -36,13 +30,7 @@ namespace RestFoundation.Results
             context.Response.SetStatus(HttpStatusCode.NoContent, statusDescription);
         }
 
-        /// <summary>
-        /// Executes a result in the provided service context.
-        /// </summary>
-        /// <param name="result">The result.</param>
-        /// <param name="methodReturnType">The service method return type.</param>
-        /// <param name="context">The service context.</param>
-        public virtual void Execute(IResult result, Type methodReturnType, IServiceContext context)
+        public void Execute(IResult result, IServiceContext context)
         {
             if (context == null)
             {

@@ -4,10 +4,10 @@
 using System;
 using System.Net;
 using RestFoundation.Formatters;
-using RestFoundation.Runtime;
+using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
 
-namespace RestFoundation.Results
+namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Represents the default result factory that converts POCO objects into
