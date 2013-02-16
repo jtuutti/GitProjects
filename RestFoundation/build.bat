@@ -28,7 +28,7 @@ echo.
 copy .\RestFoundation\bin\Release\Rest.Foundation.* .\build\ /y
 
 :end
-if %errorlevel% neq 1 echo ##teamcity[buildStatus status='FAILURE' text='{build.status.text} in compilation']
+if %errorlevel% neq 0 echo ##teamcity[buildStatus status='FAILURE' text='{build.status.text} in build']
 echo.
 if "%1"=="" pause
 
