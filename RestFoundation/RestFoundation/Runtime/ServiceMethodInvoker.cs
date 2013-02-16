@@ -239,10 +239,10 @@ namespace RestFoundation.Runtime
             if (method.ReturnType == typeof(void))
             {
                 resultExecutor.ExecuteNoContent(handler.Context);
+                return;
             }
 
             IResult result = m_resultWrapper.Wrap(returnedObject, method.ReturnType, handler);
-
             resultExecutor.Execute(result, handler.Context);
         }
     }

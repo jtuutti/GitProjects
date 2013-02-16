@@ -23,9 +23,12 @@ echo.
 echo Performing IL Merge
 cd .\RestFoundation\bin\Release
 ilmerge /out:Rest.Foundation.dll RestFoundation.dll Newtonsoft.Json.dll /ver:2.0.1.0 /t:library /internalize /targetplatform="v4,C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5" /keyfile:..\..\..\RestFoundation.snk /xmldocs
+cd ..\..\..
 echo.
-copy Rest.Foundation.* ..\..\..\build\ /y
-echo.
-pause
+copy .\RestFoundation\bin\Release\Rest.Foundation.* .\build\ /y
 
 :end
+echo.
+if "%1"=="" pause
+
+:exit
