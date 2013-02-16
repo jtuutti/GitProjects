@@ -20,15 +20,15 @@ namespace RestFoundation.Runtime.Handlers
 
         private readonly IServiceContext m_serviceContext;
         private readonly IContentNegotiator m_contentNegotiator;
-        private readonly IResultFactory m_resultFactory;
+        private readonly IResultWrapper m_resultWrapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RootRouteHandler"/> class.
         /// </summary>
         /// <param name="serviceContext">The service context.</param>
         /// <param name="contentNegotiator">The content negotiator.</param>
-        /// <param name="resultFactory">The service method result factory.</param>
-        public RootRouteHandler(IServiceContext serviceContext, IContentNegotiator contentNegotiator, IResultFactory resultFactory)
+        /// <param name="resultWrapper">The service method result wrapper.</param>
+        public RootRouteHandler(IServiceContext serviceContext, IContentNegotiator contentNegotiator, IResultWrapper resultWrapper)
         {
             if (serviceContext == null)
             {
@@ -40,14 +40,14 @@ namespace RestFoundation.Runtime.Handlers
                 throw new ArgumentNullException("contentNegotiator");
             }
 
-            if (resultFactory == null)
+            if (resultWrapper == null)
             {
-                throw new ArgumentNullException("resultFactory");
+                throw new ArgumentNullException("resultWrapper");
             }
 
             m_serviceContext = serviceContext;
             m_contentNegotiator = contentNegotiator;
-            m_resultFactory = resultFactory;
+            m_resultWrapper = resultWrapper;
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace RestFoundation.Runtime.Handlers
 
             try
             {
-                result = m_resultFactory.Create(GetOperations(), typeof(Operation[]), this);
+                result = m_resultWrapper.Wrap(GetOperations(), typeof(Operation[]), this);
             }
             catch (HttpResponseException)
             {

@@ -28,7 +28,7 @@ namespace RestFoundation.Tests.IoC
                 TestSingleton<IHttpMethodResolver>(serviceLocator);
                 TestSingleton<IParameterValueProvider>(serviceLocator);
                 TestSingleton<IResourceValidator>(serviceLocator);
-                TestSingleton<IResultFactory>(serviceLocator);
+                TestSingleton<IResultWrapper>(serviceLocator);
                 TestSingleton<IServiceCache>(serviceLocator);
                 TestSingleton<IStreamCompressor>(serviceLocator);
 
@@ -52,7 +52,7 @@ namespace RestFoundation.Tests.IoC
                 TestImplementation<IHttpMethodResolver, HttpMethodResolver>(serviceLocator);
                 TestImplementation<IParameterValueProvider, ParameterValueProvider>(serviceLocator);
                 TestImplementation<IResourceValidator, ResourceValidator>(serviceLocator);
-                TestImplementation<IResultFactory, ResultFactory>(serviceLocator);
+                TestImplementation<IResultWrapper, ResultWrapper>(serviceLocator);
                 TestImplementation<IServiceCache, ServiceCache>(serviceLocator);
                 TestImplementation<IStreamCompressor, StreamCompressor>(serviceLocator);
                 TestImplementation<IHttpRequest, HttpRequest>(serviceLocator);
@@ -137,7 +137,7 @@ namespace RestFoundation.Tests.IoC
                 TestSingleton<IHttpMethodResolver>(serviceLocator);
                 TestSingleton<IParameterValueProvider>(serviceLocator);
                 TestSingleton<IResourceValidator>(serviceLocator);
-                TestSingleton<IResultFactory>(serviceLocator);
+                TestSingleton<IResultWrapper>(serviceLocator);
                 TestSingleton<IServiceCache>(serviceLocator);
                 TestSingleton<IStreamCompressor>(serviceLocator);
 
@@ -161,7 +161,7 @@ namespace RestFoundation.Tests.IoC
                 TestImplementation<IHttpMethodResolver, HttpMethodResolver>(serviceLocator);
                 TestImplementation<IParameterValueProvider, ParameterValueProvider>(serviceLocator);
                 TestImplementation<IResourceValidator, ResourceValidator>(serviceLocator);
-                TestImplementation<IResultFactory, ResultFactory>(serviceLocator);
+                TestImplementation<IResultWrapper, ResultWrapper>(serviceLocator);
                 TestImplementation<IServiceCache, ServiceCache>(serviceLocator);
                 TestImplementation<IStreamCompressor, StreamCompressor>(serviceLocator);
                 TestImplementation<IHttpRequest, HttpRequest>(serviceLocator);

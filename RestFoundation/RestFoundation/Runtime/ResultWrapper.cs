@@ -10,18 +10,18 @@ using RestFoundation.Runtime.Handlers;
 namespace RestFoundation.Runtime
 {
     /// <summary>
-    /// Represents the default result factory that converts POCO objects into
+    /// Represents the default result wrapper that converts POCO objects into
     /// results using the registered media type formatters.
     /// </summary>
-    public class ResultFactory : IResultFactory
+    public class ResultWrapper : IResultWrapper
     {
         private readonly IContentNegotiator m_contentNegotiator;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResultFactory"/> class with the provided content negotiator.
+        /// Initializes a new instance of the <see cref="ResultWrapper"/> class with the provided content negotiator.
         /// </summary>
         /// <param name="contentNegotiator">The content negotiator.</param>
-        public ResultFactory(IContentNegotiator contentNegotiator)
+        public ResultWrapper(IContentNegotiator contentNegotiator)
         {
             if (contentNegotiator == null)
             {
@@ -32,13 +32,13 @@ namespace RestFoundation.Runtime
         }
 
         /// <summary>
-        /// Creates an <see cref="IResult"/> instance from a POCO object returned by the service method.
+        /// Wraps a POCO object returned by the service method with an <see cref="IResult"/>.
         /// </summary>
         /// <param name="returnedObj">The returned object.</param>
         /// <param name="methodReturnType">The method return type.</param>
-        /// <param name="handler">The REST handler.</param>
-        /// <returns>The created result instance.</returns>
-        public virtual IResult Create(object returnedObj, Type methodReturnType, IServiceContextHandler handler)
+        /// <param name="handler">The service context handler.</param>
+        /// <returns>The wrapper result.</returns>
+        public virtual IResult Wrap(object returnedObj, Type methodReturnType, IServiceContextHandler handler)
         {
             if (handler == null)
             {

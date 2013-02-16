@@ -8,17 +8,17 @@ using RestFoundation.Runtime.Handlers;
 namespace RestFoundation
 {
     /// <summary>
-    /// Defines a result factory.
+    /// Defines a result wrapper.
     /// </summary>
-    public interface IResultFactory
+    public interface IResultWrapper
     {
         /// <summary>
-        /// Creates an <see cref="IResult"/> instance from a POCO object returned by the service method.
+        /// Wraps a POCO object returned by the service method with an <see cref="IResult"/>.
         /// </summary>
         /// <param name="returnedObj">The returned object.</param>
         /// <param name="methodReturnType">The method return type.</param>
         /// <param name="handler">The service context handler.</param>
-        /// <returns>The created result instance.</returns>
-        IResult Create(object returnedObj, Type methodReturnType, IServiceContextHandler handler);
+        /// <returns>The wrapper result.</returns>
+        IResult Wrap(object returnedObj, Type methodReturnType, IServiceContextHandler handler);
     }
 }

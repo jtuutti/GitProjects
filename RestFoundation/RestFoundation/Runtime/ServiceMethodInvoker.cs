@@ -25,15 +25,15 @@ namespace RestFoundation.Runtime
 
         private readonly IServiceBehaviorInvoker m_behaviorInvoker;
         private readonly IParameterValueProvider m_parameterValueProvider;
-        private readonly IResultFactory m_resultFactory;
+        private readonly IResultWrapper m_resultWrapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceMethodInvoker"/> class.
         /// </summary>
         /// <param name="behaviorInvoker">The service behavior invoker.</param>
         /// <param name="parameterValueProvider">The parameter value provider.</param>
-        /// <param name="resultFactory">The service method result factory.</param>
-        public ServiceMethodInvoker(IServiceBehaviorInvoker behaviorInvoker, IParameterValueProvider parameterValueProvider, IResultFactory resultFactory)
+        /// <param name="resultWrapper">The service method result wrapper.</param>
+        public ServiceMethodInvoker(IServiceBehaviorInvoker behaviorInvoker, IParameterValueProvider parameterValueProvider, IResultWrapper resultWrapper)
         {
             if (behaviorInvoker == null)
             {
@@ -45,14 +45,14 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("parameterValueProvider");
             }
 
-            if (resultFactory == null)
+            if (resultWrapper == null)
             {
-                throw new ArgumentNullException("resultFactory");
+                throw new ArgumentNullException("resultWrapper");
             }
 
             m_behaviorInvoker = behaviorInvoker;
             m_parameterValueProvider = parameterValueProvider;
-            m_resultFactory = resultFactory;
+            m_resultWrapper = resultWrapper;
         }
 
         /// <summary>
@@ -234,16 +234,16 @@ namespace RestFoundation.Runtime
 
         private void CreateResultTask(object returnedObject, MethodInfo method, IRestServiceHandler handler)
         {
-            var resultInvoker = new ResultExecutor();
+            var resultExecutor = new ResultExecutor();
 
             if (method.ReturnType == typeof(void))
             {
-                resultInvoker.ExecuteNoContent(handler.Context);
+                resultExecutor.ExecuteNoContent(handler.Context);
             }
 
-            IResult result = m_resultFactory.Create(returnedObject, method.ReturnType, handler);
+            IResult result = m_resultWrapper.Wrap(returnedObject, method.ReturnType, handler);
 
-            resultInvoker.Execute(result, handler.Context);
+            resultExecutor.Execute(result, handler.Context);
         }
     }
 }

@@ -287,9 +287,9 @@
     <Compile Include="Runtime\OutputCachedPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Runtime\ResultFactory.cs" />
+    <Compile Include="Runtime\ResultWrapper.cs" />
     <Compile Include="Results\IResult.cs" />
-    <Compile Include="IResultFactory.cs" />
+    <Compile Include="IResultWrapper.cs" />
     <Compile Include="Results\DynamicResult.cs" />
     <Compile Include="Formatters\FormsFormatter.cs" />
     <Compile Include="Result.cs" />
