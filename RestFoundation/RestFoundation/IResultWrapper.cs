@@ -15,10 +15,10 @@ namespace RestFoundation
         /// <summary>
         /// Wraps a POCO object returned by the service method with an <see cref="IResult"/>.
         /// </summary>
+        /// <param name="handler">The service context handler.</param>
         /// <param name="returnedObj">The returned object.</param>
         /// <param name="methodReturnType">The method return type.</param>
-        /// <param name="handler">The service context handler.</param>
         /// <returns>The wrapper result.</returns>
-        IResult Wrap(object returnedObj, Type methodReturnType, IServiceContextHandler handler);
+        IResult Wrap(IServiceContextHandler handler, object returnedObj, Type methodReturnType);
     }
 }

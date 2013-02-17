@@ -32,14 +32,14 @@ namespace RestFoundation.Runtime
         /// <summary>
         /// Creates a parameter value based on the routing and HTTP data.
         /// </summary>
-        /// <param name="parameter">The service method parameters.</param>
         /// <param name="handler">The REST handler associated with the HTTP request.</param>
+        /// <param name="parameter">The service method parameters.</param>
         /// <param name="isResource">
         /// true if the parameter represents a REST resource; otherwise, false. Only 1 resource per
         /// service method is allowed.
         /// </param>
         /// <returns>The created parameter value.</returns>
-        public virtual object CreateValue(ParameterInfo parameter, IRestServiceHandler handler, out bool isResource)
+        public virtual object CreateValue(IRestServiceHandler handler, ParameterInfo parameter, out bool isResource)
         {
             if (handler == null)
             {
@@ -56,8 +56,8 @@ namespace RestFoundation.Runtime
 
             if (typeBinder != null)
             {
-                isResource = IsResourceParameter(parameter, context);
-                return GetTypeBindedValue(parameter, typeBinder, context);
+                isResource = IsResourceParameter(context, parameter);
+                return GetTypeBindedValue(context, parameter, typeBinder);
             }
 
             object routeValue = TryGetRouteValue(parameter, context.Request.RouteValues);
@@ -68,10 +68,10 @@ namespace RestFoundation.Runtime
                 return routeValue;
             }
 
-            if (IsResourceParameter(parameter, context))
+            if (IsResourceParameter(context, parameter))
             {
                 isResource = true;
-                return GetResourceValue(parameter, handler);
+                return GetResourceValue(handler, parameter);
             }
 
             isResource = false;
@@ -81,11 +81,11 @@ namespace RestFoundation.Runtime
         /// <summary>
         /// Gets a value from the associated <see cref="ITypeBinder"/> object.
         /// </summary>
+        /// <param name="context">The service context.</param>
         /// <param name="parameter">The service method parameter.</param>
         /// <param name="typeBinder">The associated type binder.</param>
-        /// <param name="context">The service context.</param>
         /// <returns>The parameter value.</returns>
-        protected virtual object GetTypeBindedValue(ParameterInfo parameter, ITypeBinder typeBinder, IServiceContext context)
+        protected virtual object GetTypeBindedValue(IServiceContext context, ParameterInfo parameter, ITypeBinder typeBinder)
         {
             if (parameter == null)
             {
@@ -150,10 +150,10 @@ namespace RestFoundation.Runtime
         /// <summary>
         /// Gets the resource value for the service method parameter.
         /// </summary>
-        /// <param name="parameter">The service method parameter.</param>
         /// <param name="handler">The REST handler.</param>
+        /// <param name="parameter">The service method parameter.</param>
         /// <returns>The resource value.</returns>
-        protected virtual object GetResourceValue(ParameterInfo parameter, IRestServiceHandler handler)
+        protected virtual object GetResourceValue(IRestServiceHandler handler, ParameterInfo parameter)
         {
             if (parameter == null)
             {
@@ -229,7 +229,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        private static bool IsResourceParameter(ParameterInfo parameter, IServiceContext context)
+        private static bool IsResourceParameter(IServiceContext context, ParameterInfo parameter)
         {
             if (context.Request.Method != HttpMethod.Post && context.Request.Method != HttpMethod.Put && context.Request.Method != HttpMethod.Patch)
             {

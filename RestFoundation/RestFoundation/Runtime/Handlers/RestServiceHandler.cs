@@ -126,7 +126,7 @@ namespace RestFoundation.Runtime.Handlers
             TrySetServiceMethodTimeout(serviceMethodData.Method);
 
             var cancellation = new CancellationTokenSource();
-            Task methodTask = m_methodInvoker.Invoke(serviceMethodData.Service, serviceMethodData.Method, this, cancellation.Token);
+            Task methodTask = m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method, cancellation.Token);
 
             if (methodTask.Status == TaskStatus.Created)
             {

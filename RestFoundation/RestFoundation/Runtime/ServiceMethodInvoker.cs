@@ -58,12 +58,12 @@ namespace RestFoundation.Runtime
         /// <summary>
         /// Invokes the service method.
         /// </summary>
+        /// <param name="handler">The REST handler associated with the HTTP request.</param>
         /// <param name="service">The service instance.</param>
         /// <param name="method">The service method.</param>
-        /// <param name="handler">The REST handler associated with the HTTP request.</param>
         /// <param name="token">The cancellation token for the returned task.</param>
         /// <returns>A task that invokes the service method.</returns>
-        public virtual Task Invoke(object service, MethodInfo method, IRestServiceHandler handler, CancellationToken token)
+        public virtual Task Invoke(IRestServiceHandler handler, object service, MethodInfo method, CancellationToken token)
         {
             if (service == null || method == null)
             {
@@ -83,7 +83,7 @@ namespace RestFoundation.Runtime
             var invocationTask = new Task(context =>
             {
                 TrySetHttpContext(context);
-                ServiceInvocationDelegate(service, method, handler, token);
+                ServiceInvocationDelegate(handler, service, method, token);
             }, HttpContext.Current, token);
 
             return invocationTask;
@@ -97,7 +97,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        private static List<IServiceBehavior> GetServiceMethodBehaviors(object service, MethodInfo method, IRestServiceHandler handler)
+        private static List<IServiceBehavior> GetServiceMethodBehaviors(IRestServiceHandler handler, object service, MethodInfo method)
         {
             List<IServiceBehavior> behaviors = ServiceBehaviorRegistry.GetBehaviors(handler)
                                                                       .Where(behavior => behavior.AppliesTo(handler.Context, new MethodAppliesContext(service, method)))
@@ -137,11 +137,11 @@ namespace RestFoundation.Runtime
             }
         }
 
-        private object InvokeAndProcessExceptions(object service, MethodInfo method, List<IServiceBehavior> behaviors, IRestServiceHandler handler)
+        private object InvokeAndProcessExceptions(IRestServiceHandler handler, object service, MethodInfo method, List<IServiceBehavior> behaviors)
         {
             try
             {
-                return InvokeWithBehaviors(service, method, behaviors, handler);
+                return InvokeWithBehaviors(handler, service, method, behaviors);
             }
             catch (Exception ex)
             {
@@ -179,12 +179,12 @@ namespace RestFoundation.Runtime
             }
         }
 
-        private object InvokeWithBehaviors(object service, MethodInfo method, List<IServiceBehavior> behaviors, IRestServiceHandler handler)
+        private object InvokeWithBehaviors(IRestServiceHandler handler, object service, MethodInfo method, List<IServiceBehavior> behaviors)
         {
             m_behaviorInvoker.InvokeOnAuthorizingBehaviors(behaviors.OfType<ISecureServiceBehavior>().ToList(), service, method);
 
             object resource;
-            object[] methodArguments = GenerateMethodArguments(method, handler, out resource);
+            object[] methodArguments = GenerateMethodArguments(handler, method, out resource);
 
             if (!ReferenceEquals(null, resource))
             {
@@ -202,7 +202,7 @@ namespace RestFoundation.Runtime
             return result;
         }
 
-        private object[] GenerateMethodArguments(MethodInfo method, IRestServiceHandler handler, out object resource)
+        private object[] GenerateMethodArguments(IRestServiceHandler handler, MethodInfo method, out object resource)
         {
             var methodArguments = new List<object>();
             resource = null;
@@ -210,7 +210,7 @@ namespace RestFoundation.Runtime
             foreach (ParameterInfo parameter in method.GetParameters())
             {
                 bool isResource;
-                object argumentValue = m_parameterValueProvider.CreateValue(parameter, handler, out isResource);
+                object argumentValue = m_parameterValueProvider.CreateValue(handler, parameter, out isResource);
 
                 if (isResource)
                 {
@@ -223,24 +223,24 @@ namespace RestFoundation.Runtime
             return methodArguments.ToArray();
         }
 
-        private void ServiceInvocationDelegate(object service, MethodInfo method, IRestServiceHandler handler, CancellationToken token)
+        private void ServiceInvocationDelegate(IRestServiceHandler handler, object service, MethodInfo method, CancellationToken token)
         {
-            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(service, method, handler);
+            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, service, method);
             AddServiceBehaviors(method, behaviors);
             token.ThrowIfCancellationRequested();
 
             LogUtility.LogRequestData(handler.Context.GetHttpContext());
 
-            object returnedObject = InvokeAndProcessExceptions(service, method, behaviors, handler);
+            object returnedObject = InvokeAndProcessExceptions(handler, service, method, behaviors);
             token.ThrowIfCancellationRequested();
 
-            CreateResultTask(returnedObject, method, handler);
+            CreateResultTask(handler, returnedObject, method);
             token.ThrowIfCancellationRequested();
 
             LogUtility.LogResponseData(handler.Context.GetHttpContext());
         }
 
-        private void CreateResultTask(object returnedObject, MethodInfo method, IRestServiceHandler handler)
+        private void CreateResultTask(IRestServiceHandler handler, object returnedObject, MethodInfo method)
         {
             var resultExecutor = new ResultExecutor();
 
@@ -255,7 +255,7 @@ namespace RestFoundation.Runtime
                 throw new InvalidOperationException(RestResources.InvalidIAsyncResultReturned);
             }
 
-            IResult result = m_resultWrapper.Wrap(returnedObject, method.ReturnType, handler);
+            IResult result = m_resultWrapper.Wrap(handler, returnedObject, method.ReturnType);
             resultExecutor.Execute(result, handler.Context);
         }
     }

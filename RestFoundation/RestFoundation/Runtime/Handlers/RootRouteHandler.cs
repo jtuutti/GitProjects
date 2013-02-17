@@ -195,7 +195,7 @@ namespace RestFoundation.Runtime.Handlers
 
             try
             {
-                result = m_resultWrapper.Wrap(GetOperations(), typeof(Operation[]), this);
+                result = m_resultWrapper.Wrap(this, GetOperations(), typeof(Operation[]));
             }
             catch (HttpResponseException)
             {

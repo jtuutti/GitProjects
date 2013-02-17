@@ -34,11 +34,11 @@ namespace RestFoundation.Runtime
         /// <summary>
         /// Wraps a POCO object returned by the service method with an <see cref="IResult"/>.
         /// </summary>
+        /// <param name="handler">The service context handler.</param>
         /// <param name="returnedObj">The returned object.</param>
         /// <param name="methodReturnType">The method return type.</param>
-        /// <param name="handler">The service context handler.</param>
         /// <returns>The wrapper result.</returns>
-        public virtual IResult Wrap(object returnedObj, Type methodReturnType, IServiceContextHandler handler)
+        public virtual IResult Wrap(IServiceContextHandler handler, object returnedObj, Type methodReturnType)
         {
             if (handler == null)
             {
@@ -47,7 +47,7 @@ namespace RestFoundation.Runtime
 
             var result = returnedObj as IResult;
 
-            return result ?? CreateFormatterResult(returnedObj, methodReturnType, handler);
+            return result ?? CreateFormatterResult(handler, returnedObj, methodReturnType);
         }
 
         private static IMediaTypeFormatter TryNegotiateMediaType(IServiceContextHandler handler)
@@ -71,7 +71,7 @@ namespace RestFoundation.Runtime
             return null;
         }
 
-        private IResult CreateFormatterResult(object returnedObj, Type methodReturnType, IServiceContextHandler handler)
+        private IResult CreateFormatterResult(IServiceContextHandler handler, object returnedObj, Type methodReturnType)
         {
             string acceptType = m_contentNegotiator.GetPreferredMediaType(handler.Context.Request);
 

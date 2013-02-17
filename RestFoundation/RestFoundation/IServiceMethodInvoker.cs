@@ -16,11 +16,11 @@ namespace RestFoundation
         /// <summary>
         /// Invokes the service method.
         /// </summary>
+        /// <param name="handler">The REST handler associated with the HTTP request.</param>
         /// <param name="service">The service instance.</param>
         /// <param name="method">The service method.</param>
-        /// <param name="handler">The REST handler associated with the HTTP request.</param>
         /// <param name="token">The cancellation token for the returned task.</param>
         /// <returns>A task that invokes the service method.</returns>
-        Task Invoke(object service, MethodInfo method, IRestServiceHandler handler, CancellationToken token);
+        Task Invoke(IRestServiceHandler handler, object service, MethodInfo method, CancellationToken token);
     }
 }

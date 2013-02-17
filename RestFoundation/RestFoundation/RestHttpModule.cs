@@ -357,7 +357,7 @@ namespace RestFoundation
                 if (faults.General.Length > 0 || faults.Resource.Length > 0)
                 {
                     var resultWrapper = Rest.Configuration.ServiceLocator.GetService<IResultWrapper>();
-                    IResult result = resultWrapper.Wrap(faults, faults.GetType(), handler);
+                    IResult result = resultWrapper.Wrap(handler, faults, faults.GetType());
 
                     if (result != null)
                     {
