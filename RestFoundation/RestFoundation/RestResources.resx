@@ -593,4 +593,8 @@
     <value>Partial Content</value>
     <comment>Partial Content</comment>
   </data>
+  <data name="InvalidMethodInvocationTaskState" xml:space="preserve">
+    <value>The task returned by the IServiceMethodInvoker must be in the 'Created' state. It cannot be started.</value>
+    <comment>The task returned by the IServiceMethodInvoker must be in the 'Created' state. It cannot be started.</comment>
+  </data>
 </root>

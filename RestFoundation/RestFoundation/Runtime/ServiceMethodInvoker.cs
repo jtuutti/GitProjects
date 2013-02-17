@@ -80,19 +80,10 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingServiceContext);
             }
 
-            var invocationTask = new Task(ctx =>
+            var invocationTask = new Task(context =>
             {
-                TrySetHttpContext(ctx);
-
-                List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(service, method, handler);
-                AddServiceBehaviors(method, behaviors);
-
-                LogUtility.LogRequestData(handler.Context.GetHttpContext());
-
-                object returnedObject = InvokeAndProcessExceptions(service, method, behaviors, handler);
-                CreateResultTask(returnedObject, method, handler);
-
-                LogUtility.LogResponseData(handler.Context.GetHttpContext());
+                TrySetHttpContext(context);
+                ServiceInvocationDelegate(service, method, handler, token);
             }, HttpContext.Current, token);
 
             return invocationTask;
@@ -230,6 +221,23 @@ namespace RestFoundation.Runtime
             }
 
             return methodArguments.ToArray();
+        }
+
+        private void ServiceInvocationDelegate(object service, MethodInfo method, IRestServiceHandler handler, CancellationToken token)
+        {
+            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(service, method, handler);
+            AddServiceBehaviors(method, behaviors);
+            token.ThrowIfCancellationRequested();
+
+            LogUtility.LogRequestData(handler.Context.GetHttpContext());
+
+            object returnedObject = InvokeAndProcessExceptions(service, method, behaviors, handler);
+            token.ThrowIfCancellationRequested();
+
+            CreateResultTask(returnedObject, method, handler);
+            token.ThrowIfCancellationRequested();
+
+            LogUtility.LogResponseData(handler.Context.GetHttpContext());
         }
 
         private void CreateResultTask(object returnedObject, MethodInfo method, IRestServiceHandler handler)

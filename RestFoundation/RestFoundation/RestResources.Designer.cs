@@ -322,6 +322,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The task returned by the IServiceMethodInvoker must be in the &apos;Created&apos; state. It cannot be started..
+        /// </summary>
+        internal static string InvalidMethodInvocationTaskState {
+            get {
+                return ResourceManager.GetString("InvalidMethodInvocationTaskState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid method parameter name provided..
         /// </summary>
         internal static string InvalidMethodParameterName {
