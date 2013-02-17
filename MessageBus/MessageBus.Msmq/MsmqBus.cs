@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Messaging;
-using System.Threading;
 using System.Threading.Tasks;
 using MessageBus.Msmq.Helpers;
 using Timer = System.Timers.Timer;
@@ -93,7 +92,7 @@ namespace MessageBus.Msmq
                 Type messageType = messageTypes[i];
                 if (messageType == null) continue;
 
-                listener.Start(messageType);
+                listener.Start(messageType).ConfigureAwait(false);
 
                 logger.Info("Listening for messages of type '{0}'...", messageType.FullName);
             }
@@ -167,77 +166,15 @@ namespace MessageBus.Msmq
             return SendOneWay(messages);
         }
 
-        public IAsyncResult SendAsync(IMessage message, AsyncCallback callback)
+        public async Task<TResponse> SendAndReceive<TResponse>(IMessage message)
         {
             Validate(message);
 
-            var task = Task<object>.Factory.StartNew(m =>
-                                                     {
-                                                         var messageToSend = (IMessage) m;
-                                                         messageToSend.Headers[SystemHeaders.RequestResponse] = Boolean.TrueString;
-
-                                                         string messageId = SendOneWay(messageToSend);
-                                                         messageToSend.Headers[SystemHeaders.MessageID] = messageId;
-
-                                                         TimeSpan responseTimeout = Settings.ResponseTimeout;
-                                                         var saga = messageToSend as ISaga;
-
-                                                         if (saga != null && saga.Timeout > TimeSpan.Zero)
-                                                         {
-                                                             responseTimeout = saga.Timeout;
-                                                         }
-
-                                                         try
-                                                         {
-                                                             return GetResponse(messageId, messageToSend, responseTimeout);
-                                                         }
-                                                         catch (Exception ex)
-                                                         {
-                                                            ((BusEvents) Events).OnFaultOccurred(messageId, messageToSend, ex);
-                                                            return null;
-                                                         }
-                                                     }, message);
-
-            if (callback != null)
-            {
-                task.ContinueWith(t =>
-                                  {
-                                      try
-                                      {
-                                          if (t.IsFaulted)
-                                          {
-                                              t.Wait();
-                                          }
-                                          else
-                                          {
-                                              callback(t);
-                                          }
-                                      }
-                                      catch (Exception ex)
-                                      {
-                                          string messageId;
-
-                                          if (!message.Headers.TryGetValue(SystemHeaders.MessageID, out messageId))
-                                          {
-                                              messageId = String.Empty;
-                                          }
-
-                                          try
-                                          {
-                                              ((BusEvents) Events).OnFaultOccurred(messageId, message, ex is AggregateException ? ex.InnerException : ex);
-                                          }
-                                          catch (Exception)
-                                          {
-                                              Thread.Sleep(Settings.MinRetryTimeout);
-                                          }
-                                      }
-                                  });
-            }
-
-            return task;
+            var task = Task<TResponse>.Factory.StartNew(m => CreateSendTwoWayTask<TResponse>((IMessage) m), message);
+            return await task;
         }
 
-        public IAsyncResult SendAsync<T>(Action<T> messageInitializer, AsyncCallback callback)
+        public async Task<TResponse> SendAndReceive<T, TResponse>(Action<T> messageInitializer)
             where T : IMessage
         {
             if (messageInitializer == null) throw new ArgumentNullException("messageInitializer");
@@ -245,16 +182,7 @@ namespace MessageBus.Msmq
             var message = (T) BusConfiguration.Configure.MessageCreator(typeof(T));
             messageInitializer(message);
 
-            return SendAsync(message, callback);
-        }
-
-        public TResponse SendComplete<TResponse>(IAsyncResult result)
-        {
-            var task = result as Task<object>;
-            if (task == null) throw new InvalidOperationException("Invalid async result returned");
-
-            object response = ConversionHelper.ChangeType(task.Result, typeof(TResponse));
-            return !ReferenceEquals(null, response) ? (TResponse) response : default(TResponse);
+            return await SendAndReceive<TResponse>(message);
         }
 
         public void Reply<TResponse>(IMessage message, TResponse value)
@@ -533,7 +461,33 @@ namespace MessageBus.Msmq
             return messageId;
         }
 
-        private object GetResponse(string messageId, IMessage message, TimeSpan timeout)
+        private TResponse CreateSendTwoWayTask<TResponse>(IMessage message)
+        {
+            message.Headers[SystemHeaders.RequestResponse] = Boolean.TrueString;
+
+            string messageId = SendOneWay(message);
+            message.Headers[SystemHeaders.MessageID] = messageId;
+
+            TimeSpan responseTimeout = Settings.ResponseTimeout;
+            var saga = message as ISaga;
+
+            if (saga != null && saga.Timeout > TimeSpan.Zero)
+            {
+                responseTimeout = saga.Timeout;
+            }
+
+            try
+            {
+                return GetResponse<TResponse>(messageId, message, responseTimeout);
+            }
+            catch (Exception ex)
+            {
+                ((BusEvents) Events).OnFaultOccurred(messageId, message, ex);
+                return default(TResponse);
+            }
+        }
+
+        private TResponse GetResponse<TResponse>(string messageId, IMessage message, TimeSpan timeout)
         {
             lock (syncRoot)
             {
@@ -568,7 +522,7 @@ namespace MessageBus.Msmq
                                 if (!String.Equals(messageId, response.MessageID)) continue;
 
                                 responseEnumerator.RemoveCurrent();
-                                return response.Body;
+                                return (TResponse) response.Body;
                             }
                         }
 

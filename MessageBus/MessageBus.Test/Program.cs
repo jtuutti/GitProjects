@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using MessageBus.Msmq;
 using StructureMap;
 
@@ -25,7 +26,12 @@ namespace MessageBus.Test
 
             bus.SubscribeAll();
 
-            SendMessages(bus);
+            StartProcess(bus).Wait();
+        }
+
+        private static async Task StartProcess(IBus bus)
+        {
+            await SendMessages(bus);
 
             int i = 0;
             var stopwatch = Stopwatch.StartNew();
@@ -45,7 +51,7 @@ namespace MessageBus.Test
                 //Console.ReadLine();
                 Console.WriteLine();
 
-                SendMessages(bus);
+                await SendMessages(bus);
 
                 Console.WriteLine();
                 Console.WriteLine();
@@ -63,7 +69,7 @@ namespace MessageBus.Test
             }
         }
 
-        private static void SendMessages(IBus bus)
+        private static async Task SendMessages(IBus bus)
         {
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -71,30 +77,23 @@ namespace MessageBus.Test
             Console.ResetColor();
             Console.WriteLine();
 
-            var result = bus.SendAsync<ITestMessage>(message =>
-                                                    {
-                                                        message.ID = 20;
-                                                        message.Name = "ABC";
-                                                    },
-                                                    callback => bus.SendComplete<string>(callback));
+            await bus.SendAndReceive<ITestMessage, string>(message =>
+            {
+                message.ID = 20;
+                message.Name = "ABC";
+            });
 
-            var result2 = bus.SendAsync<TestMessage2>(message =>
-                                                        {
-                                                            message.ID = 25;
-                                                            message.Name = "EFG";
-                                                        },
-                                                        callback => bus.SendComplete<string>(callback));
+            await bus.SendAndReceive<TestMessage2, string>(message =>
+            {
+                message.ID = 25;
+                message.Name = "EFG";
+            });
 
-            var result3 = bus.SendAsync(new TestMessage
-                                        {
-                                            ID = 26,
-                                            Name = "ABC"
-                                        },
-                                        callback => bus.SendComplete<string>(callback));
-
-            result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(100));
-            result2.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(100));
-            result3.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(100));
+            await bus.SendAndReceive<TestMessage, string>(message =>
+            {
+                message.ID = 26;
+                message.Name = "ABC";
+            });
         }
 
         private static void DisplayException(Exception ex)

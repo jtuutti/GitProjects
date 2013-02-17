@@ -20,7 +20,7 @@ namespace MessageBus.Msmq
             this.bus = bus;
         }
 
-        public void Start(Type messageType)
+        public async Task Start(Type messageType)
         {
             if (messageType == null) throw new ArgumentNullException("messageType");
 
@@ -42,7 +42,7 @@ namespace MessageBus.Msmq
                                                                   queueName.ToLowerInvariant()));
             }
 
-            Listen(messageType);
+            await Listen(messageType);
         }
 
         public void Stop(Type messageType)
@@ -71,57 +71,39 @@ namespace MessageBus.Msmq
             }
         }
 
-        private void Listen(Type messageType)
+        private async Task Listen(Type messageType)
         {
             var cancellationSource = new CancellationTokenSource();
             cancellations.TryAdd(messageType, cancellationSource);
 
-            Task<Message> task = Task.Factory.StartNew(t => !cancellationSource.Token.IsCancellationRequested ? GetFromQueue(messageType) : null, messageType, cancellationSource.Token);
+            var processor = new MessageProcessor(bus);
 
-            task.ContinueWith(t =>
+            Task<Message> task = Task.Run(() => !cancellationSource.Token.IsCancellationRequested ? GetFromQueue(messageType) : null, cancellationSource.Token);
+
+            try
             {
-                CancellationTokenSource removedCancellationSource;
-                var messageTypeToReceive = (Type) t.AsyncState;
+                await task;
 
-                if (!cancellations.TryRemove(messageTypeToReceive, out removedCancellationSource))
-                {
-                    removedCancellationSource = null;
-                }
-
-                if ((removedCancellationSource != null && removedCancellationSource.Token.IsCancellationRequested) || t.IsCanceled)
-                {
-                    return;
-                }
-
-                var processor = new MessageProcessor(bus);
-
+                processor.ProcessMessage(messageType, task);
+            }
+            catch (Exception ex)
+            {
                 try
                 {
-                    if (t.IsFaulted)
-                    {
-                        t.Wait();
-                    }
-                    else
-                    {
-                        processor.ProcessMessage(messageTypeToReceive, t);
-                    }
+                    processor.ProcessFault(messageType, task, ex);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    try
-                    {
-                        processor.ProcessFault(messageTypeToReceive, t, ex);
-                    }
-                    catch
-                    {
-                        Thread.Sleep(bus.Settings.MinRetryTimeout);
-                    }
+                    Thread.Sleep(bus.Settings.MinRetryTimeout);
                 }
-                finally
-                {
-                    Listen(messageTypeToReceive);
-                }
-            });
+            }
+            finally
+            {               
+                CancellationTokenSource removedCancellationSource;
+                cancellations.TryRemove(messageType, out removedCancellationSource);
+            }
+
+            await Listen(messageType);
         }
 
         private Message GetFromQueue(Type messageType)

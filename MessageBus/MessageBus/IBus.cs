@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace MessageBus
 {
@@ -86,6 +87,11 @@ namespace MessageBus
         /// <returns>The batch id on the bus.</returns>
         string SendBatch<T>(params T[] messages) where T : IMessage;
 
+        Task<TResponse> SendAndReceive<TResponse>(IMessage message);
+
+        Task<TResponse> SendAndReceive<T, TResponse>(Action<T> messageInitializer) where T : IMessage;
+
+        /*
         /// <summary>
         /// Begins an asynchronous 2-way operation that sends a message onto the bus and returns a response.
         /// </summary>
@@ -114,6 +120,7 @@ namespace MessageBus
         /// <param name="result">An <see cref="IAsyncResult"/> that stores state information for this asynchronous operation.</param>
         /// <returns>The message id on the bus.</returns>
         TResponse SendComplete<TResponse>(IAsyncResult result);
+        */
 
         /// <summary>
         /// Replies to a message that was received from the bus. This method should be called from message handlers.

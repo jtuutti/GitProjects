@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using MessageBus.Mvc.Messages;
 
@@ -11,6 +12,7 @@ namespace MessageBus.Mvc.Controllers
         public HomeController(IBus bus)
         {
             if (bus == null) throw new ArgumentNullException("bus");
+
             this.bus = bus;
         }
 
@@ -21,45 +23,36 @@ namespace MessageBus.Mvc.Controllers
         }
 
         [HttpPost]
-        [AsyncTimeout(30000)]
-        public void IndexAsync(string textField)
+        public async Task<ViewResult> Index(string textField)
         {
-            int number;
-            if (!Int32.TryParse(textField, out number)) return;
+            int id;
 
-            AsyncManager.OutstandingOperations.Increment();
+            if (!Int32.TryParse(textField, out id))
+            {
+                ViewBag.ResponseText = new MvcHtmlString(String.Format("Bus returned: <b>{0}</b>", MessageTypeEnum.Unknown));
+                return View();
+            }
 
-            var command = new Command { Id = number };
+            try
+            {
+                bus.Events.FaultOccurred += (sender, args) =>
+                {
+                    ViewBag.ResponseText = new MvcHtmlString(String.Format("Bus faulted: <pre>{0}</pre>", args.FaultException));
+                };
 
-            bus.SendAsync(command, r =>
-                                   {
-                                       try
-                                       {
-                                           AsyncManager.Parameters["response"] = bus.SendComplete<MessageTypeEnum>(r);
-                                       }
-                                       catch (Exception ex)
-                                       {
-                                           AsyncManager.Parameters["ex"] = ex;
-                                       }
-									   finally
-									   {
-                                           AsyncManager.OutstandingOperations.Decrement();
-									   }
-                                   });
-        }
+                var response = await bus.SendAndReceive<MessageTypeEnum>(new Command { Id = id });
 
-        public ActionResult IndexCompleted(MessageTypeEnum response, Exception ex)
-        {
-            if (ex != null)
+                if (ViewBag.ResponseText == null)
+                {
+                    ViewBag.ResponseText = new MvcHtmlString(String.Format("Bus returned: <b>{0}</b>", response));
+                }
+            }
+            catch(Exception ex)
             {
                 ViewBag.ResponseText = new MvcHtmlString(String.Format("Bus faulted: <pre>{0}</pre>", ex));
             }
-            else
-            {
-                ViewBag.ResponseText = new MvcHtmlString(String.Format("Bus returned: <b>{0}</b>", response));              
-            }
 
-            return View("Index");
+            return View();
         }
     }
 }
