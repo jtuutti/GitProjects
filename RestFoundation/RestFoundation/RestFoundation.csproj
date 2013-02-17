@@ -89,6 +89,8 @@
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
     <Compile Include="Results\ResponseResult.cs" />
     <Compile Include="RouteHash.cs" />
+    <Compile Include="Runtime\ConsoleLogger.cs" />
+    <Compile Include="Runtime\DebugLogger.cs" />
     <Compile Include="Runtime\Fault.cs" />
     <Compile Include="Runtime\FaultCollection.cs" />
     <Compile Include="Runtime\Handlers\RestServiceRouteInfo.cs" />

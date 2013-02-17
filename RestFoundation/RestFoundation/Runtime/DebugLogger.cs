@@ -1,12 +1,14 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
+using System.Diagnostics;
+
 namespace RestFoundation.Runtime
 {
     /// <summary>
-    /// Represents a dummy log writer that ignores messages.
+    /// Represents a log writer that writes messages into the <see cref="Debug"/> output.
     /// </summary>
-    public sealed class NullLogWriter : ILogWriter
+    public class DebugLogWriter : ILogWriter
     {
         /// <summary>
         /// Gets a value indicating whether to log messages automatically generated
@@ -16,7 +18,7 @@ namespace RestFoundation.Runtime
         {
             get
             {
-                return false;
+                return true;
             }
         }
 
@@ -27,6 +29,7 @@ namespace RestFoundation.Runtime
         /// <returns>The log writer instance.</returns>
         public ILogWriter WriteDebug(string debug)
         {
+            Debug.WriteLine(debug);
             return this;
         }
 
@@ -37,6 +40,7 @@ namespace RestFoundation.Runtime
         /// <returns>The log writer instance.</returns>
         public ILogWriter WriteError(string error)
         {
+            Debug.WriteLine(error);
             return this;
         }
 
@@ -47,6 +51,7 @@ namespace RestFoundation.Runtime
         /// <returns>The log writer instance.</returns>
         public ILogWriter WriteInfo(string info)
         {
+            Debug.WriteLine(info);
             return this;
         }
 
@@ -58,6 +63,7 @@ namespace RestFoundation.Runtime
         /// <returns>The log writer instance.</returns>
         public ILogWriter WriteWarning(string warning)
         {
+            Debug.WriteLine(warning);
             return this;
         }
 
@@ -66,6 +72,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         public void Flush()
         {
+            Debug.Flush();
         }
     }
 }
