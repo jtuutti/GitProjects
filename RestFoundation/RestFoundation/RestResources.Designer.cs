@@ -286,7 +286,7 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A service method result cannot implement the IAsyncResult interface. REST Foundation will execute the service method result asynchronously whenever possible..
+        ///   Looks up a localized string similar to A service method result cannot implement the IAsyncResult interface. REST Foundation will execute the service method asynchronously unless a synchronous route handler is configured for the service..
         /// </summary>
         internal static string InvalidIAsyncResultReturned {
             get {

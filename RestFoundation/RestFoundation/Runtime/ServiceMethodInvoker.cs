@@ -242,6 +242,11 @@ namespace RestFoundation.Runtime
                 return;
             }
 
+            if (returnedObject is IAsyncResult)
+            {
+                throw new InvalidOperationException(RestResources.InvalidIAsyncResultReturned);
+            }
+
             IResult result = m_resultWrapper.Wrap(returnedObject, method.ReturnType, handler);
             resultExecutor.Execute(result, handler.Context);
         }
