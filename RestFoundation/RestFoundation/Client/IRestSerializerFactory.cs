@@ -15,7 +15,8 @@ namespace RestFoundation.Client
         /// </summary>
         /// <param name="objectType">The object type.</param>
         /// <param name="resourceType">The resource type.</param>
+        /// <param name="xmlNamespace">An optional XML resource namespace.</param>
         /// <returns>The serializer instance.</returns>
-        IRestSerializer Create(Type objectType, RestResourceType resourceType);
+        IRestSerializer Create(Type objectType, RestResourceType resourceType, string xmlNamespace);
     }
 }

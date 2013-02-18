@@ -8,50 +8,52 @@ using System.Xml.Serialization;
 
 namespace RestFoundation.Runtime
 {
-    internal static class XmlClientSerializerRegistry
+    internal static class XmlSerializerRegistry
     {
         private static readonly ConcurrentDictionary<Type, XmlSerializer> serializers = new ConcurrentDictionary<Type, XmlSerializer>();
 
-        public static XmlSerializer Get(Type objectType, string rootNamespace)
+        public static XmlSerializer Get(Type objectType)
         {
             if (objectType == null)
             {
                 throw new ArgumentNullException("objectType");
             }
 
-            return serializers.GetOrAdd(objectType, InitializeXmlSerializer(objectType, rootNamespace));
+            return serializers.GetOrAdd(objectType, InitializeXmlSerializer);
         }
 
-        private static XmlSerializer InitializeXmlSerializer(Type objectType, string rootNamespace)
+        private static XmlSerializer InitializeXmlSerializer(Type objectType)
         {
             if (objectType.IsArray)
             {
-                return GetSerializerForCollection(objectType, objectType.GetElementType(), rootNamespace);
+                return GetSerializerForCollection(objectType, objectType.GetElementType());
             }
 
             if (objectType.IsGenericType && objectType.GetGenericTypeDefinition().GetInterface(typeof(IEnumerable<>).FullName) != null)
             {
-                return GetSerializerForCollection(objectType, objectType.GetGenericArguments()[0], rootNamespace);
+                return GetSerializerForCollection(objectType, objectType.GetGenericArguments()[0]);
             }
+
+            string rootNamespace = XmlNamespaceManager.GetDefault();
 
             return !String.IsNullOrWhiteSpace(rootNamespace) ? new XmlSerializer(objectType, rootNamespace) : new XmlSerializer(objectType);
         }
 
-        private static XmlSerializer GetSerializerForCollection(Type objectType, Type elementType, string rootNamespace)
+        private static XmlSerializer GetSerializerForCollection(Type objectType, Type elementType)
         {
-            string elementRootNamespace;
-            string rootElementName = XmlRootElementInspector.GetRootElementName(elementType, out elementRootNamespace);
+            string rootNamespace;
+            string rootElementName = XmlRootElementInspector.GetRootElementName(elementType, out rootNamespace);
 
-            if (String.IsNullOrWhiteSpace(elementRootNamespace))
+            if (String.IsNullOrWhiteSpace(rootNamespace))
             {
-                elementRootNamespace = rootNamespace;
+                rootNamespace = XmlNamespaceManager.GetDefault();
             }
 
             XmlSerializer serializer;
 
-            if (!String.IsNullOrWhiteSpace(elementRootNamespace))
+            if (!String.IsNullOrWhiteSpace(rootNamespace))
             {
-                serializer = new XmlSerializer(objectType, new XmlRootAttribute(rootElementName) { Namespace = elementRootNamespace });
+                serializer = new XmlSerializer(objectType, new XmlRootAttribute(rootElementName) { Namespace = rootNamespace });
             }
             else
             {

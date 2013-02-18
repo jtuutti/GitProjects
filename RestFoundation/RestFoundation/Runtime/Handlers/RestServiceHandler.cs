@@ -135,11 +135,11 @@ namespace RestFoundation.Runtime.Handlers
 
             if (ServiceTimeout.TotalMilliseconds > 0)
             {
-                await Task.WhenAny(methodTask, Task.Delay(ServiceTimeout)).ConfigureAwait(false);
+                await Task.WhenAny(methodTask, Task.Delay(ServiceTimeout));
             }
             else
             {
-                await methodTask.ConfigureAwait(false);
+                await methodTask;
             }
 
             ValidateTask(methodTask, cancellation);

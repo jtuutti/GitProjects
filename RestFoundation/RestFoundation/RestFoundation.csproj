@@ -75,6 +75,8 @@
     <Compile Include="Behaviors\Attributes\NoCacheAttribute.cs" />
     <Compile Include="Behaviors\Attributes\ServiceMethodBehaviorAttribute.cs" />
     <Compile Include="Behaviors\ThrottlingBehavior.cs" />
+    <Compile Include="Client\IRestClient.cs" />
+    <Compile Include="Client\RestClient.cs" />
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
     <Compile Include="Context\ContextContainer.cs" />
     <Compile Include="DependencyBuilder.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
     <Compile Include="Results\ResponseResult.cs" />
     <Compile Include="RouteHash.cs" />
+    <Compile Include="Runtime\AllowHeaderParser.cs" />
     <Compile Include="Runtime\ConsoleLogger.cs" />
     <Compile Include="Runtime\DebugLogger.cs" />
     <Compile Include="Runtime\Fault.cs" />
@@ -116,6 +119,7 @@
     <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
     <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
     <Compile Include="Runtime\JsonSerializerFactory.cs" />
+    <Compile Include="Runtime\Registries\XmlClientSerializerRegistry.cs" />
     <Compile Include="ServiceProxy\ProxyResponseData.cs" />
     <Compile Include="ServiceProxy\ProxySession.cs" />
     <Compile Include="ServiceProxy\ProxyUrlHelper.cs" />
@@ -167,14 +171,11 @@
     <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
     <Compile Include="Behaviors\SecureServiceBehavior.cs" />
     <Compile Include="ResourceAttribute.cs" />
-    <Compile Include="Client\RestClientExtensions.cs" />
     <Compile Include="Client\RestClientFactory.cs" />
     <Compile Include="Client\IRestSerializerFactory.cs" />
-    <Compile Include="Client\RestClient.cs" />
     <Compile Include="Client\RestResource.cs" />
     <Compile Include="Client\RestResourceOfT.cs" />
     <Compile Include="Client\RestResourceType.cs" />
-    <Compile Include="Client\IRestClient.cs" />
     <Compile Include="Client\IRestSerializer.cs" />
     <Compile Include="Client\Serializers\JsonObjectSerializer.cs" />
     <Compile Include="Client\Serializers\RestSerializerFactory.cs" />

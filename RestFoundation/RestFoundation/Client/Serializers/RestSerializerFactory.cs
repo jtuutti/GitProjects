@@ -15,8 +15,9 @@ namespace RestFoundation.Client.Serializers
         /// </summary>
         /// <param name="objectType">The object type.</param>
         /// <param name="resourceType">The resource type.</param>
+        /// <param name="xmlNamespace">An optional XML resource namespace.</param>
         /// <returns>The serializer instance.</returns>
-        public virtual IRestSerializer Create(Type objectType, RestResourceType resourceType)
+        public virtual IRestSerializer Create(Type objectType, RestResourceType resourceType, string xmlNamespace)
         {
             if (objectType == null)
             {
@@ -33,7 +34,7 @@ namespace RestFoundation.Client.Serializers
                 case RestResourceType.Json:
                     return new JsonObjectSerializer();
                 case RestResourceType.Xml:
-                    return new XmlObjectSerializer();
+                    return new XmlObjectSerializer(xmlNamespace);
             }
 
             throw new NotSupportedException();

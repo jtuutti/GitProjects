@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using RestFoundation.Runtime;
@@ -14,8 +15,18 @@ namespace RestFoundation.Client.Serializers
     /// </summary>
     public class XmlObjectSerializer : IRestSerializer
     {
+        private readonly string m_xmlNamespace;
         private string m_serializedObject;
         private object m_reference;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlObjectSerializer"/> class.
+        /// </summary>
+        /// <param name="xmlNamespace">An XML namespace.</param>
+        public XmlObjectSerializer(string xmlNamespace)
+        {
+            m_xmlNamespace = xmlNamespace;
+        }
 
         /// <summary>
         /// Gets content length of an object in the serialized form.
@@ -79,27 +90,34 @@ namespace RestFoundation.Client.Serializers
                 throw new ArgumentNullException("stream");
             }
 
-            if (typeof(T) == typeof(object))
+            Type objectType = typeof(T);
+
+            if (objectType == typeof(object))
             {
                 using (var streamReader = new StreamReader(stream, Encoding.UTF8))
                 {
-                    return (dynamic) new DynamicXDocument(streamReader.ReadToEnd());
+                    string xmlData = streamReader.ReadToEnd();
+
+                    if (String.IsNullOrWhiteSpace(xmlData))
+                    {
+                        return default(T);
+                    }
+
+                    return (dynamic) new DynamicXDocument(xmlData);
                 }
             }
 
-            var serializer = new XmlSerializer(typeof(T));
+            XmlSerializer serializer = XmlClientSerializerRegistry.Get(objectType, m_xmlNamespace);
             return (T) serializer.Deserialize(stream);
         }
 
-        private static string SerializeToString(object obj)
+        private string SerializeToString(object obj)
         {
             using (var stream = new MemoryStream())
             {
-                var namespaces = new XmlSerializerNamespaces();
-                namespaces.Add(String.Empty, String.Empty);
+                XmlSerializer serializer = XmlClientSerializerRegistry.Get(obj.GetType(), m_xmlNamespace);
+                serializer.Serialize(stream, obj);
 
-                var serializer = new XmlSerializer(obj.GetType());
-                serializer.Serialize(stream, obj, namespaces);
                 stream.Position = 0;
 
                 var reader = new StreamReader(stream, Encoding.UTF8);

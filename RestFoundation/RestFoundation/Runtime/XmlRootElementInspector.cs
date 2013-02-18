@@ -16,9 +16,9 @@ namespace RestFoundation.Runtime
 
             string elementName;
 
-            if (xmlRootAttribute != null && !String.IsNullOrEmpty(xmlRootAttribute.ElementName))
+            if (xmlRootAttribute != null)
             {
-                elementName = xmlRootAttribute.ElementName;
+                elementName = !String.IsNullOrEmpty(xmlRootAttribute.ElementName) ? xmlRootAttribute.ElementName : objectType.Name;
                 rootNamespace = xmlRootAttribute.Namespace;
             }
             else

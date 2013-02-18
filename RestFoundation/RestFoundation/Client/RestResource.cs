@@ -56,6 +56,11 @@ namespace RestFoundation.Client
         /// </summary>
         public NameValueCollection Headers { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets an XML namespace for the resource.
+        /// </summary>
+        public string XmlNamespace { get; set; }
+
         internal virtual object ResourceBody
         {
             get
