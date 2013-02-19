@@ -286,7 +286,7 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A service method result cannot implement the IAsyncResult interface. REST Foundation will execute the service method asynchronously unless a synchronous route handler is configured for the service..
+        ///   Looks up a localized string similar to An unsupported asynchronous result was returned from the service method. Only objects of Task and Task&lt;T&gt; types are supported. Nested generic tasks are not supported..
         /// </summary>
         internal static string InvalidIAsyncResultReturned {
             get {

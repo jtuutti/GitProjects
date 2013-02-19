@@ -550,8 +550,8 @@
     <comment>Async route handler does not support synchronous requests.</comment>
   </data>
   <data name="InvalidIAsyncResultReturned" xml:space="preserve">
-    <value>A service method result cannot implement the IAsyncResult interface. REST Foundation will execute the service method asynchronously unless a synchronous route handler is configured for the service.</value>
-    <comment>A service method result cannot implement the IAsyncResult interface. REST Foundation will execute the service method asynchronously unless a synchronous route handler is configured for the service.</comment>
+    <value>An unsupported asynchronous result was returned from the service method. Only objects of Task and Task&lt;T&gt; types are supported. Nested generic tasks are not supported.</value>
+    <comment>An unsupported asynchronous result was returned from the service method. Only objects of Task and Task&lt;T&gt; types are supported. Nested generic tasks are not supported.</comment>
   </data>
   <data name="InvalidServiceMethodTimeout" xml:space="preserve">
     <value>Invalid service method timeout value provided.</value>
