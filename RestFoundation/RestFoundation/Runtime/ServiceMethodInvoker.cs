@@ -9,6 +9,7 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using RestFoundation.Behaviors;
 using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
@@ -62,7 +63,7 @@ namespace RestFoundation.Runtime
         /// <param name="method">The service method.</param>
         /// <param name="token">The cancellation token for the returned task.</param>
         /// <returns>A task that invokes the service method.</returns>
-        public virtual async Task Invoke(IRestServiceHandler handler, object service, MethodInfo method, CancellationToken token)
+        public virtual Task Invoke(IRestServiceHandler handler, object service, MethodInfo method, CancellationToken token)
         {
             if (service == null || method == null)
             {
@@ -79,19 +80,21 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingServiceContext);
             }
 
-            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, service, method);
-            AddServiceBehaviors(method, behaviors);
-            token.ThrowIfCancellationRequested();
+            var invocationTask = new Task(context =>
+            {
+                TrySetHttpContext(context);
+                ServiceInvocationDelegate(handler, service, method, token);
+            }, HttpContext.Current, token);
 
-            LogUtility.LogRequestData(handler.Context.GetHttpContext());
+            return invocationTask;
+        }
 
-            object returnedObject = InvokeAndProcessExceptions(handler, service, method, behaviors);
-            token.ThrowIfCancellationRequested();
-
-            await CreateResultTask(handler, returnedObject, method.ReturnType);
-            token.ThrowIfCancellationRequested();
-
-            LogUtility.LogResponseData(handler.Context.GetHttpContext());
+        private static void TrySetHttpContext(object context)
+        {
+            if (context != null && HttpContext.Current == null)
+            {
+                HttpContext.Current = (HttpContext) context;
+            }
         }
 
         private static List<IServiceBehavior> GetServiceMethodBehaviors(IRestServiceHandler handler, object service, MethodInfo method)
@@ -243,13 +246,30 @@ namespace RestFoundation.Runtime
             return methodArguments.ToArray();
         }
 
-        private async Task CreateResultTask(IRestServiceHandler handler, object returnedObject, Type methodReturnType)
+        private void ServiceInvocationDelegate(IRestServiceHandler handler, object service, MethodInfo method, CancellationToken token)
+        {
+            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, service, method);
+            AddServiceBehaviors(method, behaviors);
+            token.ThrowIfCancellationRequested();
+
+            LogUtility.LogRequestData(handler.Context.GetHttpContext());
+
+            object returnedObject = InvokeAndProcessExceptions(handler, service, method, behaviors);
+            token.ThrowIfCancellationRequested();
+
+            CreateResultTask(handler, returnedObject, method.ReturnType);
+            token.ThrowIfCancellationRequested();
+
+            LogUtility.LogResponseData(handler.Context.GetHttpContext());
+        }
+
+        private void CreateResultTask(IRestServiceHandler handler, object returnedObject, Type methodReturnType)
         {
             var returnedTask = returnedObject as Task;
 
             if (returnedTask != null)
             {
-                await returnedTask;
+                returnedTask.Wait();
 
                 var taskInfo = GetTaskInfo(returnedTask);
                 returnedObject = taskInfo.Item1;
@@ -271,6 +291,11 @@ namespace RestFoundation.Runtime
 
             IResult result = m_resultWrapper.Wrap(handler, returnedObject, methodReturnType);
             resultExecutor.Execute(result, handler.Context);
+
+            if (returnedTask != null)
+            {
+                returnedTask.Dispose();
+            }
         }
     }
 }

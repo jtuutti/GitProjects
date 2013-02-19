@@ -125,24 +125,25 @@ namespace RestFoundation.Runtime.Handlers
 
             TrySetServiceMethodTimeout(serviceMethodData.Method);
 
-            var cancellation = new CancellationTokenSource();
-            Task methodTask = m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method, cancellation.Token);
-
-            if (methodTask.Status == TaskStatus.Created)
+            using (var cancellation = new CancellationTokenSource())
+            using (Task methodTask = m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method, cancellation.Token))
             {
-                methodTask.Start();
-            }
+                if (methodTask.Status == TaskStatus.Created)
+                {
+                    methodTask.Start();
+                }
 
-            if (ServiceTimeout.TotalMilliseconds > 0)
-            {
-                await Task.WhenAny(methodTask, Task.Delay(ServiceTimeout));
-            }
-            else
-            {
-                await methodTask;
-            }
+                if (ServiceTimeout.TotalMilliseconds > 0)
+                {
+                    await Task.WhenAny(methodTask, Task.Delay(ServiceTimeout));
+                }
+                else
+                {
+                    await methodTask;
+                }
 
-            ValidateTask(methodTask, cancellation);
+                ValidateTask(methodTask, cancellation);
+            }
         }
         
         private static void ValidateTask(Task task, CancellationTokenSource cancellation)
