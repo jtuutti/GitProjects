@@ -556,6 +556,320 @@
       <param name="behaviorContext">The "method authorizing" behavior context.</param>
       <returns>A service method action.</returns>
     </member>
+    <member name="T:RestFoundation.Client.IRestClient">
+      <summary>
+            Defines a REST HTTP client.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.GetAsync(System.Uri)">
+      <summary>
+            Executes an HTTP request to the provided URL using the GET HTTP method.
+            </summary>
+      <param name="url">The URL.</param>
+      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.GetAsync(System.Uri,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Executes an HTTP request to the provided URL using the GET HTTP method.
+            </summary>
+      <param name="url">The URL.</param>
+      <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.GetAsync``1(System.Uri,RestFoundation.Client.RestResourceType)">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the GET HTTP method.
+            </summary>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="url">The URL.</param>
+      <param name="outputType">The output resource type.</param>
+      <returns>A task resulting in an output resource.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.GetAsync``1(System.Uri,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the GET HTTP method.
+            </summary>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="url">The URL.</param>
+      <param name="outputType">The output resource type.</param>
+      <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <returns>A task resulting in an output resource.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.GetAsync``1(System.Uri,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection,System.String)">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the GET HTTP method.
+            </summary>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="url">The URL.</param>
+      <param name="outputType">The output resource type.</param>
+      <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <param name="xmlNamespace">An optional XML namespace.</param>
+      <returns>A task resulting in an output resource.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.HeadAsync(System.Uri)">
+      <summary>
+            Executes an HTTP request to the provided URL using the HEAD HTTP method.
+            </summary>
+      <param name="url">The URL.</param>
+      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.HeadAsync(System.Uri,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Executes an HTTP request to the provided URL using the HEAD HTTP method.
+            </summary>
+      <param name="url">The URL.</param>
+      <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.HeadAsync(System.Uri,RestFoundation.Client.RestResourceType)">
+      <summary>
+            Executes an HTTP request to the provided URL using the HEAD HTTP method.
+            </summary>
+      <param name="url">The URL.</param>
+      <param name="outputType">The output resource type.</param>
+      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.HeadAsync(System.Uri,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Executes an HTTP request to the provided URL using the HEAD HTTP method.
+            </summary>
+      <param name="url">The URL.</param>
+      <param name="outputType">The output resource type.</param>
+      <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.HeadAsync(System.Uri,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection,System.String)">
+      <summary>
+            Executes an HTTP request to the provided URL using the HEAD HTTP method.
+            </summary>
+      <param name="url">The URL.</param>
+      <param name="outputType">The output resource type.</param>
+      <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <param name="xmlNamespace">An optional XML namespace.</param>
+      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.PostAsync``2(System.Uri,RestFoundation.Client.RestResource{``0})">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the POST HTTP method.
+            </summary>
+      <typeparam name="TInput">The input resource object type.</typeparam>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="url">The URL.</param>
+      <param name="resource">The input resource.</param>
+      <returns>A task resulting in an output resource.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.PostAsync``2(System.Uri,RestFoundation.Client.RestResource{``0},RestFoundation.Client.RestResourceType)">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the POST HTTP method.
+            </summary>
+      <typeparam name="TInput">The input resource object type.</typeparam>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="url">The URL.</param>
+      <param name="resource">The input resource.</param>
+      <param name="outputType">The output resource type.</param>
+      <returns>A task resulting in an output resource.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.PutAsync``2(System.Uri,RestFoundation.Client.RestResource{``0})">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PUT HTTP method.
+            </summary>
+      <typeparam name="TInput">The input resource object type.</typeparam>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="url">The URL.</param>
+      <param name="resource">The input resource.</param>
+      <returns>A task resulting in an output resource.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.PutAsync``2(System.Uri,RestFoundation.Client.RestResource{``0},RestFoundation.Client.RestResourceType)">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PUT HTTP method.
+            </summary>
+      <typeparam name="TInput">The input resource object type.</typeparam>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="url">The URL.</param>
+      <param name="resource">The input resource.</param>
+      <param name="outputType">The output resource type.</param>
+      <returns>A task resulting in an output resource.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.PatchAsync``2(System.Uri,RestFoundation.Client.RestResource{``0})">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PATCH HTTP method.
+            </summary>
+      <typeparam name="TInput">The input resource object type.</typeparam>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="url">The URL.</param>
+      <param name="resource">The input resource.</param>
+      <returns>A task resulting in an output resource.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.PatchAsync``2(System.Uri,RestFoundation.Client.RestResource{``0},RestFoundation.Client.RestResourceType)">
+      <summary>
+            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PATCH HTTP method.
+            </summary>
+      <typeparam name="TInput">The input resource object type.</typeparam>
+      <typeparam name="TOutput">The output resource object type.</typeparam>
+      <param name="url">The URL.</param>
+      <param name="resource">The input resource.</param>
+      <param name="outputType">The output resource type.</param>
+      <returns>A task resulting in an output resource.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
+      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.DeleteAsync(System.Uri)">
+      <summary>
+            Executes an HTTP request to the provided URL using the DELETE HTTP method.
+            </summary>
+      <param name="url">The URL.</param>
+      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.DeleteAsync(System.Uri,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Executes an HTTP request to the provided URL using the DELETE HTTP method.
+            </summary>
+      <param name="url">The URL.</param>
+      <param name="headers">A collection of HTTP headers to pass to the request.</param>
+      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="M:RestFoundation.Client.IRestClient.OptionsAsync(System.Uri)">
+      <summary>
+            Executes an HTTP request to the provided URL using the OPTIONS HTTP method.
+            </summary>
+      <param name="url">The URL.</param>
+      <returns>A task resulting in a list of allowed HTTP methods.</returns>
+      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
+      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
+      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
+      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
+    </member>
+    <member name="P:RestFoundation.Client.IRestClient.PerformRedirects">
+      <summary>
+            Gets or sets a value indicating whether the request should perform redirects.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Client.IRestClient.AllowCookies">
+      <summary>
+            Gets or sets a value indicating whether the request should allow cookies.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Client.IRestClient.ProxyUrl">
+      <summary>
+            Gets or sets a proxy URL for tracing HTTP requests and responses.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Client.IRestClient.SupportsEncoding">
+      <summary>
+            Gets or sets a value indicating whether the client should support HTTP encoding.
+            GZIP and Deflate compression algorithms are currently supported.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Client.IRestClient.AuthenticationType">
+      <summary>
+            Gets or sets the authentication type.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Client.IRestClient.Credentials">
+      <summary>
+            Gets or sets authentication credentials.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Client.IRestClient.AllowSelfSignedCertificates">
+      <summary>
+            Gets or sets a value indicating whether self-signed certificates are allowed.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Client.IRestClient.LastStatusCode">
+      <summary>
+            Gets the last HTTP status code.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Client.IRestClient.LastStatusDescription">
+      <summary>
+            Gets the last HTTP status description.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Collections.Specialized.LinkCollection">
       <summary>
             A collection of Link header values.
@@ -569,9 +883,9 @@
     </member>
     <member name="M:RestFoundation.Collections.Specialized.LinkCollection.ToList">
       <summary>
-            Returns a list <see cref="T:RestFoundation.Runtime.Link" /> objects representing the Link header values.
+            Returns a list <see cref="T:RestFoundation.Link" /> objects representing the Link header values.
             </summary>
-      <returns>A list of <see cref="T:RestFoundation.Runtime.Link" /> objects.</returns>
+      <returns>A list of <see cref="T:RestFoundation.Link" /> objects.</returns>
     </member>
     <member name="M:RestFoundation.Collections.Specialized.LinkCollection.GetEnumerator">
       <summary>
@@ -872,6 +1186,256 @@
     <member name="P:RestFoundation.JsonFormatterSettings.WrapContentResponse">
       <summary>
             Gets or sets a value indicating whether to wrap a JSON response.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.LinkRelationValues">
+      <summary>
+            Defines most commonly used link "rel" element values.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.About">
+      <summary>
+            Refers to a resource that is the subject of the link's context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Alternate">
+      <summary>
+            Refers to a substitute for this context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Appendix">
+      <summary>
+            Refers to an appendix.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Archives">
+      <summary>
+            Refers to a collection of records, documents, or other materials of historical interest.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Author">
+      <summary>
+            Refers to the context's author.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Bookmark">
+      <summary>
+            Gives a permanent link to use for bookmarking purposes.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Canonical">
+      <summary>
+            Designates the preferred version of a resource (the URI and its contents).
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Collection">
+      <summary>
+            The target URI points to a resource which represents the collection resource for the context URI.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Contents">
+      <summary>
+            Refers to a table of contents.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Copyright">
+      <summary>
+            Refers to a copyright statement that applies to the link's context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Current">
+      <summary>
+            Refers to a resource containing the most recent item(s) in a collection of resources.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.DescribedBy">
+      <summary>
+            Refers to a resource providing information about the link's context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Describes">
+      <summary>
+            The relationship A 'describes' B asserts that resource A provides a description of resource B.
+            There are no constraints on the format or representation of either A or B, neither are there any
+            further constraints on either resource.
+            This link relation type is intended to be the inverse of the already existing 'describedby' relation
+            type, thus allowing links to be established from the describing resource to the described resource.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Edit">
+      <summary>
+            Refers to a resource that can be used to edit the link's context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.First">
+      <summary>
+            An URI that refers to the furthest preceding resource in a series of resources.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Glossary">
+      <summary>
+            Refers to a glossary of terms.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Help">
+      <summary>
+            Refers to context-sensitive help.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Icon">
+      <summary>
+            Refers to an icon representing the link's context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Index">
+      <summary>
+            Refers to an index.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Item">
+      <summary>
+            The target URI points to a resource that is a member of the collection represented by the context URI.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Last">
+      <summary>
+            An IRI that refers to the furthest following resource in a series of resources.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.LatestVersion">
+      <summary>
+            Points to a resource containing the latest (e.g., current) version of the context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.License">
+      <summary>
+            Refers to a license associated with this context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Monitor">
+      <summary>
+            Refers to a resource that can be used to monitor changes in an HTTP resource.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Next">
+      <summary>
+            Indicates that the link's context is a part of a series, and that the next in the series is the link target.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.NextArchive">
+      <summary>
+            Refers to the immediately following archive resource.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.NoFollow">
+      <summary>
+            Indicates that the context’s original author or publisher does not endorse the link target.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.NoReferrer">
+      <summary>
+            Indicates that no referrer information is to be leaked when following the link.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Payment">
+      <summary>
+            Indicates a resource where payment is accepted.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.PreFetch">
+      <summary>
+            Indicates that the link target should be preemptively cached.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Preview">
+      <summary>
+            Refers to a resource that provides a preview of the link's context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Previous">
+      <summary>
+            Indicates that the link's context is a part of a series, and that the previous in the series is the link target.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.PreviousArchive">
+      <summary>
+            Refers to the immediately preceding archive resource.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.PrivacyPolicy">
+      <summary>
+            Refers to a Privacy Policy associated with the link's context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Profile">
+      <summary>
+            Identifying that a resource representation conforms to a certain profile, without affecting the non-profile
+            semantics of the resource representation.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Related">
+      <summary>
+            Identifies a related resource.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Search">
+      <summary>
+            Refers to a resource that can be used to search through the link's context and related resources.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Section">
+      <summary>
+            Refers to a section in a collection of resources.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Self">
+      <summary>
+            Conveys an identifier for the link's context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Service">
+      <summary>
+            Indicates a URI that can be used to retrieve a service document.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Start">
+      <summary>
+            Refers to the first resource in a collection of resources.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.StyleSheet">
+      <summary>
+            Refers to a stylesheet.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.SubSection">
+      <summary>
+            Refers to a resource serving as a subsection in a collection of resources.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Tag">
+      <summary>
+            Gives a tag (identified by the given address) that applies to the current document.   
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.TermsOfService">
+      <summary>
+            Refers to the Terms of Service associated with the link's context.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Type">
+      <summary>
+            Refers to a resource identifying the abstract semantic type the link's context is considered to be an instance of.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Up">
+      <summary>
+            Refers to a parent document in a hierarchy of documents.   
+            </summary>
+    </member>
+    <member name="F:RestFoundation.LinkRelationValues.Via">
+      <summary>
+            Identifies a resource that is the source of the information in the link's context.   
             </summary>
     </member>
     <member name="T:RestFoundation.LogWriterExtensions">
@@ -1311,45 +1875,40 @@
             Setting the value to <see cref="F:System.TimeSpan.Zero" /> indicates no timeout.
             </summary>
     </member>
-    <member name="T:RestFoundation.Runtime.Link">
+    <member name="T:RestFoundation.Link">
       <summary>
             Represents a Link HTTP header value.
             </summary>
     </member>
-    <member name="M:RestFoundation.Runtime.Link.#ctor(System.Uri,System.String,System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+    <member name="M:RestFoundation.Link.#ctor(System.Uri,System.String)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.Link" /> struct.
+            Initializes a new instance of the <see cref="T:RestFoundation.Link" /> class.
+            </summary>
+      <param name="href">An absolute or relative URL.</param>
+      <param name="rel">A relation value.</param>
+    </member>
+    <member name="M:RestFoundation.Link.#ctor(System.Uri,System.String,System.String,System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Link" /> class.
             </summary>
       <param name="href">An absolute or relative URL.</param>
       <param name="rel">A relation value.</param>
       <param name="anchor">An optional URL anchor.</param>
       <param name="title">An optional title value.</param>
-      <param name="additionalParameters">Additional link parameters</param>
     </member>
-    <member name="M:RestFoundation.Runtime.Link.op_Equality(RestFoundation.Runtime.Link,RestFoundation.Runtime.Link)">
+    <member name="M:RestFoundation.Link.#ctor">
       <summary>
-            Compares two <see cref="T:RestFoundation.Runtime.Link" /> objects for equality.
+            Initializes a new instance of the <see cref="T:RestFoundation.Link" /> class.
             </summary>
-      <param name="left">The first object</param>
-      <param name="right">The second object</param>
-      <returns>true if both objects are equivalent; otherwise, false.</returns>
     </member>
-    <member name="M:RestFoundation.Runtime.Link.op_Inequality(RestFoundation.Runtime.Link,RestFoundation.Runtime.Link)">
-      <summary>
-            Compares two <see cref="T:RestFoundation.Runtime.Link" /> objects for inequality.
-            </summary>
-      <param name="left">The first object</param>
-      <param name="right">The second object</param>
-      <returns>true if both objects are not equivalent; otherwise, false.</returns>
-    </member>
-    <member name="M:RestFoundation.Runtime.Link.GetAdditionalParameter(System.String)">
+    <member name="M:RestFoundation.Link.GetAdditionalParameter(System.String)">
       <summary>
             Gets additional an additional parameter specified in the Link header.
             </summary>
       <param name="name">The parameter name.</param>
       <returns>The parameter value.</returns>
     </member>
-    <member name="M:RestFoundation.Runtime.Link.Equals(RestFoundation.Runtime.Link)">
+    <member name="M:RestFoundation.Link.Equals(RestFoundation.Link)">
       <summary>
             Indicates whether the current object is equal to another object of the same type.
             </summary>
@@ -1358,26 +1917,26 @@
             </returns>
       <param name="other">An object to compare with this object.</param>
     </member>
-    <member name="M:RestFoundation.Runtime.Link.Equals(System.Object)">
+    <member name="M:RestFoundation.Link.Equals(System.Object)">
       <summary>
-            Indicates whether this instance and a specified object are equal.
+            Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.
             </summary>
       <returns>
-            true if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, false.
+            true if the specified object  is equal to the current object; otherwise, false.
             </returns>
-      <param name="obj">Another object to compare to. </param>
+      <param name="obj">The object to compare with the current object. </param>
       <filterpriority>2</filterpriority>
     </member>
-    <member name="M:RestFoundation.Runtime.Link.GetHashCode">
+    <member name="M:RestFoundation.Link.GetHashCode">
       <summary>
-            Returns the hash code for this instance.
+            Serves as a hash function for a particular type. 
             </summary>
       <returns>
-            A 32-bit signed integer that is the hash code for this instance.
+            A hash code for the current <see cref="T:System.Object" />.
             </returns>
       <filterpriority>2</filterpriority>
     </member>
-    <member name="M:RestFoundation.Runtime.Link.ToString">
+    <member name="M:RestFoundation.Link.ToString">
       <summary>
             Returns the fully qualified type name of this instance.
             </summary>
@@ -1386,22 +1945,22 @@
             </returns>
       <filterpriority>2</filterpriority>
     </member>
-    <member name="P:RestFoundation.Runtime.Link.Href">
+    <member name="P:RestFoundation.Link.Href">
       <summary>
-            Gets the link URL.
+            Gets or sets the link URL.
             </summary>
     </member>
-    <member name="P:RestFoundation.Runtime.Link.Rel">
+    <member name="P:RestFoundation.Link.Rel">
       <summary>
             Gets the link relation to the resource.
             </summary>
     </member>
-    <member name="P:RestFoundation.Runtime.Link.Anchor">
+    <member name="P:RestFoundation.Link.Anchor">
       <summary>
             Gets the URL anchor.
             </summary>
     </member>
-    <member name="P:RestFoundation.Runtime.Link.Title">
+    <member name="P:RestFoundation.Link.Title">
       <summary>
             Gets the link title.
             </summary>
@@ -1736,7 +2295,7 @@
     </member>
     <member name="P:RestFoundation.RestResources.InvalidIAsyncResultReturned">
       <summary>
-              Looks up a localized string similar to A service method result cannot implement the IAsyncResult interface. REST Foundation will execute the service method asynchronously unless a synchronous route handler is configured for the service..
+              Looks up a localized string similar to An unsupported asynchronous result was returned from the service method. Only objects of Task and Task&lt;T&gt; types are supported. Nested generic tasks are not supported..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidIndexFileException">
@@ -3815,234 +4374,6 @@
             is allowed per a service method.
             </summary>
     </member>
-    <member name="T:RestFoundation.Client.RestClientExtensions">
-      <summary>
-            Provides extension methods to the <see cref="T:RestFoundation.Client.IRestClient" /> interface.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Get(RestFoundation.Client.IRestClient,System.Uri)">
-      <summary>
-            Executes an HTTP request to the provided URL using the GET HTTP method.
-            </summary>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <returns>A collection of HTTP headers returned.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Get(RestFoundation.Client.IRestClient,System.Uri,System.Collections.Specialized.NameValueCollection)">
-      <summary>
-            Executes an HTTP request to the provided URL using the GET HTTP method.
-            </summary>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <returns>A collection of HTTP headers returned.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Get``1(RestFoundation.Client.IRestClient,System.Uri,RestFoundation.Client.RestResourceType)">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the GET HTTP method.
-            </summary>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <param name="outputType">The output resource type.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Get``1(RestFoundation.Client.IRestClient,System.Uri,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection)">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the GET HTTP method.
-            </summary>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <param name="outputType">The output resource type.</param>
-      <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Head(RestFoundation.Client.IRestClient,System.Uri)">
-      <summary>
-            Executes an HTTP request to the provided URL using the HEAD HTTP method.
-            </summary>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <returns>A collection of HTTP headers returned.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Head(RestFoundation.Client.IRestClient,System.Uri,System.Collections.Specialized.NameValueCollection)">
-      <summary>
-            Executes an HTTP request to the provided URL using the HEAD HTTP method.
-            </summary>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <returns>A collection of HTTP headers returned.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Post``2(RestFoundation.Client.IRestClient,System.Uri,RestFoundation.Client.RestResource{``0})">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the POST HTTP method.
-            </summary>
-      <typeparam name="TInput">The input resource object type.</typeparam>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <param name="resource">The input resource.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Post``2(RestFoundation.Client.IRestClient,System.Uri,RestFoundation.Client.RestResource{``0},RestFoundation.Client.RestResourceType)">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the POST HTTP method.
-            </summary>
-      <typeparam name="TInput">The input resource object type.</typeparam>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <param name="resource">The input resource.</param>
-      <param name="outputType">The output resource type.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Put``2(RestFoundation.Client.IRestClient,System.Uri,RestFoundation.Client.RestResource{``0})">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PUT HTTP method.
-            </summary>
-      <typeparam name="TInput">The input resource object type.</typeparam>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <param name="resource">The input resource.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Put``2(RestFoundation.Client.IRestClient,System.Uri,RestFoundation.Client.RestResource{``0},RestFoundation.Client.RestResourceType)">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PUT HTTP method.
-            </summary>
-      <typeparam name="TInput">The input resource object type.</typeparam>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <param name="resource">The input resource.</param>
-      <param name="outputType">The output resource type.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Patch``2(RestFoundation.Client.IRestClient,System.Uri,RestFoundation.Client.RestResource{``0})">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PATCH HTTP method.
-            </summary>
-      <typeparam name="TInput">The input resource object type.</typeparam>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <param name="resource">The input resource.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Patch``2(RestFoundation.Client.IRestClient,System.Uri,RestFoundation.Client.RestResource{``0},RestFoundation.Client.RestResourceType)">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the PATCH HTTP method.
-            </summary>
-      <typeparam name="TInput">The input resource object type.</typeparam>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <param name="resource">The input resource.</param>
-      <param name="outputType">The output resource type.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Delete(RestFoundation.Client.IRestClient,System.Uri)">
-      <summary>
-            Executes an HTTP request to the provided URL using the DELETE HTTP method.
-            </summary>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <returns>A collection of HTTP headers returned.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Delete(RestFoundation.Client.IRestClient,System.Uri,System.Collections.Specialized.NameValueCollection)">
-      <summary>
-            Executes an HTTP request to the provided URL using the DELETE HTTP method.
-            </summary>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <returns>A collection of HTTP headers returned.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientExtensions.Options(RestFoundation.Client.IRestClient,System.Uri)">
-      <summary>
-            Executes an HTTP request to the provided URL using the OPTIONS HTTP method.
-            </summary>
-      <param name="client">The HTTP client instance.</param>
-      <param name="url">The URL.</param>
-      <returns>A list of allowed HTTP methods.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-    </member>
     <member name="T:RestFoundation.Client.RestClientFactory">
       <summary>
             Creates <see cref="T:RestFoundation.Client.IRestClient" /> instances.
@@ -4054,27 +4385,10 @@
             </summary>
       <returns>The created <see cref="T:RestFoundation.Client.IRestClient" /> instance.</returns>
     </member>
-    <member name="M:RestFoundation.Client.RestClientFactory.Create(System.TimeSpan,System.TimeSpan)">
-      <summary>
-            Creates a new <see cref="T:RestFoundation.Client.IRestClient" /> instance with the default resource types.
-            </summary>
-      <param name="connectionTimeout">A connection timeout.</param>
-      <param name="socketTimeout">A socket timeout.</param>
-      <returns>The created <see cref="T:RestFoundation.Client.IRestClient" /> instance.</returns>
-    </member>
     <member name="M:RestFoundation.Client.RestClientFactory.Create(System.Collections.Generic.IDictionary{RestFoundation.Client.RestResourceType,System.String})">
-      <summary>
-            Creates a new <see cref="T:RestFoundation.Client.IRestClient" /> instance with the default timeouts.
-            </summary>
-      <param name="resourceTypes">A dictionary of resource types mapped to MIME content types.</param>
-      <returns>The created <see cref="T:RestFoundation.Client.IRestClient" /> instance.</returns>
-    </member>
-    <member name="M:RestFoundation.Client.RestClientFactory.Create(System.TimeSpan,System.TimeSpan,System.Collections.Generic.IDictionary{RestFoundation.Client.RestResourceType,System.String})">
       <summary>
             Creates a new <see cref="T:RestFoundation.Client.IRestClient" /> instance.
             </summary>
-      <param name="connectionTimeout">A connection timeout.</param>
-      <param name="socketTimeout">A socket timeout.</param>
       <param name="resourceTypes">A dictionary of resource types mapped to MIME content types.</param>
       <returns>The created <see cref="T:RestFoundation.Client.IRestClient" /> instance.</returns>
     </member>
@@ -4083,230 +4397,14 @@
             Defines a REST serializer factory.
             </summary>
     </member>
-    <member name="M:RestFoundation.Client.IRestSerializerFactory.Create(System.Type,RestFoundation.Client.RestResourceType)">
+    <member name="M:RestFoundation.Client.IRestSerializerFactory.Create(System.Type,RestFoundation.Client.RestResourceType,System.String)">
       <summary>
             Returns a serializer that matches the object type and the resource content type.
             </summary>
       <param name="objectType">The object type.</param>
       <param name="resourceType">The resource type.</param>
+      <param name="xmlNamespace">An optional XML resource namespace.</param>
       <returns>The serializer instance.</returns>
-    </member>
-    <member name="T:RestFoundation.Client.IRestClient">
-      <summary>
-            Defines a REST HTTP client.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Client.IRestClient.Execute(System.Uri,RestFoundation.HttpMethod)">
-      <summary>
-            Executes an HTTP request to the provided URL using the specified HTTP verb.
-            </summary>
-      <param name="url">The URL.</param>
-      <param name="method">The HTTP verb.</param>
-      <returns>A collection of HTTP headers returned.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.IRestClient.Execute(System.Uri,RestFoundation.HttpMethod,System.Collections.Specialized.NameValueCollection)">
-      <summary>
-            Executes an HTTP request to the provided URL using the specified HTTP verb.
-            </summary>
-      <param name="url">The URL.</param>
-      <param name="method">The HTTP verb.</param>
-      <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <returns>A collection of HTTP headers returned.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.IRestClient.Execute``1(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResource{``0})">
-      <summary>
-            Executes an HTTP request to the provided URL using the specified HTTP verb and the provided resource.
-            </summary>
-      <typeparam name="TInput">The input resource object type.</typeparam>
-      <param name="url">The URL.</param>
-      <param name="method">The HTTP verb.</param>
-      <param name="resource">The input resource.</param>
-      <returns>A collection of HTTP headers returned.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.IRestClient.Execute``1(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResourceType)">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type.
-            </summary>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="url">The URL.</param>
-      <param name="method">The HTTP verb.</param>
-      <param name="outputType">The output resource type.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.IRestClient.Execute``1(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection)">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type.
-            </summary>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="url">The URL.</param>
-      <param name="method">The HTTP verb.</param>
-      <param name="outputType">The output resource type.</param>
-      <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.IRestClient.Execute``2(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResource{``0})">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type.
-            </summary>
-      <typeparam name="TInput">The input resource object type.</typeparam>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="url">The URL.</param>
-      <param name="method">The HTTP verb.</param>
-      <param name="resource">The input resource.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.IRestClient.Execute``2(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResource{``0},RestFoundation.Client.RestResourceType)">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type.
-            </summary>
-      <typeparam name="TInput">The input resource object type.</typeparam>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="url">The URL.</param>
-      <param name="method">The HTTP verb.</param>
-      <param name="resource">The input resource.</param>
-      <param name="outputType">The output resource type.</param>
-      <returns>The output resource.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.IRestClient.ExecuteAsync``1(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResourceType)">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type asynchronously.
-            </summary>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="url">The URL.</param>
-      <param name="method">The HTTP verb.</param>
-      <param name="outputType">The output resource type.</param>
-      <returns>The task object representing the asynchronous operation.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.IRestClient.ExecuteAsync``1(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection)">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type asynchronously.
-            </summary>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="url">The URL.</param>
-      <param name="method">The HTTP verb.</param>
-      <param name="outputType">The output resource type.</param>
-      <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <returns>The task object representing the asynchronous operation.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-    </member>
-    <member name="M:RestFoundation.Client.IRestClient.ExecuteAsync``2(System.Uri,RestFoundation.HttpMethod,RestFoundation.Client.RestResource{``0},RestFoundation.Client.RestResourceType)">
-      <summary>
-            Executes an HTTP request to the provided URL and outputs an expected resource of the specified type asynchronously.
-            </summary>
-      <typeparam name="TInput">The input resource object type.</typeparam>
-      <typeparam name="TOutput">The output resource object type.</typeparam>
-      <param name="url">The URL.</param>
-      <param name="method">The HTTP verb.</param>
-      <param name="resource">The input resource.</param>
-      <param name="outputType">The output resource type.</param>
-      <returns>The task object representing the asynchronous operation.</returns>
-      <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
-      <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
-      <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
-      <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
-      <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
-      <exception cref="T:System.ArgumentException">If the resource body is null.</exception>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.ConnectionTimeout">
-      <summary>
-            Gets or sets a connection timeout.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.SocketTimeout">
-      <summary>
-            Gets or sets a socket timeout.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.PerformRedirects">
-      <summary>
-            Gets or sets a value indicating whether the request should perform redirects.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.AllowCookies">
-      <summary>
-            Gets or sets a value indicating whether the request should allow cookies.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.ProxyUrl">
-      <summary>
-            Gets or sets a proxy URL for tracing HTTP requests and responses.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.SupportsEncoding">
-      <summary>
-            Gets or sets a value indicating whether the client should support HTTP encoding.
-            GZIP and Deflate compression algorithms are currently supported.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.AuthenticationType">
-      <summary>
-            Gets or sets the authentication type.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.Credentials">
-      <summary>
-            Gets or sets authentication credentials.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.AllowSelfSignedCertificates">
-      <summary>
-            Gets or sets a value indicating whether self-signed certificates are allowed.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.LastStatusCode">
-      <summary>
-            Gets the last HTTP status code.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.LastStatusDescription">
-      <summary>
-            Gets the last HTTP status description.
-            </summary>
     </member>
     <member name="T:RestFoundation.Client.RestResource">
       <summary>
@@ -4335,6 +4433,11 @@
     <member name="P:RestFoundation.Client.RestResource.Headers">
       <summary>
             Gets the collection of associated HTTP headers.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Client.RestResource.XmlNamespace">
+      <summary>
+            Gets or sets an XML namespace for the resource.
             </summary>
     </member>
     <member name="T:RestFoundation.Client.RestResource`1">
@@ -4436,12 +4539,13 @@
             Represents a REST serializer factory that supports JSON and XML.
             </summary>
     </member>
-    <member name="M:RestFoundation.Client.Serializers.RestSerializerFactory.Create(System.Type,RestFoundation.Client.RestResourceType)">
+    <member name="M:RestFoundation.Client.Serializers.RestSerializerFactory.Create(System.Type,RestFoundation.Client.RestResourceType,System.String)">
       <summary>
             Creates a serializer instance based on the object type and the REST resource type.
             </summary>
       <param name="objectType">The object type.</param>
       <param name="resourceType">The resource type.</param>
+      <param name="xmlNamespace">An optional XML resource namespace.</param>
       <returns>The serializer instance.</returns>
     </member>
     <member name="T:RestFoundation.Client.Serializers.StringSerializer">
@@ -4475,6 +4579,12 @@
       <summary>
             Represents an XML serializer.
             </summary>
+    </member>
+    <member name="M:RestFoundation.Client.Serializers.XmlObjectSerializer.#ctor(System.String)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Client.Serializers.XmlObjectSerializer" /> class.
+            </summary>
+      <param name="xmlNamespace">An XML namespace.</param>
     </member>
     <member name="M:RestFoundation.Client.Serializers.XmlObjectSerializer.GetContentLength(System.Object)">
       <summary>
