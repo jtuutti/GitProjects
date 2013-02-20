@@ -17,8 +17,6 @@ namespace RestFoundation.Runtime.Handlers
     /// </summary>
     public class RestServiceHandler : HttpTaskAsyncHandler, IRestServiceHandler
     {
-        private const int DefaultServiceTimeoutInSeconds = 90;
-
         private readonly IServiceContext m_serviceContext;
         private readonly IServiceMethodLocator m_methodLocator;
         private readonly IServiceMethodInvoker m_methodInvoker;
@@ -50,7 +48,7 @@ namespace RestFoundation.Runtime.Handlers
             m_methodLocator = methodLocator;
             m_methodInvoker = methodInvoker;
 
-            ServiceTimeout = TimeSpan.FromSeconds(DefaultServiceTimeoutInSeconds);
+            ServiceAsyncTimeout = TimeSpan.Zero;
         }
 
         /// <summary>
@@ -80,10 +78,10 @@ namespace RestFoundation.Runtime.Handlers
         public string UrlTemplate { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a value representing the service method execution timeout.
-        /// Setting the value to <see cref="TimeSpan.Zero"/> indicates no timeout.
+        /// Gets or sets a value representing a timeout for an asynchronous task returned by a
+        /// service method. Setting the value to <see cref="TimeSpan.Zero"/> indicates no timeout.
         /// </summary>
-        public TimeSpan ServiceTimeout { get; set; }
+        public TimeSpan ServiceAsyncTimeout { get; set; }
 
         /// <summary>
         /// Provides the object that processes the request.
@@ -125,39 +123,29 @@ namespace RestFoundation.Runtime.Handlers
 
             TrySetServiceMethodTimeout(serviceMethodData.Method);
 
-            using (var cancellation = new CancellationTokenSource())
-            using (Task methodTask = m_methodInvoker.Invoke(this, serviceMethodData.Service, serviceMethodData.Method, cancellation.Token))
+            Task methodTask = m_methodInvoker.InvokeAsync(this, serviceMethodData.Service, serviceMethodData.Method);
+
+            if (ServiceAsyncTimeout.TotalMilliseconds > 0)
             {
-                if (methodTask.Status == TaskStatus.Created)
+                var delayCancellation = new CancellationTokenSource();
+                Task delayTask = Task.Delay(ServiceAsyncTimeout, delayCancellation.Token);
+
+                if (await Task.WhenAny(methodTask, delayTask) == delayTask)
                 {
-                    methodTask.Start();
+                    throw new HttpResponseException(HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
                 }
 
-                if (ServiceTimeout.TotalMilliseconds > 0)
-                {
-                    await Task.WhenAny(methodTask, Task.Delay(ServiceTimeout));
-                }
-                else
-                {
-                    await methodTask;
-                }
-
-                ValidateTask(methodTask, cancellation);
+                SafeTaskCancel(delayCancellation);
+                ValidateTask(methodTask);
+            }
+            else
+            {
+                await methodTask;
             }
         }
-        
-        private static void ValidateTask(Task task, CancellationTokenSource cancellation)
+
+        private static void SafeTaskCancel(CancellationTokenSource cancellation)
         {
-            if (task.IsFaulted)
-            {
-                throw TaskExceptionUnwrapper.Unwrap(task);
-            }
-
-            if (task.Status == TaskStatus.RanToCompletion)
-            {
-                return;
-            }
-
             try
             {
                 cancellation.Cancel();
@@ -165,20 +153,26 @@ namespace RestFoundation.Runtime.Handlers
             catch (Exception)
             {
             }
+        }
 
-            throw new HttpResponseException(HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
+        private static void ValidateTask(Task methodTask)
+        {
+            if (methodTask.IsFaulted)
+            {
+                throw TaskExceptionUnwrapper.Unwrap(methodTask);
+            }
         }
 
         private void TrySetServiceMethodTimeout(MethodInfo method)
         {
-            var timeoutAttribute = Attribute.GetCustomAttribute(method, typeof(ServiceMethodTimeoutAttribute), false) as ServiceMethodTimeoutAttribute;
+            var timeoutAttribute = Attribute.GetCustomAttribute(method, typeof(AsyncTimeoutAttribute), false) as AsyncTimeoutAttribute;
 
             if (timeoutAttribute == null)
             {
                 return;
             }
 
-            ServiceTimeout = TimeSpan.FromSeconds(timeoutAttribute.ServiceTimeoutInSeconds);
+            ServiceAsyncTimeout = TimeSpan.FromSeconds(timeoutAttribute.TimeoutInSeconds);
         }
     }
 }

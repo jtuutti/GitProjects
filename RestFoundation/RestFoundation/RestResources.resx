@@ -161,10 +161,6 @@
     <value>Invalid key provided.</value>
     <comment>Invalid key provided.</comment>
   </data>
-  <data name="OutOfRangeAsyncServiceTimeout" xml:space="preserve">
-    <value>Asynchronous service method timeout cannot be less than 1 second.</value>
-    <comment>Asynchronous service method timeout cannot be less than 1 second.</comment>
-  </data>
   <data name="MissingDefaultConstructor" xml:space="preserve">
     <value>Created type does not have a default constructor.</value>
     <comment>Created type does not have a default constructor.</comment>
@@ -553,10 +549,6 @@
     <value>An unsupported asynchronous result was returned from the service method. Only objects of Task and Task&lt;T&gt; types are supported. Nested generic tasks are not supported.</value>
     <comment>An unsupported asynchronous result was returned from the service method. Only objects of Task and Task&lt;T&gt; types are supported. Nested generic tasks are not supported.</comment>
   </data>
-  <data name="InvalidServiceMethodTimeout" xml:space="preserve">
-    <value>Invalid service method timeout value provided.</value>
-    <comment>Invalid service method timeout value provided.</comment>
-  </data>
   <data name="NoContent" xml:space="preserve">
     <value>No Content</value>
     <comment>No Content</comment>
@@ -596,5 +588,9 @@
   <data name="InvalidMethodInvocationTaskState" xml:space="preserve">
     <value>The task returned by the IServiceMethodInvoker must be in the 'Created' state. It cannot be started.</value>
     <comment>The task returned by the IServiceMethodInvoker must be in the 'Created' state. It cannot be started.</comment>
+  </data>
+  <data name="InvalidAsyncTimeout" xml:space="preserve">
+    <value>Invalid service async timeout value provided.</value>
+    <comment>Invalid service async timeout value provided.</comment>
   </data>
 </root>

@@ -7,9 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using RestFoundation.Behaviors;
 using RestFoundation.Results;
 using RestFoundation.Runtime.Handlers;
@@ -61,9 +59,8 @@ namespace RestFoundation.Runtime
         /// <param name="handler">The REST handler associated with the HTTP request.</param>
         /// <param name="service">The service instance.</param>
         /// <param name="method">The service method.</param>
-        /// <param name="token">The cancellation token for the returned task.</param>
         /// <returns>A task that invokes the service method.</returns>
-        public virtual Task Invoke(IRestServiceHandler handler, object service, MethodInfo method, CancellationToken token)
+        public virtual Task InvokeAsync(IRestServiceHandler handler, object service, MethodInfo method)
         {
             if (service == null || method == null)
             {
@@ -80,21 +77,17 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingServiceContext);
             }
 
-            var invocationTask = new Task(context =>
-            {
-                TrySetHttpContext(context);
-                ServiceInvocationDelegate(handler, service, method, token);
-            }, HttpContext.Current, token);
+            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, service, method);
+            AddServiceBehaviors(method, behaviors);
+
+            LogUtility.LogRequestData(handler.Context.GetHttpContext());
+
+            object returnedObject = InvokeAndProcessExceptions(handler, service, method, behaviors);
+            Task invocationTask = CreateResultTask(handler, returnedObject, method.ReturnType);
+
+            LogUtility.LogResponseData(handler.Context.GetHttpContext());
 
             return invocationTask;
-        }
-
-        private static void TrySetHttpContext(object context)
-        {
-            if (context != null && HttpContext.Current == null)
-            {
-                HttpContext.Current = (HttpContext) context;
-            }
         }
 
         private static List<IServiceBehavior> GetServiceMethodBehaviors(IRestServiceHandler handler, object service, MethodInfo method)
@@ -246,30 +239,13 @@ namespace RestFoundation.Runtime
             return methodArguments.ToArray();
         }
 
-        private void ServiceInvocationDelegate(IRestServiceHandler handler, object service, MethodInfo method, CancellationToken token)
-        {
-            List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, service, method);
-            AddServiceBehaviors(method, behaviors);
-            token.ThrowIfCancellationRequested();
-
-            LogUtility.LogRequestData(handler.Context.GetHttpContext());
-
-            object returnedObject = InvokeAndProcessExceptions(handler, service, method, behaviors);
-            token.ThrowIfCancellationRequested();
-
-            CreateResultTask(handler, returnedObject, method.ReturnType);
-            token.ThrowIfCancellationRequested();
-
-            LogUtility.LogResponseData(handler.Context.GetHttpContext());
-        }
-
-        private void CreateResultTask(IRestServiceHandler handler, object returnedObject, Type methodReturnType)
+        private async Task CreateResultTask(IRestServiceHandler handler, object returnedObject, Type methodReturnType)
         {
             var returnedTask = returnedObject as Task;
 
             if (returnedTask != null)
             {
-                returnedTask.Wait();
+                await returnedTask;
 
                 var taskInfo = GetTaskInfo(returnedTask);
                 returnedObject = taskInfo.Item1;

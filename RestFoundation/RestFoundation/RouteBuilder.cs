@@ -27,7 +27,7 @@ namespace RestFoundation
 
         private readonly string m_relativeUrl;
         private readonly RouteCollection m_routes;
-        private TimeSpan? m_serviceTimeout;
+        private TimeSpan? m_asyncTimeout;
 
         internal RouteBuilder(string relativeUrl, RouteCollection routes)
         {
@@ -46,19 +46,20 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Sets a service method execution timeout for the mapped URL. The default value is 60 seconds.
+        /// Sets a timeout for asynchronous tasks returned by the services for the mapped URL. The default value is
+        /// <see cref="TimeSpan.Zero"/> representing no timeout.
         /// </summary>
         /// <param name="timeout">The timeout value.</param>
         /// <returns>The route builder.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If a negative, non-infinite timeout is provided.</exception>
-        public RouteBuilder WithServiceTimeout(TimeSpan timeout)
+        public RouteBuilder WithAsyncTimeout(TimeSpan timeout)
         {
             if (timeout.TotalSeconds < -1)
             {
-                throw new ArgumentOutOfRangeException("timeout", RestResources.InvalidServiceMethodTimeout);
+                throw new ArgumentOutOfRangeException("timeout", RestResources.InvalidAsyncTimeout);
             }
 
-            m_serviceTimeout = timeout.TotalSeconds > 0 ? timeout : TimeSpan.Zero;
+            m_asyncTimeout = timeout.TotalSeconds > 0 ? timeout : TimeSpan.Zero;
             return this;
         }
 
@@ -247,9 +248,9 @@ namespace RestFoundation
 
                 var routeHandler = Rest.Configuration.ServiceLocator.GetService<IRestServiceHandler>();
 
-                if (m_serviceTimeout.HasValue)
+                if (m_asyncTimeout.HasValue)
                 {
-                    routeHandler.ServiceTimeout = m_serviceTimeout.Value;
+                    routeHandler.ServiceAsyncTimeout = m_asyncTimeout.Value;
                 }
 
                 routeHandlers.Add(routeHandler);

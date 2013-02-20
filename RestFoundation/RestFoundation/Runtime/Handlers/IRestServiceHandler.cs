@@ -29,10 +29,10 @@ namespace RestFoundation.Runtime.Handlers
         string UrlTemplate { get; }
 
         /// <summary>
-        /// Gets or sets a value representing the service method execution timeout.
-        /// Setting the value to <see cref="TimeSpan.Zero"/> indicates no timeout.
+        /// Gets or sets a value representing a timeout for an asynchronous task returned by a
+        /// service method. Setting the value to <see cref="TimeSpan.Zero"/> indicates no timeout.
         /// </summary>
-        TimeSpan ServiceTimeout { get; set; }
+        TimeSpan ServiceAsyncTimeout { get; set; }
 
         /// <summary>
         /// When overridden in a derived class, provides code that handles an asynchronous task.

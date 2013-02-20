@@ -62,7 +62,7 @@
     <Compile Include="Behaviors\AjaxOnlyBehavior.cs" />
     <Compile Include="Behaviors\Attributes\AjaxOnlyAttribute.cs" />
     <Compile Include="Behaviors\Attributes\OutputCacheAttribute.cs" />
-    <Compile Include="Behaviors\Attributes\ServiceMethodTimeoutAttribute.cs" />
+    <Compile Include="Behaviors\Attributes\AsyncTimeoutAttribute.cs" />
     <Compile Include="Behaviors\Attributes\ThrottlingAttribute.cs" />
     <Compile Include="Behaviors\Attributes\ValidateResourceAttribute.cs" />
     <Compile Include="Behaviors\CacheValidationHandlerData.cs" />

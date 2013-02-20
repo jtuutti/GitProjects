@@ -241,6 +241,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid service async timeout value provided..
+        /// </summary>
+        internal static string InvalidAsyncTimeout {
+            get {
+                return ResourceManager.GetString("InvalidAsyncTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to URL templates cannot contain catch-all parameters. Template: &apos;{0}&apos;.
         /// </summary>
         internal static string InvalidCatchAllUrlTemplate {
@@ -453,15 +462,6 @@ namespace RestFoundation {
         internal static string InvalidServiceMethodExpression {
             get {
                 return ResourceManager.GetString("InvalidServiceMethodExpression", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid service method timeout value provided..
-        /// </summary>
-        internal static string InvalidServiceMethodTimeout {
-            get {
-                return ResourceManager.GetString("InvalidServiceMethodTimeout", resourceCulture);
             }
         }
         
@@ -822,15 +822,6 @@ namespace RestFoundation {
         internal static string OK {
             get {
                 return ResourceManager.GetString("OK", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Asynchronous service method timeout cannot be less than 1 second..
-        /// </summary>
-        internal static string OutOfRangeAsyncServiceTimeout {
-            get {
-                return ResourceManager.GetString("OutOfRangeAsyncServiceTimeout", resourceCulture);
             }
         }
         
