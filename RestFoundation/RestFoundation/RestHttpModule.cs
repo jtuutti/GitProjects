@@ -477,9 +477,9 @@ namespace RestFoundation
             if (LogUtility.CanLog)
             {
                 LogUtility.Writer.WriteInfo(String.Empty)
-                            .WriteInfo("--- SERVICE CALL ENDED ---")
-                            .WriteInfo(String.Empty)
-                            .Flush();
+                          .WriteInfo("--- SERVICE CALL ENDED ---")
+                          .WriteInfo(String.Empty)
+                          .Flush();
             }
         }
 

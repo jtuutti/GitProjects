@@ -90,6 +90,7 @@
     <Compile Include="LinkRelationValues.cs" />
     <Compile Include="LogWriterExtensions.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
+    <Compile Include="Results\IResultAsync.cs" />
     <Compile Include="Results\ResponseResult.cs" />
     <Compile Include="RouteHash.cs" />
     <Compile Include="Runtime\AllowHeaderParser.cs" />

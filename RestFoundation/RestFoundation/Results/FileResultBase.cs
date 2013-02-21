@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RestFoundation.Results
 {
@@ -14,7 +15,7 @@ namespace RestFoundation.Results
     /// Represents a base file result.
     /// This class cannot be instantiated.
     /// </summary>
-    public abstract class FileResultBase : IResult
+    public abstract class FileResultBase : IResultAsync
     {
         private const string DefaultBinaryContentType = "application/octet-stream";
 
@@ -29,10 +30,26 @@ namespace RestFoundation.Results
         public string ContentDisposition { get; set; }
 
         /// <summary>
-        /// Executes the result against the provided service context.
+        /// Executes the result against the provided service synchronously.
+        /// Asynchronous method should throw a <see cref="NotSupportedException"/> and implement
+        /// the <see cref="IResultAsync.ExecuteAsync"/> method instead.
         /// </summary>
         /// <param name="context">The service context.</param>
-        public virtual void Execute(IServiceContext context)
+        /// <exception cref="NotSupportedException">
+        /// When called from a service method result that implements the <see cref="IResultAsync"/>
+        /// interface.
+        /// </exception>
+        public void Execute(IServiceContext context)
+        {
+            throw new NotSupportedException(RestResources.UnsupportedSyncExecutionForAsyncResult);
+        }
+
+        /// <summary>
+        /// Executes the result against the provided service context asynchronously.
+        /// </summary>
+        /// <param name="context">The service context.</param>
+        /// <returns>A task executing the result.</returns>
+        public virtual Task ExecuteAsync(IServiceContext context)
         {
             if (context == null)
             {
@@ -50,7 +67,6 @@ namespace RestFoundation.Results
             context.Response.Output.Clear();
             context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
             context.Response.SetHeader(context.Response.HeaderNames.AcceptRanges, "bytes");
-            context.Response.SetHeader(context.Response.HeaderNames.ContentLength, file.Length.ToString(CultureInfo.InvariantCulture));
             context.Response.SetHeader(context.Response.HeaderNames.ContentType, ContentType ?? DefaultBinaryContentType);
             context.Response.SetHeader(context.Response.HeaderNames.ETag, GenerateETag(file));
 
@@ -59,7 +75,7 @@ namespace RestFoundation.Results
                 context.Response.SetHeader(context.Response.HeaderNames.ContentDisposition, ContentDisposition);
             }
 
-            TransmitFile(context, file);
+            return TransmitFile(context, file);
         }
 
         /// <summary>
@@ -69,7 +85,7 @@ namespace RestFoundation.Results
         /// <returns>The file info instance.</returns>
         protected abstract FileInfo GetFile(IServiceContext context);
 
-        private static void TransmitFile(IServiceContext context, FileInfo file)
+        private static async Task TransmitFile(IServiceContext context, FileInfo file)
         {
             var buffer = new byte[4096];
 
@@ -77,10 +93,10 @@ namespace RestFoundation.Results
             {
                 CreateRangeOutput(context, stream);
 
-                while (context.GetHttpContext().Response.IsClientConnected && stream.Read(buffer, 0, buffer.Length) > 0)
+                while (context.GetHttpContext().Response.IsClientConnected && await stream.ReadAsync(buffer, 0, buffer.Length) > 0)
                 {
-                    context.Response.Output.Stream.Write(buffer, 0, buffer.Length);                   
-                    context.Response.Output.Flush();
+                    await context.Response.Output.Stream.WriteAsync(buffer, 0, buffer.Length);
+                    await context.Response.Output.Stream.FlushAsync();
                 }
             }
         }
@@ -91,6 +107,7 @@ namespace RestFoundation.Results
 
             if (String.IsNullOrEmpty(rangeValue) || rangeValue.IndexOf("bytes=", StringComparison.OrdinalIgnoreCase) < 0)
             {
+                context.Response.SetHeader(context.Response.HeaderNames.ContentLength, stream.Length.ToString(CultureInfo.InvariantCulture));
                 return;
             }
 
@@ -111,7 +128,9 @@ namespace RestFoundation.Results
 
             if (start < 0 || end >= stream.Length || start > end)
             {
+                context.Response.SetHeader(context.Response.HeaderNames.ContentLength, stream.Length.ToString(CultureInfo.InvariantCulture));
                 context.Response.SetHeader(context.Response.HeaderNames.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes */{0}", stream.Length));
+
                 throw new HttpResponseException(HttpStatusCode.RequestedRangeNotSatisfiable, RestResources.UnsatisfiableRequestedRange);
             }
 
@@ -132,7 +151,7 @@ namespace RestFoundation.Results
             using (var hasher = new MD5CryptoServiceProvider())
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(fileData)))
             {
-                var hash = hasher.ComputeHash(stream);
+                byte[] hash = hasher.ComputeHash(stream);
                 return String.Concat("\"", Convert.ToBase64String(hash).TrimEnd('='), "\"");
             }
         }

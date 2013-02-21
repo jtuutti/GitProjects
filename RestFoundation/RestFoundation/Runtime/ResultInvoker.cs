@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Net;
+using System.Threading.Tasks;
 using RestFoundation.Results;
 
 namespace RestFoundation.Runtime
@@ -30,7 +31,7 @@ namespace RestFoundation.Runtime
             context.Response.SetStatus(HttpStatusCode.NoContent, statusDescription);
         }
 
-        public void Execute(IResult result, IServiceContext context)
+        public async Task Execute(IResult result, IServiceContext context)
         {
             if (context == null)
             {
@@ -42,7 +43,17 @@ namespace RestFoundation.Runtime
                 return;
             }
 
-            result.Execute(context);
+            var asyncResult = result as IResultAsync;
+
+            if (asyncResult != null)
+            {
+                await asyncResult.ExecuteAsync(context);
+            }
+            else
+            {
+                result.Execute(context);
+            }
+
             DisposeIfNecessary(result);
         }
 

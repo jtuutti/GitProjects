@@ -541,9 +541,9 @@
     <value>Too many requests</value>
     <comment>Too many requests</comment>
   </data>
-  <data name="UnsupportedSyncRequestForAsyncHandler" xml:space="preserve">
-    <value>Async route handler does not support synchronous requests.</value>
-    <comment>Async route handler does not support synchronous requests.</comment>
+  <data name="UnsupportedSyncExecutionForAsyncResult" xml:space="preserve">
+    <value>Asyncronous service method results must be executed by calling the ExecuteAsync(context) method.</value>
+    <comment>Asyncronous service method results must be executed by calling the ExecuteAsync(context) method.</comment>
   </data>
   <data name="InvalidIAsyncResultReturned" xml:space="preserve">
     <value>An unsupported asynchronous result was returned from the service method. Only objects of Task and Task&lt;T&gt; types are supported. Nested generic tasks are not supported.</value>

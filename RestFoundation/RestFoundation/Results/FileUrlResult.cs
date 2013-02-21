@@ -12,7 +12,7 @@ namespace RestFoundation.Results
     public class FileUrlResult : FileResultBase
     {
         /// <summary>
-        /// Gets or sets the file URL.
+        /// Gets or sets the file URL located in the same application as the service.
         /// </summary>
         public string FileUrl { get; set; }
 

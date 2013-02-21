@@ -1105,11 +1105,11 @@ namespace RestFoundation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Async route handler does not support synchronous requests..
+        ///   Looks up a localized string similar to Asyncronous service method results must be executed by calling the ExecuteAsync(context) method..
         /// </summary>
-        internal static string UnsupportedSyncRequestForAsyncHandler {
+        internal static string UnsupportedSyncExecutionForAsyncResult {
             get {
-                return ResourceManager.GetString("UnsupportedSyncRequestForAsyncHandler", resourceCulture);
+                return ResourceManager.GetString("UnsupportedSyncExecutionForAsyncResult", resourceCulture);
             }
         }
         

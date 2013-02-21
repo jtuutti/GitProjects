@@ -266,12 +266,8 @@ namespace RestFoundation.Runtime
             }
 
             IResult result = m_resultWrapper.Wrap(handler, returnedObject, methodReturnType);
-            resultExecutor.Execute(result, handler.Context);
 
-            if (returnedTask != null)
-            {
-                returnedTask.Dispose();
-            }
+            await resultExecutor.Execute(result, handler.Context);
         }
     }
 }
