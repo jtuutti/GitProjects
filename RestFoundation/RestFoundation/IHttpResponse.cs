@@ -20,6 +20,11 @@ namespace RestFoundation
         IHttpResponseOutput Output { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the client is connected to the server.
+        /// </summary>
+        bool IsClientConnected { get; }
+
+        /// <summary>
         /// Gets a value indicating whether the response status code is successful.
         /// </summary>
         bool IsSuccess { get; }

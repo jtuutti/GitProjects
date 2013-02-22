@@ -48,6 +48,17 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
+        /// Gets a value indicating whether the client is connected to the server.
+        /// </summary>
+        public bool IsClientConnected
+        {
+            get
+            {
+                return Context.Response.IsClientConnected;
+            }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the response status code is successful.
         /// </summary>
         public bool IsSuccess

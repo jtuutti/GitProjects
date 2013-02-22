@@ -262,21 +262,21 @@
             Gets or sets a comma delimited set of query string or form POST parameters used to vary the cache entry.
             </summary>
     </member>
-    <member name="T:RestFoundation.Behaviors.Attributes.ServiceMethodTimeoutAttribute">
+    <member name="T:RestFoundation.Behaviors.Attributes.AsyncTimeoutAttribute">
       <summary>
             Represents service method execution and result processing timeouts.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.ServiceMethodTimeoutAttribute.#ctor(System.Int32)">
+    <member name="M:RestFoundation.Behaviors.Attributes.AsyncTimeoutAttribute.#ctor(System.Int32)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.ServiceMethodTimeoutAttribute" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.AsyncTimeoutAttribute" /> class.
             </summary>
-      <param name="serviceTimeoutInSeconds">
-            The service method execution timeout value in seconds. Set the value to <see cref="F:System.TimeSpan.Zero" />
-            for an infinite timeout.
+      <param name="timeoutInSeconds">
+            A timeout for an asynchronous task returned by the service method in seconds.
+            Set the value to <see cref="F:System.TimeSpan.Zero" /> for an infinite timeout.
             </param>
     </member>
-    <member name="P:RestFoundation.Behaviors.Attributes.ServiceMethodTimeoutAttribute.ServiceTimeoutInSeconds">
+    <member name="P:RestFoundation.Behaviors.Attributes.AsyncTimeoutAttribute.TimeoutInSeconds">
       <summary>
             Gets the service method execution timeout value in seconds.
             </summary>
@@ -1094,10 +1094,26 @@
             Flushes the log buffer.
             </summary>
     </member>
+    <member name="M:RestFoundation.ILogWriter.FlushAsync">
+      <summary>
+            Flushes the log buffer asynchronously. The synchronous <see cref="M:RestFoundation.ILogWriter.Flush" />
+            method must also be implemented for the REST Foundation HTTP module to work correctly.
+            </summary>
+      <returns>The task that flashes the log buffer.</returns>
+      <exception cref="T:System.NotSupportedException">
+            If the logger's <see cref="P:RestFoundation.ILogWriter.SupportsAsyncFlush" /> property is set to false.
+            </exception>
+    </member>
     <member name="P:RestFoundation.ILogWriter.LogGeneratedInfo">
       <summary>
             Gets a value indicating whether to log messages automatically generated
             by the REST foundation.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ILogWriter.SupportsAsyncFlush">
+      <summary>
+            Gets a value indicating whether the log writer supports the <see cref="M:RestFoundation.ILogWriter.FlushAsync" />
+            operation.
             </summary>
     </member>
     <member name="T:RestFoundation.InstanceLifetime">
@@ -1594,6 +1610,30 @@
             </summary>
       <param name="context">The service context.</param>
     </member>
+    <member name="T:RestFoundation.Results.IResultAsync">
+      <summary>
+            Defines an asynchronous service method result.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Results.IResultAsync.Execute(RestFoundation.IServiceContext)">
+      <summary>
+            Executes the result against the provided service synchronously.
+            Asynchronous method should throw a <see cref="T:System.NotSupportedException" /> and implement
+            the <see cref="M:RestFoundation.Results.IResultAsync.ExecuteAsync(RestFoundation.IServiceContext)" /> method instead.
+            </summary>
+      <param name="context">The service context.</param>
+      <exception cref="T:System.NotSupportedException">
+            When called from a service method result that implements the <see cref="T:RestFoundation.Results.IResultAsync" />
+            interface.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Results.IResultAsync.ExecuteAsync(RestFoundation.IServiceContext)">
+      <summary>
+            Executes the result against the provided service context asynchronously.
+            </summary>
+      <param name="context">The service context.</param>
+      <returns>A task executing the result.</returns>
+    </member>
     <member name="T:RestFoundation.Results.ResponseResult">
       <summary>
             Represents a result with a custom response action.
@@ -1667,10 +1707,25 @@
             Flushes the log buffer.
             </summary>
     </member>
+    <member name="M:RestFoundation.Runtime.ConsoleLogWriter.FlushAsync">
+      <summary>
+            Flushes the log buffer asynchronously.
+            </summary>
+      <returns>The task that flashes the log buffer.</returns>
+      <exception cref="T:System.NotSupportedException">
+            If the logger's <see cref="P:RestFoundation.ILogWriter.SupportsAsyncFlush" /> property is set to false.
+            </exception>
+    </member>
     <member name="P:RestFoundation.Runtime.ConsoleLogWriter.LogGeneratedInfo">
       <summary>
             Gets a value indicating whether to log messages automatically generated
             by the REST foundation.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.ConsoleLogWriter.SupportsAsyncFlush">
+      <summary>
+            Gets a value indicating whether the log writer supports the <see cref="M:RestFoundation.ILogWriter.FlushAsync" />
+            operation.
             </summary>
     </member>
     <member name="T:RestFoundation.Runtime.DebugLogWriter">
@@ -1712,10 +1767,25 @@
             Flushes the log buffer.
             </summary>
     </member>
+    <member name="M:RestFoundation.Runtime.DebugLogWriter.FlushAsync">
+      <summary>
+            Flushes the log buffer asynchronously.
+            </summary>
+      <returns>The task that flashes the log buffer.</returns>
+      <exception cref="T:System.NotSupportedException">
+            If the logger's <see cref="P:RestFoundation.ILogWriter.SupportsAsyncFlush" /> property is set to false.
+            </exception>
+    </member>
     <member name="P:RestFoundation.Runtime.DebugLogWriter.LogGeneratedInfo">
       <summary>
             Gets a value indicating whether to log messages automatically generated
             by the REST foundation.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.DebugLogWriter.SupportsAsyncFlush">
+      <summary>
+            Gets a value indicating whether the log writer supports the <see cref="M:RestFoundation.ILogWriter.FlushAsync" />
+            operation.
             </summary>
     </member>
     <member name="T:RestFoundation.Runtime.Fault">
@@ -1814,10 +1884,10 @@
             Gets a relative URL template.
             </summary>
     </member>
-    <member name="P:RestFoundation.Runtime.Handlers.IRestServiceHandler.ServiceTimeout">
+    <member name="P:RestFoundation.Runtime.Handlers.IRestServiceHandler.ServiceAsyncTimeout">
       <summary>
-            Gets or sets a value representing the service method execution timeout.
-            Setting the value to <see cref="F:System.TimeSpan.Zero" /> indicates no timeout.
+            Gets or sets a value representing a timeout for an asynchronous task returned by a
+            service method. Setting the value to <see cref="F:System.TimeSpan.Zero" /> indicates no timeout.
             </summary>
     </member>
     <member name="T:RestFoundation.Runtime.Handlers.RestServiceHandler">
@@ -1869,10 +1939,10 @@
             Gets a relative URL template.
             </summary>
     </member>
-    <member name="P:RestFoundation.Runtime.Handlers.RestServiceHandler.ServiceTimeout">
+    <member name="P:RestFoundation.Runtime.Handlers.RestServiceHandler.ServiceAsyncTimeout">
       <summary>
-            Gets or sets a value representing the service method execution timeout.
-            Setting the value to <see cref="F:System.TimeSpan.Zero" /> indicates no timeout.
+            Gets or sets a value representing a timeout for an asynchronous task returned by a
+            service method. Setting the value to <see cref="F:System.TimeSpan.Zero" /> indicates no timeout.
             </summary>
     </member>
     <member name="T:RestFoundation.Link">
@@ -2268,6 +2338,11 @@
               Looks up a localized string similar to The argument contains invalid elements..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.InvalidAsyncTimeout">
+      <summary>
+              Looks up a localized string similar to Invalid service async timeout value provided..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.InvalidCatchAllUrlTemplate">
       <summary>
               Looks up a localized string similar to URL templates cannot contain catch-all parameters. Template: '{0}'.
@@ -2386,11 +2461,6 @@
     <member name="P:RestFoundation.RestResources.InvalidServiceMethodExpression">
       <summary>
               Looks up a localized string similar to Invalid service method lambda expression provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.RestResources.InvalidServiceMethodTimeout">
-      <summary>
-              Looks up a localized string similar to Invalid service method timeout value provided..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.InvalidServiceName">
@@ -2593,11 +2663,6 @@
               Looks up a localized string similar to OK.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.OutOfRangeAsyncServiceTimeout">
-      <summary>
-              Looks up a localized string similar to Asynchronous service method timeout cannot be less than 1 second..
-            </summary>
-    </member>
     <member name="P:RestFoundation.RestResources.OvercomplicatedMethodArgument">
       <summary>
               Looks up a localized string similar to Method argument '{0}' has a value that is to complex to process. It must be a simple constant or variable value..
@@ -2733,6 +2798,11 @@
               Looks up a localized string similar to HTTP Method '{0}' is not supported..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.UnsupportedLogWriterAsyncFlush">
+      <summary>
+              Looks up a localized string similar to The current log writer does not support asynchronous flushes..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.UnsupportedMediaType">
       <summary>
               Looks up a localized string similar to Media type is not supported.
@@ -2753,9 +2823,9 @@
               Looks up a localized string similar to The service is configured not to list its contents in the requested format..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedSyncRequestForAsyncHandler">
+    <member name="P:RestFoundation.RestResources.UnsupportedSyncExecutionForAsyncResult">
       <summary>
-              Looks up a localized string similar to Async route handler does not support synchronous requests..
+              Looks up a localized string similar to Asyncronous service method results must be executed by calling the ExecuteAsync(context) method..
             </summary>
     </member>
     <member name="P:RestFoundation.RestResources.ValidationFailed">
@@ -2986,10 +3056,25 @@
             Flushes the log buffer.
             </summary>
     </member>
+    <member name="M:RestFoundation.Runtime.NullLogWriter.FlushAsync">
+      <summary>
+            Flushes the log buffer asynchronously.
+            </summary>
+      <returns>The task that flashes the log buffer.</returns>
+      <exception cref="T:System.NotSupportedException">
+            If the logger's <see cref="P:RestFoundation.ILogWriter.SupportsAsyncFlush" /> property is set to false.
+            </exception>
+    </member>
     <member name="P:RestFoundation.Runtime.NullLogWriter.LogGeneratedInfo">
       <summary>
             Gets a value indicating whether to log messages automatically generated
             by the REST foundation.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Runtime.NullLogWriter.SupportsAsyncFlush">
+      <summary>
+            Gets a value indicating whether the log writer supports the <see cref="M:RestFoundation.ILogWriter.FlushAsync" />
+            operation.
             </summary>
     </member>
     <member name="T:RestFoundation.Runtime.ServiceFactory">
@@ -3204,9 +3289,22 @@
     </member>
     <member name="M:RestFoundation.Results.FileResultBase.Execute(RestFoundation.IServiceContext)">
       <summary>
-            Executes the result against the provided service context.
+            Executes the result against the provided service synchronously.
+            Asynchronous method should throw a <see cref="T:System.NotSupportedException" /> and implement
+            the <see cref="M:RestFoundation.Results.IResultAsync.ExecuteAsync(RestFoundation.IServiceContext)" /> method instead.
             </summary>
       <param name="context">The service context.</param>
+      <exception cref="T:System.NotSupportedException">
+            When called from a service method result that implements the <see cref="T:RestFoundation.Results.IResultAsync" />
+            interface.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Results.FileResultBase.ExecuteAsync(RestFoundation.IServiceContext)">
+      <summary>
+            Executes the result against the provided service context asynchronously.
+            </summary>
+      <param name="context">The service context.</param>
+      <returns>A task executing the result.</returns>
     </member>
     <member name="M:RestFoundation.Results.FileResultBase.GetFile(RestFoundation.IServiceContext)">
       <summary>
@@ -3285,9 +3383,10 @@
             Represents a route builder for the specified relative URL.
             </summary>
     </member>
-    <member name="M:RestFoundation.RouteBuilder.WithServiceTimeout(System.TimeSpan)">
+    <member name="M:RestFoundation.RouteBuilder.WithAsyncTimeout(System.TimeSpan)">
       <summary>
-            Sets a service method execution timeout for the mapped URL. The default value is 60 seconds.
+            Sets a timeout for asynchronous tasks returned by the services for the mapped URL. The default value is
+            <see cref="F:System.TimeSpan.Zero" /> representing no timeout.
             </summary>
       <param name="timeout">The timeout value.</param>
       <returns>The route builder.</returns>
@@ -6267,6 +6366,12 @@
             Sends all the buffered output the the client.
             </summary>
     </member>
+    <member name="M:RestFoundation.IHttpResponseOutput.FlushAsync">
+      <summary>
+            Sends all the buffered output the the client asynchronously.
+            </summary>
+      <returns>The task that flushes the context.</returns>
+    </member>
     <member name="M:RestFoundation.IHttpResponseOutput.Clear">
       <summary>
             Clears all the output data in the response.
@@ -6314,6 +6419,22 @@
       <param name="format">The format string.</param>
       <param name="values">An object array that contains zero or more objects to format.</param>
       <returns>The response output object.</returns>
+    </member>
+    <member name="M:RestFoundation.IHttpResponseOutput.WriteAsync(System.String)">
+      <summary>
+            Writes a string to the output stream asynchronously.
+            </summary>
+      <param name="value">A string value to write.</param>
+      <returns>The task that writes the value into the output stream.</returns>
+    </member>
+    <member name="M:RestFoundation.IHttpResponseOutput.WriteAsync(System.Char[],System.Int32,System.Int32)">
+      <summary>
+            Writes an array of characters to the output stream asynchronously.
+            </summary>
+      <param name="buffer">An array of characters.</param>
+      <param name="index">A position in the array to start writing characters.</param>
+      <param name="count">A number of characters to write.</param>
+      <returns>The task that writes the value into the output stream.</returns>
     </member>
     <member name="P:RestFoundation.IHttpResponseOutput.Buffer">
       <summary>
@@ -7037,7 +7158,7 @@
     </member>
     <member name="P:RestFoundation.Results.FileUrlResult.FileUrl">
       <summary>
-            Gets or sets the file URL.
+            Gets or sets the file URL located in the same application as the service.
             </summary>
     </member>
     <member name="T:RestFoundation.Results.FilePathResult">
@@ -7620,6 +7741,12 @@
             Sends all the buffered output the the client.
             </summary>
     </member>
+    <member name="M:RestFoundation.Context.HttpResponseOutput.FlushAsync">
+      <summary>
+            Sends all the buffered output the the client asynchronously.
+            </summary>
+      <returns>The task that flushes the context.</returns>
+    </member>
     <member name="M:RestFoundation.Context.HttpResponseOutput.Clear">
       <summary>
             Clears all the output data in the response.
@@ -7667,6 +7794,22 @@
       <param name="format">The format string.</param>
       <param name="values">An object array that contains zero or more objects to format.</param>
       <returns>The response output object.</returns>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponseOutput.WriteAsync(System.String)">
+      <summary>
+            Writes a string to the output stream asynchronously.
+            </summary>
+      <param name="value">A string value to write.</param>
+      <returns>The task that writes the value into the output stream.</returns>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponseOutput.WriteAsync(System.Char[],System.Int32,System.Int32)">
+      <summary>
+            Writes an array of characters to the output stream asynchronously.
+            </summary>
+      <param name="buffer">An array of characters.</param>
+      <param name="index">A position in the array to start writing characters.</param>
+      <param name="count">A number of characters to write.</param>
+      <returns>The task that writes the value into the output stream.</returns>
     </member>
     <member name="P:RestFoundation.Context.HttpResponseOutput.Buffer">
       <summary>
@@ -9033,6 +9176,11 @@
             Gets the response output.
             </summary>
     </member>
+    <member name="P:RestFoundation.IHttpResponse.IsClientConnected">
+      <summary>
+            Gets a value indicating whether the client is connected to the server.
+            </summary>
+    </member>
     <member name="P:RestFoundation.IHttpResponse.IsSuccess">
       <summary>
             Gets a value indicating whether the response status code is successful.
@@ -9222,14 +9370,13 @@
             Defines a service method invoker.
             </summary>
     </member>
-    <member name="M:RestFoundation.IServiceMethodInvoker.Invoke(RestFoundation.Runtime.Handlers.IRestServiceHandler,System.Object,System.Reflection.MethodInfo,System.Threading.CancellationToken)">
+    <member name="M:RestFoundation.IServiceMethodInvoker.InvokeAsync(RestFoundation.Runtime.Handlers.IRestServiceHandler,System.Object,System.Reflection.MethodInfo)">
       <summary>
-            Invokes the service method.
+            Invokes the service method asynchronously.
             </summary>
       <param name="handler">The REST handler associated with the HTTP request.</param>
       <param name="service">The service instance.</param>
       <param name="method">The service method.</param>
-      <param name="token">The cancellation token for the returned task.</param>
       <returns>A task that invokes the service method.</returns>
     </member>
     <member name="T:RestFoundation.IHttpRequest">
@@ -9563,6 +9710,11 @@
     <member name="P:RestFoundation.Context.HttpResponse.Output">
       <summary>
             Gets the response output.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Context.HttpResponse.IsClientConnected">
+      <summary>
+            Gets a value indicating whether the client is connected to the server.
             </summary>
     </member>
     <member name="P:RestFoundation.Context.HttpResponse.IsSuccess">
@@ -10248,14 +10400,13 @@
       <param name="parameterValueProvider">The parameter value provider.</param>
       <param name="resultWrapper">The service method result wrapper.</param>
     </member>
-    <member name="M:RestFoundation.Runtime.ServiceMethodInvoker.Invoke(RestFoundation.Runtime.Handlers.IRestServiceHandler,System.Object,System.Reflection.MethodInfo,System.Threading.CancellationToken)">
+    <member name="M:RestFoundation.Runtime.ServiceMethodInvoker.InvokeAsync(RestFoundation.Runtime.Handlers.IRestServiceHandler,System.Object,System.Reflection.MethodInfo)">
       <summary>
             Invokes the service method.
             </summary>
       <param name="handler">The REST handler associated with the HTTP request.</param>
       <param name="service">The service instance.</param>
       <param name="method">The service method.</param>
-      <param name="token">The cancellation token for the returned task.</param>
       <returns>A task that invokes the service method.</returns>
     </member>
     <member name="T:RestFoundation.HttpMethod">

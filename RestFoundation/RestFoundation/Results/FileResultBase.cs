@@ -93,7 +93,7 @@ namespace RestFoundation.Results
             {
                 CreateRangeOutput(context, stream);
 
-                while (context.GetHttpContext().Response.IsClientConnected && await stream.ReadAsync(buffer, 0, buffer.Length) > 0)
+                while (context.Response.IsClientConnected && await stream.ReadAsync(buffer, 0, buffer.Length) > 0)
                 {
                     await context.Response.Output.Stream.WriteAsync(buffer, 0, buffer.Length);
                     await context.Response.Output.Stream.FlushAsync();

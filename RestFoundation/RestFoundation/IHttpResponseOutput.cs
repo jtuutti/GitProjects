@@ -1,8 +1,8 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
-using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace RestFoundation
 {
@@ -40,6 +40,12 @@ namespace RestFoundation
         /// Sends all the buffered output the the client.
         /// </summary>
         void Flush();
+
+        /// <summary>
+        /// Sends all the buffered output the the client asynchronously.
+        /// </summary>
+        /// <returns>The task that flushes the context.</returns>
+        Task FlushAsync();
 
         /// <summary>
         /// Clears all the output data in the response.
@@ -88,5 +94,21 @@ namespace RestFoundation
         /// <param name="values">An object array that contains zero or more objects to format.</param>
         /// <returns>The response output object.</returns>
         IHttpResponseOutput WriteFormat(string format, params object[] values);
+
+        /// <summary>
+        /// Writes a string to the output stream asynchronously.
+        /// </summary>
+        /// <param name="value">A string value to write.</param>
+        /// <returns>The task that writes the value into the output stream.</returns>
+        Task WriteAsync(string value);
+
+        /// <summary>
+        /// Writes an array of characters to the output stream asynchronously.
+        /// </summary>
+        /// <param name="buffer">An array of characters.</param>
+        /// <param name="index">A position in the array to start writing characters.</param>
+        /// <param name="count">A number of characters to write.</param>
+        /// <returns>The task that writes the value into the output stream.</returns>
+        Task WriteAsync(char[] buffer, int index, int count);
     }
 }

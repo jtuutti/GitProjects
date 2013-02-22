@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace RestFoundation.Context
 {
@@ -96,6 +97,15 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
+        /// Sends all the buffered output the the client asynchronously.
+        /// </summary>
+        /// <returns>The task that flushes the context.</returns>
+        public Task FlushAsync()
+        {
+            return Task.Factory.FromAsync(Context.Response.BeginFlush, Context.Response.EndFlush, Context);
+        }
+
+        /// <summary>
         /// Clears all the output data in the response.
         /// </summary>
         public void Clear()
@@ -178,6 +188,28 @@ namespace RestFoundation.Context
 
             Writer.Write(format, values);
             return this;
+        }
+
+        /// <summary>
+        /// Writes a string to the output stream asynchronously.
+        /// </summary>
+        /// <param name="value">A string value to write.</param>
+        /// <returns>The task that writes the value into the output stream.</returns>
+        public Task WriteAsync(string value)
+        {
+            return Writer.WriteAsync(value);
+        }
+
+        /// <summary>
+        /// Writes an array of characters to the output stream asynchronously.
+        /// </summary>
+        /// <param name="buffer">An array of characters.</param>
+        /// <param name="index">A position in the array to start writing characters.</param>
+        /// <param name="count">A number of characters to write.</param>
+        /// <returns>The task that writes the value into the output stream.</returns>
+        public Task WriteAsync(char[] buffer, int index, int count)
+        {
+            return Writer.WriteAsync(buffer, index, count);
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
+using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace RestFoundation.Runtime
 {
@@ -19,6 +21,18 @@ namespace RestFoundation.Runtime
             get
             {
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the log writer supports the <see cref="ILogWriter.FlushAsync"/>
+        /// operation.
+        /// </summary>
+        public bool SupportsAsyncFlush
+        {
+            get
+            {
+                return false;
             }
         }
 
@@ -73,6 +87,18 @@ namespace RestFoundation.Runtime
         public void Flush()
         {
             Debug.Flush();
+        }
+
+        /// <summary>
+        /// Flushes the log buffer asynchronously.
+        /// </summary>
+        /// <returns>The task that flashes the log buffer.</returns>
+        /// <exception cref="NotSupportedException">
+        /// If the logger's <see cref="ILogWriter.SupportsAsyncFlush"/> property is set to false.
+        /// </exception>
+        public Task FlushAsync()
+        {
+            throw new NotSupportedException(RestResources.UnsupportedSyncExecutionForAsyncResult);
         }
     }
 }

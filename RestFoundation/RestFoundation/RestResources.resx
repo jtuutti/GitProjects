@@ -593,4 +593,8 @@
     <value>Invalid service async timeout value provided.</value>
     <comment>Invalid service async timeout value provided.</comment>
   </data>
+  <data name="UnsupportedLogWriterAsyncFlush" xml:space="preserve">
+    <value>The current log writer does not support asynchronous flushes.</value>
+    <comment>The current log writer does not support asynchronous flushes.</comment>
+  </data>
 </root>

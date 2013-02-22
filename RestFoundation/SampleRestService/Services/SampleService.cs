@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using RestFoundation;
 using RestFoundation.Results;
 using SampleRestService.Contracts;
@@ -48,13 +49,13 @@ namespace SampleRestService.Services
             return m_repository.GetAll();
         }
 
-        public Product Post(Product resource)
+        public async Task<Product> Post(Product resource)
         {
             // resource validation is happening in the ValidateResourceAttribute defined on the service contract
 
             try
             {
-                m_repository.Add(resource);
+                await m_repository.AddAsync(resource);
             }
             catch (ArgumentException ex) // invalid input arguments passed to the repository
             {
@@ -74,14 +75,14 @@ namespace SampleRestService.Services
             return Result.ObjectWithResponseStatus(addedResource, HttpStatusCode.Created, "Product added", responseHeaders);
         }
 
-        public Product Put(int id, Product resource)
+        public async Task<Product> Put(int id, Product resource)
         {
             // resource validation is happening in the ValidateResourceAttribute defined on the service contract
 
             try
             {
                 resource.ID = id;
-                m_repository.Update(resource);
+                await m_repository.UpdateAsync(resource);
             }
             catch (ArgumentException ex) // invalid input arguments passed to the repository
             {

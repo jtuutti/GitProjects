@@ -1069,6 +1069,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The current log writer does not support asynchronous flushes..
+        /// </summary>
+        internal static string UnsupportedLogWriterAsyncFlush {
+            get {
+                return ResourceManager.GetString("UnsupportedLogWriterAsyncFlush", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Media type is not supported.
         /// </summary>
         internal static string UnsupportedMediaType {

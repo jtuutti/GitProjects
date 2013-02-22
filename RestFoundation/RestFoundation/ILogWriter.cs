@@ -1,6 +1,10 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
+
+using System;
+using System.Threading.Tasks;
+
 namespace RestFoundation
 {
     /// <summary>
@@ -13,6 +17,12 @@ namespace RestFoundation
         /// by the REST foundation.
         /// </summary>
         bool LogGeneratedInfo { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the log writer supports the <see cref="ILogWriter.FlushAsync"/>
+        /// operation.
+        /// </summary>
+        bool SupportsAsyncFlush { get; }
 
         /// <summary>
         /// Writes a debug message into the log buffer.
@@ -50,5 +60,15 @@ namespace RestFoundation
         /// Flushes the log buffer.
         /// </summary>
         void Flush();
+
+        /// <summary>
+        /// Flushes the log buffer asynchronously. The synchronous <see cref="ILogWriter.Flush"/>
+        /// method must also be implemented for the REST Foundation HTTP module to work correctly.
+        /// </summary>
+        /// <returns>The task that flashes the log buffer.</returns>
+        /// <exception cref="NotSupportedException">
+        /// If the logger's <see cref="SupportsAsyncFlush"/> property is set to false.
+        /// </exception>
+        Task FlushAsync();
     }
 }

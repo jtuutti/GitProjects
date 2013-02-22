@@ -38,6 +38,7 @@ namespace RestFoundation.UnitTesting
             StatusDescription = RestResources.OK;
         }
 
+        public override bool BufferOutput { get; set; }
         public override string Charset { get; set; }
         public override string ContentType { get; set; }
         public override Encoding ContentEncoding { get; set; }
@@ -46,6 +47,14 @@ namespace RestFoundation.UnitTesting
         public override string StatusDescription { get; set; }
         public override bool SuppressContent { get; set; }
         public override bool TrySkipIisCustomErrors { get; set; }
+
+        public override bool IsClientConnected
+        {
+            get
+            {
+                return true;
+            }
+        }
 
         public override NameValueCollection Headers
         {
@@ -98,8 +107,6 @@ namespace RestFoundation.UnitTesting
                 m_filter = value;
             }
         }
-
-        public override bool BufferOutput { get; set; }
 
         public override void AddHeader(string name, string value)
         {

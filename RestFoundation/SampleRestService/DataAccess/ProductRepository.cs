@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SampleRestService.Resources;
 
 namespace SampleRestService.DataAccess
@@ -104,6 +105,16 @@ namespace SampleRestService.DataAccess
 
                 storedProduct.InStock = inStock;
             }
+        }
+
+        public Task AddAsync(Product product)
+        {
+            return Task.Factory.StartNew(p => Add((Product) p), product);
+        }
+   
+        public Task UpdateAsync(Product product)
+        {
+            return Task.Factory.StartNew(p => Update((Product) p), product);
         }
 
         public virtual bool Delete(int productId)
