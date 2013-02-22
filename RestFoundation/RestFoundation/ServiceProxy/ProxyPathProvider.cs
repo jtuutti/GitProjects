@@ -17,6 +17,12 @@ namespace RestFoundation.ServiceProxy
         /// <summary>
         /// Initializes the virtual path provider.
         /// </summary>
+        /// <remarks>
+        /// For some security reason .NET does not allow registering virtual path providers
+        /// for pre-compiled web application. REST Foundation requires full trust and has
+        /// no issues with the virtual provider in a pre-compiled web application.
+        /// The code in this method is a work around that restriction.
+        /// </remarks>
         public static void AppInitialize()
         {
             var provider = new ProxyPathProvider();           
@@ -32,14 +38,14 @@ namespace RestFoundation.ServiceProxy
                 return;
             }
 
-            MethodInfo mi = typeof(HostingEnvironment).GetMethod("RegisterVirtualPathProviderInternal", BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo method = typeof(HostingEnvironment).GetMethod("RegisterVirtualPathProviderInternal", BindingFlags.NonPublic | BindingFlags.Static);
 
-            if (mi == null)
+            if (method == null)
             {
                 return;
             }
 
-            mi.Invoke(environment, new object[] { provider });
+            method.Invoke(environment, new object[] { provider });
         }
 
         /// <summary>
