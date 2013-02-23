@@ -9995,6 +9995,12 @@
       <summary>
             Initializes the virtual path provider.
             </summary>
+      <remarks>
+            For some security reason .NET does not allow registering virtual path providers
+            for pre-compiled web application. REST Foundation requires full trust and has
+            no issues with the virtual provider in a pre-compiled web application.
+            The code in this method is a work around that restriction.
+            </remarks>
     </member>
     <member name="M:RestFoundation.ServiceProxy.ProxyPathProvider.FileExists(System.String)">
       <summary>
