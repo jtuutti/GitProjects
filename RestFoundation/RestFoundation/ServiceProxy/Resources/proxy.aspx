@@ -532,31 +532,34 @@
 
         try
         {
+            Task<string> responseDataTask;
+        
             switch (httpMethod.ToUpperInvariant())
             {
                 case "DELETE":
-                    response.Data = await client.UploadStringTaskAsync(url, HttpMethod.SelectedValue, String.Empty);
+                    responseDataTask = client.UploadStringTaskAsync(url, HttpMethod.SelectedValue, String.Empty);
                     break;
                 case "GET":
-                    response.Data = await client.DownloadStringTaskAsync(url);
+                    responseDataTask = client.DownloadStringTaskAsync(url);
                     break;
                 case "HEAD":
                     client.HeadOnly = true;
-                    response.Data = await client.DownloadStringTaskAsync(url);
+                    responseDataTask = client.DownloadStringTaskAsync(url);
                     break;
                 case "OPTIONS":
                     client.Options = true;
-                    response.Data = await client.DownloadStringTaskAsync(url);
+                    responseDataTask = client.DownloadStringTaskAsync(url);
                     break;
                 case "PATCH":
                 case "POST":
                 case "PUT":
-                    response.Data = await client.UploadStringTaskAsync(url, HttpMethod.SelectedValue, RequestText.Value);
+                    responseDataTask = client.UploadStringTaskAsync(url, HttpMethod.SelectedValue, RequestText.Value);
                     break;
                 default:
                     throw new HttpException((int) HttpStatusCode.MethodNotAllowed, "Invalid HTTP method provided");
             }
 
+            response.Data = await responseDataTask.ConfigureAwait(false);
             response.Code = GetStatusCode(client.WebResponse);
             response.ProtocolVersion = GetProtocolVersion(client.WebResponse);
         }

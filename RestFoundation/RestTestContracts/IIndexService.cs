@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using RestFoundation;
 using RestFoundation.Behaviors.Attributes;
 using RestFoundation.Results;
@@ -31,6 +32,9 @@ namespace RestTestContracts
 
         [Url("index/all", "Get, Head")]
         IQueryable<Person> GetAll();
+
+        [Url("index/all-async", "Get, Head")]
+        Task<IQueryable<Person>> GetAllAsync();
 
         [Url("index/all.{format}", "Get, Head")]
         IResult GetAllByFormat(string format);

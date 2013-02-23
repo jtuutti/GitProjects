@@ -283,7 +283,7 @@ namespace RestFoundation.Client
             IRestSerializer serializer = m_serializerFactory.Create(typeof(T), resource.Type, resource.XmlNamespace);
             request.ContentLength = serializer.GetContentLength(resource.ResourceBody);
 
-            var requestTask = Task<Stream>.Factory.FromAsync(request.BeginGetRequestStream, request.EndGetRequestStream, request);
+            var requestTask = Task<Stream>.Factory.FromAsync(request.BeginGetRequestStream, request.EndGetRequestStream, request).ConfigureAwait(false);
             serializer.Serialize(await requestTask, resource.ResourceBody);
         }
 
@@ -334,7 +334,7 @@ namespace RestFoundation.Client
         {
             try
             {
-                var responseTask = Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, request);
+                var responseTask = Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, request).ConfigureAwait(false);
 
                 using (var response = (HttpWebResponse) await responseTask)
                 {
@@ -375,7 +375,7 @@ namespace RestFoundation.Client
                     ServicePointManager.ServerCertificateValidationCallback = (obj, certificate, chain, errors) => true;
                 }
 
-                var responseTask = Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, request);
+                var responseTask = Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, request).ConfigureAwait(false);
 
                 using (var response = (HttpWebResponse) await responseTask)
                 {

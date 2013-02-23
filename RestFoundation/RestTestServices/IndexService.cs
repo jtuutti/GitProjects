@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 using RestFoundation;
+using RestFoundation.Client;
 using RestFoundation.Results;
 using RestTestContracts;
 using RestTestContracts.Resources;
@@ -99,6 +101,24 @@ namespace RestTestServices
         public IQueryable<Person> GetAll()
         {
             return new List<Person>(people).AsQueryable();
+        }
+
+        public async Task<IQueryable<Person>> GetAllAsync()
+        {
+            var client = RestClientFactory.Create();    
+            var allowedMethods = await client.OptionsAsync(Context.Request.Url);
+
+            if (!allowedMethods.Contains(HttpMethod.Get))
+            {
+                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "GET is not allowed");
+            }
+
+            var peopleQuery = await Task.Run(() => new List<Person>(people).AsQueryable());
+
+            // validates that the async task returns to the right thread
+            Context.Response.SetStatus(HttpStatusCode.OK, "Task completed asynchronously");
+
+            return peopleQuery;
         }
 
         public IResult GetAllByFormat(string format)

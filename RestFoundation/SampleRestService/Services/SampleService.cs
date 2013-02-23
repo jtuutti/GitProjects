@@ -49,7 +49,7 @@ namespace SampleRestService.Services
             return m_repository.GetAll();
         }
 
-        public async Task<Product> Post(Product resource)
+        public async Task<Product> PostAsync(Product resource)
         {
             // resource validation is happening in the ValidateResourceAttribute defined on the service contract
 
@@ -75,7 +75,7 @@ namespace SampleRestService.Services
             return Result.ObjectWithResponseStatus(addedResource, HttpStatusCode.Created, "Product added", responseHeaders);
         }
 
-        public async Task<Product> Put(int id, Product resource)
+        public async Task<Product> PutAsync(int id, Product resource)
         {
             // resource validation is happening in the ValidateResourceAttribute defined on the service contract
 

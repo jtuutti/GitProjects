@@ -19,10 +19,10 @@ namespace SampleRestService.Contracts
         IQueryable<Product> GetAll();
 
         [Url("product"), ValidateResource(true)]
-        Task<Product> Post(Product resource);
+        Task<Product> PostAsync(Product resource);
 
         [Url("product/{id}"), ValidateResource(true)]
-        Task<Product> Put(int id, Product resource);
+        Task<Product> PutAsync(int id, Product resource);
 
         [Url("product/{id}/in-stock/{inStock}")]
         Product PatchStockStatus(int id, bool inStock = true);

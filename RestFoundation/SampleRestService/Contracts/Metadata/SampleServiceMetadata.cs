@@ -29,12 +29,12 @@ namespace SampleRestService.Contracts.Metadata
             ForMethod(x => x.GetAll()).SetDescription("Gets all products")
                                       .SetResponseResourceExample(GetProductArray());
 
-            ForMethod(x => x.Post(Arg<Product>())).SetDescription("Creates a new product")
+            ForMethod(x => x.PostAsync(Arg<Product>())).SetDescription("Creates a new product")
                                                   .SetRequestResourceExample(CreateNewProduct())
                                                   .SetResponseResourceExample(GetProduct())
                                                   .SetResponseStatus(HttpStatusCode.Created, "Product created");
 
-            ForMethod(x => x.Put(1, Arg<Product>())).SetDescription("Updates a product")
+            ForMethod(x => x.PutAsync(1, Arg<Product>())).SetDescription("Updates a product")
                                                     .SetRequestResourceExample(GetProduct())
                                                     .SetResponseResourceExample(GetProduct())
                                                     .SetResponseStatus(HttpStatusCode.OK, "Product updated");
