@@ -215,7 +215,7 @@ namespace RestFoundation.Context
                         return m_contextContainer.Headers;
                     }
 
-                    m_contextContainer.Headers = new HeaderCollection(Context.Request.Headers);
+                    m_contextContainer.Headers = new HeaderCollection(IsUnvalidatedRequest ? Context.Request.Unvalidated.Headers : Context.Request.Headers);
                     return m_contextContainer.Headers;
                 }
             }
@@ -240,7 +240,7 @@ namespace RestFoundation.Context
                         return m_contextContainer.QueryString;
                     }
 
-                    m_contextContainer.QueryString = new StringValueCollection(Context.Request.QueryString);
+                    m_contextContainer.QueryString = new StringValueCollection(IsUnvalidatedRequest ? Context.Request.Unvalidated.QueryString : Context.Request.QueryString);
                     return m_contextContainer.QueryString;
                 }
             }
@@ -272,7 +272,7 @@ namespace RestFoundation.Context
                         return m_contextContainer.Form;
                     }
 
-                    m_contextContainer.Form = new StringValueCollection(Context.Request.Form);
+                    m_contextContainer.Form = new StringValueCollection(IsUnvalidatedRequest ? Context.Request.Unvalidated.Form : Context.Request.Form);
                     return m_contextContainer.Form;
                 }
             }
@@ -322,9 +322,17 @@ namespace RestFoundation.Context
                         return m_contextContainer.Cookies;
                     }
 
-                    m_contextContainer.Cookies = new CookieValueCollection(Context.Request.Cookies);
+                    m_contextContainer.Cookies = new CookieValueCollection(IsUnvalidatedRequest ? Context.Request.Unvalidated.Cookies : Context.Request.Cookies);
                     return m_contextContainer.Cookies;
                 }
+            }
+        }
+        
+        private bool IsUnvalidatedRequest
+        {
+            get
+            {
+                return ServiceRequestValidator.IsUnvalidatedRequest(Context);
             }
         }
 

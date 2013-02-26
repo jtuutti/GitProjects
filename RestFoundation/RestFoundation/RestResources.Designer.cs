@@ -475,6 +475,15 @@ namespace RestFoundation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service help/proxy relative URL can only contain letters and numbers with optional dashes in between. Relative URL &apos;{0}&apos; does not meet those requirements..
+        /// </summary>
+        internal static string InvalidServiceProxyRelativeUrl {
+            get {
+                return ResourceManager.GetString("InvalidServiceProxyRelativeUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid service URL or method lambda expression provided..
         /// </summary>
         internal static string InvalidServiceUrlOrMethodExpression {

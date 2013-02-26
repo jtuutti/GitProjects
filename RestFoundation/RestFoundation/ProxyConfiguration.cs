@@ -55,12 +55,7 @@ namespace RestFoundation
 
             if (!Regex.IsMatch(relativeUrl, "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z]+)?$"))
             {
-                string message = String.Format(CultureInfo.InvariantCulture,
-                                               "{0}. Relative URL '{1}' does not meet those requirements.",
-                                               "Service help/proxy relative URL can only contain letters and numbers with optional dashes in between",
-                                               relativeUrl);
-
-                throw new ArgumentException(message, "relativeUrl");
+                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidServiceProxyRelativeUrl, relativeUrl), "relativeUrl");
             }
 
             options.IsServiceProxyInitialized = true;
@@ -74,6 +69,7 @@ namespace RestFoundation
             RouteTable.Routes.Add("ProxyMetadataOp", new Route(relativeUrl + "/metadata.op.js", new JavaScriptRouteHandler("metadata.op.min.js")));
             RouteTable.Routes.Add("ProxyProxyOp", new Route(relativeUrl + "/proxy.op.js", new JavaScriptRouteHandler("proxy.op.min.js")));
             RouteTable.Routes.MapPageRoute("ProxyIndex", relativeUrl + "/index", "~/index.aspx");
+            RouteTable.Routes.MapPageRoute(String.Empty, relativeUrl + "/export", "~/export.aspx");
             RouteTable.Routes.MapPageRoute(String.Empty, relativeUrl + "/metadata", "~/metadata.aspx");
             RouteTable.Routes.MapPageRoute(String.Empty, relativeUrl + "/output", "~/output.aspx");
             RouteTable.Routes.MapPageRoute(String.Empty, relativeUrl + "/proxy", "~/proxy.aspx");

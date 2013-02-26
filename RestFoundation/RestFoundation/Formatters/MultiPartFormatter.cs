@@ -68,12 +68,12 @@ namespace RestFoundation.Formatters
 
         private static bool TryGenerateUploadedFile(IServiceContext context, out object uploadedFile)
         {
-            HttpContextBase httpContext = context.GetHttpContext();
+            HttpFileCollectionBase files = GetFiles(context);
             HttpPostedFileBase file = null;
 
-            foreach (string fileName in httpContext.Request.Files.AllKeys)
+            foreach (string fileName in files.AllKeys)
             {
-                HttpPostedFileBase currentFile = httpContext.Request.Files.Get(fileName);
+                HttpPostedFileBase currentFile = files.Get(fileName);
 
                 if (currentFile == null || String.IsNullOrEmpty(currentFile.FileName))
                 {
@@ -96,15 +96,27 @@ namespace RestFoundation.Formatters
 
         private static object GenerateUploadedFileCollection(Type collectionType, IServiceContext context)
         {
-            HttpContextBase httpContext = context.GetHttpContext();
             var fileList = !collectionType.IsInterface ? (ICollection<IUploadedFile>) Activator.CreateInstance(collectionType) : new List<IUploadedFile>();
-
-            foreach (string fileName in httpContext.Request.Files.AllKeys)
+            HttpFileCollectionBase files = GetFiles(context);
+            
+            foreach (string fileName in files.AllKeys)
             {
-                fileList.Add(new UploadedFile(httpContext.Request.Files.Get(fileName)));
+                fileList.Add(new UploadedFile(files.Get(fileName)));
             }
 
             return fileList;
+        }
+
+        private static HttpFileCollectionBase GetFiles(IServiceContext context)
+        {
+            HttpContextBase httpContext = context.GetHttpContext();
+
+            if (ServiceRequestValidator.IsUnvalidatedRequest(httpContext))
+            {
+                return httpContext.Request.Unvalidated.Files;
+            }
+
+            return httpContext.Request.Files;
         }
     }
 }

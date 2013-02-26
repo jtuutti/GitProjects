@@ -30,7 +30,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (UnvalidatedHandlerRegistry.IsUnvalidated(m_handler))
             {
-                requestContext.HttpContext.Items[ServiceRequestValidator.UnvalidatedHandlerKey] = Boolean.TrueString;
+                ServiceRequestValidator.SetUnvalidatedRequest(requestContext.HttpContext);
             }
 
             SetRouteRequestUniqueId(requestContext);

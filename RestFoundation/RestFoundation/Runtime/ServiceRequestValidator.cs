@@ -13,7 +13,7 @@ namespace RestFoundation.Runtime
     /// </summary>
     public sealed class ServiceRequestValidator : RequestValidator
     {
-        internal const string UnvalidatedHandlerKey = "REST_DoNotValidateRequest";
+        private const string UnvalidatedHandlerKey = "REST_DoNotValidateRequest";
 
         /// <summary>
         /// Validates a string that contains HTTP request data.
@@ -65,6 +65,26 @@ namespace RestFoundation.Runtime
             }
 
             return base.IsValidRequestString(context, value, requestValidationSource, collectionKey, out validationFailureIndex);
+        }
+
+        internal static bool IsUnvalidatedRequest(HttpContextBase httpContext)
+        {
+            if (httpContext == null)
+            {
+                throw new ArgumentNullException("httpContext");
+            }
+
+            return (httpContext.Items[UnvalidatedHandlerKey] as string) == Boolean.TrueString;
+        }
+
+        internal static void SetUnvalidatedRequest(HttpContextBase httpContext)
+        {
+            if (httpContext == null)
+            {
+                throw new ArgumentNullException("httpContext");
+            }
+
+            httpContext.Items[UnvalidatedHandlerKey] = Boolean.TrueString;
         }
     }
 }

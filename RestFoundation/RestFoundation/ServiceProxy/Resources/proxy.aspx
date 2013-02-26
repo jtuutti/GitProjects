@@ -615,7 +615,7 @@
 </script>
 
 <asp:Content runat="server" ContentPlaceHolderID="bodyPlaceholder">
-<form runat="server" id="bodyForm" autocomplete="off">
+<form runat="server" id="BodyForm" autocomplete="off">
     <div id="Main">
         <div ><em><%: operation.Description %></em></div>
         <div>
@@ -657,7 +657,7 @@
             </span>
             <span id="PersistenceControls" class="button-separator">
                 <input type="button" id="Import" value="Import" />
-                <asp:Button runat="server" ID="Export" Text="Export" OnClick="ExportSession" />
+                <input type="button" id="Export" value="Export" />
                 <input type="file" id="File" class="invisible" />
             </span>
         </div>
