@@ -15,6 +15,26 @@ namespace RestFoundation.Runtime
     {
         private const string UnvalidatedHandlerKey = "REST_DoNotValidateRequest";
 
+        internal static bool IsUnvalidatedRequest(HttpContextBase httpContext)
+        {
+            if (httpContext == null)
+            {
+                throw new ArgumentNullException("httpContext");
+            }
+
+            return (httpContext.Items[UnvalidatedHandlerKey] as string) == Boolean.TrueString;
+        }
+
+        internal static void SetUnvalidatedRequest(HttpContextBase httpContext)
+        {
+            if (httpContext == null)
+            {
+                throw new ArgumentNullException("httpContext");
+            }
+
+            httpContext.Items[UnvalidatedHandlerKey] = Boolean.TrueString;
+        }
+
         /// <summary>
         /// Validates a string that contains HTTP request data.
         /// </summary>
@@ -65,26 +85,6 @@ namespace RestFoundation.Runtime
             }
 
             return base.IsValidRequestString(context, value, requestValidationSource, collectionKey, out validationFailureIndex);
-        }
-
-        internal static bool IsUnvalidatedRequest(HttpContextBase httpContext)
-        {
-            if (httpContext == null)
-            {
-                throw new ArgumentNullException("httpContext");
-            }
-
-            return (httpContext.Items[UnvalidatedHandlerKey] as string) == Boolean.TrueString;
-        }
-
-        internal static void SetUnvalidatedRequest(HttpContextBase httpContext)
-        {
-            if (httpContext == null)
-            {
-                throw new ArgumentNullException("httpContext");
-            }
-
-            httpContext.Items[UnvalidatedHandlerKey] = Boolean.TrueString;
         }
     }
 }

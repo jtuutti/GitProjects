@@ -16,11 +16,9 @@ namespace RestFoundation.ServiceProxy
     {
         private static readonly Dictionary<string, string> resourceMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "export.aspx", "RestFoundation.ServiceProxy.Resources.export.aspx" },
             { "help.master", "RestFoundation.ServiceProxy.Resources.help.master" },
             { "index.aspx", "RestFoundation.ServiceProxy.Resources.index.aspx" },
             { "metadata.aspx", "RestFoundation.ServiceProxy.Resources.metadata.aspx" },
-            { "output.aspx", "RestFoundation.ServiceProxy.Resources.output.aspx" },
             { "proxy.aspx", "RestFoundation.ServiceProxy.Resources.proxy.aspx" }
         };
 

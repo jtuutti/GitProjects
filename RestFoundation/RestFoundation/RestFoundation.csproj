@@ -121,6 +121,8 @@
     <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
     <Compile Include="Runtime\JsonSerializerFactory.cs" />
     <Compile Include="Runtime\Registries\XmlClientSerializerRegistry.cs" />
+    <Compile Include="Runtime\Handlers\ProxyExportHandler.cs" />
+    <Compile Include="Runtime\Handlers\ProxyOutputHandler.cs" />
     <Compile Include="ServiceProxy\ProxyResponseData.cs" />
     <Compile Include="ServiceProxy\ProxySession.cs" />
     <Compile Include="ServiceProxy\ProxyUrlHelper.cs" />
@@ -404,11 +406,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ServiceProxy\Resources\output.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="ServiceProxy\Resources\help.css" />
   </ItemGroup>
   <ItemGroup>
@@ -420,11 +417,7 @@
   <ItemGroup>
     <EmbeddedResource Include="ServiceProxy\Resources\jquery-1.9.1.min.js" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ServiceProxy\Resources\export.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

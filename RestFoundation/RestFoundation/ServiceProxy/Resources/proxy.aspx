@@ -237,48 +237,6 @@
         }
     }
 
-    protected void ExportSession(object sender, EventArgs args)
-    {
-        var session = new ProxySession
-        {
-            ServiceUrl = serviceUrl,
-            OperationUrl = OperationUrl.Value,
-            Format = ResourceFormat.SelectedValue,
-            Method = HttpMethod.SelectedValue,
-            Headers = HeaderText.Value.Trim(),
-            Body = RequestText.Value.Trim(),
-        };
-
-        DateTime now = DateTime.Now;
-
-        Response.Clear();        
-        Response.ContentEncoding = Encoding.UTF8;
-        Response.ContentType = "application/json";
-        Response.AppendHeader("Content-Disposition", String.Format(
-                                                            CultureInfo.InvariantCulture,
-                                                            "attachment; filename=session.{0:D4}{1:D2}{2:D2}{3:D2}{4:D2}{5:D2}{6:D3}.dat",
-                                                            now.Year,
-                                                            now.Month,
-                                                            now.Day,
-                                                            now.Hour,
-                                                            now.Minute,
-                                                            now.Second,
-                                                            now.Millisecond));
-
-        string serializedSession = ProxyJsonConvert.SerializeObject(session, false, false);
-
-        Response.Output.Write(serializedSession);
-        Response.Output.Flush();
-
-        try
-        {
-            Response.End();
-        }
-        catch (Exception)
-        {
-        }
-    }
-
     private static string GetProtocolVersion(WebResponse response)
     {
         var proxyResponse = response as ProxyWebResponse ?? new ProxyWebResponse(response);

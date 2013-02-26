@@ -47,13 +47,15 @@
             }
         }
 
-        if (!isAllowed)
+        if (isAllowed)
         {
-            Response.Clear();
-            Response.StatusCode = 403;
-            Response.StatusDescription = "Access denied due to ACL restrictions";
-            Response.End();
+            return;
         }
+
+        Response.Clear();
+        Response.StatusCode = 403;
+        Response.StatusDescription = "Access denied due to ACL restrictions";
+        Response.End();
     }
     
     private void AuthorizeUserIfNecessary()
