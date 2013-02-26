@@ -577,7 +577,7 @@
     <div id="Main">
         <div ><em><%: operation.Description %></em></div>
         <div>
-            <h1>URL</h1>
+            <h1><a id="UrlPrompt" href="#">URL</a></h1>
             <% if (operation.Credentials != null) { %>
             <div id="Authentication">
                 <strong>Authentication:</strong>

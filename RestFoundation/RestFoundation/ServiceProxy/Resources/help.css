@@ -1,5 +1,5 @@
-﻿a:hover{color:#369;font-weight:700;text-decoration:underline}
-a:link,a:visited,a:active{color:#369;font-weight:700;text-decoration:none}
+﻿a:link,a:visited,a:active{color:#369;font-weight:700;text-decoration:none}
+a:hover{color:#369;font-weight:700;text-decoration:underline}
 body{color:#000;background-color:#fff;font-family:Verdana;margin-left:0;margin-top:0}
 input[type=password]{font-family:Tahoma;font-size:1.2em;width:650px;border:1px solid #999}
 input[type=password].empty{font-family:Tahoma;font-size:1.2em;width:650px;border:1px solid #f00}
@@ -22,8 +22,8 @@ ul.auto-list > li:hover,ul.auto-list > li[data-selected=true]{color:#fff;backgro
 .field-validation-error{color:red}
 .field-validation-valid,.validation-summary-valid{display:none}
 .heading1{background-color:#036;border-bottom:#369 6px solid;color:#fff;font-family:Tahoma;font-size:26px;font-weight:400;padding-bottom:8px;padding-left:30px;padding-top:16px;margin:0 0 10px -20px}
-.heading1 a:hover{color:#fff;font-family:Tahoma;font-size:26px;font-weight:400;text-decoration:underline}
 .heading1 a:link,.heading1 a:visited,.heading1 a:active{color:#fff;font-family:Tahoma;font-size:26px;font-weight:400;text-decoration:none}
+.heading1 a:hover{color:#fff;font-family:Tahoma;font-size:26px;font-weight:400;text-decoration:underline}
 .heading2{display:block;font-family:Verdana;font-size:12px;padding-top:5px}
 .hidden{width:0;height:0;font-size:0;color:transparent;background-color:transparent;border:none;margin:0;padding:0}
 .input-validation-error{border:1px solid #f00!important;background-color:#fee}
@@ -41,8 +41,8 @@ ul.auto-list > li:hover,ul.auto-list > li[data-selected=true]{color:#fff;backgro
 #Content{margin-left:30px;font-size:.70em}
 #Execute{font-weight:700}
 #Footer{font-family:Verdana;font-size:11px;color:#666;padding:25px 0 10px 30px}
-#Footer a:hover{color:#666;text-decoration:underline}
 #Footer a:link,#Footer a:visited,#Footer a:active{color:#666;text-decoration:none}
+#Footer a:hover{color:#666;text-decoration:underline}
 #HeaderText{height:120px}
 #HeaderTitle,#ResponseHeader{float:left}
 #HotKeys{padding-top:10px;color:#444}

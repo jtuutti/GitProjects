@@ -2468,6 +2468,11 @@
               Looks up a localized string similar to Invalid relative service URL name '{0}' provided. It can only contain letters, digits, underscores and dashes..
             </summary>
     </member>
+    <member name="P:RestFoundation.RestResources.InvalidServiceProxyRelativeUrl">
+      <summary>
+              Looks up a localized string similar to Service help/proxy relative URL can only contain letters and numbers with optional dashes in between. Relative URL '{0}' does not meet those requirements..
+            </summary>
+    </member>
     <member name="P:RestFoundation.RestResources.InvalidServiceUrlOrMethodExpression">
       <summary>
               Looks up a localized string similar to Invalid service URL or method lambda expression provided..
