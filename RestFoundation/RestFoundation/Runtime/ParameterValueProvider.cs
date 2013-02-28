@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Web;
 using RestFoundation.Collections;
 using RestFoundation.Formatters;
@@ -262,15 +263,15 @@ namespace RestFoundation.Runtime
                 return;
             }
 
-            using (var dataStream = new MemoryStream())
-            {
-                context.Request.Body.Seek(0, SeekOrigin.Begin);
-                context.Request.Body.CopyTo(dataStream);
-                dataStream.Seek(0, SeekOrigin.Begin);
+            long bodyStreamPosition = context.Request.Body.Position;
 
-                var dataReader = new StreamReader(dataStream, context.Request.Headers.ContentCharsetEncoding);
-                LogUtility.LogRequestBody(dataReader.ReadToEnd(), context.Request.Headers.ContentType);
-            }
+            var bodyData = new byte[context.Request.Body.Length];
+            context.Request.Body.Seek(0, SeekOrigin.Begin);
+            context.Request.Body.Read(bodyData, 0, bodyData.Length);
+            context.Request.Body.Seek(bodyStreamPosition, SeekOrigin.Begin);
+
+            string body = context.Request.Headers.ContentCharsetEncoding.GetString(bodyData);
+            LogUtility.LogRequestBody(body, context.Request.Headers.ContentType);
         }
     }
 }

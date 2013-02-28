@@ -141,6 +141,7 @@ namespace RestTestServices
         public object Post(Person resource)
         {
             resource.Values = new[] { "New person added" };
+            resource.TimeStamp = DateTime.Now;
 
             Context.Response.SetHeader("Location", Context.Request.Url.ToAbsoluteUrl("~/home/index/999"));
             Context.Response.SetStatus(HttpStatusCode.Created, "Person #999 created");
