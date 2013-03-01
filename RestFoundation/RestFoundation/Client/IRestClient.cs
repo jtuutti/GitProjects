@@ -27,7 +27,7 @@ namespace RestFoundation.Client
         bool AllowCookies { get; set; }
 
         /// <summary>
-        /// Gets or sets a proxy URL for tracing HTTP requests and responses.
+        /// Gets or sets a proxy URL for inspecting HTTP requests and responses.
         /// </summary>
         string ProxyUrl { get; set; }
 
