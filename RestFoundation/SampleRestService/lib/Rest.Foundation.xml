@@ -836,7 +836,7 @@
     </member>
     <member name="P:RestFoundation.Client.IRestClient.ProxyUrl">
       <summary>
-            Gets or sets a proxy URL for tracing HTTP requests and responses.
+            Gets or sets a proxy URL for inspecting HTTP requests and responses.
             </summary>
     </member>
     <member name="P:RestFoundation.Client.IRestClient.SupportsEncoding">
@@ -9018,6 +9018,17 @@
             Defines an HTTP response.
             </summary>
     </member>
+    <member name="M:RestFoundation.IHttpResponse.AppendHeader(System.String,System.String)">
+      <summary>
+            Appends or sets a response header value.
+            </summary>
+      <remarks>
+            Some HTTP headers do not support multiple values. In that case the latest assigned
+            value will be used.
+            </remarks>
+      <param name="headerName">The header name.</param>
+      <param name="headerValue">The header value.</param>
+    </member>
     <member name="M:RestFoundation.IHttpResponse.GetHeaders">
       <summary>
             Gets a collection of all response headers set by the service.
@@ -9035,6 +9046,11 @@
       <summary>
             Sets a response header.
             </summary>
+      <remarks>
+            This behavior is not supported when running services under the Visual Studio
+            Development Server. In that scenario the method has the same behavior as
+            the <see cref="M:RestFoundation.IHttpResponse.AppendHeader(System.String,System.String)" />.
+            </remarks>
       <param name="headerName">The header name.</param>
       <param name="headerValue">The header value.</param>
     </member>
@@ -9550,6 +9566,17 @@
             </summary>
       <param name="output">The HTTP response output.</param>
     </member>
+    <member name="M:RestFoundation.Context.HttpResponse.AppendHeader(System.String,System.String)">
+      <summary>
+            Appends or sets a response header value.
+            </summary>
+      <remarks>
+            Some HTTP headers do not support multiple values. In that case the latest assigned
+            value will be used.
+            </remarks>
+      <param name="headerName">The header name.</param>
+      <param name="headerValue">The header value.</param>
+    </member>
     <member name="M:RestFoundation.Context.HttpResponse.GetHeaders">
       <summary>
             Gets a collection of all response headers set by the service.
@@ -9567,6 +9594,11 @@
       <summary>
             Sets a response header.
             </summary>
+      <remarks>
+            This behavior is not supported when running services under the Visual Studio
+            Development Server. In that scenario the method has the same behavior as
+            the <see cref="M:RestFoundation.Context.HttpResponse.AppendHeader(System.String,System.String)" />.
+            </remarks>
       <param name="headerName">The header name.</param>
       <param name="headerValue">The header value.</param>
     </member>
