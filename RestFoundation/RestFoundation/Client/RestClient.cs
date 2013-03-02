@@ -47,7 +47,7 @@ namespace RestFoundation.Client
         public bool SupportsEncoding { get; set; }
         public bool AllowSelfSignedCertificates { get; set; }
 
-        public int LastStatusCode { get; private set; }
+        public HttpStatusCode LastStatusCode { get; private set; }
         public string LastStatusDescription { get; private set; }
 
         #region Public Methods
@@ -254,10 +254,10 @@ namespace RestFoundation.Client
         {
             var response = (HttpWebResponse) ex.Response;
 
-            LastStatusCode = (int) response.StatusCode;
+            LastStatusCode = response.StatusCode;
             LastStatusDescription = response.StatusDescription;
 
-            var httpException = new HttpException(LastStatusCode, LastStatusDescription, ex);
+            var httpException = new HttpException((int) LastStatusCode, LastStatusDescription, ex);
 
             foreach (string header in response.Headers.AllKeys)
             {
@@ -338,12 +338,12 @@ namespace RestFoundation.Client
 
                 using (var response = (HttpWebResponse) await responseTask)
                 {
-                    LastStatusCode = (int)response.StatusCode;
+                    LastStatusCode = response.StatusCode;
                     LastStatusDescription = response.StatusDescription;
 
-                    if (LastStatusCode >= MinErrorStatusCode)
+                    if ((int) LastStatusCode >= MinErrorStatusCode)
                     {
-                        throw new HttpException(LastStatusCode, response.StatusDescription);
+                        throw new HttpException((int) LastStatusCode, response.StatusDescription);
                     }
 
                     return response.Headers;
@@ -353,10 +353,10 @@ namespace RestFoundation.Client
             {
                 if (ex.Status != WebExceptionStatus.ProtocolError)
                 {
-                    LastStatusCode = (int)HttpStatusCode.InternalServerError;
+                    LastStatusCode = HttpStatusCode.InternalServerError;
                     LastStatusDescription = ex.Message;
 
-                    throw new HttpException(LastStatusCode, LastStatusDescription, ex);
+                    throw new HttpException((int) LastStatusCode, LastStatusDescription, ex);
                 }
 
                 throw GenerateHttpException(ex);
@@ -379,12 +379,12 @@ namespace RestFoundation.Client
 
                 using (var response = (HttpWebResponse) await responseTask)
                 {
-                    LastStatusCode = (int) response.StatusCode;
+                    LastStatusCode = response.StatusCode;
                     LastStatusDescription = response.StatusDescription;
 
-                    if (LastStatusCode >= MinErrorStatusCode)
+                    if ((int) LastStatusCode >= MinErrorStatusCode)
                     {
-                        throw new HttpException(LastStatusCode, response.StatusDescription);
+                        throw new HttpException((int) LastStatusCode, response.StatusDescription);
                     }
 
                     var outputResource = new RestResource<T>(outputType, response.Headers);
@@ -400,10 +400,10 @@ namespace RestFoundation.Client
             {
                 if (ex.Status != WebExceptionStatus.ProtocolError)
                 {
-                    LastStatusCode = (int) HttpStatusCode.InternalServerError;
+                    LastStatusCode = HttpStatusCode.InternalServerError;
                     LastStatusDescription = ex.Message;
 
-                    throw new HttpException(LastStatusCode, LastStatusDescription, ex);
+                    throw new HttpException((int) LastStatusCode, LastStatusDescription, ex);
                 }
 
                 throw GenerateHttpException(ex);

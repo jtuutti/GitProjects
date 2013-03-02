@@ -97,6 +97,20 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
+        /// Appends or sets a response header value.
+        /// </summary>
+        /// <remarks>
+        /// Some HTTP headers do not support multiple values. In that case the latest assigned
+        /// value will be used.
+        /// </remarks>
+        /// <param name="headerName">The header name.</param>
+        /// <param name="headerValue">The header value.</param>
+        public void AppendHeader(string headerName, string headerValue)
+        {
+            SetHeader(headerName, headerValue, false);
+        }
+
+        /// <summary>
         /// Gets a collection of all response headers set by the service.
         /// </summary>
         /// <returns>A list of response headers.</returns>
@@ -123,26 +137,16 @@ namespace RestFoundation.Context
         /// <summary>
         /// Sets a response header.
         /// </summary>
+        /// <remarks>
+        /// This behavior is not supported when running services under the Visual Studio
+        /// Development Server. In that scenario the method has the same behavior as
+        /// the <see cref="AppendHeader"/>.
+        /// </remarks>
         /// <param name="headerName">The header name.</param>
         /// <param name="headerValue">The header value.</param>
         public void SetHeader(string headerName, string headerValue)
         {
-            if (String.IsNullOrEmpty(headerName))
-            {
-                throw new ArgumentNullException("headerName");
-            }
-
-            if (headerValue == null)
-            {
-                throw new ArgumentNullException("headerValue");
-            }
-
-            if (!HeaderNameValidator.IsValid(headerName))
-            {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.EmptyHttpHeader);
-            }
-
-            Context.Response.AppendHeader(headerName, headerValue);
+            SetHeader(headerName, headerValue, true);
         }
 
         /// <summary>
@@ -452,6 +456,31 @@ namespace RestFoundation.Context
                     Context.Response.Cache.VaryByHeaders[headerName] = true;
                 }
             }
+        }
+
+        private void SetHeader(string headerName, string headerValue, bool overwriteHeader)
+        {
+            if (String.IsNullOrEmpty(headerName))
+            {
+                throw new ArgumentNullException("headerName");
+            }
+
+            if (headerValue == null)
+            {
+                throw new ArgumentNullException("headerValue");
+            }
+
+            if (!HeaderNameValidator.IsValid(headerName))
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.EmptyHttpHeader);
+            }
+
+            if (overwriteHeader && HttpRuntime.UsingIntegratedPipeline)
+            {
+                Context.Response.Headers.Remove(headerName);
+            }
+
+            Context.Response.AppendHeader(headerName, headerValue);
         }
     }
 }

@@ -41,6 +41,17 @@ namespace RestFoundation
         ResponseHeaderNames HeaderNames { get; }
 
         /// <summary>
+        /// Appends or sets a response header value.
+        /// </summary>
+        /// <remarks>
+        /// Some HTTP headers do not support multiple values. In that case the latest assigned
+        /// value will be used.
+        /// </remarks>
+        /// <param name="headerName">The header name.</param>
+        /// <param name="headerValue">The header value.</param>
+        void AppendHeader(string headerName, string headerValue);
+
+        /// <summary>
         /// Gets a collection of all response headers set by the service.
         /// </summary>
         /// <returns>A list of response headers.</returns>
@@ -56,6 +67,11 @@ namespace RestFoundation
         /// <summary>
         /// Sets a response header.
         /// </summary>
+        /// <remarks>
+        /// This behavior is not supported when running services under the Visual Studio
+        /// Development Server. In that scenario the method has the same behavior as
+        /// the <see cref="AppendHeader"/>.
+        /// </remarks>
         /// <param name="headerName">The header name.</param>
         /// <param name="headerValue">The header value.</param>
         void SetHeader(string headerName, string headerValue);

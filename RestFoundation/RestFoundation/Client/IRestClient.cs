@@ -55,7 +55,7 @@ namespace RestFoundation.Client
         /// <summary>
         /// Gets the last HTTP status code.
         /// </summary>
-        int LastStatusCode { get; }
+        HttpStatusCode LastStatusCode { get; }
 
         /// <summary>
         /// Gets the last HTTP status description.

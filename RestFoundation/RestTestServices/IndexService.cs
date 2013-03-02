@@ -144,9 +144,8 @@ namespace RestTestServices
             resource.TimeStamp = DateTime.Now;
 
             Context.Response.SetHeader("Location", Context.Request.Url.ToAbsoluteUrl("~/home/index/999"));
-            Context.Response.SetStatus(HttpStatusCode.Created, "Person #999 created");
 
-            return resource;
+            return Result.ObjectWithResponseStatus(resource, HttpStatusCode.Created, "Person #999 created");
         }
 
         public Person Put(int? id, Person personToUpdate)
