@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using RestFoundation.Collections.Specialized;
 
 namespace RestFoundation.Runtime
@@ -15,11 +14,12 @@ namespace RestFoundation.Runtime
     public class ContentNegotiator : IContentNegotiator
     {
         private const string AcceptOverrideQuery = "X-Accept-Override";
-        private const string HtmlMediaType = "text/html";
+        private const string ApplicationXmlMediaType = "application/xml";
         private const string JsonMediaType = "application/json";
-        private const string XmlMediaType = "text/xml";
+        private const string TextXmlMediaType = "text/xml";
+        private const string UserAgentVariableName = "HTTP_USER_AGENT";
 
-        private bool supportsJson, supportsXml;
+        private ICollection<string> m_supportedMediaTypes;
 
         /// <summary>
         /// Gets the preferred accepted media type from the provided HTTP request.
@@ -33,28 +33,31 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("request");
             }
 
-            if (Rest.Configuration.Options.ForceDefaultMediaType && !String.IsNullOrWhiteSpace(Rest.Configuration.Options.DefaultMediaType))
+            PopulateSupportedMediaTypes();
+
+            if (Rest.Configuration.Options.ForceDefaultMediaType && m_supportedMediaTypes.Contains(Rest.Configuration.Options.DefaultMediaType))
             {
                 return Rest.Configuration.Options.DefaultMediaType;
             }
 
-            GetMediaTypeSupport();
-
-            string acceptValue = GetAcceptedMediaType(request.QueryString.TryGet(AcceptOverrideQuery));
+            string acceptValue = GetAcceptedMediaType(request, request.QueryString.TryGet(AcceptOverrideQuery));
 
             if (!String.IsNullOrWhiteSpace(acceptValue))
             {
                 return acceptValue;
             }
 
-            acceptValue = GetAcceptedMediaType(request.Headers.AcceptType);
-
-            if (!String.IsNullOrWhiteSpace(acceptValue))
+            foreach (string acceptedType in request.Headers.AcceptTypes)
             {
-                return acceptValue;
+                acceptValue = GetAcceptedMediaType(request, acceptedType);
+
+                if (!String.IsNullOrWhiteSpace(acceptValue))
+                {
+                    return acceptValue;
+                }
             }
 
-            acceptValue = GetAcceptedMediaType(Rest.Configuration.Options.DefaultMediaType);
+            acceptValue = GetAcceptedMediaType(request, Rest.Configuration.Options.DefaultMediaType);
 
             if (!String.IsNullOrWhiteSpace(acceptValue))
             {
@@ -63,7 +66,7 @@ namespace RestFoundation.Runtime
 
             if (request.Method == HttpMethod.Post || request.Method == HttpMethod.Put || request.Method == HttpMethod.Patch)
             {
-                acceptValue = GetAcceptedMediaType(request.Headers.ContentType);
+                acceptValue = GetAcceptedMediaType(request, request.Headers.ContentType);
 
                 if (!String.IsNullOrWhiteSpace(acceptValue))
                 {
@@ -71,7 +74,7 @@ namespace RestFoundation.Runtime
                 }
             }
 
-            return request.IsAjax ? JsonMediaType : null;
+            return request.IsAjax && m_supportedMediaTypes.Contains(JsonMediaType) ? JsonMediaType : null;
         }
 
         /// <summary>
@@ -89,46 +92,28 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("request");
             }
 
-            if (request.Method != HttpMethod.Get && request.Method != HttpMethod.Head)
+            string userAgent = request.ServerVariables.Get(UserAgentVariableName);
+
+            if (userAgent == null)
             {
                 return false;
             }
 
-            string acceptedValue = request.QueryString.TryGet(AcceptOverrideQuery);
-
-            if (String.IsNullOrEmpty(acceptedValue))
-            {
-                acceptedValue = request.Headers.Get("Accept");
-            }
-
-            var acceptTypeCollection = new AcceptValueCollection(acceptedValue);
-            var mediaTypes = MediaTypeFormatterRegistry.GetMediaTypes();
-
-            foreach (string acceptedType in acceptTypeCollection.AcceptedNames)
-            {
-                if (String.Equals(HtmlMediaType, acceptedType, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-
-                if (mediaTypes.Contains(acceptedType, StringComparer.OrdinalIgnoreCase))
-                {
-                    return false;
-                }
-            }
-
-            return acceptTypeCollection.CanAccept(HtmlMediaType);
+            return userAgent.IndexOf("Mozilla", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                   userAgent.IndexOf("MSIE", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                   userAgent.IndexOf("Opera", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                   userAgent.IndexOf("WebKit", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
-        private void GetMediaTypeSupport()
+        private void PopulateSupportedMediaTypes()
         {
-            var supportedMediaTypes = new HashSet<string>(MediaTypeFormatterRegistry.GetMediaTypes());
-
-            supportsJson = supportedMediaTypes.Contains(JsonMediaType);
-            supportsXml = supportedMediaTypes.Contains(XmlMediaType);
+            if (m_supportedMediaTypes == null)
+            {
+                m_supportedMediaTypes = new HashSet<string>(MediaTypeFormatterRegistry.GetMediaTypes());
+            }
         }
 
-        private string GetAcceptedMediaType(string acceptValue)
+        private string GetAcceptedMediaType(IHttpRequest request, string acceptValue)
         {
             if (String.IsNullOrWhiteSpace(acceptValue))
             {
@@ -137,10 +122,10 @@ namespace RestFoundation.Runtime
 
             string acceptedMediaType = new AcceptValueCollection(acceptValue).GetPreferredName();
 
-            return IsValidAcceptedMediaType(ref acceptedMediaType) ? acceptedMediaType : null;
+            return IsValidAcceptedMediaType(request, ref acceptedMediaType) ? acceptedMediaType : null;
         }
 
-        private bool IsValidAcceptedMediaType(ref string acceptValue)
+        private bool IsValidAcceptedMediaType(IHttpRequest request, ref string acceptValue)
         {
             if (String.IsNullOrWhiteSpace(acceptValue))
             {
@@ -149,19 +134,29 @@ namespace RestFoundation.Runtime
 
             acceptValue = acceptValue.Trim();
 
-            if ((acceptValue.Equals("*/*") || acceptValue.Equals("application/*", StringComparison.OrdinalIgnoreCase)) && supportsJson)
+            if (acceptValue.Equals("*/*"))
+            {
+                var contentTypeValue = GetAcceptedMediaType(request, request.Headers.ContentType);
+
+                if (String.IsNullOrWhiteSpace(contentTypeValue))
+                {
+                    acceptValue = IsBrowserRequest(request) ? ApplicationXmlMediaType : JsonMediaType;
+                }
+                else
+                {
+                    acceptValue = contentTypeValue;
+                }
+            }
+            else if (acceptValue.Equals("application/*", StringComparison.OrdinalIgnoreCase))
             {
                 acceptValue = JsonMediaType;
-                return true;
             }
-
-            if (acceptValue.Equals("text/*", StringComparison.OrdinalIgnoreCase) && supportsXml)
+            else if (acceptValue.Equals("text/*", StringComparison.OrdinalIgnoreCase))
             {
-                acceptValue = XmlMediaType;
-                return true;
+                acceptValue = TextXmlMediaType;
             }
 
-            return acceptValue.IndexOf('*') < 0;
+            return m_supportedMediaTypes.Contains(acceptValue);
         }
     }
 }

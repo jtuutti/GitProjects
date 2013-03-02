@@ -139,149 +139,73 @@ namespace RestFoundation.Tests.ContentNegotiators
         }
 
         [Test]
-        public void DetectEarlyInternetExplorerBrowserByAcceptHeader()
+        public void DetectBrowserByUserAgent_Chrome()
         {
-            const string acceptValue = "image/jpeg, application/x-ms-application, image/gif, application/xaml+xml, image/pjpeg, application/x-ms-xbap, application/x-shockwave-flash, application/msword, */*";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequest(userAgentValue: "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.13 (KHTML, like Gecko) Chrome/0.2.149.29 Safari/525.13");
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.True);
         }
 
         [Test]
-        public void DetectInternetExplorerBrowserByAcceptHeader()
+        public void DetectBrowserByUserAgent_Firefox()
         {
-            const string acceptValue = "text/html, application/xhtml+xml, */*";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
-            bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
-
-            Assert.That(isBrowser, Is.True);            
-        }
-
-        [Test]
-        public void DetectMozillaOrWebkitBrowserByAcceptHeader()
-        {
-            const string acceptValue = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequest(userAgentValue: "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11");
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.True);
         }
 
         [Test]
-        public void DetectEarlyWebkitBrowserByAcceptHeader()
+        public void DetectBrowserByUserAgent_InternetExplorer()
         {
-            const string acceptValue = "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
-            bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
-
-            Assert.That(isBrowser, Is.False); // should return FALSE because XML has a higher priority that HTML
-        }
-
-        [Test]
-        public void DetectNonBrowserWhenOnlyJsonIsSpecified()
-        {
-            const string acceptValue = "application/json";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
-            bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
-
-            Assert.That(isBrowser, Is.False);
-        }
-
-        [Test]
-        public void DetectNonBrowserWhenOnlyXmlIsSpecified()
-        {
-            const string acceptValue = "application/xml";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
-            bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
-
-            Assert.That(isBrowser, Is.False);
-        }
-
-        [Test]
-        public void DetectNonBrowserWhenOnlyXmlIsSpecifiedWithAlternativeMediaType()
-        {
-            const string acceptValue = "text/xml";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
-            bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
-
-            Assert.That(isBrowser, Is.False);
-        }
-
-        [Test]
-        public void DetectNonBrowserWhenJsonIsSpecifiedWithHighPriority()
-        {
-            const string acceptValue = "application/json,text/html;q=0.9";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
-            bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
-
-            Assert.That(isBrowser, Is.False);
-        }
-
-        [Test]
-        public void DetectNonBrowserWhenXmlIsSpecifiedWithHighPriority()
-        {
-            const string acceptValue = "application/xml,text/html;q=0.9";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
-            bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
-
-            Assert.That(isBrowser, Is.False);
-        }
-
-        [Test]
-        public void DetectNonBrowserWhenXmlIsSpecifiedWithHighPriorityAndAlternativeMediaType()
-        {
-            const string acceptValue = "text/xml,text/html;q=0.9";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
-            bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
-
-            Assert.That(isBrowser, Is.False);
-        }
-
-        [Test]
-        public void DetectBrowserHasAnyTypeSupport()
-        {
-            const string acceptValue = "*/*";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequest(userAgentValue: "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)");
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.True);
         }
 
         [Test]
-        public void DetectBrowserHasLowHtmlSupport()
+        public void DetectBrowserByUserAgent_Opera()
         {
-            const string acceptValue = "text/plain,image/png;q=0.9,image/jpeg;q=0.5,text/html;charset=utf-8;q=0.1";
-
-            IHttpRequest request = CreateRequestBase(acceptValue);
+            IHttpRequest request = CreateRequest(userAgentValue: "Opera/8.0 (Windows NT 5.1; U; en)");
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.True);
         }
 
         [Test]
-        public void DetectNonBrowserThatSupportsNoneOfTheRestContentType()
+        public void DetectBrowserByUserAgent_Safari()
         {
-            const string acceptValue = "text/plain,image/png;q=0.9,image/jpeg;q=0.5";
+            IHttpRequest request = CreateRequest(userAgentValue: "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/124 (KHTML, like Gecko) Safari/125.1");
+            bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
-            IHttpRequest request = CreateRequestBase(acceptValue);
+            Assert.That(isBrowser, Is.True);
+        }
+
+        [Test]
+        public void DetectBrowserByUserAgent_RestFoundationProxy()
+        {
+            IHttpRequest request = CreateRequest(userAgentValue: "Rest Foundation Proxy");
             bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
 
             Assert.That(isBrowser, Is.False);
         }
 
-        private IHttpRequest CreateRequest(string acceptHeaderValue = null, string contentTypeHeaderValue = null, string acceptOverrideValue = null, bool isAjax = false)
+        [Test]
+        public void DetectBrowserByUserAgent_ServiceCall()
+        {
+            IHttpRequest request = CreateRequest();
+            bool isBrowser = m_contentNegotiator.IsBrowserRequest(request);
+
+            Assert.That(isBrowser, Is.False);
+        }
+
+        private IHttpRequest CreateRequest(string acceptHeaderValue = null,
+                                           string contentTypeHeaderValue = null,
+                                           string acceptOverrideValue = null,
+                                           bool isAjax = false,
+                                           string userAgentValue = null)
         {
             IRestServiceHandler handler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post(null));
             Assert.That(handler, Is.Not.Null);
@@ -291,6 +215,7 @@ namespace RestFoundation.Tests.ContentNegotiators
             Assert.That(context, Is.Not.Null);
             Assert.That(context.Request, Is.Not.Null);
             Assert.That(context.Request.Headers, Is.Not.Null);
+            Assert.That(context.Request.ServerVariables, Is.Not.Null);
 
             if (!String.IsNullOrEmpty(acceptHeaderValue))
             {
@@ -312,21 +237,10 @@ namespace RestFoundation.Tests.ContentNegotiators
                 context.Request.Headers["X-Requested-With"] = "XMLHttpRequest";
             }
 
-            return handler.Context.Request;
-        }
-
-        private IHttpRequest CreateRequestBase(string acceptHeaderValue)
-        {
-            IRestServiceHandler handler = m_factory.Create<ITestService>("~/test-service/1", m => m.Get(1));
-            Assert.That(handler, Is.Not.Null);
-            Assert.That(handler.Context, Is.Not.Null);
-
-            HttpContextBase context = handler.Context.GetHttpContext();
-            Assert.That(context, Is.Not.Null);
-            Assert.That(context.Request, Is.Not.Null);
-            Assert.That(context.Request.Headers, Is.Not.Null);
-
-            context.Request.Headers["Accept"] = acceptHeaderValue;
+            if (!String.IsNullOrEmpty(userAgentValue))
+            {
+                context.Request.ServerVariables["HTTP_USER_AGENT"] = userAgentValue;
+            }
 
             return handler.Context.Request;
         }
