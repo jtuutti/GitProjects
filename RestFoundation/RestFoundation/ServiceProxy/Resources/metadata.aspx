@@ -135,29 +135,29 @@
     <p><em><%: operation.Description %></em></p>    
     <div>
         <div>
-            <strong>URL Template: </strong>
+            <span class="strong">URL Template: </span>
             <span class="uri-template"><%: operation.UrlTempate %></span>
         </div>
         <div>
-            <strong>Sample URL: </strong>
+            <span class="strong">Sample URL: </span>
             <span class="uri-template"><%: operation.GenerateSampleUrlParts().Item1 + operation.GenerateSampleUrlParts().Item2 %></span>
         </div>
     </div>
     <% if (operation.HttpsPort > 0) { %>
     <p>
-        <strong>Requires HTTPS</strong>
+        <span class="strong">Requires HTTPS</span>
     </p>
     <% } %>
     <% if (operation.Credentials != null) { %>
     <p>
-        <strong>Authentication: </strong><span><%: operation.Credentials.Type.ToString() %></span>
+        <span class="strong">Authentication: </span><span><%: operation.Credentials.Type.ToString() %></span>
     </p>
     <% } %>
     <p>
-        <strong>HTTP Method: </strong>
+        <span class="strong">HTTP Method: </span>
         <span class="method"><%: operation.HttpMethod.ToString().ToUpperInvariant() %></span>
         <% if (!String.IsNullOrEmpty(operation.SupportedHttpMethods)) { %>
-            <br /><b>Supported Methods: </b>
+            <br /><span class="strong">Supported Methods: </span>
             <span class="method"><%: operation.SupportedHttpMethods %></span>
         <% } %>
     </p>
@@ -204,7 +204,7 @@
         }
     %>
     <% if (!String.IsNullOrWhiteSpace(authentication)) { %>
-        <p><strong>This operation requires <%: authentication %> authentication.</strong></p>
+        <p><span class="strong">This operation requires <%: authentication %> authentication.</span></p>
     <% } %>
     <table class="parameters">
     <tr>

@@ -62,20 +62,20 @@
             <% foreach (ProxyOperation operation in operations) { %>
             <tr>
                 <% if (!String.IsNullOrEmpty(operation.UrlTempate)) { %>
-                    <td class="<%: operation.IsIPFiltered ? "operation_uri ip-filtered" : "operation_uri" %>" rowspan="<%: operation.RepeatedTemplateCount + 1 %>">
-                        <strong><%: operation.UrlTempate %></strong>
+                    <td class="<%: operation.IsIPFiltered ? "operation-uri ip-filtered" : "operation-uri" %>" rowspan="<%: operation.RepeatedTemplateCount + 1 %>">
+                        <span class="strong"><%: operation.UrlTempate %></span>
                     </td>
                 <% } %>
-                <td><strong><%: operation.HttpMethod.ToString().ToUpperInvariant() %></strong></td>
+                <td><span class="strong"><%: operation.HttpMethod.ToString().ToUpperInvariant() %></span></td>
                 <td><%: operation.Description %></td>
-                <td class="centered"><a href="<%: operation.MetadataUrl %>" title="View detailed service information">View</a></td>
+                <td class="centered"><a href="<%: operation.MetadataUrl %>" class="operation-link" title="View detailed service information">View</a></td>
                 <td class="centered">
                     <% if (!operation.DoesNotSupportJson) { %>
-                        <a href="<%: operation.ProxyUrl + "&ct=json" %>" title="Profile or debug the service">JSON</a>
+                        <a href="<%: operation.ProxyUrl + "&ct=json" %>" class="operation-link" title="Profile or debug the service">JSON</a>
                     <% } %>
                     <% if (!operation.DoesNotSupportXml) { %>
                         <% if (!operation.DoesNotSupportJson) { %>|<% } %>
-                        <a href="<%: operation.ProxyUrl + "&ct=xml" %>" title="Profile or debug the service">XML</a>
+                        <a href="<%: operation.ProxyUrl + "&ct=xml" %>" class="operation-link" title="Profile or debug the service">XML</a>
                     <% } %>
                 </td>
             </tr>
@@ -91,4 +91,5 @@
         </tfoot>
         <% } %>
     </table>
+    <script type="text/javascript" src="<%= ProxyUrlHelper.GetByRouteName(Response, "ProxyIndexOp") %>"></script>
 </asp:Content>

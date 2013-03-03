@@ -29,11 +29,12 @@ ul.auto-list > li:hover,ul.auto-list > li[data-selected=true]{color:#fff;backgro
 .input-validation-error{border:1px solid #f00!important;background-color:#fee}
 .invisible{display:none;}
 .ip-filtered,.error-response-code{color:#800}
-.operation_uri,.operation_uri-custom{white-space:nowrap;vertical-align:middle}
-.operation_uri-custom a:link,.operation_uri-custom a:visited,.operation_uri-custom a:active{color:#036}
+.operation-uri,.operation-uri-custom{white-space:nowrap;vertical-align:middle}
+.operation-uri-custom a:link,.operation-uri-custom a:visited,.operation-uri-custom a:active{color:#036}
 .parameters{margin-bottom:15px}
 .schema-section{padding-top:20px}
 .spacer{padding-left:30px}
+.strong{font-weight:bold;}
 .toggle-option{float:left;margin:13px 0 0 30px}
 .underlined{text-decoration:underline}
 .validation-summary-errors{font-weight:700;color:#f00}

@@ -580,13 +580,13 @@
             <h1><a id="UrlPrompt" href="#">URL</a></h1>
             <% if (operation.Credentials != null) { %>
             <div id="Authentication">
-                <strong>Authentication:</strong>
+                <span class="strong">Authentication:</span>
                 <span><%: operation.Credentials.Type.ToString() %></span>
                 <span class="spacer"></span>
-                <strong>Username:</strong>
+                <span class="strong">Username:</span>
                 <input type="text" id="UserName" runat="server" />
                 <span class="spacer"></span>
-                <strong>Password:</strong>
+                <span class="strong">Password:</span>
                 <input type="password" id="Password" runat="server" />
             </div>
             <% } %>
