@@ -257,14 +257,10 @@ namespace RestFoundation.Runtime
             yield return Expression.Lambda(methodCallExpression).Compile().DynamicInvoke();
         }
 
-        // Assumes the default parameter value binder for the proxy.
-        // It is a bad idea to set non-null values for resource values in the metadata so it should not be a problem.
-        // ReSharper disable ConditionIsAlwaysTrueOrFalse
         private static bool IsResource(ParameterInfo parameter)
         {
             return String.Equals(ParameterValueProvider.ResourceParameterName, parameter.Name, StringComparison.OrdinalIgnoreCase) ||
                    Attribute.IsDefined(parameter, typeof(ResourceAttribute), false);
         }
-        // ReSharper restore ConditionIsAlwaysTrueOrFalse
     }
 }
