@@ -58,7 +58,7 @@ namespace RestFoundation.Behaviors
 
             if (!serviceContext.IsAuthenticated)
             {
-                SetStatusDescription(RestResources.Forbidden);
+                SetStatusDescription(Resources.Global.Forbidden);
                 return BehaviorMethodAction.Stop;
             }
 
@@ -66,7 +66,7 @@ namespace RestFoundation.Behaviors
 
             if (!isInRole)
             {
-                SetStatusDescription(RestResources.Forbidden);
+                SetStatusDescription(Resources.Global.Forbidden);
                 return BehaviorMethodAction.Stop;
             }
 

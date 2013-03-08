@@ -4,6 +4,7 @@
 using System;
 using System.Net;
 using System.Web;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Behaviors
 {
@@ -24,7 +25,7 @@ namespace RestFoundation.Behaviors
         protected SecureServiceBehavior()
         {
             m_statusCode = HttpStatusCode.Forbidden;
-            m_statusDescription = RestResources.Forbidden;
+            m_statusDescription = Resources.Global.Forbidden;
         }
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace RestFoundation.Behaviors
         /// <param name="description">The status description.</param>
         protected void SetStatusDescription(string description)
         {
-            m_statusDescription = description ?? RestResources.Forbidden;
+            m_statusDescription = description ?? Resources.Global.Forbidden;
         }
 
         private void CacheValidationHandler(HttpContext context, object data, ref HttpValidationStatus validationStatus)

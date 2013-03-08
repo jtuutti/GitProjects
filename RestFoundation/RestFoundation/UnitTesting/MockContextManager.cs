@@ -52,7 +52,7 @@ namespace RestFoundation.UnitTesting
         {
             if (TestHttpContext.Context != null)
             {
-                throw new InvalidOperationException(RestResources.AlreadyInitializedHttpContext);
+                throw new InvalidOperationException(Resources.Global.AlreadyInitializedHttpContext);
             }
 
             TestHttpContext.Context = new TestHttpContext(virtualPath, method.ToString().ToUpperInvariant());
@@ -259,7 +259,7 @@ namespace RestFoundation.UnitTesting
         {
             if (TestHttpContext.Context == null)
             {
-                throw new InvalidOperationException(RestResources.MissingHttpContext);
+                throw new InvalidOperationException(Resources.Global.MissingHttpContext);
             }
         }
     }

@@ -8,7 +8,7 @@ using System.Reflection;
 using RestFoundation.ServiceLocation;
 using TinyIoC;
 
-namespace RestFoundation
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Represents a dependency builder for the default service locator.
@@ -85,7 +85,7 @@ namespace RestFoundation
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, RestResources.DependencyRegistrationError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.DependencyRegistrationError, ex.Message), ex);
             }
 
             m_registeredTypes.Add(typeof(TContract));
@@ -132,7 +132,7 @@ namespace RestFoundation
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, RestResources.DependencyRegistrationError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.DependencyRegistrationError, ex.Message), ex);
             }
 
             m_registeredTypes.Add(contractType);
@@ -161,7 +161,7 @@ namespace RestFoundation
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, RestResources.DependencyRegistrationError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.DependencyRegistrationError, ex.Message), ex);
             }
 
             m_registeredTypes.Add(typeof(TContract));
@@ -194,7 +194,7 @@ namespace RestFoundation
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, RestResources.DependencyRegistrationError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.DependencyRegistrationError, ex.Message), ex);
             }
 
             m_registeredTypes.Add(contractType);
@@ -246,7 +246,7 @@ namespace RestFoundation
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, RestResources.DependencyRegistrationError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.DependencyRegistrationError, ex.Message), ex);
             }
 
             return this;
@@ -302,7 +302,7 @@ namespace RestFoundation
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, RestResources.DependencyRegistrationError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.DependencyRegistrationError, ex.Message), ex);
             }
 
             return ScanAssemblies(assemblies.ToArray(), registrationPredicate);

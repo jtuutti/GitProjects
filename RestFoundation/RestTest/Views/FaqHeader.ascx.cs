@@ -2,6 +2,7 @@
 using System.Net;
 using System.Web.UI;
 using RestFoundation;
+using RestFoundation.Runtime;
 
 namespace RestTest.Views
 {

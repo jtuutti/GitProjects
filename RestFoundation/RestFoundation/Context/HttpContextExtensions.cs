@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Web;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Context
 {
@@ -46,7 +47,7 @@ namespace RestFoundation.Context
 
             if (!Enum.TryParse(httpMethodString, true, out httpMethod))
             {
-                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, RestResources.DisallowedHttpMethod);
+                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, Resources.Global.DisallowedHttpMethod);
             }
 
             return httpMethod;

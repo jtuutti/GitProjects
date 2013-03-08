@@ -45,7 +45,7 @@ namespace RestFoundation.Runtime.Handlers
             {
                 if (stream == null)
                 {
-                    throw new HttpException((int) HttpStatusCode.NotFound, RestResources.MissingCssResource);
+                    throw new HttpException((int) HttpStatusCode.NotFound, Resources.Global.MissingCssResource);
                 }
 
                 context.Response.ContentType = CssContentType;

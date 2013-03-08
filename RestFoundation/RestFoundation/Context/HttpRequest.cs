@@ -257,7 +257,7 @@ namespace RestFoundation.Context
             {
                 if (Context.Request.ContentType == null || Context.Request.ContentType.IndexOf(FormDataMediaType, StringComparison.OrdinalIgnoreCase) < 0)
                 {
-                    throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.UnsupportedFormData);
+                    throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.UnsupportedFormData);
                 }
 
                 if (m_contextContainer.Form != null)

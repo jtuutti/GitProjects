@@ -2,6 +2,7 @@
 using System.Security.Principal;
 using NUnit.Framework;
 using RestFoundation.Behaviors;
+using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;

@@ -23,7 +23,7 @@ namespace RestFoundation.Context
 
                 if (context == null)
                 {
-                    throw new InvalidOperationException(RestResources.MissingHttpContext);
+                    throw new InvalidOperationException(Resources.Global.MissingHttpContext);
                 }
 
                 return new HttpContextWrapper(context);

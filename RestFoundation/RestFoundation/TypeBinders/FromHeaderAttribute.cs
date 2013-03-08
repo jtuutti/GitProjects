@@ -60,7 +60,7 @@ namespace RestFoundation.TypeBinders
 
             if (objectType.IsArray)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.UnsupportedFromHeaderBinderParameter);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.UnsupportedFromHeaderBinderParameter);
             }
 
             return BindObject(name, objectType, context);

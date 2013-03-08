@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.Practices.Unity;
 using RestFoundation.ServiceLocation;
-using RestFoundation.Unity.Properties;
 
 namespace RestFoundation.Unity
 {
@@ -50,12 +49,12 @@ namespace RestFoundation.Unity
 
             if (!abstractionType.IsInterface && !abstractionType.IsAbstract)
             {
-                throw new ArgumentException(Resources.InvalidAbstractionType, "abstractionType");
+                throw new ArgumentException(Properties.Resources.InvalidAbstractionType, "abstractionType");
             }
 
             if (!implementationType.IsClass || implementationType.IsAbstract)
             {
-                throw new ArgumentException(Resources.BadImplementationType, "implementationType");
+                throw new ArgumentException(Properties.Resources.BadImplementationType, "implementationType");
             }
 
             if (m_container.IsRegistered(abstractionType))
@@ -69,7 +68,7 @@ namespace RestFoundation.Unity
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyRegistrationError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyRegistrationError, ex.Message), ex);
             }
         }
     }

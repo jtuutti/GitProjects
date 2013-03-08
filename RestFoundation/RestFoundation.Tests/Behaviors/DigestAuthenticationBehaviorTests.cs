@@ -2,6 +2,7 @@
 using System.Net;
 using NUnit.Framework;
 using RestFoundation.Behaviors;
+using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.Security;
 using RestFoundation.Tests.Implementation.Authorization;

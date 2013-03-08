@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace RestFoundation
+namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Represents an HTTP resource fault exception. This is a special type of exception that is used

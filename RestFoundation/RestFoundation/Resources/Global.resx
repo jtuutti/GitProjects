@@ -601,4 +601,12 @@
     <value>Service help/proxy relative URL can only contain letters and numbers with optional dashes in between. Relative URL '{0}' does not meet those requirements.</value>
     <comment>Service help/proxy relative URL can only contain letters and numbers with optional dashes in between. Relative URL '{0}' does not meet those requirements.</comment>
   </data>
+  <data name="InvalidAcceptHeaderFormat" xml:space="preserve">
+    <value>One of the Accept* HTTP headers has an invalid format.</value>
+    <comment>One of the Accept* HTTP headers has an invalid format.</comment>
+  </data>
+  <data name="InvalidAcceptHeaderValue" xml:space="preserve">
+    <value>Invalid '{0}' header value to parse.</value>
+    <comment>Invalid '{0}' header value to parse.</comment>
+  </data>
 </root>

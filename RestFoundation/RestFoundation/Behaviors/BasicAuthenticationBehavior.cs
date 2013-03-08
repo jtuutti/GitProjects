@@ -5,6 +5,7 @@ using System;
 using System.Globalization;
 using System.Net;
 using System.Security.Principal;
+using RestFoundation.Runtime;
 using RestFoundation.Security;
 
 namespace RestFoundation.Behaviors
@@ -33,7 +34,7 @@ namespace RestFoundation.Behaviors
         {
             if (authorizationManager == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingAuthorizationManager);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.MissingAuthorizationManager);
             }
 
             m_authorizationManager = authorizationManager;
@@ -77,7 +78,7 @@ namespace RestFoundation.Behaviors
         {
             serviceContext.Response.Output.Clear();
             serviceContext.Response.SetHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "{0} realm=\"{1}\"", AuthenticationType, serviceContext.Request.Url.OperationUrl));
-            serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, RestResources.Unauthorized);
+            serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Resources.Global.Unauthorized);
         }
     }
 }

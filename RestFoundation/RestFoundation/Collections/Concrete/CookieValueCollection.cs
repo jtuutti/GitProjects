@@ -80,7 +80,7 @@ namespace RestFoundation.Collections.Concrete
 
             if (value == null)
             {
-                throw new ArgumentOutOfRangeException("key", RestResources.InvalidKey);
+                throw new ArgumentOutOfRangeException("key", Resources.Global.InvalidKey);
             }
 
             return value;

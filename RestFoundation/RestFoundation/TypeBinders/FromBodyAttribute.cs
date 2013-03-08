@@ -47,7 +47,7 @@ namespace RestFoundation.TypeBinders
 
             if (context.Request.Headers.ContentType == null || context.Request.Headers.ContentType.IndexOf(FormDataMediaType, StringComparison.OrdinalIgnoreCase) < 0)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.UnsupportedFormData);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.UnsupportedFormData);
             }
 
             if (!String.IsNullOrWhiteSpace(Name))

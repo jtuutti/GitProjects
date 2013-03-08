@@ -51,10 +51,10 @@
     <table>
         <thead>
         <tr>
-            <th>Relative Url</th>
+            <th>Relative URL</th>
             <th>Method</th>
             <th>Description</th>
-            <th>Metadata</th>
+            <th>Details</th>
             <th>Proxy</th>
         </tr>
         </thead>

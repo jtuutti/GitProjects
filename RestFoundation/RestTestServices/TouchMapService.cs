@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using RestFoundation;
+using RestFoundation.Runtime;
 using RestTestContracts;
 using RestTestContracts.Resources;
 using RestTestServices.Utilities;

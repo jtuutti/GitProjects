@@ -32,7 +32,7 @@ namespace RestFoundation.Behaviors
         {
             get
             {
-                return RestResources.NotFound;
+                return Resources.Global.NotFound;
             }
         }
 

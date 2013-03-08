@@ -41,7 +41,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (String.IsNullOrWhiteSpace(m_webPageUrl))
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.NotFound);
+                throw new HttpResponseException(HttpStatusCode.NotFound, Resources.Global.NotFound);
             }
 
             context.Response.Redirect(m_webPageUrl);

@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Practices.Unity;
+using RestFoundation.Configuration;
 using RestFoundation.Unity;
 
 namespace RestFoundation

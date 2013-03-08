@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using RestFoundation.Results;
+using RestFoundation.Runtime;
 using RestFoundation.Tests.Implementation.Models;
 using RestFoundation.Tests.Implementation.ServiceContracts;
 

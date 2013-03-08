@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RestFoundation {
+namespace RestFoundation.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace RestFoundation {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class RestResources {
+    internal class Global {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal RestResources() {
+        internal Global() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace RestFoundation {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RestFoundation.RestResources", typeof(RestResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RestFoundation.Resources.Global", typeof(Global).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -228,6 +228,24 @@ namespace RestFoundation {
         internal static string InternalServerError {
             get {
                 return ResourceManager.GetString("InternalServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One of the Accept* HTTP headers has an invalid format..
+        /// </summary>
+        internal static string InvalidAcceptHeaderFormat {
+            get {
+                return ResourceManager.GetString("InvalidAcceptHeaderFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid &apos;{0}&apos; header value to parse..
+        /// </summary>
+        internal static string InvalidAcceptHeaderValue {
+            get {
+                return ResourceManager.GetString("InvalidAcceptHeaderValue", resourceCulture);
             }
         }
         

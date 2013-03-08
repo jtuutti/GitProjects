@@ -45,7 +45,7 @@ namespace RestFoundation.Runtime.Handlers
             {
                 if (stream == null)
                 {
-                    throw new HttpException((int) HttpStatusCode.NotFound, RestResources.MissingJavaScriptResource);
+                    throw new HttpException((int) HttpStatusCode.NotFound, Resources.Global.MissingJavaScriptResource);
                 }
 
                 context.Response.ContentType = JavaScriptContentType;

@@ -214,7 +214,7 @@ namespace RestFoundation.Collections.Concrete
             }
             catch (Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.UnsupportedContentCharset);
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.UnsupportedContentCharset);
             }
         }
 
@@ -230,7 +230,7 @@ namespace RestFoundation.Collections.Concrete
                 }
                 catch (Exception)
                 {
-                    throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.UnsupportedContentLanguage);
+                    throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.UnsupportedContentLanguage);
                 }
             }
         }
@@ -267,7 +267,7 @@ namespace RestFoundation.Collections.Concrete
             }
             catch (Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.NonAcceptedContentCharset);
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, Resources.Global.NonAcceptedContentCharset);
             }
         }
 
@@ -301,7 +301,7 @@ namespace RestFoundation.Collections.Concrete
             }
             catch (Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.NonAcceptedContentLanguage);
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, Resources.Global.NonAcceptedContentLanguage);
             }
         }
 

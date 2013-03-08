@@ -9,6 +9,7 @@ using System.Net;
 using System.Web;
 using System.Web.Routing;
 using System.Web.UI;
+using RestFoundation.Configuration;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
@@ -213,7 +214,7 @@ namespace RestFoundation
             {
                 if (!HeaderNameValidator.IsValid(header.Key))
                 {
-                    OutputStatus(application, HttpStatusCode.InternalServerError, RestResources.EmptyHttpHeader);
+                    OutputStatus(application, HttpStatusCode.InternalServerError, Resources.Global.EmptyHttpHeader);
                     return;
                 }
 
@@ -269,7 +270,7 @@ namespace RestFoundation
 
             if (validationException != null)
             {
-                OutputStatus(application, HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
+                OutputStatus(application, HttpStatusCode.Forbidden, Resources.Global.ValidationRequestFailed);
                 return null;
             }
 
@@ -279,13 +280,13 @@ namespace RestFoundation
             {
                 if (httpException.Message.Contains(DangerousRequestMessage))
                 {
-                    OutputStatus(application, HttpStatusCode.Forbidden, RestResources.ValidationRequestFailed);
+                    OutputStatus(application, HttpStatusCode.Forbidden, Resources.Global.ValidationRequestFailed);
                     return null;
                 }
 
                 if (httpException.Message.Contains(RequestTimeoutMessage))
                 {
-                    OutputStatus(application, HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
+                    OutputStatus(application, HttpStatusCode.ServiceUnavailable, Resources.Global.ServiceTimedOut);
                     return null;
                 }
             }
@@ -321,15 +322,15 @@ namespace RestFoundation
                 return;
             }
 
-            Fault statusFault = faults.General.FirstOrDefault(f => f.Message == RestResources.NotFound);
+            Fault statusFault = faults.General.FirstOrDefault(f => f.Message == Resources.Global.NotFound);
 
             if (statusFault != null)
             {
-                statusFault.Message = RestResources.DisallowedHttpMethod;
+                statusFault.Message = Resources.Global.DisallowedHttpMethod;
             }
 
             statusCode = HttpStatusCode.MethodNotAllowed;
-            statusDescription = RestResources.DisallowedHttpMethod;
+            statusDescription = Resources.Global.DisallowedHttpMethod;
         }
 
         private static void OutputFaults(HttpApplication application, HttpStatusCode statusCode, string statusDescription, FaultCollection faults)
@@ -418,7 +419,7 @@ namespace RestFoundation
                 }
             };
 
-            OutputFaults(application, HttpStatusCode.InternalServerError, RestResources.InternalServerError, faults);
+            OutputFaults(application, HttpStatusCode.InternalServerError, Resources.Global.InternalServerError, faults);
         }
 
         private static void OutputValidationFaults(HttpApplication application, HttpResourceFaultException faultException)
@@ -431,7 +432,7 @@ namespace RestFoundation
                 return;
             }
 
-            OutputFaults(application, HttpStatusCode.BadRequest, RestResources.ResourceValidationFailed, faults);
+            OutputFaults(application, HttpStatusCode.BadRequest, Resources.Global.ResourceValidationFailed, faults);
         }
 
         private static string GetExceptionDetail(HttpApplication application, Exception exception)

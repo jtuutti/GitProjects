@@ -23,9 +23,9 @@ namespace RestFoundation.Runtime
             }
 
             string currentStatusDescription = context.Response.GetStatusDescription();
-            string statusDescription = !String.Equals(RestResources.OK, currentStatusDescription, StringComparison.OrdinalIgnoreCase) ?
+            string statusDescription = !String.Equals(Resources.Global.OK, currentStatusDescription, StringComparison.OrdinalIgnoreCase) ?
                                            currentStatusDescription :
-                                           RestResources.NoContent;
+                                           Resources.Global.NoContent;
 
             context.Response.Output.Clear();
             context.Response.SetStatus(HttpStatusCode.NoContent, statusDescription);

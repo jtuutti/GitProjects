@@ -2,6 +2,7 @@
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
 using RestFoundation.Behaviors;
+using RestFoundation.Configuration;
 using RestFoundation.Formatters;
 using RestFoundation.Security;
 using RestTest.Security;

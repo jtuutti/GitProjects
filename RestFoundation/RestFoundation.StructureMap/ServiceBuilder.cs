@@ -4,7 +4,6 @@
 using System;
 using System.Globalization;
 using RestFoundation.ServiceLocation;
-using RestFoundation.StructureMap.Properties;
 using StructureMap;
 using StructureMap.Pipeline;
 
@@ -53,12 +52,12 @@ namespace RestFoundation.StructureMap
 
             if (!abstractionType.IsInterface && !abstractionType.IsAbstract)
             {
-                throw new ArgumentException(Resources.InvalidAbstractionType, "abstractionType");
+                throw new ArgumentException(Properties.Resources.InvalidAbstractionType, "abstractionType");
             }
 
             if (!implementationType.IsClass || implementationType.IsAbstract)
             {
-                throw new ArgumentException(Resources.BadImplementationType, "implementationType");
+                throw new ArgumentException(Properties.Resources.BadImplementationType, "implementationType");
             }
 
             if (m_container.IsRegistered(abstractionType))
@@ -72,7 +71,7 @@ namespace RestFoundation.StructureMap
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyRegistrationError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyRegistrationError, ex.Message), ex);
             }
         }
     }

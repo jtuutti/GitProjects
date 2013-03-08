@@ -50,7 +50,7 @@ namespace RestFoundation.Formatters
                 return GenerateUploadedFileCollection(objectType, context);
             }
 
-            throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.InvalidUploadedFileType);
+            throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, Resources.Global.InvalidUploadedFileType);
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace RestFoundation.Formatters
         /// <exception cref="HttpResponseException">If the object could not be serialized.</exception>
         public virtual IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj)
         {
-            throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.MissingOrInvalidAcceptType);
+            throw new HttpResponseException(HttpStatusCode.NotAcceptable, Resources.Global.MissingOrInvalidAcceptType);
         }
 
         private static bool TryGenerateUploadedFile(IServiceContext context, out object uploadedFile)

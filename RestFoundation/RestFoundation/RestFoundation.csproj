@@ -79,14 +79,14 @@
     <Compile Include="Client\RestClient.cs" />
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
     <Compile Include="Context\ContextContainer.cs" />
-    <Compile Include="DependencyBuilder.cs" />
-    <Compile Include="FaultDetail.cs" />
+    <Compile Include="Configuration\DependencyBuilder.cs" />
+    <Compile Include="Configuration\FaultDetail.cs" />
     <Compile Include="Formatters\SupportedMediaTypeAttribute.cs" />
     <Compile Include="ILogWriter.cs" />
     <Compile Include="InstanceLifetime.cs" />
     <Compile Include="IOptionsDescriptor.cs" />
     <Compile Include="IServiceFactory.cs" />
-    <Compile Include="JsonFormatterSettings.cs" />
+    <Compile Include="Configuration\JsonFormatterSettings.cs" />
     <Compile Include="LinkRelationValues.cs" />
     <Compile Include="LogWriterExtensions.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
@@ -107,11 +107,11 @@
     <Compile Include="Runtime\ODataHelper.cs" />
     <Compile Include="Link.cs" />
     <Compile Include="ResourceState.cs" />
-    <Compile Include="RestOptions.cs" />
-    <Compile Include="RestResources.Designer.cs">
+    <Compile Include="Configuration\RestOptions.cs" />
+    <Compile Include="Resources\Global.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RestResources.resx</DependentUpon>
+      <DependentUpon>Global.resx</DependentUpon>
     </Compile>
     <Compile Include="Runtime\AllowHeaderGenerator.cs" />
     <Compile Include="Runtime\ExpressionArgument.cs" />
@@ -151,7 +151,7 @@
     <Compile Include="Results\FileResultBase.cs" />
     <Compile Include="Results\JsonPResult.cs" />
     <Compile Include="Results\RedirectType.cs" />
-    <Compile Include="RouteBuilder.cs" />
+    <Compile Include="Configuration\RouteBuilder.cs" />
     <Compile Include="Runtime\ContentNegotiator.cs" />
     <Compile Include="Runtime\Handlers\BrowserRedirectHandler.cs" />
     <Compile Include="Runtime\HeaderNameValidator.cs" />
@@ -168,7 +168,7 @@
     <Compile Include="Collections\Concrete\ServerVariableCollection.cs" />
     <Compile Include="Collections\IServerVariableCollection.cs" />
     <Compile Include="ResponseHeaderNames.cs" />
-    <Compile Include="GlobalBehaviorBuilder.cs" />
+    <Compile Include="Configuration\GlobalBehaviorBuilder.cs" />
     <Compile Include="Behaviors\BasicAuthenticationBehavior.cs" />
     <Compile Include="Behaviors\HttpsOnlyBehavior.cs" />
     <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
@@ -210,8 +210,8 @@
     <Compile Include="TypeBinders\FromHeaderAttribute.cs" />
     <Compile Include="TypeBinders\FromUriAttribute.cs" />
     <Compile Include="TypeBinders\TypeBinderAttribute.cs" />
-    <Compile Include="TypeBinderBuilder.cs" />
-    <Compile Include="MediaTypeFormatterBuilder.cs" />
+    <Compile Include="Configuration\TypeBinderBuilder.cs" />
+    <Compile Include="Configuration\MediaTypeFormatterBuilder.cs" />
     <Compile Include="Formatters\MultiPartFormatter.cs" />
     <Compile Include="Security\IAuthorizationManager.cs" />
     <Compile Include="IServiceCache.cs" />
@@ -225,7 +225,7 @@
     <Compile Include="IServiceContext.cs" />
     <Compile Include="UnitTesting\MockContextManager.cs" />
     <Compile Include="UriSegments.cs" />
-    <Compile Include="HttpResourceFaultException.cs" />
+    <Compile Include="Runtime\HttpResourceFaultException.cs" />
     <Compile Include="Validation\IResourceValidator.cs" />
     <Compile Include="IUploadedFile.cs" />
     <Compile Include="Odata\IModelFilter.cs" />
@@ -260,7 +260,7 @@
     <Compile Include="Results\FileUrlResult.cs" />
     <Compile Include="Results\FilePathResult.cs" />
     <Compile Include="Results\JsonResult.cs" />
-    <Compile Include="RouteConfiguration.cs" />
+    <Compile Include="Configuration\RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />
     <Compile Include="Runtime\AcceptValueOptionType.cs" />
     <Compile Include="Runtime\BrowserRouteConstraint.cs" />
@@ -285,7 +285,7 @@
     <Compile Include="Runtime\OutputCompressionManager.cs" />
     <Compile Include="Runtime\ParameterValueProvider.cs" />
     <Compile Include="Validation\ResourceValidator.cs" />
-    <Compile Include="UrlBuilder.cs" />
+    <Compile Include="Configuration\UrlBuilder.cs" />
     <Compile Include="Runtime\StreamCompressor.cs" />
     <Compile Include="Context\ServiceContext.cs" />
     <Compile Include="Runtime\ServiceMetadata.cs" />
@@ -307,7 +307,7 @@
     <Compile Include="Formatters\JsonFormatter.cs" />
     <Compile Include="Formatters\XmlFormatter.cs" />
     <Compile Include="RestHttpModule.cs" />
-    <Compile Include="HttpResponseException.cs" />
+    <Compile Include="Runtime\HttpResponseException.cs" />
     <Compile Include="Behaviors\IServiceBehavior.cs" />
     <Compile Include="Formatters\IMediaTypeFormatter.cs" />
     <Compile Include="IHttpResponse.cs" />
@@ -330,7 +330,7 @@
     <Compile Include="Runtime\UploadedFile.cs" />
     <Compile Include="Runtime\XmlSchemaGenerator.cs" />
     <Compile Include="Runtime\Registries\XmlSerializerRegistry.cs" />
-    <Compile Include="ProxyConfiguration.cs" />
+    <Compile Include="Configuration\ProxyConfiguration.cs" />
     <Compile Include="Runtime\Handlers\ProxyRootHandler.cs" />
     <Compile Include="ServiceProxy\ProxyOperation.cs" />
     <Compile Include="ServiceProxy\ProxyOperationGenerator.cs" />
@@ -345,7 +345,7 @@
     <Compile Include="Runtime\ResourceOutputFormatter.cs" />
     <Compile Include="ServiceProxy\TypeDescriptor.cs" />
     <Compile Include="ServiceProxy\XmlSchemasExtensions.cs" />
-    <Compile Include="ServiceRuntimeException.cs" />
+    <Compile Include="Runtime\ServiceRuntimeException.cs" />
     <Compile Include="ServiceOperationUri.cs" />
     <Compile Include="Runtime\SafeConvert.cs" />
     <Compile Include="Runtime\ServiceMethodInvoker.cs" />
@@ -378,13 +378,13 @@
     <Compile Include="ParameterConstraintAttribute.cs" />
     <Compile Include="Validation\ValidateObjectAttribute.cs" />
     <Compile Include="Validation\ValidationError.cs" />
-    <Compile Include="XmlFormatterSettings.cs" />
+    <Compile Include="Configuration\XmlFormatterSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="RestResources.resx">
+    <EmbeddedResource Include="Resources\Global.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
-      <LastGenOutput>RestResources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Global.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ServiceProxy\Resources\index.aspx">
       <SubType>ASPXCodeBehind</SubType>

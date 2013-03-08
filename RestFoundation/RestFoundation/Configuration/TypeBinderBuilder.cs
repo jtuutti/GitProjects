@@ -5,7 +5,7 @@ using System;
 using RestFoundation.Runtime;
 using RestFoundation.TypeBinders;
 
-namespace RestFoundation
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Represents a type binder builder.

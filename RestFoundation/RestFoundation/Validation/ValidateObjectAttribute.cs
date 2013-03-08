@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using RestFoundation;
+using RestFoundation.Resources;
 using RestFoundation.Runtime;
 
 namespace System.ComponentModel.DataAnnotations
@@ -39,7 +39,7 @@ namespace System.ComponentModel.DataAnnotations
  
             if (results.Count != 0)
             {
-                var compositeResults = new CompositeValidationResult(String.Format(CultureInfo.InvariantCulture, RestResources.ValidationFailed, validationContext.DisplayName));
+                var compositeResults = new CompositeValidationResult(String.Format(CultureInfo.InvariantCulture, Global.ValidationFailed, validationContext.DisplayName));
                 results.ForEach(compositeResults.AddResult);
  
                 return compositeResults;

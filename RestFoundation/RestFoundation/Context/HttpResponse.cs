@@ -342,7 +342,7 @@ namespace RestFoundation.Context
 
             if (!Uri.TryCreate(href, UriKind.RelativeOrAbsolute, out hrefUrl))
             {
-                throw new ArgumentException(RestResources.InvalidFilePathOrUrl, "href");
+                throw new ArgumentException(Resources.Global.InvalidFilePathOrUrl, "href");
             }
 
             SetLink(hrefUrl, rel, title);
@@ -382,12 +382,12 @@ namespace RestFoundation.Context
 
             if (hrefString.IndexOf('<') >= 0 || hrefString.IndexOf('>') >= 0)
             {
-                throw new ArgumentException(RestResources.InvalidArgumentValue, "href");
+                throw new ArgumentException(Resources.Global.InvalidArgumentValue, "href");
             }
 
             if (rel.IndexOf('"') >= 0)
             {
-                throw new ArgumentException(RestResources.InvalidArgumentValue, "rel");
+                throw new ArgumentException(Resources.Global.InvalidArgumentValue, "rel");
             }
 
             var link = new StringBuilder();
@@ -472,7 +472,7 @@ namespace RestFoundation.Context
 
             if (!HeaderNameValidator.IsValid(headerName))
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.EmptyHttpHeader);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.EmptyHttpHeader);
             }
 
             if (overwriteHeader && HttpRuntime.UsingIntegratedPipeline)

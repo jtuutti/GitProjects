@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Web.Routing;
 using System.Web.Util;
+using RestFoundation.Configuration;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.ServiceLocation;
@@ -85,7 +86,7 @@ namespace RestFoundation
             {
                 if (m_options == null)
                 {
-                    throw new InvalidOperationException(RestResources.ConfigurationNotInitialized);
+                    throw new InvalidOperationException(Resources.Global.ConfigurationNotInitialized);
                 }
 
                 return m_options;
@@ -183,7 +184,7 @@ namespace RestFoundation
 
             if (ServiceLocator != null)
             {
-                throw new InvalidOperationException(RestResources.AlreadyConfigured);
+                throw new InvalidOperationException(Resources.Global.AlreadyConfigured);
             }
 
             RouteCollection routes = RouteTable.Routes;

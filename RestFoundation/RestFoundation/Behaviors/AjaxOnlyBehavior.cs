@@ -28,7 +28,7 @@ namespace RestFoundation.Behaviors
 
             if (!serviceContext.Request.IsAjax)
             {
-                SetStatus(HttpStatusCode.NotFound, RestResources.NotFound);
+                SetStatus(HttpStatusCode.NotFound, Resources.Global.NotFound);
                 return BehaviorMethodAction.Stop;
             }
 

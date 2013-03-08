@@ -24,7 +24,7 @@ namespace RestFoundation.Runtime.Handlers
 
         public void ProcessRequest(HttpContext context)
         {
-            throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.NotFound);
+            throw new HttpResponseException(HttpStatusCode.NotFound, Resources.Global.NotFound);
         }
     }
 }

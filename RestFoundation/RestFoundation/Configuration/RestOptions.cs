@@ -10,7 +10,7 @@ using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 using RestFoundation.Security;
 
-namespace RestFoundation
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Represents the REST Foundation configuration options.
@@ -177,7 +177,7 @@ namespace RestFoundation
 
             if (filename.IndexOf('~') >= 0 || filename.IndexOf('/') >= 0 || filename.IndexOf('\\') >= 0 || filename.IndexOf(':') >= 0)
             {
-                throw new ArgumentException(RestResources.FileNameContainsPath);
+                throw new ArgumentException(Resources.Global.FileNameContainsPath);
             }
 
             string extension = Path.GetExtension(filename);
@@ -185,7 +185,7 @@ namespace RestFoundation
             if (!String.Equals(extension, ".htm", StringComparison.OrdinalIgnoreCase) &&
                 !String.Equals(extension, ".html", StringComparison.OrdinalIgnoreCase))
             {
-                throw new ArgumentException(RestResources.InvalidIndexFileException);
+                throw new ArgumentException(Resources.Global.InvalidIndexFileException);
             }
 
             IndexPageRelativeUrl = "~/" + filename.Trim();

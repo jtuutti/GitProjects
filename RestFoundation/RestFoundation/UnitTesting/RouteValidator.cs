@@ -40,19 +40,19 @@ namespace RestFoundation.UnitTesting
 
             if (methodDelegate == null)
             {
-                throw new RouteAssertException(RestResources.InvalidServiceMethodExpression);
+                throw new RouteAssertException(Resources.Global.InvalidServiceMethodExpression);
             }
 
             Type validatedContractType = typeof(T);
 
             if (!validatedContractType.IsInterface && !validatedContractType.IsClass)
             {
-                throw new RouteAssertException(RestResources.InvalidServiceContract);
+                throw new RouteAssertException(Resources.Global.InvalidServiceContract);
             }
 
             if (validatedContractType.IsClass && (validatedContractType.IsAbstract || !Attribute.IsDefined(validatedContractType, typeof(ServiceContractAttribute), true)))
             {
-                throw new RouteAssertException(RestResources.InvalidServiceImplementation);
+                throw new RouteAssertException(Resources.Global.InvalidServiceImplementation);
             }
 
             using (var httpContext = new TestHttpContext(m_virtualUrl, m_httpMethod.ToString().ToUpperInvariant()))
@@ -61,21 +61,21 @@ namespace RestFoundation.UnitTesting
 
                 if (routeData == null)
                 {
-                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.MismatchedUrl, m_virtualUrl));
+                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, Resources.Global.MismatchedUrl, m_virtualUrl));
                 }
 
                 Type contractType = GetServiceContractType(routeData);
 
                 if (contractType != methodDelegate.Method.DeclaringType)
                 {
-                    throw new RouteAssertException(RestResources.MismatchedServiceMethodRoute);
+                    throw new RouteAssertException(Resources.Global.MismatchedServiceMethodRoute);
                 }
 
                 MethodInfo serviceMethod = GetServiceMethod(routeData, contractType);
 
                 if (serviceMethod != methodDelegate.Method)
                 {
-                    throw new RouteAssertException(RestResources.InvalidServiceMethodExpression);
+                    throw new RouteAssertException(Resources.Global.InvalidServiceMethodExpression);
                 }
 
                 ValidateServiceMethodArguments(methodDelegate, routeData);
@@ -115,12 +115,12 @@ namespace RestFoundation.UnitTesting
 
                 if (argumentValues == null || argumentValues.Count == 0)
                 {
-                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidServiceMethodArgument, argument.Name));
+                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidServiceMethodArgument, argument.Name));
                 }
 
                 if (argumentValues.Count > 1)
                 {
-                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, RestResources.OvercomplicatedMethodArgument, argument.Name));
+                    throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture, Resources.Global.OvercomplicatedMethodArgument, argument.Name));
                 }
 
                 object argumentValue = argumentValues[0].Value;
@@ -130,7 +130,7 @@ namespace RestFoundation.UnitTesting
                 if (!SafeConvert.TryChangeType(routeArgumentValue, methodDelegate.Arguments[index].Type, out convertedArgumentValue) || !Equals(argumentValue, convertedArgumentValue))
                 {
                     throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture,
-                                                                 RestResources.MismatchedServiceMethodExpression,
+                                                                 Resources.Global.MismatchedServiceMethodExpression,
                                                                  argument.Name,
                                                                  argumentValue ?? "(null)",
                                                                  routeArgumentValue ?? "(null)"));
@@ -141,7 +141,7 @@ namespace RestFoundation.UnitTesting
                 if (constraintAttribute != null && !constraintAttribute.PatternRegex.IsMatch(Convert.ToString(routeArgumentValue, CultureInfo.InvariantCulture)))
                 {
                     throw new RouteAssertException(String.Format(CultureInfo.InvariantCulture,
-                                                                 RestResources.ConstraintMismatchedRouteParameter,
+                                                                 Resources.Global.ConstraintMismatchedRouteParameter,
                                                                  argument.Name,
                                                                  routeArgumentValue,
                                                                  constraintAttribute.Pattern));

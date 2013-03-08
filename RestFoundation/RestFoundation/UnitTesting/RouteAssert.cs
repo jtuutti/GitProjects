@@ -24,7 +24,7 @@ namespace RestFoundation.UnitTesting
 
             if (!virtualUrl.TrimStart().StartsWith("~", StringComparison.Ordinal))
             {
-                throw new ArgumentException(RestResources.InvalidVirtualUrl, "virtualUrl");
+                throw new ArgumentException(Resources.Global.InvalidVirtualUrl, "virtualUrl");
             }
 
             return new HttpMethodBuilder(virtualUrl);

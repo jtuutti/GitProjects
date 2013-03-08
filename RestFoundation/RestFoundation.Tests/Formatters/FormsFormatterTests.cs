@@ -3,6 +3,7 @@ using System.Text;
 using System.Web;
 using NUnit.Framework;
 using RestFoundation.Formatters;
+using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.Implementation.Models;
 using RestFoundation.Tests.Implementation.ServiceContracts;

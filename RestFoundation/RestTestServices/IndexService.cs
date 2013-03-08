@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using RestFoundation;
 using RestFoundation.Client;
 using RestFoundation.Results;
+using RestFoundation.Runtime;
 using RestTestContracts;
 using RestTestContracts.Resources;
 

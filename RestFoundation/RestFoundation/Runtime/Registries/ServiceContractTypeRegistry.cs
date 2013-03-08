@@ -69,7 +69,7 @@ namespace RestFoundation.Runtime
 
             if (proxyMetadata == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidProxyMetadataType, proxyMetadataType.Name));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidProxyMetadataType, proxyMetadataType.Name));
             }
 
             proxyMetadata.Initialize();

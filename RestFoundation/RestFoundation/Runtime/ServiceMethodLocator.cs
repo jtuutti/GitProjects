@@ -86,7 +86,7 @@ namespace RestFoundation.Runtime
             if (serviceContractType == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format(CultureInfo.InvariantCulture,
-                                                                                                  RestResources.UndeterminedServiceContract,
+                                                                                                  Resources.Global.UndeterminedServiceContract,
                                                                                                   serviceTypeContractName));
             }
 
@@ -100,7 +100,7 @@ namespace RestFoundation.Runtime
             if (method == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format(CultureInfo.InvariantCulture,
-                                                                                                  RestResources.UndefinedServiceMethodUrl,
+                                                                                                  Resources.Global.UndefinedServiceMethodUrl,
                                                                                                   serviceContractType.Name));
             }
 
@@ -114,7 +114,7 @@ namespace RestFoundation.Runtime
             if (service == null)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format(CultureInfo.InvariantCulture,
-                                                                                                  RestResources.UnableToCreateServiceType,
+                                                                                                  Resources.Global.UnableToCreateServiceType,
                                                                                                   serviceContractType.Name));
             }
 

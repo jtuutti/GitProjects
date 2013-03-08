@@ -7,7 +7,7 @@ using System.Linq;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 
-namespace RestFoundation
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Represents a media type formatter builder.
@@ -33,7 +33,7 @@ namespace RestFoundation
 
             if (mediaType.IndexOf(';') >= 0 || mediaType.IndexOf(',') >= 0)
             {
-                throw new ArgumentException(RestResources.DisallowedMediaTypeParameters, "mediaType");
+                throw new ArgumentException(Resources.Global.DisallowedMediaTypeParameters, "mediaType");
             }
 
             return MediaTypeFormatterRegistry.GetFormatter(mediaType.Trim());
@@ -56,7 +56,7 @@ namespace RestFoundation
 
             if (supportedMediaTypes.Count == 0)
             {
-                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, RestResources.MissingSupportedMediaTypeForFormatter, formatterType.Name), "formatter");
+                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, Resources.Global.MissingSupportedMediaTypeForFormatter, formatterType.Name), "formatter");
             }
 
             foreach (SupportedMediaTypeAttribute supportedMediaType in supportedMediaTypes)
@@ -85,7 +85,7 @@ namespace RestFoundation
 
             if (mediaType.IndexOf(';') >= 0 || mediaType.IndexOf(',') >= 0)
             {
-                throw new ArgumentException(RestResources.DisallowedMediaTypeParameters, "mediaType");
+                throw new ArgumentException(Resources.Global.DisallowedMediaTypeParameters, "mediaType");
             }
 
             MediaTypeFormatterRegistry.SetFormatter(mediaType.Trim(), formatter);
@@ -109,7 +109,7 @@ namespace RestFoundation
 
             if (mediaType.IndexOf(';') >= 0 || mediaType.IndexOf(',') >= 0)
             {
-                throw new ArgumentException(RestResources.DisallowedMediaTypeParameters, "mediaType");
+                throw new ArgumentException(Resources.Global.DisallowedMediaTypeParameters, "mediaType");
             }
 
             return MediaTypeFormatterRegistry.RemoveFormatter(mediaType.Trim());

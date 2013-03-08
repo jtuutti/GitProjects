@@ -8,7 +8,7 @@ using System.Net;
 using System.Runtime.Serialization;
 using RestFoundation.Runtime;
 
-namespace RestFoundation
+namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Represents an HTTP response exception. This is a special type of exception that is designed to stop
@@ -57,7 +57,7 @@ namespace RestFoundation
         {
             if ((int) statusCode < MinErrorStatusCode)
             {
-                throw new ArgumentException(RestResources.NonErrorHttpStatusCode, "statusCode");
+                throw new ArgumentException(Resources.Global.NonErrorHttpStatusCode, "statusCode");
             }
 
             StatusCode = statusCode;

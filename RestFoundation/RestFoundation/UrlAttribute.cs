@@ -30,7 +30,7 @@ namespace RestFoundation
 
             if (httpMethods != null && Array.IndexOf(httpMethods, HttpMethod.Options) >= 0)
             {
-                throw new InvalidOperationException(RestResources.ManuallyDefinedOptionsHttpMethod);
+                throw new InvalidOperationException(Resources.Global.ManuallyDefinedOptionsHttpMethod);
             }
 
             UrlTemplate = urlTemplate.Trim();
@@ -100,12 +100,12 @@ namespace RestFoundation
 
                 if (!Enum.TryParse(httpMethodArray[i], true, out httpMethod))
                 {
-                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.UnsupportedHttpMethod, httpMethodArray[i]));
+                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.UnsupportedHttpMethod, httpMethodArray[i]));
                 }
 
                 if (httpMethod == HttpMethod.Options)
                 {
-                    throw new InvalidOperationException(RestResources.ManuallyDefinedOptionsHttpMethod);
+                    throw new InvalidOperationException(Resources.Global.ManuallyDefinedOptionsHttpMethod);
                 }
 
                 if (!httpMethodList.Contains(httpMethod))
@@ -121,7 +121,7 @@ namespace RestFoundation
         {
             if (UrlTemplate.IndexOf('*') >= 0)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidCatchAllUrlTemplate, UrlTemplate));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidCatchAllUrlTemplate, UrlTemplate));
             }
         }
     }

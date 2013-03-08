@@ -49,7 +49,7 @@ namespace RestFoundation.Behaviors.Attributes
         {
             get
             {
-                return RestResources.TooManyRequests;
+                return Resources.Global.TooManyRequests;
             }
         }
 
@@ -73,7 +73,7 @@ namespace RestFoundation.Behaviors.Attributes
 
             if (serviceContext.Cache == null)
             {
-                throw new InvalidOperationException(RestResources.UnableToInitializeCache);
+                throw new InvalidOperationException(Resources.Global.UnableToInitializeCache);
             }
 
             string remoteAddress = serviceContext.Request.ServerVariables.RemoteAddress;

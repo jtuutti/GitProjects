@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using RestFoundation;
 using RestFoundation.Results;
+using RestFoundation.Runtime;
 using SampleRestService.Contracts;
 using SampleRestService.DataAccess;
 using SampleRestService.Resources;

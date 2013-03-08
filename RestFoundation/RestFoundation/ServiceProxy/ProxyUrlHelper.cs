@@ -41,7 +41,7 @@ namespace RestFoundation.ServiceProxy
 
             response.Clear();
             response.StatusCode = (int) HttpStatusCode.NotFound;
-            response.StatusDescription = String.Format(CultureInfo.InvariantCulture, RestResources.InvalidNamedRoute, routeName);
+            response.StatusDescription = String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidNamedRoute, routeName);
 
             return null;
         }

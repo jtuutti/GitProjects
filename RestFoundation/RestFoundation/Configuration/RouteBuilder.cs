@@ -11,7 +11,7 @@ using System.Web.Routing;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 
-namespace RestFoundation
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Represents a route builder for the specified relative URL.
@@ -56,7 +56,7 @@ namespace RestFoundation
         {
             if (timeout.TotalSeconds < -1)
             {
-                throw new ArgumentOutOfRangeException("timeout", RestResources.InvalidAsyncTimeout);
+                throw new ArgumentOutOfRangeException("timeout", Resources.Global.InvalidAsyncTimeout);
             }
 
             m_asyncTimeout = timeout.TotalSeconds > 0 ? timeout : TimeSpan.Zero;
@@ -198,12 +198,12 @@ namespace RestFoundation
 
             if (!contractType.IsInterface && !contractType.IsClass)
             {
-                throw new ArgumentException(RestResources.InvalidServiceContract, "contractType");
+                throw new ArgumentException(Resources.Global.InvalidServiceContract, "contractType");
             }
 
             if (contractType.IsClass && (contractType.IsAbstract || !Attribute.IsDefined(contractType, typeof(ServiceContractAttribute), true)))
             {
-                throw new ArgumentException(RestResources.InvalidServiceImplementation, "contractType");
+                throw new ArgumentException(Resources.Global.InvalidServiceImplementation, "contractType");
             }
 
             var serviceMethods = contractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
@@ -215,7 +215,7 @@ namespace RestFoundation
             {
                 if (ServiceMethodRegistry.ServiceMethods.Any(m => String.Equals(m_relativeUrl, m.Key.Url, StringComparison.OrdinalIgnoreCase)))
                 {
-                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.AlreadyMapped, m_relativeUrl));
+                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.AlreadyMapped, m_relativeUrl));
                 }
 
                 ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, m_relativeUrl), t => methodMetadata, (t, u) => methodMetadata);

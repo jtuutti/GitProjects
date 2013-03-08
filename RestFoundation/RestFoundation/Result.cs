@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.ServiceModel.Syndication;
 using RestFoundation.Results;
+using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
@@ -120,7 +121,7 @@ namespace RestFoundation
                 var result = new StatusResult
                              {
                                  StatusCode = HttpStatusCode.NotFound,
-                                 StatusDescription = RestResources.NotFound
+                                 StatusDescription = Resources.Global.NotFound
                              };
 
                 return result;
@@ -387,7 +388,7 @@ namespace RestFoundation
 
             if (context == null)
             {
-                throw new InvalidOperationException(RestResources.MissingHttpContext);
+                throw new InvalidOperationException(Resources.Global.MissingHttpContext);
             }
 
             return new RedirectResult
@@ -496,7 +497,7 @@ namespace RestFoundation
 
             if (context == null)
             {
-                throw new InvalidOperationException(RestResources.MissingHttpContext);
+                throw new InvalidOperationException(Resources.Global.MissingHttpContext);
             }
 
             return new RedirectResult
@@ -633,7 +634,7 @@ namespace RestFoundation
 
             if (context == null)
             {
-                throw new InvalidOperationException(RestResources.MissingHttpContext);
+                throw new InvalidOperationException(Resources.Global.MissingHttpContext);
             }
 
             context.Response.SetStatus(code, description ?? String.Empty);
@@ -730,7 +731,7 @@ namespace RestFoundation
         {
             if (format == null)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.InvalidResultContentFormat);
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.InvalidResultContentFormat);
             }
 
             switch (format.ToLowerInvariant().Trim())
@@ -746,7 +747,7 @@ namespace RestFoundation
                         Content = obj
                     };
                 default:
-                    throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.InvalidResultContentFormat);
+                    throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.InvalidResultContentFormat);
             }
         }
 

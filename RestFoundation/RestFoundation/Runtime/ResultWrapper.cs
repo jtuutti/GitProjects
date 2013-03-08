@@ -59,7 +59,7 @@ namespace RestFoundation.Runtime
 
             if (formatter == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotAcceptable, RestResources.MissingOrInvalidAcceptType);
+                throw new HttpResponseException(HttpStatusCode.NotAcceptable, Resources.Global.MissingOrInvalidAcceptType);
             }
 
             return formatter.FormatResponse(handler.Context, methodReturnType, returnedObj);

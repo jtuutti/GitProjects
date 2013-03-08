@@ -33,7 +33,7 @@ namespace RestFoundation.UnitTesting
 
                 if (context == null)
                 {
-                    throw new InvalidOperationException(RestResources.MissingHttpContext);
+                    throw new InvalidOperationException(Resources.Global.MissingHttpContext);
                 }
 
                 return context;

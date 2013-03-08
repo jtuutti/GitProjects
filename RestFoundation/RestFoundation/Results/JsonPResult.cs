@@ -52,7 +52,7 @@ namespace RestFoundation.Results
             }
             else if (!methodNamePattern.IsMatch(Callback))
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.InvalidJsonPCallback);
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.InvalidJsonPCallback);
             }
 
             if (String.IsNullOrEmpty(ContentType))

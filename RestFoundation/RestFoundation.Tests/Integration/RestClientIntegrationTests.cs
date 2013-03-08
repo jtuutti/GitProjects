@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 using NUnit.Framework;
 using RestFoundation.Client;
@@ -256,15 +254,19 @@ namespace RestFoundation.Tests.Integration
 
         [Test]
         [ExpectedException(typeof(HttpException))]
-        public async Task TestBadUri()
+        public void TestBadUri()
         {
             IRestClient client = RestClientFactory.Create();
 
             try
             {
                 var serviceUri = new Uri(integrationServiceUri + "/home/index/bad-url");
-                var outputResponse = await client.GetAsync<Person>(serviceUri, RestResourceType.Json);
+                var outputResponse = client.GetAsync<Person>(serviceUri, RestResourceType.Json).Result;
                 Assert.That(outputResponse, Is.Not.Null);
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.InnerException;
             }
             finally
             {
@@ -274,7 +276,7 @@ namespace RestFoundation.Tests.Integration
 
         [Test]
         [ExpectedException(typeof(HttpException))]
-        public async Task TestBadHttpMethod()
+        public void TestBadHttpMethod()
         {
             IRestClient client = RestClientFactory.Create();
 
@@ -291,8 +293,12 @@ namespace RestFoundation.Tests.Integration
 
             try
             {
-                var outputResource = await client.PostAsync<Person, Person>(serviceUri, inputResource);
+                var outputResource = client.PostAsync<Person, Person>(serviceUri, inputResource).Result;
                 Assert.That(outputResource, Is.Not.Null);
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.InnerException;
             }
             finally
             {

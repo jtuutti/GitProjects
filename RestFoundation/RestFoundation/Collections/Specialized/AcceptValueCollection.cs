@@ -189,7 +189,7 @@ namespace RestFoundation.Collections.Specialized
 
             if (names.Any(n => n == null || n.IndexOf('*') >= 0))
             {
-                throw new ArgumentException(RestResources.NullOrInvalidAcceptedName, "names");
+                throw new ArgumentException(Resources.Global.NullOrInvalidAcceptedName, "names");
             }
 
             if (names.Length == 0)
@@ -241,7 +241,7 @@ namespace RestFoundation.Collections.Specialized
 
             if (names.Any(n => n == null || n.IndexOf('*') >= 0))
             {
-                throw new ArgumentException(RestResources.NullOrInvalidAcceptedName, "names");
+                throw new ArgumentException(Resources.Global.NullOrInvalidAcceptedName, "names");
             }
 
             if (names.Length == 0)

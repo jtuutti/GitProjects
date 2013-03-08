@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using RestFoundation;
+using RestFoundation.Runtime;
 using RestTestContracts;
 
 namespace RestTestServices

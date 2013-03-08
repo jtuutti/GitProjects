@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using RestFoundation.Client;
+using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.Implementation.Models;
 using RestFoundation.Tests.Implementation.ServiceContracts;

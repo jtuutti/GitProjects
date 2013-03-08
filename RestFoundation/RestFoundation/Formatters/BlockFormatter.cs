@@ -17,7 +17,9 @@ namespace RestFoundation.Formatters
         /// <param name="context">The service context.</param>
         /// <param name="objectType">The object type.</param>
         /// <returns>The deserialized object.</returns>
-        /// <exception cref="HttpResponseException">If the object could not be deserialized.</exception>
+        /// <exception cref="RestFoundation.Runtime.HttpResponseException">
+        /// If the object could not be serialized.
+        /// </exception>
         public object FormatRequest(IServiceContext context, Type objectType)
         {
             throw new NotSupportedException();
@@ -30,7 +32,9 @@ namespace RestFoundation.Formatters
         /// <param name="methodReturnType">The method return type.</param>
         /// <param name="obj">The object to serialize.</param>
         /// <returns>A service method result containing the serialized object representation.</returns>
-        /// <exception cref="HttpResponseException">If the object could not be serialized.</exception>
+        /// <exception cref="RestFoundation.Runtime.HttpResponseException">
+        /// If the object could not be serialized.
+        /// </exception>
         public IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj)
         {
             throw new NotSupportedException();

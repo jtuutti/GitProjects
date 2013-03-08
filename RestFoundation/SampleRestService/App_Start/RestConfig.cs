@@ -1,4 +1,4 @@
-﻿using RestFoundation;
+﻿using RestFoundation.Configuration;
 using SampleRestService.Contracts;
 
 namespace SampleRestService.App_Start

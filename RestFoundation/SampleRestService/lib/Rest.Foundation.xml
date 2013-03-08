@@ -896,12 +896,12 @@
             </returns>
       <filterpriority>1</filterpriority>
     </member>
-    <member name="T:RestFoundation.DependencyBuilder">
+    <member name="T:RestFoundation.Configuration.DependencyBuilder">
       <summary>
             Represents a dependency builder for the default service locator.
             </summary>
     </member>
-    <member name="M:RestFoundation.DependencyBuilder.AllowPropertyInjection(System.Func{System.Type,System.Boolean})">
+    <member name="M:RestFoundation.Configuration.DependencyBuilder.AllowPropertyInjection(System.Func{System.Type,System.Boolean})">
       <summary>
             Enables property injection for the types that match the predicate. The predicate should include
             contract and implementation classes.
@@ -913,7 +913,7 @@
       <param name="typePredicate">The type predicate.</param>
       <returns>The dependency builder.</returns>
     </member>
-    <member name="M:RestFoundation.DependencyBuilder.Register``2">
+    <member name="M:RestFoundation.Configuration.DependencyBuilder.Register``2">
       <summary>
             Registers a service implementation for its contract with the per-instance lifetime.
             </summary>
@@ -922,7 +922,7 @@
       <returns>The dependency builder.</returns>
       <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
-    <member name="M:RestFoundation.DependencyBuilder.Register``2(RestFoundation.InstanceLifetime)">
+    <member name="M:RestFoundation.Configuration.DependencyBuilder.Register``2(RestFoundation.InstanceLifetime)">
       <summary>
             Registers a service implementation for its contract with the provided lifetime.
             </summary>
@@ -932,7 +932,7 @@
       <returns>The dependency builder.</returns>
       <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
-    <member name="M:RestFoundation.DependencyBuilder.Register(System.Type,System.Type)">
+    <member name="M:RestFoundation.Configuration.DependencyBuilder.Register(System.Type,System.Type)">
       <summary>
             Registers a service implementation for its contract with the per-instance lifetime.
             </summary>
@@ -941,7 +941,7 @@
       <returns>The dependency builder.</returns>
       <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
-    <member name="M:RestFoundation.DependencyBuilder.Register(System.Type,System.Type,RestFoundation.InstanceLifetime)">
+    <member name="M:RestFoundation.Configuration.DependencyBuilder.Register(System.Type,System.Type,RestFoundation.InstanceLifetime)">
       <summary>
             Registers a service implementation for its contract with the provided lifetime.
             </summary>
@@ -951,7 +951,7 @@
       <returns>The dependency builder.</returns>
       <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
-    <member name="M:RestFoundation.DependencyBuilder.Register``1(``0)">
+    <member name="M:RestFoundation.Configuration.DependencyBuilder.Register``1(``0)">
       <summary>
             Registers a specific service implementation instance to its contract with the per-instance lifetime.
             </summary>
@@ -960,7 +960,7 @@
       <returns>The dependency builder.</returns>
       <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
-    <member name="M:RestFoundation.DependencyBuilder.Register(System.Type,System.Object)">
+    <member name="M:RestFoundation.Configuration.DependencyBuilder.Register(System.Type,System.Object)">
       <summary>
             Registers a specific service implementation instance to its contract with the per-instance lifetime.
             </summary>
@@ -969,7 +969,7 @@
       <returns>The dependency builder.</returns>
       <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
-    <member name="M:RestFoundation.DependencyBuilder.ScanAssemblies(System.Reflection.Assembly[])">
+    <member name="M:RestFoundation.Configuration.DependencyBuilder.ScanAssemblies(System.Reflection.Assembly[])">
       <summary>
             Scans the provided assemblies and registers the inner service implementations to their contracts.
             </summary>
@@ -977,7 +977,7 @@
       <returns>The dependency builder.</returns>
       <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
-    <member name="M:RestFoundation.DependencyBuilder.ScanAssemblies(System.Reflection.Assembly[],System.Func{System.Type,System.Boolean})">
+    <member name="M:RestFoundation.Configuration.DependencyBuilder.ScanAssemblies(System.Reflection.Assembly[],System.Func{System.Type,System.Boolean})">
       <summary>
             Scans the provided assemblies and registers the inner service implementations to their contracts.
             The registration predicate must account for both, service contracts and implementations.
@@ -987,7 +987,7 @@
       <returns>The dependency builder.</returns>
       <exception cref="T:RestFoundation.ServiceLocation.ServiceActivationException">If there is a problem registering the service.</exception>
     </member>
-    <member name="M:RestFoundation.DependencyBuilder.ScanAssemblies(System.String[])">
+    <member name="M:RestFoundation.Configuration.DependencyBuilder.ScanAssemblies(System.String[])">
       <summary>
             Scans assemblies with the provided names and registers the inner service implementations to their contracts.
             </summary>
@@ -999,7 +999,7 @@
       <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
       <exception cref="T:System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
     </member>
-    <member name="M:RestFoundation.DependencyBuilder.ScanAssemblies(System.String[],System.Func{System.Type,System.Boolean})">
+    <member name="M:RestFoundation.Configuration.DependencyBuilder.ScanAssemblies(System.String[],System.Func{System.Type,System.Boolean})">
       <summary>
             Scans assemblies with the provided names and registers the inner service implementations to their contracts.
             The registration predicate must account for both, service contracts and implementations.
@@ -1013,25 +1013,25 @@
       <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
       <exception cref="T:System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
     </member>
-    <member name="T:RestFoundation.FaultDetail">
+    <member name="T:RestFoundation.Configuration.FaultDetail">
       <summary>
             Defines the detail of information returned in the fault collection object during an
             unhandled service exception.
             </summary>
     </member>
-    <member name="F:RestFoundation.FaultDetail.MessageOnly">
+    <member name="F:RestFoundation.Configuration.FaultDetail.MessageOnly">
       <summary>
             Only the exception message is returned.
             </summary>
     </member>
-    <member name="F:RestFoundation.FaultDetail.DetailedInDebugMode">
+    <member name="F:RestFoundation.Configuration.FaultDetail.DetailedInDebugMode">
       <summary>
             The exception message and the stack trace are returned in the debug mode.
             Only the exception message is returned in the release mode.
             This is the default setting.
             </summary>
     </member>
-    <member name="F:RestFoundation.FaultDetail.Detailed">
+    <member name="F:RestFoundation.Configuration.FaultDetail.Detailed">
       <summary>
             The exception message and the stack trace are always returned.
             </summary>
@@ -1160,46 +1160,46 @@
       <param name="serviceContractType">A service contract type.</param>
       <returns>The created service instance.</returns>
     </member>
-    <member name="T:RestFoundation.JsonFormatterSettings">
+    <member name="T:RestFoundation.Configuration.JsonFormatterSettings">
       <summary>
             Contains settings used by JSON formatters and results.
             </summary>
     </member>
-    <member name="M:RestFoundation.JsonFormatterSettings.#ctor">
+    <member name="M:RestFoundation.Configuration.JsonFormatterSettings.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.JsonFormatterSettings" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Configuration.JsonFormatterSettings" /> class.
             </summary>
     </member>
-    <member name="P:RestFoundation.JsonFormatterSettings.MaxDepth">
+    <member name="P:RestFoundation.Configuration.JsonFormatterSettings.MaxDepth">
       <summary>
             Gets or sets an optional maximum depth of the object graph.
             </summary>
     </member>
-    <member name="P:RestFoundation.JsonFormatterSettings.IncludeNullValues">
+    <member name="P:RestFoundation.Configuration.JsonFormatterSettings.IncludeNullValues">
       <summary>
             Gets or sets a value indicating that properties with null values must be serialized.
             This property is set to false by default.
             </summary>
     </member>
-    <member name="P:RestFoundation.JsonFormatterSettings.LowerPropertiesForAjax">
+    <member name="P:RestFoundation.Configuration.JsonFormatterSettings.LowerPropertiesForAjax">
       <summary>
             Gets or sets a value indicating that properties should be in lower case for AJAX
             requests.
             </summary>
     </member>
-    <member name="P:RestFoundation.JsonFormatterSettings.UseLocalTimeZone">
+    <member name="P:RestFoundation.Configuration.JsonFormatterSettings.UseLocalTimeZone">
       <summary>
             Gets or sets a value indicating that dates must be serialized in the local server
             timezone instead of UTC. This property is set to true by default.
             </summary>
     </member>
-    <member name="P:RestFoundation.JsonFormatterSettings.UseMicrosoftStyleDates">
+    <member name="P:RestFoundation.Configuration.JsonFormatterSettings.UseMicrosoftStyleDates">
       <summary>
             Gets or sets a value indicating that dates must be serialized in Microsoft format
             instead of the ISO 8601 format. This property is set to false by default.
             </summary>
     </member>
-    <member name="P:RestFoundation.JsonFormatterSettings.WrapContentResponse">
+    <member name="P:RestFoundation.Configuration.JsonFormatterSettings.WrapContentResponse">
       <summary>
             Gets or sets a value indicating whether to wrap a JSON response.
             </summary>
@@ -2065,25 +2065,25 @@
             Gets a value indicating whether the resource state is valid (has no errors).
             </summary>
     </member>
-    <member name="T:RestFoundation.RestOptions">
+    <member name="T:RestFoundation.Configuration.RestOptions">
       <summary>
             Represents the REST Foundation configuration options.
             </summary>
     </member>
-    <member name="M:RestFoundation.RestOptions.ConfigureServiceHelpAndProxy(System.Action{RestFoundation.ProxyConfiguration})">
+    <member name="M:RestFoundation.Configuration.RestOptions.ConfigureServiceHelpAndProxy(System.Action{RestFoundation.Configuration.ProxyConfiguration})">
       <summary>
             Calls the provided service proxy configuration object to set up service help and proxy UI for the services.
             </summary>
       <param name="configuration">The service help and proxy configuration.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.EnableJsonPSupport">
+    <member name="M:RestFoundation.Configuration.RestOptions.EnableJsonPSupport">
       <summary>
             Adds media type formatters for the JSONP support.
             </summary>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.WithDefaultMediaType(System.String,System.Boolean)">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithDefaultMediaType(System.String,System.Boolean)">
       <summary>
             Sets the default media type in case the Accept HTTP header is not provided or should
             be ignored.
@@ -2095,7 +2095,7 @@
             </param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.WithFaultDetail(RestFoundation.FaultDetail)">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithFaultDetail(RestFoundation.Configuration.FaultDetail)">
       <summary>
             Sets the detail of information being returned in the fault collection object during an unhandled service
             exception.
@@ -2103,21 +2103,21 @@
       <param name="detail">The detail of fault information.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.WithGlobalBehaviors(System.Action{RestFoundation.GlobalBehaviorBuilder})">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithGlobalBehaviors(System.Action{RestFoundation.Configuration.GlobalBehaviorBuilder})">
       <summary>
             Calls the provided global behavior builder delegate to set or remove behaviors global to all services.
             </summary>
       <param name="builder">The builder.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.WithGlobalExceptionHandler(RestFoundation.IServiceExceptionHandler)">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithGlobalExceptionHandler(RestFoundation.IServiceExceptionHandler)">
       <summary>
             Sets the exception handler global to all services.
             </summary>
       <param name="exceptionHandler">The exception handler.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.WithIndexFileName(System.String)">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithIndexFileName(System.String)">
       <summary>
             Sets the default page file name. The file must be in the root folder and only the file name must be
             provided.
@@ -2128,14 +2128,14 @@
             If the file has an unsupported extension or a file path had been provided in addition to the name.
             </exception>
     </member>
-    <member name="M:RestFoundation.RestOptions.WithMediaTypeFormatters(System.Action{RestFoundation.MediaTypeFormatterBuilder})">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithMediaTypeFormatters(System.Action{RestFoundation.Configuration.MediaTypeFormatterBuilder})">
       <summary>
             Calls the provided media type formatter builder delegate to set or remove formatters.
             </summary>
       <param name="builder">The builder.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.WithResponseHeader(System.String,System.String)">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithResponseHeader(System.String,System.String)">
       <summary>
             Adds the provided header to all HTTP responses.
             </summary>
@@ -2143,42 +2143,42 @@
       <param name="headerValue">The header value.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.WithResponseHeaders(System.Collections.Generic.IDictionary{System.String,System.String})">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithResponseHeaders(System.Collections.Generic.IDictionary{System.String,System.String})">
       <summary>
             Adds the provided response headers to all HTTP responses.
             </summary>
       <param name="responseHeaders">A dictionary of header names and values.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.WithTypeBinders(System.Action{RestFoundation.TypeBinderBuilder})">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithTypeBinders(System.Action{RestFoundation.Configuration.TypeBinderBuilder})">
       <summary>
             Calls the provided type binder builder delegate to set or remove type binders.
             </summary>
       <param name="builder">The builder.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.WithUrls(System.Action{RestFoundation.UrlBuilder})">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithUrls(System.Action{RestFoundation.Configuration.UrlBuilder})">
       <summary>
             Calls the provided URL builder delegate to set up URL routes to services and web form pages.
             </summary>
       <param name="builder">The builder.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.UseJsonFormatterSettings(RestFoundation.JsonFormatterSettings)">
+    <member name="M:RestFoundation.Configuration.RestOptions.UseJsonFormatterSettings(RestFoundation.Configuration.JsonFormatterSettings)">
       <summary>
             Sets custom JSON formatter and result settings.
             </summary>
       <param name="settings">The JSON formatter settings.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.UseXmlFormatterSettings(RestFoundation.XmlFormatterSettings)">
+    <member name="M:RestFoundation.Configuration.RestOptions.UseXmlFormatterSettings(RestFoundation.Configuration.XmlFormatterSettings)">
       <summary>
             Sets custom XML formatter and result settings.
             </summary>
       <param name="settings">The XML formatter settings.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.DoNotRemoveWebServerHeaders">
+    <member name="M:RestFoundation.Configuration.RestOptions.DoNotRemoveWebServerHeaders">
       <summary>
             Retains the HTTP response headers generated by the IIS server and ASP .NET framework.
             It is not recommended to retain these headers because they expose the technology
@@ -2186,659 +2186,669 @@
             </summary>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.OnBeginRequest(System.Action{RestFoundation.IServiceContext})">
+    <member name="M:RestFoundation.Configuration.RestOptions.OnBeginRequest(System.Action{RestFoundation.IServiceContext})">
       <summary>
             Sets an action to execute when a REST service request begins.
             </summary>
       <param name="action">The action delegate.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.OnEndRequest(System.Action{RestFoundation.IServiceContext})">
+    <member name="M:RestFoundation.Configuration.RestOptions.OnEndRequest(System.Action{RestFoundation.IServiceContext})">
       <summary>
             Sets an action to execute when a REST service request ends.
             </summary>
       <param name="action">The action delegate.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.RestOptions.OnException(System.Action{RestFoundation.IServiceContext,System.Exception})">
+    <member name="M:RestFoundation.Configuration.RestOptions.OnException(System.Action{RestFoundation.IServiceContext,System.Exception})">
       <summary>
             Sets an action to execute when a REST service method throws an exception.
             </summary>
       <param name="action">The action delegate.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="P:RestFoundation.RestOptions.ServiceProxyHttpsOnly">
+    <member name="P:RestFoundation.Configuration.RestOptions.ServiceProxyHttpsOnly">
       <summary>
             Gets a value indicating whether the service proxy must be accessed through the HTTPS protocol only.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestOptions.ServiceProxyAuthorizationManager">
+    <member name="P:RestFoundation.Configuration.RestOptions.ServiceProxyAuthorizationManager">
       <summary>
             Gets the service proxy authorization manager instance.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestOptions.ServiceDescription">
+    <member name="P:RestFoundation.Configuration.RestOptions.ServiceDescription">
       <summary>
             Gets the service description.
             </summary>
     </member>
-    <member name="T:RestFoundation.RestResources">
+    <member name="T:RestFoundation.Resources.Global">
       <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ResourceManager">
+    <member name="P:RestFoundation.Resources.Global.ResourceManager">
       <summary>
               Returns the cached ResourceManager instance used by this class.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.Culture">
+    <member name="P:RestFoundation.Resources.Global.Culture">
       <summary>
               Overrides the current thread's CurrentUICulture property for all
               resource lookups using this strongly typed resource class.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.AlreadyConfigured">
+    <member name="P:RestFoundation.Resources.Global.AlreadyConfigured">
       <summary>
               Looks up a localized string similar to REST Foundation has already been configured..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.AlreadyInitializedHttpContext">
+    <member name="P:RestFoundation.Resources.Global.AlreadyInitializedHttpContext">
       <summary>
               Looks up a localized string similar to HTTP context has already been initialized..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.AlreadyMapped">
+    <member name="P:RestFoundation.Resources.Global.AlreadyMapped">
       <summary>
               Looks up a localized string similar to The relative URL '{0}' has already been mapped..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ConfigurationNotInitialized">
+    <member name="P:RestFoundation.Resources.Global.ConfigurationNotInitialized">
       <summary>
               Looks up a localized string similar to REST Foundation configuration has not been initialized. Make sure to add a call to one of the Initialize methods of the RestFoundation.Rest.Configuration object on the application start..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ConstraintMismatchedRouteParameter">
+    <member name="P:RestFoundation.Resources.Global.ConstraintMismatchedRouteParameter">
       <summary>
               Looks up a localized string similar to Route parameter '{0}' with value '{1}' does not match the constraint pattern '{2}'..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.DependencyRegistrationError">
+    <member name="P:RestFoundation.Resources.Global.DependencyRegistrationError">
       <summary>
               Looks up a localized string similar to There was a problem registering a service: {0}.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.DependencyResolutionError">
+    <member name="P:RestFoundation.Resources.Global.DependencyResolutionError">
       <summary>
               Looks up a localized string similar to There was a problem resolving a service: {0}.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.DisallowedHttpMethod">
+    <member name="P:RestFoundation.Resources.Global.DisallowedHttpMethod">
       <summary>
               Looks up a localized string similar to HTTP method is not allowed..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.DisallowedMediaTypeParameters">
+    <member name="P:RestFoundation.Resources.Global.DisallowedMediaTypeParameters">
       <summary>
               Looks up a localized string similar to Media type parameters are not allowed..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.DuplicateAuthenticationBehavior">
+    <member name="P:RestFoundation.Resources.Global.DuplicateAuthenticationBehavior">
       <summary>
               Looks up a localized string similar to Only a single authentication behavior can be associated with a service method. That includes global behaviors..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.DuplicateGlobalBehaviors">
+    <member name="P:RestFoundation.Resources.Global.DuplicateGlobalBehaviors">
       <summary>
               Looks up a localized string similar to Multiple global service behaviors of the same type are not allowed..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.DuplicateRouteBehaviors">
+    <member name="P:RestFoundation.Resources.Global.DuplicateRouteBehaviors">
       <summary>
               Looks up a localized string similar to Multiple service behaviors of the same type are not allowed for the same route..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.EmptyFileName">
+    <member name="P:RestFoundation.Resources.Global.EmptyFileName">
       <summary>
               Looks up a localized string similar to File name cannot be empty..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.EmptyHttpHeader">
+    <member name="P:RestFoundation.Resources.Global.EmptyHttpHeader">
       <summary>
               Looks up a localized string similar to HTTP headers cannot be empty or have white-space in the name..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.FailedRequest">
+    <member name="P:RestFoundation.Resources.Global.FailedRequest">
       <summary>
               Looks up a localized string similar to HTTP request failed to process..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.FileNameContainsPath">
+    <member name="P:RestFoundation.Resources.Global.FileNameContainsPath">
       <summary>
               Looks up a localized string similar to Only a file name can be specified. Relative or absolute paths/URLs are not supported..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.Forbidden">
+    <member name="P:RestFoundation.Resources.Global.Forbidden">
       <summary>
               Looks up a localized string similar to Forbidden.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.HttpsRequiredStatusDescription">
+    <member name="P:RestFoundation.Resources.Global.HttpsRequiredStatusDescription">
       <summary>
               Looks up a localized string similar to HTTPS required.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InternalServerError">
+    <member name="P:RestFoundation.Resources.Global.InternalServerError">
       <summary>
               Looks up a localized string similar to Internal Server Error.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidArgumentValue">
+    <member name="P:RestFoundation.Resources.Global.InvalidAcceptHeaderFormat">
+      <summary>
+              Looks up a localized string similar to One of the Accept* HTTP headers has an invalid format..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidAcceptHeaderValue">
+      <summary>
+              Looks up a localized string similar to Invalid '{0}' header value to parse..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidArgumentValue">
       <summary>
               Looks up a localized string similar to The argument contains invalid elements..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidAsyncTimeout">
+    <member name="P:RestFoundation.Resources.Global.InvalidAsyncTimeout">
       <summary>
               Looks up a localized string similar to Invalid service async timeout value provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidCatchAllUrlTemplate">
+    <member name="P:RestFoundation.Resources.Global.InvalidCatchAllUrlTemplate">
       <summary>
               Looks up a localized string similar to URL templates cannot contain catch-all parameters. Template: '{0}'.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidConnectionTimeout">
+    <member name="P:RestFoundation.Resources.Global.InvalidConnectionTimeout">
       <summary>
               Looks up a localized string similar to Connection timeout is invalid..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidFilePathOrUrl">
+    <member name="P:RestFoundation.Resources.Global.InvalidFilePathOrUrl">
       <summary>
               Looks up a localized string similar to No valid file path/URL provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidHashKey">
+    <member name="P:RestFoundation.Resources.Global.InvalidHashKey">
       <summary>
               Looks up a localized string similar to Invalid hash key provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidHttpMethodForResource">
+    <member name="P:RestFoundation.Resources.Global.InvalidHttpMethodForResource">
       <summary>
               Looks up a localized string similar to A resource cannot be set for the current HTTP method..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidIAsyncResultReturned">
+    <member name="P:RestFoundation.Resources.Global.InvalidIAsyncResultReturned">
       <summary>
               Looks up a localized string similar to An unsupported asynchronous result was returned from the service method. Only objects of Task and Task&lt;T&gt; types are supported. Nested generic tasks are not supported..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidIndexFileException">
+    <member name="P:RestFoundation.Resources.Global.InvalidIndexFileException">
       <summary>
               Looks up a localized string similar to Index files can only have .html or .htm extensions..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidJsonPCallback">
+    <member name="P:RestFoundation.Resources.Global.InvalidJsonPCallback">
       <summary>
               Looks up a localized string similar to Invalid JSONP callback method provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidKey">
+    <member name="P:RestFoundation.Resources.Global.InvalidKey">
       <summary>
               Looks up a localized string similar to Invalid key provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidMethodInvocationTaskState">
+    <member name="P:RestFoundation.Resources.Global.InvalidMethodInvocationTaskState">
       <summary>
               Looks up a localized string similar to The task returned by the IServiceMethodInvoker must be in the 'Created' state. It cannot be started..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidMethodParameterName">
+    <member name="P:RestFoundation.Resources.Global.InvalidMethodParameterName">
       <summary>
               Looks up a localized string similar to Invalid method parameter name provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidNamedRoute">
+    <member name="P:RestFoundation.Resources.Global.InvalidNamedRoute">
       <summary>
               Looks up a localized string similar to Invalid route '{0}' specified..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidODataParameters">
+    <member name="P:RestFoundation.Resources.Global.InvalidODataParameters">
       <summary>
               Looks up a localized string similar to Invalid OData parameters provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidPortNumber">
+    <member name="P:RestFoundation.Resources.Global.InvalidPortNumber">
       <summary>
               Looks up a localized string similar to Port must be greater than 0..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidProxyMetadataType">
+    <member name="P:RestFoundation.Resources.Global.InvalidProxyMetadataType">
       <summary>
               Looks up a localized string similar to The type '{0}' is not a valid proxy metadata type..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidResourceBody">
+    <member name="P:RestFoundation.Resources.Global.InvalidResourceBody">
       <summary>
               Looks up a localized string similar to Invalid resource body provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidResourceExampleType">
+    <member name="P:RestFoundation.Resources.Global.InvalidResourceExampleType">
       <summary>
               Looks up a localized string similar to A resource example type must be a class implementing the RestFoundation.ServiceProxy.IResourceExample interface..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidResultContentFormat">
+    <member name="P:RestFoundation.Resources.Global.InvalidResultContentFormat">
       <summary>
               Looks up a localized string similar to Invalid content result format provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidServiceContract">
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceContract">
       <summary>
               Looks up a localized string similar to Service contract type must be an interface or a concrete class that defines its own contract..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidServiceContractType">
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceContractType">
       <summary>
               Looks up a localized string similar to Type '{0}' is not a service contract..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidServiceImplementation">
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceImplementation">
       <summary>
               Looks up a localized string similar to A service implementation that defines its own contract must be non-abstract and marked with the 'ServiceContract' attribute..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidServiceMethod">
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceMethod">
       <summary>
               Looks up a localized string similar to No valid service method provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidServiceMethodArgument">
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceMethodArgument">
       <summary>
               Looks up a localized string similar to There was a problem validating service method argument '{0}'..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidServiceMethodExpression">
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceMethodExpression">
       <summary>
               Looks up a localized string similar to Invalid service method lambda expression provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidServiceName">
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceName">
       <summary>
               Looks up a localized string similar to Invalid relative service URL name '{0}' provided. It can only contain letters, digits, underscores and dashes..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidServiceProxyRelativeUrl">
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceProxyRelativeUrl">
       <summary>
               Looks up a localized string similar to Service help/proxy relative URL can only contain letters and numbers with optional dashes in between. Relative URL '{0}' does not meet those requirements..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidServiceUrlOrMethodExpression">
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceUrlOrMethodExpression">
       <summary>
               Looks up a localized string similar to Invalid service URL or method lambda expression provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidSocketTimeout">
+    <member name="P:RestFoundation.Resources.Global.InvalidSocketTimeout">
       <summary>
               Looks up a localized string similar to Socket timeout is invalid..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidUploadedFileType">
+    <member name="P:RestFoundation.Resources.Global.InvalidUploadedFileType">
       <summary>
               Looks up a localized string similar to The resource type must be IUploadedFile or a collection that implements IEnumerable&lt;IUploadedFile&gt;..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidUpperBoundAddress">
+    <member name="P:RestFoundation.Resources.Global.InvalidUpperBoundAddress">
       <summary>
               Looks up a localized string similar to The upper bound address is from a different family than the lower bound address..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidVirtualUrl">
+    <member name="P:RestFoundation.Resources.Global.InvalidVirtualUrl">
       <summary>
               Looks up a localized string similar to Virtual URL must start with ~/.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.InvalidWebResponse">
+    <member name="P:RestFoundation.Resources.Global.InvalidWebResponse">
       <summary>
               Looks up a localized string similar to Invalid web response provided..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ManuallyDefinedOptionsHttpMethod">
+    <member name="P:RestFoundation.Resources.Global.ManuallyDefinedOptionsHttpMethod">
       <summary>
               Looks up a localized string similar to HTTP method OPTIONS cannot be manually defined on a service method..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MismatchedServiceMethod">
+    <member name="P:RestFoundation.Resources.Global.MismatchedServiceMethod">
       <summary>
               Looks up a localized string similar to No matching service type or service method was found..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MismatchedServiceMethodExpression">
+    <member name="P:RestFoundation.Resources.Global.MismatchedServiceMethodExpression">
       <summary>
               Looks up a localized string similar to Service method delegate value of the argument '{0}' does not match the corresponding route value: {1} != {2}..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MismatchedServiceMethodRoute">
+    <member name="P:RestFoundation.Resources.Global.MismatchedServiceMethodRoute">
       <summary>
               Looks up a localized string similar to Provided service method delegate does not match the route..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MismatchedUrl">
+    <member name="P:RestFoundation.Resources.Global.MismatchedUrl">
       <summary>
               Looks up a localized string similar to URL '{0}' does not match any routes..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingAmbiguousServiceUrl">
+    <member name="P:RestFoundation.Resources.Global.MissingAmbiguousServiceUrl">
       <summary>
               Looks up a localized string similar to An ambiguous route match was found for the service method. A specific 'serviceUrl' parameter must be specified..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingAuthorizationManager">
+    <member name="P:RestFoundation.Resources.Global.MissingAuthorizationManager">
       <summary>
               Looks up a localized string similar to No authorization manager could be found..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingCssResource">
+    <member name="P:RestFoundation.Resources.Global.MissingCssResource">
       <summary>
               Looks up a localized string similar to CSS resource not found..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingCurrentServiceMethod">
+    <member name="P:RestFoundation.Resources.Global.MissingCurrentServiceMethod">
       <summary>
               Looks up a localized string similar to No current service method has been set..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingDefaultConstructor">
+    <member name="P:RestFoundation.Resources.Global.MissingDefaultConstructor">
       <summary>
               Looks up a localized string similar to Created type does not have a default constructor..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingDescription">
+    <member name="P:RestFoundation.Resources.Global.MissingDescription">
       <summary>
               Looks up a localized string similar to No description provided.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingHttpContext">
+    <member name="P:RestFoundation.Resources.Global.MissingHttpContext">
       <summary>
               Looks up a localized string similar to No HTTP context was found..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingJavaScriptResource">
+    <member name="P:RestFoundation.Resources.Global.MissingJavaScriptResource">
       <summary>
               Looks up a localized string similar to JavaScript resource not found..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingOrInvalidAcceptType">
+    <member name="P:RestFoundation.Resources.Global.MissingOrInvalidAcceptType">
       <summary>
               Looks up a localized string similar to No supported media type was provided in the Accept header..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingOrInvalidContentType">
+    <member name="P:RestFoundation.Resources.Global.MissingOrInvalidContentType">
       <summary>
               Looks up a localized string similar to No supported media type was provided in the Content-Type header..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingPropertyDefinition">
+    <member name="P:RestFoundation.Resources.Global.MissingPropertyDefinition">
       <summary>
               Looks up a localized string similar to Properties must have at least 1 property definition..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingRestHttpModule">
+    <member name="P:RestFoundation.Resources.Global.MissingRestHttpModule">
       <summary>
               Looks up a localized string similar to No REST HTTP module detected. Make sure to add a reference to the RestFoundation.RestHttpModule HTTP module in the Web.config file..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingRouteData">
+    <member name="P:RestFoundation.Resources.Global.MissingRouteData">
       <summary>
               Looks up a localized string similar to No route data found..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingRouteHandler">
+    <member name="P:RestFoundation.Resources.Global.MissingRouteHandler">
       <summary>
               Looks up a localized string similar to No route handler was passed to the service method invoker..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingServiceContext">
+    <member name="P:RestFoundation.Resources.Global.MissingServiceContext">
       <summary>
               Looks up a localized string similar to No service context was passed to the service method invoker..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MissingSupportedMediaTypeForFormatter">
+    <member name="P:RestFoundation.Resources.Global.MissingSupportedMediaTypeForFormatter">
       <summary>
               Looks up a localized string similar to No supported media types are defined for the media type formatter of type '{0}'..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.MultipleTypeBindersPerParameter">
+    <member name="P:RestFoundation.Resources.Global.MultipleTypeBindersPerParameter">
       <summary>
               Looks up a localized string similar to Parameter '{0}' of the method '{1}' in the service contract of type '{2}' is decorated with multiple type binder attributes..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.NoContent">
+    <member name="P:RestFoundation.Resources.Global.NoContent">
       <summary>
               Looks up a localized string similar to No Content.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.NonAcceptedContentCharset">
+    <member name="P:RestFoundation.Resources.Global.NonAcceptedContentCharset">
       <summary>
               Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.NonAcceptedContentLanguage">
+    <member name="P:RestFoundation.Resources.Global.NonAcceptedContentLanguage">
       <summary>
               Looks up a localized string similar to The accepted language provided in the Accept-Language header is not supported..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.NonAcceptedMediaType">
+    <member name="P:RestFoundation.Resources.Global.NonAcceptedMediaType">
       <summary>
               Looks up a localized string similar to Resulting media type is not accepted by the client.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.NonErrorHttpStatusCode">
+    <member name="P:RestFoundation.Resources.Global.NonErrorHttpStatusCode">
       <summary>
               Looks up a localized string similar to The HTTP status code is not an error code..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.NonStringOutputType">
+    <member name="P:RestFoundation.Resources.Global.NonStringOutputType">
       <summary>
               Looks up a localized string similar to The output type is not a string..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.NoResourceProvided">
+    <member name="P:RestFoundation.Resources.Global.NoResourceProvided">
       <summary>
               Looks up a localized string similar to No resource provided.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.NotFound">
+    <member name="P:RestFoundation.Resources.Global.NotFound">
       <summary>
               Looks up a localized string similar to Not Found.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.NullOrInvalidAcceptedName">
+    <member name="P:RestFoundation.Resources.Global.NullOrInvalidAcceptedName">
       <summary>
               Looks up a localized string similar to An accepted name cannot be null or contain a wildcard..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.NullResourceBody">
+    <member name="P:RestFoundation.Resources.Global.NullResourceBody">
       <summary>
               Looks up a localized string similar to Resource body cannot be null..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.OK">
+    <member name="P:RestFoundation.Resources.Global.OK">
       <summary>
               Looks up a localized string similar to OK.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.OvercomplicatedMethodArgument">
+    <member name="P:RestFoundation.Resources.Global.OvercomplicatedMethodArgument">
       <summary>
               Looks up a localized string similar to Method argument '{0}' has a value that is to complex to process. It must be a simple constant or variable value..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.PartialContent">
+    <member name="P:RestFoundation.Resources.Global.PartialContent">
       <summary>
               Looks up a localized string similar to Partial Content.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ProxyAlreadyInitialized">
+    <member name="P:RestFoundation.Resources.Global.ProxyAlreadyInitialized">
       <summary>
               Looks up a localized string similar to Service proxy UI is already enabled..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ResourceValidationFailed">
+    <member name="P:RestFoundation.Resources.Global.ResourceValidationFailed">
       <summary>
               Looks up a localized string similar to Validation Failed.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ServiceCallEnded">
+    <member name="P:RestFoundation.Resources.Global.ServiceCallEnded">
       <summary>
               Looks up a localized string similar to -- SERVICE CALL ENDED --.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ServiceCallStarted">
+    <member name="P:RestFoundation.Resources.Global.ServiceCallStarted">
       <summary>
               Looks up a localized string similar to -- SERVICE CALL STARTED --.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ServiceTimedOut">
+    <member name="P:RestFoundation.Resources.Global.ServiceTimedOut">
       <summary>
               Looks up a localized string similar to Service timed out.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ServiceUnavailable">
+    <member name="P:RestFoundation.Resources.Global.ServiceUnavailable">
       <summary>
               Looks up a localized string similar to Service is not available.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.SuccessfulOperation">
+    <member name="P:RestFoundation.Resources.Global.SuccessfulOperation">
       <summary>
               Looks up a localized string similar to Operation is successful.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.TooManyRequests">
+    <member name="P:RestFoundation.Resources.Global.TooManyRequests">
       <summary>
               Looks up a localized string similar to Too many requests.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnableToCreateServiceType">
+    <member name="P:RestFoundation.Resources.Global.UnableToCreateServiceType">
       <summary>
               Looks up a localized string similar to Service with contract of type '{0}' could not be created..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnableToInitializeCache">
+    <member name="P:RestFoundation.Resources.Global.UnableToInitializeCache">
       <summary>
               Looks up a localized string similar to Cache could not be initialized..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnableToLoadIndexPage">
+    <member name="P:RestFoundation.Resources.Global.UnableToLoadIndexPage">
       <summary>
               Looks up a localized string similar to Index page file could not be loaded. Make sure the specified index file is available and not locked..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.Unauthorized">
+    <member name="P:RestFoundation.Resources.Global.Unauthorized">
       <summary>
               Looks up a localized string similar to Unauthorized.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UndefinedHttpMethodsForServiceMethod">
+    <member name="P:RestFoundation.Resources.Global.UndefinedHttpMethodsForServiceMethod">
       <summary>
               Looks up a localized string similar to Method '{0}' of the service contract type '{1}' does not have any HTTP methods defined in the UrlAttribute declaration..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UndefinedServiceMethodUrl">
+    <member name="P:RestFoundation.Resources.Global.UndefinedServiceMethodUrl">
       <summary>
               Looks up a localized string similar to Service with contract of type '{0}' could not match the URL with a method..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UndeterminedServiceContract">
+    <member name="P:RestFoundation.Resources.Global.UndeterminedServiceContract">
       <summary>
               Looks up a localized string similar to Service contract of type '{0}' could not be determined..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UndeterminedUriHostName">
+    <member name="P:RestFoundation.Resources.Global.UndeterminedUriHostName">
       <summary>
               Looks up a localized string similar to Could not determine the URI host name..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnmappedResourceType">
+    <member name="P:RestFoundation.Resources.Global.UnmappedResourceType">
       <summary>
               Looks up a localized string similar to HTTP resource type provided has not been mapped..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnregisteredLogWriter">
+    <member name="P:RestFoundation.Resources.Global.UnregisteredLogWriter">
       <summary>
               Looks up a localized string similar to No log writer has been registered..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsatisfiableRequestedRange">
+    <member name="P:RestFoundation.Resources.Global.UnsatisfiableRequestedRange">
       <summary>
               Looks up a localized string similar to Range not satisfiable..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsealedBehaviorAttributeClass">
+    <member name="P:RestFoundation.Resources.Global.UnsealedBehaviorAttributeClass">
       <summary>
               Looks up a localized string similar to Service method behavior attribute class '{0}' should be sealed for performance benefits..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedContentCharset">
+    <member name="P:RestFoundation.Resources.Global.UnsupportedContentCharset">
       <summary>
               Looks up a localized string similar to The content charset provided is not supported..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedContentLanguage">
+    <member name="P:RestFoundation.Resources.Global.UnsupportedContentLanguage">
       <summary>
               Looks up a localized string similar to The content language provided is not supported..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedFormData">
+    <member name="P:RestFoundation.Resources.Global.UnsupportedFormData">
       <summary>
               Looks up a localized string similar to The current service method does not support HTTP body form data..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedFromHeaderBinderParameter">
+    <member name="P:RestFoundation.Resources.Global.UnsupportedFromHeaderBinderParameter">
       <summary>
               Looks up a localized string similar to Array parameters are not supported by the FromHeader type binder..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedHttpMethod">
+    <member name="P:RestFoundation.Resources.Global.UnsupportedHttpMethod">
       <summary>
               Looks up a localized string similar to HTTP Method '{0}' is not supported..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedLogWriterAsyncFlush">
+    <member name="P:RestFoundation.Resources.Global.UnsupportedLogWriterAsyncFlush">
       <summary>
               Looks up a localized string similar to The current log writer does not support asynchronous flushes..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedMediaType">
+    <member name="P:RestFoundation.Resources.Global.UnsupportedMediaType">
       <summary>
               Looks up a localized string similar to Media type is not supported.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedObjectTypeForOData">
+    <member name="P:RestFoundation.Resources.Global.UnsupportedObjectTypeForOData">
       <summary>
               Looks up a localized string similar to OData operations are not supported for anonymous objects..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedOperation">
+    <member name="P:RestFoundation.Resources.Global.UnsupportedOperation">
       <summary>
               Looks up a localized string similar to Unsupported operation.
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedRequestedFormat">
+    <member name="P:RestFoundation.Resources.Global.UnsupportedRequestedFormat">
       <summary>
               Looks up a localized string similar to The service is configured not to list its contents in the requested format..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.UnsupportedSyncExecutionForAsyncResult">
+    <member name="P:RestFoundation.Resources.Global.UnsupportedSyncExecutionForAsyncResult">
       <summary>
               Looks up a localized string similar to Asyncronous service method results must be executed by calling the ExecuteAsync(context) method..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ValidationFailed">
+    <member name="P:RestFoundation.Resources.Global.ValidationFailed">
       <summary>
               Looks up a localized string similar to Validation for '{0}' failed..
             </summary>
     </member>
-    <member name="P:RestFoundation.RestResources.ValidationRequestFailed">
+    <member name="P:RestFoundation.Resources.Global.ValidationRequestFailed">
       <summary>
               Looks up a localized string similar to A potentially dangerous value was found in the HTTP request..
             </summary>
@@ -3167,7 +3177,9 @@
       <param name="context">The service context.</param>
       <param name="objectType">The object type.</param>
       <returns>The deserialized object.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be deserialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">
+            If the object could not be deserialized.
+            </exception>
     </member>
     <member name="M:RestFoundation.Formatters.IMediaTypeFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
       <summary>
@@ -3177,7 +3189,9 @@
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
       <returns>A service method result containing the serialized object representation.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be serialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">
+            If the object could not be serialized.
+            </exception>
     </member>
     <member name="T:RestFoundation.Formatters.BlockFormatter">
       <summary>
@@ -3191,7 +3205,9 @@
       <param name="context">The service context.</param>
       <param name="objectType">The object type.</param>
       <returns>The deserialized object.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be deserialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">
+            If the object could not be serialized.
+            </exception>
     </member>
     <member name="M:RestFoundation.Formatters.BlockFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
       <summary>
@@ -3201,7 +3217,9 @@
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
       <returns>A service method result containing the serialized object representation.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be serialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">
+            If the object could not be serialized.
+            </exception>
     </member>
     <member name="T:RestFoundation.Formatters.JsonPFormatter">
       <summary>
@@ -3215,7 +3233,7 @@
       <param name="context">The service context.</param>
       <param name="objectType">The object type.</param>
       <returns>The deserialized object.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object cannot be deserialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object cannot be deserialized.</exception>
     </member>
     <member name="M:RestFoundation.Formatters.JsonPFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
       <summary>
@@ -3225,7 +3243,7 @@
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
       <returns>A service method result containing the serialized object representation.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be serialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
     <member name="T:RestFoundation.Behaviors.IAuthenticationBehavior">
       <summary>
@@ -3265,7 +3283,7 @@
     <member name="M:RestFoundation.IServiceExceptionHandler.Handle(RestFoundation.IServiceContext,System.Object,System.Reflection.MethodInfo,System.Exception)">
       <summary>
             Called if an exception occurs during the service method execution.
-            This method does not catch <see cref="T:RestFoundation.HttpResponseException" /> exceptions because they are
+            This method does not catch <see cref="T:RestFoundation.Runtime.HttpResponseException" /> exceptions because they are
             designed to set response status codes and stop the request.
             </summary>
       <param name="context">The service context.</param>
@@ -3383,12 +3401,12 @@
             HTTP code: 307.
             </summary>
     </member>
-    <member name="T:RestFoundation.RouteBuilder">
+    <member name="T:RestFoundation.Configuration.RouteBuilder">
       <summary>
             Represents a route builder for the specified relative URL.
             </summary>
     </member>
-    <member name="M:RestFoundation.RouteBuilder.WithAsyncTimeout(System.TimeSpan)">
+    <member name="M:RestFoundation.Configuration.RouteBuilder.WithAsyncTimeout(System.TimeSpan)">
       <summary>
             Sets a timeout for asynchronous tasks returned by the services for the mapped URL. The default value is
             <see cref="F:System.TimeSpan.Zero" /> representing no timeout.
@@ -3397,7 +3415,7 @@
       <returns>The route builder.</returns>
       <exception cref="T:System.ArgumentOutOfRangeException">If a negative, non-infinite timeout is provided.</exception>
     </member>
-    <member name="M:RestFoundation.RouteBuilder.ToServiceContract(System.Type)">
+    <member name="M:RestFoundation.Configuration.RouteBuilder.ToServiceContract(System.Type)">
       <summary>
             Maps the relative URL to a service contract.
             </summary>
@@ -3408,7 +3426,7 @@
             </exception>
       <exception cref="T:System.InvalidOperationException">If the relative URL has already been mapped.</exception>
     </member>
-    <member name="M:RestFoundation.RouteBuilder.ToServiceContract``1">
+    <member name="M:RestFoundation.Configuration.RouteBuilder.ToServiceContract``1">
       <summary>
             Maps the relative URL to a service contract.
             </summary>
@@ -3419,7 +3437,7 @@
             </exception>
       <exception cref="T:System.InvalidOperationException">If the relative URL has already been mapped.</exception>
     </member>
-    <member name="M:RestFoundation.RouteBuilder.ToWebFormsPage(System.String)">
+    <member name="M:RestFoundation.Configuration.RouteBuilder.ToWebFormsPage(System.String)">
       <summary>
             Maps the relative URL to a web forms page.
             </summary>
@@ -4364,31 +4382,31 @@
             Warning
             </summary>
     </member>
-    <member name="T:RestFoundation.GlobalBehaviorBuilder">
+    <member name="T:RestFoundation.Configuration.GlobalBehaviorBuilder">
       <summary>
             Represents a global behavior builder.
             </summary>
     </member>
-    <member name="M:RestFoundation.GlobalBehaviorBuilder.AddGlobalBehaviors(RestFoundation.Behaviors.IServiceBehavior[])">
+    <member name="M:RestFoundation.Configuration.GlobalBehaviorBuilder.AddGlobalBehaviors(RestFoundation.Behaviors.IServiceBehavior[])">
       <summary>
             Adds the provided global behaviors.
             </summary>
       <param name="behaviors">An array of behavior instances.</param>
     </member>
-    <member name="M:RestFoundation.GlobalBehaviorBuilder.GetGlobalBehaviors">
+    <member name="M:RestFoundation.Configuration.GlobalBehaviorBuilder.GetGlobalBehaviors">
       <summary>
             Gets all registered global behaviors.
             </summary>
       <returns>A sequence of behavior instances.</returns>
     </member>
-    <member name="M:RestFoundation.GlobalBehaviorBuilder.RemoveGlobalBehavior(RestFoundation.Behaviors.IServiceBehavior)">
+    <member name="M:RestFoundation.Configuration.GlobalBehaviorBuilder.RemoveGlobalBehavior(RestFoundation.Behaviors.IServiceBehavior)">
       <summary>
             Removes/unregisters a global behavior instance.
             </summary>
       <param name="behavior">The behavior instance.</param>
       <returns>true if the behavior was removed; false if the behavior instance had not been registered</returns>
     </member>
-    <member name="M:RestFoundation.GlobalBehaviorBuilder.ClearGlobalBehaviors">
+    <member name="M:RestFoundation.Configuration.GlobalBehaviorBuilder.ClearGlobalBehaviors">
       <summary>
             Clears/unregisters all global behaviors.
             </summary>
@@ -6164,26 +6182,26 @@
             If this value is not set, the parameter name will be used.
             </summary>
     </member>
-    <member name="T:RestFoundation.TypeBinderBuilder">
+    <member name="T:RestFoundation.Configuration.TypeBinderBuilder">
       <summary>
             Represents a type binder builder.
             </summary>
     </member>
-    <member name="M:RestFoundation.TypeBinderBuilder.Get(System.Type)">
+    <member name="M:RestFoundation.Configuration.TypeBinderBuilder.Get(System.Type)">
       <summary>
             Gets an associated type binder by the object type.
             </summary>
       <param name="objectType">The object type.</param>
       <returns>The associated type binder or null.</returns>
     </member>
-    <member name="M:RestFoundation.TypeBinderBuilder.Set(System.Type,RestFoundation.TypeBinders.ITypeBinder)">
+    <member name="M:RestFoundation.Configuration.TypeBinderBuilder.Set(System.Type,RestFoundation.TypeBinders.ITypeBinder)">
       <summary>
             Sets a type binder for the provided object type.
             </summary>
       <param name="objectType">The object type.</param>
       <param name="binder">The type binder.</param>
     </member>
-    <member name="M:RestFoundation.TypeBinderBuilder.Remove(System.Type)">
+    <member name="M:RestFoundation.Configuration.TypeBinderBuilder.Remove(System.Type)">
       <summary>
             Removes an associated type binder for the provided object type.
             </summary>
@@ -6193,17 +6211,17 @@
             for the object type.
             </returns>
     </member>
-    <member name="M:RestFoundation.TypeBinderBuilder.Clear">
+    <member name="M:RestFoundation.Configuration.TypeBinderBuilder.Clear">
       <summary>
             Clears all associated type binders.
             </summary>
     </member>
-    <member name="T:RestFoundation.MediaTypeFormatterBuilder">
+    <member name="T:RestFoundation.Configuration.MediaTypeFormatterBuilder">
       <summary>
             Represents a media type formatter builder.
             </summary>
     </member>
-    <member name="M:RestFoundation.MediaTypeFormatterBuilder.Get(System.String)">
+    <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.Get(System.String)">
       <summary>
             Gets a formatter by the media type.
             </summary>
@@ -6211,14 +6229,14 @@
       <returns>The associated media type formatter or null.</returns>
       <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
     </member>
-    <member name="M:RestFoundation.MediaTypeFormatterBuilder.Set(RestFoundation.Formatters.IMediaTypeFormatter)">
+    <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.Set(RestFoundation.Formatters.IMediaTypeFormatter)">
       <summary>
             Sets a formatter for its supported types.
             </summary>
       <param name="formatter">The media type formatter.</param>
       <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
     </member>
-    <member name="M:RestFoundation.MediaTypeFormatterBuilder.Set(System.String,RestFoundation.Formatters.IMediaTypeFormatter)">
+    <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.Set(System.String,RestFoundation.Formatters.IMediaTypeFormatter)">
       <summary>
             Sets a formatter for the provided media type.
             </summary>
@@ -6226,7 +6244,7 @@
       <param name="formatter">The media type formatter.</param>
       <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
     </member>
-    <member name="M:RestFoundation.MediaTypeFormatterBuilder.Remove(System.String)">
+    <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.Remove(System.String)">
       <summary>
             Removes an associated formatter for the provided media type.
             </summary>
@@ -6237,7 +6255,7 @@
             </returns>
       <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
     </member>
-    <member name="M:RestFoundation.MediaTypeFormatterBuilder.Clear">
+    <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.Clear">
       <summary>
             Clears all associated media type formatters.
             </summary>
@@ -6254,7 +6272,7 @@
       <param name="context">The service context.</param>
       <param name="objectType">The object type.</param>
       <returns>The deserialized object.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object cannot be deserialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object cannot be deserialized.</exception>
     </member>
     <member name="M:RestFoundation.Formatters.MultiPartFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
       <summary>
@@ -6264,7 +6282,7 @@
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
       <returns>A service method result containing the serialized object representation.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be serialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
     <member name="T:RestFoundation.Security.IAuthorizationManager">
       <summary>
@@ -6533,7 +6551,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <returns>The application relative URL for the service method.</returns>
@@ -6547,7 +6566,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <param name="routeValues">Additional route values.</param>
@@ -6562,7 +6582,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <param name="routeValues">Additional route values.</param>
@@ -6601,7 +6622,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <returns>The application relative URL for the service method.</returns>
@@ -6615,7 +6637,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <param name="routeValues">Additional route values.</param>
@@ -6630,7 +6653,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <param name="routeValues">Additional route values.</param>
@@ -6841,42 +6865,42 @@
       <returns>A <see cref="T:System.String" /> containg the generated URI.</returns>
       <exception cref="T:System.InvalidOperationException">If no host name could be determined.</exception>
     </member>
-    <member name="T:RestFoundation.HttpResourceFaultException">
+    <member name="T:RestFoundation.Runtime.HttpResourceFaultException">
       <summary>
             Represents an HTTP resource fault exception. This is a special type of exception that is used
             to return a collection of resource validation faults to the REST client. It does not get caught
             by the service behaviors.
             </summary>
     </member>
-    <member name="M:RestFoundation.HttpResourceFaultException.#ctor">
+    <member name="M:RestFoundation.Runtime.HttpResourceFaultException.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.HttpResourceFaultException" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.HttpResourceFaultException" /> class.
             </summary>
     </member>
-    <member name="M:RestFoundation.HttpResourceFaultException.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+    <member name="M:RestFoundation.Runtime.HttpResourceFaultException.#ctor(System.Collections.Generic.IEnumerable{System.String})">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.HttpResourceFaultException" /> class with the provided general fault
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.HttpResourceFaultException" /> class with the provided general fault
             messages.
             </summary>
       <param name="faultMessages">A sequence of fault messages.</param>
     </member>
-    <member name="M:RestFoundation.HttpResourceFaultException.#ctor(System.String)">
+    <member name="M:RestFoundation.Runtime.HttpResourceFaultException.#ctor(System.String)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.HttpResourceFaultException" /> class with the provided message.
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.HttpResourceFaultException" /> class with the provided message.
             </summary>
       <param name="message">The exception message.</param>
     </member>
-    <member name="M:RestFoundation.HttpResourceFaultException.#ctor(System.String,System.Exception)">
+    <member name="M:RestFoundation.Runtime.HttpResourceFaultException.#ctor(System.String,System.Exception)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.HttpResourceFaultException" /> class with the provided message
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.HttpResourceFaultException" /> class with the provided message
             and a reference to the exception that is the cause of the current exception.
             </summary>
       <param name="message">The exception message.</param>
       <param name="innerException">The exception that is the cause of the current exception, or a null reference.</param>
     </member>
-    <member name="M:RestFoundation.HttpResourceFaultException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+    <member name="M:RestFoundation.Runtime.HttpResourceFaultException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.HttpResourceFaultException" /> class with serialized data.
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.HttpResourceFaultException" /> class with serialized data.
             </summary>
       <param name="info">
             The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown.
@@ -6888,7 +6912,7 @@
             The class name is null or <see cref="P:System.Exception.HResult" /> is zero (0).
             </exception>
     </member>
-    <member name="M:RestFoundation.HttpResourceFaultException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+    <member name="M:RestFoundation.Runtime.HttpResourceFaultException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
       <summary>
             Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with information about the exception.
             </summary>
@@ -6900,7 +6924,7 @@
             </param>
       <filterpriority>2</filterpriority>
     </member>
-    <member name="P:RestFoundation.HttpResourceFaultException.FaultMessages">
+    <member name="P:RestFoundation.Runtime.HttpResourceFaultException.FaultMessages">
       <summary>
             Gets a list of the exception specific general fault messages.
             </summary>
@@ -7013,14 +7037,14 @@
       <exception cref="T:System.AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
       <exception cref="T:System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
     </member>
-    <member name="M:RestFoundation.Rest.Initialize(System.Action{RestFoundation.DependencyBuilder})">
+    <member name="M:RestFoundation.Rest.Initialize(System.Action{RestFoundation.Configuration.DependencyBuilder})">
       <summary>
             Initializes REST foundation configuration with custom dependencies.
             </summary>
       <param name="builder">The dependency builder.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.Rest.InitializeAndMock(System.Action{RestFoundation.DependencyBuilder})">
+    <member name="M:RestFoundation.Rest.InitializeAndMock(System.Action{RestFoundation.Configuration.DependencyBuilder})">
       <summary>
             Initializes REST foundation configuration with custom dependencies.
             </summary>
@@ -7214,12 +7238,12 @@
             Gets or sets a value indicating whether to wrap the content.
             </summary>
     </member>
-    <member name="T:RestFoundation.RouteConfiguration">
+    <member name="T:RestFoundation.Configuration.RouteConfiguration">
       <summary>
             Represents a route configuration.
             </summary>
     </member>
-    <member name="M:RestFoundation.RouteConfiguration.BlockMediaTypesForFormatter``1">
+    <member name="M:RestFoundation.Configuration.RouteConfiguration.BlockMediaTypesForFormatter``1">
       <summary>
             Prevents media types supported by the provided formatter from being supported by the
             service through the current route.
@@ -7227,21 +7251,21 @@
       <typeparam name="TFormatter">The type of the media type formatter.</typeparam>
       <returns>The route configuration.</returns>
     </member>
-    <member name="M:RestFoundation.RouteConfiguration.BlockMediaType(System.String)">
+    <member name="M:RestFoundation.Configuration.RouteConfiguration.BlockMediaType(System.String)">
       <summary>
             Prevents a provided media type from being supported by the service through the current route.
             </summary>
       <param name="mediaType">The media type.</param>
       <returns>The route configuration.</returns>
     </member>
-    <member name="M:RestFoundation.RouteConfiguration.SetMediaTypeFormatter(RestFoundation.Formatters.IMediaTypeFormatter)">
+    <member name="M:RestFoundation.Configuration.RouteConfiguration.SetMediaTypeFormatter(RestFoundation.Formatters.IMediaTypeFormatter)">
       <summary>
             Sets a route specific formatter for its supported media types for the current route.
             </summary>
       <param name="formatter">The media formatter.</param>
       <returns>The route configuration.</returns>
     </member>
-    <member name="M:RestFoundation.RouteConfiguration.SetMediaTypeFormatter(System.String,RestFoundation.Formatters.IMediaTypeFormatter)">
+    <member name="M:RestFoundation.Configuration.RouteConfiguration.SetMediaTypeFormatter(System.String,RestFoundation.Formatters.IMediaTypeFormatter)">
       <summary>
             Sets a route specific formatter for the provided media type for the current route.
             </summary>
@@ -7249,21 +7273,21 @@
       <param name="formatter">The media formatter.</param>
       <returns>The route configuration.</returns>
     </member>
-    <member name="M:RestFoundation.RouteConfiguration.WithBehaviors(RestFoundation.Behaviors.IServiceBehavior[])">
+    <member name="M:RestFoundation.Configuration.RouteConfiguration.WithBehaviors(RestFoundation.Behaviors.IServiceBehavior[])">
       <summary>
             Adds behaviors to the current route.
             </summary>
       <param name="behaviors">An array of behavior instances.</param>
       <returns>The route configuration.</returns>
     </member>
-    <member name="M:RestFoundation.RouteConfiguration.WithExceptionHandler(RestFoundation.IServiceExceptionHandler)">
+    <member name="M:RestFoundation.Configuration.RouteConfiguration.WithExceptionHandler(RestFoundation.IServiceExceptionHandler)">
       <summary>
             Sets an exception handler for the current route.
             </summary>
       <param name="exceptionHandler">The exception handler.</param>
       <returns>The route configuration.</returns>
     </member>
-    <member name="M:RestFoundation.RouteConfiguration.WithIPsRestrictedBySection(System.String)">
+    <member name="M:RestFoundation.Configuration.RouteConfiguration.WithIPsRestrictedBySection(System.String)">
       <summary>
             Specifies a Web.config name-value section that contains an ACL list of allowed IPs.
             All other IPs will be blocked for the current route.
@@ -7271,7 +7295,7 @@
       <param name="nameValueSectionName">The section name.</param>
       <returns>The route configuration.</returns>
     </member>
-    <member name="M:RestFoundation.RouteConfiguration.DoNotValidateRequests">
+    <member name="M:RestFoundation.Configuration.RouteConfiguration.DoNotValidateRequests">
       <summary>
             Skip HTTP request validation that checks query string, form data and cookies for dangerous characters for the current route.
             </summary>
@@ -7907,12 +7931,12 @@
       <param name="errors">The collection of errors.</param>
       <returns>true if the resource is valid; otherwise, false.</returns>
     </member>
-    <member name="T:RestFoundation.UrlBuilder">
+    <member name="T:RestFoundation.Configuration.UrlBuilder">
       <summary>
             Represents a service URL builder.
             </summary>
     </member>
-    <member name="M:RestFoundation.UrlBuilder.MapUrl(System.String)">
+    <member name="M:RestFoundation.Configuration.UrlBuilder.MapUrl(System.String)">
       <summary>
             Maps the provided relative URL to a service or a web forms page.
             </summary>
@@ -7976,7 +8000,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <returns>The application relative URL for the service method.</returns>
@@ -7990,7 +8015,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <param name="routeValues">Additional route values.</param>
@@ -8005,7 +8031,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <param name="routeValues">Additional route values.</param>
@@ -8044,7 +8071,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <returns>The application relative URL for the service method.</returns>
@@ -8058,7 +8086,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <param name="routeValues">Additional route values.</param>
@@ -8073,7 +8102,8 @@
             </summary>
       <typeparam name="TContract">The service contract type.</typeparam>
       <param name="serviceUrl">
-            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.UrlBuilder" /> configuration object.
+            The service URL defined by the MapUrl(serviceUrl) function by the <see cref="T:RestFoundation.Configuration.UrlBuilder" />
+            configuration object.
             </param>
       <param name="serviceMethod">The service contract method.</param>
       <param name="routeValues">Additional route values.</param>
@@ -8362,7 +8392,7 @@
       <param name="context">The service context.</param>
       <param name="objectType">The object type.</param>
       <returns>The deserialized object.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object cannot be deserialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object cannot be deserialized.</exception>
     </member>
     <member name="M:RestFoundation.Formatters.FormsFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
       <summary>
@@ -8372,7 +8402,7 @@
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
       <returns>A service method result containing the serialized object representation.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be serialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
     <member name="T:RestFoundation.Result">
       <summary>
@@ -8893,7 +8923,7 @@
       <param name="context">The service context.</param>
       <param name="objectType">The object type.</param>
       <returns>The deserialized object.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object cannot be deserialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object cannot be deserialized.</exception>
     </member>
     <member name="M:RestFoundation.Formatters.JsonFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
       <summary>
@@ -8903,7 +8933,7 @@
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
       <returns>A service method result containing the serialized object representation.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be serialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
     <member name="T:RestFoundation.Formatters.XmlFormatter">
       <summary>
@@ -8928,7 +8958,7 @@
       <param name="context">The service context.</param>
       <param name="objectType">The object type.</param>
       <returns>The deserialized object.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object cannot be deserialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object cannot be deserialized.</exception>
     </member>
     <member name="M:RestFoundation.Formatters.XmlFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
       <summary>
@@ -8938,7 +8968,7 @@
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
       <returns>A service method result containing the serialized object representation.</returns>
-      <exception cref="T:RestFoundation.HttpResponseException">If the object could not be serialized.</exception>
+      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
     <member name="T:RestFoundation.RestHttpModule">
       <summary>
@@ -8959,39 +8989,39 @@
             Disposes of the resources (other than memory) used by the module that implements <see cref="T:System.Web.IHttpModule" />.
             </summary>
     </member>
-    <member name="T:RestFoundation.HttpResponseException">
+    <member name="T:RestFoundation.Runtime.HttpResponseException">
       <summary>
             Represents an HTTP response exception. This is a special type of exception that is designed to stop
             the HTTP request and set a status. It does not get caught by the service behaviors.
             </summary>
     </member>
-    <member name="M:RestFoundation.HttpResponseException.#ctor">
+    <member name="M:RestFoundation.Runtime.HttpResponseException.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.HttpResponseException" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.HttpResponseException" /> class.
             </summary>
     </member>
-    <member name="M:RestFoundation.HttpResponseException.#ctor(System.String)">
+    <member name="M:RestFoundation.Runtime.HttpResponseException.#ctor(System.String)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.HttpResponseException" /> class with the HTTP status description.
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.HttpResponseException" /> class with the HTTP status description.
             The status code is assumed to be 500 (internal server error).
             </summary>
       <param name="statusDescription">The status description.</param>
     </member>
-    <member name="M:RestFoundation.HttpResponseException.#ctor(System.Net.HttpStatusCode)">
+    <member name="M:RestFoundation.Runtime.HttpResponseException.#ctor(System.Net.HttpStatusCode)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.HttpResponseException" /> class with the HTTP status code.
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.HttpResponseException" /> class with the HTTP status code.
             </summary>
       <param name="statusCode">The status code.</param>
     </member>
-    <member name="M:RestFoundation.HttpResponseException.#ctor(System.Net.HttpStatusCode,System.String)">
+    <member name="M:RestFoundation.Runtime.HttpResponseException.#ctor(System.Net.HttpStatusCode,System.String)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.HttpResponseException" /> class with the HTTP status code and description.
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.HttpResponseException" /> class with the HTTP status code and description.
             </summary>
       <param name="statusCode">The status code.</param>
       <param name="statusDescription">The status description.</param>
       <exception cref="T:System.ArgumentException">If the status code is not an error code.</exception>
     </member>
-    <member name="M:RestFoundation.HttpResponseException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+    <member name="M:RestFoundation.Runtime.HttpResponseException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
       <summary>
             Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with information about the exception.
             </summary>
@@ -9003,12 +9033,12 @@
             </param>
       <filterpriority>2</filterpriority>
     </member>
-    <member name="P:RestFoundation.HttpResponseException.StatusCode">
+    <member name="P:RestFoundation.Runtime.HttpResponseException.StatusCode">
       <summary>
             Gets the associated HTTP status code.
             </summary>
     </member>
-    <member name="P:RestFoundation.HttpResponseException.StatusDescription">
+    <member name="P:RestFoundation.Runtime.HttpResponseException.StatusDescription">
       <summary>
             Gets the associated HTTP status description.
             </summary>
@@ -9814,18 +9844,18 @@
       <param name="objectType">The object type.</param>
       <returns>XML schemas for the object.</returns>
     </member>
-    <member name="T:RestFoundation.ProxyConfiguration">
+    <member name="T:RestFoundation.Configuration.ProxyConfiguration">
       <summary>
             Represents the service help and proxy interface configuration.
             </summary>
     </member>
-    <member name="M:RestFoundation.ProxyConfiguration.Enable">
+    <member name="M:RestFoundation.Configuration.ProxyConfiguration.Enable">
       <summary>
             Enables HTML based interface for the service help pages and HTTP proxy under the relative URL "help".
             </summary>
       <returns>The configuration object.</returns>
     </member>
-    <member name="M:RestFoundation.ProxyConfiguration.EnableWithRelativeUrl(System.String)">
+    <member name="M:RestFoundation.Configuration.ProxyConfiguration.EnableWithRelativeUrl(System.String)">
       <summary>
             Enables HTML based interface for the service help pages and HTTP proxy.
             IMPORTANT: If you are setting the relative URL parameter to something other than "help",
@@ -9836,20 +9866,20 @@
       <returns>The configuration object.</returns>
       <exception cref="T:System.ArgumentException">If the relative URL contains invalid characters.</exception>
     </member>
-    <member name="M:RestFoundation.ProxyConfiguration.WithServiceDescription(System.String)">
+    <member name="M:RestFoundation.Configuration.ProxyConfiguration.WithServiceDescription(System.String)">
       <summary>
             Sets the service description for the service help and proxy pages.
             </summary>
       <param name="description">The service description.</param>
       <returns>The configuration object.</returns>
     </member>
-    <member name="M:RestFoundation.ProxyConfiguration.HttpsOnly">
+    <member name="M:RestFoundation.Configuration.ProxyConfiguration.HttpsOnly">
       <summary>
             Requires the service proxy to be accessed through HTTPS only.
             </summary>
       <returns>The configuration object.</returns>
     </member>
-    <member name="M:RestFoundation.ProxyConfiguration.RequireAuthorization(RestFoundation.Security.IAuthorizationManager)">
+    <member name="M:RestFoundation.Configuration.ProxyConfiguration.RequireAuthorization(RestFoundation.Security.IAuthorizationManager)">
       <summary>
             Sets basic authentication for the service proxy and authorizes users through the provided authorization manager
             instance.
@@ -10308,48 +10338,48 @@
       <param name="schemas">The schema colleciton.</param>
       <returns>A list of stringified schemas.</returns>
     </member>
-    <member name="T:RestFoundation.ServiceRuntimeException">
+    <member name="T:RestFoundation.Runtime.ServiceRuntimeException">
       <summary>
             Represents a service runtime aggregate exception. It should not be thrown from
             the user code.
             </summary>
     </member>
-    <member name="M:RestFoundation.ServiceRuntimeException.#ctor">
+    <member name="M:RestFoundation.Runtime.ServiceRuntimeException.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceRuntimeException" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.ServiceRuntimeException" /> class.
             </summary>
     </member>
-    <member name="M:RestFoundation.ServiceRuntimeException.#ctor(System.Exception[])">
+    <member name="M:RestFoundation.Runtime.ServiceRuntimeException.#ctor(System.Exception[])">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceRuntimeException" /> class with the provided
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.ServiceRuntimeException" /> class with the provided
             inner exceptions.
             </summary>
       <param name="innerExceptions">An array of inner exceptions.</param>
     </member>
-    <member name="M:RestFoundation.ServiceRuntimeException.#ctor(System.Collections.Generic.IEnumerable{System.Exception})">
+    <member name="M:RestFoundation.Runtime.ServiceRuntimeException.#ctor(System.Collections.Generic.IEnumerable{System.Exception})">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceRuntimeException" /> class with the provided
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.ServiceRuntimeException" /> class with the provided
             inner exceptions.
             </summary>
       <param name="innerExceptions">A sequence of inner exceptions.</param>
     </member>
-    <member name="M:RestFoundation.ServiceRuntimeException.#ctor(System.String,System.Exception[])">
+    <member name="M:RestFoundation.Runtime.ServiceRuntimeException.#ctor(System.String,System.Exception[])">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceRuntimeException" /> class with the provided
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.ServiceRuntimeException" /> class with the provided
             message and inner exceptions.
             </summary>
       <param name="message">The exception message.</param>
       <param name="innerExceptions">An array of inner exceptions.</param>
     </member>
-    <member name="M:RestFoundation.ServiceRuntimeException.#ctor(System.String,System.Collections.Generic.IEnumerable{System.Exception})">
+    <member name="M:RestFoundation.Runtime.ServiceRuntimeException.#ctor(System.String,System.Collections.Generic.IEnumerable{System.Exception})">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ServiceRuntimeException" /> class with the provided
+            Initializes a new instance of the <see cref="T:RestFoundation.Runtime.ServiceRuntimeException" /> class with the provided
             message and inner exceptions.
             </summary>
       <param name="message">The exception message.</param>
       <param name="innerExceptions">A sequence of inner exceptions.</param>
     </member>
-    <member name="M:RestFoundation.ServiceRuntimeException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+    <member name="M:RestFoundation.Runtime.ServiceRuntimeException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
       <summary>
             Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with information about the exception.
             </summary>
@@ -10361,7 +10391,7 @@
             </param>
       <filterpriority>2</filterpriority>
     </member>
-    <member name="P:RestFoundation.ServiceRuntimeException.InnerExceptions">
+    <member name="P:RestFoundation.Runtime.ServiceRuntimeException.InnerExceptions">
       <summary>
             Gets a sequence of inner exception.
             </summary>
@@ -10894,12 +10924,12 @@
             Gets the error message.
             </summary>
     </member>
-    <member name="T:RestFoundation.XmlFormatterSettings">
+    <member name="T:RestFoundation.Configuration.XmlFormatterSettings">
       <summary>
             Contains settings used by XML formatters and results.
             </summary>
     </member>
-    <member name="P:RestFoundation.XmlFormatterSettings.Namespace">
+    <member name="P:RestFoundation.Configuration.XmlFormatterSettings.Namespace">
       <summary>
             Gets or sets the XML namespace
             </summary>

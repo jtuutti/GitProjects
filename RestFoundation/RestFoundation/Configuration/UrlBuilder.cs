@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Web.Routing;
 
-namespace RestFoundation
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Represents a service URL builder.
@@ -41,7 +41,7 @@ namespace RestFoundation
 
             if (!serviceNameRegex.IsMatch(serviceUrl))
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidServiceName, serviceUrl));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidServiceName, serviceUrl));
             }
 
             return new RouteBuilder(serviceUrl, m_routes);

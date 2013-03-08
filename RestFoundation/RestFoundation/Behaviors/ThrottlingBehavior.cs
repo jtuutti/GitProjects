@@ -47,7 +47,7 @@ namespace RestFoundation.Behaviors
 
             if (serviceContext.Cache == null)
             {
-                throw new InvalidOperationException(RestResources.UnableToInitializeCache);
+                throw new InvalidOperationException(Resources.Global.UnableToInitializeCache);
             }
 
             string remoteAddress = serviceContext.Request.ServerVariables.RemoteAddress;
@@ -61,7 +61,7 @@ namespace RestFoundation.Behaviors
 
             if (serviceContext.Cache.Contains(cacheKey))
             {
-                SetStatus((HttpStatusCode) 429, RestResources.TooManyRequests);
+                SetStatus((HttpStatusCode) 429, Resources.Global.TooManyRequests);
                 return BehaviorMethodAction.Stop;
             }
 

@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Net;
 using System.Security.Principal;
 using System.Text;
+using RestFoundation.Runtime;
 using RestFoundation.Security;
 
 namespace RestFoundation.Behaviors
@@ -39,7 +40,7 @@ namespace RestFoundation.Behaviors
         {
             if (authorizationManager == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingAuthorizationManager);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.MissingAuthorizationManager);
             }
 
             NonceLifetime = TimeSpan.FromSeconds(DefaultNonceLifeTimeInSeconds);
@@ -154,7 +155,7 @@ namespace RestFoundation.Behaviors
             if (String.IsNullOrWhiteSpace(serviceContext.Request.ServerVariables.RemoteAddress) ||
                 String.IsNullOrWhiteSpace(serviceContext.Request.ServerVariables.LocalAddress))
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden, RestResources.Forbidden);
+                throw new HttpResponseException(HttpStatusCode.Forbidden, Resources.Global.Forbidden);
             }
 
             string nonce = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture,
@@ -187,7 +188,7 @@ namespace RestFoundation.Behaviors
 
             serviceContext.Response.Output.Clear();
             serviceContext.Response.SetHeader("WWW-Authenticate", headerBuilder.ToString());
-            serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, RestResources.Unauthorized);
+            serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Resources.Global.Unauthorized);
         }
 
         private Tuple<bool, bool> ValidateResponse(IServiceContext serviceContext, AuthorizationHeader header, Credentials credentials)
@@ -313,7 +314,7 @@ namespace RestFoundation.Behaviors
 
             if (!Double.TryParse(timestamp, NumberStyles.Float, CultureInfo.InvariantCulture, out timestampAsDouble) || timestampAsDouble <= 0)
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden, RestResources.Forbidden);
+                throw new HttpResponseException(HttpStatusCode.Forbidden, Resources.Global.Forbidden);
             }
 
             DateTime nonceLifetime = DateTime.MinValue.AddMilliseconds(timestampAsDouble);

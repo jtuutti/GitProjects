@@ -50,7 +50,7 @@ namespace RestFoundation.Runtime
         {
             if (allowedHttpMethods.Count == 0)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.NotFound);
+                throw new HttpResponseException(HttpStatusCode.NotFound, Resources.Global.NotFound);
             }
 
             m_response.SetHeader(AllowHeaderName, String.Join(AllowHeaderValueSeparator, allowedHttpMethods.Select(m => m.ToString().ToUpperInvariant()).OrderBy(m => m)));

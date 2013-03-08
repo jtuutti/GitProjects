@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using RestFoundation.ServiceLocation;
-using RestFoundation.StructureMap.Properties;
 using StructureMap;
 
 namespace RestFoundation.StructureMap
@@ -47,7 +46,7 @@ namespace RestFoundation.StructureMap
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyResolutionError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyResolutionError, ex.Message), ex);
             }
         }
 
@@ -70,7 +69,7 @@ namespace RestFoundation.StructureMap
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyResolutionError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyResolutionError, ex.Message), ex);
             }
         }
 
@@ -92,7 +91,7 @@ namespace RestFoundation.StructureMap
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyResolutionError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyResolutionError, ex.Message), ex);
             }
         }
 
@@ -112,7 +111,7 @@ namespace RestFoundation.StructureMap
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyResolutionError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyResolutionError, ex.Message), ex);
             }
         }
 
@@ -130,7 +129,7 @@ namespace RestFoundation.StructureMap
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyBuildUpError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyBuildUpError, ex.Message), ex);
             }
         }
 

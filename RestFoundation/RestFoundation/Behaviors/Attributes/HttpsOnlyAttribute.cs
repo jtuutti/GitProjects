@@ -31,7 +31,7 @@ namespace RestFoundation.Behaviors
         {
             get
             {
-                return RestResources.HttpsRequiredStatusDescription;
+                return Resources.Global.HttpsRequiredStatusDescription;
             }
         }
 

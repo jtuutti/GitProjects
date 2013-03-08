@@ -71,7 +71,8 @@ namespace RestFoundation
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <returns>The application relative URL for the service method.</returns>
@@ -85,7 +86,8 @@ namespace RestFoundation
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
@@ -100,7 +102,8 @@ namespace RestFoundation
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
@@ -139,7 +142,8 @@ namespace RestFoundation
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <returns>The application relative URL for the service method.</returns>
@@ -153,7 +157,8 @@ namespace RestFoundation
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
@@ -168,7 +173,8 @@ namespace RestFoundation
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>

@@ -1,7 +1,7 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
-namespace RestFoundation
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Defines the detail of information returned in the fault collection object during an

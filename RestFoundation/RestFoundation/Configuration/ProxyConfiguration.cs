@@ -10,7 +10,7 @@ using RestFoundation.Runtime.Handlers;
 using RestFoundation.Security;
 using RestFoundation.ServiceProxy;
 
-namespace RestFoundation
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Represents the service help and proxy interface configuration.
@@ -50,12 +50,12 @@ namespace RestFoundation
 
             if (options.IsServiceProxyInitialized)
             {
-                throw new InvalidOperationException(RestResources.ProxyAlreadyInitialized);
+                throw new InvalidOperationException(Resources.Global.ProxyAlreadyInitialized);
             }
 
             if (!Regex.IsMatch(relativeUrl, "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z]+)?$"))
             {
-                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidServiceProxyRelativeUrl, relativeUrl), "relativeUrl");
+                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidServiceProxyRelativeUrl, relativeUrl), "relativeUrl");
             }
 
             options.IsServiceProxyInitialized = true;

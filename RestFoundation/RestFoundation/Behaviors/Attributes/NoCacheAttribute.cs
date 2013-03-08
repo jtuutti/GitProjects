@@ -28,7 +28,7 @@ namespace RestFoundation.Behaviors
 
             if (httpContext == null)
             {
-                throw new ArgumentException(RestResources.MissingHttpContext, "serviceContext");
+                throw new ArgumentException(Resources.Global.MissingHttpContext, "serviceContext");
             }
 
             httpContext.Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));

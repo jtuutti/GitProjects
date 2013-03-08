@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web;
 using System.Web.Routing;
+using RestFoundation.Configuration;
 using RestFoundation.Results;
 using RestFoundation.ServiceProxy;
 
@@ -91,7 +92,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (!RestHttpModule.IsInitialized)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingRestHttpModule);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.MissingRestHttpModule);
             }
 
             return this;
@@ -115,7 +116,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (m_serviceContext.Request.Method != HttpMethod.Get && m_serviceContext.Request.Method != HttpMethod.Head)
             {
-                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, RestResources.DisallowedHttpMethod);
+                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, Resources.Global.DisallowedHttpMethod);
             }
 
             if (context != null)
@@ -169,7 +170,7 @@ namespace RestFoundation.Runtime.Handlers
                 }
                 catch (Exception)
                 {
-                    throw new InvalidOperationException(RestResources.UnableToLoadIndexPage);
+                    throw new InvalidOperationException(Resources.Global.UnableToLoadIndexPage);
                 }
             }
 
@@ -199,7 +200,7 @@ namespace RestFoundation.Runtime.Handlers
             }
             catch (HttpResponseException)
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden, RestResources.UnsupportedRequestedFormat);
+                throw new HttpResponseException(HttpStatusCode.Forbidden, Resources.Global.UnsupportedRequestedFormat);
             }
 
             if (result != null)

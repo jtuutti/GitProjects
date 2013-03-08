@@ -95,7 +95,7 @@ namespace RestFoundation
 
             if (String.IsNullOrWhiteSpace(host))
             {
-                throw new InvalidOperationException(RestResources.UndeterminedUriHostName);
+                throw new InvalidOperationException(Resources.Global.UndeterminedUriHostName);
             }
 
             var uriBuilder = new UriBuilder

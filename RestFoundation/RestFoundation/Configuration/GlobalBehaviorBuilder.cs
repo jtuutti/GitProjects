@@ -8,7 +8,7 @@ using System.Linq;
 using RestFoundation.Behaviors;
 using RestFoundation.Runtime;
 
-namespace RestFoundation
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Represents a global behavior builder.
@@ -32,7 +32,7 @@ namespace RestFoundation
 
             if (behaviors.Length > 1 && behaviors.GroupBy(s => s.GetType()).Max(g => g.Count()) > 1)
             {
-                throw new InvalidOperationException(RestResources.DuplicateGlobalBehaviors);
+                throw new InvalidOperationException(Resources.Global.DuplicateGlobalBehaviors);
             }
 
             for (int i = 0; i < behaviors.Length; i++)

@@ -118,7 +118,7 @@ namespace RestFoundation.Runtime
 
             if (authBehaviorIndex != lastAuthBehaviorIndex)
             {
-                throw new InvalidOperationException(RestResources.DuplicateAuthenticationBehavior);
+                throw new InvalidOperationException(Resources.Global.DuplicateAuthenticationBehavior);
             }
 
             if (authBehaviorIndex == 0)

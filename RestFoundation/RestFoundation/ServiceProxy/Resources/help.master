@@ -1,6 +1,7 @@
 ﻿<%@ Master Language="C#" %>
 <%@ Import Namespace="System.Globalization" %>
 <%@ Import Namespace="RestFoundation" %>
+<%@ Import Namespace="RestFoundation.Configuration" %>
 <%@ Import Namespace="RestFoundation.Security" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
 

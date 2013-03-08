@@ -4,6 +4,7 @@
 using System;
 using System.Net;
 using System.Web;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Behaviors
 {
@@ -37,7 +38,7 @@ namespace RestFoundation.Behaviors
         {
             get
             {
-                return RestResources.Forbidden;
+                return Resources.Global.Forbidden;
             }
         }
 

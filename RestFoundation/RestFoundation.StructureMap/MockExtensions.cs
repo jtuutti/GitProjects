@@ -4,6 +4,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using RestFoundation.Configuration;
 using RestFoundation.ServiceLocation;
 using RestFoundation.StructureMap;
 using Container = StructureMap.Container;

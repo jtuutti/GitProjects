@@ -4,6 +4,7 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using RestFoundation.Configuration;
 using RestFoundation.StructureMap;
 using IContainer = StructureMap.IContainer;
 

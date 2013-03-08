@@ -225,7 +225,7 @@ namespace RestFoundation.Client
 
             if (!m_resourceTypes.TryGetValue(type, out mimeType) || String.IsNullOrWhiteSpace(mimeType))
             {
-                throw new InvalidOperationException(RestResources.UnmappedResourceType);
+                throw new InvalidOperationException(Resources.Global.UnmappedResourceType);
             }
 
             return mimeType;
@@ -479,7 +479,7 @@ namespace RestFoundation.Client
 
             if (ReferenceEquals(resource.Body, null))
             {
-                throw new ArgumentException(RestResources.NullResourceBody, "resource");
+                throw new ArgumentException(Resources.Global.NullResourceBody, "resource");
             }
 
             HttpWebRequest request = CreateRequest(url, method, resource);

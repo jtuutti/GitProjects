@@ -48,13 +48,13 @@ namespace RestFoundation.Behaviors
 
             if (m_enableLoadBalancerSupport && !serviceContext.Request.IsSecure)
             {
-                SetStatusDescription(RestResources.HttpsRequiredStatusDescription);
+                SetStatusDescription(Resources.Global.HttpsRequiredStatusDescription);
                 return BehaviorMethodAction.Stop;               
             }
 
             if (!m_enableLoadBalancerSupport && !String.Equals("https", serviceContext.Request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
             {
-                SetStatusDescription(RestResources.HttpsRequiredStatusDescription);
+                SetStatusDescription(Resources.Global.HttpsRequiredStatusDescription);
                 return BehaviorMethodAction.Stop;               
             }
 

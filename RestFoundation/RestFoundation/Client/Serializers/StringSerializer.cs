@@ -73,7 +73,7 @@ namespace RestFoundation.Client.Serializers
 
             if (typeof(T) != typeof(string))
             {
-                throw new InvalidOperationException(RestResources.NonStringOutputType);
+                throw new InvalidOperationException(Resources.Global.NonStringOutputType);
             }
 
             using (var reader = new StreamReader(stream, Encoding.UTF8))

@@ -132,7 +132,7 @@ namespace RestFoundation.Runtime.Handlers
 
                 if (await Task.WhenAny(methodTask, delayTask) == delayTask)
                 {
-                    throw new HttpResponseException(HttpStatusCode.ServiceUnavailable, RestResources.ServiceTimedOut);
+                    throw new HttpResponseException(HttpStatusCode.ServiceUnavailable, Resources.Global.ServiceTimedOut);
                 }
 
                 SafeTaskCancel(delayCancellation);

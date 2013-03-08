@@ -19,7 +19,7 @@ namespace RestFoundation.Behaviors.Attributes
         {
             if (timeoutInSeconds < -1)
             {
-                throw new ArgumentOutOfRangeException("timeoutInSeconds", RestResources.InvalidAsyncTimeout);
+                throw new ArgumentOutOfRangeException("timeoutInSeconds", Resources.Global.InvalidAsyncTimeout);
             }
 
             TimeoutInSeconds = timeoutInSeconds > 0 ? timeoutInSeconds : 0;

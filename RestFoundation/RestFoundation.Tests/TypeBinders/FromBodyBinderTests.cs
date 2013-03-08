@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using RestFoundation.Runtime;
 using RestFoundation.TypeBinders;
 using RestFoundation.UnitTesting;
 

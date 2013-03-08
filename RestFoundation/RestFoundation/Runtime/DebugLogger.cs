@@ -98,7 +98,7 @@ namespace RestFoundation.Runtime
         /// </exception>
         public Task FlushAsync()
         {
-            throw new NotSupportedException(RestResources.UnsupportedSyncExecutionForAsyncResult);
+            throw new NotSupportedException(Resources.Global.UnsupportedSyncExecutionForAsyncResult);
         }
     }
 }

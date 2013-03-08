@@ -64,17 +64,17 @@ namespace RestFoundation.Runtime
         {
             if (service == null || method == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.MismatchedServiceMethod);
+                throw new HttpResponseException(HttpStatusCode.NotFound, Resources.Global.MismatchedServiceMethod);
             }
 
             if (handler == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingRouteHandler);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.MissingRouteHandler);
             }
 
             if (handler.Context == null)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.MissingServiceContext);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.MissingServiceContext);
             }
 
             List<IServiceBehavior> behaviors = GetServiceMethodBehaviors(handler, service, method);
@@ -139,7 +139,7 @@ namespace RestFoundation.Runtime
 
             if (!isVoidTask && !isTypedTask)
             {
-                throw new InvalidOperationException(RestResources.InvalidIAsyncResultReturned);
+                throw new InvalidOperationException(Resources.Global.InvalidIAsyncResultReturned);
             }
 
             if (isVoidTask)
@@ -254,7 +254,7 @@ namespace RestFoundation.Runtime
 
             if (returnedObject is IAsyncResult)
             {
-                throw new InvalidOperationException(RestResources.InvalidIAsyncResultReturned);
+                throw new InvalidOperationException(Resources.Global.InvalidIAsyncResultReturned);
             }
 
             var resultExecutor = new ResultExecutor();

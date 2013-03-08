@@ -10,7 +10,7 @@ using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 
-namespace RestFoundation
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Represents a route configuration.
@@ -43,7 +43,7 @@ namespace RestFoundation
 
             if (supportedMediaTypes.Count == 0)
             {
-                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, RestResources.MissingSupportedMediaTypeForFormatter, formatterType.Name));
+                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, Resources.Global.MissingSupportedMediaTypeForFormatter, formatterType.Name));
             }
 
             foreach (SupportedMediaTypeAttribute supportedMediaType in supportedMediaTypes)
@@ -93,7 +93,7 @@ namespace RestFoundation
 
             if (supportedMediaTypes.Count == 0)
             {
-                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, RestResources.MissingSupportedMediaTypeForFormatter, formatterType.Name), "formatter");
+                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, Resources.Global.MissingSupportedMediaTypeForFormatter, formatterType.Name), "formatter");
             }
 
             foreach (SupportedMediaTypeAttribute supportedMediaType in supportedMediaTypes)
@@ -144,7 +144,7 @@ namespace RestFoundation
 
             if (behaviors.Length > 1 && behaviors.GroupBy(s => s.GetType()).Max(g => g.Count()) > 1)
             {
-                throw new InvalidOperationException(RestResources.DuplicateRouteBehaviors);
+                throw new InvalidOperationException(Resources.Global.DuplicateRouteBehaviors);
             }
 
             foreach (IRestServiceHandler routeHandler in m_routeHandlers)

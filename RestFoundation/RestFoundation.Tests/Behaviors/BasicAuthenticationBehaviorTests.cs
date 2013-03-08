@@ -4,6 +4,7 @@ using System.Security.Principal;
 using System.Text;
 using NUnit.Framework;
 using RestFoundation.Behaviors;
+using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.Implementation.Authorization;
 using RestFoundation.Tests.Implementation.ServiceContracts;

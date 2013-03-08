@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Net;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Behaviors.Attributes
 {
@@ -56,7 +57,7 @@ namespace RestFoundation.Behaviors.Attributes
 
             if (ThrowOnNullResource && ReferenceEquals(null, serviceContext.Request.ResourceBag.Resource))
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.NoResourceProvided);
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.NoResourceProvided);
             }
 
             if (!serviceContext.Request.ResourceState.IsValid)

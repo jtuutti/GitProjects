@@ -151,7 +151,8 @@ namespace RestFoundation.Context
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <returns>The application relative URL for the service method.</returns>
@@ -168,7 +169,8 @@ namespace RestFoundation.Context
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
@@ -186,7 +188,8 @@ namespace RestFoundation.Context
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
@@ -206,14 +209,14 @@ namespace RestFoundation.Context
 
             if (!ServiceContractTypeRegistry.IsServiceContract(contractType))
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidServiceContractType, contractType.Name));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidServiceContractType, contractType.Name));
             }
 
             var methodExpression = serviceMethod.Body as MethodCallExpression;
 
             if (methodExpression == null || methodExpression.Method == null)
             {
-                throw new ArgumentException(RestResources.InvalidServiceMethodExpression, "serviceMethod");
+                throw new ArgumentException(Resources.Global.InvalidServiceMethodExpression, "serviceMethod");
             }
 
             if (serviceUrl == null)
@@ -258,7 +261,8 @@ namespace RestFoundation.Context
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <returns>The application relative URL for the service method.</returns>
@@ -275,7 +279,8 @@ namespace RestFoundation.Context
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
@@ -293,7 +298,8 @@ namespace RestFoundation.Context
         /// </summary>
         /// <typeparam name="TContract">The service contract type.</typeparam>
         /// <param name="serviceUrl">
-        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="UrlBuilder"/> configuration object.
+        /// The service URL defined by the MapUrl(serviceUrl) function by the <see cref="RestFoundation.Configuration.UrlBuilder"/>
+        /// configuration object.
         /// </param>
         /// <param name="serviceMethod">The service contract method.</param>
         /// <param name="routeValues">Additional route values.</param>
@@ -313,14 +319,14 @@ namespace RestFoundation.Context
 
             if (!ServiceContractTypeRegistry.IsServiceContract(contractType))
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidServiceContractType, contractType.Name));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidServiceContractType, contractType.Name));
             }
 
             var methodExpression = serviceMethod.Body as MethodCallExpression;
 
             if (methodExpression == null || methodExpression.Method == null)
             {
-                throw new InvalidOperationException(RestResources.InvalidServiceMethodExpression);
+                throw new InvalidOperationException(Resources.Global.InvalidServiceMethodExpression);
             }
 
             if (serviceUrl == null)
@@ -356,7 +362,7 @@ namespace RestFoundation.Context
 
             if (serviceMethodList.Count == 0)
             {
-                throw new InvalidOperationException(RestResources.InvalidServiceMethodExpression);
+                throw new InvalidOperationException(Resources.Global.InvalidServiceMethodExpression);
             }
 
             if (serviceMethodList.Count > 1)
@@ -368,7 +374,7 @@ namespace RestFoundation.Context
                     return serviceUrl;
                 }
 
-                throw new InvalidOperationException(RestResources.MissingAmbiguousServiceUrl);
+                throw new InvalidOperationException(Resources.Global.MissingAmbiguousServiceUrl);
             }
 
             return serviceMethodList[0].ServiceUrl;
@@ -407,7 +413,7 @@ namespace RestFoundation.Context
 
             if (String.IsNullOrEmpty(routeName))
             {
-                throw new InvalidOperationException(RestResources.InvalidServiceUrlOrMethodExpression);
+                throw new InvalidOperationException(Resources.Global.InvalidServiceUrlOrMethodExpression);
             }
 
             if (routeValues == null)
@@ -434,7 +440,7 @@ namespace RestFoundation.Context
 
             if (routeData == null)
             {
-                throw new InvalidOperationException(RestResources.MissingRouteData);
+                throw new InvalidOperationException(Resources.Global.MissingRouteData);
             }
 
             var requestContext = new RequestContext(Context, routeData);
@@ -451,7 +457,7 @@ namespace RestFoundation.Context
 
             if (methodRoute == null || String.IsNullOrWhiteSpace(methodRoute.VirtualPath))
             {
-                throw new InvalidOperationException(RestResources.InvalidServiceUrlOrMethodExpression);
+                throw new InvalidOperationException(Resources.Global.InvalidServiceUrlOrMethodExpression);
             }
 
             string relativeUrl = VirtualPathUtility.ToAbsolute(methodRoute.VirtualPath, Context.Request.ApplicationPath);

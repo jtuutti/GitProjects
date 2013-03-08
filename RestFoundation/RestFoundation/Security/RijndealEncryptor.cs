@@ -38,7 +38,7 @@ namespace RestFoundation.Security
 
             if (m_key == null)
             {
-                throw new InvalidOperationException(RestResources.InvalidHashKey);
+                throw new InvalidOperationException(Resources.Global.InvalidHashKey);
             }
 
             byte[] data = Encoding.UTF8.GetBytes(value);
@@ -65,7 +65,7 @@ namespace RestFoundation.Security
 
             if (m_key == null)
             {
-                throw new InvalidOperationException(RestResources.InvalidHashKey);
+                throw new InvalidOperationException(Resources.Global.InvalidHashKey);
             }
 
             byte[] cipher = Convert.FromBase64String(encryptedValue);

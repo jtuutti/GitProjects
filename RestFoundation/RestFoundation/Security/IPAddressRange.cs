@@ -67,7 +67,7 @@ namespace RestFoundation.Security
 
             if (!Equals(lower.AddressFamily, upper.AddressFamily))
             {
-                throw new ArgumentOutOfRangeException("upper", RestResources.InvalidUpperBoundAddress);
+                throw new ArgumentOutOfRangeException("upper", Resources.Global.InvalidUpperBoundAddress);
             }
 
             m_addressFamily = lower.AddressFamily;

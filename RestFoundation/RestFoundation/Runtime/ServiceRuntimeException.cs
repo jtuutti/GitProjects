@@ -9,7 +9,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Security;
 
-namespace RestFoundation
+namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Represents a service runtime aggregate exception. It should not be thrown from

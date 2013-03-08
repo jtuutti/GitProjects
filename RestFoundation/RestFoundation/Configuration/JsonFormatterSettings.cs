@@ -3,7 +3,7 @@
 // </copyright>
 using Newtonsoft.Json;
 
-namespace RestFoundation
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Contains settings used by JSON formatters and results.

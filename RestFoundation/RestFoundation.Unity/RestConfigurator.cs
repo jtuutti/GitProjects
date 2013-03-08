@@ -5,8 +5,8 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.Practices.Unity;
+using RestFoundation.Configuration;
 using RestFoundation.ServiceLocation;
-using RestFoundation.Unity.Properties;
 
 namespace RestFoundation.Unity
 {
@@ -30,7 +30,7 @@ namespace RestFoundation.Unity
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyRegistrationError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyRegistrationError, ex.Message), ex);
             }
         }
     }

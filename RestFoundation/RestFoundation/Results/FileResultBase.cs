@@ -8,6 +8,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
 {
@@ -41,7 +42,7 @@ namespace RestFoundation.Results
         /// </exception>
         public void Execute(IServiceContext context)
         {
-            throw new NotSupportedException(RestResources.UnsupportedSyncExecutionForAsyncResult);
+            throw new NotSupportedException(Resources.Global.UnsupportedSyncExecutionForAsyncResult);
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace RestFoundation.Results
 
             if (file == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.InvalidFilePathOrUrl);
+                throw new HttpResponseException(HttpStatusCode.NotFound, Resources.Global.InvalidFilePathOrUrl);
             }
 
             context.Response.Output.Buffer = false;
@@ -131,7 +132,7 @@ namespace RestFoundation.Results
                 context.Response.SetHeader(context.Response.HeaderNames.ContentLength, stream.Length.ToString(CultureInfo.InvariantCulture));
                 context.Response.SetHeader(context.Response.HeaderNames.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes */{0}", stream.Length));
 
-                throw new HttpResponseException(HttpStatusCode.RequestedRangeNotSatisfiable, RestResources.UnsatisfiableRequestedRange);
+                throw new HttpResponseException(HttpStatusCode.RequestedRangeNotSatisfiable, Resources.Global.UnsatisfiableRequestedRange);
             }
 
             if (start > 0)
@@ -141,7 +142,7 @@ namespace RestFoundation.Results
 
             context.Response.SetHeader(context.Response.HeaderNames.ContentLength, (end - start + 1).ToString(CultureInfo.InvariantCulture));
             context.Response.SetHeader(context.Response.HeaderNames.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes {0}-{1}/{2}", start, end, stream.Length));
-            context.Response.SetStatus(HttpStatusCode.PartialContent, RestResources.PartialContent);
+            context.Response.SetStatus(HttpStatusCode.PartialContent, Resources.Global.PartialContent);
         }
 
         private static string GenerateETag(FileInfo file)

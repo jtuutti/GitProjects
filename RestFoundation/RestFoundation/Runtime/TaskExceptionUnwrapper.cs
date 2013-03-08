@@ -15,7 +15,7 @@ namespace RestFoundation.Runtime
 
             if (taskException == null)
             {
-                return new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.FailedRequest);
+                return new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.FailedRequest);
             }
 
             return ExceptionUnwrapper.IsDirectResponseException(taskException.InnerException) ? taskException.InnerException : taskException;

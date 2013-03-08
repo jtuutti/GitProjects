@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Practices.Unity;
 using RestFoundation.ServiceLocation;
-using RestFoundation.Unity.Properties;
 
 namespace RestFoundation.Unity
 {
@@ -56,7 +55,7 @@ namespace RestFoundation.Unity
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyResolutionError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyResolutionError, ex.Message), ex);
             }
         }
 
@@ -89,7 +88,7 @@ namespace RestFoundation.Unity
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyResolutionError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyResolutionError, ex.Message), ex);
             }
         }
 
@@ -120,7 +119,7 @@ namespace RestFoundation.Unity
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyResolutionError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyResolutionError, ex.Message), ex);
             }
         }
 
@@ -149,7 +148,7 @@ namespace RestFoundation.Unity
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyResolutionError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyResolutionError, ex.Message), ex);
             }
         }
 

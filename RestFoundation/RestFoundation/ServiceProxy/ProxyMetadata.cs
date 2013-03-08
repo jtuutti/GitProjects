@@ -154,7 +154,7 @@ namespace RestFoundation.ServiceProxy
         {
             if (port <= 0)
             {
-                throw new ArgumentOutOfRangeException("port", RestResources.InvalidPortNumber);
+                throw new ArgumentOutOfRangeException("port", Resources.Global.InvalidPortNumber);
             }
 
             m_https = new HttpsMetadata
@@ -187,7 +187,7 @@ namespace RestFoundation.ServiceProxy
 
             if (methodExpression == null || methodExpression.Method == null)
             {
-                throw new ArgumentException(RestResources.InvalidServiceMethodExpression, "serviceMethod");
+                throw new ArgumentException(Resources.Global.InvalidServiceMethodExpression, "serviceMethod");
             }
 
             m_currentServiceMethod = methodExpression.Method;
@@ -213,7 +213,7 @@ namespace RestFoundation.ServiceProxy
 
             if (methodExpression == null || methodExpression.Method == null)
             {
-                throw new ArgumentException(RestResources.InvalidServiceMethodExpression, "serviceMethod");
+                throw new ArgumentException(Resources.Global.InvalidServiceMethodExpression, "serviceMethod");
             }
 
             m_currentServiceMethod = methodExpression.Method;
@@ -407,7 +407,7 @@ namespace RestFoundation.ServiceProxy
 
             if (port <= 0)
             {
-                throw new ArgumentOutOfRangeException("port", RestResources.InvalidPortNumber);
+                throw new ArgumentOutOfRangeException("port", Resources.Global.InvalidPortNumber);
             }
 
             m_httpsDictionary[m_currentServiceMethod] = new HttpsMetadata
@@ -472,7 +472,7 @@ namespace RestFoundation.ServiceProxy
 
             if (m_currentServiceMethod.GetParameters().All(p => p.Name != name))
             {
-                throw new ArgumentException(RestResources.InvalidMethodParameterName, "name");
+                throw new ArgumentException(Resources.Global.InvalidMethodParameterName, "name");
             }
 
             SetParameter(name, null, exampleValue, allowedValues, null, true);
@@ -828,7 +828,7 @@ namespace RestFoundation.ServiceProxy
         {
             if (m_currentServiceMethod == null)
             {
-                throw new InvalidOperationException(RestResources.MissingCurrentServiceMethod);
+                throw new InvalidOperationException(Resources.Global.MissingCurrentServiceMethod);
             }
         }
 

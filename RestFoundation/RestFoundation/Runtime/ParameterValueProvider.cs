@@ -142,7 +142,7 @@ namespace RestFoundation.Runtime
 
             if (!SafeConvert.TryChangeType(routeValue, parameter.ParameterType, out value))
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound, RestResources.NotFound);
+                throw new HttpResponseException(HttpStatusCode.NotFound, Resources.Global.NotFound);
             }
 
             return value;
@@ -170,7 +170,7 @@ namespace RestFoundation.Runtime
 
             if (String.IsNullOrEmpty(contentType))
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.MissingOrInvalidContentType);
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, Resources.Global.MissingOrInvalidContentType);
             }
 
             IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, contentType) ??
@@ -178,7 +178,7 @@ namespace RestFoundation.Runtime
 
             if (formatter == null || formatter is BlockFormatter)
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, RestResources.MissingOrInvalidContentType);
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, Resources.Global.MissingOrInvalidContentType);
             }
 
             object argumentValue;
@@ -206,7 +206,7 @@ namespace RestFoundation.Runtime
                     throw new HttpResponseException((HttpStatusCode) httpException.GetHttpCode(), httpException.Message);
                 }
 
-                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.InvalidResourceBody);
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.InvalidResourceBody);
             }
 
             return argumentValue;
@@ -223,7 +223,7 @@ namespace RestFoundation.Runtime
             catch (AmbiguousMatchException)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, String.Format(CultureInfo.InvariantCulture,
-                                                                                                  RestResources.MultipleTypeBindersPerParameter,
+                                                                                                  Resources.Global.MultipleTypeBindersPerParameter,
                                                                                                   parameter.Name,
                                                                                                   parameter.Member.Name,
                                                                                                   parameter.Member.DeclaringType != null ? parameter.Member.DeclaringType.Name : String.Empty));

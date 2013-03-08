@@ -13,7 +13,7 @@ namespace RestFoundation
     {
         /// <summary>
         /// Called if an exception occurs during the service method execution.
-        /// This method does not catch <see cref="HttpResponseException"/> exceptions because they are
+        /// This method does not catch <see cref="RestFoundation.Runtime.HttpResponseException"/> exceptions because they are
         /// designed to set response status codes and stop the request.
         /// </summary>
         /// <param name="context">The service context.</param>

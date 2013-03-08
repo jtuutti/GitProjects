@@ -4,8 +4,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using RestFoundation.Configuration;
 using RestFoundation.ServiceLocation;
-using RestFoundation.StructureMap.Properties;
 using StructureMap;
 
 namespace RestFoundation.StructureMap
@@ -34,7 +34,7 @@ namespace RestFoundation.StructureMap
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.DependencyRegistrationError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Properties.Resources.DependencyRegistrationError, ex.Message), ex);
             }
         }
     }

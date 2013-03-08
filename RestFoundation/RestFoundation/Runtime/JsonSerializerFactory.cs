@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using Newtonsoft.Json;
+using RestFoundation.Configuration;
 
 namespace RestFoundation.Runtime
 {

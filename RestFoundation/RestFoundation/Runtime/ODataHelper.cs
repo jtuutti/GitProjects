@@ -26,7 +26,7 @@ namespace RestFoundation.Runtime
             }
             catch (Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, RestResources.InvalidODataParameters);
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.InvalidODataParameters);
             }
 
             var filteredResultArray = filteredResults as object[];
@@ -40,7 +40,7 @@ namespace RestFoundation.Runtime
 
             if (returnItemType.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, RestResources.UnsupportedObjectTypeForOData);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.UnsupportedObjectTypeForOData);
             }
 
             Type filteredResultListType = typeof(List<>).MakeGenericType(returnItemType);

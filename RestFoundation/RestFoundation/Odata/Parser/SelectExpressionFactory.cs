@@ -83,7 +83,7 @@ namespace RestFoundation.Odata.Parser
 
             if (constructorInfo == null)
             {
-                throw new InvalidOperationException(RestResources.MissingDefaultConstructor);
+                throw new InvalidOperationException(Resources.Global.MissingDefaultConstructor);
             }
 
             var selector = Expression.Lambda<Func<T, object>>(

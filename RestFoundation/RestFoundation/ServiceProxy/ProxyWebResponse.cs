@@ -34,7 +34,7 @@ namespace RestFoundation.ServiceProxy
 
             if (webResponse == null)
             {
-                throw new ArgumentException(RestResources.InvalidWebResponse, "response");
+                throw new ArgumentException(Resources.Global.InvalidWebResponse, "response");
             }
 
             m_httpResponse = webResponse;

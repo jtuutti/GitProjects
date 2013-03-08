@@ -59,7 +59,7 @@ namespace RestFoundation.Runtime
             }
             catch (Exception ex)
             {
-                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, RestResources.DependencyResolutionError, ex.Message), ex);
+                throw new ServiceActivationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.DependencyResolutionError, ex.Message), ex);
             }
         }
 

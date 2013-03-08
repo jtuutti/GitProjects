@@ -26,7 +26,7 @@ namespace RestFoundation.ServiceProxy
 
             if (proxyMetadataType.GetInterface(typeof(IProxyMetadata).FullName) == null)
             {
-                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, RestResources.InvalidProxyMetadataType, proxyMetadataType.Name), "proxyMetadataType");
+                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidProxyMetadataType, proxyMetadataType.Name), "proxyMetadataType");
             }
 
             ProxyMetadataType = proxyMetadataType;

@@ -35,7 +35,7 @@ namespace RestFoundation.UnitTesting
             m_output.AutoFlush = true;
 
             StatusCode = (int) HttpStatusCode.OK;
-            StatusDescription = RestResources.OK;
+            StatusDescription = Resources.Global.OK;
         }
 
         public override bool BufferOutput { get; set; }

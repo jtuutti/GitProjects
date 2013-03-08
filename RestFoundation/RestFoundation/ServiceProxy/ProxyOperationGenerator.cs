@@ -111,10 +111,10 @@ namespace RestFoundation.ServiceProxy
         {
             if (proxyMetadata == null)
             {
-                return RestResources.MissingDescription;
+                return Resources.Global.MissingDescription;
             }
 
-            return proxyMetadata.GetDescription(method) ?? RestResources.MissingDescription;
+            return proxyMetadata.GetDescription(method) ?? Resources.Global.MissingDescription;
         }
 
         private static List<StatusCodeMetadata> GetStatusCodes(MethodInfo method, IProxyMetadata proxyMetadata, bool hasResource, bool hasResponse, bool requiresHttps)
@@ -128,23 +128,23 @@ namespace RestFoundation.ServiceProxy
 
             if (hasResource)
             {
-                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.BadRequest, Condition = RestResources.InvalidResourceBody });
-                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.UnsupportedMediaType, Condition = RestResources.UnsupportedMediaType });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.BadRequest, Condition = Resources.Global.InvalidResourceBody });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.UnsupportedMediaType, Condition = Resources.Global.UnsupportedMediaType });
             }
 
             if (hasResponse)
             {
-                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.NotAcceptable, Condition = RestResources.NonAcceptedMediaType });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.NotAcceptable, Condition = Resources.Global.NonAcceptedMediaType });
             }
 
             if (!statusCodes.Any(code => code.GetNumericStatusCode() >= 200 && code.GetNumericStatusCode() <= 204))
             {
-                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.OK, Condition = RestResources.SuccessfulOperation });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.OK, Condition = Resources.Global.SuccessfulOperation });
             }
 
             if (requiresHttps)
             {
-                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.Forbidden, Condition = RestResources.HttpsRequiredStatusDescription });
+                statusCodes.Add(new StatusCodeMetadata { Code = HttpStatusCode.Forbidden, Condition = Resources.Global.HttpsRequiredStatusDescription });
             }
 
             statusCodes.Sort((code1, code2) => code1.CompareTo(code2));

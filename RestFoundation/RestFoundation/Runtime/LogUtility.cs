@@ -42,7 +42,7 @@ namespace RestFoundation.Runtime
 
                 if (writer == null)
                 {
-                    throw new InvalidOperationException(RestResources.UnregisteredLogWriter);
+                    throw new InvalidOperationException(Resources.Global.UnregisteredLogWriter);
                 }
 
                 return writer;
@@ -60,7 +60,7 @@ namespace RestFoundation.Runtime
             {
                 if (CanLog)
                 {
-                    Writer.WriteInfo(RestResources.ServiceCallStarted);
+                    Writer.WriteInfo(Resources.Global.ServiceCallStarted);
 
                     if (httpContext == null || httpContext.Request == null || httpContext.Response == null)
                     {
@@ -173,7 +173,7 @@ namespace RestFoundation.Runtime
             {
                 if (CanLog)
                 {
-                    Writer.WriteInfo(String.Empty).WriteInfo(RestResources.ServiceCallEnded);
+                    Writer.WriteInfo(String.Empty).WriteInfo(Resources.Global.ServiceCallEnded);
                 }
             }
         }
@@ -189,7 +189,7 @@ namespace RestFoundation.Runtime
             {
                 if (CanLog)
                 {
-                    Writer.WriteWarning(String.Format(CultureInfo.InvariantCulture, RestResources.UnsealedBehaviorAttributeClass, behaviorAttributeType.FullName));
+                    Writer.WriteWarning(String.Format(CultureInfo.InvariantCulture, Resources.Global.UnsealedBehaviorAttributeClass, behaviorAttributeType.FullName));
                 }
             }
         }
