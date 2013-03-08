@@ -41,7 +41,7 @@ namespace RestFoundation.Runtime
             if (!resolvedMethod.HasValue || resolvedMethod.Value == HttpMethod.Options)
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
-                                                                 RestResources.UndefinedHttpMethodsForServiceMethod,
+                                                                  RestResources.UndefinedHttpMethodsForServiceMethod,
                                                                   method.DeclaringType != null ? method.DeclaringType.Name : String.Empty,
                                                                   method.Name));
             }
