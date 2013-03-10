@@ -77,23 +77,46 @@ namespace RestFoundation.Runtime
         }
 
         /// <summary>
+        /// Adds a key/value pair to the cache with the normal cache item priority.
+        /// </summary>
+        /// <param name="key">The cache key.</param>
+        /// <param name="value">The cached value.</param>
+        public void Add(string key, object value)
+        {
+            Add(key, value, Cache.NoAbsoluteExpiration, CachePriority.Normal);
+        }
+
+        /// <summary>
         /// Adds a key/value pair to the cache.
         /// </summary>
         /// <param name="key">The cache key.</param>
         /// <param name="value">The cached value.</param>
-        public virtual void Add(string key, object value)
+        /// <param name="priority">The cached item priority.</param>
+        public void Add(string key, object value, CachePriority priority)
         {
-            if (String.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException("key");
-            }
+            Add(key, value, Cache.NoAbsoluteExpiration, priority);
+        }
 
-            if (value == null)
-            {
-                throw new ArgumentNullException("value");
-            }
+        /// <summary>
+        /// Adds a key/value pair to the cache with the normal cache item priority.
+        /// </summary>
+        /// <param name="key">The cache key.</param>
+        /// <param name="value">The cached value.</param>
+        /// <param name="absoluteExpiration">A <see cref="DateTime"/> representing an absolute expiration time.</param>
+        public void Add(string key, object value, DateTime absoluteExpiration)
+        {
+            Add(key, value, absoluteExpiration, CachePriority.Normal);
+        }
 
-            m_cache.Add(key, value, null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
+        /// <summary>
+        /// Adds a key/value pair to the cache with the normal cache item priority.
+        /// </summary>
+        /// <param name="key">The cache key.</param>
+        /// <param name="value">The cached value.</param>
+        /// <param name="slidingExpiration">A <see cref="TimeSpan"/> representing a sliding expiration time.</param>
+        public void Add(string key, object value, TimeSpan slidingExpiration)
+        {
+            Add(key, value, slidingExpiration, CachePriority.Normal);
         }
 
         /// <summary>
@@ -102,7 +125,8 @@ namespace RestFoundation.Runtime
         /// <param name="key">The cache key.</param>
         /// <param name="value">The cached value.</param>
         /// <param name="absoluteExpiration">A <see cref="DateTime"/> representing an absolute expiration time.</param>
-        public virtual void Add(string key, object value, DateTime absoluteExpiration)
+        /// <param name="priority">The cached item priority.</param>
+        public virtual void Add(string key, object value, DateTime absoluteExpiration, CachePriority priority)
         {
             if (String.IsNullOrEmpty(key))
             {
@@ -114,7 +138,7 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("value");
             }
 
-            m_cache.Add(key, value, null, absoluteExpiration, Cache.NoSlidingExpiration, CacheItemPriority.Default, null);
+            m_cache.Add(key, value, null, absoluteExpiration, Cache.NoSlidingExpiration, ConvertCachePriority(priority), null);
         }
 
         /// <summary>
@@ -123,7 +147,8 @@ namespace RestFoundation.Runtime
         /// <param name="key">The cache key.</param>
         /// <param name="value">The cached value.</param>
         /// <param name="slidingExpiration">A <see cref="TimeSpan"/> representing a sliding expiration time.</param>
-        public virtual void Add(string key, object value, TimeSpan slidingExpiration)
+        /// <param name="priority">The cached item priority.</param>
+        public virtual void Add(string key, object value, TimeSpan slidingExpiration, CachePriority priority)
         {
             if (String.IsNullOrEmpty(key))
             {
@@ -135,7 +160,7 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("value");
             }
 
-            m_cache.Add(key, value, null, Cache.NoAbsoluteExpiration, slidingExpiration, CacheItemPriority.Default, null);
+            m_cache.Add(key, value, null, Cache.NoAbsoluteExpiration, slidingExpiration, ConvertCachePriority(priority), null);
         }
 
         /// <summary>
@@ -191,6 +216,26 @@ namespace RestFoundation.Runtime
             {
                 m_cache.Remove(key);
             }
+        }
+
+        private static CacheItemPriority ConvertCachePriority(CachePriority priority)
+        {
+            CacheItemPriority cachedItemPriority;
+
+            switch (priority)
+            {
+                case CachePriority.Low:
+                    cachedItemPriority = CacheItemPriority.Low;
+                    break;
+                case CachePriority.High:
+                    cachedItemPriority = CacheItemPriority.High;
+                    break;
+                default:
+                    cachedItemPriority = CacheItemPriority.Normal;
+                    break;
+            }
+
+            return cachedItemPriority;
         }
     }
 }

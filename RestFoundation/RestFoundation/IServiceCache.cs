@@ -30,9 +30,9 @@ namespace RestFoundation
         /// <param name="key">The cache key.</param>
         /// <returns>The corresponding value.</returns>
         object Get(string key);
-        
+
         /// <summary>
-        /// Adds a key/value pair to the cache.
+        /// Adds a key/value pair to the cache with the normal cache item priority.
         /// </summary>
         /// <param name="key">The cache key.</param>
         /// <param name="value">The cached value.</param>
@@ -43,8 +43,33 @@ namespace RestFoundation
         /// </summary>
         /// <param name="key">The cache key.</param>
         /// <param name="value">The cached value.</param>
+        /// <param name="priority">The cached item priority.</param>
+        void Add(string key, object value, CachePriority priority);
+
+        /// <summary>
+        /// Adds a key/value pair to the cache with the normal cache item priority.
+        /// </summary>
+        /// <param name="key">The cache key.</param>
+        /// <param name="value">The cached value.</param>
         /// <param name="absoluteExpiration">A <see cref="DateTime"/> representing an absolute expiration time.</param>
         void Add(string key, object value, DateTime absoluteExpiration);
+
+        /// <summary>
+        /// Adds a key/value pair to the cache with the normal cache item priority.
+        /// </summary>
+        /// <param name="key">The cache key.</param>
+        /// <param name="value">The cached value.</param>
+        /// <param name="slidingExpiration">A <see cref="TimeSpan"/> representing a sliding expiration time.</param>
+        void Add(string key, object value, TimeSpan slidingExpiration);
+
+        /// <summary>
+        /// Adds a key/value pair to the cache.
+        /// </summary>
+        /// <param name="key">The cache key.</param>
+        /// <param name="value">The cached value.</param>
+        /// <param name="absoluteExpiration">A <see cref="DateTime"/> representing an absolute expiration time.</param>
+        /// <param name="priority">The cached item priority.</param>
+        void Add(string key, object value, DateTime absoluteExpiration, CachePriority priority);
 
         /// <summary>
         /// Adds a key/value pair to the cache.
@@ -52,7 +77,8 @@ namespace RestFoundation
         /// <param name="key">The cache key.</param>
         /// <param name="value">The cached value.</param>
         /// <param name="slidingExpiration">A <see cref="TimeSpan"/> representing a sliding expiration time.</param>
-        void Add(string key, object value, TimeSpan slidingExpiration);
+        /// <param name="priority">The cached item priority.</param>
+        void Add(string key, object value, TimeSpan slidingExpiration, CachePriority priority);
 
         /// <summary>
         /// Updated the cached value for the corresponding cache key.

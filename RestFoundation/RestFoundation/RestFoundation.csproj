@@ -75,6 +75,7 @@
     <Compile Include="Behaviors\Attributes\NoCacheAttribute.cs" />
     <Compile Include="Behaviors\Attributes\ServiceMethodBehaviorAttribute.cs" />
     <Compile Include="Behaviors\ThrottlingBehavior.cs" />
+    <Compile Include="CachePriority.cs" />
     <Compile Include="Client\IRestClient.cs" />
     <Compile Include="Client\RestClient.cs" />
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
