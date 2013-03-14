@@ -65,7 +65,7 @@ namespace RestFoundation.Behaviors
                 return BehaviorMethodAction.Stop;
             }
 
-            serviceContext.Cache.Add(cacheKey, true, DateTime.Now.AddMilliseconds(m_delayInMilliseconds));
+            serviceContext.Cache.Add(cacheKey, true, DateTime.Now.AddMilliseconds(m_delayInMilliseconds), CachePriority.Low);
             return BehaviorMethodAction.Execute;
         }
     }

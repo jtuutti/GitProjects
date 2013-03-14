@@ -4,11 +4,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Routing;
 using RestFoundation.Context;
+using RestFoundation.Resources;
 
 namespace RestFoundation.Runtime
 {
@@ -99,26 +101,41 @@ namespace RestFoundation.Runtime
             return routeParameters;
         }
 
+        private static void TryToBrew(string httpMethod)
+        {
+            if (String.Equals("BREW", httpMethod, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new HttpResponseException((HttpStatusCode) 418, Global.InvalidBrewOperation);
+            }
+        }
+
         private bool ValidateHttpMethod(HttpContextBase httpContext, Type serviceContractType, string urlTemplate)
         {
             ICollection<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
-            HttpMethod httpMethod = httpContext.GetOverriddenHttpMethod();
+            HttpMethod httpMethod;
 
-            if (httpMethod != HttpMethod.Options)
+            try
             {
-                if (!allowedHttpMethods.Contains(httpMethod))
-                {
-                    httpContext.Items[RouteConstants.RouteMethodConstraintFailed] = true;
-                    return false;
-                }
-
-                if (!m_httpMethods.Contains(httpMethod))
-                {
-                    return false;
-                }
+                httpMethod = httpContext.GetOverriddenHttpMethod();
+            }
+            catch (HttpResponseException)
+            {
+                TryToBrew(httpContext.Request.HttpMethod);               
+                throw;
             }
 
-            return true;
+            if (httpMethod == HttpMethod.Options)
+            {
+                return true;
+            }
+
+            if (!allowedHttpMethods.Contains(httpMethod))
+            {
+                httpContext.Items[RouteConstants.RouteMethodConstraintFailed] = true;
+                return false;
+            }
+
+            return m_httpMethods.Contains(httpMethod);
         }
 
         private bool ValidateRouteParameters(IEnumerable<KeyValuePair<string, object>> values)

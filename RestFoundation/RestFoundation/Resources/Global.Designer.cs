@@ -268,6 +268,15 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to I&apos;m a teapot.
+        /// </summary>
+        internal static string InvalidBrewOperation {
+            get {
+                return ResourceManager.GetString("InvalidBrewOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to URL templates cannot contain catch-all parameters. Template: &apos;{0}&apos;.
         /// </summary>
         internal static string InvalidCatchAllUrlTemplate {

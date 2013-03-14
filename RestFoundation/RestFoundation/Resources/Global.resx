@@ -609,4 +609,8 @@
     <value>Invalid '{0}' header value to parse.</value>
     <comment>Invalid '{0}' header value to parse.</comment>
   </data>
+  <data name="InvalidBrewOperation" xml:space="preserve">
+    <value>I'm a teapot</value>
+    <comment>I'm a teapot</comment>
+  </data>
 </root>
