@@ -556,6 +556,28 @@
       <param name="behaviorContext">The "method authorizing" behavior context.</param>
       <returns>A service method action.</returns>
     </member>
+    <member name="T:RestFoundation.CachePriority">
+      <summary>
+            Represents a cache item priority.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.CachePriority.Normal">
+      <summary>
+            The default priority.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.CachePriority.Low">
+      <summary>
+            Low priority. Low priority items are removed from cache first in
+            low memory situations.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.CachePriority.High">
+      <summary>
+            High priority. High priority items are retained the longest in
+            low memory situations.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Client.IRestClient">
       <summary>
             Defines a REST HTTP client.
@@ -1862,13 +1884,6 @@
             Defines a REST service handler.
             </summary>
     </member>
-    <member name="M:RestFoundation.Runtime.Handlers.IRestServiceHandler.ProcessRequestAsync(System.Web.HttpContext)">
-      <summary>
-            When overridden in a derived class, provides code that handles an asynchronous task.
-            </summary>
-      <returns>The asynchronous task.</returns>
-      <param name="context">The HTTP context.</param>
-    </member>
     <member name="P:RestFoundation.Runtime.Handlers.IRestServiceHandler.ServiceContractTypeName">
       <summary>
             Gets a fully qualified name of the interface type defining the service contract.
@@ -2351,6 +2366,11 @@
     <member name="P:RestFoundation.Resources.Global.InvalidAsyncTimeout">
       <summary>
               Looks up a localized string similar to Invalid service async timeout value provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidBrewOperation">
+      <summary>
+              Looks up a localized string similar to I'm a teapot.
             </summary>
     </member>
     <member name="P:RestFoundation.Resources.Global.InvalidCatchAllUrlTemplate">
@@ -6317,14 +6337,22 @@
     </member>
     <member name="M:RestFoundation.IServiceCache.Add(System.String,System.Object)">
       <summary>
-            Adds a key/value pair to the cache.
+            Adds a key/value pair to the cache with the normal cache item priority.
             </summary>
       <param name="key">The cache key.</param>
       <param name="value">The cached value.</param>
     </member>
-    <member name="M:RestFoundation.IServiceCache.Add(System.String,System.Object,System.DateTime)">
+    <member name="M:RestFoundation.IServiceCache.Add(System.String,System.Object,RestFoundation.CachePriority)">
       <summary>
             Adds a key/value pair to the cache.
+            </summary>
+      <param name="key">The cache key.</param>
+      <param name="value">The cached value.</param>
+      <param name="priority">The cached item priority.</param>
+    </member>
+    <member name="M:RestFoundation.IServiceCache.Add(System.String,System.Object,System.DateTime)">
+      <summary>
+            Adds a key/value pair to the cache with the normal cache item priority.
             </summary>
       <param name="key">The cache key.</param>
       <param name="value">The cached value.</param>
@@ -6332,11 +6360,29 @@
     </member>
     <member name="M:RestFoundation.IServiceCache.Add(System.String,System.Object,System.TimeSpan)">
       <summary>
+            Adds a key/value pair to the cache with the normal cache item priority.
+            </summary>
+      <param name="key">The cache key.</param>
+      <param name="value">The cached value.</param>
+      <param name="slidingExpiration">A <see cref="T:System.TimeSpan" /> representing a sliding expiration time.</param>
+    </member>
+    <member name="M:RestFoundation.IServiceCache.Add(System.String,System.Object,System.DateTime,RestFoundation.CachePriority)">
+      <summary>
+            Adds a key/value pair to the cache.
+            </summary>
+      <param name="key">The cache key.</param>
+      <param name="value">The cached value.</param>
+      <param name="absoluteExpiration">A <see cref="T:System.DateTime" /> representing an absolute expiration time.</param>
+      <param name="priority">The cached item priority.</param>
+    </member>
+    <member name="M:RestFoundation.IServiceCache.Add(System.String,System.Object,System.TimeSpan,RestFoundation.CachePriority)">
+      <summary>
             Adds a key/value pair to the cache.
             </summary>
       <param name="key">The cache key.</param>
       <param name="value">The cached value.</param>
       <param name="slidingExpiration">A <see cref="T:System.TimeSpan" /> representing a sliding expiration time.</param>
+      <param name="priority">The cached item priority.</param>
     </member>
     <member name="M:RestFoundation.IServiceCache.Update(System.String,System.Object)">
       <summary>
@@ -7707,14 +7753,22 @@
     </member>
     <member name="M:RestFoundation.Runtime.ServiceCache.Add(System.String,System.Object)">
       <summary>
-            Adds a key/value pair to the cache.
+            Adds a key/value pair to the cache with the normal cache item priority.
             </summary>
       <param name="key">The cache key.</param>
       <param name="value">The cached value.</param>
     </member>
-    <member name="M:RestFoundation.Runtime.ServiceCache.Add(System.String,System.Object,System.DateTime)">
+    <member name="M:RestFoundation.Runtime.ServiceCache.Add(System.String,System.Object,RestFoundation.CachePriority)">
       <summary>
             Adds a key/value pair to the cache.
+            </summary>
+      <param name="key">The cache key.</param>
+      <param name="value">The cached value.</param>
+      <param name="priority">The cached item priority.</param>
+    </member>
+    <member name="M:RestFoundation.Runtime.ServiceCache.Add(System.String,System.Object,System.DateTime)">
+      <summary>
+            Adds a key/value pair to the cache with the normal cache item priority.
             </summary>
       <param name="key">The cache key.</param>
       <param name="value">The cached value.</param>
@@ -7722,11 +7776,29 @@
     </member>
     <member name="M:RestFoundation.Runtime.ServiceCache.Add(System.String,System.Object,System.TimeSpan)">
       <summary>
+            Adds a key/value pair to the cache with the normal cache item priority.
+            </summary>
+      <param name="key">The cache key.</param>
+      <param name="value">The cached value.</param>
+      <param name="slidingExpiration">A <see cref="T:System.TimeSpan" /> representing a sliding expiration time.</param>
+    </member>
+    <member name="M:RestFoundation.Runtime.ServiceCache.Add(System.String,System.Object,System.DateTime,RestFoundation.CachePriority)">
+      <summary>
+            Adds a key/value pair to the cache.
+            </summary>
+      <param name="key">The cache key.</param>
+      <param name="value">The cached value.</param>
+      <param name="absoluteExpiration">A <see cref="T:System.DateTime" /> representing an absolute expiration time.</param>
+      <param name="priority">The cached item priority.</param>
+    </member>
+    <member name="M:RestFoundation.Runtime.ServiceCache.Add(System.String,System.Object,System.TimeSpan,RestFoundation.CachePriority)">
+      <summary>
             Adds a key/value pair to the cache.
             </summary>
       <param name="key">The cache key.</param>
       <param name="value">The cached value.</param>
       <param name="slidingExpiration">A <see cref="T:System.TimeSpan" /> representing a sliding expiration time.</param>
+      <param name="priority">The cached item priority.</param>
     </member>
     <member name="M:RestFoundation.Runtime.ServiceCache.Update(System.String,System.Object)">
       <summary>
