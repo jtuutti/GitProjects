@@ -1074,6 +1074,11 @@
             Gets the media type.
             </summary>
     </member>
+    <member name="P:RestFoundation.Formatters.SupportedMediaTypeAttribute.Priority">
+      <summary>
+            Gets or sets the media type priority to resolve for wildcard in the Accept HTTP header.
+            </summary>
+    </member>
     <member name="T:RestFoundation.ILogWriter">
       <summary>
             Defines a log writer for the services.
@@ -3201,13 +3206,14 @@
             If the object could not be deserialized.
             </exception>
     </member>
-    <member name="M:RestFoundation.Formatters.IMediaTypeFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
+    <member name="M:RestFoundation.Formatters.IMediaTypeFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object,System.String)">
       <summary>
             Serializes the object instance into the HTTP response stream using the accepted media type.
             </summary>
       <param name="context">The service context.</param>
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
+      <param name="preferredMediaType">The preferred media type.</param>
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">
             If the object could not be serialized.
@@ -3229,13 +3235,14 @@
             If the object could not be serialized.
             </exception>
     </member>
-    <member name="M:RestFoundation.Formatters.BlockFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
+    <member name="M:RestFoundation.Formatters.BlockFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object,System.String)">
       <summary>
             Serializes the object instance into the HTTP response stream using the accepted media type.
             </summary>
       <param name="context">The service context.</param>
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
+      <param name="preferredMediaType">The preferred media type.</param>
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">
             If the object could not be serialized.
@@ -3255,13 +3262,14 @@
       <returns>The deserialized object.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object cannot be deserialized.</exception>
     </member>
-    <member name="M:RestFoundation.Formatters.JsonPFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
+    <member name="M:RestFoundation.Formatters.JsonPFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object,System.String)">
       <summary>
             Serializes the object instance into the HTTP response stream using the accepted media type.
             </summary>
       <param name="context">The service context.</param>
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
+      <param name="preferredMediaType">The preferred media type.</param>
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
@@ -6294,13 +6302,14 @@
       <returns>The deserialized object.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object cannot be deserialized.</exception>
     </member>
-    <member name="M:RestFoundation.Formatters.MultiPartFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
+    <member name="M:RestFoundation.Formatters.MultiPartFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object,System.String)">
       <summary>
             Serializes the object instance into the HTTP response stream using the accepted media type.
             </summary>
       <param name="context">The service context.</param>
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
+      <param name="preferredMediaType">The preferred media type.</param>
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
@@ -8466,13 +8475,14 @@
       <returns>The deserialized object.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object cannot be deserialized.</exception>
     </member>
-    <member name="M:RestFoundation.Formatters.FormsFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
+    <member name="M:RestFoundation.Formatters.FormsFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object,System.String)">
       <summary>
             Serializes the object instance into the HTTP response stream using the accepted media type.
             </summary>
       <param name="context">The service context.</param>
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
+      <param name="preferredMediaType">The preferred media type.</param>
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
@@ -8977,17 +8987,6 @@
             Represents a JSON media type formatter.
             </summary>
     </member>
-    <member name="M:RestFoundation.Formatters.JsonFormatter.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Formatters.JsonFormatter" /> class with the provided content negotiator.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Formatters.JsonFormatter.#ctor(RestFoundation.IContentNegotiator)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Formatters.JsonFormatter" /> class.
-            </summary>
-      <param name="contentNegotiator">The content negotiator.</param>
-    </member>
     <member name="M:RestFoundation.Formatters.JsonFormatter.FormatRequest(RestFoundation.IServiceContext,System.Type)">
       <summary>
             Deserializes HTTP message body data into an object instance of the provided type.
@@ -8997,13 +8996,14 @@
       <returns>The deserialized object.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object cannot be deserialized.</exception>
     </member>
-    <member name="M:RestFoundation.Formatters.JsonFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
+    <member name="M:RestFoundation.Formatters.JsonFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object,System.String)">
       <summary>
             Serializes the object instance into the HTTP response stream using the accepted media type.
             </summary>
       <param name="context">The service context.</param>
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
+      <param name="preferredMediaType">The preferred media type.</param>
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
@@ -9011,17 +9011,6 @@
       <summary>
             Represents an XML media type formatter.
             </summary>
-    </member>
-    <member name="M:RestFoundation.Formatters.XmlFormatter.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Formatters.XmlFormatter" /> class with the provided content negotiator.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Formatters.XmlFormatter.#ctor(RestFoundation.IContentNegotiator)">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Formatters.XmlFormatter" /> class.
-            </summary>
-      <param name="contentNegotiator">The content negotiator.</param>
     </member>
     <member name="M:RestFoundation.Formatters.XmlFormatter.FormatRequest(RestFoundation.IServiceContext,System.Type)">
       <summary>
@@ -9032,13 +9021,14 @@
       <returns>The deserialized object.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object cannot be deserialized.</exception>
     </member>
-    <member name="M:RestFoundation.Formatters.XmlFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object)">
+    <member name="M:RestFoundation.Formatters.XmlFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object,System.String)">
       <summary>
             Serializes the object instance into the HTTP response stream using the accepted media type.
             </summary>
       <param name="context">The service context.</param>
       <param name="methodReturnType">The method return type.</param>
       <param name="obj">The object to serialize.</param>
+      <param name="preferredMediaType">The preferred media type.</param>
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
