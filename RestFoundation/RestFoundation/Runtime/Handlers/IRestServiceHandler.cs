@@ -1,9 +1,7 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
-
 using System;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace RestFoundation.Runtime.Handlers
@@ -33,12 +31,5 @@ namespace RestFoundation.Runtime.Handlers
         /// service method. Setting the value to <see cref="TimeSpan.Zero"/> indicates no timeout.
         /// </summary>
         TimeSpan ServiceAsyncTimeout { get; set; }
-
-        /// <summary>
-        /// When overridden in a derived class, provides code that handles an asynchronous task.
-        /// </summary>
-        /// <returns>The asynchronous task.</returns>
-        /// <param name="context">The HTTP context.</param>
-        Task ProcessRequestAsync(HttpContext context);
     }
 }

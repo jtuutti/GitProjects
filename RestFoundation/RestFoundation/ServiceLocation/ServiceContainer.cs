@@ -8,7 +8,6 @@ using System.Diagnostics.CodeAnalysis;
 using RestFoundation.Client;
 using RestFoundation.Client.Serializers;
 using RestFoundation.Context;
-using RestFoundation.Results;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.Security;

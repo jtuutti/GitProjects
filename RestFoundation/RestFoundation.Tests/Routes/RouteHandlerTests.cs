@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using NUnit.Framework;
 using RestFoundation.Client;
 using RestFoundation.Runtime;
@@ -285,14 +286,14 @@ namespace RestFoundation.Tests.Routes
 
         private static void ProcessRequest(IRestServiceHandler handler)
         {
-            Task handlerTask = handler.ProcessRequestAsync(null);
+            var handlerTask = Task.Factory.FromAsync(handler.BeginProcessRequest, handler.EndProcessRequest, (HttpContext) null, null);
 
             try
             {
                 handlerTask.Wait();
             }
             catch (AggregateException ex)
-            {
+            {               
                 throw ex.InnerException;
             }
         }
