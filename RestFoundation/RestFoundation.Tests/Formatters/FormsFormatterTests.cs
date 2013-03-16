@@ -59,7 +59,7 @@ namespace RestFoundation.Tests.Formatters
             var formatter = new FormsFormatter();
 
             // "application/x-www-form-urlencoded" be used as an accepted media type
-            Assert.Throws(typeof(HttpResponseException), () => formatter.FormatResponse(m_context, typeof(Model), model));
+            Assert.Throws(typeof(HttpResponseException), () => formatter.FormatResponse(m_context, typeof(Model), model, null));
         }
 
         private static Model CreateModel()

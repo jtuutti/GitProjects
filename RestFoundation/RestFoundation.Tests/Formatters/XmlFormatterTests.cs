@@ -60,7 +60,27 @@ namespace RestFoundation.Tests.Formatters
             Model model = CreateModel();
 
             var formatter = new XmlFormatter();
-            var result = formatter.FormatResponse(m_context, typeof(Model), model) as XmlResult;
+            var result = formatter.FormatResponse(m_context, typeof(Model), model, null) as XmlResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Content, Is.SameAs(model));
+
+            result.Execute(m_context);
+
+            string response = ReadResponseAsXml();
+            Assert.That(response, Is.Not.Null);
+
+            string serializedModel = SerializeModel(model);
+            Assert.That(response, Is.EqualTo(serializedModel));
+        }
+
+        [Test]
+        public void FormatResponseWithPreferredMediaType()
+        {
+            Model model = CreateModel();
+
+            var formatter = new XmlFormatter();
+            var result = formatter.FormatResponse(m_context, typeof(Model), model, "text/xml") as XmlResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Content, Is.SameAs(model));

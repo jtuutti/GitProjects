@@ -52,17 +52,17 @@ namespace RestFoundation.Runtime
 
         private IResult CreateFormatterResult(IServiceContextHandler handler, object returnedObj, Type methodReturnType)
         {
-            string acceptType = m_contentNegotiator.GetPreferredMediaType(handler.Context.Request);
+            string preferredMediaType = m_contentNegotiator.GetPreferredMediaType(handler.Context.Request);
 
-            IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, acceptType) ??
-                                            MediaTypeFormatterRegistry.GetFormatter(acceptType);
+            IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, preferredMediaType) ??
+                                            MediaTypeFormatterRegistry.GetFormatter(preferredMediaType);
 
             if (formatter == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotAcceptable, Resources.Global.MissingOrInvalidAcceptType);
             }
 
-            return formatter.FormatResponse(handler.Context, methodReturnType, returnedObj);
+            return formatter.FormatResponse(handler.Context, methodReturnType, returnedObj, preferredMediaType);
         }
     }
 }

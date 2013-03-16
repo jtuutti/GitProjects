@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime.Handlers;
@@ -12,8 +13,9 @@ namespace RestFoundation.Runtime
 {
     internal static class MediaTypeFormatterRegistry
     {
-        private static readonly ConcurrentDictionary<string, IMediaTypeFormatter> formatters = InitializeDefaultFormatters();
         private static readonly ConcurrentDictionary<IServiceContextHandler, Dictionary<string, IMediaTypeFormatter>> handlerFormatters = new ConcurrentDictionary<IServiceContextHandler, Dictionary<string, IMediaTypeFormatter>>();
+        private static readonly ConcurrentDictionary<string, int> mediaTypePriorities = new ConcurrentDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        private static readonly ConcurrentDictionary<string, IMediaTypeFormatter> formatters = InitializeDefaultFormatters();
 
         public static IMediaTypeFormatter GetFormatter(string mediaType)
         {
@@ -30,6 +32,13 @@ namespace RestFoundation.Runtime
         public static ICollection<string> GetMediaTypes()
         {
             return formatters.Keys.ToArray();
+        }
+
+        public static ICollection<string> GetPrioritizedMediaTypes()
+        {
+            List<string> mediaTypes = mediaTypePriorities.OrderByDescending(x => x.Value).ThenBy(x => x.Key).Select(x => x.Key).ToList();
+
+            return new ReadOnlyCollection<string>(mediaTypes);
         }
 
         public static void SetFormatter(string mediaType, IMediaTypeFormatter formatter)
@@ -105,6 +114,7 @@ namespace RestFoundation.Runtime
             foreach (SupportedMediaTypeAttribute mediaType in mediaTypes)
             {
                 defaultFormatters.TryAdd(mediaType.MediaType, formatter);
+                mediaTypePriorities.TryAdd(mediaType.MediaType, mediaType.Priority);
             }
         }
     }

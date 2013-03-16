@@ -29,10 +29,11 @@ namespace RestFoundation.Formatters
         /// <param name="context">The service context.</param>
         /// <param name="methodReturnType">The method return type.</param>
         /// <param name="obj">The object to serialize.</param>
+        /// <param name="preferredMediaType">The preferred media type.</param>
         /// <returns>A service method result containing the serialized object representation.</returns>
         /// <exception cref="RestFoundation.Runtime.HttpResponseException">
         /// If the object could not be serialized.
         /// </exception>
-        IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj);
+        IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj, string preferredMediaType);
     }
 }

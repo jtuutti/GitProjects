@@ -3,6 +3,8 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using RestFoundation.Collections.Specialized;
 
 namespace RestFoundation.Runtime
@@ -14,10 +16,11 @@ namespace RestFoundation.Runtime
     public class ContentNegotiator : IContentNegotiator
     {
         private const string AcceptOverrideQuery = "X-Accept-Override";
-        private const string ApplicationXmlMediaType = "application/xml";
         private const string JsonMediaType = "application/json";
-        private const string TextXmlMediaType = "text/xml";
+        private const string XmlMediaType = "application/xml";
         private const string UserAgentVariableName = "HTTP_USER_AGENT";
+
+        private static readonly Regex WildCardRegex = new Regex(@"^([a-zA-Z\-_\*/]+)\*$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
         private ICollection<string> m_supportedMediaTypes;
 
@@ -74,7 +77,7 @@ namespace RestFoundation.Runtime
                 }
             }
 
-            return request.IsAjax && m_supportedMediaTypes.Contains(JsonMediaType) ? JsonMediaType : null;
+            return (request.IsAjax && m_supportedMediaTypes.Contains(JsonMediaType)) ? JsonMediaType : null;
         }
 
         /// <summary>
@@ -132,31 +135,33 @@ namespace RestFoundation.Runtime
                 return false;
             }
 
-            acceptValue = acceptValue.Trim();
+            Match wildCardMatch = WildCardRegex.Match(acceptValue.Trim());
 
-            if (acceptValue.Equals("*/*"))
+            if (wildCardMatch.Success)
             {
-                var contentTypeValue = GetAcceptedMediaType(request, request.Headers.ContentType);
-
-                if (String.IsNullOrWhiteSpace(contentTypeValue))
-                {
-                    acceptValue = IsBrowserRequest(request) ? ApplicationXmlMediaType : JsonMediaType;
-                }
-                else
-                {
-                    acceptValue = contentTypeValue;
-                }
-            }
-            else if (acceptValue.Equals("application/*", StringComparison.OrdinalIgnoreCase))
-            {
-                acceptValue = JsonMediaType;
-            }
-            else if (acceptValue.Equals("text/*", StringComparison.OrdinalIgnoreCase))
-            {
-                acceptValue = TextXmlMediaType;
+                acceptValue = GetWildCardMediaType(request, wildCardMatch);
             }
 
             return m_supportedMediaTypes.Contains(acceptValue);
+        }
+
+        private string GetWildCardMediaType(IHttpRequest request, Match wildCardMatch)
+        {
+            string matchedTypePart = wildCardMatch.Groups[1].Value;
+
+            if (matchedTypePart != "*/")
+            {
+                return MediaTypeFormatterRegistry.GetPrioritizedMediaTypes().FirstOrDefault(x => x.StartsWith(matchedTypePart, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var contentTypeValue = GetAcceptedMediaType(request, request.Headers.ContentType);
+
+            if (String.IsNullOrWhiteSpace(contentTypeValue))
+            {
+                return IsBrowserRequest(request) ? XmlMediaType : MediaTypeFormatterRegistry.GetPrioritizedMediaTypes().FirstOrDefault();
+            }
+
+            return contentTypeValue;
         }
     }
 }

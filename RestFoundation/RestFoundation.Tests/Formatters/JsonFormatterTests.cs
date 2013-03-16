@@ -58,7 +58,27 @@ namespace RestFoundation.Tests.Formatters
             Model model = CreateModel();
 
             var formatter = new JsonFormatter();
-            var result = formatter.FormatResponse(m_context, typeof(Model), model) as JsonResult;
+            var result = formatter.FormatResponse(m_context, typeof(Model), model, null) as JsonResult;
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Content, Is.SameAs(model));
+
+            result.Execute(m_context);
+
+            string response = ReadResponseAsJson();
+            Assert.That(response, Is.Not.Null);
+
+            string serializedModel = SerializeModel(model);
+            Assert.That(response, Is.EqualTo(serializedModel));
+        }
+
+        [Test]
+        public void FormatResponseWithPreferredMediaType()
+        {
+            Model model = CreateModel();
+
+            var formatter = new JsonFormatter();
+            var result = formatter.FormatResponse(m_context, typeof(Model), model, "application/json") as JsonResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Content, Is.SameAs(model));

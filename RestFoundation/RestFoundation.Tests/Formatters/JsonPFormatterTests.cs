@@ -62,7 +62,7 @@ namespace RestFoundation.Tests.Formatters
             Model model = CreateModel();
 
             var formatter = new JsonPFormatter();
-            var result = formatter.FormatResponse(m_context, typeof(Model), model) as JsonPResult;
+            var result = formatter.FormatResponse(m_context, typeof(Model), model, null) as JsonPResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Content, Is.SameAs(model));

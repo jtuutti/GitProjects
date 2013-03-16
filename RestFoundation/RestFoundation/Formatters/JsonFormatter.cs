@@ -14,33 +14,10 @@ namespace RestFoundation.Formatters
     /// <summary>
     /// Represents a JSON media type formatter.
     /// </summary>
-    [SupportedMediaType("application/json")]
+    [SupportedMediaType("application/json", Priority = 2)]
     public class JsonFormatter : IMediaTypeFormatter
     {
         private static readonly HashSet<string> supportedMediaTypes = GetSupportedMediaTypes();
-
-        private readonly IContentNegotiator m_contentNegotiator;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JsonFormatter"/> class with the provided content negotiator.
-        /// </summary>
-        public JsonFormatter() : this(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JsonFormatter"/> class.
-        /// </summary>
-        /// <param name="contentNegotiator">The content negotiator.</param>
-        public JsonFormatter(IContentNegotiator contentNegotiator)
-        {
-            if (contentNegotiator == null)
-            {
-                throw new ArgumentNullException("contentNegotiator");
-            }
-
-            m_contentNegotiator = contentNegotiator;
-        }
 
         /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.
@@ -84,9 +61,10 @@ namespace RestFoundation.Formatters
         /// <param name="context">The service context.</param>
         /// <param name="methodReturnType">The method return type.</param>
         /// <param name="obj">The object to serialize.</param>
+        /// <param name="preferredMediaType">The preferred media type.</param>
         /// <returns>A service method result containing the serialized object representation.</returns>
         /// <exception cref="HttpResponseException">If the object could not be serialized.</exception>
-        public virtual IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj)
+        public virtual IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj, string preferredMediaType)
         {
             if (context == null)
             {
@@ -96,7 +74,7 @@ namespace RestFoundation.Formatters
             return new JsonResult
             {
                 Content = obj,
-                ContentType = GetFormatterMediaType(context.Request),
+                ContentType = preferredMediaType != null && supportedMediaTypes.Contains(preferredMediaType) ? preferredMediaType : supportedMediaTypes.First(),
                 ReturnedType = methodReturnType
             };
         }
@@ -106,13 +84,6 @@ namespace RestFoundation.Formatters
             var supportedMediaTypeAttributes = typeof(JsonFormatter).GetCustomAttributes(typeof(SupportedMediaTypeAttribute), false).Cast<SupportedMediaTypeAttribute>();
 
             return new HashSet<string>(supportedMediaTypeAttributes.Select(a => a.MediaType), StringComparer.OrdinalIgnoreCase);
-        }
-
-        private string GetFormatterMediaType(IHttpRequest request)
-        {
-            string preferredMediaType = m_contentNegotiator.GetPreferredMediaType(request);
-
-            return supportedMediaTypes.Contains(preferredMediaType) ? preferredMediaType : supportedMediaTypes.First();
         }
     }
 }
