@@ -31,7 +31,8 @@ namespace RestFoundation.Formatters
         public string MediaType { get; private set; }
 
         /// <summary>
-        /// Gets or sets the media type priority to resolve for wildcard in the Accept HTTP header.
+        /// Gets or sets the priority value to resolve media types that match wildcards specified
+        /// in the Accept HTTP header. Matching media types with the highest priority will be used.
         /// </summary>
         public int Priority { get; set; }
     }
