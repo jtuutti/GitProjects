@@ -54,10 +54,10 @@ namespace RestFoundation.Runtime
                 result.Execute(context);
             }
 
-            DisposeIfNecessary(result);
+            TryDisposeResult(result);
         }
 
-        private static void DisposeIfNecessary(IResult result)
+        private static void TryDisposeResult(IResult result)
         {
             var disposableResult = result as IDisposable;
 

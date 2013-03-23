@@ -147,12 +147,7 @@ namespace RestFoundation.Runtime.Handlers
             }
             finally
             {
-                var disposableService = serviceMethodData.Service as IDisposable;
-
-                if (disposableService != null)
-                {
-                    disposableService.Dispose();
-                }
+                TryDisposeService(serviceMethodData.Service);
             }
         }
 
@@ -172,6 +167,16 @@ namespace RestFoundation.Runtime.Handlers
             if (methodTask.IsFaulted)
             {
                 throw TaskExceptionUnwrapper.Unwrap(methodTask);
+            }
+        }
+
+        private static void TryDisposeService(object service)
+        {
+            var disposableService = service as IDisposable;
+
+            if (disposableService != null)
+            {
+                disposableService.Dispose();
             }
         }
 
