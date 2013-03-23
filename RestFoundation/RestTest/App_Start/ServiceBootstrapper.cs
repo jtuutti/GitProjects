@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.Unity;
+﻿using System.Linq;
+using Microsoft.Practices.Unity;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using RestFoundation;
 using RestFoundation.Behaviors;
@@ -62,7 +63,7 @@ namespace RestTest.App_Start
                     scanner.WithDefaultConventions();
                 });
 
-                registry.SetAllProperties(convention => convention.TypeMatches(Rest.ServiceContextTypes.Contains));
+                registry.SetAllProperties(convention => convention.TypeMatches(type => Rest.ServiceContextTypes.Contains(type)));
             });
         }
 

@@ -12,9 +12,9 @@ namespace RestFoundation.Collections
     public interface IRouteValueCollection : IEnumerable<object>
     {
         /// <summary>
-        /// Gets a collection of all collection keys.
+        /// Gets a read-only collection of all keys.
         /// </summary>
-        ICollection<string> Keys { get; }
+        IReadOnlyCollection<string> Keys { get; }
 
         /// <summary>
         /// Gets a value containing the count of all collection items.

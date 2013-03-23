@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -23,14 +22,14 @@ namespace RestFoundation.Runtime
     {
         private const string DefaultMessage = "A service exception occurred";
 
-        private readonly ReadOnlyCollection<Exception> m_innerExceptions;
+        private readonly IList<Exception> m_innerExceptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceRuntimeException"/> class.
         /// </summary>
         public ServiceRuntimeException()
         {
-            m_innerExceptions = new ReadOnlyCollection<Exception>(new Exception[0]);
+            m_innerExceptions = new Exception[0];
         }
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace RestFoundation.Runtime
             : base(innerExceptions != null && innerExceptions.Length > 0 ? innerExceptions[0].Message : DefaultMessage,
                    innerExceptions != null && innerExceptions.Length > 0 ? innerExceptions[0] : null)
         {
-            m_innerExceptions = innerExceptions != null ? new ReadOnlyCollection<Exception>(innerExceptions) : new ReadOnlyCollection<Exception>(new Exception[0]);
+            m_innerExceptions = innerExceptions ?? new Exception[0];
         }
 
         /// <summary>
@@ -64,7 +63,7 @@ namespace RestFoundation.Runtime
         public ServiceRuntimeException(string message, params Exception[] innerExceptions)
             : base(message, innerExceptions != null && innerExceptions.Length > 0 ? innerExceptions[0] : null)
         {
-            m_innerExceptions = innerExceptions != null ? new ReadOnlyCollection<Exception>(innerExceptions) : new ReadOnlyCollection<Exception>(new Exception[0]);
+            m_innerExceptions = innerExceptions ?? new Exception[0];
         }
 
         /// <summary>
@@ -87,15 +86,7 @@ namespace RestFoundation.Runtime
             }
 
             var innerExceptionArray = info.GetValue("InnerExceptions", typeof(Exception[])) as Exception[];
-
-            if (innerExceptionArray != null)
-            {
-                m_innerExceptions = new ReadOnlyCollection<Exception>(innerExceptionArray);
-            }
-            else
-            {
-                m_innerExceptions = new ReadOnlyCollection<Exception>(new Exception[0]);
-            }
+            m_innerExceptions = innerExceptionArray ?? new Exception[0];
         }
 
         /// <summary>

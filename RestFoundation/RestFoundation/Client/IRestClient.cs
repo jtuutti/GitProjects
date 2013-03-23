@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Net;
 using System.Security;
 using System.Threading.Tasks;
@@ -53,37 +52,27 @@ namespace RestFoundation.Client
         bool AllowSelfSignedCertificates { get; set; }
 
         /// <summary>
-        /// Gets the last HTTP status code.
-        /// </summary>
-        HttpStatusCode LastStatusCode { get; }
-
-        /// <summary>
-        /// Gets the last HTTP status description.
-        /// </summary>
-        string LastStatusDescription { get; }
-
-        /// <summary>
         /// Executes an HTTP request to the provided URL using the GET HTTP method.
         /// </summary>
         /// <param name="url">The URL.</param>
-        /// <returns>A task resulting in a collection of HTTP headers returned.</returns>
+        /// <returns>A task resulting in an output resource without a body.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        Task<WebHeaderCollection> GetAsync(Uri url);
+        Task<RestResource> GetAsync(Uri url);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL using the GET HTTP method.
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
-        /// <returns>A task resulting in a collection of HTTP headers returned.</returns>
+        /// <returns>A task resulting in an output resource without a body.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        Task<WebHeaderCollection> GetAsync(Uri url, NameValueCollection headers);
+        Task<RestResource> GetAsync(Uri url, WebHeaderCollection headers);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the GET HTTP method.
@@ -112,7 +101,7 @@ namespace RestFoundation.Client
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
         /// <exception cref="InvalidOperationException">If a resource object is not serializable.</exception>
-        Task<RestResource<TOutput>> GetAsync<TOutput>(Uri url, RestResourceType outputType, NameValueCollection headers);
+        Task<RestResource<TOutput>> GetAsync<TOutput>(Uri url, RestResourceType outputType, WebHeaderCollection headers);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the GET HTTP method.
@@ -128,42 +117,42 @@ namespace RestFoundation.Client
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
         /// <exception cref="InvalidOperationException">If a resource object is not serializable.</exception>
-        Task<RestResource<TOutput>> GetAsync<TOutput>(Uri url, RestResourceType outputType, NameValueCollection headers, string xmlNamespace);
+        Task<RestResource<TOutput>> GetAsync<TOutput>(Uri url, RestResourceType outputType, WebHeaderCollection headers, string xmlNamespace);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL using the HEAD HTTP method.
         /// </summary>
         /// <param name="url">The URL.</param>
-        /// <returns>A task resulting in a collection of HTTP headers returned.</returns>
+        /// <returns>A task resulting in an output resource without a body.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        Task<WebHeaderCollection> HeadAsync(Uri url);
+        Task<RestResource> HeadAsync(Uri url);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL using the HEAD HTTP method.
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
-        /// <returns>A task resulting in a collection of HTTP headers returned.</returns>
+        /// <returns>A task resulting in an output resource without a body.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        Task<WebHeaderCollection> HeadAsync(Uri url, NameValueCollection headers);
+        Task<RestResource> HeadAsync(Uri url, WebHeaderCollection headers);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL using the HEAD HTTP method.
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <param name="outputType">The output resource type.</param>
-        /// <returns>A task resulting in a collection of HTTP headers returned.</returns>
+        /// <returns>A task resulting in an output resource without a body.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        Task<WebHeaderCollection> HeadAsync(Uri url, RestResourceType outputType);
+        Task<RestResource> HeadAsync(Uri url, RestResourceType outputType);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL using the HEAD HTTP method.
@@ -171,12 +160,12 @@ namespace RestFoundation.Client
         /// <param name="url">The URL.</param>
         /// <param name="outputType">The output resource type.</param>
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
-        /// <returns>A task resulting in a collection of HTTP headers returned.</returns>
+        /// <returns>A task resulting in an output resource without a body.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        Task<WebHeaderCollection> HeadAsync(Uri url, RestResourceType outputType, NameValueCollection headers);
+        Task<RestResource> HeadAsync(Uri url, RestResourceType outputType, WebHeaderCollection headers);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL using the HEAD HTTP method.
@@ -185,12 +174,12 @@ namespace RestFoundation.Client
         /// <param name="outputType">The output resource type.</param>
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
         /// <param name="xmlNamespace">An optional XML namespace.</param>
-        /// <returns>A task resulting in a collection of HTTP headers returned.</returns>
+        /// <returns>A task resulting in an output resource without a body.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        Task<WebHeaderCollection> HeadAsync(Uri url, RestResourceType outputType, NameValueCollection headers, string xmlNamespace);
+        Task<RestResource> HeadAsync(Uri url, RestResourceType outputType, WebHeaderCollection headers, string xmlNamespace);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the POST HTTP method.
@@ -295,24 +284,24 @@ namespace RestFoundation.Client
         /// Executes an HTTP request to the provided URL using the DELETE HTTP method.
         /// </summary>
         /// <param name="url">The URL.</param>
-        /// <returns>A task resulting in a collection of HTTP headers returned.</returns>
+        /// <returns>A task resulting in an output resource without a body.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        Task<WebHeaderCollection> DeleteAsync(Uri url);
+        Task<RestResource> DeleteAsync(Uri url);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL using the DELETE HTTP method.
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
-        /// <returns>A task resulting in a collection of HTTP headers returned.</returns>
+        /// <returns>A task resulting in an output resource without a body.</returns>
         /// <exception cref="HttpException">If an HTTP-level exception occurred.</exception>
         /// <exception cref="WebException">If a non-HTTP level exception occurred.</exception>
         /// <exception cref="ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
         /// <exception cref="SecurityException">If a security exception occurred.</exception>
-        Task<WebHeaderCollection> DeleteAsync(Uri url, NameValueCollection headers);
+        Task<RestResource> DeleteAsync(Uri url, WebHeaderCollection headers);
 
         /// <summary>
         /// Executes an HTTP request to the provided URL using the OPTIONS HTTP method.

@@ -2,7 +2,7 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
-using System.Collections.Specialized;
+using System.Net;
 
 namespace RestFoundation.Client
 {
@@ -16,7 +16,7 @@ namespace RestFoundation.Client
         /// Initializes a new instance of the <see cref="RestResource"/> class.
         /// </summary>
         /// <param name="type">The resource type.</param>
-        public RestResource(RestResourceType type) : this(type, new NameValueCollection())
+        public RestResource(RestResourceType type) : this(type, new WebHeaderCollection())
         {
         }
 
@@ -25,7 +25,7 @@ namespace RestFoundation.Client
         /// </summary>
         /// <param name="type">The resource type.</param>
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
-        public RestResource(RestResourceType type, NameValueCollection headers)
+        public RestResource(RestResourceType type, WebHeaderCollection headers)
         {
             if (!Enum.IsDefined(typeof(RestResourceType), type))
             {
@@ -43,8 +43,18 @@ namespace RestFoundation.Client
 
         internal RestResource()
         {
-            Headers = new NameValueCollection();
+            Headers = new WebHeaderCollection();
         }
+
+        /// <summary>
+        /// Gets or sets an XML namespace for the resource.
+        /// </summary>
+        public string XmlNamespace { get; set; }
+
+        /// <summary>
+        /// Gets the collection of associated HTTP headers.
+        /// </summary>
+        public WebHeaderCollection Headers { get; protected set; }
 
         /// <summary>
         /// Gets the resource type.
@@ -52,14 +62,14 @@ namespace RestFoundation.Client
         public RestResourceType Type { get; protected internal set; }
 
         /// <summary>
-        /// Gets the collection of associated HTTP headers.
+        /// Gets the last HTTP status code.
         /// </summary>
-        public NameValueCollection Headers { get; protected set; }
+        public HttpStatusCode StatusCode { get; protected internal set; }
 
         /// <summary>
-        /// Gets or sets an XML namespace for the resource.
+        /// Gets the last HTTP status description.
         /// </summary>
-        public string XmlNamespace { get; set; }
+        public string StatusDescription { get; protected internal set; }
 
         internal virtual object ResourceBody
         {

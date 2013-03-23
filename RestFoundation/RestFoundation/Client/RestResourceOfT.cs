@@ -1,7 +1,7 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
-using System.Collections.Specialized;
+using System.Net;
 
 namespace RestFoundation.Client
 {
@@ -25,7 +25,7 @@ namespace RestFoundation.Client
         /// </summary>
         /// <param name="type">The resource type.</param>
         /// <param name="headers">A collection of HTTP headers to pass to the request.</param>
-        public RestResource(RestResourceType type, NameValueCollection headers) : base(type, headers)
+        public RestResource(RestResourceType type, WebHeaderCollection headers) : base(type, headers)
         {
         }
 

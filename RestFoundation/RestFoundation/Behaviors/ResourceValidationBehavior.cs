@@ -59,7 +59,7 @@ namespace RestFoundation.Behaviors
                 return BehaviorMethodAction.Execute;
             }
 
-            ICollection<ValidationError> validationErrors;
+            IReadOnlyCollection<ValidationError> validationErrors;
 
             if (!m_validator.IsValid(behaviorContext.Resource, out validationErrors))
             {

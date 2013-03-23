@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
@@ -308,15 +307,7 @@ namespace RestFoundation.Collections.Concrete
         private void SetLinks()
         {
             IList<string> linkValues = GetValues("Link");
-
-            if (linkValues == null || linkValues.Count == 0)
-            {
-                Links = new Link[0];
-                return;
-            }
-
-            var links = new LinkCollection(linkValues);
-            Links = new ReadOnlyCollection<Link>(links.ToList());
+            Links = linkValues != null && linkValues.Count != 0 ? new LinkCollection(linkValues).ToList() : new Link[0];
         }
     }
 }

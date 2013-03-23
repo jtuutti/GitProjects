@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -22,14 +21,14 @@ namespace RestFoundation
     /// </summary>
     public sealed class Rest : IDisposable
     {
-        private static readonly ICollection<Type> serviceContextTypes = new ReadOnlyCollection<Type>(new[]
+        private static readonly IReadOnlyCollection<Type> serviceContextTypes = new[]
         {
             typeof(IServiceContext),
             typeof(IHttpRequest),
             typeof(IHttpResponse),
             typeof(IHttpResponseOutput),
             typeof(IServiceCache)
-        });
+        };
 
         private static readonly Lazy<Rest> configurationBuilder = new Lazy<Rest>(() =>
         {
@@ -55,9 +54,9 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Gets the service context dependent types.
+        /// Gets a read-only collection of the service context dependent types.
         /// </summary>
-        public static ICollection<Type> ServiceContextTypes
+        public static IReadOnlyCollection<Type> ServiceContextTypes
         {
             get
             {

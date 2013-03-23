@@ -13,13 +13,15 @@ namespace RestFoundation
     /// </summary>
     public class ResourceState : IEnumerable<ValidationError>
     {
-        private readonly ICollection<ValidationError> m_errors;
+        private readonly IReadOnlyCollection<ValidationError> m_errors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceState"/> class.
         /// </summary>
-        /// <param name="errors">A collection of validation errors associated with the resource.</param>
-        public ResourceState(ICollection<ValidationError> errors)
+        /// <param name="errors">
+        /// A read-only collection of the validation errors associated with the resource.
+        /// </param>
+        public ResourceState(IReadOnlyCollection<ValidationError> errors)
         {
             if (errors == null)
             {

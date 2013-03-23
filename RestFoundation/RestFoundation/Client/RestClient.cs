@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -47,17 +46,14 @@ namespace RestFoundation.Client
         public bool SupportsEncoding { get; set; }
         public bool AllowSelfSignedCertificates { get; set; }
 
-        public HttpStatusCode LastStatusCode { get; private set; }
-        public string LastStatusDescription { get; private set; }
-
         #region Public Methods
 
-        public Task<WebHeaderCollection> GetAsync(Uri url)
+        public Task<RestResource> GetAsync(Uri url)
         {
             return GetAsync(url, null);
         }
 
-        public Task<WebHeaderCollection> GetAsync(Uri url, NameValueCollection headers)
+        public Task<RestResource> GetAsync(Uri url, WebHeaderCollection headers)
         {
             return Execute(url, HttpMethod.Get, headers);
         }
@@ -67,37 +63,37 @@ namespace RestFoundation.Client
             return GetAsync<TOutput>(url, outputType, null, null);
         }
 
-        public Task<RestResource<TOutput>> GetAsync<TOutput>(Uri url, RestResourceType outputType, NameValueCollection headers)
+        public Task<RestResource<TOutput>> GetAsync<TOutput>(Uri url, RestResourceType outputType, WebHeaderCollection headers)
         {
             return GetAsync<TOutput>(url, outputType, headers, null);
         }
 
-        public Task<RestResource<TOutput>> GetAsync<TOutput>(Uri url, RestResourceType outputType, NameValueCollection headers, string xmlNamespace)
+        public Task<RestResource<TOutput>> GetAsync<TOutput>(Uri url, RestResourceType outputType, WebHeaderCollection headers, string xmlNamespace)
         {
             return Execute<TOutput>(url, HttpMethod.Get, outputType, headers, xmlNamespace);
         }
 
-        public Task<WebHeaderCollection> HeadAsync(Uri url)
+        public Task<RestResource> HeadAsync(Uri url)
         {
             return HeadAsync(url, null);
         }
 
-        public Task<WebHeaderCollection> HeadAsync(Uri url, NameValueCollection headers)
+        public Task<RestResource> HeadAsync(Uri url, WebHeaderCollection headers)
         {
             return Execute(url, HttpMethod.Head, headers);
         }
 
-        public Task<WebHeaderCollection> HeadAsync(Uri url, RestResourceType outputType)
+        public Task<RestResource> HeadAsync(Uri url, RestResourceType outputType)
         {
             return HeadAsync(url, outputType, null, null);
         }
 
-        public Task<WebHeaderCollection> HeadAsync(Uri url, RestResourceType outputType, NameValueCollection headers)
+        public Task<RestResource> HeadAsync(Uri url, RestResourceType outputType, WebHeaderCollection headers)
         {
             return HeadAsync(url, outputType, headers, null);
         }
 
-        public async Task<WebHeaderCollection> HeadAsync(Uri url, RestResourceType outputType, NameValueCollection headers, string xmlNamespace)
+        public async Task<RestResource> HeadAsync(Uri url, RestResourceType outputType, WebHeaderCollection headers, string xmlNamespace)
         {
             RestResource<dynamic> resource = await Execute<dynamic>(url, HttpMethod.Head, outputType, headers, xmlNamespace);
 
@@ -134,21 +130,21 @@ namespace RestFoundation.Client
             return Execute<TInput, TOutput>(url, HttpMethod.Patch, resource, outputType);
         }
 
-        public Task<WebHeaderCollection> DeleteAsync(Uri url)
+        public Task<RestResource> DeleteAsync(Uri url)
         {
             return DeleteAsync(url, null);
         }
 
-        public Task<WebHeaderCollection> DeleteAsync(Uri url, NameValueCollection headers)
+        public Task<RestResource> DeleteAsync(Uri url, WebHeaderCollection headers)
         {
             return Execute(url, HttpMethod.Delete, headers);
         }
 
         public async Task<IReadOnlyList<HttpMethod>> OptionsAsync(Uri url)
         {
-            WebHeaderCollection responseHeaders = await Execute(url, HttpMethod.Options, null);
+            RestResource resource = await Execute(url, HttpMethod.Options, null);
 
-            return AllowHeaderParser.Parse(responseHeaders);
+            return AllowHeaderParser.Parse(resource.Headers);
         }
 
         #endregion
@@ -160,7 +156,7 @@ namespace RestFoundation.Client
             return resource != null ? resource.Type : default(RestResourceType);
         }
 
-        private static WebHeaderCollection GetResourceHeaders(RestResource<dynamic> resource)
+        private static RestResource GetResourceHeaders(RestResource<dynamic> resource)
         {
             var responseHeaders = new WebHeaderCollection();
 
@@ -172,7 +168,7 @@ namespace RestFoundation.Client
                 }
             }
 
-            return responseHeaders;
+            return new RestResource(RestResourceType.None, responseHeaders);
         }
 
         private static void SetResourceTypeFromHeader(RestResource emptyResource, string value)
@@ -189,7 +185,7 @@ namespace RestFoundation.Client
             }
         }
 
-        private static void MergeHeaders(NameValueCollection headers, RestResource emptyResource)
+        private static void MergeHeaders(WebHeaderCollection headers, RestResource emptyResource)
         {
             foreach (string key in headers.AllKeys)
             {
@@ -217,6 +213,55 @@ namespace RestFoundation.Client
 
                 emptyResource.Headers.Add(key, value);
             }
+        }
+
+        private static async Task<RestResource> CreateEmptyResponse(WebRequest request)
+        {
+            try
+            {
+                var responseTask = Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, request).ConfigureAwait(false);
+
+                using (var response = (HttpWebResponse) await responseTask)
+                {
+                    if ((int) response.StatusCode >= MinErrorStatusCode)
+                    {
+                        throw new HttpException((int) response.StatusCode, response.StatusDescription);
+                    }
+
+                    return new RestResource(RestResourceType.None, response.Headers)
+                    {
+                        StatusCode = response.StatusCode,
+                        StatusDescription = response.StatusDescription
+                    };
+                }
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status != WebExceptionStatus.ProtocolError)
+                {
+                    throw new HttpException((int) HttpStatusCode.InternalServerError, ex.Message, ex);
+                }
+
+                throw GenerateHttpException(ex);
+            }
+        }
+
+        private static HttpException GenerateHttpException(WebException ex)
+        {
+            var response = (HttpWebResponse) ex.Response;
+            var httpException = new HttpException((int) response.StatusCode, response.StatusDescription, ex);
+
+            foreach (string header in response.Headers.AllKeys)
+            {
+                string[] headerValues = response.Headers.GetValues(header);
+
+                if (headerValues != null && headerValues.Length > 0)
+                {
+                    httpException.Data[header] = String.Join(",", headerValues);
+                }
+            }
+
+            return httpException;
         }
 
         private string GetMimeType(RestResourceType type)
@@ -248,28 +293,6 @@ namespace RestFoundation.Client
             }
 
             request.Credentials = credentialCache;
-        }
-
-        private HttpException GenerateHttpException(WebException ex)
-        {
-            var response = (HttpWebResponse) ex.Response;
-
-            LastStatusCode = response.StatusCode;
-            LastStatusDescription = response.StatusDescription;
-
-            var httpException = new HttpException((int) LastStatusCode, LastStatusDescription, ex);
-
-            foreach (string header in response.Headers.AllKeys)
-            {
-                string[] headerValues = response.Headers.GetValues(header);
-
-                if (headerValues != null && headerValues.Length > 0)
-                {
-                    httpException.Data[header] = String.Join(",", headerValues);
-                }
-            }
-
-            return httpException;
         }
 
         private async Task SerializeInputResourceBody<T>(WebRequest request, RestResource resource)
@@ -330,39 +353,6 @@ namespace RestFoundation.Client
             return request;
         }
 
-        private async Task<WebHeaderCollection> CreateEmptyResponse(WebRequest request)
-        {
-            try
-            {
-                var responseTask = Task<WebResponse>.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, request).ConfigureAwait(false);
-
-                using (var response = (HttpWebResponse) await responseTask)
-                {
-                    LastStatusCode = response.StatusCode;
-                    LastStatusDescription = response.StatusDescription;
-
-                    if ((int) LastStatusCode >= MinErrorStatusCode)
-                    {
-                        throw new HttpException((int) LastStatusCode, response.StatusDescription);
-                    }
-
-                    return response.Headers;
-                }
-            }
-            catch (WebException ex)
-            {
-                if (ex.Status != WebExceptionStatus.ProtocolError)
-                {
-                    LastStatusCode = HttpStatusCode.InternalServerError;
-                    LastStatusDescription = ex.Message;
-
-                    throw new HttpException((int) LastStatusCode, LastStatusDescription, ex);
-                }
-
-                throw GenerateHttpException(ex);
-            }
-        }
-
         private async Task<RestResource<T>> CreateResponse<T>(WebRequest request, RestResourceType outputType, string xmlNamespace)
         {
             RemoteCertificateValidationCallback validationCallback = null;
@@ -379,15 +369,17 @@ namespace RestFoundation.Client
 
                 using (var response = (HttpWebResponse) await responseTask)
                 {
-                    LastStatusCode = response.StatusCode;
-                    LastStatusDescription = response.StatusDescription;
-
-                    if ((int) LastStatusCode >= MinErrorStatusCode)
+                    if ((int) response.StatusCode >= MinErrorStatusCode)
                     {
-                        throw new HttpException((int) LastStatusCode, response.StatusDescription);
+                        throw new HttpException((int) response.StatusCode, response.StatusDescription);
                     }
 
-                    var outputResource = new RestResource<T>(outputType, response.Headers);
+                    var outputResource = new RestResource<T>(outputType, response.Headers)
+                    {
+                        StatusCode = response.StatusCode,
+                        StatusDescription = response.StatusDescription
+                    };
+
                     Stream responseStream = response.GetResponseStream();
 
                     IRestSerializer serializer = m_serializerFactory.Create(typeof(T), outputType, xmlNamespace);
@@ -400,10 +392,7 @@ namespace RestFoundation.Client
             {
                 if (ex.Status != WebExceptionStatus.ProtocolError)
                 {
-                    LastStatusCode = HttpStatusCode.InternalServerError;
-                    LastStatusDescription = ex.Message;
-
-                    throw new HttpException((int) LastStatusCode, LastStatusDescription, ex);
+                    throw new HttpException((int) HttpStatusCode.InternalServerError, ex.Message, ex);
                 }
 
                 throw GenerateHttpException(ex);
@@ -421,7 +410,7 @@ namespace RestFoundation.Client
 
         #region Private Execution Methods
 
-        private Task<WebHeaderCollection> Execute(Uri url, HttpMethod method, NameValueCollection headers)
+        private Task<RestResource> Execute(Uri url, HttpMethod method, WebHeaderCollection headers)
         {
             if (url == null)
             {
@@ -445,7 +434,7 @@ namespace RestFoundation.Client
             return CreateEmptyResponse(request);
         }
 
-        private Task<RestResource<TOutput>> Execute<TOutput>(Uri url, HttpMethod method, RestResourceType outputType, NameValueCollection headers, string xmlNamespace)
+        private Task<RestResource<TOutput>> Execute<TOutput>(Uri url, HttpMethod method, RestResourceType outputType, WebHeaderCollection headers, string xmlNamespace)
         {
             if (url == null)
             {

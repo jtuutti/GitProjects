@@ -35,9 +35,11 @@ namespace RestFoundation.Tests.Integration
             IRestClient client = RestClientFactory.Create();
 
             var serviceUri = new Uri(integrationServiceUri + "/home/index/all");
-            WebHeaderCollection responseHeaders = client.HeadAsync(serviceUri, RestResourceType.Json).Result;
-            Assert.That(responseHeaders, Is.Not.Null);
-            Assert.That(responseHeaders.Count, Is.GreaterThan(0));
+            RestResource resource = client.HeadAsync(serviceUri, RestResourceType.Json).Result;
+            Assert.That(resource, Is.Not.Null);
+            Assert.That(resource.Type, Is.EqualTo(RestResourceType.None));
+            Assert.That(resource.Headers, Is.Not.Null);
+            Assert.That(resource.Headers.Count, Is.GreaterThan(0));
         }
 
         [Test]
@@ -46,9 +48,11 @@ namespace RestFoundation.Tests.Integration
             IRestClient client = RestClientFactory.Create();
 
             var serviceUri = new Uri(integrationServiceUri + "/home/index/all");
-            WebHeaderCollection responseHeaders = client.HeadAsync(serviceUri, RestResourceType.Xml).Result;
-            Assert.That(responseHeaders, Is.Not.Null);
-            Assert.That(responseHeaders.Count, Is.GreaterThan(0));
+            RestResource resource = client.HeadAsync(serviceUri, RestResourceType.Xml).Result;
+            Assert.That(resource, Is.Not.Null);
+            Assert.That(resource.Type, Is.EqualTo(RestResourceType.None));
+            Assert.That(resource.Headers, Is.Not.Null);
+            Assert.That(resource.Headers.Count, Is.GreaterThan(0));
         }
 
         [Test]
@@ -58,8 +62,9 @@ namespace RestFoundation.Tests.Integration
 
             var serviceUri = new Uri(integrationServiceUri + "/home/index/all");
             RestResource<Person[]> resource = client.GetAsync<Person[]>(serviceUri, RestResourceType.Json).Result;
-            Assert.That(client.LastStatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(resource, Is.Not.Null);
+            Assert.That(resource.Type, Is.EqualTo(RestResourceType.Json));
+            Assert.That(resource.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(resource.Body, Is.Not.Null);
             Assert.That(resource.Body.Length, Is.GreaterThan(0));
 
@@ -79,8 +84,9 @@ namespace RestFoundation.Tests.Integration
 
             var serviceUri = new Uri(integrationServiceUri + "/home/index/all");
             RestResource<Person[]> resource = client.GetAsync<Person[]>(serviceUri, RestResourceType.Xml, null, PersonXmlNamespace).Result;
-            Assert.That(client.LastStatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(resource, Is.Not.Null);
+            Assert.That(resource.Type, Is.EqualTo(RestResourceType.Xml));
+            Assert.That(resource.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(resource.Body, Is.Not.Null);
             Assert.That(resource.Body.Length, Is.GreaterThan(0));
 
@@ -108,9 +114,10 @@ namespace RestFoundation.Tests.Integration
             };
 
             var serviceUri = new Uri(integrationServiceUri + "/home/index");
-            var outputResource = client.PostAsync<Person, Person>(serviceUri, inputResource).Result;
-            Assert.That(client.LastStatusCode, Is.EqualTo(HttpStatusCode.Created));
+            RestResource<Person> outputResource = client.PostAsync<Person, Person>(serviceUri, inputResource).Result;
             Assert.That(outputResource, Is.Not.Null);
+            Assert.That(outputResource.Type, Is.EqualTo(RestResourceType.Json));
+            Assert.That(outputResource.StatusCode, Is.EqualTo(HttpStatusCode.Created));
             Assert.That(outputResource.Body, Is.Not.Null);
             Assert.That(outputResource.Body.Name, Is.EqualTo(inputResource.Body.Name));
             Assert.That(outputResource.Body.Age, Is.EqualTo(inputResource.Body.Age));
@@ -133,9 +140,10 @@ namespace RestFoundation.Tests.Integration
             };
 
             var serviceUri = new Uri(integrationServiceUri + "/home/index");
-            var outputResource = client.PostAsync<Person, Person>(serviceUri, inputResource).Result;
-            Assert.That(client.LastStatusCode, Is.EqualTo(HttpStatusCode.Created));
+            RestResource<Person> outputResource = client.PostAsync<Person, Person>(serviceUri, inputResource).Result;
             Assert.That(outputResource, Is.Not.Null);
+            Assert.That(outputResource.Type, Is.EqualTo(RestResourceType.Xml));
+            Assert.That(outputResource.StatusCode, Is.EqualTo(HttpStatusCode.Created));
             Assert.That(outputResource.Body, Is.Not.Null);
             Assert.That(outputResource.Body.Name, Is.EqualTo(inputResource.Body.Name));
             Assert.That(outputResource.Body.Age, Is.EqualTo(inputResource.Body.Age));
@@ -157,9 +165,10 @@ namespace RestFoundation.Tests.Integration
             };
 
             var serviceUri = new Uri(integrationServiceUri + "/home/index/1");
-            var outputResource = client.PutAsync<Person, Person>(serviceUri, inputResource).Result;
-            Assert.That(client.LastStatusCode, Is.EqualTo(HttpStatusCode.OK));
+            RestResource<Person> outputResource = client.PutAsync<Person, Person>(serviceUri, inputResource).Result;
             Assert.That(outputResource, Is.Not.Null);
+            Assert.That(outputResource.Type, Is.EqualTo(RestResourceType.Json));
+            Assert.That(outputResource.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(outputResource.Body, Is.Not.Null);
             Assert.That(outputResource.Body.Name, Is.EqualTo(inputResource.Body.Name));
             Assert.That(outputResource.Body.Age, Is.EqualTo(inputResource.Body.Age));
@@ -182,9 +191,10 @@ namespace RestFoundation.Tests.Integration
             };
 
             var serviceUri = new Uri(integrationServiceUri + "/home/index/1");
-            var outputResource = client.PutAsync<Person, Person>(serviceUri, inputResource).Result;
-            Assert.That(client.LastStatusCode, Is.EqualTo(HttpStatusCode.OK));
+            RestResource<Person> outputResource = client.PutAsync<Person, Person>(serviceUri, inputResource).Result;
             Assert.That(outputResource, Is.Not.Null);
+            Assert.That(outputResource.Type, Is.EqualTo(RestResourceType.Xml));
+            Assert.That(outputResource.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(outputResource.Body, Is.Not.Null);
             Assert.That(outputResource.Body.Name, Is.EqualTo(inputResource.Body.Name));
             Assert.That(outputResource.Body.Age, Is.EqualTo(inputResource.Body.Age));
@@ -206,9 +216,10 @@ namespace RestFoundation.Tests.Integration
             };
 
             var serviceUri = new Uri(integrationServiceUri + "/home/index/1");
-            var outputResource = client.PatchAsync<Person, Person>(serviceUri, inputResource).Result;
-            Assert.That(client.LastStatusCode, Is.EqualTo(HttpStatusCode.OK));
+            RestResource<Person> outputResource = client.PatchAsync<Person, Person>(serviceUri, inputResource).Result;
             Assert.That(outputResource, Is.Not.Null);
+            Assert.That(outputResource.Type, Is.EqualTo(RestResourceType.Json));
+            Assert.That(outputResource.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(outputResource.Body, Is.Not.Null);
             Assert.That(outputResource.Body.Name, Is.EqualTo(inputResource.Body.Name));
             Assert.That(outputResource.Body.Age, Is.EqualTo(inputResource.Body.Age));
@@ -231,9 +242,10 @@ namespace RestFoundation.Tests.Integration
             };
 
             var serviceUri = new Uri(integrationServiceUri + "/home/index/1");
-            var outputResource = client.PatchAsync<Person, Person>(serviceUri, inputResource).Result;
-            Assert.That(client.LastStatusCode, Is.EqualTo(HttpStatusCode.OK));
+            RestResource<Person> outputResource = client.PatchAsync<Person, Person>(serviceUri, inputResource).Result;
             Assert.That(outputResource, Is.Not.Null);
+            Assert.That(outputResource.Type, Is.EqualTo(RestResourceType.Xml));
+            Assert.That(outputResource.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(outputResource.Body, Is.Not.Null);
             Assert.That(outputResource.Body.Name, Is.EqualTo(inputResource.Body.Name));
             Assert.That(outputResource.Body.Age, Is.EqualTo(inputResource.Body.Age));
@@ -246,10 +258,12 @@ namespace RestFoundation.Tests.Integration
             IRestClient client = RestClientFactory.Create();
 
             var serviceUri = new Uri(integrationServiceUri + "/home/index/1");
-            var outputResponse = client.DeleteAsync(serviceUri).Result;
-            Assert.That(client.LastStatusCode, Is.EqualTo(HttpStatusCode.NoContent));
-            Assert.That(outputResponse, Is.Not.Null);
-            Assert.That(outputResponse.Count, Is.GreaterThan(0));
+            RestResource resource = client.DeleteAsync(serviceUri).Result;
+            Assert.That(resource, Is.Not.Null);
+            Assert.That(resource.Type, Is.EqualTo(RestResourceType.None));
+            Assert.That(resource.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
+            Assert.That(resource.Headers, Is.Not.Null);
+            Assert.That(resource.Headers.Count, Is.GreaterThan(0));
         }
 
         [Test]
@@ -261,16 +275,16 @@ namespace RestFoundation.Tests.Integration
             try
             {
                 var serviceUri = new Uri(integrationServiceUri + "/home/index/bad-url");
-                var outputResponse = client.GetAsync<Person>(serviceUri, RestResourceType.Json).Result;
+                RestResource<Person> outputResponse = client.GetAsync<Person>(serviceUri, RestResourceType.Json).Result;
                 Assert.That(outputResponse, Is.Not.Null);
             }
             catch (AggregateException ex)
             {
-                throw ex.InnerException;
-            }
-            finally
-            {
-                Assert.That(client.LastStatusCode, Is.EqualTo(HttpStatusCode.NotFound));
+                var unwrappedException = ex.InnerException as HttpException;
+                Assert.IsNotNull(unwrappedException);
+                Assert.That(unwrappedException.GetHttpCode(), Is.EqualTo((int) HttpStatusCode.NotFound));
+
+                throw unwrappedException;
             }
         }
 
@@ -293,16 +307,16 @@ namespace RestFoundation.Tests.Integration
 
             try
             {
-                var outputResource = client.PostAsync<Person, Person>(serviceUri, inputResource).Result;
+                RestResource<Person> outputResource = client.PostAsync<Person, Person>(serviceUri, inputResource).Result;
                 Assert.That(outputResource, Is.Not.Null);
             }
             catch (AggregateException ex)
             {
-                throw ex.InnerException;
-            }
-            finally
-            {
-                Assert.That(client.LastStatusCode, Is.EqualTo(HttpStatusCode.MethodNotAllowed));
+                var unwrappedException = ex.InnerException as HttpException;
+                Assert.IsNotNull(unwrappedException);
+                Assert.That(unwrappedException.GetHttpCode(), Is.EqualTo((int) HttpStatusCode.MethodNotAllowed));
+
+                throw unwrappedException;
             }
         }
     }

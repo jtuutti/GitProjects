@@ -9,6 +9,11 @@ namespace RestFoundation.Client
     public enum RestResourceType
     {
         /// <summary>
+        /// A resource without a body.
+        /// </summary>
+        None,
+
+        /// <summary>
         /// An object serialized as JSON.
         /// </summary>
         Json,

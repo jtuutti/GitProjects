@@ -2,7 +2,6 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Linq;
@@ -23,13 +22,13 @@ namespace RestFoundation.Validation
         /// collection of errors.
         /// </summary>
         /// <param name="resource">The resource.</param>
-        /// <param name="errors">The collection of errors.</param>
+        /// <param name="errors">A read-only collection of the validation errors.</param>
         /// <returns>true if the resource is valid; otherwise, false.</returns>
-        public virtual bool IsValid(object resource, out ICollection<ValidationError> errors)
+        public virtual bool IsValid(object resource, out IReadOnlyCollection<ValidationError> errors)
         {
             if (resource == null || resource is DynamicObject || resource is JObject)
             {
-                errors = new ReadOnlyCollection<ValidationError>(new ValidationError[0]);
+                errors = new ValidationError[0];
                 return true;
             }
 
@@ -37,9 +36,8 @@ namespace RestFoundation.Validation
             var results = new List<ValidationResult>();
 
             bool isValid = Validator.TryValidateObject(resource, context, results, true);
-            List<ValidationError> errorCollection = PopulateValidationErrors(results);
 
-            errors = new ReadOnlyCollection<ValidationError>(errorCollection);
+            errors = PopulateValidationErrors(results);
             return isValid;
         }
 

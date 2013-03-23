@@ -4,7 +4,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using System.Web;
@@ -30,13 +29,13 @@ namespace RestFoundation.Collections.Concrete
         }
 
         /// <summary>
-        /// Gets a collection of all collection keys.
+        /// Gets a read-only collection of all keys.
         /// </summary>
-        public ICollection<string> Keys
+        public IReadOnlyCollection<string> Keys
         {
             get
             {
-                return new ReadOnlyCollection<string>(m_collection.AllKeys);
+                return m_collection.AllKeys;
             }
         }
 

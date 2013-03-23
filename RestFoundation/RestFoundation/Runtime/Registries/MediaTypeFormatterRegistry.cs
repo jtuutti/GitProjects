@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime.Handlers;
@@ -29,16 +28,14 @@ namespace RestFoundation.Runtime
             return formatters.TryGetValue(mediaType, out formatter) ? formatter : null;
         }
 
-        public static ICollection<string> GetMediaTypes()
+        public static IReadOnlyCollection<string> GetMediaTypes()
         {
             return formatters.Keys.ToArray();
         }
 
-        public static ICollection<string> GetPrioritizedMediaTypes()
+        public static IReadOnlyCollection<string> GetPrioritizedMediaTypes()
         {
-            List<string> mediaTypes = mediaTypePriorities.OrderByDescending(x => x.Value).ThenBy(x => x.Key).Select(x => x.Key).ToList();
-
-            return new ReadOnlyCollection<string>(mediaTypes);
+            return mediaTypePriorities.OrderByDescending(x => x.Value).ThenBy(x => x.Key).Select(x => x.Key).ToList();
         }
 
         public static void SetFormatter(string mediaType, IMediaTypeFormatter formatter)

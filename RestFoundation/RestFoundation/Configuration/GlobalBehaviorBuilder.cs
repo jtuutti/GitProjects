@@ -3,7 +3,6 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using RestFoundation.Behaviors;
 using RestFoundation.Runtime;
@@ -47,7 +46,7 @@ namespace RestFoundation.Configuration
         /// <returns>A sequence of behavior instances.</returns>
         public IEnumerable<IServiceBehavior> GetGlobalBehaviors()
         {
-            return new ReadOnlyCollection<IServiceBehavior>(ServiceBehaviorRegistry.GetGlobalBehaviors());
+            return ServiceBehaviorRegistry.GetGlobalBehaviors();
         }
 
         /// <summary>

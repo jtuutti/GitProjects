@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
 namespace RestFoundation.Runtime
@@ -11,14 +10,14 @@ namespace RestFoundation.Runtime
         {
             if (headers == null || headers.Count == 0)
             {
-                return new ReadOnlyCollection<HttpMethod>(new HttpMethod[0]);
+                return new HttpMethod[0];
             }
 
             string allowHeaderValue = headers.Get("Allow");
 
             if (String.IsNullOrWhiteSpace(allowHeaderValue))
             {
-                return new ReadOnlyCollection<HttpMethod>(new HttpMethod[0]);
+                return new HttpMethod[0];
             }
 
             return ParseHeaderValue(allowHeaderValue);
@@ -40,7 +39,7 @@ namespace RestFoundation.Runtime
                 }
             }
 
-            return new ReadOnlyCollection<HttpMethod>(allowedMethods);
+            return allowedMethods;
         }
     }
 }

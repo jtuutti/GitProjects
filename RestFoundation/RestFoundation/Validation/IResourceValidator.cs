@@ -15,8 +15,8 @@ namespace RestFoundation.Validation
         /// collection of errors.
         /// </summary>
         /// <param name="resource">The resource.</param>
-        /// <param name="errors">The collection of errors.</param>
+        /// <param name="errors">A read-only collection of the validation errors.</param>
         /// <returns>true if the resource is valid; otherwise, false.</returns>
-        bool IsValid(object resource, out ICollection<ValidationError> errors);
+        bool IsValid(object resource, out IReadOnlyCollection<ValidationError> errors);
     }
 }
