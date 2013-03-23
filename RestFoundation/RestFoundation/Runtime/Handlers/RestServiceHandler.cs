@@ -121,26 +121,38 @@ namespace RestFoundation.Runtime.Handlers
                 return;
             }
 
-            TrySetServiceMethodTimeout(serviceMethodData.Method);
-
-            Task methodTask = m_methodInvoker.InvokeAsync(this, serviceMethodData.Service, serviceMethodData.Method);
-
-            if (ServiceAsyncTimeout.TotalMilliseconds > 0)
+            try
             {
-                var delayCancellation = new CancellationTokenSource();
-                Task delayTask = Task.Delay(ServiceAsyncTimeout, delayCancellation.Token);
+                TrySetServiceMethodTimeout(serviceMethodData.Method);
 
-                if (await Task.WhenAny(methodTask, delayTask) == delayTask)
+                Task methodTask = m_methodInvoker.InvokeAsync(this, serviceMethodData.Service, serviceMethodData.Method);
+
+                if (ServiceAsyncTimeout.TotalMilliseconds > 0)
                 {
-                    throw new HttpResponseException(HttpStatusCode.ServiceUnavailable, Resources.Global.ServiceTimedOut);
-                }
+                    var delayCancellation = new CancellationTokenSource();
+                    Task delayTask = Task.Delay(ServiceAsyncTimeout, delayCancellation.Token);
 
-                SafeTaskCancel(delayCancellation);
-                ValidateTask(methodTask);
+                    if (await Task.WhenAny(methodTask, delayTask) == delayTask)
+                    {
+                        throw new HttpResponseException(HttpStatusCode.ServiceUnavailable, Resources.Global.ServiceTimedOut);
+                    }
+
+                    SafeTaskCancel(delayCancellation);
+                    ValidateTask(methodTask);
+                }
+                else
+                {
+                    await methodTask;
+                }
             }
-            else
+            finally
             {
-                await methodTask;
+                var disposableService = serviceMethodData.Service as IDisposable;
+
+                if (disposableService != null)
+                {
+                    disposableService.Dispose();
+                }
             }
         }
 
