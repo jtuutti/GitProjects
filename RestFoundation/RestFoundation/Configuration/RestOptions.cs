@@ -302,7 +302,7 @@ namespace RestFoundation.Configuration
         /// </summary>
         /// <param name="settings">The JSON formatter settings.</param>
         /// <returns>The configuration options object.</returns>
-        public RestOptions UseJsonFormatterSettings(JsonFormatterSettings settings)
+        public RestOptions WithJsonFormatterSettings(JsonFormatterSettings settings)
         {
             if (settings == null)
             {
@@ -318,7 +318,7 @@ namespace RestFoundation.Configuration
         /// </summary>
         /// <param name="settings">The XML formatter settings.</param>
         /// <returns>The configuration options object.</returns>
-        public RestOptions UseXmlFormatterSettings(XmlFormatterSettings settings)
+        public RestOptions WithXmlFormatterSettings(XmlFormatterSettings settings)
         {
             if (settings == null)
             {

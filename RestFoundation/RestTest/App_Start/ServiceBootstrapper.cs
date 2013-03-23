@@ -28,10 +28,10 @@ namespace RestTest.App_Start
                 // .InitializeWithUnity(CreateUnityContainer())
                 .WithUrls(RegisterUrls)
                 .WithMediaTypeFormatters(RegisterFormatters)
-                .UseXmlFormatterSettings(new XmlFormatterSettings { Namespace = "urn:com.rest-test.resources" })
-                .EnableJsonPSupport()               
+                .WithXmlFormatterSettings(new XmlFormatterSettings { Namespace = "urn:com.rest-test.resources" })
                 .WithResponseHeader("X-Service-Name", "Rest Foundation Test")
                 .WithResponseHeader("X-Service-Version", "1.0")
+                .EnableJsonPSupport()               
                 .ConfigureServiceHelpAndProxy(c => c.Enable()
                                                     .WithServiceDescription("RESTFul test service")
                                                     .RequireAuthorization(new ProxyAuthorizationManager()));
