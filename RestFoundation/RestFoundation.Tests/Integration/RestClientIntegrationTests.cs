@@ -319,5 +319,33 @@ namespace RestFoundation.Tests.Integration
                 throw unwrappedException;
             }
         }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestInvalidResourceType()
+        {
+            IRestClient client = RestClientFactory.Create();
+
+            var inputResource = new RestResource<Person>(RestResourceType.None)
+            {
+                Body = new Person
+                {
+                    Name = "Joe Bloe",
+                    Age = 41
+                }
+            };
+
+            var serviceUri = new Uri(integrationServiceUri + "/home/index/1");
+
+            try
+            {
+                RestResource<Person> outputResource = client.PostAsync<Person, Person>(serviceUri, inputResource).Result;
+                Assert.That(outputResource, Is.Not.Null);
+            }
+            catch (AggregateException ex)
+            {
+                throw ex.InnerException;
+            }
+        }
     }
 }

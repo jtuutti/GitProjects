@@ -3,8 +3,8 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyVersion("2.1.0.0")]
-[assembly: AssemblyFileVersion("2.1.0.0")]
+[assembly: AssemblyVersion("2.2.0.0")]
+[assembly: AssemblyFileVersion("2.2.0.0")]
 [assembly: AssemblyTitle("REST Foundation")]
 [assembly: AssemblyDescription("REST Service Framework")]
 [assembly: AssemblyConfiguration("")]

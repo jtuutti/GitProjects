@@ -588,19 +588,19 @@
             Executes an HTTP request to the provided URL using the GET HTTP method.
             </summary>
       <param name="url">The URL.</param>
-      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <returns>A task resulting in an output resource without a body.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
       <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
     </member>
-    <member name="M:RestFoundation.Client.IRestClient.GetAsync(System.Uri,System.Collections.Specialized.NameValueCollection)">
+    <member name="M:RestFoundation.Client.IRestClient.GetAsync(System.Uri,System.Net.WebHeaderCollection)">
       <summary>
             Executes an HTTP request to the provided URL using the GET HTTP method.
             </summary>
       <param name="url">The URL.</param>
       <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <returns>A task resulting in an output resource without a body.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
@@ -620,7 +620,7 @@
       <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
       <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
     </member>
-    <member name="M:RestFoundation.Client.IRestClient.GetAsync``1(System.Uri,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection)">
+    <member name="M:RestFoundation.Client.IRestClient.GetAsync``1(System.Uri,RestFoundation.Client.RestResourceType,System.Net.WebHeaderCollection)">
       <summary>
             Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the GET HTTP method.
             </summary>
@@ -635,7 +635,7 @@
       <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
       <exception cref="T:System.InvalidOperationException">If a resource object is not serializable.</exception>
     </member>
-    <member name="M:RestFoundation.Client.IRestClient.GetAsync``1(System.Uri,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection,System.String)">
+    <member name="M:RestFoundation.Client.IRestClient.GetAsync``1(System.Uri,RestFoundation.Client.RestResourceType,System.Net.WebHeaderCollection,System.String)">
       <summary>
             Executes an HTTP request to the provided URL and outputs an expected resource of the specified type using the GET HTTP method.
             </summary>
@@ -656,19 +656,19 @@
             Executes an HTTP request to the provided URL using the HEAD HTTP method.
             </summary>
       <param name="url">The URL.</param>
-      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <returns>A task resulting in an output resource without a body.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
       <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
     </member>
-    <member name="M:RestFoundation.Client.IRestClient.HeadAsync(System.Uri,System.Collections.Specialized.NameValueCollection)">
+    <member name="M:RestFoundation.Client.IRestClient.HeadAsync(System.Uri,System.Net.WebHeaderCollection)">
       <summary>
             Executes an HTTP request to the provided URL using the HEAD HTTP method.
             </summary>
       <param name="url">The URL.</param>
       <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <returns>A task resulting in an output resource without a body.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
@@ -680,26 +680,26 @@
             </summary>
       <param name="url">The URL.</param>
       <param name="outputType">The output resource type.</param>
-      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <returns>A task resulting in an output resource without a body.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
       <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
     </member>
-    <member name="M:RestFoundation.Client.IRestClient.HeadAsync(System.Uri,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection)">
+    <member name="M:RestFoundation.Client.IRestClient.HeadAsync(System.Uri,RestFoundation.Client.RestResourceType,System.Net.WebHeaderCollection)">
       <summary>
             Executes an HTTP request to the provided URL using the HEAD HTTP method.
             </summary>
       <param name="url">The URL.</param>
       <param name="outputType">The output resource type.</param>
       <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <returns>A task resulting in an output resource without a body.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
       <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
     </member>
-    <member name="M:RestFoundation.Client.IRestClient.HeadAsync(System.Uri,RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection,System.String)">
+    <member name="M:RestFoundation.Client.IRestClient.HeadAsync(System.Uri,RestFoundation.Client.RestResourceType,System.Net.WebHeaderCollection,System.String)">
       <summary>
             Executes an HTTP request to the provided URL using the HEAD HTTP method.
             </summary>
@@ -707,7 +707,7 @@
       <param name="outputType">The output resource type.</param>
       <param name="headers">A collection of HTTP headers to pass to the request.</param>
       <param name="xmlNamespace">An optional XML namespace.</param>
-      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <returns>A task resulting in an output resource without a body.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
@@ -817,19 +817,19 @@
             Executes an HTTP request to the provided URL using the DELETE HTTP method.
             </summary>
       <param name="url">The URL.</param>
-      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <returns>A task resulting in an output resource without a body.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
       <exception cref="T:System.Security.SecurityException">If a security exception occurred.</exception>
     </member>
-    <member name="M:RestFoundation.Client.IRestClient.DeleteAsync(System.Uri,System.Collections.Specialized.NameValueCollection)">
+    <member name="M:RestFoundation.Client.IRestClient.DeleteAsync(System.Uri,System.Net.WebHeaderCollection)">
       <summary>
             Executes an HTTP request to the provided URL using the DELETE HTTP method.
             </summary>
       <param name="url">The URL.</param>
       <param name="headers">A collection of HTTP headers to pass to the request.</param>
-      <returns>A task resulting in a collection of HTTP headers returned.</returns>
+      <returns>A task resulting in an output resource without a body.</returns>
       <exception cref="T:System.Web.HttpException">If an HTTP-level exception occurred.</exception>
       <exception cref="T:System.Net.WebException">If a non-HTTP level exception occurred.</exception>
       <exception cref="T:System.Net.ProtocolViolationException">If an unexpected protocol exception occurred.</exception>
@@ -880,16 +880,6 @@
     <member name="P:RestFoundation.Client.IRestClient.AllowSelfSignedCertificates">
       <summary>
             Gets or sets a value indicating whether self-signed certificates are allowed.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.LastStatusCode">
-      <summary>
-            Gets the last HTTP status code.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Client.IRestClient.LastStatusDescription">
-      <summary>
-            Gets the last HTTP status description.
             </summary>
     </member>
     <member name="T:RestFoundation.Collections.Specialized.LinkCollection">
@@ -1076,7 +1066,8 @@
     </member>
     <member name="P:RestFoundation.Formatters.SupportedMediaTypeAttribute.Priority">
       <summary>
-            Gets or sets the media type priority to resolve for wildcard in the Accept HTTP header.
+            Gets or sets the priority value to resolve media types that match wildcards specified
+            in the Accept HTTP header. Matching media types with the highest priority will be used.
             </summary>
     </member>
     <member name="T:RestFoundation.ILogWriter">
@@ -2060,11 +2051,13 @@
             Represents the resource state for service methods.
             </summary>
     </member>
-    <member name="M:RestFoundation.ResourceState.#ctor(System.Collections.Generic.ICollection{RestFoundation.Validation.ValidationError})">
+    <member name="M:RestFoundation.ResourceState.#ctor(System.Collections.Generic.IReadOnlyCollection{RestFoundation.Validation.ValidationError})">
       <summary>
             Initializes a new instance of the <see cref="T:RestFoundation.ResourceState" /> class.
             </summary>
-      <param name="errors">A collection of validation errors associated with the resource.</param>
+      <param name="errors">
+            A read-only collection of the validation errors associated with the resource.
+            </param>
     </member>
     <member name="M:RestFoundation.ResourceState.GetEnumerator">
       <summary>
@@ -4166,7 +4159,7 @@
     </member>
     <member name="P:RestFoundation.Collections.IStringValueCollection.Keys">
       <summary>
-            Gets a collection of all collection keys.
+            Gets a read-only collection of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.IStringValueCollection.Count">
@@ -4227,7 +4220,7 @@
     </member>
     <member name="P:RestFoundation.Collections.Concrete.StringValueCollection.Keys">
       <summary>
-            Gets a collection of all collection keys.
+            Gets a read-only collection of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.StringValueCollection.Count">
@@ -4568,16 +4561,16 @@
             </summary>
       <param name="type">The resource type.</param>
     </member>
-    <member name="M:RestFoundation.Client.RestResource.#ctor(RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection)">
+    <member name="M:RestFoundation.Client.RestResource.#ctor(RestFoundation.Client.RestResourceType,System.Net.WebHeaderCollection)">
       <summary>
             Initializes a new instance of the <see cref="T:RestFoundation.Client.RestResource" /> class.
             </summary>
       <param name="type">The resource type.</param>
       <param name="headers">A collection of HTTP headers to pass to the request.</param>
     </member>
-    <member name="P:RestFoundation.Client.RestResource.Type">
+    <member name="P:RestFoundation.Client.RestResource.XmlNamespace">
       <summary>
-            Gets the resource type.
+            Gets or sets an XML namespace for the resource.
             </summary>
     </member>
     <member name="P:RestFoundation.Client.RestResource.Headers">
@@ -4585,9 +4578,19 @@
             Gets the collection of associated HTTP headers.
             </summary>
     </member>
-    <member name="P:RestFoundation.Client.RestResource.XmlNamespace">
+    <member name="P:RestFoundation.Client.RestResource.Type">
       <summary>
-            Gets or sets an XML namespace for the resource.
+            Gets the resource type.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Client.RestResource.StatusCode">
+      <summary>
+            Gets the last HTTP status code.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Client.RestResource.StatusDescription">
+      <summary>
+            Gets the last HTTP status description.
             </summary>
     </member>
     <member name="T:RestFoundation.Client.RestResource`1">
@@ -4603,7 +4606,7 @@
             </summary>
       <param name="type">The resource type.</param>
     </member>
-    <member name="M:RestFoundation.Client.RestResource`1.#ctor(RestFoundation.Client.RestResourceType,System.Collections.Specialized.NameValueCollection)">
+    <member name="M:RestFoundation.Client.RestResource`1.#ctor(RestFoundation.Client.RestResourceType,System.Net.WebHeaderCollection)">
       <summary>
             Initializes a new instance of the <see cref="T:RestFoundation.Client.RestResource`1" /> class.
             </summary>
@@ -4618,6 +4621,11 @@
     <member name="T:RestFoundation.Client.RestResourceType">
       <summary>
             Describes a REST HTTP resource type.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.Client.RestResourceType.None">
+      <summary>
+            A resource without a body.
             </summary>
     </member>
     <member name="F:RestFoundation.Client.RestResourceType.Json">
@@ -6989,13 +6997,13 @@
             Defines a resource validator.
             </summary>
     </member>
-    <member name="M:RestFoundation.Validation.IResourceValidator.IsValid(System.Object,System.Collections.Generic.ICollection{RestFoundation.Validation.ValidationError}@)">
+    <member name="M:RestFoundation.Validation.IResourceValidator.IsValid(System.Object,System.Collections.Generic.IReadOnlyCollection{RestFoundation.Validation.ValidationError}@)">
       <summary>
             Returns a <see cref="T:System.Boolean" /> value indicating whether the resource is valid along with the associated
             collection of errors.
             </summary>
       <param name="resource">The resource.</param>
-      <param name="errors">The collection of errors.</param>
+      <param name="errors">A read-only collection of the validation errors.</param>
       <returns>true if the resource is valid; otherwise, false.</returns>
     </member>
     <member name="T:RestFoundation.IUploadedFile">
@@ -7126,7 +7134,7 @@
     </member>
     <member name="P:RestFoundation.Rest.ServiceContextTypes">
       <summary>
-            Gets the service context dependent types.
+            Gets a read-only collection of the service context dependent types.
             </summary>
     </member>
     <member name="P:RestFoundation.Rest.Configuration">
@@ -8003,13 +8011,13 @@
             namespace attributes.
             </summary>
     </member>
-    <member name="M:RestFoundation.Validation.ResourceValidator.IsValid(System.Object,System.Collections.Generic.ICollection{RestFoundation.Validation.ValidationError}@)">
+    <member name="M:RestFoundation.Validation.ResourceValidator.IsValid(System.Object,System.Collections.Generic.IReadOnlyCollection{RestFoundation.Validation.ValidationError}@)">
       <summary>
             Returns a <see cref="T:System.Boolean" /> value indicating whether the resource is valid along with the associated
             collection of errors.
             </summary>
       <param name="resource">The resource.</param>
-      <param name="errors">The collection of errors.</param>
+      <param name="errors">A read-only collection of the validation errors.</param>
       <returns>true if the resource is valid; otherwise, false.</returns>
     </member>
     <member name="T:RestFoundation.Configuration.UrlBuilder">
@@ -9332,7 +9340,7 @@
     </member>
     <member name="P:RestFoundation.Collections.ICookieValueCollection.Keys">
       <summary>
-            Gets a collection of all collection keys.
+            Gets a read-only collection of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.ICookieValueCollection.Count">
@@ -9380,7 +9388,7 @@
     </member>
     <member name="P:RestFoundation.Collections.Concrete.CookieValueCollection.Keys">
       <summary>
-            Gets a collection of all collection keys.
+            Gets a read-only collection of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.CookieValueCollection.Count">
@@ -9416,7 +9424,7 @@
     </member>
     <member name="P:RestFoundation.Collections.IRouteValueCollection.Keys">
       <summary>
-            Gets a collection of all collection keys.
+            Gets a read-only collection of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.IRouteValueCollection.Count">
@@ -9470,7 +9478,7 @@
     </member>
     <member name="P:RestFoundation.Collections.Concrete.RouteValueCollection.Keys">
       <summary>
-            Gets a collection of all collection keys.
+            Gets a read-only collection of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.RouteValueCollection.Count">
