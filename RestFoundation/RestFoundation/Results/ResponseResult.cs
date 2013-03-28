@@ -30,7 +30,7 @@ namespace RestFoundation.Results
         /// Executes the result against the provided service context.
         /// </summary>
         /// <param name="context">The service context.</param>
-        public void Execute(IServiceContext context)
+        public virtual void Execute(IServiceContext context)
         {
             if (context == null)
             {
