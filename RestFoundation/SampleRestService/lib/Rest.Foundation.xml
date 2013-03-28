@@ -2177,14 +2177,14 @@
       <param name="builder">The builder.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.Configuration.RestOptions.UseJsonFormatterSettings(RestFoundation.Configuration.JsonFormatterSettings)">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithJsonFormatterSettings(RestFoundation.Configuration.JsonFormatterSettings)">
       <summary>
             Sets custom JSON formatter and result settings.
             </summary>
       <param name="settings">The JSON formatter settings.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.Configuration.RestOptions.UseXmlFormatterSettings(RestFoundation.Configuration.XmlFormatterSettings)">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithXmlFormatterSettings(RestFoundation.Configuration.XmlFormatterSettings)">
       <summary>
             Sets custom XML formatter and result settings.
             </summary>

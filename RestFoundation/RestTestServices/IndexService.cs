@@ -80,7 +80,7 @@ namespace RestTestServices
                 return Result.Content("No files");
             }
 
-            return Result.Content("Files: " + String.Join(", ", files.Select(f => f.Name)));
+            return Result.Content("Files: " + String.Join(", ", files.Select(f => f.Name)), true, "text/plain");
         }
 
         public RedirectResult RedirectToGet10()
@@ -136,7 +136,7 @@ namespace RestTestServices
                 Context.Response.Output.WriteFormat("<br/><br/>Dummy variable: {0}", dummy);
             }
 
-            return Result.Content("<br/><br/>GET completed", false);
+            return Result.Content("<br/><br/>GET completed", false, "text/html");
         }
 
         public object Post(Person resource)

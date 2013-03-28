@@ -517,7 +517,7 @@
                     throw new HttpException((int) HttpStatusCode.MethodNotAllowed, "Invalid HTTP method provided");
             }
 
-            response.Data = await responseDataTask.ConfigureAwait(false);
+            response.Data = await responseDataTask;
             response.Code = GetStatusCode(client.WebResponse);
             response.ProtocolVersion = GetProtocolVersion(client.WebResponse);
         }
