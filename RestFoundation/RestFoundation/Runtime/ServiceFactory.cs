@@ -15,7 +15,7 @@ namespace RestFoundation.Runtime
         /// </summary>
         /// <param name="serviceContractType">A service contract type.</param>
         /// <returns>The created service instance.</returns>
-        public object Create(Type serviceContractType)
+        public virtual object Create(Type serviceContractType)
         {
             if (serviceContractType == null)
             {
