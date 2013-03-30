@@ -69,7 +69,8 @@ namespace RestFoundation.Collections.Concrete
         {
             string forwardedAddress = TryGet("HTTP_X_FORWARDED_FOR");
 
-            if (String.IsNullOrWhiteSpace(forwardedAddress) || forwardedAddress.IndexOf(ForwardedAddressSeparator) == 0)
+            if (String.IsNullOrWhiteSpace(forwardedAddress) || String.Equals("unknown", forwardedAddress, StringComparison.OrdinalIgnoreCase) ||
+                forwardedAddress.IndexOf(ForwardedAddressSeparator) == 0)
             {
                 return TryGet("REMOTE_ADDR");
             }
