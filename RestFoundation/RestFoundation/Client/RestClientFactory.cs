@@ -38,6 +38,7 @@ namespace RestFoundation.Client
         /// <returns>The created <see cref="IRestClient"/> instance.</returns>
         public static IRestClient Create(IDictionary<RestResourceType, string> resourceTypes)
         {
+<<<<<<< HEAD
             return (currentBuilder ?? defaultBuilder)(null, resourceTypes);
         }
 
@@ -66,6 +67,9 @@ namespace RestFoundation.Client
             {
                 currentBuilder = null;
             }
+=======
+            return Builder(null, resourceTypes);
+>>>>>>> 310cee91cd95e222d5b22a727641646ae8ec6443
         }
     }
 }
