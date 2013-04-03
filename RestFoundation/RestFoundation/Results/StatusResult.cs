@@ -65,5 +65,18 @@ namespace RestFoundation.Results
                 context.Response.SetStatus(StatusCode);
             }
         }
+
+        /// <summary>
+        /// Gets a <see cref="bool"/> indicating whether the status code was successful.
+        /// </summary>
+        /// <returns>
+        /// true if the status code is in the 200-299 range; otherwise false.
+        /// </returns>
+        public bool IsSuccessStatusCode()
+        {
+            var numericStatusCode = (int) StatusCode;
+
+            return numericStatusCode >= 200 && numericStatusCode < 300;
+        }
     }
 }
