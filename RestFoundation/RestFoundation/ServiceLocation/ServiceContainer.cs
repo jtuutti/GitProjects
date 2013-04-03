@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using RestFoundation.Client;
-using RestFoundation.Client.Serializers;
 using RestFoundation.Context;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
@@ -43,7 +41,6 @@ namespace RestFoundation.ServiceLocation
                 { typeof(ILogWriter), typeof(NullLogWriter) },
                 { typeof(IParameterValueProvider), typeof(ParameterValueProvider) },
                 { typeof(IResourceValidator), typeof(ResourceValidator) },
-                { typeof(IRestSerializerFactory), typeof(RestSerializerFactory) },
                 { typeof(IResultWrapper), typeof(ResultWrapper) },
                 { typeof(IServiceCache), typeof(ServiceCache) },
                 { typeof(IStreamCompressor), typeof(StreamCompressor) }

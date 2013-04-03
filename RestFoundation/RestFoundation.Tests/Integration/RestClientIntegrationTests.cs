@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using NUnit.Framework;
 using RestFoundation.Client;
 using RestTestContracts.Resources;
+using Rhino.Mocks;
 
 namespace RestFoundation.Tests.Integration
 {
@@ -27,6 +29,34 @@ namespace RestFoundation.Tests.Integration
             Assert.That(httpMethods, Is.Not.Null);
             Assert.That(httpMethods.Count, Is.GreaterThan(0));
             Assert.That(httpMethods.Any(m => m == HttpMethod.Post), Is.False);
+        }
+
+        [Test]
+        public void TestGetMethod_HttpOptions_Mock()
+        {
+            var result = new TaskCompletionSource<IReadOnlyList<HttpMethod>>();
+            result.SetResult(new List<HttpMethod>
+            {
+                HttpMethod.Delete,
+                HttpMethod.Get,
+                HttpMethod.Head,
+                HttpMethod.Patch,
+                HttpMethod.Put
+            });
+
+            var clientMock = MockRepository.GenerateStrictMock<IRestClient>();
+            clientMock.Stub(c => c.OptionsAsync(null)).IgnoreArguments().Return(result.Task);
+
+            using (RestClientFactory.UseBuilder((factory, dictionary) => clientMock))
+            {
+                IRestClient client = RestClientFactory.Create();
+
+                var serviceUri = new Uri(integrationServiceUri + "/home/index/1");
+                IReadOnlyList<HttpMethod> httpMethods = client.OptionsAsync(serviceUri).Result;
+                Assert.That(httpMethods, Is.Not.Null);
+                Assert.That(httpMethods.Count, Is.GreaterThan(0));
+                Assert.That(httpMethods.Any(m => m == HttpMethod.Post), Is.False);
+            }
         }
 
         [Test]
