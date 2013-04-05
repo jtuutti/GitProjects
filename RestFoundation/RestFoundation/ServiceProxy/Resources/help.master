@@ -1,11 +1,14 @@
 ﻿<%@ Master Language="C#" %>
 <%@ Import Namespace="System.Globalization" %>
+<%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="RestFoundation" %>
 <%@ Import Namespace="RestFoundation.Configuration" %>
 <%@ Import Namespace="RestFoundation.Security" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
 
 <script runat="server" language="C#">
+    private static readonly Regex RegexBetweenTags = new Regex(@">(?! )\s+", RegexOptions.Compiled);
+    private static readonly Regex RegexLineBreaks = new Regex(@"([\n\s])+?(?<= {2,})<", RegexOptions.Compiled);
     private readonly RestOptions configurationOptions = Rest.Configuration.Options;    
 
     protected void Page_Init(object sender, EventArgs e)
@@ -13,6 +16,20 @@
         ValidateHttpSecurity();
         ValidateIPRange();
         AuthorizeUserIfNecessary();
+    }
+
+    protected override void Render(HtmlTextWriter writer)
+    {
+        using (var htmlwriter = new HtmlTextWriter(new StringWriter()))
+        {
+            base.Render(htmlwriter);
+
+            string html = htmlwriter.InnerWriter.ToString();
+            html = RegexBetweenTags.Replace(html, ">");
+            html = RegexLineBreaks.Replace(html, "<");
+
+            writer.Write(html.Trim());
+        }
     }
 
     private void ValidateHttpSecurity()

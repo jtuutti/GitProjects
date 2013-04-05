@@ -74,7 +74,7 @@
                         <a href="<%: operation.ProxyUrl + "&ct=json" %>" class="operation-link" title="Profile or debug the service">JSON</a>
                     <% } %>
                     <% if (!operation.DoesNotSupportXml) { %>
-                        <% if (!operation.DoesNotSupportJson) { %>|<% } %>
+                        <% if (!operation.DoesNotSupportJson) { %><span class="link-separator">|</span><% } %>
                         <a href="<%: operation.ProxyUrl + "&ct=xml" %>" class="operation-link" title="Profile or debug the service">XML</a>
                     <% } %>
                 </td>

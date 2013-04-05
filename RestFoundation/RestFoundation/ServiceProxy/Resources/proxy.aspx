@@ -591,12 +591,12 @@
             </div>
             <% } %>
             <span id="ServiceUrl"><%: serviceUrl %></span>
-            <input id="OperationUrl" runat="server" type="text" />
-            <asp:DropDownList id="ResourceFormat" runat="server" AutoPostBack="True">
+            <input id="OperationUrl" runat="server" type="text" class="has-right-margin" />
+            <asp:DropDownList id="ResourceFormat" runat="server" AutoPostBack="True" CssClass="has-right-margin">
                 <asp:ListItem>JSON</asp:ListItem>
                 <asp:ListItem>XML</asp:ListItem>
             </asp:DropDownList>
-            <asp:DropDownList id="HttpMethod" runat="server">
+            <asp:DropDownList id="HttpMethod" runat="server" CssClass="has-right-margin">
                 <asp:ListItem>GET</asp:ListItem>
                 <asp:ListItem>POST</asp:ListItem>
                 <asp:ListItem>PUT</asp:ListItem>
@@ -605,7 +605,7 @@
                 <asp:ListItem>HEAD</asp:ListItem>
                 <asp:ListItem>OPTIONS</asp:ListItem>
             </asp:DropDownList>
-            <span id="ConnectToProxy" runat="server">
+            <span id="ConnectToProxy" runat="server" class="has-right-margin">
                 <span>Proxy port:</span>
                 <input type="text" id="ProxyPort" runat="server" />
             </span>
