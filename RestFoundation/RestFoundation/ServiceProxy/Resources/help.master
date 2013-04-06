@@ -9,6 +9,7 @@
 <script runat="server" language="C#">
     private static readonly Regex RegexBetweenTags = new Regex(@">(?! )\s+", RegexOptions.Compiled);
     private static readonly Regex RegexLineBreaks = new Regex(@"([\n\s])+?(?<= {2,})<", RegexOptions.Compiled);
+    private static readonly Regex OriginalPostBackScript = new Regex(@">//<!\[CDATA\[\s*(?:.(?<!\]\]>)\s*)*\]\]>", RegexOptions.Compiled);
     private readonly RestOptions configurationOptions = Rest.Configuration.Options;    
 
     protected void Page_Init(object sender, EventArgs e)
@@ -27,6 +28,9 @@
             string html = htmlwriter.InnerWriter.ToString();
             html = RegexBetweenTags.Replace(html, ">");
             html = RegexLineBreaks.Replace(html, "<");
+            
+            string submitScript = String.Format(CultureInfo.InvariantCulture, " src=\"{0}\">", ProxyUrlHelper.GetByRouteName(Response, "ProxySubmit"));
+            html = OriginalPostBackScript.Replace(html, submitScript);
 
             writer.Write(html.Trim());
         }
@@ -108,6 +112,7 @@
         Response.StatusDescription = "Unauthorized";
         Response.End();
     }
+
 </script>
 
 <!DOCTYPE html>
