@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System.Collections;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace RestFoundation.Results
@@ -17,8 +18,10 @@ namespace RestFoundation.Results
         /// objects.
         /// </summary>
         /// <param name="collection">The collection to perform the query on.</param>
-        /// <param name="request">The current HTTP request.</param>
+        /// <param name="queryString">
+        /// A <see cref="NameValueCollection"/> containing the HTTP request query string parameters.
+        /// </param>
         /// <returns>The resulting collection.</returns>
-        IEnumerable PerformQuery(IQueryable collection, IHttpRequest request);
+        IEnumerable PerformQuery(IQueryable collection, NameValueCollection queryString);
     }
 }

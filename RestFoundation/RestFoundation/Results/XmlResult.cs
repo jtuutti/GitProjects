@@ -241,7 +241,8 @@ namespace RestFoundation.Results
             if (returnedGenericType == typeof(IQueryable<>) ||
                 ReturnedType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryable<>)))
             {
-                Content = Rest.Configuration.ServiceLocator.GetService<IODataProvider>().PerformQuery((IQueryable) Content, context.Request);
+                var odataProvider = Rest.Configuration.ServiceLocator.GetService<IODataProvider>();
+                Content = odataProvider.PerformQuery((IQueryable) Content, context.Request.QueryString.ToNameValueCollection());
             }
 
             return false;

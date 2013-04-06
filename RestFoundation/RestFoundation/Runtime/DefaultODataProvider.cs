@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
@@ -23,13 +24,15 @@ namespace RestFoundation.Runtime
         /// objects.
         /// </summary>
         /// <param name="collection">The collection to perform the query on.</param>
-        /// <param name="request">The current HTTP request.</param>
+        /// <param name="queryString">
+        /// A <see cref="NameValueCollection"/> containing the HTTP request query string parameters.
+        /// </param>
         /// <returns>The resulting collection.</returns>
-        public IEnumerable PerformQuery(IQueryable collection, IHttpRequest request)
+        public IEnumerable PerformQuery(IQueryable collection, NameValueCollection queryString)
         {
-            if (request == null)
+            if (queryString == null)
             {
-                throw new ArgumentNullException("request");
+                throw new ArgumentNullException("queryString");
             }
 
             if (collection == null)
@@ -37,7 +40,7 @@ namespace RestFoundation.Runtime
                 return null;
             }
 
-            IEnumerable filteredCollection = TryConvertToFilteredCollection(collection, request);
+            IEnumerable filteredCollection = TryConvertToFilteredCollection(collection, queryString);
 
             var filteredObjectArray = filteredCollection as object[];
 
@@ -56,13 +59,13 @@ namespace RestFoundation.Runtime
             return GenerateFilteredCollection(objectType, filteredObjectArray);
         }
 
-        private static IEnumerable TryConvertToFilteredCollection(IQueryable collection, IHttpRequest request)
+        private static IEnumerable TryConvertToFilteredCollection(IQueryable collection, NameValueCollection queryString)
         {
             object filteredCollection;
 
             try
             {
-                filteredCollection = QueryableHelper.Filter(collection, request.QueryString.ToNameValueCollection());
+                filteredCollection = QueryableHelper.Filter(collection, queryString);
             }
             catch (Exception)
             {
