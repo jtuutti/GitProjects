@@ -613,4 +613,8 @@
     <value>I'm a teapot</value>
     <comment>I'm a teapot</comment>
   </data>
+  <data name="NonGenericResultCollections" xml:space="preserve">
+    <value>Non-generic collections cannot be returned as service method results. Return typed arrays (recommended) or generic collections instead.</value>
+    <comment>Non-generic collections cannot be returned as service method results. Return typed arrays (recommended) or generic collections instead.</comment>
+  </data>
 </root>

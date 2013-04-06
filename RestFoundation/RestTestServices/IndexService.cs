@@ -122,6 +122,11 @@ namespace RestTestServices
             return peopleQuery;
         }
 
+        public IEnumerable<Person> GetAllChunked()
+        {
+            return new List<Person>(people);
+        }
+
         public IResult GetAllByFormat(string format)
         {
             return Result.JsonOrXml(new List<Person>(people).AsQueryable(), format);

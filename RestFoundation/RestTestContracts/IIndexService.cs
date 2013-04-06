@@ -30,13 +30,16 @@ namespace RestTestContracts
         [Url("dyn")]
         dynamic GetDynamicDict();
 
-        [Url("index/all", "Get, Head")]
+        [Url("index/all")]
         IQueryable<Person> GetAll();
 
-        [Url("index/all-async", "Get, Head")]
+        [Url("index/all-async")]
         Task<IQueryable<Person>> GetAllAsync();
 
-        [Url("index/all.{format}", "Get, Head")]
+        [Url("index/all-chunked")]
+        IEnumerable<Person> GetAllChunked();
+
+        [Url("index/all.{format}")]
         IResult GetAllByFormat(string format);
 
         [Url("index/{id}")]

@@ -7,12 +7,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using RestFoundation.Resources;
 using RestFoundation.Runtime;
 using Formatting = System.Xml.Formatting;
 using XmlNamespaceManager = RestFoundation.Runtime.XmlNamespaceManager;
@@ -95,7 +97,12 @@ namespace RestFoundation.Results
                 ReturnedType = contentObjectType;
             }
 
-            if (ReturnedType != null && ReturnedType.IsGenericType && SerializeAsSpecializedCollection(context, xmlWriter))
+            if (!NonGenericCollectionValidator.ValidateType(ReturnedType))
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Global.NonGenericResultCollections);
+            }
+
+            if (ReturnedType != null && ReturnedType.IsGenericType && SerializeAsSpecializedCollection(context, xmlWriter, Content))
             {
                 return;
             }
@@ -215,18 +222,26 @@ namespace RestFoundation.Results
             xmlWriter.Flush();
         }
 
-        private bool SerializeAsSpecializedCollection(IServiceContext context, XmlWriter xmlWriter)
+        private bool SerializeAsSpecializedCollection(IServiceContext context, XmlWriter xmlWriter, object obj)
         {
-            if (ReturnedType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            Type returnedGenericType = ReturnedType.GetGenericTypeDefinition();
+
+            if (returnedGenericType == typeof(IDictionary<,>))
+            {
+                SerializeAsAnonymousType(xmlWriter, obj);
+                return true;
+            }
+
+            if (Rest.Configuration.Options.EnumerableAsChunked && returnedGenericType == typeof(IEnumerable<>))
             {
                 SerializeAsChunkedSequence(context, xmlWriter);
                 return true;
             }
 
-            if (ReturnedType.GetGenericTypeDefinition() == typeof(IQueryable<>) ||
+            if (returnedGenericType == typeof(IQueryable<>) ||
                 ReturnedType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryable<>)))
             {
-                Content = ODataHelper.PerformOdataOperations(Content, context.Request);
+                Content = Rest.Configuration.ServiceLocator.GetService<IODataProvider>().PerformQuery((IQueryable) Content, context.Request);
             }
 
             return false;

@@ -219,8 +219,7 @@ namespace RestFoundation.Formatters
         {
             return propertyType.IsGenericType &&
                    (propertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ||
-                    propertyType.GetGenericTypeDefinition() == typeof(ICollection<>) ||
-                    propertyType.GetGenericTypeDefinition() == typeof(IList<>));
+                    propertyType.GetGenericTypeDefinition().GetInterface(typeof(IEnumerable<>).FullName) != null);
         }
     }
 }

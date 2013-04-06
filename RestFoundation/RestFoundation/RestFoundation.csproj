@@ -91,12 +91,14 @@
     <Compile Include="LinkRelationValues.cs" />
     <Compile Include="LogWriterExtensions.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
+    <Compile Include="Results\IODataProvider.cs" />
     <Compile Include="Results\IResultAsync.cs" />
     <Compile Include="Results\ResponseResult.cs" />
     <Compile Include="RouteHash.cs" />
     <Compile Include="Runtime\AllowHeaderParser.cs" />
     <Compile Include="Runtime\ConsoleLogger.cs" />
     <Compile Include="Runtime\DebugLogger.cs" />
+    <Compile Include="Runtime\DefaultODataProvider.cs" />
     <Compile Include="Runtime\Fault.cs" />
     <Compile Include="Runtime\FaultCollection.cs" />
     <Compile Include="Runtime\Handlers\RestServiceRouteInfo.cs" />
@@ -105,7 +107,6 @@
     <Compile Include="Runtime\Handlers\IServiceContextHandler.cs" />
     <Compile Include="Runtime\Handlers\NotFoundHandler.cs" />
     <Compile Include="Runtime\Handlers\RestServiceHandler.cs" />
-    <Compile Include="Runtime\ODataHelper.cs" />
     <Compile Include="Link.cs" />
     <Compile Include="ResourceState.cs" />
     <Compile Include="Configuration\RestOptions.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
     <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
     <Compile Include="Runtime\JsonSerializerFactory.cs" />
+    <Compile Include="Runtime\NonGenericCollectionValidator.cs" />
     <Compile Include="Runtime\Registries\XmlClientSerializerRegistry.cs" />
     <Compile Include="Runtime\Handlers\ProxyExportHandler.cs" />
     <Compile Include="Runtime\Handlers\ProxyOutputHandler.cs" />

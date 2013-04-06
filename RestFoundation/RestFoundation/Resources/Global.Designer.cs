@@ -808,6 +808,15 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Non-generic collections cannot be returned as service method results. Return typed arrays (recommended) or generic collections instead..
+        /// </summary>
+        internal static string NonGenericResultCollections {
+            get {
+                return ResourceManager.GetString("NonGenericResultCollections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The output type is not a string..
         /// </summary>
         internal static string NonStringOutputType {

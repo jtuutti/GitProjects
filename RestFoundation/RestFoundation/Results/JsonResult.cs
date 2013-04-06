@@ -6,8 +6,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using RestFoundation.Resources;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
@@ -78,6 +80,11 @@ namespace RestFoundation.Results
                 ReturnedType = Content.GetType();
             }
 
+            if (!NonGenericCollectionValidator.ValidateType(ReturnedType))
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Global.NonGenericResultCollections);
+            }
+
             if (ReturnedType != null && ReturnedType.IsGenericType && SerializeAsSpecializedCollection(context, serializer))
             {
                 return;
@@ -119,16 +126,18 @@ namespace RestFoundation.Results
 
         private bool SerializeAsSpecializedCollection(IServiceContext context, JsonSerializer serializer)
         {
-            if (ReturnedType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            Type returnedGenericType = ReturnedType.GetGenericTypeDefinition();
+
+            if (Rest.Configuration.Options.EnumerableAsChunked && returnedGenericType == typeof(IEnumerable<>))
             {
                 SerializeAsChunkedSequence(context, serializer);
                 return true;
             }
 
-            if (ReturnedType.GetGenericTypeDefinition() == typeof(IQueryable<>) ||
+            if (returnedGenericType == typeof(IQueryable<>) ||
                 ReturnedType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryable<>)))
             {
-                Content = ODataHelper.PerformOdataOperations(Content, context.Request);
+                Content = Rest.Configuration.ServiceLocator.GetService<IODataProvider>().PerformQuery((IQueryable) Content, context.Request);
             }
 
             return false;

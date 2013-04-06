@@ -19,6 +19,7 @@ namespace RestFoundation.Configuration
     {
         internal RestOptions()
         {
+            EnumerableAsChunked = true;
             FaultDetail = FaultDetail.DetailedInDebugMode;
             JsonSettings = new JsonFormatterSettings();
 
@@ -49,6 +50,7 @@ namespace RestFoundation.Configuration
         internal string ServiceProxyRelativeUrl { get; set; }
         internal string DefaultMediaType { get; private set; }
         internal bool ForceDefaultMediaType { get; private set; }
+        internal bool EnumerableAsChunked { get; private set; }
         internal FaultDetail FaultDetail { get; private set; }
         internal bool RetainWebServerHeaders { get; private set; }
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
@@ -107,6 +109,20 @@ namespace RestFoundation.Configuration
             DefaultMediaType = mediaType;
             ForceDefaultMediaType = forceDefaultMediaType;
 
+            return this;
+        }
+
+        /// <summary>
+        /// Sets a value indicating whether <see cref="T:System.Collections.Generic.IEnumerable`1"/> collection
+        /// results should be output as chunked HTTP requests. The default value is true.
+        /// </summary>
+        /// <param name="enumerableAsChunked">
+        /// true if collections should be output as chunked HTTP requests; otherwise false.
+        /// </param>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions OutputEnumerableAsChunked(bool enumerableAsChunked)
+        {
+            EnumerableAsChunked = enumerableAsChunked;
             return this;
         }
 

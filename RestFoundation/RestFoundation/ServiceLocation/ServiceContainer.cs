@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using RestFoundation.Context;
+using RestFoundation.Results;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.Security;
@@ -39,6 +40,7 @@ namespace RestFoundation.ServiceLocation
                 { typeof(IContentNegotiator), typeof(ContentNegotiator) },
                 { typeof(IHttpMethodResolver), typeof(HttpMethodResolver) },
                 { typeof(ILogWriter), typeof(NullLogWriter) },
+                { typeof(IODataProvider), typeof(DefaultODataProvider) },
                 { typeof(IParameterValueProvider), typeof(ParameterValueProvider) },
                 { typeof(IResourceValidator), typeof(ResourceValidator) },
                 { typeof(IResultWrapper), typeof(ResultWrapper) },
