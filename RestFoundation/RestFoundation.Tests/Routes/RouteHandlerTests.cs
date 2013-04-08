@@ -259,31 +259,6 @@ namespace RestFoundation.Tests.Routes
             }
         }
 
-        [Test]
-        public void OptionsMethod()
-        {
-            const string url = "~/test-service/1";
-            const HttpMethod method = HttpMethod.Options;
-
-            using (var factory = new MockHandlerFactory())
-            {
-                IRestServiceHandler handler = factory.Create<ITestService>(url, m => m.Get(1), method);
-                Assert.That(handler, Is.Not.Null);
-                Assert.That(handler, Is.InstanceOf<RestServiceHandler>());
-                Assert.That(handler.Context, Is.Not.Null);
-                Assert.That(handler.Context.Request, Is.Not.Null);
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Request.Url, Is.EqualTo(ToAbsoluteUri(url)));
-                Assert.That(handler.Context.Request.Method, Is.EqualTo(method));
-
-                ProcessRequest(handler);
-
-                Assert.That(handler.Context.Response, Is.Not.Null);
-                Assert.That(handler.Context.Response.GetStatusCode(), Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(handler.Context.Response.GetHeader("Allow"), Is.EqualTo("DELETE, GET, HEAD, PATCH, PUT"));
-            }
-        }
-
         private static void ProcessRequest(IRestServiceHandler handler)
         {
             var handlerTask = Task.Factory.FromAsync(handler.BeginProcessRequest, handler.EndProcessRequest, (HttpContext) null, null);

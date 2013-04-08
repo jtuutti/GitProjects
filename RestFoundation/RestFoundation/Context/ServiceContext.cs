@@ -392,7 +392,7 @@ namespace RestFoundation.Context
 
             object currentServiceUrl;
 
-            if (routeTable.Values.TryGetValue(RouteConstants.ServiceUrl, out currentServiceUrl) && currentServiceUrl != null)
+            if (routeTable.Values.TryGetValue(ServiceCallConstants.ServiceUrl, out currentServiceUrl) && currentServiceUrl != null)
             {
                 var serviceMethod = serviceMethodList.FirstOrDefault(m => String.Equals(currentServiceUrl.ToString(), m.ServiceUrl, StringComparison.OrdinalIgnoreCase));
 

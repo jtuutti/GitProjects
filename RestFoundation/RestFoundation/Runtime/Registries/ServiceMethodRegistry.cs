@@ -32,8 +32,7 @@ namespace RestFoundation.Runtime
 
             foreach (var method in methods)
             {
-                if (String.Equals(UrlTemplateStandardizer.Standardize(method.UrlInfo.UrlTemplate), UrlTemplateStandardizer.Standardize(urlTemplate)) &&
-                    method.UrlInfo.HttpMethods.Contains(httpMethod))
+                if (String.Equals(method.UrlInfo.UrlTemplate, urlTemplate) && method.UrlInfo.HttpMethods.Contains(httpMethod))
                 {
                     return method.MethodInfo;
                 }

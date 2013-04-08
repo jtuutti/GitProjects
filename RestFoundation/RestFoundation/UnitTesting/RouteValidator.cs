@@ -88,7 +88,7 @@ namespace RestFoundation.UnitTesting
 
             try
             {
-                serviceContractType = Type.GetType(routeData.GetRequiredString(RouteConstants.ServiceContractType));
+                serviceContractType = Type.GetType(routeData.GetRequiredString(ServiceCallConstants.ServiceContractType));
             }
             catch (Exception)
             {
@@ -156,8 +156,8 @@ namespace RestFoundation.UnitTesting
             try
             {
                 serviceMethod = ServiceMethodRegistry.GetMethod(new ServiceMetadata(serviceContractType,
-                                                                                    routeData.GetRequiredString(RouteConstants.ServiceUrl)),
-                                                                                    routeData.GetRequiredString(RouteConstants.UrlTemplate),
+                                                                                    routeData.GetRequiredString(ServiceCallConstants.ServiceUrl)),
+                                                                                    routeData.GetRequiredString(ServiceCallConstants.UrlTemplate),
                                                                                     m_httpMethod);
             }
             catch (Exception)

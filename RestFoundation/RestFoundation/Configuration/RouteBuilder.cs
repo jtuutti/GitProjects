@@ -234,14 +234,14 @@ namespace RestFoundation.Configuration
             {
                 var defaults = new RouteValueDictionary
                                    {
-                                       { RouteConstants.ServiceContractType, serviceContractType.AssemblyQualifiedName },
-                                       { RouteConstants.ServiceUrl, m_relativeUrl },
-                                       { RouteConstants.UrlTemplate, metadata.UrlInfo.UrlTemplate.Trim() }
+                                       { ServiceCallConstants.ServiceContractType, serviceContractType.AssemblyQualifiedName },
+                                       { ServiceCallConstants.ServiceUrl, m_relativeUrl },
+                                       { ServiceCallConstants.UrlTemplate, metadata.UrlInfo.UrlTemplate.Trim() }
                                    };
 
                 var constraints = new RouteValueDictionary
                 {
-                    { RouteConstants.RouteConstraint, new ServiceRouteConstraint(metadata) }
+                    { ServiceCallConstants.RouteConstraint, new ServiceRouteConstraint(metadata) }
                 };
 
                 ConfigureOptionalRouteParameters(metadata, defaults);
@@ -277,7 +277,7 @@ namespace RestFoundation.Configuration
             var constraints = new RouteValueDictionary
             {
                 {
-                    RouteConstants.BrowserConstraint, new BrowserRouteConstraint(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>(),
+                    ServiceCallConstants.BrowserConstraint, new BrowserRouteConstraint(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>(),
                                                                                  Rest.Configuration.ServiceLocator.GetService<IHttpRequest>())
                 }
             };
@@ -290,7 +290,7 @@ namespace RestFoundation.Configuration
 
             var defaults = new RouteValueDictionary
             {
-                { RouteConstants.WebPageUrl, externalUrl }
+                { ServiceCallConstants.WebPageUrl, externalUrl }
             };
 
             m_routes.Add(new Route(serviceUrl, defaults, constraints, new BrowserRedirectHandler()));

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Routing;
 using RestFoundation.Configuration;
+using RestFoundation.Resources;
 using RestFoundation.Results;
 using RestFoundation.ServiceProxy;
 
@@ -92,7 +93,7 @@ namespace RestFoundation.Runtime.Handlers
 
             if (!RestHttpModule.IsInitialized)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.MissingRestHttpModule);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Global.MissingRestHttpModule);
             }
 
             return this;
@@ -108,15 +109,9 @@ namespace RestFoundation.Runtime.Handlers
         /// </param>
         public void ProcessRequest(HttpContext context)
         {
-            if (m_serviceContext.Request.Method == HttpMethod.Options)
-            {
-                m_serviceContext.Response.SetHeader("Allow", "GET, HEAD");
-                return;
-            }
-
             if (m_serviceContext.Request.Method != HttpMethod.Get && m_serviceContext.Request.Method != HttpMethod.Head)
             {
-                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, Resources.Global.DisallowedHttpMethod);
+                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, Global.DisallowedHttpMethod);
             }
 
             if (context != null)
@@ -170,7 +165,7 @@ namespace RestFoundation.Runtime.Handlers
                 }
                 catch (Exception)
                 {
-                    throw new InvalidOperationException(Resources.Global.UnableToLoadIndexPage);
+                    throw new InvalidOperationException(Global.UnableToLoadIndexPage);
                 }
             }
 
@@ -200,7 +195,7 @@ namespace RestFoundation.Runtime.Handlers
             }
             catch (HttpResponseException)
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden, Resources.Global.UnsupportedRequestedFormat);
+                throw new HttpResponseException(HttpStatusCode.Forbidden, Global.UnsupportedRequestedFormat);
             }
 
             if (result != null)

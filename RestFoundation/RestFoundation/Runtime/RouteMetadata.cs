@@ -9,7 +9,6 @@ namespace RestFoundation.Runtime
     {
         private readonly string m_typeName;
         private readonly string m_urlTemplate;
-        private readonly string m_standardizedUrlTemplate;
 
         public RouteMetadata(string typeName, string urlTemplate)
         {
@@ -25,7 +24,6 @@ namespace RestFoundation.Runtime
 
             m_typeName = typeName;
             m_urlTemplate = urlTemplate;
-            m_standardizedUrlTemplate = UrlTemplateStandardizer.Standardize(urlTemplate);
         }
 
         public string TypeName
@@ -44,14 +42,6 @@ namespace RestFoundation.Runtime
             }
         }
 
-        public string StandardizedUrlTemplate
-        {
-            get
-            {
-                return m_standardizedUrlTemplate;
-            }
-        }
-
         public static bool operator ==(RouteMetadata left, RouteMetadata right)
         {
             return left.Equals(right);
@@ -64,7 +54,7 @@ namespace RestFoundation.Runtime
 
         public bool Equals(RouteMetadata other)
         {
-            return Equals(other.m_typeName, m_typeName) && Equals(other.m_standardizedUrlTemplate, m_standardizedUrlTemplate);
+            return Equals(other.m_typeName, m_typeName) && Equals(other.m_urlTemplate, m_urlTemplate);
         }
 
         public override bool Equals(object obj)
@@ -81,7 +71,7 @@ namespace RestFoundation.Runtime
         {
             unchecked
             {
-                return (m_typeName.GetHashCode() * 397) ^ m_standardizedUrlTemplate.GetHashCode();
+                return (m_typeName.GetHashCode() * 397) ^ m_urlTemplate.GetHashCode();
             }
         }
     }

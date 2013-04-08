@@ -16,7 +16,6 @@ namespace RestFoundation.Runtime
     {
         private readonly IServiceContext m_serviceContext;
         private readonly IServiceFactory m_serviceFactory;
-        private readonly AllowHeaderGenerator m_allowHeaderGenerator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceMethodLocator"/> class.
@@ -37,7 +36,6 @@ namespace RestFoundation.Runtime
 
             m_serviceContext = serviceContext;
             m_serviceFactory = serviceFactory;
-            m_allowHeaderGenerator = new AllowHeaderGenerator(serviceContext.Response);
         }
 
         /// <summary>
@@ -56,18 +54,6 @@ namespace RestFoundation.Runtime
             object service = InitializeService(serviceContractType);
 
             HttpMethod httpMethod = m_serviceContext.Request.Method;
-
-            if (httpMethod == HttpMethod.Options)
-            {
-                var optionsDescriptor = service as IOptionsDescriptor;
-
-                if (optionsDescriptor == null || !m_allowHeaderGenerator.TrySetAllowHeaderFromDescriptor(m_serviceContext.Request.Url.LocalPath, optionsDescriptor))
-                {
-                    m_allowHeaderGenerator.SetAllowHeader(handler.UrlTemplate, serviceContractType);
-                }
-
-                return ServiceMethodLocatorData.Options;
-            }
 
             if (httpMethod == HttpMethod.Head)
             {

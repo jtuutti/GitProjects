@@ -30,7 +30,7 @@
             html = RegexLineBreaks.Replace(html, "<");
             
             string submitScript = String.Format(CultureInfo.InvariantCulture, " src=\"{0}\">", ProxyUrlHelper.GetByRouteName(Response, "ProxySubmit"));
-            html = OriginalPostBackScript.Replace(html, submitScript);
+            html = OriginalPostBackScript.Replace(html, submitScript, 1);
 
             writer.Write(html.Trim());
         }

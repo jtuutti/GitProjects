@@ -304,7 +304,7 @@ namespace RestFoundation.Tests.Integration
 
             try
             {
-                var serviceUri = new Uri(integrationServiceUri + "/home/index/bad-url");
+                var serviceUri = new Uri(integrationServiceUri + "/home/index/bad/url");
                 RestResource<Person> outputResponse = client.GetAsync<Person>(serviceUri, RestResourceType.Json).Result;
                 Assert.That(outputResponse, Is.Not.Null);
             }

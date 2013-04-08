@@ -43,7 +43,7 @@ namespace RestTestContracts
         IResult GetAllByFormat(string format);
 
         [Url("index/{id}")]
-        ContentResult Get(int? id = 1, [FromUri] string dummy = "N/A");
+        ContentResult Get([ParameterConstraint(@"\d{1,3}")] int? id = 1, [FromUri] string dummy = "N/A");
 
         [Url("index"), ValidateResource(true)]
         object Post(Person resource);

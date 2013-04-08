@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Routing;
+using RestFoundation.Collections.Specialized;
 using RestFoundation.Context;
 using RestFoundation.Resources;
 
@@ -44,7 +45,7 @@ namespace RestFoundation.Runtime
                 return true;
             }
 
-            var serviceContractTypeName = values[RouteConstants.ServiceContractType] as string;
+            var serviceContractTypeName = values[ServiceCallConstants.ServiceContractType] as string;
 
             if (serviceContractTypeName == null)
             {
@@ -58,14 +59,14 @@ namespace RestFoundation.Runtime
                 return false;
             }
 
-            var urlTemplate = values[RouteConstants.UrlTemplate] as string;
+            var urlTemplate = values[ServiceCallConstants.UrlTemplate] as string;
 
             if (urlTemplate == null)
             {
                 return false;
             }
 
-            return ValidateHttpMethod(httpContext, serviceContractType, urlTemplate) && ValidateRouteParameters(values);
+            return ValidateRouteParameters(values) && IsMatch(httpContext, serviceContractType, urlTemplate);
         }
 
         private static Dictionary<string, RouteParameter> GetRouteParameters(ServiceMethodMetadata metadata)
@@ -109,7 +110,23 @@ namespace RestFoundation.Runtime
             }
         }
 
-        private bool ValidateHttpMethod(HttpContextBase httpContext, Type serviceContractType, string urlTemplate)
+        private void GenerateAllowedMethods(HttpContextBase httpContext, IEnumerable<HttpMethod> allowedHttpMethods)
+        {
+            if (httpContext.Items[ServiceCallConstants.AllowedHttpMethods] == null)
+            {
+                httpContext.Items[ServiceCallConstants.AllowedHttpMethods] = new HttpMethodCollection();
+            }
+
+            var httpMethodCollection = (HttpMethodCollection) httpContext.Items[ServiceCallConstants.AllowedHttpMethods];
+            httpMethodCollection.AddRange(allowedHttpMethods);
+
+            if (m_parameters.Count == 0)
+            {
+                httpMethodCollection.MarkFinalized();
+            }
+        }
+
+        private bool IsMatch(HttpContextBase httpContext, Type serviceContractType, string urlTemplate)
         {
             ICollection<HttpMethod> allowedHttpMethods = HttpMethodRegistry.GetHttpMethods(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlTemplate));
             HttpMethod httpMethod;
@@ -124,14 +141,11 @@ namespace RestFoundation.Runtime
                 throw;
             }
 
-            if (httpMethod == HttpMethod.Options)
-            {
-                return true;
-            }
+            GenerateAllowedMethods(httpContext, allowedHttpMethods);
 
             if (!allowedHttpMethods.Contains(httpMethod))
             {
-                httpContext.Items[RouteConstants.RouteMethodConstraintFailed] = true;
+                httpContext.Items[ServiceCallConstants.RouteMethodConstraintFailed] = true;
                 return false;
             }
 

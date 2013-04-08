@@ -78,6 +78,7 @@
     <Compile Include="CachePriority.cs" />
     <Compile Include="Client\IRestClient.cs" />
     <Compile Include="Client\RestClient.cs" />
+    <Compile Include="Collections\Specialized\HttpMethodCollection.cs" />
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
     <Compile Include="Context\ContextContainer.cs" />
     <Compile Include="Configuration\DependencyBuilder.cs" />
@@ -85,7 +86,6 @@
     <Compile Include="Formatters\SupportedMediaTypeAttribute.cs" />
     <Compile Include="ILogWriter.cs" />
     <Compile Include="InstanceLifetime.cs" />
-    <Compile Include="IOptionsDescriptor.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="Configuration\JsonFormatterSettings.cs" />
     <Compile Include="LinkRelationValues.cs" />
@@ -115,7 +115,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Global.resx</DependentUpon>
     </Compile>
-    <Compile Include="Runtime\AllowHeaderGenerator.cs" />
     <Compile Include="Runtime\ExpressionArgument.cs" />
     <Compile Include="Runtime\Handlers\CssRouteHandler.cs" />
     <Compile Include="Runtime\Handlers\JavaScriptRouteHandler.cs" />
@@ -352,7 +351,7 @@
     <Compile Include="ServiceOperationUri.cs" />
     <Compile Include="Runtime\SafeConvert.cs" />
     <Compile Include="Runtime\ServiceMethodInvoker.cs" />
-    <Compile Include="Runtime\RouteConstants.cs" />
+    <Compile Include="Runtime\ServiceCallConstants.cs" />
     <Compile Include="Runtime\RouteMetadata.cs" />
     <Compile Include="HttpMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -377,7 +376,6 @@
     <Compile Include="UnitTesting\TestHttpServerUtility.cs" />
     <Compile Include="Url.cs" />
     <Compile Include="UrlAttribute.cs" />
-    <Compile Include="Runtime\UrlTemplateStandardizer.cs" />
     <Compile Include="ParameterConstraintAttribute.cs" />
     <Compile Include="Validation\ValidateObjectAttribute.cs" />
     <Compile Include="Validation\ValidationError.cs" />

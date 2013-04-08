@@ -27,7 +27,7 @@ namespace RestFoundation.Runtime.Handlers
                 throw new ArgumentNullException("requestContext");
             }
 
-            m_webPageUrl = requestContext.RouteData.Values[RouteConstants.WebPageUrl] as string;
+            m_webPageUrl = requestContext.RouteData.Values[ServiceCallConstants.WebPageUrl] as string;
 
             return this;
         }

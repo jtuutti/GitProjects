@@ -47,9 +47,9 @@ namespace RestFoundation.Runtime.Handlers
         {
             var routeInfo = new RestServiceRouteInfo
             {
-                ServiceUrl = (string) requestContext.RouteData.Values[RouteConstants.ServiceUrl],
-                ServiceContractTypeName = (string) requestContext.RouteData.Values[RouteConstants.ServiceContractType],
-                UrlTemplate = (string) requestContext.RouteData.Values[RouteConstants.UrlTemplate]
+                ServiceUrl = (string) requestContext.RouteData.Values[ServiceCallConstants.ServiceUrl],
+                ServiceContractTypeName = (string) requestContext.RouteData.Values[ServiceCallConstants.ServiceContractType],
+                UrlTemplate = (string) requestContext.RouteData.Values[ServiceCallConstants.UrlTemplate]
             };
 
             if (String.IsNullOrEmpty(routeInfo.ServiceUrl) || String.IsNullOrEmpty(routeInfo.ServiceContractTypeName) || routeInfo.UrlTemplate == null)
