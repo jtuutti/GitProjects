@@ -617,4 +617,8 @@
     <value>Non-generic collections cannot be returned as service method results. Return typed arrays (recommended) or generic collections instead.</value>
     <comment>Non-generic collections cannot be returned as service method results. Return typed arrays (recommended) or generic collections instead.</comment>
   </data>
+  <data name="NotImplemented" xml:space="preserve">
+    <value>Not Implemented</value>
+    <comment>Not Implemented</comment>
+  </data>
 </root>

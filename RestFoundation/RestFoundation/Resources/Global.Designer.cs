@@ -844,6 +844,15 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not Implemented.
+        /// </summary>
+        internal static string NotImplemented {
+            get {
+                return ResourceManager.GetString("NotImplemented", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An accepted name cannot be null or contain a wildcard..
         /// </summary>
         internal static string NullOrInvalidAcceptedName {

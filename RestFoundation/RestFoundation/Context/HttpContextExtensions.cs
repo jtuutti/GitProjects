@@ -47,7 +47,7 @@ namespace RestFoundation.Context
 
             if (!Enum.TryParse(httpMethodString, true, out httpMethod))
             {
-                throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, Resources.Global.DisallowedHttpMethod);
+                throw new HttpResponseException(HttpStatusCode.NotImplemented, Resources.Global.NotImplemented);
             }
 
             return httpMethod;
