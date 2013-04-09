@@ -1154,18 +1154,6 @@
             A single instance is used every time the dependency is requested.
             </summary>
     </member>
-    <member name="T:RestFoundation.IOptionsDescriptor">
-      <summary>
-            Overrides the default allowed HTTP method detection for REST services by the calling URL.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.IOptionsDescriptor.ReturnHttpMethodsFor(System.Uri)">
-      <summary>
-            Returns all the available HTTP methods for the provided URL.
-            </summary>
-      <param name="relativeUrl">The relative URL being called.</param>
-      <returns>The sequence of available HTTP methods or null to revert to the default behavior.</returns>
-    </member>
     <member name="T:RestFoundation.IServiceFactory">
       <summary>
             Defines a service factory.
@@ -1617,6 +1605,58 @@
             If the <paramref name="format" /> string does not match the arguments.
             </exception>
     </member>
+    <member name="T:RestFoundation.ParameterConstraints">
+      <summary>
+            Contains common parameter constaints.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ParameterConstraints.AnyInteger">
+      <summary>
+            Represents any integer number up to 7 digits.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ParameterConstraints.UnsignedInteger">
+      <summary>
+            Represents a non-negative integer number up to 7 digits.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ParameterConstraints.AnyNumber">
+      <summary>
+            Represents any decimal/floating point number.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ParameterConstraints.UnsignedNumber">
+      <summary>
+            Represents a non-negative decimal/floating point number.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ParameterConstraints.Boolean">
+      <summary>
+            Represents a boolean true/false value.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ParameterConstraints.Guid">
+      <summary>
+            Represents a GUID value.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.Results.IODataProvider">
+      <summary>
+            Defines an OData provider for <see cref="T:System.Linq.IQueryable`1" /> collection
+            results.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Results.IODataProvider.PerformQuery(System.Linq.IQueryable,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Performs a query on a collection and returns the resulting collection of
+            objects.
+            </summary>
+      <param name="collection">The collection to perform the query on.</param>
+      <param name="queryString">
+            A <see cref="T:System.Collections.Specialized.NameValueCollection" /> containing the HTTP request query string parameters.
+            </param>
+      <returns>The resulting collection.</returns>
+    </member>
     <member name="T:RestFoundation.Results.IResult">
       <summary>
             Defines a service method result.
@@ -1805,6 +1845,23 @@
             Gets a value indicating whether the log writer supports the <see cref="M:RestFoundation.ILogWriter.FlushAsync" />
             operation.
             </summary>
+    </member>
+    <member name="T:RestFoundation.Runtime.DefaultODataProvider">
+      <summary>
+            Represents the default OData provider for <see cref="T:System.Linq.IQueryable`T" /> collection
+            results.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Runtime.DefaultODataProvider.PerformQuery(System.Linq.IQueryable,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Performs a query on a collection and returns the resulting collection of
+            objects.
+            </summary>
+      <param name="collection">The collection to perform the query on.</param>
+      <param name="queryString">
+            A <see cref="T:System.Collections.Specialized.NameValueCollection" /> containing the HTTP request query string parameters.
+            </param>
+      <returns>The resulting collection.</returns>
     </member>
     <member name="T:RestFoundation.Runtime.Fault">
       <summary>
@@ -2105,6 +2162,16 @@
       <param name="forceDefaultMediaType">
             Set to true to always use the provided media type regardless of the Accept HTTP header value;
             otherwise set to false.
+            </param>
+      <returns>The configuration options object.</returns>
+    </member>
+    <member name="M:RestFoundation.Configuration.RestOptions.OutputEnumerableAsChunked(System.Boolean)">
+      <summary>
+            Sets a value indicating whether <see cref="T:System.Collections.Generic.IEnumerable`1" /> collection
+            results should be output as chunked HTTP requests. The default value is true.
+            </summary>
+      <param name="enumerableAsChunked">
+            true if collections should be output as chunked HTTP requests; otherwise false.
             </param>
       <returns>The configuration options object.</returns>
     </member>
@@ -2666,6 +2733,11 @@
               Looks up a localized string similar to The HTTP status code is not an error code..
             </summary>
     </member>
+    <member name="P:RestFoundation.Resources.Global.NonGenericResultCollections">
+      <summary>
+              Looks up a localized string similar to Non-generic collections cannot be returned as service method results. Return typed arrays (recommended) or generic collections instead..
+            </summary>
+    </member>
     <member name="P:RestFoundation.Resources.Global.NonStringOutputType">
       <summary>
               Looks up a localized string similar to The output type is not a string..
@@ -2679,6 +2751,11 @@
     <member name="P:RestFoundation.Resources.Global.NotFound">
       <summary>
               Looks up a localized string similar to Not Found.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NotImplemented">
+      <summary>
+              Looks up a localized string similar to Not Implemented.
             </summary>
     </member>
     <member name="P:RestFoundation.Resources.Global.NullOrInvalidAcceptedName">
@@ -4534,6 +4611,15 @@
             </summary>
       <param name="resourceTypes">A dictionary of resource types mapped to MIME content types.</param>
       <returns>The created <see cref="T:RestFoundation.Client.IRestClient" /> instance.</returns>
+    </member>
+    <member name="M:RestFoundation.Client.RestClientFactory.UseBuilder(System.Func{RestFoundation.Client.IRestSerializerFactory,System.Collections.Generic.IDictionary{RestFoundation.Client.RestResourceType,System.String},RestFoundation.Client.IRestClient})">
+      <summary>
+            Sets a delegate to create a REST client instance.
+            </summary>
+      <param name="builder">A REST client builder delegate.</param>
+      <returns>
+            An <see cref="T:System.IDisposable" /> to reset the default REST client builder.
+            </returns>
     </member>
     <member name="T:RestFoundation.Client.IRestSerializerFactory">
       <summary>
@@ -10607,6 +10693,14 @@
             Executes the result against the provided service context.
             </summary>
       <param name="context">The service context.</param>
+    </member>
+    <member name="M:RestFoundation.Results.StatusResult.IsSuccessStatusCode">
+      <summary>
+            Gets a <see cref="T:System.Boolean" /> indicating whether the status code was successful.
+            </summary>
+      <returns>
+            true if the status code is in the 200-299 range; otherwise false.
+            </returns>
     </member>
     <member name="P:RestFoundation.Results.StatusResult.ResponseHeaders">
       <summary>
