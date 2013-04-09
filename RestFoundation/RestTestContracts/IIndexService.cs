@@ -43,21 +43,26 @@ namespace RestTestContracts
         IResult GetAllByFormat(string format);
 
         [Url("index/{id}")]
-        ContentResult Get([ParameterConstraint(@"\d{1,3}")] int? id = 1, [FromUri] string dummy = "N/A");
+        ContentResult Get([ParameterConstraint(ParameterConstraints.UnsignedInteger)] int? id = 1,
+                          [FromUri] string dummy = "N/A");
 
         [Url("index"), ValidateResource(true)]
         object Post(Person resource);
 
         [Url("index/{id}"), ValidateResource(true)]
-        Person Put([ParameterConstraint(@"\d{1,3}")] int? id, [Resource] Person personToUpdate);
+        Person Put([ParameterConstraint(ParameterConstraints.UnsignedInteger)] int? id,
+                   [Resource] Person personToUpdate);
 
         [Url("index/{id}"), ValidateResource(true)]
-        Person Patch([ParameterConstraint(@"\d{1,3}")] int? id, Person resource);
+        Person Patch([ParameterConstraint(ParameterConstraints.UnsignedInteger)] int? id,
+                     Person resource);
 
         [Url("index/{name}")]
-        StatusResult Delete(string name);
+        StatusResult Delete([ParameterConstraint(ParameterConstraints.UnsignedInteger)] string name);
 
-        [Url("index/form-data", Priority = 10 /* need to be above the parameterized methods */ )]
-        Person PostMultipleParameters([FromBody] string name, [FromBody] int age, [FromBody] DateTime? timestamp);
+        [Url("index/form-data", Priority = 10 /* need to be above the parameterized methods */)]
+        Person PostMultipleParameters([FromBody] string name,
+                                      [FromBody] int age,
+                                      [FromBody] DateTime? timestamp);
     }
 }
