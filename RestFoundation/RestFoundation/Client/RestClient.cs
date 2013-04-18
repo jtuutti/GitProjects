@@ -40,6 +40,7 @@ namespace RestFoundation.Client
 
         public bool PerformRedirects { get; set; }
         public bool AllowCookies { get; set; }
+        public bool UseDefaultCredentials { get; set; }
         public NetworkCredential Credentials { get; set; }
         public string AuthenticationType { get; set; }
         public string ProxyUrl { get; set; }
@@ -340,7 +341,11 @@ namespace RestFoundation.Client
             request.AllowAutoRedirect = PerformRedirects;
             request.Headers.Add(resource.Headers);
 
-            if (Credentials != null)
+            if (UseDefaultCredentials)
+            {
+                request.UseDefaultCredentials = true;
+            }
+            else if (Credentials != null)
             {
                 SetCredentials(request, url);
             }

@@ -37,6 +37,13 @@ namespace RestFoundation.Client
         bool SupportsEncoding { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to use default authentication credentials.
+        /// If set to to true, the <see cref="Credentials"/> and the <see cref="AuthenticationType"/>
+        /// properties will be ignored.
+        /// </summary>
+        bool UseDefaultCredentials { get; set; }
+
+        /// <summary>
         /// Gets or sets the authentication type.
         /// </summary>
         string AuthenticationType { get; set; }
