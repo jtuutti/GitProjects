@@ -867,6 +867,13 @@
             GZIP and Deflate compression algorithms are currently supported.
             </summary>
     </member>
+    <member name="P:RestFoundation.Client.IRestClient.UseDefaultCredentials">
+      <summary>
+            Gets or sets a value indicating whether to use default authentication credentials.
+            If set to to true, the <see cref="P:RestFoundation.Client.IRestClient.Credentials" /> and the <see cref="P:RestFoundation.Client.IRestClient.AuthenticationType" />
+            properties will be ignored.
+            </summary>
+    </member>
     <member name="P:RestFoundation.Client.IRestClient.AuthenticationType">
       <summary>
             Gets or sets the authentication type.
