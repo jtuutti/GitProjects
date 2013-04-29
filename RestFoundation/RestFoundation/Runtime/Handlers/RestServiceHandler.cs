@@ -134,6 +134,7 @@ namespace RestFoundation.Runtime.Handlers
 
                     if (await Task.WhenAny(methodTask, delayTask) == delayTask)
                     {
+                        SafeTaskCancel(Context.Response.CancellationTokenSource);
                         throw new HttpResponseException(HttpStatusCode.ServiceUnavailable, Resources.Global.ServiceTimedOut);
                     }
 
@@ -155,7 +156,10 @@ namespace RestFoundation.Runtime.Handlers
         {
             try
             {
-                cancellation.Cancel();
+                if (cancellation != null && !cancellation.IsCancellationRequested)
+                {
+                    cancellation.Cancel();
+                }
             }
             catch (Exception)
             {

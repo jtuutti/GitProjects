@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Web;
 using RestFoundation.Collections;
 using RestFoundation.Collections.Concrete;
@@ -68,6 +69,11 @@ namespace RestFoundation.Context
                 return Context.Response.StatusCode >= 200 && Context.Response.StatusCode < 300;
             }
         }
+
+        /// <summary>
+        /// Gets or sets a cancellation token source for a returned asynchronous task.
+        /// </summary>
+        public CancellationTokenSource CancellationTokenSource { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether custom IIS 7+ error pages should be

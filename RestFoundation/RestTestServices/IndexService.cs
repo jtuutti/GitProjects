@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using RestFoundation;
 using RestFoundation.Client;
+using RestFoundation.Context;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
 using RestTestContracts;
@@ -114,7 +115,7 @@ namespace RestTestServices
                 throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "GET is not allowed");
             }
 
-            var peopleQuery = await Task.Run(() => new List<Person>(people).AsQueryable());
+            var peopleQuery = await Task.Run(() => new List<Person>(people).AsQueryable(), Context.Response.CreateCancellationToken());
 
             // validates that the async task returns to the right thread
             Context.Response.SetStatus(HttpStatusCode.OK, "Task completed asynchronously");

@@ -7,7 +7,9 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using RestFoundation.Context;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
@@ -94,10 +96,12 @@ namespace RestFoundation.Results
             {
                 CreateRangeOutput(context, stream);
 
-                while (context.Response.IsClientConnected && await stream.ReadAsync(buffer, 0, buffer.Length) > 0)
+                CancellationToken cancellationToken = context.Response.GetCancellationToken();
+
+                while (context.Response.IsClientConnected && await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken) > 0)
                 {
-                    await context.Response.Output.Stream.WriteAsync(buffer, 0, buffer.Length);
-                    await context.Response.Output.Stream.FlushAsync();
+                    await context.Response.Output.Stream.WriteAsync(buffer, 0, buffer.Length, cancellationToken);
+                    await context.Response.Output.Stream.FlushAsync(cancellationToken);
                 }
             }
         }

@@ -84,6 +84,7 @@
     <Compile Include="Context\ContextContainer.cs" />
     <Compile Include="Configuration\DependencyBuilder.cs" />
     <Compile Include="Configuration\FaultDetail.cs" />
+    <Compile Include="Context\HttpResponseExtensions.cs" />
     <Compile Include="Formatters\SupportedMediaTypeAttribute.cs" />
     <Compile Include="ILogWriter.cs" />
     <Compile Include="InstanceLifetime.cs" />

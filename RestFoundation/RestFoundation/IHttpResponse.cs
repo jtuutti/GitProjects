@@ -4,6 +4,7 @@
 using System;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Web;
 using RestFoundation.Collections;
 
@@ -28,6 +29,11 @@ namespace RestFoundation
         /// Gets a value indicating whether the response status code is successful.
         /// </summary>
         bool IsSuccess { get; }
+
+        /// <summary>
+        /// Gets or sets a cancellation token source for a returned asynchronous task.
+        /// </summary>
+        CancellationTokenSource CancellationTokenSource { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether custom IIS 7+ error pages should be
