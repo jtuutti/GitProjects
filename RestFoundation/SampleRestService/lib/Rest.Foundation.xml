@@ -1055,6 +1055,27 @@
             The exception message and the stack trace are always returned.
             </summary>
     </member>
+    <member name="T:RestFoundation.Context.HttpResponseExtensions">
+      <summary>
+            Contains <see cref="T:RestFoundation.IHttpResponse" /> extensions.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponseExtensions.CreateCancellationToken(RestFoundation.IHttpResponse)">
+      <summary>
+            Creates a <see cref="T:System.Threading.CancellationToken" /> for the HTTP response. If the response
+            already has an associated <see cref="T:System.Threading.CancellationTokenSource" />, the existing
+            <see cref="T:System.Threading.CancellationToken" /> will be returned.
+            </summary>
+      <param name="response">The <see cref="T:RestFoundation.IHttpResponse" /> instance.</param>
+      <returns>The associated cancellation token.</returns>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponseExtensions.GetCancellationToken(RestFoundation.IHttpResponse)">
+      <summary>
+            Returns a <see cref="T:System.Threading.CancellationToken" /> associated with the HTTP response.
+            </summary>
+      <param name="response">The <see cref="T:RestFoundation.IHttpResponse" /> instance.</param>
+      <returns>The associated cancellation token.</returns>
+    </member>
     <member name="T:RestFoundation.Formatters.SupportedMediaTypeAttribute">
       <summary>
             Represents a supported media type for a media type formatter.
@@ -9400,6 +9421,11 @@
             Gets a value indicating whether the response status code is successful.
             </summary>
     </member>
+    <member name="P:RestFoundation.IHttpResponse.CancellationTokenSource">
+      <summary>
+            Gets or sets a cancellation token source for a returned asynchronous task.
+            </summary>
+    </member>
     <member name="P:RestFoundation.IHttpResponse.TrySkipIisCustomErrors">
       <summary>
             Gets or sets a value indicating whether custom IIS 7+ error pages should be
@@ -9950,6 +9976,11 @@
     <member name="P:RestFoundation.Context.HttpResponse.IsSuccess">
       <summary>
             Gets a value indicating whether the response status code is successful.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Context.HttpResponse.CancellationTokenSource">
+      <summary>
+            Gets or sets a cancellation token source for a returned asynchronous task.
             </summary>
     </member>
     <member name="P:RestFoundation.Context.HttpResponse.TrySkipIisCustomErrors">
