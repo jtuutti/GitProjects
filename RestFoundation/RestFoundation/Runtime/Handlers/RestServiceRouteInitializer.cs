@@ -56,6 +56,7 @@ namespace RestFoundation.Runtime.Handlers
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound, Resources.Global.NotFound);
             }
+
             return routeInfo;
         }
     }
