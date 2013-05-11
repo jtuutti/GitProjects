@@ -13,9 +13,9 @@ namespace RestFoundation.Collections
     public interface ICookieValueCollection : IEnumerable<HttpCookie>
     {
         /// <summary>
-        /// Gets a read-only collection of all keys.
+        /// Gets a list of all keys.
         /// </summary>
-        IReadOnlyCollection<string> Keys { get; }
+        IReadOnlyList<string> Keys { get; }
 
         /// <summary>
         /// Gets a value containing the count of all collection items.

@@ -7,6 +7,7 @@ namespace RestFoundation.TypeBinders
 {
     /// <summary>
     /// Represents a type binder for a specific service method parameter.
+    /// This class cannot be instantiated.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
     public abstract class TypeBinderAttribute : Attribute, ITypeBinder

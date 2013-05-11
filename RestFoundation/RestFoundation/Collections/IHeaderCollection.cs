@@ -18,9 +18,9 @@ namespace RestFoundation.Collections
         string AcceptType { get; }
 
         /// <summary>
-        /// Gets the Accept-Type header values as a sequence in the order of preference.
+        /// Gets the Accept-Type header value list in the order of preference.
         /// </summary>
-        IEnumerable<string> AcceptTypes { get; }
+        IReadOnlyList<string> AcceptTypes { get; }
 
         /// <summary>
         /// Gets the Accept-Charset header value.
@@ -28,9 +28,9 @@ namespace RestFoundation.Collections
         string AcceptCharset { get; }
 
         /// <summary>
-        /// Gets the Accept-Charset header values as a sequence in the order of preference.
+        /// Gets the Accept-Charset header value list in the order of preference.
         /// </summary>
-        IEnumerable<string> AcceptCharsets { get; }
+        IReadOnlyList<string> AcceptCharsets { get; }
 
         /// <summary>
         /// Gets the Accept-Charset header value as an <see cref="Encoding"/> object.
@@ -43,9 +43,9 @@ namespace RestFoundation.Collections
         string AcceptEncoding { get; }
 
         /// <summary>
-        /// Gets the Accept-Encoding header values as a sequence in the order of preference.
+        /// Gets the Accept-Encoding header value list in the order of preference.
         /// </summary>
-        IEnumerable<string> AcceptEncodings { get; }
+        IReadOnlyList<string> AcceptEncodings { get; }
 
         /// <summary>
         /// Gets the Accept-Language header value.
@@ -53,9 +53,9 @@ namespace RestFoundation.Collections
         string AcceptLanguage { get; }
 
         /// <summary>
-        /// Gets the Accept-Language header values as a sequence in the order of preference.
+        /// Gets the Accept-Language header value list in the order of preference.
         /// </summary>
-        IEnumerable<string> AcceptLanguages { get; }
+        IReadOnlyList<string> AcceptLanguages { get; }
 
         /// <summary>
         /// Gets the Accept-Language header value as a <see cref="CultureInfo"/> object.
@@ -116,7 +116,7 @@ namespace RestFoundation.Collections
         /// <summary>
         /// Gets a list of links specified in the Link header.
         /// </summary>
-        IEnumerable<Link> Links { get; }
+        IReadOnlyList<Link> Links { get; }
 
         /// <summary>
         /// Gets the Authorization header value.

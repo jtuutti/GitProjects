@@ -54,7 +54,7 @@ namespace RestFoundation
         }
 
         /// <summary>
-        /// Gets a read-only collection of the service context dependent types.
+        /// Gets a collection of the service context dependent types.
         /// </summary>
         public static IReadOnlyCollection<Type> ServiceContextTypes
         {

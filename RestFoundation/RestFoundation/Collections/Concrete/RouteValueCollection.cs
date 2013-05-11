@@ -28,9 +28,9 @@ namespace RestFoundation.Collections.Concrete
         }
 
         /// <summary>
-        /// Gets a read-only collection of all keys.
+        /// Gets a list of all keys.
         /// </summary>
-        public IReadOnlyCollection<string> Keys
+        public IReadOnlyList<string> Keys
         {
             get
             {

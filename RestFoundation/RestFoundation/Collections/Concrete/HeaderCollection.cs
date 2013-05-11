@@ -54,9 +54,9 @@ namespace RestFoundation.Collections.Concrete
         public string AcceptType { get; protected set; }
 
         /// <summary>
-        /// Gets the Accept-Type header values as a sequence in the order of preference.
+        /// Gets the Accept-Type header value list in the order of preference.
         /// </summary>
-        public IEnumerable<string> AcceptTypes { get; protected set; }
+        public IReadOnlyList<string> AcceptTypes { get; protected set; }
 
         /// <summary>
         /// Gets the Accept-Charset header value.
@@ -64,9 +64,9 @@ namespace RestFoundation.Collections.Concrete
         public string AcceptCharset { get; protected set; }
 
         /// <summary>
-        /// Gets the Accept-Charset header values as a sequence in the order of preference.
+        /// Gets the Accept-Charset header value list in the order of preference.
         /// </summary>
-        public IEnumerable<string> AcceptCharsets { get; protected set; }
+        public IReadOnlyList<string> AcceptCharsets { get; protected set; }
 
         /// <summary>
         /// Gets the Accept-Charset header value as an <see cref="Encoding"/> object.
@@ -79,9 +79,9 @@ namespace RestFoundation.Collections.Concrete
         public string AcceptEncoding { get; protected set; }
 
         /// <summary>
-        /// Gets the Accept-Encoding header values as a sequence in the order of preference.
+        /// Gets the Accept-Encoding header value list in the order of preference.
         /// </summary>
-        public IEnumerable<string> AcceptEncodings { get; protected set; }
+        public IReadOnlyList<string> AcceptEncodings { get; protected set; }
 
         /// <summary>
         /// Gets the Accept-Language header value.
@@ -89,9 +89,9 @@ namespace RestFoundation.Collections.Concrete
         public string AcceptLanguage { get; protected set; }
 
         /// <summary>
-        /// Gets the Accept-Language header values as a sequence in the order of preference.
+        /// Gets the Accept-Language header value list in the order of preference.
         /// </summary>
-        public IEnumerable<string> AcceptLanguages { get; protected set; }
+        public IReadOnlyList<string> AcceptLanguages { get; protected set; }
 
         /// <summary>
         /// Gets the Accept-Language header value as a <see cref="CultureInfo"/> object.
@@ -142,7 +142,7 @@ namespace RestFoundation.Collections.Concrete
         /// <summary>
         /// Gets a list of links specified in the Link header.
         /// </summary>
-        public IEnumerable<Link> Links { get; private set; }
+        public IReadOnlyList<Link> Links { get; private set; }
 
         /// <summary>
         /// Gets the Content-Encoding header value.
@@ -238,7 +238,7 @@ namespace RestFoundation.Collections.Concrete
         {
             var acceptValues = new AcceptValueCollection(TryGet("Accept"));
             AcceptType = acceptValues.GetPreferredName();
-            AcceptTypes = acceptValues.AcceptedNames;
+            AcceptTypes = acceptValues.AcceptedNames.ToArray();
 
             AcceptValue? acceptedTypeValue = acceptValues.GetPreferredValue();
             AcceptVersion = acceptedTypeValue.HasValue ? acceptedTypeValue.Value.Version : 0;
@@ -251,7 +251,7 @@ namespace RestFoundation.Collections.Concrete
 
             if (!String.IsNullOrEmpty(acceptCharset))
             {
-                AcceptCharsets = acceptCharsets.AcceptedNames;
+                AcceptCharsets = acceptCharsets.AcceptedNames.ToArray();
             }
             else
             {
@@ -274,14 +274,14 @@ namespace RestFoundation.Collections.Concrete
         {
             var acceptEncodings = new AcceptValueCollection(TryGet("Accept-Encoding"));
             AcceptEncoding = acceptEncodings.GetPreferredName();
-            AcceptEncodings = acceptEncodings.AcceptedNames;
+            AcceptEncodings = acceptEncodings.AcceptedNames.ToArray();
         }
 
         private void SetAcceptLanguages()
         {
             var acceptLanguages = new AcceptValueCollection(TryGet("Accept-Language"));
             AcceptLanguage = acceptLanguages.GetPreferredName();
-            AcceptLanguages = acceptLanguages.AcceptedNames;
+            AcceptLanguages = acceptLanguages.AcceptedNames.ToArray();
 
             if (String.IsNullOrEmpty(AcceptLanguage))
             {
@@ -307,7 +307,15 @@ namespace RestFoundation.Collections.Concrete
         private void SetLinks()
         {
             IList<string> linkValues = GetValues("Link");
-            Links = linkValues != null && linkValues.Count != 0 ? new LinkCollection(linkValues).ToList() : new Link[0];
+
+            if (linkValues != null && linkValues.Count != 0)
+            {
+                Links = new LinkCollection(linkValues).ToArray();
+            }
+            else
+            {
+                Links = new Link[0];
+            }
         }
     }
 }

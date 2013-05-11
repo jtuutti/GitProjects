@@ -45,15 +45,21 @@ namespace RestFoundation.Collections.Specialized
         }
 
         /// <summary>
+        /// Returns an array of <see cref="Link"/> objects representing the Link header values.
+        /// </summary>
+        /// <returns>An array of <see cref="Link"/> objects.</returns>
+        public Link[] ToArray()
+        {
+            return GetLinks().ToArray();
+        }
+
+        /// <summary>
         /// Returns a list <see cref="Link"/> objects representing the Link header values.
         /// </summary>
         /// <returns>A list of <see cref="Link"/> objects.</returns>
         public IList<Link> ToList()
         {
-            return (from v in m_linkValues
-                    let link = ParseLinkValue(v)
-                    where link.Href != null
-                    select link).ToList();
+            return GetLinks().ToList();
         }
 
         /// <summary>
@@ -198,6 +204,14 @@ namespace RestFoundation.Collections.Specialized
         private static string ParseLinkParameterValue(string value)
         {
             return value.Trim(QuotationMark[0], Space[0]).Replace(CommaPlaceholder, Comma).Replace(SemicolonPlaceholder, Semicolon);
+        }
+
+        private IEnumerable<Link> GetLinks()
+        {
+            return from v in m_linkValues
+                   let link = ParseLinkValue(v)
+                   where link.Href != null
+                   select link;
         }
     }
 }
