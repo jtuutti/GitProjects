@@ -305,31 +305,33 @@ namespace RestFoundation.Client
             }
 
             IRestSerializer serializer = m_serializerFactory.Create(typeof(T), resource.Type, resource.XmlNamespace);
-            request.ContentLength = serializer.GetContentLength(resource.ResourceBody);
-
-            var requestTask = Task<Stream>.Factory.FromAsync(request.BeginGetRequestStream, request.EndGetRequestStream, request).ConfigureAwait(false);
-            serializer.Serialize(await requestTask, resource.ResourceBody);
+            await serializer.SerializeAsync(request, resource.ResourceBody);
         }
 
-        private void DeserializeResourceBody<T>(RestResource<T> outputResource, IRestSerializer serializer, WebResponse response, Stream responseStream)
+        private async Task DeserializeResourceBody<T>(RestResource<T> outputResource, IRestSerializer serializer, HttpWebResponse response, Stream responseStream)
         {
+            if (String.Equals("HEAD", response.Method, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
             if (SupportsEncoding && String.Equals("gzip", response.Headers[ContentEncodingHeader], StringComparison.OrdinalIgnoreCase))
             {
                 using (var uncompressedStream = new GZipStream(responseStream, CompressionMode.Decompress))
                 {
-                    outputResource.Body = serializer.Deserialize<T>(uncompressedStream);
+                    outputResource.Body = await serializer.DeserializeAsync<T>(uncompressedStream);
                 }
             }
             else if (SupportsEncoding && String.Equals("deflate", response.Headers[ContentEncodingHeader], StringComparison.OrdinalIgnoreCase))
             {
                 using (var uncompressedStream = new DeflateStream(responseStream, CompressionMode.Decompress))
                 {
-                    outputResource.Body = serializer.Deserialize<T>(uncompressedStream);
+                    outputResource.Body = await serializer.DeserializeAsync<T>(uncompressedStream);
                 }
             }
             else
             {
-                outputResource.Body = serializer.Deserialize<T>(responseStream);
+                outputResource.Body = await serializer.DeserializeAsync<T>(responseStream);
             }
         }
 
@@ -388,7 +390,7 @@ namespace RestFoundation.Client
                     Stream responseStream = response.GetResponseStream();
 
                     IRestSerializer serializer = m_serializerFactory.Create(typeof(T), outputType, xmlNamespace);
-                    DeserializeResourceBody(outputResource, serializer, response, responseStream);
+                    await DeserializeResourceBody(outputResource, serializer, response, responseStream);
 
                     return outputResource;
                 }

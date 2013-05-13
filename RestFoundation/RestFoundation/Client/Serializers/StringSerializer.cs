@@ -3,7 +3,9 @@
 // </copyright>
 using System;
 using System.IO;
+using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RestFoundation.Client.Serializers
 {
@@ -13,35 +15,16 @@ namespace RestFoundation.Client.Serializers
     public class StringSerializer : IRestSerializer
     {
         /// <summary>
-        /// Gets content length of an object in the serialized form.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <returns>A value containing the serialized object length.</returns>
-        public int GetContentLength(object obj)
-        {
-            if (obj == null)
-            {
-                return 0;
-            }
-
-            if (!(obj is string))
-            {
-                throw new ArgumentOutOfRangeException("obj");
-            }
-
-            return obj.ToString().Length;
-        }
-
-        /// <summary>
         /// Serializes an object into a stream.
         /// </summary>
-        /// <param name="stream">The output stream.</param>
+        /// <param name="request">The web request to update.</param>
         /// <param name="obj">The object to serialize.</param>
-        public void Serialize(Stream stream, object obj)
+        /// <returns>The serialization task.</returns>
+        public async Task SerializeAsync(WebRequest request, object obj)
         {
-            if (stream == null)
+            if (request == null)
             {
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException("request");
             }
 
             if (obj == null)
@@ -55,7 +38,10 @@ namespace RestFoundation.Client.Serializers
             }
 
             byte[] data = Encoding.UTF8.GetBytes(obj.ToString());
-            stream.Write(data, 0, data.Length);
+            request.ContentLength = data.LongLength;
+
+            Stream requestStream = await Task<Stream>.Factory.FromAsync(request.BeginGetRequestStream, request.EndGetRequestStream, request).ConfigureAwait(false);
+            await requestStream.WriteAsync(data, 0, data.Length);
         }
 
         /// <summary>
@@ -63,8 +49,8 @@ namespace RestFoundation.Client.Serializers
         /// </summary>
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="stream">The input stream.</param>
-        /// <returns>The deserialized object.</returns>
-        public T Deserialize<T>(Stream stream)
+        /// <returns>The deserialization task.</returns>
+        public async Task<T> DeserializeAsync<T>(Stream stream)
         {
             if (stream == null)
             {
@@ -78,7 +64,7 @@ namespace RestFoundation.Client.Serializers
 
             using (var reader = new StreamReader(stream, Encoding.UTF8))
             {
-                object serializedObject = reader.ReadToEnd();
+                object serializedObject = await reader.ReadToEndAsync();
                 return (T) serializedObject;
             }
         }
