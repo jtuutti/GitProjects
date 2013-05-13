@@ -900,6 +900,12 @@
             </summary>
       <param name="linkValues">A list of Link header values.</param>
     </member>
+    <member name="M:RestFoundation.Collections.Specialized.LinkCollection.ToArray">
+      <summary>
+            Returns an array of <see cref="T:RestFoundation.Link" /> objects representing the Link header values.
+            </summary>
+      <returns>An array of <see cref="T:RestFoundation.Link" /> objects.</returns>
+    </member>
     <member name="M:RestFoundation.Collections.Specialized.LinkCollection.ToList">
       <summary>
             Returns a list <see cref="T:RestFoundation.Link" /> objects representing the Link header values.
@@ -4264,7 +4270,7 @@
     </member>
     <member name="P:RestFoundation.Collections.IStringValueCollection.Keys">
       <summary>
-            Gets a read-only collection of all keys.
+            Gets a list of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.IStringValueCollection.Count">
@@ -4325,7 +4331,7 @@
     </member>
     <member name="P:RestFoundation.Collections.Concrete.StringValueCollection.Keys">
       <summary>
-            Gets a read-only collection of all keys.
+            Gets a list of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.StringValueCollection.Count">
@@ -4892,7 +4898,7 @@
     </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.AcceptTypes">
       <summary>
-            Gets the Accept-Type header values as a sequence in the order of preference.
+            Gets the Accept-Type header value list in the order of preference.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.AcceptCharset">
@@ -4902,7 +4908,7 @@
     </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.AcceptCharsets">
       <summary>
-            Gets the Accept-Charset header values as a sequence in the order of preference.
+            Gets the Accept-Charset header value list in the order of preference.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.AcceptCharsetEncoding">
@@ -4917,7 +4923,7 @@
     </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.AcceptEncodings">
       <summary>
-            Gets the Accept-Encoding header values as a sequence in the order of preference.
+            Gets the Accept-Encoding header value list in the order of preference.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.AcceptLanguage">
@@ -4927,7 +4933,7 @@
     </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.AcceptLanguages">
       <summary>
-            Gets the Accept-Language header values as a sequence in the order of preference.
+            Gets the Accept-Language header value list in the order of preference.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.IHeaderCollection.AcceptLanguageCulture">
@@ -5028,7 +5034,7 @@
     </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AcceptTypes">
       <summary>
-            Gets the Accept-Type header values as a sequence in the order of preference.
+            Gets the Accept-Type header value list in the order of preference.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AcceptCharset">
@@ -5038,7 +5044,7 @@
     </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AcceptCharsets">
       <summary>
-            Gets the Accept-Charset header values as a sequence in the order of preference.
+            Gets the Accept-Charset header value list in the order of preference.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AcceptCharsetEncoding">
@@ -5053,7 +5059,7 @@
     </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AcceptEncodings">
       <summary>
-            Gets the Accept-Encoding header values as a sequence in the order of preference.
+            Gets the Accept-Encoding header value list in the order of preference.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AcceptLanguage">
@@ -5063,7 +5069,7 @@
     </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AcceptLanguages">
       <summary>
-            Gets the Accept-Language header values as a sequence in the order of preference.
+            Gets the Accept-Language header value list in the order of preference.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.HeaderCollection.AcceptLanguageCulture">
@@ -6249,6 +6255,7 @@
     <member name="T:RestFoundation.TypeBinders.TypeBinderAttribute">
       <summary>
             Represents a type binder for a specific service method parameter.
+            This class cannot be instantiated.
             </summary>
     </member>
     <member name="M:RestFoundation.TypeBinders.TypeBinderAttribute.Bind(System.String,System.Type,RestFoundation.IServiceContext)">
@@ -7248,7 +7255,7 @@
     </member>
     <member name="P:RestFoundation.Rest.ServiceContextTypes">
       <summary>
-            Gets a read-only collection of the service context dependent types.
+            Gets a collection of the service context dependent types.
             </summary>
     </member>
     <member name="P:RestFoundation.Rest.Configuration">
@@ -9459,7 +9466,7 @@
     </member>
     <member name="P:RestFoundation.Collections.ICookieValueCollection.Keys">
       <summary>
-            Gets a read-only collection of all keys.
+            Gets a list of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.ICookieValueCollection.Count">
@@ -9507,7 +9514,7 @@
     </member>
     <member name="P:RestFoundation.Collections.Concrete.CookieValueCollection.Keys">
       <summary>
-            Gets a read-only collection of all keys.
+            Gets a list of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.CookieValueCollection.Count">
@@ -9543,7 +9550,7 @@
     </member>
     <member name="P:RestFoundation.Collections.IRouteValueCollection.Keys">
       <summary>
-            Gets a read-only collection of all keys.
+            Gets a list of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.IRouteValueCollection.Count">
@@ -9597,7 +9604,7 @@
     </member>
     <member name="P:RestFoundation.Collections.Concrete.RouteValueCollection.Keys">
       <summary>
-            Gets a read-only collection of all keys.
+            Gets a list of all keys.
             </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.RouteValueCollection.Count">
