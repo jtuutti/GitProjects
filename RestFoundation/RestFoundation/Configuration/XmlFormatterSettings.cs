@@ -11,10 +11,6 @@ namespace RestFoundation.Configuration
         /// <summary>
         /// Gets or sets the XML namespace
         /// </summary>
-        public string Namespace
-        {
-            get;
-            set;
-        }
+        public string Namespace { get; set; }
     }
 }
