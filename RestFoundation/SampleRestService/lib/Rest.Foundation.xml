@@ -4646,7 +4646,7 @@
       <param name="resourceTypes">A dictionary of resource types mapped to MIME content types.</param>
       <returns>The created <see cref="T:RestFoundation.Client.IRestClient" /> instance.</returns>
     </member>
-    <member name="M:RestFoundation.Client.RestClientFactory.UseBuilder(System.Func{RestFoundation.Client.IRestSerializerFactory,System.Collections.Generic.IDictionary{RestFoundation.Client.RestResourceType,System.String},RestFoundation.Client.IRestClient})">
+    <member name="M:RestFoundation.Client.RestClientFactory.UseBuilder(System.Func{RestFoundation.Client.IRestClientSerializerFactory,System.Collections.Generic.IDictionary{RestFoundation.Client.RestResourceType,System.String},RestFoundation.Client.IRestClient})">
       <summary>
             Sets a delegate to create a REST client instance.
             </summary>
@@ -4655,12 +4655,12 @@
             An <see cref="T:System.IDisposable" /> to reset the default REST client builder.
             </returns>
     </member>
-    <member name="T:RestFoundation.Client.IRestSerializerFactory">
+    <member name="T:RestFoundation.Client.IRestClientSerializerFactory">
       <summary>
-            Defines a REST serializer factory.
+            Defines a REST client serializer factory.
             </summary>
     </member>
-    <member name="M:RestFoundation.Client.IRestSerializerFactory.Create(System.Type,RestFoundation.Client.RestResourceType,System.String)">
+    <member name="M:RestFoundation.Client.IRestClientSerializerFactory.Create(System.Type,RestFoundation.Client.RestResourceType,System.String)">
       <summary>
             Returns a serializer that matches the object type and the resource content type.
             </summary>
@@ -4758,66 +4758,54 @@
             An object serialized as XML.
             </summary>
     </member>
-    <member name="T:RestFoundation.Client.IRestSerializer">
+    <member name="T:RestFoundation.Client.IRestClientSerializer">
       <summary>
             Defines a REST client serializer.
             </summary>
     </member>
-    <member name="M:RestFoundation.Client.IRestSerializer.GetContentLength(System.Object)">
-      <summary>
-            Gets content length of an object in the serialized form.
-            </summary>
-      <param name="obj">The object.</param>
-      <returns>A value containing the serialized object length.</returns>
-    </member>
-    <member name="M:RestFoundation.Client.IRestSerializer.Serialize(System.IO.Stream,System.Object)">
+    <member name="M:RestFoundation.Client.IRestClientSerializer.SerializeAsync(System.Net.WebRequest,System.Object)">
       <summary>
             Serializes an object into a stream.
             </summary>
-      <param name="stream">The output stream.</param>
+      <param name="request">The web request to update.</param>
       <param name="obj">The object to serialize.</param>
+      <returns>The serialization task.</returns>
     </member>
-    <member name="M:RestFoundation.Client.IRestSerializer.Deserialize``1(System.IO.Stream)">
+    <member name="M:RestFoundation.Client.IRestClientSerializer.DeserializeAsync``1(System.IO.Stream)">
       <summary>
             Deserializes an object of the provided type from the stream.
             </summary>
       <typeparam name="T">The object type.</typeparam>
       <param name="stream">The input stream.</param>
-      <returns>The deserialized object.</returns>
+      <returns>The deserialization task.</returns>
     </member>
-    <member name="T:RestFoundation.Client.Serializers.JsonObjectSerializer">
+    <member name="T:RestFoundation.Client.Serializers.JsonClientSerializer">
       <summary>
-            Represents a JSON serializer.
+            Represents a REST client JSON serializer.
             </summary>
     </member>
-    <member name="M:RestFoundation.Client.Serializers.JsonObjectSerializer.GetContentLength(System.Object)">
-      <summary>
-            Gets content length of an object in the serialized form.
-            </summary>
-      <param name="obj">The object.</param>
-      <returns>A value containing the serialized object length.</returns>
-    </member>
-    <member name="M:RestFoundation.Client.Serializers.JsonObjectSerializer.Serialize(System.IO.Stream,System.Object)">
+    <member name="M:RestFoundation.Client.Serializers.JsonClientSerializer.SerializeAsync(System.Net.WebRequest,System.Object)">
       <summary>
             Serializes an object into a stream.
             </summary>
-      <param name="stream">The output stream.</param>
+      <param name="request">The web request to update.</param>
       <param name="obj">The object to serialize.</param>
+      <returns>The serialization task.</returns>
     </member>
-    <member name="M:RestFoundation.Client.Serializers.JsonObjectSerializer.Deserialize``1(System.IO.Stream)">
+    <member name="M:RestFoundation.Client.Serializers.JsonClientSerializer.DeserializeAsync``1(System.IO.Stream)">
       <summary>
             Deserializes an object of the provided type from the stream.
             </summary>
       <typeparam name="T">The object type.</typeparam>
       <param name="stream">The input stream.</param>
-      <returns>The deserialized object.</returns>
+      <returns>The deserialization task.</returns>
     </member>
-    <member name="T:RestFoundation.Client.Serializers.RestSerializerFactory">
+    <member name="T:RestFoundation.Client.Serializers.RestClientSerializerFactory">
       <summary>
-            Represents a REST serializer factory that supports JSON and XML.
+            Represents a REST client serializer factory that supports JSON and XML.
             </summary>
     </member>
-    <member name="M:RestFoundation.Client.Serializers.RestSerializerFactory.Create(System.Type,RestFoundation.Client.RestResourceType,System.String)">
+    <member name="M:RestFoundation.Client.Serializers.RestClientSerializerFactory.Create(System.Type,RestFoundation.Client.RestResourceType,System.String)">
       <summary>
             Creates a serializer instance based on the object type and the REST resource type.
             </summary>
@@ -4826,65 +4814,53 @@
       <param name="xmlNamespace">An optional XML resource namespace.</param>
       <returns>The serializer instance.</returns>
     </member>
-    <member name="T:RestFoundation.Client.Serializers.StringSerializer">
+    <member name="T:RestFoundation.Client.Serializers.StringClientSerializer">
       <summary>
-            Represents a <see cref="T:System.String" /> serializer.
+            Represents a REST client <see cref="T:System.String" /> serializer.
             </summary>
     </member>
-    <member name="M:RestFoundation.Client.Serializers.StringSerializer.GetContentLength(System.Object)">
-      <summary>
-            Gets content length of an object in the serialized form.
-            </summary>
-      <param name="obj">The object.</param>
-      <returns>A value containing the serialized object length.</returns>
-    </member>
-    <member name="M:RestFoundation.Client.Serializers.StringSerializer.Serialize(System.IO.Stream,System.Object)">
+    <member name="M:RestFoundation.Client.Serializers.StringClientSerializer.SerializeAsync(System.Net.WebRequest,System.Object)">
       <summary>
             Serializes an object into a stream.
             </summary>
-      <param name="stream">The output stream.</param>
+      <param name="request">The web request to update.</param>
       <param name="obj">The object to serialize.</param>
+      <returns>The serialization task.</returns>
     </member>
-    <member name="M:RestFoundation.Client.Serializers.StringSerializer.Deserialize``1(System.IO.Stream)">
+    <member name="M:RestFoundation.Client.Serializers.StringClientSerializer.DeserializeAsync``1(System.IO.Stream)">
       <summary>
             Deserializes an object of the provided type from the stream.
             </summary>
       <typeparam name="T">The object type.</typeparam>
       <param name="stream">The input stream.</param>
-      <returns>The deserialized object.</returns>
+      <returns>The deserialization task.</returns>
     </member>
-    <member name="T:RestFoundation.Client.Serializers.XmlObjectSerializer">
+    <member name="T:RestFoundation.Client.Serializers.XmlClientSerializer">
       <summary>
-            Represents an XML serializer.
+            Represents a REST client XML serializer.
             </summary>
     </member>
-    <member name="M:RestFoundation.Client.Serializers.XmlObjectSerializer.#ctor(System.String)">
+    <member name="M:RestFoundation.Client.Serializers.XmlClientSerializer.#ctor(System.String)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Client.Serializers.XmlObjectSerializer" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Client.Serializers.XmlClientSerializer" /> class.
             </summary>
       <param name="xmlNamespace">An XML namespace.</param>
     </member>
-    <member name="M:RestFoundation.Client.Serializers.XmlObjectSerializer.GetContentLength(System.Object)">
-      <summary>
-            Gets content length of an object in the serialized form.
-            </summary>
-      <param name="obj">The object.</param>
-      <returns>A value containing the serialized object length.</returns>
-    </member>
-    <member name="M:RestFoundation.Client.Serializers.XmlObjectSerializer.Serialize(System.IO.Stream,System.Object)">
+    <member name="M:RestFoundation.Client.Serializers.XmlClientSerializer.SerializeAsync(System.Net.WebRequest,System.Object)">
       <summary>
             Serializes an object into a stream.
             </summary>
-      <param name="stream">The output stream.</param>
+      <param name="request">The web request to update.</param>
       <param name="obj">The object to serialize.</param>
+      <returns>The serialization task.</returns>
     </member>
-    <member name="M:RestFoundation.Client.Serializers.XmlObjectSerializer.Deserialize``1(System.IO.Stream)">
+    <member name="M:RestFoundation.Client.Serializers.XmlClientSerializer.DeserializeAsync``1(System.IO.Stream)">
       <summary>
             Deserializes an object of the provided type from the stream.
             </summary>
       <typeparam name="T">The object type.</typeparam>
       <param name="stream">The input stream.</param>
-      <returns>The deserialized object.</returns>
+      <returns>The deserialization task.</returns>
     </member>
     <member name="T:RestFoundation.Collections.IHeaderCollection">
       <summary>

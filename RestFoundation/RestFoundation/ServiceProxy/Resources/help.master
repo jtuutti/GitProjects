@@ -36,6 +36,18 @@
         }
     }
 
+    private static string GetAssemblyVersion()
+    {
+        Version assemblyVersion = Rest.FoundationAssembly.GetName().Version;
+
+        if (assemblyVersion == null)
+        {
+            return "1.0";
+        }
+
+        return String.Format(CultureInfo.InvariantCulture, "{0}.{1}", assemblyVersion.Major, assemblyVersion.Minor);
+    }
+
     private void ValidateHttpSecurity()
     {
         if (!configurationOptions.ServiceProxyHttpsOnly || Request.IsSecureConnection)
@@ -112,7 +124,6 @@
         Response.StatusDescription = "Unauthorized";
         Response.End();
     }
-
 </script>
 
 <!DOCTYPE html>
@@ -134,7 +145,7 @@
     <asp:ContentPlaceHolder runat="server" ID="bodyPlaceholder"></asp:ContentPlaceHolder>
 </div>
 <div id="Footer">
-    This web service was built with the <span class="strong">REST Foundation v<%= Rest.FoundationAssembly.GetName().Version %></span> framework (c) 2012-<%= DateTime.Now.Year %> by Dmitry Starosta
+    This web service was built with the <span class="strong">REST Foundation v<%= GetAssemblyVersion() %></span> framework (c) 2012-<%= DateTime.Now.Year %> by Dmitry Starosta
 </div>
 </body>
 </html>
