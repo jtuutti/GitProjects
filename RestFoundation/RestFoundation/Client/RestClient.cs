@@ -19,10 +19,10 @@ namespace RestFoundation.Client
         private const int MinErrorStatusCode = 400;
         private const string ContentEncodingHeader = "Content-Encoding";
 
-        private readonly IRestSerializerFactory m_serializerFactory;
+        private readonly IRestClientSerializerFactory m_serializerFactory;
         private readonly IDictionary<RestResourceType, string> m_resourceTypes;
 
-        internal RestClient(IRestSerializerFactory serializerFactory, IDictionary<RestResourceType, string> resourceTypes)
+        internal RestClient(IRestClientSerializerFactory serializerFactory, IDictionary<RestResourceType, string> resourceTypes)
         {
             if (serializerFactory == null)
             {
@@ -304,11 +304,11 @@ namespace RestFoundation.Client
                 return;
             }
 
-            IRestSerializer serializer = m_serializerFactory.Create(typeof(T), resource.Type, resource.XmlNamespace);
+            IRestClientSerializer serializer = m_serializerFactory.Create(typeof(T), resource.Type, resource.XmlNamespace);
             await serializer.SerializeAsync(request, resource.ResourceBody);
         }
 
-        private async Task DeserializeResourceBody<T>(RestResource<T> outputResource, IRestSerializer serializer, HttpWebResponse response, Stream responseStream)
+        private async Task DeserializeResourceBody<T>(RestResource<T> outputResource, IRestClientSerializer serializer, HttpWebResponse response, Stream responseStream)
         {
             if (String.Equals("HEAD", response.Method, StringComparison.OrdinalIgnoreCase))
             {
@@ -389,7 +389,7 @@ namespace RestFoundation.Client
 
                     Stream responseStream = response.GetResponseStream();
 
-                    IRestSerializer serializer = m_serializerFactory.Create(typeof(T), outputType, xmlNamespace);
+                    IRestClientSerializer serializer = m_serializerFactory.Create(typeof(T), outputType, xmlNamespace);
                     await DeserializeResourceBody(outputResource, serializer, response, responseStream);
 
                     return outputResource;

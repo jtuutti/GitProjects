@@ -6,13 +6,15 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using RestFoundation.Runtime;
 
 namespace RestFoundation.Client.Serializers
 {
     /// <summary>
-    /// Represents a <see cref="String"/> serializer.
+    /// Represents a REST client JSON serializer.
     /// </summary>
-    public class StringSerializer : IRestSerializer
+    public class JsonClientSerializer : IRestClientSerializer
     {
         /// <summary>
         /// Serializes an object into a stream.
@@ -32,12 +34,9 @@ namespace RestFoundation.Client.Serializers
                 return;
             }
 
-            if (!(obj is string))
-            {
-                throw new ArgumentOutOfRangeException("obj");
-            }
+            string serializedObject = JsonConvert.SerializeObject(obj, Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings());
 
-            byte[] data = Encoding.UTF8.GetBytes(obj.ToString());
+            byte[] data = Encoding.UTF8.GetBytes(serializedObject);
             request.ContentLength = data.LongLength;
 
             Stream requestStream = await Task<Stream>.Factory.FromAsync(request.BeginGetRequestStream, request.EndGetRequestStream, request).ConfigureAwait(false);
@@ -50,22 +49,25 @@ namespace RestFoundation.Client.Serializers
         /// <typeparam name="T">The object type.</typeparam>
         /// <param name="stream">The input stream.</param>
         /// <returns>The deserialization task.</returns>
-        public async Task<T> DeserializeAsync<T>(Stream stream)
+        public Task<T> DeserializeAsync<T>(Stream stream)
         {
             if (stream == null)
             {
                 throw new ArgumentNullException("stream");
             }
 
-            if (typeof(T) != typeof(string))
+            using (var streamReader = new StreamReader(stream, Encoding.UTF8))
             {
-                throw new InvalidOperationException(Resources.Global.NonStringOutputType);
-            }
+                var serializer = JsonSerializerFactory.Create();
+                var reader = new JsonTextReader(streamReader);
 
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
-            {
-                object serializedObject = await reader.ReadToEndAsync();
-                return (T) serializedObject;
+                if (typeof(T) == typeof(object))
+                {
+                    dynamic deserializedObject = serializer.Deserialize(reader);
+                    return Task.FromResult<dynamic>(deserializedObject);
+                }
+
+                return Task.FromResult(serializer.Deserialize<T>(reader));
             }
         }
     }

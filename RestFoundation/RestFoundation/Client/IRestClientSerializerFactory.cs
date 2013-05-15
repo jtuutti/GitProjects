@@ -6,9 +6,9 @@ using System;
 namespace RestFoundation.Client
 {
     /// <summary>
-    /// Defines a REST serializer factory.
+    /// Defines a REST client serializer factory.
     /// </summary>
-    public interface IRestSerializerFactory
+    public interface IRestClientSerializerFactory
     {
         /// <summary>
         /// Returns a serializer that matches the object type and the resource content type.
@@ -17,6 +17,6 @@ namespace RestFoundation.Client
         /// <param name="resourceType">The resource type.</param>
         /// <param name="xmlNamespace">An optional XML resource namespace.</param>
         /// <returns>The serializer instance.</returns>
-        IRestSerializer Create(Type objectType, RestResourceType resourceType, string xmlNamespace);
+        IRestClientSerializer Create(Type objectType, RestResourceType resourceType, string xmlNamespace);
     }
 }

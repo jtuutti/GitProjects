@@ -10,7 +10,7 @@ namespace RestFoundation.Client
     /// <summary>
     /// Defines a REST client serializer.
     /// </summary>
-    public interface IRestSerializer
+    public interface IRestClientSerializer
     {
         /// <summary>
         /// Serializes an object into a stream.

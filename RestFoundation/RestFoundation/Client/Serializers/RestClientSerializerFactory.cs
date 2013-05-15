@@ -6,9 +6,9 @@ using System;
 namespace RestFoundation.Client.Serializers
 {
     /// <summary>
-    /// Represents a REST serializer factory that supports JSON and XML.
+    /// Represents a REST client serializer factory that supports JSON and XML.
     /// </summary>
-    public class RestSerializerFactory : IRestSerializerFactory
+    public class RestClientSerializerFactory : IRestClientSerializerFactory
     {
         /// <summary>
         /// Creates a serializer instance based on the object type and the REST resource type.
@@ -17,7 +17,7 @@ namespace RestFoundation.Client.Serializers
         /// <param name="resourceType">The resource type.</param>
         /// <param name="xmlNamespace">An optional XML resource namespace.</param>
         /// <returns>The serializer instance.</returns>
-        public virtual IRestSerializer Create(Type objectType, RestResourceType resourceType, string xmlNamespace)
+        public virtual IRestClientSerializer Create(Type objectType, RestResourceType resourceType, string xmlNamespace)
         {
             if (objectType == null)
             {
@@ -26,15 +26,15 @@ namespace RestFoundation.Client.Serializers
 
             if (objectType == typeof(string))
             {
-                return new StringSerializer();
+                return new StringClientSerializer();
             }
 
             switch (resourceType)
             {
                 case RestResourceType.Json:
-                    return new JsonObjectSerializer();
+                    return new JsonClientSerializer();
                 case RestResourceType.Xml:
-                    return new XmlObjectSerializer(xmlNamespace);
+                    return new XmlClientSerializer(xmlNamespace);
             }
 
             throw new NotSupportedException();

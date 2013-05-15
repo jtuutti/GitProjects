@@ -7,14 +7,14 @@ using RestFoundation.Client.Serializers;
 
 namespace RestFoundation.Client
 {
-    using ClientBuilder = Func<IRestSerializerFactory, IDictionary<RestResourceType, string>, IRestClient>;
+    using ClientBuilder = Func<IRestClientSerializerFactory, IDictionary<RestResourceType, string>, IRestClient>;
 
     /// <summary>
     /// Creates <see cref="IRestClient"/> instances.
     /// </summary>
     public static class RestClientFactory
     {
-        private static readonly ClientBuilder defaultBuilder = (serializerFactory, resourceTypes) => new RestClient(serializerFactory ?? new RestSerializerFactory(),
+        private static readonly ClientBuilder defaultBuilder = (serializerFactory, resourceTypes) => new RestClient(serializerFactory ?? new RestClientSerializerFactory(),
                                                                                                                     resourceTypes ?? new Dictionary<RestResourceType, string>
                                                                                                                     {
                                                                                                                         { RestResourceType.Json, "application/json" },

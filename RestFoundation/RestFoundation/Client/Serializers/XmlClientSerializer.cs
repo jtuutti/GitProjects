@@ -12,17 +12,17 @@ using RestFoundation.Runtime;
 namespace RestFoundation.Client.Serializers
 {
     /// <summary>
-    /// Represents an XML serializer.
+    /// Represents a REST client XML serializer.
     /// </summary>
-    public class XmlObjectSerializer : IRestSerializer
+    public class XmlClientSerializer : IRestClientSerializer
     {
         private readonly string m_xmlNamespace;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XmlObjectSerializer"/> class.
+        /// Initializes a new instance of the <see cref="XmlClientSerializer"/> class.
         /// </summary>
         /// <param name="xmlNamespace">An XML namespace.</param>
-        public XmlObjectSerializer(string xmlNamespace)
+        public XmlClientSerializer(string xmlNamespace)
         {
             m_xmlNamespace = xmlNamespace;
         }
