@@ -12,7 +12,7 @@ table{border-collapse:collapse;border-spacing:0;font-family:Verdana}
 table td{border-right:2px #fff solid;border-bottom:2px #fff solid;background-color:#e5e5cc;padding:3px 5px}
 table td.centered{text-align:center}
 table th{border-right:2px #fff solid;border-bottom:2px #fff solid;font-weight:700;background-color:#cecf9c;padding:5px}
-textarea{font-family:Tahoma;font-size:1.2em;width:100%;height:200px;border:1px solid #999;padding:2px}
+textarea{font-family:Tahoma;font-size:1.2em;width:100%;height:200px;border:1px solid #999;padding:2px;resize:none}
 tfoot td{background-color:#cecf9c;font-style:italic;padding:5px}
 ul.auto-list{font-size:10pt;display:none;position:absolute;top:0;left:0;border:1px solid #666;background-color:#e5e5cc;list-style:none;margin:0;padding:0}
 ul.auto-list > li{border:1px solid #666;cursor:pointer;padding:2px}

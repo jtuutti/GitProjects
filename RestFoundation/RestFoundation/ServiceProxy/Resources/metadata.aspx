@@ -336,7 +336,7 @@
     <div class="schema-section">
     <a name="response-schema"></a>The following is the response model XSD Schema:
     <pre id="ResponseSchema"><%: responseXmlSchemas[0] %></pre>
-    <a id="ViewResponseSchema" href="#">Response Schema</a>
+    <a id="ViewResponseSchema" href="#">View Response Schema</a>
     </div>
     <% if (responseXmlSchemas.Count > 1) { %>
     <div class="schema-section">
