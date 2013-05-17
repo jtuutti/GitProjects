@@ -196,6 +196,24 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to REST Foundation service route was invoked successfully when it should have failed..
+        /// </summary>
+        internal static string FailedRouteInvokedSuccessfully {
+            get {
+                return ResourceManager.GetString("FailedRouteInvokedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to REST Foundation service route invocation failed with the exception message &quot;{0}&quot;. Exception message &quot;{1}&quot; was expected..
+        /// </summary>
+        internal static string FailedRouteWithInvalidExceptionMessage {
+            get {
+                return ResourceManager.GetString("FailedRouteWithInvalidExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only a file name can be specified. Relative or absolute paths/URLs are not supported..
         /// </summary>
         internal static string FileNameContainsPath {
@@ -484,7 +502,7 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid service method lambda expression provided..
+        ///   Looks up a localized string similar to Invalid or mismatched service method lambda expression provided..
         /// </summary>
         internal static string InvalidServiceMethodExpression {
             get {

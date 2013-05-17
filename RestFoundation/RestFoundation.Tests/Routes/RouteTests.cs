@@ -44,28 +44,28 @@ namespace RestFoundation.Tests.Routes
         public void InvalidRoutes()
         {
             // invalid relative URL
-            Assert.Throws(typeof(ArgumentException), () => RouteAssert.Url("/rest/test/1").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.Get(1)));
+            Assert.Throws(typeof(ArgumentException), () => RouteAssert.Url("/rest/test/1"));
 
             // invalid service contract type
-            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/").WithHttpMethod(HttpMethod.Get).Invokes<RouteTests>(s => s.InvalidRoutes()));
+            RouteAssert.Url("~/").WithHttpMethod(HttpMethod.Get).FailsOnInvocation<RouteTests>(s => s.InvalidRoutes());
 
             // mismatched route
-            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.Get(null)));
+            RouteAssert.Url("~/").WithHttpMethod(HttpMethod.Get).FailsOnInvocation<ITestService>(s => s.Get(null));
 
             // mismatched route due to using query data instead of the route parameter
-            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test-service?id=1").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.Get(1)));
+            RouteAssert.Url("~/test-service?id=1").WithHttpMethod(HttpMethod.Get).FailsOnInvocation<ITestService>(s => s.Get(1));
 
             // mismatched http method
-            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test-service/1").WithHttpMethod(HttpMethod.Put).Invokes<ITestService>(s => s.Patch(1)));
+            RouteAssert.Url("~/test-service/1").WithHttpMethod(HttpMethod.Put).FailsOnInvocation<ITestService>(s => s.Patch(1));
 
             // mismatched parameter values
-            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test-service/1").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.Get(11)));
+            RouteAssert.Url("~/test-service/1").WithHttpMethod(HttpMethod.Get).FailsOnInvocation<ITestService>(s => s.Get(11));
 
             // invalid parameter type
-            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test-service/a").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.Get(1)));
+            RouteAssert.Url("~/test-service/a").WithHttpMethod(HttpMethod.Get).FailsOnInvocation<ITestService>(s => s.Get(1));
 
             // parameter constraint violation - orderby must start with a letter or underscore
-            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test-service/all/1name").WithHttpMethod(HttpMethod.Get).Invokes<ITestService>(s => s.GetAll("1name")));
+            RouteAssert.Url("~/test-service/all/1name").WithHttpMethod(HttpMethod.Get).FailsOnInvocation<ITestService>(s => s.GetAll("1name"));
         }
 
         [Test]
@@ -74,11 +74,11 @@ namespace RestFoundation.Tests.Routes
             RouteAssert.Url("~/test-ok-fail/ok").WithHttpMethod(HttpMethod.Get).Invokes<TestSelfContainedService>(s => s.GetOK());
             RouteAssert.Url("~/test-ok-fail/fail").WithHttpMethod(HttpMethod.Get).Invokes<TestSelfContainedService>(s => s.GetFail());
 
-            // mismatched http method
-            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test-ok-fail/fail").WithHttpMethod(HttpMethod.Head).Invokes<TestSelfContainedService>(s => s.GetFail()));
+            string expectedMessage = "URL '~/test-ok-fail/fail' does not match any routes.";
+            RouteAssert.Url("~/test-ok-fail/fail").WithHttpMethod(HttpMethod.Head).FailsOnInvocation<TestSelfContainedService>(s => s.GetFail(), expectedMessage);
 
-            // invalid relative url
-            Assert.Throws(typeof(RouteAssertException), () => RouteAssert.Url("~/test-ok-fail/ok").WithHttpMethod(HttpMethod.Get).Invokes<TestSelfContainedService>(s => s.GetFail()));
+            expectedMessage = "Invalid or mismatched service method lambda expression provided.";
+            RouteAssert.Url("~/test-ok-fail/ok").WithHttpMethod(HttpMethod.Get).FailsOnInvocation<TestSelfContainedService>(s => s.GetFail(), expectedMessage);
         }
     }
 }

@@ -2427,6 +2427,16 @@
               Looks up a localized string similar to HTTP request failed to process..
             </summary>
     </member>
+    <member name="P:RestFoundation.Resources.Global.FailedRouteInvokedSuccessfully">
+      <summary>
+              Looks up a localized string similar to REST Foundation service route was invoked successfully when it should have failed..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.FailedRouteWithInvalidExceptionMessage">
+      <summary>
+              Looks up a localized string similar to REST Foundation service route invocation failed with the exception message "{0}". Exception message "{1}" was expected..
+            </summary>
+    </member>
     <member name="P:RestFoundation.Resources.Global.FileNameContainsPath">
       <summary>
               Looks up a localized string similar to Only a file name can be specified. Relative or absolute paths/URLs are not supported..
@@ -2589,7 +2599,7 @@
     </member>
     <member name="P:RestFoundation.Resources.Global.InvalidServiceMethodExpression">
       <summary>
-              Looks up a localized string similar to Invalid service method lambda expression provided..
+              Looks up a localized string similar to Invalid or mismatched service method lambda expression provided..
             </summary>
     </member>
     <member name="P:RestFoundation.Resources.Global.InvalidServiceName">
@@ -10940,6 +10950,27 @@
       <summary>
             Represents a route validator builder.
             </summary>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.RouteValidatorBuilder.FailsOnInvocation``1(System.Linq.Expressions.Expression{System.Action{``0}})">
+      <summary>
+            Ensures a route assert expected to fail does not invoke successfully.
+            </summary>
+      <typeparam name="T">The service contract type.</typeparam>
+      <param name="serviceMethodDelegate">The service method delegate.</param>
+      <exception cref="T:RestFoundation.UnitTesting.RouteAssertException">If the route gets invoked successfully.</exception>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.RouteValidatorBuilder.FailsOnInvocation``1(System.Linq.Expressions.Expression{System.Action{``0}},System.String)">
+      <summary>
+            Ensures a route assert expected to fail does not invoke successfully. An expected exception message
+            can be provided for more detailed assert statements.
+            </summary>
+      <typeparam name="T">The service contract type.</typeparam>
+      <param name="serviceMethodDelegate">The service method delegate.</param>
+      <param name="exceptionMessage">The expected <see cref="T:RestFoundation.UnitTesting.RouteAssertException" /> message.</param>
+      <exception cref="T:RestFoundation.UnitTesting.RouteAssertException">
+            If the route gets invoked successfully; or the expected exception message does not match the actual
+            exception message.
+            </exception>
     </member>
     <member name="M:RestFoundation.UnitTesting.RouteValidatorBuilder.Invokes``1(System.Linq.Expressions.Expression{System.Action{``0}})">
       <summary>

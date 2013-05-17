@@ -342,8 +342,8 @@
     <comment>Virtual URL must start with ~/</comment>
   </data>
   <data name="InvalidServiceMethodExpression" xml:space="preserve">
-    <value>Invalid service method lambda expression provided.</value>
-    <comment>Invalid service method lambda expression provided.</comment>
+    <value>Invalid or mismatched service method lambda expression provided.</value>
+    <comment>Invalid or mismatched service method lambda expression provided.</comment>
   </data>
   <data name="InvalidServiceMethod" xml:space="preserve">
     <value>No valid service method provided.</value>
@@ -620,5 +620,13 @@
   <data name="NotImplemented" xml:space="preserve">
     <value>Not Implemented</value>
     <comment>Not Implemented</comment>
+  </data>
+  <data name="FailedRouteInvokedSuccessfully" xml:space="preserve">
+    <value>REST Foundation service route was invoked successfully when it should have failed.</value>
+    <comment>REST Foundation service route was invoked successfully when it should have failed.</comment>
+  </data>
+  <data name="FailedRouteWithInvalidExceptionMessage" xml:space="preserve">
+    <value>REST Foundation service route invocation failed with the exception message "{0}". Exception message "{1}" was expected.</value>
+    <comment>REST Foundation service route invocation failed with the exception message "{0}". Exception message "{1}" was expected.</comment>
   </data>
 </root>
