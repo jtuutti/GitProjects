@@ -3,9 +3,7 @@
 // </copyright>
 using System;
 using System.IO;
-using System.Text;
 using System.Xml;
-using System.Xml.Serialization;
 using RestFoundation.Runtime;
 using XmlNamespaceManager = RestFoundation.Runtime.XmlNamespaceManager;
 
@@ -35,17 +33,18 @@ namespace RestFoundation.ServiceProxy
 
             using (var stream = new MemoryStream())
             {
-                var xmlWriter = new XmlTextWriter(stream, Encoding.UTF8)
-                                {
-                                    Formatting = isFormatted ? Formatting.Indented : Formatting.None
-                                };
+                var xmlWriter = XmlWriter.Create(stream, new XmlWriterSettings
+                {
+                    Indent = isFormatted,
+                    OmitXmlDeclaration = Rest.Configuration.Options.XmlSettings.OmitXmlDeclaration
+                });
 
                 serializer.Serialize(xmlWriter, obj, XmlNamespaceManager.Generate());
                 xmlWriter.Flush();
 
                 stream.Seek(0, SeekOrigin.Begin);
 
-                var xmlReader = new StreamReader(stream, Encoding.UTF8);
+                var xmlReader = new StreamReader(stream);
                 return xmlReader.ReadToEnd();
             }
         }

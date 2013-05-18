@@ -69,7 +69,8 @@ namespace RestFoundation.Results
             var xmlWriter = XmlWriter.Create(context.Response.Output.Writer, new XmlWriterSettings
             {
                 Encoding = m_encoding,
-                Indent = false
+                Indent = false,
+                OmitXmlDeclaration = Rest.Configuration.Options.XmlSettings.OmitXmlDeclaration
             });
 
             if (Content == null)

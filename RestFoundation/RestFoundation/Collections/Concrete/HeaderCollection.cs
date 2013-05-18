@@ -247,9 +247,9 @@ namespace RestFoundation.Collections.Concrete
         private void SetAcceptCharsets()
         {
             var acceptCharsets = new AcceptValueCollection(TryGet("Accept-Charset"));
-            string acceptCharset = acceptCharsets.GetPreferredName();
+            string acceptCharset = acceptCharsets.GetPreferredName();           
 
-            if (!String.IsNullOrEmpty(acceptCharset))
+            if (!String.IsNullOrEmpty(acceptCharset) && acceptCharset.IndexOf('*') < 0)
             {
                 AcceptCharsets = acceptCharsets.AcceptedNames.ToArray();
             }

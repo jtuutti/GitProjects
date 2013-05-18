@@ -21,7 +21,9 @@ namespace RestFoundation.Configuration
         {
             EnumerableAsChunked = true;
             FaultDetail = FaultDetail.DetailedInDebugMode;
+
             JsonSettings = new JsonFormatterSettings();
+            XmlSettings = new XmlFormatterSettings();
 
             BeginRequestAction = context => { };
             EndRequestAction = context => { };

@@ -5,6 +5,7 @@
 <%@ Import Namespace="System.Net" %>
 <%@ Import Namespace="System.Net.Security" %>
 <%@ Import Namespace="System.Threading.Tasks" %>
+<%@ Import Namespace="RestFoundation.Collections.Specialized" %>
 <%@ Import Namespace="RestFoundation.Runtime" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy.OperationMetadata" %>
@@ -346,9 +347,9 @@
 
     private static void SetEncoding(ProxyWebClient client)
     {
-        string charset = client.Headers.Get(AcceptCharsetHeader);
+        string charset = new AcceptValueCollection(client.Headers.Get(AcceptCharsetHeader)).GetPreferredName();
 
-        if (String.IsNullOrWhiteSpace(charset) || "utf-8".Equals(charset, StringComparison.OrdinalIgnoreCase))
+        if (String.IsNullOrWhiteSpace(charset) || "utf-8".Equals(charset, StringComparison.OrdinalIgnoreCase) || charset.IndexOf('*') >= 0)
         {
             client.Encoding = Encoding.UTF8;
         }
@@ -405,7 +406,7 @@
 
         if ("XML".Equals(ResourceFormat.Text))
         {
-            client.Headers[AcceptHeader] = "text/xml";
+            client.Headers[AcceptHeader] = "application/xml";
         }
         else if ("JSON".Equals(ResourceFormat.Text))
         {
@@ -430,13 +431,20 @@
             return;
         }
 
+        var charset = new AcceptValueCollection(client.Headers[AcceptCharsetHeader]).GetPreferredName();
+
+        if (String.IsNullOrWhiteSpace(charset) || charset.IndexOf('*') >= 0)
+        {
+            charset = "utf-8";
+        }
+
         if ("XML".Equals(ResourceFormat.Text))
         {
-            client.Headers[ContentTypeHeader] = "text/xml; charset=utf-8";
+            client.Headers[ContentTypeHeader] = "application/xml; charset=" + charset;
         }
         else if ("JSON".Equals(ResourceFormat.Text))
         {
-            client.Headers[ContentTypeHeader] = "application/json; charset=utf-8";
+            client.Headers[ContentTypeHeader] = "application/json; charset=" + charset;
         }
     }
 

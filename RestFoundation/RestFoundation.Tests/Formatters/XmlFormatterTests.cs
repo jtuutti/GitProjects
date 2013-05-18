@@ -80,7 +80,7 @@ namespace RestFoundation.Tests.Formatters
             Model model = CreateModel();
 
             var formatter = new XmlFormatter();
-            var result = formatter.FormatResponse(m_context, typeof(Model), model, "text/xml") as XmlResult;
+            var result = formatter.FormatResponse(m_context, typeof(Model), model, "application/xml") as XmlResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Content, Is.SameAs(model));

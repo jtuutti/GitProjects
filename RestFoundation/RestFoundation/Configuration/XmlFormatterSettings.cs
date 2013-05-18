@@ -14,8 +14,8 @@ namespace RestFoundation.Configuration
         public string Namespace { get; set; }
         
         /// <summary>
-        /// Gets or sets a value indicating whether XML declaration
-        /// should be omitted by the XML formatter.
+        /// Gets or sets a value indicating whether XML declaration should be omitted
+        /// by the XML formatter.
         /// </summary>
         public bool OmitXmlDeclaration { get; set; }
     }
