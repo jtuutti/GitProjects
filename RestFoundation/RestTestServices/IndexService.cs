@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using RestFoundation;
 using RestFoundation.Client;
 using RestFoundation.Context;
@@ -12,57 +10,25 @@ using RestFoundation.Results;
 using RestFoundation.Runtime;
 using RestTestContracts;
 using RestTestContracts.Resources;
+using RestTestServices.Repositories;
 
 namespace RestTestServices
 {
     public class IndexService : IIndexService
     {
-        public IServiceContext Context { get; set; }
+        private readonly PersonRepository m_repository;
 
-        private readonly List<Person> people = new List<Person>
+        public IndexService(PersonRepository repository)
         {
-            new Person { Name = "John", Age = 51, Values = new[] { "Manager", "old" }, TimeStamp = DateTime.Now.AddDays(-55) },
-            new Person { Name = "Mike", Age = 16, Values = new string[0], TimeStamp = DateTime.Now  },
-            new Person { Name = "Beth", Age = 32, Values = new[] { "Secretary" }, TimeStamp = DateTime.Now.AddYears(-1)  },
-            new Person { Name = "Saul", Age = 62, TimeStamp = DateTime.Now.AddMonths(-2)  }
-        };
-
-        public FeedResult Feed(string format)
-        {
-            FeedResult.SyndicationFormat feedFormat;
-
-            if (!Enum.TryParse(format, true, out feedFormat))
+            if (repository == null)
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "This feed only supports ATOM and RSS formats");
+                throw new ArgumentNullException("repository");
             }
 
-            var feedItems = new List<SyndicationItem>(people.Count);
-            var xmlSerializer = new XmlSerializer(typeof(Person));
-
-            for (int i = 0; i < people.Count; i++)
-            {
-                var item = new SyndicationItem
-                           {
-                               Id = String.Format("urn:uuid:{0}", Guid.NewGuid().ToString().ToLowerInvariant()),
-                               Title = new TextSyndicationContent("Person #" + (i + 1), TextSyndicationContentKind.Plaintext),
-                               Content = new XmlSyndicationContent("application/vnd.person+xml", people[i], xmlSerializer),
-                               PublishDate = DateTime.UtcNow,
-                               LastUpdatedTime = DateTime.UtcNow
-                           };
-
-                feedItems.Add(item);
-            }
-
-            var feed = new SyndicationFeed(feedItems)
-            {
-                 Id = "urn:uuid:6b46a53d-99c3-49e5-8828-c3d8aad2db0f",
-                 Title = new TextSyndicationContent("People Feed", TextSyndicationContentKind.Plaintext),
-                 Copyright = new TextSyndicationContent("(c) Rest Foundation, 2012", TextSyndicationContentKind.Plaintext),
-                 Generator = "Rest Foundation Service"
-            };
-
-            return Result.Feed(feed, feedFormat);
+            m_repository = repository;
         }
+
+        public IServiceContext Context { get; set; }
 
         public RedirectResult RedirectToGet10()
         {
@@ -82,6 +48,8 @@ namespace RestTestServices
 
         public IQueryable<Person> GetAll()
         {
+            var people = m_repository.GetAll();
+
             return new List<Person>(people).AsQueryable();
         }
 
@@ -95,6 +63,8 @@ namespace RestTestServices
                 throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "GET is not allowed");
             }
 
+            var people = m_repository.GetAll();
+
             var peopleQuery = await Task.Run(() => new List<Person>(people).AsQueryable(), Context.Response.CreateCancellationToken());
 
             // validates that the async task returns to the right thread
@@ -105,11 +75,15 @@ namespace RestTestServices
 
         public IEnumerable<Person> GetAllChunked()
         {
+            var people = m_repository.GetAll();
+
             return new List<Person>(people);
         }
 
         public IResult GetAllByFormat(string format)
         {
+            var people = m_repository.GetAll();
+
             return Result.JsonOrXml(new List<Person>(people).AsQueryable(), format);
         }
 

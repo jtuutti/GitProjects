@@ -15,9 +15,6 @@ namespace RestTestContracts
     [ProxyMetadata(typeof(IndexServiceMetadata))]
     public interface IIndexService
     {
-        [Url("index/feed.{format}", HttpMethod.Get, HttpMethod.Head)]
-        FeedResult Feed(string format);
-
         [Url("index/get-10", HttpMethod.Get)]
         RedirectResult RedirectToGet10();
 

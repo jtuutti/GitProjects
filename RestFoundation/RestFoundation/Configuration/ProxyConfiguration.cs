@@ -70,9 +70,9 @@ namespace RestFoundation.Configuration
             RouteTable.Routes.Add("ProxyMetadataOp", new Route(relativeUrl + "/metadata.op.js", new JavaScriptRouteHandler("metadata.op.min.js")));
             RouteTable.Routes.Add("ProxyProxyOp", new Route(relativeUrl + "/proxy.op.js", new JavaScriptRouteHandler("proxy.op.min.js")));
             RouteTable.Routes.Add("ProxySubmit", new Route(relativeUrl + "/submit.js", new JavaScriptRouteHandler("submit.min.js")));
-            RouteTable.Routes.MapPageRoute("ProxyIndex", relativeUrl + "/index", "~/index.aspx");
-            RouteTable.Routes.MapPageRoute(String.Empty, relativeUrl + "/metadata", "~/metadata.aspx");
-            RouteTable.Routes.MapPageRoute(String.Empty, relativeUrl + "/proxy", "~/proxy.aspx");
+            RouteTable.Routes.MapPageRoute("ProxyIndex", relativeUrl + "/index", "~/index.aspx", false);
+            RouteTable.Routes.MapPageRoute(String.Empty, relativeUrl + "/metadata", "~/metadata.aspx", false);
+            RouteTable.Routes.MapPageRoute(String.Empty, relativeUrl + "/proxy", "~/proxy.aspx", false);
             RouteTable.Routes.Add(new Route(relativeUrl + "/export", new ProxyExportHandler()));
             RouteTable.Routes.Add(new Route(relativeUrl + "/output", new ProxyOutputHandler()));
             RouteTable.Routes.Add(new Route(relativeUrl, new ProxyRootHandler()));

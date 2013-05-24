@@ -24,6 +24,7 @@ namespace RestFoundation.Configuration
 
         private static readonly Type urlAttributeType = typeof(UrlAttribute);
         private static readonly object syncRoot = new object();
+        private static readonly Regex serviceNameRegex = new Regex(@"^[_a-zA-Z0-9\-]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
         private static readonly Regex urlParameterRegex = new Regex(@"\{([_a-zA-Z0-9]+)\}", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         private readonly string m_relativeUrl;
@@ -57,7 +58,7 @@ namespace RestFoundation.Configuration
         {
             if (timeout.TotalSeconds < -1)
             {
-                throw new ArgumentOutOfRangeException("timeout", Resources.Global.InvalidAsyncTimeout);
+                throw new ArgumentOutOfRangeException("timeout", Global.InvalidAsyncTimeout);
             }
 
             m_asyncTimeout = timeout.TotalSeconds > 0 ? timeout : TimeSpan.Zero;
@@ -72,7 +73,9 @@ namespace RestFoundation.Configuration
         /// <exception cref="ArgumentException">
         /// If the service contract type is not an interface or a concrete class that defines its own contract.
         /// </exception>
-        /// <exception cref="InvalidOperationException">If the relative URL has already been mapped.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// If the relative URL is invalid or has already been mapped.
+        /// </exception>
         public RouteConfiguration ToServiceContract(Type contractType)
         {
             if (contractType == null)
@@ -91,7 +94,9 @@ namespace RestFoundation.Configuration
         /// <exception cref="ArgumentException">
         /// If the service contract type is not an interface or a concrete class that defines its own contract.
         /// </exception>
-        /// <exception cref="InvalidOperationException">If the relative URL has already been mapped.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// If the relative URL is invalid or has already been mapped.
+        /// </exception>
         public RouteConfiguration ToServiceContract<T>()
         {
             return MapUrl(typeof(T));
@@ -107,6 +112,22 @@ namespace RestFoundation.Configuration
         public void ToHttpHandler<T>()
             where T : HttpHandler
         {
+            ToHttpHandler<T>(null);
+        }
+
+        /// <summary>
+        /// Maps the relative URL to an HTTP handler of type <typeparamref name="T"/>.
+        /// </summary>
+        /// <param name="defaults">
+        /// The values to use for route parameters if they are missing in the URL.
+        /// </param>
+        /// <exception cref="InvalidOperationException">
+        /// If the HTTP handler type is not a concrete class.
+        /// </exception>
+        /// <typeparam name="T">The HTTP handler type.</typeparam>
+        public void ToHttpHandler<T>(RouteHash defaults)
+            where T : HttpHandler
+        {
             Type handlerType = typeof(T);
 
             if (!handlerType.IsClass || handlerType.IsAbstract)
@@ -116,7 +137,14 @@ namespace RestFoundation.Configuration
 
             var handler = Rest.Configuration.ServiceLocator.GetService<T>();
 
-            m_routes.Add(null, new Route(m_relativeUrl, handler));
+            if (defaults != null)
+            {
+                m_routes.Add(null, new Route(m_relativeUrl, defaults, handler));
+            }
+            else
+            {
+                m_routes.Add(null, new Route(m_relativeUrl, handler));
+            }
         }
 
         /// <summary>
@@ -125,12 +153,31 @@ namespace RestFoundation.Configuration
         /// <param name="virtualPageUrl">A virtual URL to the ASPX file.</param>
         public void ToWebFormsPage(string virtualPageUrl)
         {
+            ToWebFormsPage(virtualPageUrl, null);
+        }
+
+        /// <summary>
+        /// Maps the relative URL to a web forms page.
+        /// </summary>
+        /// <param name="virtualPageUrl">A virtual URL to the ASPX file.</param>
+        /// <param name="defaults">
+        /// The values to use for route parameters if they are missing in the URL.
+        /// </param>
+        public void ToWebFormsPage(string virtualPageUrl, RouteHash defaults)
+        {
             if (virtualPageUrl == null)
             {
                 throw new ArgumentNullException("virtualPageUrl");
             }
 
-            m_routes.MapPageRoute(null, m_relativeUrl, virtualPageUrl);
+            if (defaults != null)
+            {
+                m_routes.MapPageRoute(null, m_relativeUrl, virtualPageUrl, false, defaults);
+            }
+            else
+            {
+                m_routes.MapPageRoute(null, m_relativeUrl, virtualPageUrl, false);
+            }
         }
 
         private static HashSet<HttpMethod> AddHttpMethods(IEnumerable<HttpMethod> urlMethods)
@@ -221,12 +268,17 @@ namespace RestFoundation.Configuration
 
             if (!contractType.IsInterface && !contractType.IsClass)
             {
-                throw new ArgumentException(Resources.Global.InvalidServiceContract, "contractType");
+                throw new ArgumentException(Global.InvalidServiceContract, "contractType");
             }
 
             if (contractType.IsClass && (contractType.IsAbstract || !Attribute.IsDefined(contractType, typeof(ServiceContractAttribute), true)))
             {
-                throw new ArgumentException(Resources.Global.InvalidServiceImplementation, "contractType");
+                throw new ArgumentException(Global.InvalidServiceImplementation, "contractType");
+            }
+
+            if (!serviceNameRegex.IsMatch(m_relativeUrl))
+            {
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Global.InvalidServiceName, m_relativeUrl));
             }
 
             var serviceMethods = contractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
@@ -238,7 +290,7 @@ namespace RestFoundation.Configuration
             {
                 if (ServiceMethodRegistry.ServiceMethods.Any(m => String.Equals(m_relativeUrl, m.Key.Url, StringComparison.OrdinalIgnoreCase)))
                 {
-                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.AlreadyMapped, m_relativeUrl));
+                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Global.AlreadyMapped, m_relativeUrl));
                 }
 
                 ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, m_relativeUrl), t => methodMetadata, (t, u) => methodMetadata);

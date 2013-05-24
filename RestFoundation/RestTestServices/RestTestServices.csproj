@@ -48,6 +48,7 @@
     <Compile Include="DynamicService.cs" />
     <Compile Include="IndexService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\PersonRepository.cs" />
     <Compile Include="TouchMapService.cs" />
     <Compile Include="Utilities\SafeXmlTextReader.cs" />
   </ItemGroup>

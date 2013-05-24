@@ -74,6 +74,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -106,6 +108,7 @@
   <ItemGroup>
     <Compile Include="App_Start\ServiceBootstrapper.cs" />
     <Compile Include="Handlers\DownloadHandler.cs" />
+    <Compile Include="Handlers\FeedHandler.cs" />
     <Compile Include="Security\ProxyAuthorizationManager.cs" />
     <Compile Include="Security\ServiceAuthorizationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

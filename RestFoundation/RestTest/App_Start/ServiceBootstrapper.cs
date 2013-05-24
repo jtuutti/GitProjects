@@ -103,6 +103,9 @@ namespace RestTest.App_Start
             urlBuilder.MapUrl("hello")
                       .ToServiceContract<HelloService>();
 
+            urlBuilder.MapUrl("feed.{format}")
+                      .ToHttpHandler<FeedHandler>();
+
             urlBuilder.MapUrl("download")
                       .ToHttpHandler<DownloadHandler>();
 
