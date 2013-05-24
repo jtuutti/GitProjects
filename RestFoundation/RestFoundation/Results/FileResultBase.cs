@@ -90,13 +90,12 @@ namespace RestFoundation.Results
 
         private static async Task TransmitFile(IServiceContext context, FileInfo file)
         {
-            var buffer = new byte[4096];
-
             using (var stream = file.OpenRead())
             {
                 CreateRangeOutput(context, stream);
 
                 CancellationToken cancellationToken = context.Response.GetCancellationToken();
+                var buffer = new byte[4096];
 
                 while (context.Response.IsClientConnected && await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken) > 0)
                 {
