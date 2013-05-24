@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
-using RestFoundation;
 using RestFoundation.ServiceProxy;
 using RestTestContracts.Resources;
 
@@ -15,7 +13,7 @@ namespace RestTestContracts.Metadata
 
             ForMethod(x => x.Feed(Arg<string>())).SetHidden();
             ForMethod(x => x.FileDownload(Arg<string>())).SetHidden();
-            ForMethod(x => x.FileUpload(Arg<ICollection<IUploadedFile>>())).SetHidden();
+            ForMethod(x => x.FileUpload()).SetHidden();
             ForMethod(x => x.RedirectToGet10()).SetHidden();
             ForMethod(x => x.GetAllByFormat("json")).SetHidden();
 

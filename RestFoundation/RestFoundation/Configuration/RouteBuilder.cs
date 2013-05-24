@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web.Routing;
+using RestFoundation.Resources;
 using RestFoundation.Runtime;
 using RestFoundation.Runtime.Handlers;
 
@@ -94,6 +95,28 @@ namespace RestFoundation.Configuration
         public RouteConfiguration ToServiceContract<T>()
         {
             return MapUrl(typeof(T));
+        }
+
+        /// <summary>
+        /// Maps the relative URL to an HTTP handler of type <typeparamref name="T"/>.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// If the HTTP handler type is not a concrete class.
+        /// </exception>
+        /// <typeparam name="T">The HTTP handler type.</typeparam>
+        public void ToHttpHandler<T>()
+            where T : HttpHandler
+        {
+            Type handlerType = typeof(T);
+
+            if (!handlerType.IsClass || handlerType.IsAbstract)
+            {
+                throw new InvalidOperationException(Global.AbstractHttpHandler);
+            }
+
+            var handler = Rest.Configuration.ServiceLocator.GetService<T>();
+
+            m_routes.Add(null, new Route(m_relativeUrl, handler));
         }
 
         /// <summary>

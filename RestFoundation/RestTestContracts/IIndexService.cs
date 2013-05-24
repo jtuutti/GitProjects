@@ -22,7 +22,7 @@ namespace RestTestContracts
         FileResultBase FileDownload([FromUri] string fileName);
 
         [Url("index/upload", HttpMethod.Post)]
-        ContentResult FileUpload(ICollection<IUploadedFile> files);
+        ContentResult FileUpload();
 
         [Url("index/get-10", HttpMethod.Get)]
         RedirectResult RedirectToGet10();

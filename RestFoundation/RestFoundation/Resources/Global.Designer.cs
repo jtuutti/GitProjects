@@ -61,6 +61,15 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The HTTP handler cannot be abstract..
+        /// </summary>
+        internal static string AbstractHttpHandler {
+            get {
+                return ResourceManager.GetString("AbstractHttpHandler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to REST Foundation has already been configured..
         /// </summary>
         internal static string AlreadyConfigured {
@@ -1159,6 +1168,15 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The current service method does not support multi-form data..
+        /// </summary>
+        internal static string UnsupportedMultiFormData {
+            get {
+                return ResourceManager.GetString("UnsupportedMultiFormData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OData operations are not supported for anonymous objects..
         /// </summary>
         internal static string UnsupportedObjectTypeForOData {
@@ -1186,7 +1204,7 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Asyncronous service method results must be executed by calling the ExecuteAsync(context) method..
+        ///   Looks up a localized string similar to Asynchronous service method results must be executed by calling the ExecuteAsync(context) method..
         /// </summary>
         internal static string UnsupportedSyncExecutionForAsyncResult {
             get {

@@ -12,7 +12,7 @@ using RestFoundation.Runtime;
 namespace RestFoundation
 {
     /// <summary>
-    /// Represents results to return from service methods.
+    /// Generates results to return from service methods.
     /// </summary>
     public static class Result
     {
@@ -551,7 +551,7 @@ namespace RestFoundation
         /// Returns the response status result.
         /// </summary>
         /// <param name="code">The HTTP status code.</param>
-        /// <returns>The response status result</returns>
+        /// <returns>The response status result.</returns>
         public static StatusResult ResponseStatus(HttpStatusCode code)
         {
             return ResponseStatus(code, null, null);
@@ -593,7 +593,7 @@ namespace RestFoundation
 
             return result;
         }
-    
+
         /// <summary>
         /// Returns the provided object and sets the provided response status code.
         /// </summary>
@@ -725,7 +725,7 @@ namespace RestFoundation
         /// Format value must be equal to <see cref="JsonFormat"/> or <see cref="XmlFormat"/>.
         /// </summary>
         /// <param name="obj">The object to serialize to JSON or XML.</param>
-        /// <param name="format">The result content format.</param>
+        /// <param name="format">The result content format ("JSON" or "XML").</param>
         /// <returns>The JSON or XML result.</returns>
         public static IResult JsonOrXml(object obj, string format)
         {

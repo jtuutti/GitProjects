@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using RestFoundation;
 using RestFoundation.Client;
+using RestFoundation.Collections;
 using RestFoundation.Context;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
@@ -74,14 +75,16 @@ namespace RestTestServices
             };
         }
 
-        public ContentResult FileUpload(ICollection<IUploadedFile> files)
+        public ContentResult FileUpload()
         {
+            IUploadedFileCollection files = Context.Request.Files;
+
             if (files == null || files.Count == 0)
             {
-                return Result.Content("No files");
+                return Result.Content("No files", true, "text/plain");
             }
 
-            return Result.Content("Files: " + String.Join(", ", files.Select(f => f.Name)), true, "text/plain");
+            return Result.Content("Files: " + String.Join(", ", files.Select(f => !String.IsNullOrEmpty(f.Name) ? f.Name : "N/A")), true, "text/plain");
         }
 
         public RedirectResult RedirectToGet10()

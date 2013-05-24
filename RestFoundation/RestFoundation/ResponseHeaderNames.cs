@@ -39,6 +39,16 @@ namespace RestFoundation
         public readonly string AccessControlMaxAge = "Access-Control-Max-Age";
 
         /// <summary>
+        /// Allow
+        /// </summary>
+        public readonly string Allow = "Allow";
+
+        /// <summary>
+        /// Cache-Control
+        /// </summary>
+        public readonly string CacheControl = "Cache-Control";
+
+        /// <summary>
         /// Content-Length
         /// </summary>
         public readonly string ContentLength = "Content-Length";
@@ -77,6 +87,16 @@ namespace RestFoundation
         /// ETag
         /// </summary>
         public readonly string ETag = "ETag";
+
+        /// <summary>
+        /// Expires
+        /// </summary>
+        public readonly string Expires = "Expires";
+
+        /// <summary>
+        /// Last-Modified
+        /// </summary>
+        public readonly string LastModified = "Last-Modified";
 
         /// <summary>
         /// Location

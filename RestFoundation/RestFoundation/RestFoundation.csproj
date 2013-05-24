@@ -79,6 +79,8 @@
     <Compile Include="CachePriority.cs" />
     <Compile Include="Client\IRestClient.cs" />
     <Compile Include="Client\RestClient.cs" />
+    <Compile Include="Collections\Concrete\UploadedFileCollection.cs" />
+    <Compile Include="Collections\IUploadedFileCollection.cs" />
     <Compile Include="Collections\Specialized\HttpMethodCollection.cs" />
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
     <Compile Include="Context\ContextContainer.cs" />
@@ -211,13 +213,14 @@
     <Compile Include="ServiceProxy\ProxyStatus.cs" />
     <Compile Include="ServiceProxy\OperationMetadata\ResourceExampleMetadata.cs" />
     <Compile Include="ServiceProxy\OperationMetadata\StatusCodeMetadata.cs" />
+    <Compile Include="HttpHandler.cs" />
+    <Compile Include="TaskResult.cs" />
     <Compile Include="TypeBinders\FromBodyAttribute.cs" />
     <Compile Include="TypeBinders\FromHeaderAttribute.cs" />
     <Compile Include="TypeBinders\FromUriAttribute.cs" />
     <Compile Include="TypeBinders\TypeBinderAttribute.cs" />
     <Compile Include="Configuration\TypeBinderBuilder.cs" />
     <Compile Include="Configuration\MediaTypeFormatterBuilder.cs" />
-    <Compile Include="Formatters\MultiPartFormatter.cs" />
     <Compile Include="Security\IAuthorizationManager.cs" />
     <Compile Include="IServiceCache.cs" />
     <Compile Include="TypeBinders\ITypeBinder.cs" />

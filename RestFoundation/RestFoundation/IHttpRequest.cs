@@ -1,6 +1,8 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
+
+using System;
 using System.IO;
 using RestFoundation.Collections;
 using RestFoundation.Runtime;
@@ -66,6 +68,11 @@ namespace RestFoundation
         /// Gets the query string collection.
         /// </summary>
         IStringValueCollection QueryString { get; }
+
+        /// <summary>
+        /// Gets an uploaded file collection.
+        /// </summary>
+        IUploadedFileCollection Files { get; }
 
         /// <summary>
         /// Gets the form name/value collection.

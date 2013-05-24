@@ -542,8 +542,8 @@
     <comment>Too many requests</comment>
   </data>
   <data name="UnsupportedSyncExecutionForAsyncResult" xml:space="preserve">
-    <value>Asyncronous service method results must be executed by calling the ExecuteAsync(context) method.</value>
-    <comment>Asyncronous service method results must be executed by calling the ExecuteAsync(context) method.</comment>
+    <value>Asynchronous service method results must be executed by calling the ExecuteAsync(context) method.</value>
+    <comment>Asynchronous service method results must be executed by calling the ExecuteAsync(context) method.</comment>
   </data>
   <data name="InvalidIAsyncResultReturned" xml:space="preserve">
     <value>An unsupported asynchronous result was returned from the service method. Only objects of Task and Task&lt;T&gt; types are supported. Nested generic tasks are not supported.</value>
@@ -628,5 +628,13 @@
   <data name="FailedRouteWithInvalidExceptionMessage" xml:space="preserve">
     <value>REST Foundation service route invocation failed with the exception message "{0}". Exception message "{1}" was expected.</value>
     <comment>REST Foundation service route invocation failed with the exception message "{0}". Exception message "{1}" was expected.</comment>
+  </data>
+  <data name="UnsupportedMultiFormData" xml:space="preserve">
+    <value>The current service method does not support multi-form data.</value>
+    <comment>The current service method does not support multi-form data.</comment>
+  </data>
+  <data name="AbstractHttpHandler" xml:space="preserve">
+    <value>The HTTP handler cannot be abstract.</value>
+    <comment>The HTTP handler cannot be abstract.</comment>
   </data>
 </root>

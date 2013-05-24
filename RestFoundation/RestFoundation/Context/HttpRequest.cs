@@ -24,6 +24,7 @@ namespace RestFoundation.Context
         private const string AjaxHeaderValue = "XMLHttpRequest";
         private const string FormDataMediaType = "application/x-www-form-urlencoded";
         private const string ForwardedProtocolHeaderName = "X-Forwarded-Proto";
+        private const string MultiFormDataMediaType = "multipart/form-data";
 
         private readonly object m_uriSyncRoot = new Object();
         private readonly object m_methodSyncRoot = new Object();
@@ -247,6 +248,26 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
+        /// Gets an uploaded file collection.
+        /// </summary>
+        [SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations",
+                         Justification = "This is a special type of exception that will be handled by the HTTP module.")]
+        public IUploadedFileCollection Files
+        {
+            get
+            {
+                if (Context.Request.ContentType == null || Context.Request.ContentType.IndexOf(MultiFormDataMediaType, StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.UnsupportedMultiFormData);
+                }
+
+                var files = ServiceRequestValidator.IsUnvalidatedRequest(Context) ? Context.Request.Unvalidated.Files : Context.Request.Files;
+
+                return new UploadedFileCollection(files);
+            }
+        }
+
+        /// <summary>
         /// Gets the form name/value collection.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations",
@@ -257,7 +278,7 @@ namespace RestFoundation.Context
             {
                 if (Context.Request.ContentType == null || Context.Request.ContentType.IndexOf(FormDataMediaType, StringComparison.OrdinalIgnoreCase) < 0)
                 {
-                    throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.UnsupportedFormData);
+                    throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.UnsupportedFormData);
                 }
 
                 if (m_contextContainer.Form != null)

@@ -6,6 +6,7 @@ using RestFoundation.Behaviors;
 using RestFoundation.Configuration;
 using RestFoundation.Formatters;
 using RestFoundation.Security;
+using RestTest.Handlers;
 using RestTest.Security;
 using RestTest.SimpleServices;
 using RestTest.StreamCompressors;
@@ -78,7 +79,6 @@ namespace RestTest.App_Start
         private static void RegisterFormatters(MediaTypeFormatterBuilder builder)
         {
             builder.Set(new FormsFormatter());
-            builder.Set(new MultiPartFormatter());
         }
 
         private static void RegisterUrls(UrlBuilder urlBuilder)
@@ -102,6 +102,12 @@ namespace RestTest.App_Start
 
             urlBuilder.MapUrl("hello")
                       .ToServiceContract<HelloService>();
+
+            urlBuilder.MapUrl("download")
+                      .ToHttpHandler<DownloadHandler>();
+
+            urlBuilder.MapUrl("upload")
+                      .ToHttpHandler<UploadHandler>();
 
             urlBuilder.MapUrl("faq")
                       .ToWebFormsPage("~/Views/Faq.aspx");
