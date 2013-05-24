@@ -110,7 +110,7 @@ namespace RestFoundation.Context
         /// </summary>
         public void Clear()
         {
-            Context.Response.Clear();
+            Context.Response.ClearContent();
         }
 
         /// <summary>

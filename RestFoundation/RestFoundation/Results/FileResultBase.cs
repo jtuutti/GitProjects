@@ -7,9 +7,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using RestFoundation.Context;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
@@ -180,13 +178,13 @@ namespace RestFoundation.Results
             {
                 CreateRangeOutput(context, stream);
 
-                CancellationToken cancellationToken = context.Response.GetCancellationToken();
-                var buffer = new byte[m_buffer];
+                var buffer = new byte[m_buffer < file.Length ? m_buffer : file.Length];
+                int bytesRead;
 
-                while (context.Response.IsClientConnected && await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken) > 0)
+                while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0 && context.Response.IsClientConnected)
                 {
-                    await context.Response.Output.Stream.WriteAsync(buffer, 0, buffer.Length, cancellationToken);
-                    await context.Response.Output.Stream.FlushAsync(cancellationToken);
+                    await context.Response.Output.Stream.WriteAsync(buffer, 0, bytesRead);
+                    await context.Response.Output.Stream.FlushAsync();
                 }
             }
         }
