@@ -21,6 +21,37 @@ namespace RestFoundation.Results
     public abstract class FileResultBase : IResultAsync
     {
         private const string DefaultBinaryContentType = "application/octet-stream";
+        private const int DefaultBuffer = 16384;
+
+        private int m_buffer;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileResultBase"/> class.
+        /// </summary>
+        protected FileResultBase()
+        {
+            m_buffer = DefaultBuffer;
+        }
+
+        /// <summary>
+        /// Gets or sets the file read buffer size.
+        /// </summary>
+        public int Buffer
+        {
+            get
+            {
+                return m_buffer;
+            }
+            set
+            {
+                if (m_buffer <= 0)
+                {
+                    throw new ArgumentOutOfRangeException("value");
+                }
+
+                m_buffer = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the content type.
@@ -88,23 +119,6 @@ namespace RestFoundation.Results
         /// <returns>The file info instance.</returns>
         protected abstract FileInfo GetFile(IServiceContext context);
 
-        private static async Task TransmitFile(IServiceContext context, FileInfo file)
-        {
-            using (var stream = file.OpenRead())
-            {
-                CreateRangeOutput(context, stream);
-
-                CancellationToken cancellationToken = context.Response.GetCancellationToken();
-                var buffer = new byte[4096];
-
-                while (context.Response.IsClientConnected && await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken) > 0)
-                {
-                    await context.Response.Output.Stream.WriteAsync(buffer, 0, buffer.Length, cancellationToken);
-                    await context.Response.Output.Stream.FlushAsync(cancellationToken);
-                }
-            }
-        }
-
         private static void CreateRangeOutput(IServiceContext context, FileStream stream)
         {
             string rangeValue = context.Request.Headers.TryGet("Range");
@@ -157,6 +171,23 @@ namespace RestFoundation.Results
             {
                 byte[] hash = hasher.ComputeHash(stream);
                 return String.Concat("\"", Convert.ToBase64String(hash).TrimEnd('='), "\"");
+            }
+        }
+
+        private async Task TransmitFile(IServiceContext context, FileInfo file)
+        {
+            using (var stream = file.OpenRead())
+            {
+                CreateRangeOutput(context, stream);
+
+                CancellationToken cancellationToken = context.Response.GetCancellationToken();
+                var buffer = new byte[m_buffer];
+
+                while (context.Response.IsClientConnected && await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken) > 0)
+                {
+                    await context.Response.Output.Stream.WriteAsync(buffer, 0, buffer.Length, cancellationToken);
+                    await context.Response.Output.Stream.FlushAsync(cancellationToken);
+                }
             }
         }
     }
