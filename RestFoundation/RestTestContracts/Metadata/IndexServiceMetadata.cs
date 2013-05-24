@@ -12,8 +12,6 @@ namespace RestTestContracts.Metadata
             SetAuthentication(AuthenticationType.Digest, "admin", "~/secure");
 
             ForMethod(x => x.Feed(Arg<string>())).SetHidden();
-            ForMethod(x => x.FileDownload(Arg<string>())).SetHidden();
-            ForMethod(x => x.FileUpload()).SetHidden();
             ForMethod(x => x.RedirectToGet10()).SetHidden();
             ForMethod(x => x.GetAllByFormat("json")).SetHidden();
 
