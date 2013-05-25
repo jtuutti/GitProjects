@@ -12,22 +12,22 @@ namespace RestFoundation.Behaviors.Attributes
     /// failed before the method execution.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public sealed class ValidateResourceAttribute : ServiceMethodBehaviorAttribute
+    public sealed class AssertValidationAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidateResourceAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AssertValidationAttribute"/> class.
         /// </summary>
-        public ValidateResourceAttribute() : this(false)
+        public AssertValidationAttribute() : this(false)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValidateResourceAttribute"/> class.
+        /// Initializes a new instance of the <see cref="AssertValidationAttribute"/> class.
         /// </summary>
         /// <param name="throwOnNullResource">
         /// A value indicating whether there should be a fault created if the resource is null.
         /// </param>
-        public ValidateResourceAttribute(bool throwOnNullResource)
+        public AssertValidationAttribute(bool throwOnNullResource)
         {
             ThrowOnNullResource = throwOnNullResource;
         }

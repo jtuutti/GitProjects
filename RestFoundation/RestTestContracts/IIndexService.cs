@@ -37,14 +37,14 @@ namespace RestTestContracts
         ContentResult Get([ParameterConstraint(ParameterConstraints.UnsignedInteger)] int? id = 1,
                           [FromUri] string dummy = "N/A");
 
-        [Url("index"), ValidateResource(true)]
+        [Url("index"), AssertValidation(true)]
         object Post(Person resource);
 
-        [Url("index/{id}"), ValidateResource(true)]
+        [Url("index/{id}"), AssertValidation(true)]
         Person Put([ParameterConstraint(ParameterConstraints.UnsignedInteger)] int? id,
                    [Resource] Person personToUpdate);
 
-        [Url("index/{id}"), ValidateResource(true)]
+        [Url("index/{id}"), AssertValidation(true)]
         Person Patch([ParameterConstraint(ParameterConstraints.UnsignedInteger)] int? id,
                      Person resource);
 

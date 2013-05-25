@@ -889,6 +889,76 @@
             Gets or sets a value indicating whether self-signed certificates are allowed.
             </summary>
     </member>
+    <member name="T:RestFoundation.Collections.IUploadedFileCollection">
+      <summary>
+            Defines an uploaded file collection.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Collections.IUploadedFileCollection.Get(System.String)">
+      <summary>
+            Gets a value by the key in the collection.
+            </summary>
+      <param name="key">The key.</param>
+      <returns>The corresponding value.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">If the key is not a part of the collection.</exception>
+    </member>
+    <member name="M:RestFoundation.Collections.IUploadedFileCollection.TryGet(System.String)">
+      <summary>
+            Gets a value by the key in the collection or null if the key is not a part of the collection.
+            </summary>
+      <param name="key">The key.</param>
+      <returns>The corresponding value.</returns>
+    </member>
+    <member name="M:RestFoundation.Collections.IUploadedFileCollection.GetEnumerator">
+      <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+      <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through
+            the collection.
+            </returns>
+      <filterpriority>1</filterpriority>
+    </member>
+    <member name="P:RestFoundation.Collections.IUploadedFileCollection.Count">
+      <summary>
+            Gets a value containing the count of all collection items.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.Collections.Concrete.UploadedFileCollection">
+      <summary>
+            Represents an uploaded files collection.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Collections.Concrete.UploadedFileCollection.Get(System.String)">
+      <summary>
+            Gets a value by the key in the collection.
+            </summary>
+      <param name="key">The key.</param>
+      <returns>The corresponding value.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">If the key is not a part of the collection.</exception>
+    </member>
+    <member name="M:RestFoundation.Collections.Concrete.UploadedFileCollection.TryGet(System.String)">
+      <summary>
+            Gets a value by the key in the collection or null if the key is not a part of the collection.
+            </summary>
+      <param name="key">The key.</param>
+      <returns>The corresponding value.</returns>
+    </member>
+    <member name="M:RestFoundation.Collections.Concrete.UploadedFileCollection.GetEnumerator">
+      <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+      <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through
+            the collection.
+            </returns>
+      <filterpriority>1</filterpriority>
+    </member>
+    <member name="P:RestFoundation.Collections.Concrete.UploadedFileCollection.Count">
+      <summary>
+            Gets a value containing the count of all collection items.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Collections.Specialized.LinkCollection">
       <summary>
             A collection of Link header values.
@@ -1060,27 +1130,6 @@
       <summary>
             The exception message and the stack trace are always returned.
             </summary>
-    </member>
-    <member name="T:RestFoundation.Context.HttpResponseExtensions">
-      <summary>
-            Contains <see cref="T:RestFoundation.IHttpResponse" /> extensions.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Context.HttpResponseExtensions.CreateCancellationToken(RestFoundation.IHttpResponse)">
-      <summary>
-            Creates a <see cref="T:System.Threading.CancellationToken" /> for the HTTP response. If the response
-            already has an associated <see cref="T:System.Threading.CancellationTokenSource" />, the existing
-            <see cref="T:System.Threading.CancellationToken" /> will be returned.
-            </summary>
-      <param name="response">The <see cref="T:RestFoundation.IHttpResponse" /> instance.</param>
-      <returns>The associated cancellation token.</returns>
-    </member>
-    <member name="M:RestFoundation.Context.HttpResponseExtensions.GetCancellationToken(RestFoundation.IHttpResponse)">
-      <summary>
-            Returns a <see cref="T:System.Threading.CancellationToken" /> associated with the HTTP response.
-            </summary>
-      <param name="response">The <see cref="T:RestFoundation.IHttpResponse" /> instance.</param>
-      <returns>The associated cancellation token.</returns>
     </member>
     <member name="T:RestFoundation.Formatters.SupportedMediaTypeAttribute">
       <summary>
@@ -1711,7 +1760,7 @@
       <summary>
             Executes the result against the provided service synchronously.
             Asynchronous method should throw a <see cref="T:System.NotSupportedException" /> and implement
-            the <see cref="M:RestFoundation.Results.IResultAsync.ExecuteAsync(RestFoundation.IServiceContext)" /> method instead.
+            the <see cref="M:RestFoundation.Results.IResultAsync.ExecuteAsync(RestFoundation.IServiceContext,System.Threading.CancellationToken)" /> method instead.
             </summary>
       <param name="context">The service context.</param>
       <exception cref="T:System.NotSupportedException">
@@ -1719,11 +1768,12 @@
             interface.
             </exception>
     </member>
-    <member name="M:RestFoundation.Results.IResultAsync.ExecuteAsync(RestFoundation.IServiceContext)">
+    <member name="M:RestFoundation.Results.IResultAsync.ExecuteAsync(RestFoundation.IServiceContext,System.Threading.CancellationToken)">
       <summary>
             Executes the result against the provided service context asynchronously.
             </summary>
       <param name="context">The service context.</param>
+      <param name="cancellationToken">The cancellation token.</param>
       <returns>A task executing the result.</returns>
     </member>
     <member name="T:RestFoundation.Results.ResponseResult">
@@ -2352,6 +2402,11 @@
               resource lookups using this strongly typed resource class.
             </summary>
     </member>
+    <member name="P:RestFoundation.Resources.Global.AbstractHttpHandler">
+      <summary>
+              Looks up a localized string similar to The HTTP handler cannot be abstract..
+            </summary>
+    </member>
     <member name="P:RestFoundation.Resources.Global.AlreadyConfigured">
       <summary>
               Looks up a localized string similar to REST Foundation has already been configured..
@@ -2962,6 +3017,11 @@
               Looks up a localized string similar to Media type is not supported.
             </summary>
     </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedMultiFormData">
+      <summary>
+              Looks up a localized string similar to The current service method does not support multi-form data..
+            </summary>
+    </member>
     <member name="P:RestFoundation.Resources.Global.UnsupportedObjectTypeForOData">
       <summary>
               Looks up a localized string similar to OData operations are not supported for anonymous objects..
@@ -2979,7 +3039,7 @@
     </member>
     <member name="P:RestFoundation.Resources.Global.UnsupportedSyncExecutionForAsyncResult">
       <summary>
-              Looks up a localized string similar to Asyncronous service method results must be executed by calling the ExecuteAsync(context) method..
+              Looks up a localized string similar to Asynchronous service method results must be executed by calling the ExecuteAsync(context) method..
             </summary>
     </member>
     <member name="P:RestFoundation.Resources.Global.ValidationFailed">
@@ -3452,11 +3512,16 @@
             This class cannot be instantiated.
             </summary>
     </member>
+    <member name="M:RestFoundation.Results.FileResultBase.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Results.FileResultBase" /> class.
+            </summary>
+    </member>
     <member name="M:RestFoundation.Results.FileResultBase.Execute(RestFoundation.IServiceContext)">
       <summary>
             Executes the result against the provided service synchronously.
             Asynchronous method should throw a <see cref="T:System.NotSupportedException" /> and implement
-            the <see cref="M:RestFoundation.Results.IResultAsync.ExecuteAsync(RestFoundation.IServiceContext)" /> method instead.
+            the <see cref="M:RestFoundation.Results.IResultAsync.ExecuteAsync(RestFoundation.IServiceContext,System.Threading.CancellationToken)" /> method instead.
             </summary>
       <param name="context">The service context.</param>
       <exception cref="T:System.NotSupportedException">
@@ -3464,11 +3529,12 @@
             interface.
             </exception>
     </member>
-    <member name="M:RestFoundation.Results.FileResultBase.ExecuteAsync(RestFoundation.IServiceContext)">
+    <member name="M:RestFoundation.Results.FileResultBase.ExecuteAsync(RestFoundation.IServiceContext,System.Threading.CancellationToken)">
       <summary>
             Executes the result against the provided service context asynchronously.
             </summary>
       <param name="context">The service context.</param>
+      <param name="cancellationToken">The cancellation token.</param>
       <returns>A task executing the result.</returns>
     </member>
     <member name="M:RestFoundation.Results.FileResultBase.GetFile(RestFoundation.IServiceContext)">
@@ -3477,6 +3543,11 @@
             </summary>
       <param name="context">The service context.</param>
       <returns>The file info instance.</returns>
+    </member>
+    <member name="P:RestFoundation.Results.FileResultBase.Buffer">
+      <summary>
+            Gets or sets the file read buffer size.
+            </summary>
     </member>
     <member name="P:RestFoundation.Results.FileResultBase.ContentType">
       <summary>
@@ -3566,7 +3637,9 @@
       <exception cref="T:System.ArgumentException">
             If the service contract type is not an interface or a concrete class that defines its own contract.
             </exception>
-      <exception cref="T:System.InvalidOperationException">If the relative URL has already been mapped.</exception>
+      <exception cref="T:System.InvalidOperationException">
+            If the relative URL is invalid or has already been mapped.
+            </exception>
     </member>
     <member name="M:RestFoundation.Configuration.RouteBuilder.ToServiceContract``1">
       <summary>
@@ -3577,13 +3650,45 @@
       <exception cref="T:System.ArgumentException">
             If the service contract type is not an interface or a concrete class that defines its own contract.
             </exception>
-      <exception cref="T:System.InvalidOperationException">If the relative URL has already been mapped.</exception>
+      <exception cref="T:System.InvalidOperationException">
+            If the relative URL is invalid or has already been mapped.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Configuration.RouteBuilder.ToHttpHandler``1">
+      <summary>
+            Maps the relative URL to an HTTP handler of type <typeparamref name="T" />.
+            </summary>
+      <exception cref="T:System.InvalidOperationException">
+            If the HTTP handler type is not a concrete class.
+            </exception>
+      <typeparam name="T">The HTTP handler type.</typeparam>
+    </member>
+    <member name="M:RestFoundation.Configuration.RouteBuilder.ToHttpHandler``1(RestFoundation.RouteHash)">
+      <summary>
+            Maps the relative URL to an HTTP handler of type <typeparamref name="T" />.
+            </summary>
+      <param name="defaults">
+            The values to use for route parameters if they are missing in the URL.
+            </param>
+      <exception cref="T:System.InvalidOperationException">
+            If the HTTP handler type is not a concrete class.
+            </exception>
+      <typeparam name="T">The HTTP handler type.</typeparam>
     </member>
     <member name="M:RestFoundation.Configuration.RouteBuilder.ToWebFormsPage(System.String)">
       <summary>
             Maps the relative URL to a web forms page.
             </summary>
       <param name="virtualPageUrl">A virtual URL to the ASPX file.</param>
+    </member>
+    <member name="M:RestFoundation.Configuration.RouteBuilder.ToWebFormsPage(System.String,RestFoundation.RouteHash)">
+      <summary>
+            Maps the relative URL to a web forms page.
+            </summary>
+      <param name="virtualPageUrl">A virtual URL to the ASPX file.</param>
+      <param name="defaults">
+            The values to use for route parameters if they are missing in the URL.
+            </param>
     </member>
     <member name="T:RestFoundation.Runtime.ContentNegotiator">
       <summary>
@@ -4474,6 +4579,16 @@
             Access-Control-Max-Age
             </summary>
     </member>
+    <member name="F:RestFoundation.ResponseHeaderNames.Allow">
+      <summary>
+            Allow
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ResponseHeaderNames.CacheControl">
+      <summary>
+            Cache-Control
+            </summary>
+    </member>
     <member name="F:RestFoundation.ResponseHeaderNames.ContentLength">
       <summary>
             Content-Length
@@ -4512,6 +4627,16 @@
     <member name="F:RestFoundation.ResponseHeaderNames.ETag">
       <summary>
             ETag
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ResponseHeaderNames.Expires">
+      <summary>
+            Expires
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ResponseHeaderNames.LastModified">
+      <summary>
+            Last-Modified
             </summary>
     </member>
     <member name="F:RestFoundation.ResponseHeaderNames.Location">
@@ -6223,6 +6348,268 @@
             Gets or sets the condition for the status.
             </summary>
     </member>
+    <member name="T:RestFoundation.HttpHandler">
+      <summary>
+            Represents a base class for an HTTP handler implementation. HTTP handlers are designed for non-RESTful
+            operations. This class cannot be instantiated.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.HttpHandler.ExecuteAsync(RestFoundation.IServiceContext)">
+      <summary>
+            When overridden in a derived class, provides code that performs the HTTP handler operations.
+            </summary>
+      <returns>The asynchronous task containing the <see cref="T:RestFoundation.Results.IResult" /> object.</returns>
+      <param name="context">The service context.</param>
+    </member>
+    <member name="M:RestFoundation.HttpHandler.ProcessRequestAsync(System.Web.HttpContext)">
+      <summary>
+            When overridden in a derived class, provides code that handles an asynchronous task.
+            </summary>
+      <returns>
+            The asynchronous task.
+            </returns>
+      <param name="context">The HTTP context.</param>
+    </member>
+    <member name="M:RestFoundation.HttpHandler.ProcessRequest(System.Web.HttpContext)">
+      <summary>
+            When overridden in a derived class, provides code that handles a synchronous task.
+            </summary>
+      <param name="context">The HTTP context.</param>
+      <exception cref="T:System.NotSupportedException">
+            The method is implemented but does not provide any default handling for synchronous tasks.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.HttpHandler.GetHttpHandler(System.Web.Routing.RequestContext)">
+      <summary>
+            Provides the object that processes the request.
+            </summary>
+      <returns>An object that processes the request.</returns>
+      <param name="requestContext">An object that encapsulates information about the request.</param>
+    </member>
+    <member name="T:RestFoundation.TaskResult">
+      <summary>
+            Generates results wrapped in a <see cref="T:System.Threading.Tasks.Task`1" /> to return from service methods.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.TaskResult.Content(System.String)">
+      <summary>
+            Returns a content result task.
+            </summary>
+      <param name="content">The content string.</param>
+      <returns>The content result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.Content(System.String,System.Boolean)">
+      <summary>
+            Returns a content result task.
+            </summary>
+      <param name="content">The content string.</param>
+      <param name="clearOutput">A value indicating whether to clear output before sending the content.</param>
+      <returns>The content result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.Content(System.String,System.Boolean,System.String)">
+      <summary>
+            Returns a content result task.
+            </summary>
+      <param name="content">The content string.</param>
+      <param name="clearOutput">A value indicating whether to clear output before sending the content (true by default).</param>
+      <param name="contentType">The content type.</param>
+      <returns>The content result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.LocalFile(System.String)">
+      <summary>
+            Returns a local file result task.
+            </summary>
+      <param name="filePath">The local file path.</param>
+      <returns>The file path result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.LocalFile(System.String,System.String)">
+      <summary>
+            Returns a local file result task.
+            </summary>
+      <param name="filePath">The local file path.</param>
+      <param name="contentType">The content type.</param>
+      <returns>The file path result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.LocalFile(System.String,System.String,System.String)">
+      <summary>
+            Returns a local file result task.
+            </summary>
+      <param name="filePath">The local file path.</param>
+      <param name="contentType">The content type.</param>
+      <param name="contentDisposition">The content disposition data.</param>
+      <returns>The file path result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.RedirectToUrl(System.String)">
+      <summary>
+            Returns a redirect result task for the provided URL with the redirect type <see cref="F:RestFoundation.Results.RedirectType.Found" />.
+            </summary>
+      <param name="url">The URL to redirect to.</param>
+      <returns>The redirect result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.RedirectToUrl(System.String,RestFoundation.Results.RedirectType)">
+      <summary>
+            Returns a redirect result task for the provided URL with the provided redirect type.
+            </summary>
+      <param name="url">The URL to redirect to.</param>
+      <param name="redirectType">The redirect type.</param>
+      <returns>The redirect result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.RemoteFile(System.String)">
+      <summary>
+            Returns a remote file result task.
+            </summary>
+      <param name="fileUrl">The remote file URL.</param>
+      <returns>The file URL result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.RemoteFile(System.String,System.String)">
+      <summary>
+            Returns a remote file result task.
+            </summary>
+      <param name="fileUrl">The remote file URL.</param>
+      <param name="contentType">The content type.</param>
+      <returns>The file URL result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.RemoteFile(System.String,System.String,System.String)">
+      <summary>
+            Returns a remote file result task.
+            </summary>
+      <param name="fileUrl">The remote file URL.</param>
+      <param name="contentType">The content type.</param>
+      <param name="contentDisposition">The content disposition data.</param>
+      <returns>The file URL result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.ResponseStatus(System.Net.HttpStatusCode)">
+      <summary>
+            Returns the response status result task.
+            </summary>
+      <param name="code">The HTTP status code.</param>
+      <returns>The response status result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.ResponseStatus(System.Net.HttpStatusCode,System.String)">
+      <summary>
+            Returns the response status result task.
+            </summary>
+      <param name="code">The HTTP status code.</param>
+      <param name="description">The HTTP status description.</param>
+      <returns>The response status result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.ResponseStatus(System.Net.HttpStatusCode,System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+      <summary>
+            Returns the response status result task.
+            </summary>
+      <param name="code">The HTTP status code.</param>
+      <param name="description">The HTTP status description.</param>
+      <param name="responseHeaders">A dictionary of response headers.</param>
+      <returns>The response status result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.Feed(System.ServiceModel.Syndication.SyndicationFeed,RestFoundation.Results.FeedResult.SyndicationFormat)">
+      <summary>
+            Returns an ATOM or RSS feed result task.
+            </summary>
+      <param name="feed">The feed.</param>
+      <param name="format">The feed format.</param>
+      <returns>The feed result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.Json(System.Object)">
+      <summary>
+            Returns a JSON result task.
+            </summary>
+      <param name="obj">The object to serialize to JSON.</param>
+      <returns>The JSON result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.JsonP(System.Object)">
+      <summary>
+            Returns a JSONP result task inside a callback function with the "jsonpCallback" name.
+            </summary>
+      <param name="obj">The object to serialize to JSONP.</param>
+      <returns>The JSONP result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.JsonP(System.Object,System.String)">
+      <summary>
+            Returns a JSONP result task inside a callback function with the provided name.
+            </summary>
+      <param name="obj">The object to serialize to JSONP.</param>
+      <param name="callback">The callback function name.</param>
+      <returns>The JSONP result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.Xml(System.Object)">
+      <summary>
+            Returns a XML result task.
+            </summary>
+      <param name="obj">The object to serialize to XML.</param>
+      <returns>The XML result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.JsonOrXml(System.Object,System.String)">
+      <summary>
+            Returns a JSON or an XML result task based on the <paramref name="format" /> value.
+            Format value must be equal to <see cref="F:RestFoundation.Result.JsonFormat" /> or <see cref="F:RestFoundation.Result.XmlFormat" />.
+            </summary>
+      <param name="obj">The object to serialize to JSON or XML.</param>
+      <param name="format">The result content format ("JSON" or "XML").</param>
+      <returns>The JSON or XML result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.Start(System.Func{RestFoundation.Results.IResult})">
+      <summary>
+            Creates and starts a new task returning an <see cref="T:RestFoundation.Results.IResult" />.
+            </summary>
+      <param name="action">The action delegate that creates an <see cref="T:RestFoundation.Results.IResult" />.</param>
+      <returns>The created result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.Start(System.Func{RestFoundation.Results.IResult},System.Threading.CancellationToken)">
+      <summary>
+            Creates and starts a new task returning an <see cref="T:RestFoundation.Results.IResult" />.
+            </summary>
+      <param name="action">The action delegate that creates an <see cref="T:RestFoundation.Results.IResult" />.</param>
+      <param name="cancellationToken">The cancellation token for the task.</param>
+      <returns>The created result task.</returns>
+    </member>
+    <member name="M:RestFoundation.TaskResult.Wrap(RestFoundation.Results.IResult)">
+      <summary>
+            Returns a result task wrapped in a task.
+            </summary>
+      <param name="result">The <see cref="T:RestFoundation.Results.IResult" /> to wrap.</param>
+      <returns>The result task.</returns>
+    </member>
+    <member name="P:RestFoundation.TaskResult.Accepted">
+      <summary>
+            Gets a result task with the status code set to Accepted (202).
+            </summary>
+    </member>
+    <member name="P:RestFoundation.TaskResult.BadRequest">
+      <summary>
+            Gets a result task with the status code set to Bad Request (400).
+            </summary>
+    </member>
+    <member name="P:RestFoundation.TaskResult.Conflict">
+      <summary>
+            Gets a result task with the status code set to Conflict (409).
+            </summary>
+    </member>
+    <member name="P:RestFoundation.TaskResult.Forbidden">
+      <summary>
+            Gets a result task with the status code set to Forbidden (403).
+            </summary>
+    </member>
+    <member name="P:RestFoundation.TaskResult.NoContent">
+      <summary>
+            Gets a result task with the status code set to No Content (204).
+            </summary>
+    </member>
+    <member name="P:RestFoundation.TaskResult.NotFound">
+      <summary>
+            Gets a result task with the status code set to Not Found (404).
+            </summary>
+    </member>
+    <member name="P:RestFoundation.TaskResult.NotImplemented">
+      <summary>
+            Gets a result task with the status code set to Not Implemented (501).
+            </summary>
+    </member>
+    <member name="P:RestFoundation.TaskResult.Ok">
+      <summary>
+            Gets a result task with the status code set to OK (200).
+            </summary>
+    </member>
     <member name="T:RestFoundation.TypeBinders.ITypeBinder">
       <summary>
             Defines a binder for service method parameters of a specific object type.
@@ -6402,31 +6789,6 @@
       <summary>
             Clears all associated media type formatters.
             </summary>
-    </member>
-    <member name="T:RestFoundation.Formatters.MultiPartFormatter">
-      <summary>
-            Represents a multi-part media type formatter for uploading files over the HTTP.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Formatters.MultiPartFormatter.FormatRequest(RestFoundation.IServiceContext,System.Type)">
-      <summary>
-            Deserializes HTTP message body data into an object instance of the provided type.
-            </summary>
-      <param name="context">The service context.</param>
-      <param name="objectType">The object type.</param>
-      <returns>The deserialized object.</returns>
-      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object cannot be deserialized.</exception>
-    </member>
-    <member name="M:RestFoundation.Formatters.MultiPartFormatter.FormatResponse(RestFoundation.IServiceContext,System.Type,System.Object,System.String)">
-      <summary>
-            Serializes the object instance into the HTTP response stream using the accepted media type.
-            </summary>
-      <param name="context">The service context.</param>
-      <param name="methodReturnType">The method return type.</param>
-      <param name="obj">The object to serialize.</param>
-      <param name="preferredMediaType">The preferred media type.</param>
-      <returns>A service method result containing the serialized object representation.</returns>
-      <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
     <member name="T:RestFoundation.Security.IAuthorizationManager">
       <summary>
@@ -8603,7 +8965,7 @@
     </member>
     <member name="T:RestFoundation.Result">
       <summary>
-            Represents results to return from service methods.
+            Generates results to return from service methods.
             </summary>
     </member>
     <member name="F:RestFoundation.Result.JsonFormat">
@@ -8858,7 +9220,7 @@
             Returns the response status result.
             </summary>
       <param name="code">The HTTP status code.</param>
-      <returns>The response status result</returns>
+      <returns>The response status result.</returns>
     </member>
     <member name="M:RestFoundation.Result.ResponseStatus(System.Net.HttpStatusCode,System.String)">
       <summary>
@@ -8950,7 +9312,7 @@
             Format value must be equal to <see cref="F:RestFoundation.Result.JsonFormat" /> or <see cref="F:RestFoundation.Result.XmlFormat" />.
             </summary>
       <param name="obj">The object to serialize to JSON or XML.</param>
-      <param name="format">The result content format.</param>
+      <param name="format">The result content format ("JSON" or "XML").</param>
       <returns>The JSON or XML result.</returns>
     </member>
     <member name="M:RestFoundation.Result.Response(System.Action{RestFoundation.IServiceContext})">
@@ -9275,6 +9637,12 @@
       <summary>
             Clears all response headers.
             </summary>
+    </member>
+    <member name="M:RestFoundation.IHttpResponse.GetCancellationToken">
+      <summary>
+            Gets the response cancellation token.
+            </summary>
+      <returns>The response <see cref="T:System.Threading.CancellationToken" />.</returns>
     </member>
     <member name="M:RestFoundation.IHttpResponse.GetCharsetEncoding">
       <summary>
@@ -9672,6 +10040,11 @@
             Gets the query string collection.
             </summary>
     </member>
+    <member name="P:RestFoundation.IHttpRequest.Files">
+      <summary>
+            Gets an uploaded file collection.
+            </summary>
+    </member>
     <member name="P:RestFoundation.IHttpRequest.Form">
       <summary>
             Gets the form name/value collection.
@@ -9752,6 +10125,11 @@
             Gets the query string collection.
             </summary>
     </member>
+    <member name="P:RestFoundation.Context.HttpRequest.Files">
+      <summary>
+            Gets an uploaded file collection.
+            </summary>
+    </member>
     <member name="P:RestFoundation.Context.HttpRequest.Form">
       <summary>
             Gets the form name/value collection.
@@ -9828,6 +10206,12 @@
       <summary>
             Clears all response headers.
             </summary>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponse.GetCancellationToken">
+      <summary>
+            Gets the response cancellation token.
+            </summary>
+      <returns>The response <see cref="T:System.Threading.CancellationToken" />.</returns>
     </member>
     <member name="M:RestFoundation.Context.HttpResponse.GetCharsetEncoding">
       <summary>

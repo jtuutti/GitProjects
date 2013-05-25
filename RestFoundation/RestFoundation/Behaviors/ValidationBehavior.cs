@@ -11,22 +11,22 @@ namespace RestFoundation.Behaviors
     /// Represents a resource validation behavior for a service or a service method.
     /// This behavior is set as global service behavior by the default REST configuration.
     /// </summary>
-    public class ResourceValidationBehavior : ServiceBehavior
+    public class ValidationBehavior : ServiceBehavior
     {
         private readonly IResourceValidator m_validator;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceValidationBehavior"/> class.
+        /// Initializes a new instance of the <see cref="ValidationBehavior"/> class.
         /// </summary>
-        public ResourceValidationBehavior() : this(new ResourceValidator())
+        public ValidationBehavior() : this(new ResourceValidator())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ResourceValidationBehavior"/> class.
+        /// Initializes a new instance of the <see cref="ValidationBehavior"/> class.
         /// </summary>
         /// <param name="validator">The resource validator.</param>
-        public ResourceValidationBehavior(IResourceValidator validator)
+        public ValidationBehavior(IResourceValidator validator)
         {
             if (validator == null)
             {

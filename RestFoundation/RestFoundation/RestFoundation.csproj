@@ -65,7 +65,7 @@
     <Compile Include="Behaviors\Attributes\OutputCacheAttribute.cs" />
     <Compile Include="Behaviors\Attributes\AsyncTimeoutAttribute.cs" />
     <Compile Include="Behaviors\Attributes\ThrottlingAttribute.cs" />
-    <Compile Include="Behaviors\Attributes\ValidateResourceAttribute.cs" />
+    <Compile Include="Behaviors\Attributes\AssertValidationAttribute.cs" />
     <Compile Include="Behaviors\CacheValidationHandlerData.cs" />
     <Compile Include="Behaviors\Context\BehaviorContext.cs" />
     <Compile Include="Behaviors\Context\MethodAppliesContext.cs" />
@@ -178,7 +178,7 @@
     <Compile Include="Configuration\GlobalBehaviorBuilder.cs" />
     <Compile Include="Behaviors\BasicAuthenticationBehavior.cs" />
     <Compile Include="Behaviors\HttpsOnlyBehavior.cs" />
-    <Compile Include="Behaviors\ResourceValidationBehavior.cs" />
+    <Compile Include="Behaviors\ValidationBehavior.cs" />
     <Compile Include="Behaviors\SecureServiceBehavior.cs" />
     <Compile Include="ResourceAttribute.cs" />
     <Compile Include="Client\RestClientFactory.cs" />
@@ -217,6 +217,7 @@
     <Compile Include="TaskResult.cs" />
     <Compile Include="TypeBinders\FromBodyAttribute.cs" />
     <Compile Include="TypeBinders\FromHeaderAttribute.cs" />
+    <Compile Include="TypeBinders\FromUriAsComplexTypeAttribute.cs" />
     <Compile Include="TypeBinders\FromUriAttribute.cs" />
     <Compile Include="TypeBinders\TypeBinderAttribute.cs" />
     <Compile Include="Configuration\TypeBinderBuilder.cs" />

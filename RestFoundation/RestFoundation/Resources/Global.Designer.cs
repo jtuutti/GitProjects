@@ -313,6 +313,24 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Object type must be a concrete class..
+        /// </summary>
+        internal static string InvalidComplexType {
+            get {
+                return ResourceManager.GetString("InvalidComplexType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value &apos;{0}&apos; could not be assigned to the property &apos;{1}&apos; (type: {2}) of the complex type &apos;{3}&apos;.
+        /// </summary>
+        internal static string InvalidComplexTypePropertyValue {
+            get {
+                return ResourceManager.GetString("InvalidComplexTypePropertyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection timeout is invalid..
         /// </summary>
         internal static string InvalidConnectionTimeout {

@@ -40,7 +40,7 @@ namespace RestFoundation.Tests.Behaviors
         [Test]
         public void ValidResourceShouldNotCreateValidationErrors()
         {
-            IServiceBehavior behavior = new ResourceValidationBehavior();
+            IServiceBehavior behavior = new ValidationBehavior();
 
             var resource = new Model
             {
@@ -57,7 +57,7 @@ namespace RestFoundation.Tests.Behaviors
         [Test]
         public void EmptyResourceShouldCreateValidationErrors()
         {
-            IServiceBehavior behavior = new ResourceValidationBehavior();
+            IServiceBehavior behavior = new ValidationBehavior();
 
             var resource = new Model();
 
@@ -70,7 +70,7 @@ namespace RestFoundation.Tests.Behaviors
         [Test]
         public void ResourceWithoutIDShouldCreateValidationErrors()
         {
-            IServiceBehavior behavior = new ResourceValidationBehavior();
+            IServiceBehavior behavior = new ValidationBehavior();
 
             var resource = new Model
             {
@@ -86,7 +86,7 @@ namespace RestFoundation.Tests.Behaviors
         [Test]
         public void ResourceWithEmptyNameShouldCreateValidationErrors()
         {
-            IServiceBehavior behavior = new ResourceValidationBehavior();
+            IServiceBehavior behavior = new ValidationBehavior();
 
             var resource = new Model
             {
@@ -103,7 +103,7 @@ namespace RestFoundation.Tests.Behaviors
         [Test]
         public void ResourceWithNameOver25CharactersShouldCreateValidationErrors()
         {
-            IServiceBehavior behavior = new ResourceValidationBehavior();
+            IServiceBehavior behavior = new ValidationBehavior();
 
             var resource = new Model
             {
@@ -120,7 +120,7 @@ namespace RestFoundation.Tests.Behaviors
         [Test]
         public void ResourceWithNameOf25CharactersShouldNotCreateValidationErrors()
         {
-            IServiceBehavior behavior = new ResourceValidationBehavior();
+            IServiceBehavior behavior = new ValidationBehavior();
 
             var resource = new Model
             {

@@ -53,23 +53,23 @@ namespace RestFoundation.TypeBinders
 
         private static object BindObject(string name, Type objectType, IServiceContext context)
         {
-            string value = context.Request.QueryString.TryGet(name);
+            string uriValue = context.Request.QueryString.TryGet(name);
             object changedValue;
 
-            return SafeConvert.TryChangeType(value, objectType, out changedValue) ? changedValue : null;
+            return SafeConvert.TryChangeType(uriValue, objectType, out changedValue) ? changedValue : null;
         }
 
         private static object BindArray(string name, Type objectType, IServiceContext context)
         {
             Type elementType = objectType.GetElementType();
 
-            IList<string> values = context.Request.QueryString.GetValues(name);
-            var changedValues = Array.CreateInstance(elementType, values.Count);
+            IList<string> uriValues = context.Request.QueryString.GetValues(name);
+            var changedValues = Array.CreateInstance(elementType, uriValues.Count);
 
-            for (int i = 0; i < values.Count; i++)
+            for (int i = 0; i < uriValues.Count; i++)
             {
                 object changedArrayValue;
-                changedValues.SetValue(SafeConvert.TryChangeType(values[i], elementType, out changedArrayValue) ? changedArrayValue : null, i);
+                changedValues.SetValue(SafeConvert.TryChangeType(uriValues[i], elementType, out changedArrayValue) ? changedArrayValue : null, i);
             }
 
             return changedValues;

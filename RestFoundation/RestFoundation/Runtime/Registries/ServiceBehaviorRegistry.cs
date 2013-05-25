@@ -14,7 +14,7 @@ namespace RestFoundation.Runtime
     {
         private static readonly List<IServiceBehavior> globalBehaviors = new List<IServiceBehavior>
         {
-            new ResourceValidationBehavior()
+            new ValidationBehavior()
         };
 
         private static readonly ConcurrentDictionary<IRestServiceHandler, List<IServiceBehavior>> handlerBehaviors = new ConcurrentDictionary<IRestServiceHandler, List<IServiceBehavior>>();
