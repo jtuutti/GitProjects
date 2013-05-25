@@ -54,7 +54,6 @@ namespace RestFoundation
 
             context.BeginRequest += (sender, args) => OnBeginRequest(sender);
             context.PreRequestHandlerExecute += (sender, args) => OnPreRequestHandlerExecute(sender);
-            context.PreSendRequestHeaders += (sender, args) => OnPreSendRequestHeaders(sender);
             context.EndRequest += (sender, args) => OnEndRequest(sender);
             context.Error += (sender, args) => OnError(sender);
         }
@@ -123,19 +122,6 @@ namespace RestFoundation
             }
         }
 
-        private static void OnPreSendRequestHeaders(object sender)
-        {
-            var application = sender as HttpApplication;
-
-            if (application == null)
-            {
-                return;
-            }
-
-            RemoveServerHeaders(application);
-            SetResponseHeaders(application);
-        }
-
         private static void OnEndRequest(object sender)
         {
             var application = sender as HttpApplication;
@@ -202,39 +188,6 @@ namespace RestFoundation
             WebFormsInjectionHelper.InjectControlDependencies(handler);
 
             handler.PreInit += (s, e) => WebFormsInjectionHelper.InitializeChildControls(handler);
-        }
-
-        private static void SetResponseHeaders(HttpApplication application)
-        {
-            IDictionary<string, string> responseHeaders = Rest.Configuration.Options.ResponseHeaders;
-
-            if (responseHeaders == null || responseHeaders.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var header in responseHeaders)
-            {
-                if (!HeaderNameValidator.IsValid(header.Key))
-                {
-                    OutputStatus(application, HttpStatusCode.InternalServerError, Global.EmptyHttpHeader);
-                    return;
-                }
-
-                application.Response.AppendHeader(header.Key, header.Value);
-            }
-        }
-
-        private static void RemoveServerHeaders(HttpApplication application)
-        {
-            if (!HttpRuntime.UsingIntegratedPipeline || Rest.Configuration.Options.RetainWebServerHeaders)
-            {
-                return;
-            }
-
-            application.Response.Headers.Remove("Server");
-            application.Response.Headers.Remove("X-AspNet-Version");
-            application.Response.Headers.Remove("X-Powered-By");
         }
 
         private static Exception TryGetException(HttpApplication application)

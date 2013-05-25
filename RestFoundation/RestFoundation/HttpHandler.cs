@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
 using RestFoundation.Results;
+using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
@@ -41,16 +42,8 @@ namespace RestFoundation
                 return;
             }
 
-            var asyncResult = result as IResultAsync;
-
-            if (asyncResult != null)
-            {
-                await asyncResult.ExecuteAsync(serviceContext);
-            }
-            else
-            {
-                result.Execute(serviceContext);
-            }
+            var resultExecutor = new ResultExecutor();
+            await resultExecutor.Execute(result, serviceContext);
         }
 
         /// <summary>
