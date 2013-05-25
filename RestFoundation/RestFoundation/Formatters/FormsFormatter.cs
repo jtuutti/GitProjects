@@ -9,6 +9,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Web;
+using RestFoundation.Resources;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
 
@@ -82,7 +83,7 @@ namespace RestFoundation.Formatters
         /// <exception cref="HttpResponseException">If the object could not be serialized.</exception>
         public virtual IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj, string preferredMediaType)
         {
-            throw new HttpResponseException(HttpStatusCode.NotAcceptable, Resources.Global.MissingOrInvalidAcceptType);
+            throw new HttpResponseException(HttpStatusCode.NotAcceptable, Global.MissingOrInvalidAcceptType);
         }
 
         private static NameValueCollection PopulateFormData(IServiceContext context)
@@ -168,13 +169,20 @@ namespace RestFoundation.Formatters
                     continue;
                 }
 
-                if (values.Length == 1)
+                try
                 {
-                    resource.Add(name, values[0]);
+                    if (values.Length == 1)
+                    {
+                        resource.Add(name, values[0]);
+                    }
+                    else
+                    {
+                        resource.Add(name, values);
+                    }
                 }
-                else
+                catch (ArgumentException)
                 {
-                    resource.Add(name, values);
+                    throw new HttpResponseException(HttpStatusCode.BadRequest, Global.InvalidDynamicPropertyName);
                 }
             }
         }

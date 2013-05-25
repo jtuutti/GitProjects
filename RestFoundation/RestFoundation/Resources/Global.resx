@@ -638,11 +638,15 @@
     <comment>The HTTP handler cannot be abstract.</comment>
   </data>
   <data name="InvalidComplexTypePropertyValue" xml:space="preserve">
-    <value>Value '{0}' could not be assigned to the property '{1}' (type: {2}) of the complex type '{3}'</value>
-    <comment>Value '{0}' could not be assigned to the property '{1}' (type: {2}) of the complex type '{3}'</comment>
+    <value>Value '{0}' could not be assigned to the property '{1}' (type: {2}) of the complex type '{3}'.</value>
+    <comment>Value '{0}' could not be assigned to the property '{1}' (type: {2}) of the complex type '{3}'.</comment>
   </data>
   <data name="InvalidComplexType" xml:space="preserve">
     <value>Object type must be a concrete class.</value>
     <comment>Object type must be a concrete class.</comment>
+  </data>
+  <data name="InvalidDynamicPropertyName" xml:space="preserve">
+    <value>Invalid dynamic class property name provided.</value>
+    <comment>Invalid dynamic class property name provided.</comment>
   </data>
 </root>

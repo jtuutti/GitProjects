@@ -12,6 +12,11 @@ namespace RestFoundation.Collections
     public interface IUploadedFileCollection : IEnumerable<IUploadedFile>
     {
         /// <summary>
+        /// Gets a list of all keys.
+        /// </summary>
+        IReadOnlyList<string> Keys { get; }
+
+        /// <summary>
         /// Gets a value containing the count of all collection items.
         /// </summary>
         int Count { get; }

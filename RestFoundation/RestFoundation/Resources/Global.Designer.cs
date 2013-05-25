@@ -322,7 +322,7 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value &apos;{0}&apos; could not be assigned to the property &apos;{1}&apos; (type: {2}) of the complex type &apos;{3}&apos;.
+        ///   Looks up a localized string similar to Value &apos;{0}&apos; could not be assigned to the property &apos;{1}&apos; (type: {2}) of the complex type &apos;{3}&apos;..
         /// </summary>
         internal static string InvalidComplexTypePropertyValue {
             get {
@@ -336,6 +336,15 @@ namespace RestFoundation.Resources {
         internal static string InvalidConnectionTimeout {
             get {
                 return ResourceManager.GetString("InvalidConnectionTimeout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid dynamic class property name provided..
+        /// </summary>
+        internal static string InvalidDynamicPropertyName {
+            get {
+                return ResourceManager.GetString("InvalidDynamicPropertyName", resourceCulture);
             }
         }
         

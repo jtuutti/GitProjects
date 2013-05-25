@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Data.Entity.Design.PluralizationServices;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using RestFoundation.Resources;
+using RestFoundation.Results;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.TypeBinders
@@ -53,6 +55,11 @@ namespace RestFoundation.TypeBinders
                 throw new InvalidOperationException(Global.InvalidComplexType);
             }
 
+            if (objectType == typeof(object))
+            {
+                return PopulateDynamicObject(context);
+            }
+
             object instance = Activator.CreateInstance(objectType, true);
 
             List<string> faultMessages = BindProperties(instance, context);
@@ -60,6 +67,35 @@ namespace RestFoundation.TypeBinders
             if (faultMessages.Count > 0)
             {
                 throw new HttpResourceFaultException(faultMessages);
+            }
+
+            return instance;
+        }
+
+        private static dynamic PopulateDynamicObject(IServiceContext context)
+        {
+            dynamic instance = new DynamicResult();
+
+            foreach (string key in context.Request.QueryString.Keys)
+            {
+                IList<string> values = context.Request.QueryString.GetValues(key);
+                string propertyName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(key);
+
+                try
+                {
+                    if (values.Count == 1)
+                    {
+                        instance.Add(propertyName, values[0]);
+                    }
+                    else
+                    {
+                        instance.Add(propertyName, values);
+                    }
+                }
+                catch (ArgumentException)
+                {
+                    throw new HttpResponseException(HttpStatusCode.BadRequest, Global.InvalidDynamicPropertyName);
+                }
             }
 
             return instance;

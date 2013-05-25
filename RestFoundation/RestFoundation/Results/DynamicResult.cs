@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using RestFoundation.Resources;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
@@ -18,6 +20,8 @@ namespace RestFoundation.Results
     [XmlRoot("ComplexType")]
     public class DynamicResult : DynamicObject, IXmlSerializable
     {
+        private static readonly Regex PropertyNameRegex = new Regex("^[a-zA-Z_][a-zA-Z0-9_]*$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
         private static readonly HashSet<Type> knownSimpleTypes = new HashSet<Type>
         {
             typeof(string),
@@ -83,6 +87,11 @@ namespace RestFoundation.Results
             if (String.IsNullOrWhiteSpace(propertyName))
             {
                 throw new ArgumentNullException("propertyName");
+            }
+
+            if (!PropertyNameRegex.IsMatch(propertyName))
+            {
+                throw new ArgumentException(Global.InvalidDynamicPropertyName, "propertyName");
             }
 
             if (m_dictionary.ContainsKey(propertyName))

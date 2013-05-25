@@ -32,6 +32,17 @@ namespace RestFoundation.Collections.Concrete
         }
 
         /// <summary>
+        /// Gets a list of all keys.
+        /// </summary>
+        public IReadOnlyList<string> Keys
+        {
+            get
+            {
+                return m_collection.Select(f => f.Name).ToArray();
+            }
+        }
+
+        /// <summary>
         /// Gets a value containing the count of all collection items.
         /// </summary>
         public int Count
@@ -67,7 +78,7 @@ namespace RestFoundation.Collections.Concrete
         /// <returns>The corresponding value.</returns>
         public IUploadedFile TryGet(string key)
         {
-            return m_collection.FirstOrDefault(x => String.Equals(key, x.Name, StringComparison.OrdinalIgnoreCase));
+            return m_collection.FirstOrDefault(f => String.Equals(key, f.Name, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
