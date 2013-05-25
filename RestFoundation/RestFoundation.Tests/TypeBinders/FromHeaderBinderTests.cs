@@ -28,7 +28,7 @@ namespace RestFoundation.Tests.TypeBinders
         [Test]
         public void Test_Object_Binding()
         {
-            MockContextManager.SetHeader("X-Name", "Dmitry");
+            MockContextManager.SetHeader("X-Name", "User");
             MockContextManager.SetHeader("X-Age", "15");
             MockContextManager.SetHeader("X-Id", Guid.NewGuid().ToString());
 

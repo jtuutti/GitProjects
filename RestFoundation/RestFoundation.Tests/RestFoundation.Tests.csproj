@@ -96,6 +96,7 @@
     <Compile Include="Formatters\XmlFormatterTests.cs" />
     <Compile Include="TypeBinders\FromHeaderBinderTests.cs" />
     <Compile Include="TypeBinders\FromBodyBinderTests.cs" />
+    <Compile Include="TypeBinders\FromUriAsComplexTypeTests.cs" />
     <Compile Include="TypeBinders\FromUriBinderTests.cs" />
   </ItemGroup>
   <ItemGroup>

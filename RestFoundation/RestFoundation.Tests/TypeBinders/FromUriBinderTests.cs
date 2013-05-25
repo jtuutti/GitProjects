@@ -27,7 +27,7 @@ namespace RestFoundation.Tests.TypeBinders
         [Test]
         public void Test_Object_Binding()
         {
-            MockContextManager.SetQuery("name", "Dmitry");
+            MockContextManager.SetQuery("name", "User");
             MockContextManager.SetQuery("age", "15");
             MockContextManager.SetQuery("id", Guid.NewGuid().ToString());
 

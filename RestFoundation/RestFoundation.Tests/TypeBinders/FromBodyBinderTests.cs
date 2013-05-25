@@ -30,7 +30,7 @@ namespace RestFoundation.Tests.TypeBinders
         {
             MockContextManager.SetContentType("application/x-www-form-urlencoded; charset=utf-8");
 
-            MockContextManager.SetFormData("name", "Dmitry");
+            MockContextManager.SetFormData("name", "User");
             MockContextManager.SetFormData("age", "15");
             MockContextManager.SetFormData("id", Guid.NewGuid().ToString());
 
