@@ -86,7 +86,7 @@
     <Compile Include="Context\ContextContainer.cs" />
     <Compile Include="Configuration\DependencyBuilder.cs" />
     <Compile Include="Configuration\FaultDetail.cs" />
-    <Compile Include="Context\HttpResponseExtensions.cs" />
+    <Compile Include="Context\HttpContextExtensions.cs" />
     <Compile Include="Formatters\SupportedMediaTypeAttribute.cs" />
     <Compile Include="ILogWriter.cs" />
     <Compile Include="InstanceLifetime.cs" />
@@ -298,7 +298,6 @@
     <Compile Include="Context\ServiceContext.cs" />
     <Compile Include="Runtime\ServiceMetadata.cs" />
     <Compile Include="Runtime\ServiceRequestValidator.cs" />
-    <Compile Include="Context\HttpContextExtensions.cs" />
     <Compile Include="Runtime\OutputCachedPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

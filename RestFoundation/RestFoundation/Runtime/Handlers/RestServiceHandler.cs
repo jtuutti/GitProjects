@@ -123,6 +123,8 @@ namespace RestFoundation.Runtime.Handlers
 
             try
             {
+                m_serviceContext.Response.CancellationTokenSource = new CancellationTokenSource();
+
                 TrySetServiceMethodTimeout(serviceMethodData.Method);
 
                 Task methodTask = m_methodInvoker.InvokeAsync(this, serviceMethodData.Service, serviceMethodData.Method);

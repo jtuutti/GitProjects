@@ -52,7 +52,7 @@ namespace RestFoundation.Runtime
 
             if (asyncResult != null)
             {
-                await asyncResult.ExecuteAsync(context);
+                await asyncResult.ExecuteAsync(context, context.Response.GetCancellationToken());
             }
             else
             {

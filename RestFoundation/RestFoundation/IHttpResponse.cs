@@ -98,6 +98,12 @@ namespace RestFoundation
         void ClearHeaders();
 
         /// <summary>
+        /// Gets the response cancellation token.
+        /// </summary>
+        /// <returns>The response <see cref="CancellationToken"/>.</returns>
+        CancellationToken GetCancellationToken();
+
+        /// <summary>
         /// Gets the response character encoding.
         /// </summary>
         /// <returns>Returns the encoding.</returns>

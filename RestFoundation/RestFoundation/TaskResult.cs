@@ -336,7 +336,7 @@ namespace RestFoundation
                 throw new InvalidOperationException(Resources.Global.MissingHttpContext);
             }
 
-            return Task.Factory.StartNew(action, context.Response.CreateCancellationToken());
+            return Task.Factory.StartNew(action, context.Response.GetCancellationToken());
         }
 
         /// <summary>

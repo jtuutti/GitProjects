@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using RestFoundation.Runtime;
 
@@ -80,8 +81,9 @@ namespace RestFoundation.Results
         /// Executes the result against the provided service context asynchronously.
         /// </summary>
         /// <param name="context">The service context.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A task executing the result.</returns>
-        public virtual Task ExecuteAsync(IServiceContext context)
+        public virtual Task ExecuteAsync(IServiceContext context, CancellationToken cancellationToken)
         {
             if (context == null)
             {
@@ -107,7 +109,7 @@ namespace RestFoundation.Results
                 context.Response.SetHeader(context.Response.HeaderNames.ContentDisposition, ContentDisposition);
             }
 
-            return TransmitFile(context, file);
+            return TransmitFile(context, file, cancellationToken);
         }
 
         /// <summary>
@@ -172,7 +174,7 @@ namespace RestFoundation.Results
             }
         }
 
-        private async Task TransmitFile(IServiceContext context, FileInfo file)
+        private async Task TransmitFile(IServiceContext context, FileInfo file, CancellationToken cancellationToken)
         {
             using (var stream = file.OpenRead())
             {
@@ -181,10 +183,10 @@ namespace RestFoundation.Results
                 var buffer = new byte[m_buffer < file.Length ? m_buffer : file.Length];
                 int bytesRead;
 
-                while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0 && context.Response.IsClientConnected)
+                while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)) > 0 && context.Response.IsClientConnected)
                 {
-                    await context.Response.Output.Stream.WriteAsync(buffer, 0, bytesRead);
-                    await context.Response.Output.Stream.FlushAsync();
+                    await context.Response.Output.Stream.WriteAsync(buffer, 0, bytesRead, cancellationToken);
+                    await context.Response.Output.Stream.FlushAsync(cancellationToken);
                 }
             }
         }

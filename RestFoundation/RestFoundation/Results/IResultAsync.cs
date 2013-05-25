@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RestFoundation.Results
@@ -24,7 +25,8 @@ namespace RestFoundation.Results
         /// Executes the result against the provided service context asynchronously.
         /// </summary>
         /// <param name="context">The service context.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A task executing the result.</returns>
-        Task ExecuteAsync(IServiceContext context);
+        Task ExecuteAsync(IServiceContext context, CancellationToken cancellationToken);
     }
 }
