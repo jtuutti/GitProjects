@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using RestFoundation;
@@ -19,7 +20,7 @@ namespace RestTest.Handlers
                 });
             }
 
-            string fileName = context.Request.QueryString.TryGet("fileName");
+            string fileName = Params.Get("fileName");
 
             if (String.IsNullOrWhiteSpace(fileName))
             {
@@ -30,7 +31,7 @@ namespace RestTest.Handlers
             {
                 FilePath = fileName,
                 ContentType = "video/x-ms-wmv",
-                ContentDisposition = "attachment; filename=movie.avi"
+                ContentDisposition = "attachment; filename=" + Path.GetFileName(fileName)
             });
         }
     }
