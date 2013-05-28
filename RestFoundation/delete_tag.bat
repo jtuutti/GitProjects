@@ -1,5 +1,5 @@
 @echo off
-echo Last known tag:
+echo Last known tag name:
 git describe --tags --abbrev=0
 echo.
 set /p tag="Enter a tag name: "
