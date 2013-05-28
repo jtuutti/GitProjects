@@ -320,26 +320,26 @@
             Gets the number of milliseconds allowed between the calls for a user.
             </summary>
     </member>
-    <member name="T:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute">
+    <member name="T:RestFoundation.Behaviors.Attributes.AssertValidationAttribute">
       <summary>
             Represents a service method that creates and returns a fault collection if the resource validation
             failed before the method execution.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute.#ctor">
+    <member name="M:RestFoundation.Behaviors.Attributes.AssertValidationAttribute.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.AssertValidationAttribute" /> class.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute.#ctor(System.Boolean)">
+    <member name="M:RestFoundation.Behaviors.Attributes.AssertValidationAttribute.#ctor(System.Boolean)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.AssertValidationAttribute" /> class.
             </summary>
       <param name="throwOnNullResource">
             A value indicating whether there should be a fault created if the resource is null.
             </param>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+    <member name="M:RestFoundation.Behaviors.Attributes.AssertValidationAttribute.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
       <summary>
             Called before a service method is executed.
             </summary>
@@ -347,7 +347,7 @@
       <param name="behaviorContext">The "method executing" behavior context.</param>
       <returns>A service method action.</returns>
     </member>
-    <member name="P:RestFoundation.Behaviors.Attributes.ValidateResourceAttribute.ThrowOnNullResource">
+    <member name="P:RestFoundation.Behaviors.Attributes.AssertValidationAttribute.ThrowOnNullResource">
       <summary>
             Gets a value indicating whether a null resource is allowed.
             </summary>
@@ -919,6 +919,11 @@
             </returns>
       <filterpriority>1</filterpriority>
     </member>
+    <member name="P:RestFoundation.Collections.IUploadedFileCollection.Keys">
+      <summary>
+            Gets a list of all keys.
+            </summary>
+    </member>
     <member name="P:RestFoundation.Collections.IUploadedFileCollection.Count">
       <summary>
             Gets a value containing the count of all collection items.
@@ -953,6 +958,11 @@
             the collection.
             </returns>
       <filterpriority>1</filterpriority>
+    </member>
+    <member name="P:RestFoundation.Collections.Concrete.UploadedFileCollection.Keys">
+      <summary>
+            Gets a list of all keys.
+            </summary>
     </member>
     <member name="P:RestFoundation.Collections.Concrete.UploadedFileCollection.Count">
       <summary>
@@ -2542,9 +2552,24 @@
               Looks up a localized string similar to URL templates cannot contain catch-all parameters. Template: '{0}'.
             </summary>
     </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidComplexType">
+      <summary>
+              Looks up a localized string similar to Object type must be a concrete class..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidComplexTypePropertyValue">
+      <summary>
+              Looks up a localized string similar to Value '{0}' could not be assigned to the property '{1}' (type: {2}) of the complex type '{3}'..
+            </summary>
+    </member>
     <member name="P:RestFoundation.Resources.Global.InvalidConnectionTimeout">
       <summary>
               Looks up a localized string similar to Connection timeout is invalid..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidDynamicPropertyName">
+      <summary>
+              Looks up a localized string similar to Invalid dynamic class property name provided..
             </summary>
     </member>
     <member name="P:RestFoundation.Resources.Global.InvalidFilePathOrUrl">
@@ -4731,24 +4756,24 @@
       <param name="behaviorContext">The "method authorizing" behavior context.</param>
       <returns>A service method action.</returns>
     </member>
-    <member name="T:RestFoundation.Behaviors.ResourceValidationBehavior">
+    <member name="T:RestFoundation.Behaviors.ValidationBehavior">
       <summary>
             Represents a resource validation behavior for a service or a service method.
             This behavior is set as global service behavior by the default REST configuration.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.ResourceValidationBehavior.#ctor">
+    <member name="M:RestFoundation.Behaviors.ValidationBehavior.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.ResourceValidationBehavior" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.ValidationBehavior" /> class.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.ResourceValidationBehavior.#ctor(RestFoundation.Validation.IResourceValidator)">
+    <member name="M:RestFoundation.Behaviors.ValidationBehavior.#ctor(RestFoundation.Validation.IResourceValidator)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.ResourceValidationBehavior" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.ValidationBehavior" /> class.
             </summary>
       <param name="validator">The resource validator.</param>
     </member>
-    <member name="M:RestFoundation.Behaviors.ResourceValidationBehavior.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+    <member name="M:RestFoundation.Behaviors.ValidationBehavior.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
       <summary>
             Called before a service method is executed.
             </summary>
@@ -6386,6 +6411,14 @@
       <returns>An object that processes the request.</returns>
       <param name="requestContext">An object that encapsulates information about the request.</param>
     </member>
+    <member name="P:RestFoundation.HttpHandler.Params">
+      <summary>
+            Gets a combined collection of route, query string, form data and header values.
+            </summary>
+      <remarks>
+            Form data is only populated if the content type is "application/x-www-form-urlencoded".
+            </remarks>
+    </member>
     <member name="T:RestFoundation.TaskResult">
       <summary>
             Generates results wrapped in a <see cref="T:System.Threading.Tasks.Task`1" /> to return from service methods.
@@ -6690,6 +6723,26 @@
             Gets a value indicating whether to convert underscores in the parameter to dashes
             when finding the HTTP header. The default value is true. This value has no effect
             if the <see cref="P:RestFoundation.TypeBinders.FromHeaderAttribute.Name" /> property is set.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.TypeBinders.FromUriAsComplexTypeAttribute">
+      <summary>
+            Represents a type binder that binds complex class types from URI query string parameters.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.TypeBinders.FromUriAsComplexTypeAttribute.Bind(System.String,System.Type,RestFoundation.IServiceContext)">
+      <summary>
+            Binds data from an HTTP route, query string or message to a service method parameter.
+            </summary>
+      <param name="name">The service method parameter name.</param>
+      <param name="objectType">The binded object type.</param>
+      <param name="context">The service context.</param>
+      <returns>The object instance with the data or null.</returns>
+    </member>
+    <member name="P:RestFoundation.TypeBinders.FromUriAsComplexTypeAttribute.AssertTypeConversion">
+      <summary>
+            Indicates whether the type binder should return fault collection if a query string value
+            cannot be converted into the property type.
             </summary>
     </member>
     <member name="T:RestFoundation.TypeBinders.FromUriAttribute">
