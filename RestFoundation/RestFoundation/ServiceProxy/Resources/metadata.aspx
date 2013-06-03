@@ -320,14 +320,14 @@
     <div class="schema-section">
     <a name="request-schema"></a>The following is the request model XSD Schema:         
     <pre id="RequestSchema"><%: requestXmlSchemas[0] %></pre>
-    <a id="ViewRequestSchema" href="#">View Schema</a>
+    <a id="ViewRequestSchema" href="#">View Request Schema</a>
     </div>
     <% if (requestXmlSchemas.Count > 1) { %>
     <div class="schema-section">
     <span>Additional request XSD Schemas:</span>
     <% for (int i = 1; i < requestXmlSchemas.Count; i++) { %>
         <pre id="RequestSchema<%: i %>"><%: requestXmlSchemas[i] %></pre>
-        <a id="ViewRequestSchema<%: i %>" href="#">View Schema</a>
+        <a id="ViewRequestSchema<%: i %>" href="#">View Request Schema</a>
     <% } %>
     </div>
     <% } %>
@@ -343,7 +343,7 @@
     <span>Additional response XSD Schemas:</span>
     <% for (int i = 1; i < responseXmlSchemas.Count; i++) { %>
         <pre id="ResponseSchema<%: i %>"><%: responseXmlSchemas[i] %></pre>
-        <a id="ViewResponseSchema<%: i %>" href="#">View Schema</a>
+        <a id="ViewResponseSchema<%: i %>" href="#">View Response Schema</a>
     <% } %>
     </div>
     <% } %>
