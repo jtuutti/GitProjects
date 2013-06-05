@@ -649,4 +649,8 @@
     <value>Invalid dynamic class property name provided.</value>
     <comment>Invalid dynamic class property name provided.</comment>
   </data>
+  <data name="InaccessibleFile" xml:space="preserve">
+    <value>The requested file cannot be accessed.</value>
+    <comment>The requested file cannot be accessed.</comment>
+  </data>
 </root>

@@ -7,7 +7,6 @@ using System.Net;
 using System.ServiceModel.Syndication;
 using System.Threading;
 using System.Threading.Tasks;
-using RestFoundation.Context;
 using RestFoundation.Results;
 
 namespace RestFoundation
@@ -172,6 +171,16 @@ namespace RestFoundation
         }
 
         /// <summary>
+        /// Returns an HTML file result task.
+        /// </summary>
+        /// <param name="filePath">The local file path.</param>
+        /// <returns>The HTML file result task.</returns>
+        public static Task<IResult> LocalHtmlFile(string filePath)
+        {
+            return Task.FromResult<IResult>(Result.LocalHtmlFile(filePath));
+        }
+
+        /// <summary>
         /// Returns a redirect result task for the provided URL with the redirect type <see cref="RedirectType.Found"/>.
         /// </summary>
         /// <param name="url">The URL to redirect to.</param>
@@ -223,6 +232,16 @@ namespace RestFoundation
         public static Task<IResult> RemoteFile(string fileUrl, string contentType, string contentDisposition)
         {
             return Task.FromResult<IResult>(Result.RemoteFile(fileUrl, contentType, contentDisposition));
+        }
+
+        /// <summary>
+        /// Returns an HTML file result task.
+        /// </summary>
+        /// <param name="fileUrl">The remote file URL.</param>
+        /// <returns>The HTML file result task.</returns>
+        public static Task<IResult> RemoteHtmlFile(string fileUrl)
+        {
+            return Task.FromResult<IResult>(Result.RemoteHtmlFile(fileUrl));
         }
 
         /// <summary>

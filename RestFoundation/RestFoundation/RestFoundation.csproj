@@ -96,6 +96,10 @@
     <Compile Include="LogWriterExtensions.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
     <Compile Include="ParameterConstraints.cs" />
+    <Compile Include="Results\FilePathResult.cs" />
+    <Compile Include="Results\FileResultBase.cs" />
+    <Compile Include="Results\FileUrlResult.cs" />
+    <Compile Include="Results\HtmlFileResult.cs" />
     <Compile Include="Results\IODataProvider.cs" />
     <Compile Include="Results\IResultAsync.cs" />
     <Compile Include="Results\ResponseResult.cs" />
@@ -155,7 +159,6 @@
     <Compile Include="IContentNegotiator.cs" />
     <Compile Include="IServiceExceptionHandler.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
-    <Compile Include="Results\FileResultBase.cs" />
     <Compile Include="Results\JsonPResult.cs" />
     <Compile Include="Results\RedirectType.cs" />
     <Compile Include="Configuration\RouteBuilder.cs" />
@@ -266,8 +269,6 @@
     <Compile Include="Results\ContentResult.cs" />
     <Compile Include="Results\FeedResult.cs" />
     <Compile Include="Results\XmlResult.cs" />
-    <Compile Include="Results\FileUrlResult.cs" />
-    <Compile Include="Results\FilePathResult.cs" />
     <Compile Include="Results\JsonResult.cs" />
     <Compile Include="Configuration\RouteConfiguration.cs" />
     <Compile Include="Runtime\AcceptValue.cs" />

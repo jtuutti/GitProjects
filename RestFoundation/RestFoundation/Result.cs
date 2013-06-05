@@ -260,6 +260,21 @@ namespace RestFoundation
         }
 
         /// <summary>
+        /// Returns an HTML file result.
+        /// </summary>
+        /// <param name="filePath">The local file path.</param>
+        /// <returns>The HTML file result.</returns>
+        public static HtmlFileResult LocalHtmlFile(string filePath)
+        {
+            var result = new HtmlFileResult
+            {
+                FilePath = filePath
+            };
+
+            return result;
+        }
+
+        /// <summary>
         /// Returns a redirect result for the provided URL with the redirect type <see cref="RedirectType.Found"/>.
         /// </summary>
         /// <param name="url">The URL to redirect to.</param>
@@ -545,6 +560,23 @@ namespace RestFoundation
                          };
 
             return result;
+        }
+
+        /// <summary>
+        /// Returns an HTML file result.
+        /// </summary>
+        /// <param name="fileUrl">The remote file URL.</param>
+        /// <returns>The HTML file result.</returns>
+        public static HtmlFileResult RemoteHtmlFile(string fileUrl)
+        {
+            var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
+
+            if (context == null)
+            {
+                throw new InvalidOperationException(Resources.Global.MissingHttpContext);
+            }
+
+            return LocalHtmlFile(!String.IsNullOrEmpty(fileUrl) ? context.MapPath(fileUrl) : null);
         }
 
         /// <summary>

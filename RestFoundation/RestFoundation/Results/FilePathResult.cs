@@ -28,13 +28,7 @@ namespace RestFoundation.Results
                 throw new ArgumentNullException("context");
             }
 
-            if (String.IsNullOrWhiteSpace(FilePath))
-            {
-                return null;
-            }
-
-            var file = new FileInfo(FilePath);
-            return file.Exists ? file : null;
+            return !String.IsNullOrWhiteSpace(FilePath) ? new FileInfo(FilePath) : null;
         }
     }
 }

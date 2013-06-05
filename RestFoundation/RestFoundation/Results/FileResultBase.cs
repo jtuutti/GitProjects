@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using RestFoundation.Resources;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Results
@@ -74,7 +75,7 @@ namespace RestFoundation.Results
         /// </exception>
         public void Execute(IServiceContext context)
         {
-            throw new NotSupportedException(Resources.Global.UnsupportedSyncExecutionForAsyncResult);
+            throw new NotSupportedException(Global.UnsupportedSyncExecutionForAsyncResult);
         }
 
         /// <summary>
@@ -94,7 +95,12 @@ namespace RestFoundation.Results
 
             if (file == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound, Resources.Global.InvalidFilePathOrUrl);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Global.InvalidFilePathOrUrl);
+            }
+
+            if (!file.Exists)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound, Global.InvalidFilePathOrUrl);
             }
 
             context.Response.Output.Buffer = false;
@@ -149,7 +155,7 @@ namespace RestFoundation.Results
                 context.Response.SetHeader(context.Response.HeaderNames.ContentLength, stream.Length.ToString(CultureInfo.InvariantCulture));
                 context.Response.SetHeader(context.Response.HeaderNames.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes */{0}", stream.Length));
 
-                throw new HttpResponseException(HttpStatusCode.RequestedRangeNotSatisfiable, Resources.Global.UnsatisfiableRequestedRange);
+                throw new HttpResponseException(HttpStatusCode.RequestedRangeNotSatisfiable, Global.UnsatisfiableRequestedRange);
             }
 
             if (start > 0)
@@ -159,7 +165,7 @@ namespace RestFoundation.Results
 
             context.Response.SetHeader(context.Response.HeaderNames.ContentLength, (end - start + 1).ToString(CultureInfo.InvariantCulture));
             context.Response.SetHeader(context.Response.HeaderNames.ContentRange, String.Format(CultureInfo.InvariantCulture, "bytes {0}-{1}/{2}", start, end, stream.Length));
-            context.Response.SetStatus(HttpStatusCode.PartialContent, Resources.Global.PartialContent);
+            context.Response.SetStatus(HttpStatusCode.PartialContent, Global.PartialContent);
         }
 
         private static string GenerateETag(FileInfo file)
@@ -176,18 +182,37 @@ namespace RestFoundation.Results
 
         private async Task TransmitFile(IServiceContext context, FileInfo file, CancellationToken cancellationToken)
         {
-            using (var stream = file.OpenRead())
+            try
             {
-                CreateRangeOutput(context, stream);
-
-                var buffer = new byte[m_buffer < file.Length ? m_buffer : file.Length];
-                int bytesRead;
-
-                while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)) > 0 && context.Response.IsClientConnected)
+                using (var stream = file.OpenRead())
                 {
-                    await context.Response.Output.Stream.WriteAsync(buffer, 0, bytesRead, cancellationToken);
-                    await context.Response.Output.Stream.FlushAsync(cancellationToken);
+                    CreateRangeOutput(context, stream);
+
+                    var buffer = new byte[m_buffer < file.Length ? m_buffer : file.Length];
+                    int bytesRead;
+
+                    while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)) > 0 && context.Response.IsClientConnected)
+                    {
+                        await context.Response.Output.Stream.WriteAsync(buffer, 0, bytesRead, cancellationToken);
+                        await context.Response.Output.Stream.FlushAsync(cancellationToken);
+                    }
                 }
+            }
+            catch (DirectoryNotFoundException)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound, Global.InvalidFilePathOrUrl);
+            }
+            catch (IOException)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Global.InaccessibleFile);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Global.InaccessibleFile);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden, Global.InaccessibleFile);
             }
         }
     }
