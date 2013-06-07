@@ -14,7 +14,7 @@ using RestFoundation.Results;
 namespace RestFoundation.Runtime
 {
     /// <summary>
-    /// Represents the default OData provider for <see cref="T:System.Linq.IQueryable`T"/> collection
+    /// Represents the default OData provider for <see cref="T:System.Linq.IQueryable`1"/> collection
     /// results.
     /// </summary>
     public class DefaultODataProvider : IODataProvider
