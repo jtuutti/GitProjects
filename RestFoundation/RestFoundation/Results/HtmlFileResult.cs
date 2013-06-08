@@ -51,7 +51,7 @@ namespace RestFoundation.Results
         /// <param name="context">The service context.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A task executing the result.</returns>
-        public async Task ExecuteAsync(IServiceContext context, CancellationToken cancellationToken)
+        public virtual async Task ExecuteAsync(IServiceContext context, CancellationToken cancellationToken)
         {
             context.Response.Output.Buffer = false;
             context.Response.Output.Clear();

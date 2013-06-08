@@ -27,9 +27,9 @@ namespace RestTest.Handlers
                 return TaskResult.BadRequest;
             }
 
-            return TaskResult.Start(() => new FileResult
+            return TaskResult.Start(() => new StreamResult
             {
-                FilePath = fileName,
+                Stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None),
                 ContentType = "video/x-ms-wmv",
                 ContentDisposition = "attachment; filename=" + Path.GetFileName(fileName)
             });
