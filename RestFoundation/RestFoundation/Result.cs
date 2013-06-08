@@ -224,7 +224,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="filePath">The local file path.</param>
         /// <returns>The file path result.</returns>
-        public static FilePathResult LocalFile(string filePath)
+        public static FileResult LocalFile(string filePath)
         {
             return LocalFile(filePath, null, null);
         }
@@ -235,7 +235,7 @@ namespace RestFoundation
         /// <param name="filePath">The local file path.</param>
         /// <param name="contentType">The content type.</param>
         /// <returns>The file path result.</returns>
-        public static FilePathResult LocalFile(string filePath, string contentType)
+        public static FileResult LocalFile(string filePath, string contentType)
         {
             return LocalFile(filePath, contentType, null);
         }
@@ -247,9 +247,9 @@ namespace RestFoundation
         /// <param name="contentType">The content type.</param>
         /// <param name="contentDisposition">The content disposition data.</param>
         /// <returns>The file path result.</returns>
-        public static FilePathResult LocalFile(string filePath, string contentType, string contentDisposition)
+        public static FileResult LocalFile(string filePath, string contentType, string contentDisposition)
         {
-            var result = new FilePathResult
+            var result = new FileResult
                          {
                              FilePath = filePath,
                              ContentType = contentType,
@@ -399,16 +399,9 @@ namespace RestFoundation
                 throw new ArgumentNullException("serviceMethod");
             }
 
-            var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
-
-            if (context == null)
-            {
-                throw new InvalidOperationException(Resources.Global.MissingHttpContext);
-            }
-
             return new RedirectResult
             {
-                RedirectUrl = context.GetPath(serviceUrl, serviceMethod, routeValues),
+                RedirectUrl = GetServiceContext().GetPath(serviceUrl, serviceMethod, routeValues),
                 RedirectType = redirectType
             };
         }
@@ -508,16 +501,9 @@ namespace RestFoundation
                 throw new ArgumentNullException("serviceMethod");
             }
 
-            var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
-
-            if (context == null)
-            {
-                throw new InvalidOperationException(Resources.Global.MissingHttpContext);
-            }
-
             return new RedirectResult
             {
-                RedirectUrl = context.GetPath(serviceUrl, serviceMethod, routeValues),
+                RedirectUrl = GetServiceContext().GetPath(serviceUrl, serviceMethod, routeValues),
                 RedirectType = redirectType
             };
         }
@@ -527,7 +513,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="fileUrl">The remote file URL.</param>
         /// <returns>The file URL result.</returns>
-        public static FileUrlResult RemoteFile(string fileUrl)
+        public static FileResult RemoteFile(string fileUrl)
         {
             return RemoteFile(fileUrl, null, null);
         }
@@ -538,7 +524,7 @@ namespace RestFoundation
         /// <param name="fileUrl">The remote file URL.</param>
         /// <param name="contentType">The content type.</param>
         /// <returns>The file URL result.</returns>
-        public static FileUrlResult RemoteFile(string fileUrl, string contentType)
+        public static FileResult RemoteFile(string fileUrl, string contentType)
         {
             return RemoteFile(fileUrl, contentType, null);
         }
@@ -550,11 +536,16 @@ namespace RestFoundation
         /// <param name="contentType">The content type.</param>
         /// <param name="contentDisposition">The content disposition data.</param>
         /// <returns>The file URL result.</returns>
-        public static FileUrlResult RemoteFile(string fileUrl, string contentType, string contentDisposition)
+        public static FileResult RemoteFile(string fileUrl, string contentType, string contentDisposition)
         {
-            var result = new FileUrlResult
+            if (String.IsNullOrEmpty(fileUrl))
+            {
+                throw new ArgumentNullException("fileUrl");
+            }
+
+            var result = new FileResult
                          {
-                             FileUrl = fileUrl,
+                             FilePath = GetServiceContext().MapPath(fileUrl),
                              ContentType = contentType,
                              ContentDisposition = contentDisposition
                          };
@@ -569,14 +560,7 @@ namespace RestFoundation
         /// <returns>The HTML file result.</returns>
         public static HtmlFileResult RemoteHtmlFile(string fileUrl)
         {
-            var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
-
-            if (context == null)
-            {
-                throw new InvalidOperationException(Resources.Global.MissingHttpContext);
-            }
-
-            return LocalHtmlFile(!String.IsNullOrEmpty(fileUrl) ? context.MapPath(fileUrl) : null);
+            return LocalHtmlFile(!String.IsNullOrEmpty(fileUrl) ? GetServiceContext().MapPath(fileUrl) : null);
         }
 
         /// <summary>
@@ -662,12 +646,7 @@ namespace RestFoundation
         /// <returns>The object.</returns>
         public static T ObjectWithResponseStatus<T>(T obj, HttpStatusCode code, string description, IDictionary<string, string> responseHeaders)
         {
-            var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
-
-            if (context == null)
-            {
-                throw new InvalidOperationException(Resources.Global.MissingHttpContext);
-            }
+            IServiceContext context = GetServiceContext();
 
             context.Response.SetStatus(code, description ?? String.Empty);
 
@@ -796,6 +775,18 @@ namespace RestFoundation
             }
 
             return new ResponseResult(action);
+        }
+
+        private static IServiceContext GetServiceContext()
+        {
+            var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
+
+            if (context == null)
+            {
+                throw new InvalidOperationException(Resources.Global.MissingHttpContext);
+            }
+
+            return context;
         }
     }
 }

@@ -96,9 +96,7 @@
     <Compile Include="LogWriterExtensions.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
     <Compile Include="ParameterConstraints.cs" />
-    <Compile Include="Results\FilePathResult.cs" />
-    <Compile Include="Results\FileResultBase.cs" />
-    <Compile Include="Results\FileUrlResult.cs" />
+    <Compile Include="Results\FileResult.cs" />
     <Compile Include="Results\HtmlFileResult.cs" />
     <Compile Include="Results\IODataProvider.cs" />
     <Compile Include="Results\IResultAsync.cs" />

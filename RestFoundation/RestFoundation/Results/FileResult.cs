@@ -15,10 +15,9 @@ using RestFoundation.Runtime;
 namespace RestFoundation.Results
 {
     /// <summary>
-    /// Represents a base file result.
-    /// This class cannot be instantiated.
+    /// Represents a file result.
     /// </summary>
-    public abstract class FileResultBase : IResultAsync
+    public class FileResult : IResultAsync
     {
         private const string DefaultBinaryContentType = "application/octet-stream";
         private const int DefaultBuffer = 16384;
@@ -26,9 +25,9 @@ namespace RestFoundation.Results
         private int m_buffer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileResultBase"/> class.
+        /// Initializes a new instance of the <see cref="FileResult"/> class.
         /// </summary>
-        protected FileResultBase()
+        public FileResult()
         {
             m_buffer = DefaultBuffer;
         }
@@ -64,6 +63,11 @@ namespace RestFoundation.Results
         public string ContentDisposition { get; set; }
 
         /// <summary>
+        /// Gets or sets the local file path.
+        /// </summary>
+        public string FilePath { get; set; }
+
+        /// <summary>
         /// Executes the result against the provided service synchronously.
         /// Asynchronous method should throw a <see cref="NotSupportedException"/> and implement
         /// the <see cref="IResultAsync.ExecuteAsync"/> method instead.
@@ -91,7 +95,12 @@ namespace RestFoundation.Results
                 throw new ArgumentNullException("context");
             }
 
-            FileInfo file = GetFile(context);
+            if (String.IsNullOrWhiteSpace(FilePath))
+            {
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Global.InvalidFilePathOrUrl);
+            }
+
+            var file = new FileInfo(FilePath);
 
             if (file == null)
             {
@@ -117,13 +126,6 @@ namespace RestFoundation.Results
 
             return TransmitFile(context, file, cancellationToken);
         }
-
-        /// <summary>
-        /// Gets the <see cref="FileInfo"/> instance using the service context.
-        /// </summary>
-        /// <param name="context">The service context.</param>
-        /// <returns>The file info instance.</returns>
-        protected abstract FileInfo GetFile(IServiceContext context);
 
         private static void CreateRangeOutput(IServiceContext context, FileStream stream)
         {
