@@ -2143,7 +2143,7 @@ namespace TinyIoC
                 foreach (var type in abstractInterfaceTypes)
                 {
                     var implementations = from implementationType in concreteTypes
-                                          where implementationType.GetInterfaces().Contains(type) || implementationType.BaseType() == type
+                                          where type.IsAssignableFrom(implementationType)
                                           select implementationType;
 
                     if (!ignoreDuplicateImplementations && implementations.Count() > 1)
@@ -2627,7 +2627,13 @@ namespace TinyIoC
             // i.e. be as "greedy" as possible so we satify the most amount of dependencies possible
             var ctors = this.GetTypeConstructors(type);
 
-            return ctors.FirstOrDefault(ctor => this.CanConstruct(ctor, parameters, options));
+            foreach (var ctor in ctors)
+            {
+                if (this.CanConstruct(ctor, parameters, options))
+                return ctor;
+            }
+
+            return null;
         }
 
         private IEnumerable<ConstructorInfo> GetTypeConstructors(Type type)
