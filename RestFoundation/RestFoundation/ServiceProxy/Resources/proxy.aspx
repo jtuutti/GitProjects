@@ -580,7 +580,7 @@
     }
 </script>
 
-<asp:Content runat="server" ContentPlaceHolderID="bodyPlaceholder">
+<asp:Content runat="server" ContentPlaceHolderID="BodyPlaceholder">
 <form runat="server" id="BodyForm" autocomplete="off">
     <div id="Main">
         <div ><em><%: operation.Description %></em></div>

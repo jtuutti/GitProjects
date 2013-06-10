@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="help.master" ClientIDMode="Static" EnableViewStateMac="false" EnableEventValidation="false" %>
+﻿<%@ Page Language="C#" MasterPageFile="help.master" ClientIDMode="Static" EnableViewState="false" EnableViewStateMac="false" EnableEventValidation="false" %>
 <%@ Import Namespace="System.Xml.Serialization" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
 
@@ -9,8 +9,6 @@
     
     protected void Page_Init(object sender, EventArgs e)
     {
-        EnableViewState = false;
-
         int operationId;
         
         if (!Int32.TryParse(Request.QueryString["oid"], out operationId) || operationId == 0)
@@ -131,7 +129,7 @@
     }
 </script>
 
-<asp:Content runat="server" ContentPlaceHolderID="bodyPlaceholder">
+<asp:Content runat="server" ContentPlaceHolderID="BodyPlaceholder">
     <p><em><%: operation.Description %></em></p>    
     <div>
         <div>

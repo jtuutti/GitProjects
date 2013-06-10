@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="help.master" ClientIDMode="Static" EnableViewStateMac="false" EnableEventValidation="false" %>
+﻿<%@ Page Language="C#" MasterPageFile="help.master" ClientIDMode="Static" EnableViewState="false" EnableViewStateMac="false" EnableEventValidation="false" %>
 <%@ Import Namespace="RestFoundation.ServiceProxy" %>
 
 <script runat="server" language="C#">
@@ -7,8 +7,6 @@
 
     protected void Page_Init(object sender, EventArgs e)
     {
-        EnableViewState = false;
-
         operations = ProxyOperationGenerator.GetAll().ToList();
 
         string previousUrlTemplate = null;
@@ -41,7 +39,7 @@
     }
 </script>
 
-<asp:Content runat="server" ContentPlaceHolderID="bodyPlaceholder">
+<asp:Content runat="server" ContentPlaceHolderID="BodyPlaceholder">
     <% if (Request.QueryString["expired"] == "1") { %>
     <p class="field-validation-error">
         <em>Session Expired</em>

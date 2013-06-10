@@ -142,7 +142,7 @@
     <% } %>
 </p>
 <div id="Content">
-    <asp:ContentPlaceHolder runat="server" ID="bodyPlaceholder"></asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder runat="server" ID="BodyPlaceholder"></asp:ContentPlaceHolder>
 </div>
 <div id="Footer">
     This web service was built with the <span class="strong">REST Foundation v<%= GetAssemblyVersion() %></span> framework (c) 2012-<%= DateTime.Now.Year %> by Dmitry Starosta
