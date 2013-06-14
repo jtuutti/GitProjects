@@ -1,4 +1,7 @@
-﻿using System;
+// <copyright>
+// Dmitry Starosta, 2012-2013
+// </copyright>
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
