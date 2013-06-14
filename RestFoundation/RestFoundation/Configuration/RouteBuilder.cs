@@ -212,24 +212,25 @@ namespace RestFoundation.Configuration
             var urlAttributes = new List<ServiceMethodMetadata>();
             var httpMethodResolver = Rest.Configuration.ServiceLocator.GetService<IHttpMethodResolver>();
 
-            foreach (MethodInfo method in methods)
+            var metadataCollection = from m in methods
+                                     from a in Attribute.GetCustomAttributes(m, urlAttributeType, false).Cast<UrlAttribute>()
+                                     select new { Method = m, Attribute = a };
+
+            foreach (var metadata in metadataCollection)
             {
-                foreach (UrlAttribute urlAttribute in Attribute.GetCustomAttributes(method, urlAttributeType, false).Cast<UrlAttribute>())
+                var methodMetadata = new ServiceMethodMetadata(url, metadata.Method, metadata.Attribute);
+                var httpMethods = metadata.Attribute.HttpMethods ?? (metadata.Attribute.HttpMethods = httpMethodResolver.Resolve(metadata.Method));
+
+                if (metadata.Attribute.Priority == 0 && metadata.Method.GetParameters().Any(x => x.DefaultValue != DBNull.Value))
                 {
-                    var methodMetadata = new ServiceMethodMetadata(url, method, urlAttribute);
-                    var httpMethods = urlAttribute.HttpMethods ?? (urlAttribute.HttpMethods = httpMethodResolver.Resolve(method));
-
-                    if (urlAttribute.Priority == 0 && method.GetParameters().Any(x => x.DefaultValue != DBNull.Value))
-                    {
-                        urlAttribute.Priority = -1;
-                    }
-
-                    urlAttributes.Add(methodMetadata);
-
-                    HttpMethodRegistry.HttpMethods.AddOrUpdate(new RouteMetadata(serviceContractType.AssemblyQualifiedName, urlAttribute.UrlTemplate),
-                                                               template => AddHttpMethods(httpMethods),
-                                                               (template, allowedMethods) => UpdateHttpMethods(allowedMethods, httpMethods));
+                    metadata.Attribute.Priority = -1;
                 }
+
+                urlAttributes.Add(methodMetadata);
+
+                HttpMethodRegistry.HttpMethods.AddOrUpdate(new RouteMetadata(serviceContractType.AssemblyQualifiedName, metadata.Attribute.UrlTemplate),
+                                                           template => AddHttpMethods(httpMethods),
+                                                           (template, allowedMethods) => UpdateHttpMethods(allowedMethods, httpMethods));
             }
 
             return urlAttributes;
@@ -237,26 +238,72 @@ namespace RestFoundation.Configuration
 
         private static void ConfigureOptionalRouteParameters(ServiceMethodMetadata metadata, RouteValueDictionary defaults)
         {
-            var routeParameters = urlParameterRegex.Matches(metadata.UrlInfo.UrlTemplate);
+            var parameters = urlParameterRegex.Matches(metadata.UrlInfo.UrlTemplate);
 
-            for (int i = 0; i < routeParameters.Count; i++)
+            for (int i = 0; i < parameters.Count; i++)
             {
-                ParameterInfo methodParameter = metadata.MethodInfo.GetParameters().FirstOrDefault(p => p.Name == routeParameters[i].Groups[1].Value);
-
-                if (methodParameter == null || methodParameter.DefaultValue == DBNull.Value)
-                {
-                    continue;
-                }
-
-                if (methodParameter.DefaultValue == null)
-                {
-                    defaults[methodParameter.Name] = UrlParameter.Optional;
-                }
-                else
-                {
-                    defaults[methodParameter.Name] = methodParameter.DefaultValue;
-                }
+                ConfigureOptionalParameter(metadata, parameters[i].Groups[1].Value, defaults);
             }
+        }
+
+        private static void ConfigureOptionalParameter(ServiceMethodMetadata metadata, string parameterValue, RouteValueDictionary defaults)
+        {
+            ParameterInfo methodParameter = metadata.MethodInfo.GetParameters().FirstOrDefault(p => p.Name == parameterValue);
+
+            if (methodParameter == null || methodParameter.DefaultValue == DBNull.Value)
+            {
+                return;
+            }
+
+            if (methodParameter.DefaultValue == null)
+            {
+                defaults[methodParameter.Name] = UrlParameter.Optional;
+            }
+            else
+            {
+                defaults[methodParameter.Name] = methodParameter.DefaultValue;
+            }
+        }
+
+        private static RouteValueDictionary GetRouteConstraints(ServiceMethodMetadata metadata)
+        {
+            return new RouteValueDictionary
+            {
+                { ServiceCallConstants.RouteConstraint, new ServiceRouteConstraint(metadata) }
+            };
+        }
+
+        private static RouteValueDictionary GetBrowserRouteConstraints()
+        {
+            return new RouteValueDictionary
+            {
+                {
+                    ServiceCallConstants.BrowserConstraint, new BrowserRouteConstraint(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>(),
+                                                                                       Rest.Configuration.ServiceLocator.GetService<IHttpRequest>())
+                }
+            };
+        }
+
+        private RouteValueDictionary GetRouteDefaults(ServiceMethodMetadata metadata, Type serviceContractType)
+        {
+            var defaults = new RouteValueDictionary
+            {
+                { ServiceCallConstants.ServiceContractType, serviceContractType.AssemblyQualifiedName },
+                { ServiceCallConstants.ServiceUrl, m_relativeUrl },
+                { ServiceCallConstants.UrlTemplate, metadata.UrlInfo.UrlTemplate.Trim() }
+            };
+
+            return defaults;
+        }
+
+        private void AddServiceMethod(Type contractType, List<ServiceMethodMetadata> metadata)
+        {
+            if (ServiceMethodRegistry.ServiceMethods.Any(m => String.Equals(m_relativeUrl, m.Key.Url, StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Global.AlreadyMapped, m_relativeUrl));
+            }
+
+            ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, m_relativeUrl), t => metadata, (t, u) => metadata);
         }
 
         private RouteConfiguration MapUrl(Type contractType)
@@ -288,74 +335,59 @@ namespace RestFoundation.Configuration
 
             lock (syncRoot)
             {
-                if (ServiceMethodRegistry.ServiceMethods.Any(m => String.Equals(m_relativeUrl, m.Key.Url, StringComparison.OrdinalIgnoreCase)))
-                {
-                    throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Global.AlreadyMapped, m_relativeUrl));
-                }
-
-                ServiceMethodRegistry.ServiceMethods.AddOrUpdate(new ServiceMetadata(contractType, m_relativeUrl), t => methodMetadata, (t, u) => methodMetadata);
+                AddServiceMethod(contractType, methodMetadata);
             }
 
-            IEnumerable<IRestServiceHandler> routeHandlers = MapRoutes(methodMetadata, contractType);
+            IEnumerable<IRestServiceHandler> routeHandlers = MapRoutes(contractType, methodMetadata);
             return new RouteConfiguration(routeHandlers);
         }
 
-        private IEnumerable<IRestServiceHandler> MapRoutes(IEnumerable<ServiceMethodMetadata> methodMetadata, Type serviceContractType)
+        private IEnumerable<IRestServiceHandler> MapRoutes(Type serviceContractType, IEnumerable<ServiceMethodMetadata> metadata)
         {
             var routeHandlers = new List<IRestServiceHandler>();
-            var orderedMethodMetadata = methodMetadata.OrderByDescending(m => m.UrlInfo.Priority);
+            var orderedMethodMetadata = metadata.OrderByDescending(m => m.UrlInfo.Priority);
 
-            foreach (ServiceMethodMetadata metadata in orderedMethodMetadata)
+            foreach (ServiceMethodMetadata orderMetadata in orderedMethodMetadata)
             {
-                var defaults = new RouteValueDictionary
-                                   {
-                                       { ServiceCallConstants.ServiceContractType, serviceContractType.AssemblyQualifiedName },
-                                       { ServiceCallConstants.ServiceUrl, m_relativeUrl },
-                                       { ServiceCallConstants.UrlTemplate, metadata.UrlInfo.UrlTemplate.Trim() }
-                                   };
-
-                var constraints = new RouteValueDictionary
-                {
-                    { ServiceCallConstants.RouteConstraint, new ServiceRouteConstraint(metadata) }
-                };
-
-                ConfigureOptionalRouteParameters(metadata, defaults);
-
-                var routeHandler = Rest.Configuration.ServiceLocator.GetService<IRestServiceHandler>();
-
-                if (m_asyncTimeout.HasValue)
-                {
-                    routeHandler.ServiceAsyncTimeout = m_asyncTimeout.Value;
-                }
-
-                routeHandlers.Add(routeHandler);
-
-                string serviceUrl = ConcatUrl(m_relativeUrl, metadata.UrlInfo.UrlTemplate.Trim());
-
-                if (!String.IsNullOrWhiteSpace(metadata.UrlInfo.WebPageUrl))
-                {
-                    SetBrowserRoutes(serviceUrl, metadata);
-                }
-
-                string routeName = RouteNameHelper.GetRouteName(metadata.ServiceUrl, metadata.MethodInfo);
-
-                m_routes.Add(routeName, new Route(serviceUrl, defaults, constraints, routeHandler));
+                MapRoute(serviceContractType, orderMetadata, routeHandlers);
             }
 
             return routeHandlers;
+        }
+
+        private void MapRoute(Type serviceContractType, ServiceMethodMetadata metadata, List<IRestServiceHandler> routeHandlers)
+        {
+            RouteValueDictionary defaults = GetRouteDefaults(metadata, serviceContractType);
+            RouteValueDictionary constraints = GetRouteConstraints(metadata);
+
+            ConfigureOptionalRouteParameters(metadata, defaults);
+
+            var routeHandler = Rest.Configuration.ServiceLocator.GetService<IRestServiceHandler>();
+
+            if (m_asyncTimeout.HasValue)
+            {
+                routeHandler.ServiceAsyncTimeout = m_asyncTimeout.Value;
+            }
+
+            routeHandlers.Add(routeHandler);
+
+            string serviceUrl = ConcatUrl(m_relativeUrl, metadata.UrlInfo.UrlTemplate.Trim());
+
+            if (!String.IsNullOrWhiteSpace(metadata.UrlInfo.WebPageUrl))
+            {
+                SetBrowserRoutes(serviceUrl, metadata);
+            }
+
+            string routeName = RouteNameHelper.GetRouteName(metadata.ServiceUrl, metadata.MethodInfo);
+
+            m_routes.Add(routeName, new Route(serviceUrl, defaults, constraints, routeHandler));
         }
 
         private void SetBrowserRoutes(string serviceUrl, ServiceMethodMetadata metadata)
         {
             string externalUrl = metadata.UrlInfo.WebPageUrl.Trim();
 
-            var constraints = new RouteValueDictionary
-            {
-                {
-                    ServiceCallConstants.BrowserConstraint, new BrowserRouteConstraint(Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>(),
-                                                                                 Rest.Configuration.ServiceLocator.GetService<IHttpRequest>())
-                }
-            };
+            RouteValueDictionary constraints = GetBrowserRouteConstraints();
 
             if (externalUrl.StartsWith("~/", StringComparison.Ordinal) && externalUrl.EndsWith(".aspx", StringComparison.OrdinalIgnoreCase))
             {
