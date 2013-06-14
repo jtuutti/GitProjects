@@ -16,6 +16,7 @@ namespace RestFoundation.Configuration
         public JsonFormatterSettings()
         {
             LowerPropertiesForAjax = true;
+            UseLocalTimeZone = true;
         }
 
         /// <summary>
