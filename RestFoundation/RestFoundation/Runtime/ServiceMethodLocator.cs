@@ -51,7 +51,7 @@ namespace RestFoundation.Runtime
             }
 
             var serviceContractType = GetServiceContractType(handler.ServiceContractTypeName);
-            object service = InitializeService(serviceContractType);
+            object service = InitializeService(serviceContractType, m_serviceContext.Request);
 
             HttpMethod httpMethod = m_serviceContext.Request.Method;
 
@@ -93,9 +93,9 @@ namespace RestFoundation.Runtime
             return method;
         }
 
-        private object InitializeService(Type serviceContractType)
+        private object InitializeService(Type serviceContractType, IHttpRequest request)
         {
-            object service = m_serviceFactory.Create(serviceContractType);
+            object service = m_serviceFactory.Create(serviceContractType, request);
 
             if (service == null)
             {

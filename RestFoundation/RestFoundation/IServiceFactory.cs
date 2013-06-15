@@ -13,8 +13,9 @@ namespace RestFoundation
         /// <summary>
         /// Creates a service implementation instance.
         /// </summary>
-        /// <param name="serviceContractType">A service contract type.</param>
+        /// <param name="serviceContractType">The service contract type.</param>
+        /// <param name="request">The HTTP request.</param>
         /// <returns>The created service instance.</returns>
-        object Create(Type serviceContractType);
+        object Create(Type serviceContractType, IHttpRequest request);
     }
 }
