@@ -317,9 +317,9 @@ namespace RestFoundation.Behaviors
                 throw new HttpResponseException(HttpStatusCode.Forbidden, Resources.Global.Forbidden);
             }
 
-            DateTime nonceLifetime = DateTime.MinValue.AddMilliseconds(timestampAsDouble);
+            DateTime nonceTimeStamp = DateTime.MinValue.AddMilliseconds(timestampAsDouble);
 
-            return nonceLifetime.Add(NonceLifetime) <= DateTime.UtcNow;
+            return nonceTimeStamp.Add(NonceLifetime) <= DateTime.UtcNow;
         }
     }
 }
