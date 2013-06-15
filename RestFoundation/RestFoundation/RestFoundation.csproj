@@ -126,6 +126,7 @@
     <Compile Include="Runtime\ExpressionArgument.cs" />
     <Compile Include="Runtime\Handlers\CssRouteHandler.cs" />
     <Compile Include="Runtime\Handlers\JavaScriptRouteHandler.cs" />
+    <Compile Include="Runtime\HttpHandlerRouteConstraint.cs" />
     <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
     <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
     <Compile Include="Runtime\JsonSerializerFactory.cs" />

@@ -2,9 +2,11 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
@@ -22,7 +24,28 @@ namespace RestFoundation
     {
         private const string FormDataMediaType = "application/x-www-form-urlencoded";
 
+        private readonly HashSet<HttpMethod> m_allowedMethods;
         private Lazy<NameValueCollection> m_paramsBuilder;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpHandler"/> class.
+        /// </summary>
+        protected HttpHandler()
+        {
+            m_allowedMethods = new HashSet<HttpMethod>();
+        }
+
+        /// <summary>
+        /// Gets a collection of HTTP methods supported by the HTTP handler.
+        /// If all HTTP methods are supported, an empty collection will be returned.
+        /// </summary>
+        public IReadOnlyCollection<HttpMethod> AllowedMethods
+        {
+            get
+            {
+                return m_allowedMethods.ToArray();
+            }
+        }
 
         /// <summary>
         /// Gets a combined collection of route, query string, form data and header values.
@@ -92,6 +115,37 @@ namespace RestFoundation
         public IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
             return this;
+        }
+
+        /// <summary>
+        /// Appends an HTTP method to the methods allowed by the <see cref="HttpHandler"/> instance.
+        /// </summary>
+        /// <param name="httpMethod">The HTTP method.</param>
+        protected void AppendAllowedHttpMethod(HttpMethod httpMethod)
+        {
+            m_allowedMethods.Add(httpMethod);
+        }
+
+        /// <summary>
+        /// Sets a sequence of HTTP methods as allowed for the <see cref="HttpHandler"/> instance.
+        /// </summary>
+        /// <param name="httpMethods">A sequence of HTTP methods.</param>
+        protected void SetAllowedHttpMethods(params HttpMethod[] httpMethods)
+        {
+            if (httpMethods == null)
+            {
+                throw new ArgumentNullException("httpMethods");
+            }
+
+            if (m_allowedMethods.Count > 0)
+            {
+                m_allowedMethods.Clear();
+            }
+
+            foreach (HttpMethod httpMethod in httpMethods)
+            {
+                m_allowedMethods.Add(httpMethod);
+            }
         }
 
         private static NameValueCollection PopulateParams(IServiceContext context)

@@ -118,13 +118,13 @@ namespace RestFoundation.Configuration
         /// <summary>
         /// Maps the relative URL to an HTTP handler of type <typeparamref name="T"/>.
         /// </summary>
+        /// <typeparam name="T">The HTTP handler type.</typeparam>
         /// <param name="defaults">
         /// The values to use for route parameters if they are missing in the URL.
         /// </param>
         /// <exception cref="InvalidOperationException">
         /// If the HTTP handler type is not a concrete class.
         /// </exception>
-        /// <typeparam name="T">The HTTP handler type.</typeparam>
         public void ToHttpHandler<T>(RouteHash defaults)
             where T : HttpHandler
         {
@@ -136,15 +136,9 @@ namespace RestFoundation.Configuration
             }
 
             var handler = Rest.Configuration.ServiceLocator.GetService<T>();
+            RouteValueDictionary contraints = GetHttpHandlerRouteConstraints(handler.AllowedMethods);
 
-            if (defaults != null)
-            {
-                m_routes.Add(null, new Route(m_relativeUrl, defaults, handler));
-            }
-            else
-            {
-                m_routes.Add(null, new Route(m_relativeUrl, handler));
-            }
+            m_routes.Add(null, new Route(m_relativeUrl, defaults, contraints, handler));
         }
 
         /// <summary>
@@ -270,6 +264,19 @@ namespace RestFoundation.Configuration
             return new RouteValueDictionary
             {
                 { ServiceCallConstants.RouteConstraint, new ServiceRouteConstraint(metadata) }
+            };
+        }
+
+        private static RouteValueDictionary GetHttpHandlerRouteConstraints(IReadOnlyCollection<HttpMethod> allowedHttpMethods)
+        {
+            if (allowedHttpMethods == null || !allowedHttpMethods.Any())
+            {
+                return null;
+            }
+
+            return new RouteValueDictionary
+            {
+                { ServiceCallConstants.RouteConstraint, new HttpHandlerRouteConstraint(allowedHttpMethods) }
             };
         }
 

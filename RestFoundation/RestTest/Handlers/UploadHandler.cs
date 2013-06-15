@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using RestFoundation;
 using RestFoundation.Collections;
@@ -11,16 +9,13 @@ namespace RestTest.Handlers
 {
     public class UploadHandler : HttpHandler
     {
+        public UploadHandler()
+        {
+            SetAllowedHttpMethods(HttpMethod.Post);
+        }
+
         public override Task<IResult> ExecuteAsync(IServiceContext context)
         {
-            if (context.Request.Method != HttpMethod.Post)
-            {
-                return TaskResult.ResponseStatus(HttpStatusCode.MethodNotAllowed, "Method not allowed", new Dictionary<string, string>
-                {
-                    { context.Response.HeaderNames.Allow, HttpMethod.Post.ToString().ToUpper() }
-                });
-            }
-
             IUploadedFileCollection files = context.Request.Files;
 
             if (files == null || files.Count == 0)

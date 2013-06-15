@@ -10,6 +10,11 @@ namespace RestTest.Handlers
 {
     public class DownloadHandler : HttpHandler
     {
+        public DownloadHandler()
+        {
+            SetAllowedHttpMethods(HttpMethod.Get);
+        }
+
         public override Task<IResult> ExecuteAsync(IServiceContext context)
         {
             if (context.Request.Method != HttpMethod.Get)

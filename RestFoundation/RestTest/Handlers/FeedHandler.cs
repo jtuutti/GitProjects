@@ -24,6 +24,8 @@ namespace RestTest.Handlers
             }
 
             m_repository = repository;
+
+            SetAllowedHttpMethods(HttpMethod.Get, HttpMethod.Head);
         }
 
         public override Task<IResult> ExecuteAsync(IServiceContext context)
