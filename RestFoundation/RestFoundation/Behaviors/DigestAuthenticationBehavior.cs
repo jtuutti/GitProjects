@@ -104,7 +104,7 @@ namespace RestFoundation.Behaviors
             if (credentials == null)
             {
                 GenerateAuthenticationHeader(serviceContext, false);
-                return BehaviorMethodAction.Stop;
+                throw new HttpResponseException(HttpStatusCode.Forbidden, Resources.Global.Forbidden);
             }
 
             Tuple<bool, bool> responseValidationResult = ValidateResponse(serviceContext, header, credentials);
@@ -112,7 +112,7 @@ namespace RestFoundation.Behaviors
             if (!responseValidationResult.Item1)
             {
                 GenerateAuthenticationHeader(serviceContext, responseValidationResult.Item2);
-                return BehaviorMethodAction.Stop;
+                throw new HttpResponseException(HttpStatusCode.Forbidden, Resources.Global.Forbidden);
             }
 
             serviceContext.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), credentials.GetRoles());
@@ -191,6 +191,24 @@ namespace RestFoundation.Behaviors
             serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Resources.Global.Unauthorized);
         }
 
+        private string GenerateExpectedResponse(AuthorizationHeader header, string ha1, string ha2, string nonce)
+        {
+            if (Qop != QualityOfProtection.Auth)
+            {
+                return m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}", ha1, nonce, ha2));
+            }
+
+            string nonceCounter = header.Parameters.Get("nc");
+            string clientNonce = header.Parameters.Get("cnonce");
+
+            if (String.IsNullOrEmpty(nonceCounter) || String.IsNullOrEmpty(clientNonce))
+            {
+                return null;
+            }
+
+            return m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}:{3}:{4}:{5}", ha1, nonce, nonceCounter, clientNonce, "auth", ha2));
+        }
+
         private Tuple<bool, bool> ValidateResponse(IServiceContext serviceContext, AuthorizationHeader header, Credentials credentials)
         {
             if (String.IsNullOrWhiteSpace(header.UserName) || header.Parameters == null)
@@ -242,29 +260,11 @@ namespace RestFoundation.Behaviors
             string ha1 = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}", header.UserName, realm, credentials.Password));
             string ha2 = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}", serviceContext.Request.Method.ToString().ToUpperInvariant(), uri));
 
-            string expectedResponse;
+            string expectedResponse = GenerateExpectedResponse(header, ha1, ha2, nonce);
 
-            if (Qop == QualityOfProtection.Auth)
+            if (expectedResponse == null)
             {
-                string nonceCounter = header.Parameters.Get("nc");
-
-                if (String.IsNullOrEmpty(nonceCounter))
-                {
-                    return Tuple.Create(false, false);
-                }
-
-                string clientNonce = header.Parameters.Get("cnonce");
-
-                if (String.IsNullOrEmpty(clientNonce))
-                {
-                    return Tuple.Create(false, false);
-                }
-
-                expectedResponse = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}:{3}:{4}:{5}", ha1, nonce, nonceCounter, clientNonce, "auth", ha2));
-            }
-            else
-            {
-                expectedResponse = m_encoder.Encode(String.Format(CultureInfo.InvariantCulture, "{0}:{1}:{2}", ha1, nonce, ha2));
+                return Tuple.Create(false, false);
             }
 
             return Tuple.Create(String.Equals(expectedResponse, response, StringComparison.Ordinal), false);

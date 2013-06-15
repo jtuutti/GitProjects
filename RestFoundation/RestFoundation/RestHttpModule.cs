@@ -299,12 +299,12 @@ namespace RestFoundation
 
         private static void GenerateFaultBody(IServiceContext context, IServiceContextHandler handler, FaultCollection faults)
         {
+            context.Response.TrySkipIisCustomErrors = true;
+
             if (faults.General.Length == 0 && faults.Resource.Length == 0)
             {
                 return;
             }
-
-            context.Response.TrySkipIisCustomErrors = true;
 
             var resultWrapper = Rest.Configuration.ServiceLocator.GetService<IResultWrapper>();
             IResult result = resultWrapper.Wrap(handler, faults, faults.GetType());

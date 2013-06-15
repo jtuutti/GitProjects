@@ -102,7 +102,7 @@ namespace RestFoundation.Tests.Behaviors
             }
             catch (HttpResponseException ex)
             {
-                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
+                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
             }
         }
 

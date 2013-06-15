@@ -67,7 +67,7 @@ namespace RestFoundation.Behaviors
             if (credentials == null || !String.Equals(header.Password, credentials.Password, StringComparison.Ordinal))
             {
                 GenerateAuthenticationHeader(serviceContext);
-                return BehaviorMethodAction.Stop;
+                throw new HttpResponseException(HttpStatusCode.Forbidden, Resources.Global.Forbidden);
             }
 
             serviceContext.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), credentials.GetRoles());
