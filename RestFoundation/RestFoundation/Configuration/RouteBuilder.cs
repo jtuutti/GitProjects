@@ -91,9 +91,6 @@ namespace RestFoundation.Configuration
         /// </summary>
         /// <typeparam name="T">The service contract type.</typeparam>
         /// <returns>The route configuration.</returns>
-        /// <exception cref="ArgumentException">
-        /// If the service contract type is not an interface or a concrete class that defines its own contract.
-        /// </exception>
         /// <exception cref="InvalidOperationException">
         /// If the relative URL is invalid or has already been mapped.
         /// </exception>
@@ -105,14 +102,14 @@ namespace RestFoundation.Configuration
         /// <summary>
         /// Maps the relative URL to an HTTP handler of type <typeparamref name="T"/>.
         /// </summary>
+        /// <typeparam name="T">The HTTP handler type.</typeparam>
         /// <exception cref="InvalidOperationException">
         /// If the HTTP handler type is not a concrete class.
         /// </exception>
-        /// <typeparam name="T">The HTTP handler type.</typeparam>
         public void ToHttpHandler<T>()
             where T : HttpHandler
         {
-            ToHttpHandler<T>(null);
+            ToHttpHandler<T>(null, null);
         }
 
         /// <summary>
@@ -128,6 +125,25 @@ namespace RestFoundation.Configuration
         public void ToHttpHandler<T>(RouteHash defaults)
             where T : HttpHandler
         {
+            ToHttpHandler<T>(defaults, null);
+        }
+
+        /// <summary>
+        /// Maps the relative URL to an HTTP handler of type <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The HTTP handler type.</typeparam>
+        /// <param name="defaults">
+        /// The values to use for route parameters if they are missing in the URL.
+        /// </param>
+        /// <param name="constraints">
+        /// The contraints to use for the route and its parameters.
+        /// </param>
+        /// <exception cref="InvalidOperationException">
+        /// If the HTTP handler type is not a concrete class.
+        /// </exception>
+        public void ToHttpHandler<T>(RouteHash defaults, RouteHash constraints)
+            where T : HttpHandler
+        {
             Type handlerType = typeof(T);
 
             if (!handlerType.IsClass || handlerType.IsAbstract)
@@ -136,9 +152,19 @@ namespace RestFoundation.Configuration
             }
 
             var handler = Rest.Configuration.ServiceLocator.GetService<T>();
-            RouteValueDictionary contraints = GetHttpHandlerRouteConstraints(handler.AllowedMethods);
+            RouteValueDictionary methodConstraints = GetHttpHandlerRouteConstraints(handler.AllowedMethods);
 
-            m_routes.Add(null, new Route(m_relativeUrl, defaults, contraints, handler));
+            if (methodConstraints != null)
+            {
+                if (constraints == null)
+                {
+                    constraints = new RouteHash();
+                }
+
+                MergeHttpHandlerConstraints(constraints, methodConstraints);
+            }
+
+            m_routes.Add(null, new Route(m_relativeUrl, defaults, constraints, handler));
         }
 
         /// <summary>
@@ -289,6 +315,14 @@ namespace RestFoundation.Configuration
                                                                                        Rest.Configuration.ServiceLocator.GetService<IHttpRequest>())
                 }
             };
+        }
+
+        private static void MergeHttpHandlerConstraints(RouteHash constraints, IEnumerable<KeyValuePair<string, object>> methodConstraints)
+        {
+            foreach (KeyValuePair<string, object> constraint in methodConstraints)
+            {
+                constraints[constraint.Key] = constraint.Value;
+            }
         }
 
         private RouteValueDictionary GetRouteDefaults(ServiceMethodMetadata metadata, Type serviceContractType)

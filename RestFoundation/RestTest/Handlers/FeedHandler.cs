@@ -32,9 +32,7 @@ namespace RestTest.Handlers
         {
             FeedResult.SyndicationFormat feedFormat;
 
-            var format = Convert.ToString(context.Request.RouteValues.TryGet("format"));
-
-            if (format == null || !Enum.TryParse(format, true, out feedFormat))
+            if (!Enum.TryParse((string) context.Request.RouteValues.TryGet("format"), true, out feedFormat))
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, "This feed only supports ATOM and RSS formats");
             }

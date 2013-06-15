@@ -104,7 +104,7 @@ namespace RestTest.App_Start
                       .ToServiceContract<HelloService>();
 
             urlBuilder.MapUrl("feed.{format}")
-                      .ToHttpHandler<FeedHandler>();
+                      .ToHttpHandler<FeedHandler>(null, new RouteHash(format => "^atom|rss$"));
 
             urlBuilder.MapUrl("download")
                       .ToHttpHandler<DownloadHandler>();
