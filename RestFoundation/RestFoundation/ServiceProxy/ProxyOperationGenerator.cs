@@ -114,7 +114,17 @@ namespace RestFoundation.ServiceProxy
                 return Resources.Global.MissingDescription;
             }
 
-            return proxyMetadata.GetDescription(method) ?? Resources.Global.MissingDescription;
+            return (proxyMetadata.GetDescription(method) ?? Resources.Global.MissingDescription).Trim();
+        }
+
+        private static string GetLongDescription(MethodInfo method, IProxyMetadata proxyMetadata)
+        {
+            if (proxyMetadata == null)
+            {
+                return Resources.Global.MissingDescription;
+            }
+
+            return proxyMetadata.GetLongDescription(method);
         }
 
         private static List<StatusCodeMetadata> GetStatusCodes(MethodInfo method, IProxyMetadata proxyMetadata, bool hasResource, bool hasResponse, bool requiresHttps)
@@ -293,6 +303,7 @@ namespace RestFoundation.ServiceProxy
                                 MetadataUrl = String.Concat("metadata?oid=", metadata.ServiceMethodId),
                                 ProxyUrl = String.Concat("proxy?oid=", metadata.ServiceMethodId),
                                 Description = GetDescription(metadata.MethodInfo, proxyMetadata),
+                                LongDescription = GetLongDescription(metadata.MethodInfo, proxyMetadata),
                                 ResultType = metadata.MethodInfo.ReturnType,
                                 RouteParameters = GetParameters(metadata, proxyMetadata),
                                 HttpsPort = proxyMetadata != null && proxyMetadata.GetHttps(metadata.MethodInfo) != null ? proxyMetadata.GetHttps(metadata.MethodInfo).Port : 0,

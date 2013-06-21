@@ -1,6 +1,7 @@
 ﻿<%@ Master Language="C#" %>
 <%@ Import Namespace="System.Globalization" %>
 <%@ Import Namespace="System.IO" %>
+<%@ Import Namespace="System.Reflection" %>
 <%@ Import Namespace="RestFoundation" %>
 <%@ Import Namespace="RestFoundation.Configuration" %>
 <%@ Import Namespace="RestFoundation.Security" %>
@@ -42,10 +43,17 @@
 
         if (assemblyVersion == null)
         {
-            return "1.0";
+            return "v1.0";
         }
 
-        return String.Format(CultureInfo.InvariantCulture, "{0}.{1}", assemblyVersion.Major, assemblyVersion.Minor);
+        return String.Format(CultureInfo.InvariantCulture, "v{0}.{1}", assemblyVersion.Major, assemblyVersion.Minor);
+    }
+
+    private static string GetAssemblyInformationVersion()
+    {
+        var versionAttribute = Attribute.GetCustomAttribute(Rest.FoundationAssembly, typeof(AssemblyInformationalVersionAttribute)) as AssemblyInformationalVersionAttribute;
+
+        return versionAttribute != null ? String.Concat("v", versionAttribute.InformationalVersion) : "v1.0.0.0";
     }
 
     private void ValidateHttpSecurity()
@@ -145,7 +153,7 @@
     <asp:ContentPlaceHolder runat="server" ID="BodyPlaceholder"></asp:ContentPlaceHolder>
 </div>
 <div id="Footer">
-    This web service was built with the <span class="strong">REST Foundation v<%= GetAssemblyVersion() %></span> framework (c) 2012-<%= DateTime.Now.Year %> by Dmitry Starosta
+    This web service was built with the <span class="strong" title="<%: GetAssemblyInformationVersion() %>">REST Foundation <%: GetAssemblyVersion() %></span> framework (c) 2012-<%: DateTime.Now.Year %> by Dmitry Starosta
 </div>
 </body>
 </html>

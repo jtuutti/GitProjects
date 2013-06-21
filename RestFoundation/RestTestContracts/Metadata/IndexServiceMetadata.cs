@@ -7,6 +7,10 @@ namespace RestTestContracts.Metadata
 {
     public class IndexServiceMetadata : ProxyMetadata<IIndexService>
     {
+        private const string GetAllLongDescription = @"This service method can return a large number of person records.
+                                                        
+Use with caution!!!";
+
         public override void Initialize()
         {
             SetAuthentication(AuthenticationType.Digest, "admin", "~/secure");
@@ -15,6 +19,7 @@ namespace RestTestContracts.Metadata
             ForMethod(x => x.GetAllByFormat("json")).SetHidden();
 
             ForMethod(x => x.GetAll()).SetDescription("Gets all resources of type 'Person'")
+                                      .SetLongDescription(GetAllLongDescription)
                                       .SetResponseResourceExample(CreatePersonArrayExample());
 
             ForMethod(x => x.GetAllAsync()).SetDescription("Gets all resources of type 'Person' asynchronously")

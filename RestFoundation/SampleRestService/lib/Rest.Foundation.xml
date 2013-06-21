@@ -1252,11 +1252,12 @@
             Defines a service factory.
             </summary>
     </member>
-    <member name="M:RestFoundation.IServiceFactory.Create(System.Type)">
+    <member name="M:RestFoundation.IServiceFactory.Create(System.Type,RestFoundation.IHttpRequest)">
       <summary>
             Creates a service implementation instance.
             </summary>
-      <param name="serviceContractType">A service contract type.</param>
+      <param name="serviceContractType">The service contract type.</param>
+      <param name="request">The HTTP request.</param>
       <returns>The created service instance.</returns>
     </member>
     <member name="T:RestFoundation.Configuration.JsonFormatterSettings">
@@ -3472,11 +3473,12 @@
             Represents the default service factory.
             </summary>
     </member>
-    <member name="M:RestFoundation.Runtime.ServiceFactory.Create(System.Type)">
+    <member name="M:RestFoundation.Runtime.ServiceFactory.Create(System.Type,RestFoundation.IHttpRequest)">
       <summary>
             Creates a service implementation instance.
             </summary>
-      <param name="serviceContractType">A service contract type.</param>
+      <param name="serviceContractType">The service contract type.</param>
+      <param name="request">The HTTP request.</param>
       <returns>The created service instance.</returns>
     </member>
     <member name="T:RestFoundation.ServiceContractAttribute">
@@ -3770,9 +3772,6 @@
             </summary>
       <typeparam name="T">The service contract type.</typeparam>
       <returns>The route configuration.</returns>
-      <exception cref="T:System.ArgumentException">
-            If the service contract type is not an interface or a concrete class that defines its own contract.
-            </exception>
       <exception cref="T:System.InvalidOperationException">
             If the relative URL is invalid or has already been mapped.
             </exception>
@@ -3781,22 +3780,37 @@
       <summary>
             Maps the relative URL to an HTTP handler of type <typeparamref name="T" />.
             </summary>
+      <typeparam name="T">The HTTP handler type.</typeparam>
       <exception cref="T:System.InvalidOperationException">
             If the HTTP handler type is not a concrete class.
             </exception>
-      <typeparam name="T">The HTTP handler type.</typeparam>
     </member>
     <member name="M:RestFoundation.Configuration.RouteBuilder.ToHttpHandler``1(RestFoundation.RouteHash)">
       <summary>
             Maps the relative URL to an HTTP handler of type <typeparamref name="T" />.
             </summary>
+      <typeparam name="T">The HTTP handler type.</typeparam>
       <param name="defaults">
             The values to use for route parameters if they are missing in the URL.
             </param>
       <exception cref="T:System.InvalidOperationException">
             If the HTTP handler type is not a concrete class.
             </exception>
+    </member>
+    <member name="M:RestFoundation.Configuration.RouteBuilder.ToHttpHandler``1(RestFoundation.RouteHash,RestFoundation.RouteHash)">
+      <summary>
+            Maps the relative URL to an HTTP handler of type <typeparamref name="T" />.
+            </summary>
       <typeparam name="T">The HTTP handler type.</typeparam>
+      <param name="defaults">
+            The values to use for route parameters if they are missing in the URL.
+            </param>
+      <param name="constraints">
+            The contraints to use for the route and its parameters.
+            </param>
+      <exception cref="T:System.InvalidOperationException">
+            If the HTTP handler type is not a concrete class.
+            </exception>
     </member>
     <member name="M:RestFoundation.Configuration.RouteBuilder.ToWebFormsPage(System.String)">
       <summary>
@@ -5768,7 +5782,14 @@
       <summary>
             Sets the description for the service operation.
             </summary>
-      <param name="operationDescription">The description.</param>
+      <param name="description">The description.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetLongDescription(System.String)">
+      <summary>
+            Sets the long metadata description for the service operation.
+            </summary>
+      <param name="description">The long description.</param>
       <returns>The service method metadata.</returns>
     </member>
     <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetHeader(RestFoundation.ServiceProxy.ProxyHeader)">
@@ -6006,6 +6027,13 @@
     <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetDescription(System.Reflection.MethodInfo)">
       <summary>
             Returns the operation description.
+            </summary>
+      <param name="serviceMethod">The service method.</param>
+      <returns>The operation description.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetLongDescription(System.Reflection.MethodInfo)">
+      <summary>
+            Returns the long operation description.
             </summary>
       <param name="serviceMethod">The service method.</param>
       <returns>The operation description.</returns>
@@ -6477,6 +6505,11 @@
             operations. This class cannot be instantiated.
             </summary>
     </member>
+    <member name="M:RestFoundation.HttpHandler.#ctor">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.HttpHandler" /> class.
+            </summary>
+    </member>
     <member name="M:RestFoundation.HttpHandler.ExecuteAsync(RestFoundation.IServiceContext)">
       <summary>
             When overridden in a derived class, provides code that performs the HTTP handler operations.
@@ -6508,6 +6541,24 @@
             </summary>
       <returns>An object that processes the request.</returns>
       <param name="requestContext">An object that encapsulates information about the request.</param>
+    </member>
+    <member name="M:RestFoundation.HttpHandler.AppendAllowedHttpMethod(RestFoundation.HttpMethod)">
+      <summary>
+            Appends an HTTP method to the methods allowed by the <see cref="T:RestFoundation.HttpHandler" /> instance.
+            </summary>
+      <param name="httpMethod">The HTTP method.</param>
+    </member>
+    <member name="M:RestFoundation.HttpHandler.SetAllowedHttpMethods(RestFoundation.HttpMethod[])">
+      <summary>
+            Sets a sequence of HTTP methods as allowed for the <see cref="T:RestFoundation.HttpHandler" /> instance.
+            </summary>
+      <param name="httpMethods">A sequence of HTTP methods.</param>
+    </member>
+    <member name="P:RestFoundation.HttpHandler.AllowedMethods">
+      <summary>
+            Gets a collection of HTTP methods supported by the HTTP handler.
+            If all HTTP methods are supported, an empty collection will be returned.
+            </summary>
     </member>
     <member name="P:RestFoundation.HttpHandler.Params">
       <summary>
@@ -10624,6 +10675,11 @@
     <member name="P:RestFoundation.ServiceProxy.ProxyOperation.Description">
       <summary>
             Gets or sets the description.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxyOperation.LongDescription">
+      <summary>
+            Gets or sets the long description.
             </summary>
     </member>
     <member name="P:RestFoundation.ServiceProxy.ProxyOperation.HasResource">

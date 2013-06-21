@@ -35,6 +35,11 @@ namespace RestFoundation.ServiceProxy
             return null;
         }
 
+        public string GetLongDescription(MethodInfo serviceMethod)
+        {
+            return null;
+        }
+
         public AuthenticationMetadata GetAuthentication(MethodInfo serviceMethod)
         {
             return null;

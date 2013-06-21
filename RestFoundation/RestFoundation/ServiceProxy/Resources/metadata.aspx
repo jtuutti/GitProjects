@@ -130,7 +130,8 @@
 </script>
 
 <asp:Content runat="server" ContentPlaceHolderID="BodyPlaceholder">
-    <p><em><%: operation.Description %></em></p>    
+    <p><em><%: operation.Description %></em></p>
+    <% if (!String.IsNullOrWhiteSpace(operation.LongDescription)) { %><pre class="long-description"><%: operation.LongDescription %></pre><% } %>
     <div>
         <div>
             <span class="strong">URL Template: </span>
@@ -276,7 +277,7 @@
         <th>Condition</th>
     </tr>
     <%  foreach (var statusCode in operation.StatusCodes) { %>
-    <tr<%= statusCode.GetNumericStatusCode() >= 400 ? " class=\"error-response-code\"" : "" %>>
+    <tr<%: statusCode.GetNumericStatusCode() >= 400 ? " class=\"error-response-code\"" : "" %>>
         <td><%: statusCode.GetNumericStatusCode() %></td>
         <td><%: statusCode.Condition %></td>
     </tr>

@@ -48,6 +48,13 @@ namespace RestFoundation.ServiceProxy
         string GetDescription(MethodInfo serviceMethod);
 
         /// <summary>
+        /// Returns the long operation description.
+        /// </summary>
+        /// <param name="serviceMethod">The service method.</param>
+        /// <returns>The operation description.</returns>
+        string GetLongDescription(MethodInfo serviceMethod);
+
+        /// <summary>
         /// Returns the operation authentication information, if applicable; or null.
         /// </summary>
         /// <param name="serviceMethod">The service method.</param>

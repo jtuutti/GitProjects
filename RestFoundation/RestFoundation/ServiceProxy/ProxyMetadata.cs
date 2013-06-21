@@ -29,6 +29,7 @@ namespace RestFoundation.ServiceProxy
         private readonly SortedSet<HeaderMetadata> m_serviceHeaders = new SortedSet<HeaderMetadata>();
 
         private readonly Dictionary<MethodInfo, string> m_descriptionDictionary = new Dictionary<MethodInfo, string>();
+        private readonly Dictionary<MethodInfo, string> m_longDescriptionDictionary = new Dictionary<MethodInfo, string>();
         private readonly Dictionary<MethodInfo, AuthenticationMetadata> m_authenticationDictionary = new Dictionary<MethodInfo, AuthenticationMetadata>();
         private readonly Dictionary<MethodInfo, HttpsMetadata> m_httpsDictionary = new Dictionary<MethodInfo, HttpsMetadata>();
         private readonly Dictionary<MethodInfo, ResourceExampleMetadata> m_requestResourceExampleDictionary = new Dictionary<MethodInfo, ResourceExampleMetadata>();
@@ -283,6 +284,20 @@ namespace RestFoundation.ServiceProxy
             }
 
             m_descriptionDictionary[m_currentServiceMethod] = description;
+
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetLongDescription(string description)
+        {
+            ValidateCurrentServiceMethod();
+
+            if (String.IsNullOrEmpty(description))
+            {
+                throw new ArgumentNullException("description");
+            }
+
+            m_longDescriptionDictionary[m_currentServiceMethod] = description;
 
             return this;
         }
@@ -667,6 +682,23 @@ namespace RestFoundation.ServiceProxy
             string description;
 
             if (!m_descriptionDictionary.TryGetValue(serviceMethod, out description))
+            {
+                return null;
+            }
+
+            return description;
+        }
+
+       string IProxyMetadata.GetLongDescription(MethodInfo serviceMethod)
+        {
+            if (serviceMethod == null)
+            {
+                throw new ArgumentNullException("serviceMethod");
+            }
+
+            string description;
+
+            if (!m_longDescriptionDictionary.TryGetValue(serviceMethod, out description))
             {
                 return null;
             }

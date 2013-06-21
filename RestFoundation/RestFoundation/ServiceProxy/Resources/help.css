@@ -1,21 +1,22 @@
 ﻿a:link,a:visited,a:active{color:#369;font-weight:700;text-decoration:none}
 a:hover{color:#369;font-weight:700;text-decoration:underline}
 body{color:#000;background-color:#fff;font-family:Verdana;margin-left:0;margin-top:0}
-input[type=password]{font-family:Tahoma;font-size:1.2em;width:650px;border:1px solid #999}
-input[type=password].empty{font-family:Tahoma;font-size:1.2em;width:650px;border:1px solid #f00}
-input[type=text]{font-family:Tahoma;font-size:1.2em;width:650px;border:1px solid #999}
-input[type=text].empty{font-family:Tahoma;font-size:1.2em;width:650px;border:1px solid #f00}
+input[type=password]{font-family:Tahoma;font-size:13px;width:650px;border:1px solid #999}
+input[type=password].empty{font-family:Tahoma;font-size:13px;width:650px;border:1px solid #f00}
+input[type=text]{font-family:Tahoma;font-size:13px;width:650px;border:1px solid #999}
+input[type=text].empty{font-family:Tahoma;font-size:13px;width:650px;border:1px solid #f00}
 input[type=text]#ProxyPort{width:50px}
-pre{font-size:small;background-color:#e5e5cc;font-family:Courier New;margin-top:5px;margin-bottom:5px;border:1px #f0f0e0 solid;white-space:pre-wrap;word-wrap:break-word;padding:5px}
+pre{font-size:13px;background-color:#e5e5cc;font-family:Courier New;margin-top:5px;margin-bottom:5px;border:1px #cecf9c solid;white-space:pre-wrap;word-wrap:break-word;padding:5px}
+pre.long-description{font-family:Arial;font-size:12px;margin-top:-8px;margin-bottom:15px;display:inline-block}
 select{font-family:Tahoma;font-size:13px}
 table{border-collapse:collapse;border-spacing:0;font-family:Verdana}
 table td{border-right:2px #fff solid;border-bottom:2px #fff solid;background-color:#e5e5cc;padding:3px 5px}
 table td.centered{text-align:center}
 table th{border-right:2px #fff solid;border-bottom:2px #fff solid;font-weight:700;background-color:#cecf9c;padding:5px}
-textarea{font-family:Tahoma;font-size:1.2em;width:100%;height:200px;border:1px solid #999;padding:2px;resize:none}
+textarea{font-family:Tahoma;font-size:13px;width:100%;height:200px;border:1px solid #999;padding:2px;resize:none}
 tfoot td{background-color:#cecf9c;font-style:italic;padding:5px}
-ul.auto-list{font-size:10pt;display:none;position:absolute;top:0;left:0;border:1px solid #666;background-color:#e5e5cc;list-style:none;margin:0;padding:0}
-ul.auto-list > li{border:1px solid #666;cursor:pointer;padding:2px}
+ul.auto-list{font-size:12px;display:none;position:absolute;top:0;left:0;border-top:1px solid #999;border-left:1px solid #999;border-right:1px solid #999;background-color:#e5e5cc;list-style:none;margin:0;padding:0}
+ul.auto-list > li{border-bottom:1px solid #999;cursor:pointer;padding:3px}
 ul.auto-list > li:hover,ul.auto-list > li[data-selected=true]{color:#fff;background-color:#39f}
 .button-separator{padding-left:20px}
 .clear{clear:both}
@@ -36,12 +37,12 @@ ul.auto-list > li:hover,ul.auto-list > li[data-selected=true]{color:#fff;backgro
 .has-right-margin{margin-right:7px}
 .schema-section{padding-top:20px}
 .spacer{padding-left:30px}
-.strong{font-weight:bold;}
+.strong{font-weight:700;}
 .toggle-option{float:left;margin:13px 0 0 30px}
 .underlined{text-decoration:underline}
 .validation-summary-errors{font-weight:700;color:#f00}
 #AllServices{float:right;font-size:15px;padding-right:10px;padding-top:10px}
-#Content{margin-left:30px;font-size:.70em}
+#Content{margin-left:30px;font-size:11px}
 #Execute{font-weight:700}
 #Footer{font-family:Verdana;font-size:11px;color:#666;padding:25px 0 10px 30px}
 #Footer a:link,#Footer a:visited,#Footer a:active{color:#666;text-decoration:none}
@@ -50,7 +51,7 @@ ul.auto-list > li:hover,ul.auto-list > li[data-selected=true]{color:#fff;backgro
 #HeaderTitle,#ResponseHeader{float:left}
 #HotKeys{padding-top:10px;color:#444}
 #Main{border:#bbb 1px solid;margin-left:-10px;background-color:#e5e5cc;padding:15px}
-#Main h1{font-size:1.2em;font-weight:700;margin:15px 0 5px;padding:0}
+#Main h1{font-size:13px;font-weight:700;margin:15px 0 5px;padding:0}
 #Password{width:100px}
 #ResponseCodes{margin-top:15px}
 #ResponseHeightControls{float:right;text-align:right;vertical-align:bottom;margin:19px 0 0 auto}

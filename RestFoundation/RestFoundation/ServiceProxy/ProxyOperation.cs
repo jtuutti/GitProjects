@@ -23,6 +23,11 @@ namespace RestFoundation.ServiceProxy
         public string Description { get; set; }
 
         /// <summary>
+        /// Gets or sets the long description.
+        /// </summary>
+        public string LongDescription { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the operation has a response.
         /// </summary>
         public bool HasResource { get; set; }

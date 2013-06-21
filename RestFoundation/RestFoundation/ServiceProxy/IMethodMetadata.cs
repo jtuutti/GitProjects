@@ -40,9 +40,16 @@ namespace RestFoundation.ServiceProxy
         /// <summary>
         /// Sets the description for the service operation.
         /// </summary>
-        /// <param name="operationDescription">The description.</param>
+        /// <param name="description">The description.</param>
         /// <returns>The service method metadata.</returns>
-        IMethodMetadata SetDescription(string operationDescription);
+        IMethodMetadata SetDescription(string description);
+
+        /// <summary>
+        /// Sets the long metadata description for the service operation.
+        /// </summary>
+        /// <param name="description">The long description.</param>
+        /// <returns>The service method metadata.</returns>
+        IMethodMetadata SetLongDescription(string description);
 
         /// <summary>
         /// Sets an additional HTTP header for the service operation.
