@@ -10,7 +10,7 @@ namespace RestFoundation.Context
     /// <summary>
     /// Represents the output of an HTTP response.
     /// </summary>
-    public class HttpResponseOutput : ContextBase, IHttpResponseOutput
+    public class HttpResponseOutput : RestContextBase, IHttpResponseOutput
     {
         private const string LineBreak = "<br/>";
 

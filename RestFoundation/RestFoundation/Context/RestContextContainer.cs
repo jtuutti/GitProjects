@@ -7,14 +7,14 @@ using RestFoundation.Collections;
 
 namespace RestFoundation.Context
 {
-    internal sealed class ContextContainer
+    internal sealed class RestContextContainer
     {
         private const string ContextContainerKey = "REST_Context";
 
         private readonly object m_syncRoot = new Object();
         private readonly Func<IDictionary> m_contextItemBuilder;
 
-        public ContextContainer(Func<IDictionary> contextItemBuilder)
+        public RestContextContainer(Func<IDictionary> contextItemBuilder)
         {
             if (contextItemBuilder == null)
             {

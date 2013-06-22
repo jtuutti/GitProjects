@@ -8,6 +8,6 @@ namespace RestTestContracts
     public interface IDynamicService
     {
         [Url(Url.Root)]
-        dynamic Post(dynamic resource);
+        dynamic Post(dynamic resource, IHttpRequest request);
     }
 }

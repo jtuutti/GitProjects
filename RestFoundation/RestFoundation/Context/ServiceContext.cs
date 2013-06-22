@@ -17,7 +17,7 @@ namespace RestFoundation.Context
     /// <summary>
     /// Represents a service context.
     /// </summary>
-    public class ServiceContext : ContextBase, IServiceContext
+    public class ServiceContext : RestContextBase, IServiceContext
     {
         private readonly IHttpRequest m_request;
         private readonly IHttpResponse m_response;

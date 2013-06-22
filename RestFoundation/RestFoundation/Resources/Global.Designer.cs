@@ -835,7 +835,7 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header..
+        ///   Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header.
         /// </summary>
         internal static string NonAcceptedContentCharset {
             get {
@@ -844,7 +844,7 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The accepted language provided in the Accept-Language header is not supported..
+        ///   Looks up a localized string similar to No accepted language was provided in the Accept-Language header.
         /// </summary>
         internal static string NonAcceptedContentLanguage {
             get {
@@ -853,7 +853,7 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resulting media type is not accepted by the client.
+        ///   Looks up a localized string similar to No accepted media type was provided in the Accept header.
         /// </summary>
         internal static string NonAcceptedMediaType {
             get {

@@ -7,13 +7,14 @@ using System.Text;
 using System.Threading;
 using System.Web;
 using RestFoundation.Collections;
+using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
     /// <summary>
     /// Defines an HTTP response.
     /// </summary>
-    public interface IHttpResponse
+    public interface IHttpResponse : IRestContext
     {
         /// <summary>
         /// Gets the response output.

@@ -17,7 +17,7 @@ namespace RestFoundation.Context
     /// <summary>
     /// Represents an HTTP response.
     /// </summary>
-    public class HttpResponse : ContextBase, IHttpResponse
+    public class HttpResponse : RestContextBase, IHttpResponse
     {
         private readonly IHttpResponseOutput m_output;
         private readonly ResponseHeaderNames m_headerNames;

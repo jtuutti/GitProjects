@@ -762,21 +762,6 @@ namespace RestFoundation
             }
         }
 
-        /// <summary>
-        /// Returns a result with a custom response.
-        /// </summary>
-        /// <param name="action">The response action.</param>
-        /// <returns>The response result.</returns>
-        public static IResult Response(Action<IServiceContext> action)
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException("action");
-            }
-
-            return new ResponseResult(action);
-        }
-
         private static IServiceContext GetServiceContext()
         {
             var context = Rest.Configuration.ServiceLocator.GetService<IServiceContext>();

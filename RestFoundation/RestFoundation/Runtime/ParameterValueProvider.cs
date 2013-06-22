@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Web;
 using RestFoundation.Collections;
+using RestFoundation.Context;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime.Handlers;
 using RestFoundation.TypeBinders;
@@ -76,6 +77,12 @@ namespace RestFoundation.Runtime
             }
 
             isResource = false;
+
+            if (typeof(IRestContext).IsAssignableFrom(parameter.ParameterType))
+            {
+                return Rest.Configuration.ServiceLocator.GetService(parameter.ParameterType);
+            }
+
             return null;
         }
 

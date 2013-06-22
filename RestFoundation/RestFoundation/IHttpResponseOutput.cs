@@ -3,13 +3,14 @@
 // </copyright>
 using System.IO;
 using System.Threading.Tasks;
+using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
     /// <summary>
     /// Defines an HTTP response output.
     /// </summary>
-    public interface IHttpResponseOutput
+    public interface IHttpResponseOutput : IRestContext
     {
         /// <summary>
         /// Gets or sets a value indicating whether the output should be buffered.

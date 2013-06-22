@@ -299,8 +299,6 @@ namespace RestFoundation
 
         private static void GenerateFaultBody(IServiceContext context, IServiceContextHandler handler, FaultCollection faults)
         {
-            context.Response.TrySkipIisCustomErrors = true;
-
             if (faults.General.Length == 0 && faults.Resource.Length == 0)
             {
                 return;
@@ -346,7 +344,13 @@ namespace RestFoundation
 
             if (!contextNegotiator.IsBrowserRequest(context.Request))
             {
-                GenerateFaultBody(context, handler, faults);
+                context.Response.TrySkipIisCustomErrors = true;
+
+                // Do not try to resolve the response content-type because there is a problem with the Accept header
+                if (statusCode != HttpStatusCode.NotAcceptable)
+                {
+                    GenerateFaultBody(context, handler, faults);
+                }
             }
 
             application.CompleteRequest();

@@ -83,7 +83,7 @@
     <Compile Include="Collections\IUploadedFileCollection.cs" />
     <Compile Include="Collections\Specialized\HttpMethodCollection.cs" />
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
-    <Compile Include="Context\ContextContainer.cs" />
+    <Compile Include="Context\RestContextContainer.cs" />
     <Compile Include="Configuration\DependencyBuilder.cs" />
     <Compile Include="Configuration\FaultDetail.cs" />
     <Compile Include="Context\HttpContextExtensions.cs" />
@@ -129,6 +129,7 @@
     <Compile Include="Runtime\HttpHandlerRouteConstraint.cs" />
     <Compile Include="Runtime\IoC\DefaultServiceLocator.cs" />
     <Compile Include="Runtime\ExpressionArgumentExtractor.cs" />
+    <Compile Include="Context\IRestContext.cs" />
     <Compile Include="Runtime\JsonSerializerFactory.cs" />
     <Compile Include="Runtime\NonGenericCollectionValidator.cs" />
     <Compile Include="Runtime\Registries\XmlClientSerializerRegistry.cs" />
@@ -279,7 +280,7 @@
     <Compile Include="Security\AuthorizationHeader.cs" />
     <Compile Include="Security\AuthorizationHeaderParser.cs" />
     <Compile Include="Security\AuthorizationManager.cs" />
-    <Compile Include="Context\ContextBase.cs" />
+    <Compile Include="Context\RestContextBase.cs" />
     <Compile Include="Runtime\HttpMethodResolver.cs" />
     <Compile Include="Security\MD5Encoder.cs" />
     <Compile Include="Security\RijndealEncryptor.cs" />

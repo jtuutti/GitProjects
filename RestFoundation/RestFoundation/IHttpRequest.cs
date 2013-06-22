@@ -1,8 +1,6 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
-
-using System;
 using System.IO;
 using RestFoundation.Collections;
 using RestFoundation.Runtime;
@@ -12,7 +10,7 @@ namespace RestFoundation
     /// <summary>
     /// Defines an HTTP request.
     /// </summary>
-    public interface IHttpRequest
+    public interface IHttpRequest : IRestContext
     {
         /// <summary>
         /// Gets a value indicating whether the request was initiated through AJAX.

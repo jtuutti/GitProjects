@@ -258,12 +258,12 @@
     <comment>The content language provided is not supported.</comment>
   </data>
   <data name="NonAcceptedContentCharset" xml:space="preserve">
-    <value>No accepted charset was provided in the Accept-Charset header.</value>
-    <comment>No accepted charset was provided in the Accept-Charset header.</comment>
+    <value>No accepted charset was provided in the Accept-Charset header</value>
+    <comment>No accepted charset was provided in the Accept-Charset header</comment>
   </data>
   <data name="NonAcceptedContentLanguage" xml:space="preserve">
-    <value>The accepted language provided in the Accept-Language header is not supported.</value>
-    <comment>The accepted language provided in the Accept-Language header is not supported.</comment>
+    <value>No accepted language was provided in the Accept-Language header</value>
+    <comment>No accepted language was provided in the Accept-Language header</comment>
   </data>
   <data name="EmptyHttpHeader" xml:space="preserve">
     <value>HTTP headers cannot be empty or have white-space in the name.</value>
@@ -414,8 +414,8 @@
     <comment>No description provided</comment>
   </data>
   <data name="NonAcceptedMediaType" xml:space="preserve">
-    <value>Resulting media type is not accepted by the client</value>
-    <comment>Resulting media type is not accepted by the client</comment>
+    <value>No accepted media type was provided in the Accept header</value>
+    <comment>No accepted media type was provided in the Accept header</comment>
   </data>
   <data name="SuccessfulOperation" xml:space="preserve">
     <value>Operation is successful</value>

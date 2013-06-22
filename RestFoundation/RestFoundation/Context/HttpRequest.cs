@@ -18,7 +18,7 @@ namespace RestFoundation.Context
     /// <summary>
     /// Represents an HTTP request.
     /// </summary>
-    public class HttpRequest : ContextBase, IHttpRequest
+    public class HttpRequest : RestContextBase, IHttpRequest
     {
         private const string AjaxHeaderName = "X-Requested-With";
         private const string AjaxHeaderValue = "XMLHttpRequest";
@@ -36,7 +36,7 @@ namespace RestFoundation.Context
         private readonly object m_formCollectionSyncRoot = new Object();
         private readonly object m_serverVariablesCollectionSyncRoot = new Object();
 
-        private readonly ContextContainer m_contextContainer;
+        private readonly RestContextContainer m_contextContainer;
         private DynamicDictionary m_resourceBag;
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace RestFoundation.Context
         /// </summary>
         public HttpRequest()
         {
-            m_contextContainer = new ContextContainer(() => Context.Items);
+            m_contextContainer = new RestContextContainer(() => Context.Items);
         }
 
         /// <summary>

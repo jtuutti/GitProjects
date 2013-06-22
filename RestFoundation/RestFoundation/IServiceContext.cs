@@ -5,13 +5,14 @@ using System;
 using System.Linq.Expressions;
 using System.Security.Principal;
 using System.Web;
+using RestFoundation.Runtime;
 
 namespace RestFoundation
 {
     /// <summary>
     /// Defines a service context.
     /// </summary>
-    public interface IServiceContext
+    public interface IServiceContext : IRestContext
     {
         /// <summary>
         /// Gets the current HTTP request.
