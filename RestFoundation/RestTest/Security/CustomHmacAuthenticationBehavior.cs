@@ -7,44 +7,52 @@ namespace RestTest.Security
 {
     public class CustomHmacAuthenticationBehavior : HmacAuthenticationBehavior
     {
-        public CustomHmacAuthenticationBehavior() : base(HashAlgorithmType.Md5)
+        public CustomHmacAuthenticationBehavior() : base(HashAlgorithmType.Sha1)
         {
         }
 
-        protected override bool TryGetRequestedSignature(IHttpRequest request, out string signature)
+        protected override bool TryGetRequestedSignature(IHttpRequest request, out string userId, out string signature)
         {
-            signature = request.QueryString.TryGet("apikey");
+            userId = request.QueryString.TryGet("apiuser");
+            signature = request.QueryString.TryGet("apisig");
 
-            if (signature == null && request.Headers.Authorization != null)
+            if ((userId == null || signature == null) && request.Headers.Authorization != null)
             {
-                signature = GetSignatureFromAuthorizationHeader(request);
+                Tuple<string, string> credentials = GetSignatureFromAuthorizationHeader(request);
+
+                userId = credentials.Item1;
+                signature = credentials.Item2;
             }
 
-            return !String.IsNullOrEmpty(signature);
+            return !String.IsNullOrWhiteSpace(signature) && !String.IsNullOrWhiteSpace(signature);
         }
 
         protected override string GenerateServerSignature(IServiceContext context)
         {
-            return context.Request.Url.GetLeftPart(UriPartial.Path).ToLowerInvariant();
+            return context.Request.Url.GetLeftPart(UriPartial.Path).TrimEnd(' ', '/', '?', '#').ToLowerInvariant();
         }
 
-        protected override string GetUserPrivateKey(IHttpRequest request)
+        protected override string GetUserPrivateKey(string userId, IHttpRequest request)
         {
-            return "secret";
+            if (userId == null)
+            {
+                throw new ArgumentNullException("userId");
+            }
+
+            return "SECRET_" + userId.Trim().ToUpperInvariant();
         }
 
-        private static string GetSignatureFromAuthorizationHeader(IHttpRequest request)
+        private static Tuple<string, string> GetSignatureFromAuthorizationHeader(IHttpRequest request)
         {
             AuthorizationHeader header;
 
             if (!AuthorizationHeaderParser.TryParse(request.Headers.Authorization, out header) ||
-                !String.Equals("HMAC", header.AuthenticationType, StringComparison.OrdinalIgnoreCase) ||
-                String.IsNullOrWhiteSpace(header.Password))
+                !String.Equals("HMAC", header.AuthenticationType, StringComparison.OrdinalIgnoreCase))
             {
-                return null;
+                return new Tuple<string, string>(null, null);
             }
 
-            return header.Password;
+            return Tuple.Create(header.UserName, header.Parameters.Get("sig"));
         }
     }
 }

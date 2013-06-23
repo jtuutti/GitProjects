@@ -13,7 +13,7 @@ namespace RestFoundation.Security
         /// Gets an authenticated and authorized user credentials by the provided user name.
         /// </summary>
         /// <param name="userName">The user name.</param>
-        /// <returns>The user credentials; or null if the username is invalid.</returns>
+        /// <returns>The user credentials; or null if the user name is invalid.</returns>
         public Credentials GetCredentials(string userName)
         {
             return null;

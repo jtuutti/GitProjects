@@ -38,8 +38,15 @@ namespace RestTest.SimpleServices
 
         public override void Initialize()
         {
-            ForMethod(x => x.Get(Arg<IHttpRequest>())).SetDescription("Prints 'Hello world!'")
-                                                      .SetResponseResourceExample("Hello world!");
+            SetAuthentication(AuthenticationType.HMAC, "RestTest", "~/secure-hello");
+
+            ForMethod(x => x.Get(Arg<IHttpRequest>())).SetAuthentication(AuthenticationType.HMAC,
+                                                                         "RestTest",
+                                                                         "~/secure-hello",
+                                                                         "HMAC username=\"RestTest\", sig=\"eE5ypbNBOJPJ2M1Lh/PLa7eVHNE=\"")
+                                                      .SetDescription("Prints 'Hello world!'")
+                                                      .SetResponseResourceExample("Hello world!")
+                                                      .SetHeader("Accept-Language", "en-US");
         }
     }
 }

@@ -14,9 +14,14 @@ namespace RestFoundation.ServiceProxy.OperationMetadata
         public AuthenticationType Type { get; set; }
 
         /// <summary>
-        /// Gets or sets the default username.
+        /// Gets or sets the default user name.
         /// </summary>
         public string DefaultUserName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default authorization header value.
+        /// </summary>
+        public string DefaultAuthorizationHeader { get; set; }
 
         /// <summary>
         /// Gets or sets the relative URL to match.

@@ -51,7 +51,7 @@ namespace RestFoundation.ServiceProxy
         /// <param name="type">The authentication type.</param>
         public void SetAuthentication(AuthenticationType type)
         {
-            SetAuthentication(type, null, null);
+            SetAuthentication(type, null, null, null);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace RestFoundation.ServiceProxy
         /// <param name="defaultUserName">The default user name.</param>
         public void SetAuthentication(AuthenticationType type, string defaultUserName)
         {
-            SetAuthentication(type, defaultUserName, null);
+            SetAuthentication(type, defaultUserName, null, null);
         }
 
         /// <summary>
@@ -72,10 +72,23 @@ namespace RestFoundation.ServiceProxy
         /// <param name="relativeUrlToMatch">A relative URL to apply authentication to.</param>
         public void SetAuthentication(AuthenticationType type, string defaultUserName, string relativeUrlToMatch)
         {
+            SetAuthentication(type, defaultUserName, relativeUrlToMatch, null);
+        }
+
+        /// <summary>
+        /// Sets the global service authentication.
+        /// </summary>
+        /// <param name="type">The authentication type.</param>
+        /// <param name="defaultUserName">The default user name.</param>
+        /// <param name="relativeUrlToMatch">A relative URL to apply authentication to.</param>
+        /// <param name="defaultAuthorizationHeader">The default Authorization header value.</param>
+        public void SetAuthentication(AuthenticationType type, string defaultUserName, string relativeUrlToMatch, string defaultAuthorizationHeader)
+        {
             m_authentication = new AuthenticationMetadata
             {
                 Type = type,
                 DefaultUserName = defaultUserName,
+                DefaultAuthorizationHeader = defaultAuthorizationHeader,
                 RelativeUrlToMatch = relativeUrlToMatch
             };
         }
@@ -252,15 +265,20 @@ namespace RestFoundation.ServiceProxy
 
         IMethodMetadata IMethodMetadata.SetAuthentication(AuthenticationType type)
         {
-            return ((IMethodMetadata) this).SetAuthentication(type, null, null);
+            return ((IMethodMetadata) this).SetAuthentication(type, null, null, null);
         }
 
         IMethodMetadata IMethodMetadata.SetAuthentication(AuthenticationType type, string defaultUserName)
         {
-            return ((IMethodMetadata) this).SetAuthentication(type, defaultUserName, null);
+            return ((IMethodMetadata) this).SetAuthentication(type, defaultUserName, null, null);
         }
 
         IMethodMetadata IMethodMetadata.SetAuthentication(AuthenticationType type, string defaultUserName, string relativeUrlToMatch)
+        {
+            return ((IMethodMetadata) this).SetAuthentication(type, defaultUserName, relativeUrlToMatch, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetAuthentication(AuthenticationType type, string defaultUserName, string relativeUrlToMatch, string defaultAuthorizationHeader)
         {
             ValidateCurrentServiceMethod();
 
@@ -268,6 +286,7 @@ namespace RestFoundation.ServiceProxy
             {
                 Type = type,
                 DefaultUserName = defaultUserName,
+                DefaultAuthorizationHeader = defaultAuthorizationHeader,
                 RelativeUrlToMatch = relativeUrlToMatch
             };
 

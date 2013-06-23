@@ -376,6 +376,15 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid hash type was specified..
+        /// </summary>
+        internal static string InvalidHashType {
+            get {
+                return ResourceManager.GetString("InvalidHashType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A resource cannot be set for the current HTTP method..
         /// </summary>
         internal static string InvalidHttpMethodForResource {
@@ -723,6 +732,15 @@ namespace RestFoundation.Resources {
         internal static string MissingDescription {
             get {
                 return ResourceManager.GetString("MissingDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No private key was found..
+        /// </summary>
+        internal static string MissingHmacPrivateKey {
+            get {
+                return ResourceManager.GetString("MissingHmacPrivateKey", resourceCulture);
             }
         }
         

@@ -38,6 +38,16 @@ namespace RestFoundation.ServiceProxy
         IMethodMetadata SetAuthentication(AuthenticationType type, string defaultUserName, string relativeUrlToMatch);
 
         /// <summary>
+        /// Sets the authentication for the service operation.
+        /// </summary>
+        /// <param name="type">The authentication type.</param>
+        /// <param name="defaultUserName">The default user name.</param>
+        /// <param name="relativeUrlToMatch">A relative URL to apply authentication to.</param>
+        /// <param name="defaultAuthorizationHeader">The default Authorization header value.</param>
+        /// <returns>The service method metadata.</returns>
+        IMethodMetadata SetAuthentication(AuthenticationType type, string defaultUserName, string relativeUrlToMatch, string defaultAuthorizationHeader);
+
+        /// <summary>
         /// Sets the description for the service operation.
         /// </summary>
         /// <param name="description">The description.</param>

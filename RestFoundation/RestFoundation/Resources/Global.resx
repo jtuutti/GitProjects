@@ -653,4 +653,12 @@
     <value>The requested file cannot be accessed.</value>
     <comment>The requested file cannot be accessed.</comment>
   </data>
+  <data name="MissingHmacPrivateKey" xml:space="preserve">
+    <value>No private key was found.</value>
+    <comment>No private key was found.</comment>
+  </data>
+  <data name="InvalidHashType" xml:space="preserve">
+    <value>Invalid hash type was specified.</value>
+    <comment>Invalid hash type was specified.</comment>
+  </data>
 </root>

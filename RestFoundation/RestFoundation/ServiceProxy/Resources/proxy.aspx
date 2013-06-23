@@ -49,7 +49,14 @@
 
         if (operation.Credentials != null)
         {
-            if (!String.IsNullOrEmpty(operation.Credentials.DefaultUserName))
+            if (!String.IsNullOrEmpty(operation.Credentials.DefaultAuthorizationHeader))
+            {
+                HeaderText.InnerText = String.Concat("Authorization: ",
+                                                     operation.Credentials.DefaultAuthorizationHeader.Trim(),
+                                                     Environment.NewLine,
+                                                     HeaderText.InnerText);
+            }
+            else if (!String.IsNullOrEmpty(operation.Credentials.DefaultUserName))
             {
                 UserName.Value = operation.Credentials.DefaultUserName;
             }
@@ -586,7 +593,7 @@
         <div ><em><%: operation.Description %></em></div>
         <div>
             <h1><a id="UrlPrompt" href="#">URL</a></h1>
-            <% if (operation.Credentials != null) { %>
+            <% if (operation.Credentials != null && (operation.Credentials.Type == AuthenticationType.Basic || operation.Credentials.Type == AuthenticationType.Digest)) { %>
             <div id="Authentication">
                 <span class="strong spacer-right">Authentication:</span>
                 <span><%: operation.Credentials.Type.ToString() %></span>

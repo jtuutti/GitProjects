@@ -15,22 +15,15 @@ namespace RestFoundation.Security
         /// Initializes a new instance of the <see cref="AuthorizationHeader"/> class.
         /// </summary>
         /// <param name="authenticationType">The authentication type.</param>
-        /// <param name="userName">The user name.</param>
         /// <param name="parameters">A collection of additional parameters.</param>
-        public AuthorizationHeader(string authenticationType, string userName, NameValueCollection parameters)
+        public AuthorizationHeader(string authenticationType, NameValueCollection parameters)
         {
-            if (String.IsNullOrEmpty(userName))
-            {
-                throw new ArgumentNullException("userName");
-            }
-
             if (parameters == null)
             {
                 throw new ArgumentNullException("parameters");
             }
 
             AuthenticationType = authenticationType;
-            UserName = userName;
             Parameters = parameters;
         }
 
@@ -40,18 +33,18 @@ namespace RestFoundation.Security
         public string AuthenticationType { get; protected set; }
 
         /// <summary>
+        /// Gets the parameter collection.
+        /// </summary>
+        public NameValueCollection Parameters { get; protected set; }
+
+        /// <summary>
         /// Gets the user name.
         /// </summary>
-        public string UserName { get; protected set; }
+        public string UserName { get; protected internal set; }
 
         /// <summary>
         /// Gets the password, if applicable.
         /// </summary>
         public string Password { get; protected internal set; }
-
-        /// <summary>
-        /// Gets the parameter collection.
-        /// </summary>
-        public NameValueCollection Parameters { get; protected set; }
     }
 }

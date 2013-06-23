@@ -7,6 +7,7 @@ using System.Net;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
+using RestFoundation.Resources;
 
 namespace RestFoundation.Behaviors
 {
@@ -73,33 +74,43 @@ namespace RestFoundation.Behaviors
                 throw new ArgumentNullException("serviceContext");
             }
 
-            string requestedSignature;
+            string userId;
+            string signature;
 
-            if (!TryGetRequestedSignature(serviceContext.Request, out requestedSignature) || String.IsNullOrEmpty(requestedSignature))
+            if (!TryGetRequestedSignature(serviceContext.Request, out userId, out signature) ||
+                String.IsNullOrWhiteSpace(userId) ||
+                String.IsNullOrWhiteSpace(signature))
             {
                 serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Resources.Global.Unauthorized);
                 return BehaviorMethodAction.Stop;
             }
 
-            string hashedServerSignature = HashSignature(GenerateServerSignature(serviceContext), serviceContext.Request);
+            string hashedServerSignature = HashSignature(userId, GenerateServerSignature(serviceContext), serviceContext.Request);
 
-            return requestedSignature == hashedServerSignature ? BehaviorMethodAction.Execute : BehaviorMethodAction.Stop;
+            return signature == hashedServerSignature ? BehaviorMethodAction.Execute : BehaviorMethodAction.Stop;
         }
 
         /// <summary>
         /// Hashes and base64 encodes a string signature using the hash algorithm during the class instantiation.
         /// </summary>
-        /// <param name="signature">The signature string.</param>
+        /// <param name="userId">The user id (key or user name).</param>
+        /// <param name="signature">The signature.</param>
         /// <param name="request">The HTTP request.</param>
         /// <returns>The hashed and base64 encoded signature.</returns>
-        protected virtual string HashSignature(string signature, IHttpRequest request)
+        /// <exception cref="SecurityException">If a user's private key is missing or an invalid hash type is used.</exception>
+        protected virtual string HashSignature(string userId, string signature, IHttpRequest request)
         {
+            if (userId == null)
+            {
+                throw new ArgumentNullException("userId");
+            }
+
             if (signature == null)
             {
                 throw new ArgumentNullException("signature");
             }
 
-            using (HashAlgorithm algorithm = CreateAlgorithm(request))
+            using (HashAlgorithm algorithm = CreateAlgorithm(userId, request))
             {
                 byte[] hash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(signature));
                 return Convert.ToBase64String(hash);
@@ -111,12 +122,13 @@ namespace RestFoundation.Behaviors
         /// be used to validate timestamps or nonces.
         /// </summary>
         /// <param name="request">The HTTP request.</param>
+        /// <param name="userId">The user id (key or user name).</param>
         /// <param name="signatureHash">The hashed and base64 encoded signature.</param>
         /// <returns>
         /// True if the request signature was found and all the request criteria was satisfied;
         /// otherwise false.
         /// </returns>
-        protected abstract bool TryGetRequestedSignature(IHttpRequest request, out string signatureHash);
+        protected abstract bool TryGetRequestedSignature(IHttpRequest request, out string userId, out string signatureHash);
 
         /// <summary>
         /// Generates the signature for the web request on the server to validate against the user
@@ -129,17 +141,18 @@ namespace RestFoundation.Behaviors
         /// <summary>
         /// Gets the web requests user's private key.
         /// </summary>
+        /// <param name="userId">The user id (key or user name).</param>
         /// <param name="request">The HTTP request.</param>
         /// <returns>The private key.</returns>
-        protected abstract string GetUserPrivateKey(IHttpRequest request);
+        protected abstract string GetUserPrivateKey(string userId, IHttpRequest request);
 
-        private HashAlgorithm CreateAlgorithm(IHttpRequest request)
+        private HashAlgorithm CreateAlgorithm(string userId, IHttpRequest request)
         {
-            string secretKey = GetUserPrivateKey(request);
+            string secretKey = GetUserPrivateKey(userId, request);
 
             if (String.IsNullOrEmpty(secretKey))
             {
-                throw new SecurityException("No private key was found.");
+                throw new SecurityException(Global.MissingHmacPrivateKey);
             }
 
             byte[] keyData = Encoding.ASCII.GetBytes(secretKey);
@@ -158,7 +171,7 @@ namespace RestFoundation.Behaviors
                     return new HMACMD5(keyData);
             }
 
-            throw new SecurityException("Invalid hash type was specified.");
+            throw new SecurityException(Global.InvalidHashType);
         }
     }
 }

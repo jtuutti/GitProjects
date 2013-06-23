@@ -14,7 +14,6 @@ namespace RestFoundation.Security
     /// </summary>
     public static class AuthorizationHeaderParser
     {
-        private const string ApiUserName = "key";
         private const string AuthenticationTypeKey = "auth-type";
         private const string AuthenticationCredentialsKey = "auth-credentials";
         private const string UserNameKey = "username";
@@ -59,7 +58,6 @@ namespace RestFoundation.Security
             }
 
             bool isBasic = String.Equals("Basic", authenticationType, StringComparison.OrdinalIgnoreCase);
-            bool isDigest = String.Equals("Digest", authenticationType, StringComparison.OrdinalIgnoreCase);
 
             string credentials, userName, password;
 
@@ -70,7 +68,7 @@ namespace RestFoundation.Security
                 userName = basicCredentials.Item1;
                 password = basicCredentials.Item2;
             }
-            else if (isDigest)
+            else
             {
                 if (!items.TryGetValue(UserNameKey, out userName))
                 {
@@ -79,20 +77,10 @@ namespace RestFoundation.Security
 
                 password = null;
             }
-            else
-            {
-                userName = ApiUserName;
-                password = DecodeApiKey(authorizationString, authenticationType);
-            }
 
-            if (String.IsNullOrWhiteSpace(userName))
+            header = new AuthorizationHeader(authenticationType, GenerateParameters(items))
             {
-                header = null;
-                return false;
-            }
-
-            header = new AuthorizationHeader(authenticationType, userName, GenerateParameters(items))
-            {
+                UserName = userName,
                 Password = password
             };
 
@@ -206,14 +194,6 @@ namespace RestFoundation.Security
             }
 
             return itemDictionary;
-        }
-
-        private static string DecodeApiKey(string authorizationString, string authenticationType)
-        {
-            return Regex.Replace(authorizationString.Split(',')[0].TrimEnd(),
-                                 String.Concat("^", authenticationType, @"\s+"),
-                                 String.Empty,
-                                 RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         }
 
         private static NameValueCollection GenerateParameters(IEnumerable<KeyValuePair<string, string>> items)

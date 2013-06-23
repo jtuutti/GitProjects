@@ -101,6 +101,9 @@ namespace RestTest.App_Start
                       .WithBehaviors(new HttpsOnlyBehavior());
 
             urlBuilder.MapUrl("hello")
+                      .ToServiceContract<HelloService>();
+
+            urlBuilder.MapUrl("secure-hello")
                       .ToServiceContract<HelloService>().WithBehaviors(new CustomHmacAuthenticationBehavior());
 
             urlBuilder.MapUrl("feed.{format}")
