@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.IO;
 using System.Net;
 using NUnit.Framework;
 using RestFoundation.Behaviors;
 using RestFoundation.Runtime;
-using RestFoundation.Runtime.Handlers;
 using RestFoundation.Security;
 using RestFoundation.Tests.Implementation.Authorization;
-using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
 namespace RestFoundation.Tests.Behaviors
@@ -20,42 +21,24 @@ namespace RestFoundation.Tests.Behaviors
         private const string NonceCount = "00000001";
         private const string ServiceUri = "/test-service/new";
 
-        private MockHandlerFactory m_factory;
-        private IServiceContext m_context;
-
-        [SetUp]
-        public void Initialize()
-        {
-            m_factory = new MockHandlerFactory();
-
-            IRestServiceHandler handler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post(null));
-            Assert.That(handler, Is.Not.Null);
-            Assert.That(handler.Context, Is.Not.Null);
-
-            m_context = handler.Context;
-        }
-
-        [TearDown]
-        public void ShutDown()
-        {
-            m_factory.Dispose();
-        }
-
         [Test]
         public void RequestWithoutAuthorizationHeaderShouldThrow()
         {
             ISecureServiceBehavior behavior = new DigestAuthenticationBehavior();
-
-            m_context.GetHttpContext().Request.Headers["Authorization"] = null;
+            IServiceContext context = GenerateInitialContext();
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null);
+                behavior.OnMethodAuthorizing(context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
             {
                 Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
+            }
+            finally
+            {
+                MockContextManager.DestroyContext();
             }
         }
 
@@ -64,32 +47,44 @@ namespace RestFoundation.Tests.Behaviors
         {
             ISecureServiceBehavior behavior = new DigestAuthenticationBehavior(new TestAuthorizationManager());
 
-            m_context.GetHttpContext().Request.Headers["Authorization"] = null;
+            string authorizationHeaderString;
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null);
-                Assert.Fail();
+                // creating initial unauthorized context
+                IServiceContext initialContext = GenerateInitialContext();
+
+                try
+                {
+                    behavior.OnMethodAuthorizing(initialContext, null);
+                    Assert.Fail();
+                }
+                catch (HttpResponseException ex)
+                {
+                    Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
+                }
+
+                // generating authorization header
+                string authenticateHeaderString = initialContext.Response.GetHeader("WWW-Authenticate");
+                Assert.That(authenticateHeaderString, Is.Not.Null);
+                Assert.That(authenticateHeaderString, Is.StringStarting("Digest"));
+
+                authorizationHeaderString = String.Format("Digest {0} username=\"{1}\", cnonce=\"{2}\", nc=\"{3}\", uri=\"{4}\"",
+                                                                 authenticateHeaderString.Replace("Digest ", String.Empty),
+                                                                 UserName,
+                                                                 ClientNonce,
+                                                                 NonceCount,
+                                                                 ServiceUri);
             }
-            catch (HttpResponseException ex)
+            finally
             {
-                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
+                MockContextManager.DestroyContext();
             }
-
-            string authenticateHeaderString = m_context.Response.GetHeader("WWW-Authenticate");
-            Assert.That(authenticateHeaderString, Is.Not.Null);
-            Assert.That(authenticateHeaderString, Is.StringStarting("Digest"));
-
-            string authorizationHeaderString = String.Format("Digest {0}, username=\"{1}\", cnonce=\"{2}\", nc=\"{3}\", uri=\"{4}\"",
-                                                             authenticateHeaderString.Replace("Digest ", String.Empty),
-                                                             UserName,
-                                                             ClientNonce,
-                                                             NonceCount,
-                                                             ServiceUri);
 
             AuthorizationHeader authorizationHeader;
             Assert.That(AuthorizationHeaderParser.TryParse(authorizationHeaderString, out authorizationHeader));
 
+            // generating digest response
             string response;
 
             using (var encoder = new MD5Encoder())
@@ -100,9 +95,16 @@ namespace RestFoundation.Tests.Behaviors
                 response = encoder.Encode(String.Format("{0}:{1}:{2}:{3}:{4}:{5}", ha1, authorizationHeader.Parameters.Get("nonce"), NonceCount, ClientNonce, "auth", ha2));
             }
 
-            m_context.GetHttpContext().Request.Headers["Authorization"] = String.Format("{0}, response=\"{1}\"", authorizationHeaderString, response);
-
-            behavior.OnMethodAuthorizing(m_context, null);
+            try
+            {
+                // creating authorized context
+                IServiceContext authorizedContext = GenerateAuthorizedContext(authorizationHeaderString, response);
+                behavior.OnMethodAuthorizing(authorizedContext, null);
+            }
+            finally
+            {
+                MockContextManager.DestroyContext();
+            }
         }
 
         [Test]
@@ -113,30 +115,42 @@ namespace RestFoundation.Tests.Behaviors
                 Qop = DigestAuthenticationBehavior.QualityOfProtection.None
             };
 
-            m_context.GetHttpContext().Request.Headers["Authorization"] = null;
+            string authorizationHeaderString;
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null);
-                Assert.Fail();
+                // creating initial unauthorized context
+                IServiceContext initialContext = GenerateInitialContext();
+
+                try
+                {
+                    behavior.OnMethodAuthorizing(initialContext, null);
+                    Assert.Fail();
+                }
+                catch (HttpResponseException ex)
+                {
+                    Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
+                }
+
+                // generating authorization header
+                string authenticateHeaderString = initialContext.Response.GetHeader("WWW-Authenticate");
+                Assert.That(authenticateHeaderString, Is.Not.Null);
+                Assert.That(authenticateHeaderString, Is.StringStarting("Digest"));
+
+                authorizationHeaderString = String.Format("Digest {0} username=\"{1}\", uri=\"{2}\"",
+                                                          authenticateHeaderString.Replace("Digest ", String.Empty),
+                                                          UserName,
+                                                          ServiceUri);
             }
-            catch (HttpResponseException ex)
+            finally
             {
-                Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
+                MockContextManager.DestroyContext();
             }
-
-            string authenticateHeaderString = m_context.Response.GetHeader("WWW-Authenticate");
-            Assert.That(authenticateHeaderString, Is.Not.Null);
-            Assert.That(authenticateHeaderString, Is.StringStarting("Digest"));
-
-            string authorizationHeaderString = String.Format("Digest {0}, username=\"{1}\", uri=\"{2}\"",
-                                                             authenticateHeaderString.Replace("Digest ", String.Empty),
-                                                             UserName,
-                                                             ServiceUri);
 
             AuthorizationHeader authorizationHeader;
             Assert.That(AuthorizationHeaderParser.TryParse(authorizationHeaderString, out authorizationHeader));
 
+            // generating digest response
             string response;
 
             using (var encoder = new MD5Encoder())
@@ -147,9 +161,31 @@ namespace RestFoundation.Tests.Behaviors
                 response = encoder.Encode(String.Format("{0}:{1}:{2}", ha1, authorizationHeader.Parameters.Get("nonce"), ha2));
             }
 
-            m_context.GetHttpContext().Request.Headers["Authorization"] = String.Format("{0}, response=\"{1}\"", authorizationHeaderString, response);
+            try
+            {
+                // creating authorized context
+                IServiceContext authorizedContext = GenerateAuthorizedContext(authorizationHeaderString, response);
+                behavior.OnMethodAuthorizing(authorizedContext, null);
+            }
+            finally
+            {
+                MockContextManager.DestroyContext();
+            }
+        }
 
-            behavior.OnMethodAuthorizing(m_context, null);
+        private static IServiceContext GenerateInitialContext()
+        {
+            return MockContextManager.GenerateContext(ServiceUri, HttpMethod.Post);
+        }
+
+        private static IServiceContext GenerateAuthorizedContext(string authorizationHeader, string response)
+        {
+            var headers = new NameValueCollection
+            {
+                { "Authorization", String.Format(CultureInfo.InvariantCulture, "{0}, response=\"{1}\"", authorizationHeader, response) }
+            };
+
+            return MockContextManager.GenerateContext(ServiceUri, HttpMethod.Post, headers);
         }
     }
 }

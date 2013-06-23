@@ -588,13 +588,13 @@
             <h1><a id="UrlPrompt" href="#">URL</a></h1>
             <% if (operation.Credentials != null) { %>
             <div id="Authentication">
-                <span class="strong">Authentication:</span>
+                <span class="strong spacer-right">Authentication:</span>
                 <span><%: operation.Credentials.Type.ToString() %></span>
                 <span class="spacer"></span>
-                <span class="strong">Username:</span>
+                <span class="strong spacer-right">Username:</span>
                 <input type="text" id="UserName" runat="server" />
                 <span class="spacer"></span>
-                <span class="strong">Password:</span>
+                <span class="strong spacer-right">Password:</span>
                 <input type="password" id="Password" runat="server" />
             </div>
             <% } %>
@@ -641,11 +641,11 @@
             </div>
             <div id="ResponseHeaderToggle" class="toggle-option">
                 <asp:CheckBox id="DisplayResponseHeaders" runat="server" />
-                <label for="DisplayResponseHeaders"><span class="underlined">A</span>lways display response headers</label>
+                <label class="spacer-left" for="DisplayResponseHeaders"><span class="underlined">A</span>lways display response headers</label>
             </div>
             <div id="FormatBodyToggle" class="toggle-option">
                 <asp:CheckBox id="DoNotFormatBody" runat="server" />
-                <label for="DoNotFormatBody"><span class="underlined">D</span>o not format body</label>
+                <label class="spacer-left" for="DoNotFormatBody"><span class="underlined">D</span>o not format body</label>
             </div>
             <div id="ResponseHeightControls">
                 <a id="ViewResponse" runat="server" href="#">View in Browser</a>

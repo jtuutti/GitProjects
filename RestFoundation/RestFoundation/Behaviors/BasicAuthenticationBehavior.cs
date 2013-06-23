@@ -55,9 +55,10 @@ namespace RestFoundation.Behaviors
 
             AuthorizationHeader header;
 
-            if (!AuthorizationHeaderParser.TryParse(serviceContext.Request.Headers.TryGet("Authorization"), serviceContext.Request.Headers.ContentCharsetEncoding, out header) ||
+            if (!AuthorizationHeaderParser.TryParse(serviceContext.Request.Headers.Authorization, serviceContext.Request.Headers.ContentCharsetEncoding, out header) ||
                 !AuthenticationType.Equals(header.AuthenticationType, StringComparison.OrdinalIgnoreCase))
             {
+                serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Resources.Global.Unauthorized);
                 GenerateAuthenticationHeader(serviceContext);
                 return BehaviorMethodAction.Stop;
             }
@@ -67,7 +68,7 @@ namespace RestFoundation.Behaviors
             if (credentials == null || !String.Equals(header.Password, credentials.Password, StringComparison.Ordinal))
             {
                 GenerateAuthenticationHeader(serviceContext);
-                throw new HttpResponseException(HttpStatusCode.Forbidden, Resources.Global.Forbidden);
+                return BehaviorMethodAction.Stop;
             }
 
             serviceContext.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), credentials.GetRoles());
@@ -76,9 +77,7 @@ namespace RestFoundation.Behaviors
 
         private static void GenerateAuthenticationHeader(IServiceContext serviceContext)
         {
-            serviceContext.Response.Output.Clear();
             serviceContext.Response.SetHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "{0} realm=\"{1}\"", AuthenticationType, serviceContext.Request.Url.OperationUrl));
-            serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Resources.Global.Unauthorized);
         }
     }
 }

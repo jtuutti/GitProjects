@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.IO;
 using System.Net;
 using System.Security.Principal;
 using System.Text;
 using NUnit.Framework;
 using RestFoundation.Behaviors;
 using RestFoundation.Runtime;
-using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.Implementation.Authorization;
-using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
 namespace RestFoundation.Tests.Behaviors
@@ -15,95 +15,112 @@ namespace RestFoundation.Tests.Behaviors
     [TestFixture]
     public class BasicAuthenticationBehaviorTests
     {
-        private MockHandlerFactory m_factory;
-        private IServiceContext m_context;
-
-        [SetUp]
-        public void Initialize()
-        {
-            m_factory = new MockHandlerFactory();
-
-            IRestServiceHandler handler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post(null));
-            Assert.That(handler, Is.Not.Null);
-            Assert.That(handler.Context, Is.Not.Null);
-            
-            m_context = handler.Context;
-        }
-
-        [TearDown]
-        public void ShutDown()
-        {
-            m_factory.Dispose();
-        }
+        private const string ServiceUri = "/test-service/new";
 
         [Test]
         public void RequestWithoutAuthorizationHeaderShouldThrow()
         {
             ISecureServiceBehavior behavior = new BasicAuthenticationBehavior();
-
-            m_context.GetHttpContext().Request.Headers["Authorization"] = null;
+            IServiceContext context = GenerateInitialContext();
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null);
+                behavior.OnMethodAuthorizing(context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
             {
                 Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
+            }
+            finally
+            {
+                MockContextManager.DestroyContext();
             }
         }
 
         [Test]
         public void RequestWithBasicAuthorizationHeaderShouldNotThrow()
         {
+            string authorizationHeader = String.Concat("Basic ", ToBase64String("user1:test123"));
+
             ISecureServiceBehavior behavior = new BasicAuthenticationBehavior(new TestAuthorizationManager());
+            IServiceContext context = GenerateAuthorizedContext(authorizationHeader);
 
-            m_context.GetHttpContext().Request.Headers["Authorization"] = String.Format("Basic {0}", ToBase64String("user1:test123"));
+            try
+            {
+                behavior.OnMethodAuthorizing(context, null);
 
-            behavior.OnMethodAuthorizing(m_context, null);
-
-            Assert.That(m_context.User, Is.Not.Null);
-            Assert.That(m_context.IsAuthenticated, Is.True);
-            Assert.That(m_context.User, Is.InstanceOf<GenericPrincipal>());
-            Assert.That(m_context.User.Identity.Name, Is.EqualTo("user1"));
-            Assert.That(m_context.User.IsInRole("Testers"), Is.True);
+                Assert.That(context.User, Is.Not.Null);
+                Assert.That(context.IsAuthenticated, Is.True);
+                Assert.That(context.User, Is.InstanceOf<GenericPrincipal>());
+                Assert.That(context.User.Identity.Name, Is.EqualTo("user1"));
+                Assert.That(context.User.IsInRole("Testers"), Is.True);
+            }
+            finally
+            {
+                MockContextManager.DestroyContext();
+            }
         }
 
         [Test]
         public void RequestWithDigestAuthorizationHeaderShouldThrow()
         {
-            ISecureServiceBehavior behavior = new BasicAuthenticationBehavior();
+            const string authorizationHeader = "Digest username=\"user1\", realm=\"http://localhost\", nonce=\"dcd98b7102dd2f0e8b11d0f600bfb0c093\", qop=auth, cnonce=\"0a4f113b\"";
 
-            m_context.GetHttpContext().Request.Headers["Authorization"] = "Digest username=\"user1\", realm=\"http://localhost\", nonce=\"dcd98b7102dd2f0e8b11d0f600bfb0c093\", qop=auth, cnonce=\"0a4f113b\"";
+            ISecureServiceBehavior behavior = new BasicAuthenticationBehavior(new TestAuthorizationManager());
+            IServiceContext context = GenerateAuthorizedContext(authorizationHeader);
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null);
+                behavior.OnMethodAuthorizing(context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
             {
                 Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
             }
+            finally
+            {
+                MockContextManager.DestroyContext();
+            }
         }
 
         [Test]
         public void RequestWithBasicAuthorizationHeaderAndWrongCredentialsShouldThrow()
         {
-            ISecureServiceBehavior behavior = new BasicAuthenticationBehavior();
+            string authorizationHeader = String.Format("Basic {0}", ToBase64String("user1:wrong-password"));
 
-            m_context.GetHttpContext().Request.Headers["Authorization"] = String.Format("Basic {0}", ToBase64String("user1:wrong-password"));
+            ISecureServiceBehavior behavior = new BasicAuthenticationBehavior(new TestAuthorizationManager());
+            IServiceContext context = GenerateAuthorizedContext(authorizationHeader);
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null);
+                behavior.OnMethodAuthorizing(context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
             {
                 Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
             }
+            finally
+            {
+                MockContextManager.DestroyContext();
+            }
+        }
+
+        private static IServiceContext GenerateInitialContext()
+        {
+            return MockContextManager.GenerateContext(ServiceUri, HttpMethod.Post);
+        }
+
+        private static IServiceContext GenerateAuthorizedContext(string authorizationHeader)
+        {
+            var headers = new NameValueCollection
+            {
+                { "Authorization", authorizationHeader }
+            };
+
+            return MockContextManager.GenerateContext(ServiceUri, HttpMethod.Post, headers);
         }
 
         private static string ToBase64String(string credentials)

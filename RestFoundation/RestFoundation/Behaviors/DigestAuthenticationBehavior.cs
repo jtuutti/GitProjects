@@ -92,9 +92,10 @@ namespace RestFoundation.Behaviors
 
             AuthorizationHeader header;
 
-            if (!AuthorizationHeaderParser.TryParse(serviceContext.Request.Headers.TryGet("Authorization"), serviceContext.Request.Headers.ContentCharsetEncoding, out header) ||
+            if (!AuthorizationHeaderParser.TryParse(serviceContext.Request.Headers.Authorization, serviceContext.Request.Headers.ContentCharsetEncoding, out header) ||
                 !AuthenticationType.Equals(header.AuthenticationType, StringComparison.OrdinalIgnoreCase))
             {
+                serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Resources.Global.Unauthorized);
                 GenerateAuthenticationHeader(serviceContext, false);
                 return BehaviorMethodAction.Stop;
             }
@@ -104,7 +105,7 @@ namespace RestFoundation.Behaviors
             if (credentials == null)
             {
                 GenerateAuthenticationHeader(serviceContext, false);
-                throw new HttpResponseException(HttpStatusCode.Forbidden, Resources.Global.Forbidden);
+                return BehaviorMethodAction.Stop;
             }
 
             Tuple<bool, bool> responseValidationResult = ValidateResponse(serviceContext, header, credentials);
@@ -112,7 +113,7 @@ namespace RestFoundation.Behaviors
             if (!responseValidationResult.Item1)
             {
                 GenerateAuthenticationHeader(serviceContext, responseValidationResult.Item2);
-                throw new HttpResponseException(HttpStatusCode.Forbidden, Resources.Global.Forbidden);
+                return BehaviorMethodAction.Stop;
             }
 
             serviceContext.User = new GenericPrincipal(new GenericIdentity(header.UserName, AuthenticationType), credentials.GetRoles());
@@ -186,9 +187,7 @@ namespace RestFoundation.Behaviors
                 headerBuilder.AppendFormat(CultureInfo.InvariantCulture, ", stale=\"TRUE\"");
             }
 
-            serviceContext.Response.Output.Clear();
             serviceContext.Response.SetHeader("WWW-Authenticate", headerBuilder.ToString());
-            serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Resources.Global.Unauthorized);
         }
 
         private string GenerateExpectedResponse(AuthorizationHeader header, string ha1, string ha2, string nonce)

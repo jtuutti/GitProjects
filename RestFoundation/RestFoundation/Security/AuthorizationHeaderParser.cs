@@ -14,14 +14,13 @@ namespace RestFoundation.Security
     /// </summary>
     public static class AuthorizationHeaderParser
     {
+        private const string ApiUserName = "key";
         private const string AuthenticationTypeKey = "auth-type";
         private const string AuthenticationCredentialsKey = "auth-credentials";
         private const string UserNameKey = "username";
-        private const string AuthorizationSeparator = " ";
-        private const string AuthorizationItemSeparator = ",";
-        private const string NameValueSeparator = "=";
 
-        private static readonly Regex nameValueSeparatorRegex = new Regex(@"\s+=\s+", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static readonly Regex AuthorizationRegex = new Regex("^\\s*([^,^\\s]+)\\s*([^,^\\s]+)", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        private static readonly Regex AuthorizationParameterRegex = new Regex("[^,^\\s]+\\s*=\\s*((\"[^\"=]+\")|([^,^=,^\\s]+))", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
         /// <summary>
         /// Tries to parse an authorization header from an Authorization header style string.
@@ -53,19 +52,14 @@ namespace RestFoundation.Security
 
             string authenticationType;
 
-            if (!items.TryGetValue(AuthenticationTypeKey, out authenticationType))
+            if (!items.TryGetValue(AuthenticationTypeKey, out authenticationType) || String.IsNullOrWhiteSpace(authenticationType))
             {
                 header = null;
                 return false;
             }
 
-            bool isBasic = "Basic".Equals(authenticationType, StringComparison.OrdinalIgnoreCase);
-
-            if (!isBasic && !"Digest".Equals(authenticationType, StringComparison.OrdinalIgnoreCase))
-            {
-                header = null;
-                return false;
-            }
+            bool isBasic = String.Equals("Basic", authenticationType, StringComparison.OrdinalIgnoreCase);
+            bool isDigest = String.Equals("Digest", authenticationType, StringComparison.OrdinalIgnoreCase);
 
             string credentials, userName, password;
 
@@ -76,7 +70,7 @@ namespace RestFoundation.Security
                 userName = basicCredentials.Item1;
                 password = basicCredentials.Item2;
             }
-            else
+            else if (isDigest)
             {
                 if (!items.TryGetValue(UserNameKey, out userName))
                 {
@@ -85,6 +79,11 @@ namespace RestFoundation.Security
 
                 password = null;
             }
+            else
+            {
+                userName = ApiUserName;
+                password = DecodeApiKey(authorizationString, authenticationType);
+            }
 
             if (String.IsNullOrWhiteSpace(userName))
             {
@@ -92,12 +91,10 @@ namespace RestFoundation.Security
                 return false;
             }
 
-            header = new AuthorizationHeader(authenticationType, userName, GenerateParameters(items));
-
-            if (password != null)
+            header = new AuthorizationHeader(authenticationType, userName, GenerateParameters(items))
             {
-                header.Password = password;
-            }
+                Password = password
+            };
 
             return true;
         }
@@ -142,45 +139,81 @@ namespace RestFoundation.Security
             return Tuple.Create(decodedCredentials.Item1, decodedCredentials.Item2);
         }
 
+        private static void SetAuthorizationValue(Match valueMatch, int index, Dictionary<string, string> itemDictionary)
+        {
+            Group match = valueMatch.Groups[index];
+
+            if (!match.Success || String.IsNullOrWhiteSpace(match.Value))
+            {
+                return;
+            }
+
+            if (match.Value.TrimEnd('=').IndexOf('=') >= 0)
+            {
+                return;
+            }
+
+            switch (index)
+            {
+                case 1:
+                    itemDictionary[AuthenticationTypeKey] = match.Value;
+                    break;
+                case 2:
+                    if (!itemDictionary.ContainsKey(match.Value))
+                    {
+                        itemDictionary[AuthenticationCredentialsKey] = match.Value;
+                    }
+                    break;
+            }
+        }
+
+        private static void SetAuthorizationParameter(Match parameterMatch, Dictionary<string, string> itemDictionary)
+        {
+            if (!parameterMatch.Success)
+            {
+                return;
+            }
+
+            int separatorIndex = parameterMatch.Value.IndexOf('=');
+
+            if (separatorIndex <= 0 || separatorIndex == parameterMatch.Value.Length - 1)
+            {
+                return;
+            }
+
+            string key = parameterMatch.Value.Substring(0, separatorIndex);
+            string value = parameterMatch.Value.Substring(separatorIndex + 1);
+
+            itemDictionary[key.Trim().ToLowerInvariant()] = value.Trim('"', ' ');
+        }
+
         private static IDictionary<string, string> ParseAuthorizationItems(string authorizationString)
         {
-            string[] items = nameValueSeparatorRegex.Replace(authorizationString, NameValueSeparator)
-                                                    .Split(new[]
-                                                            {
-                                                                AuthorizationSeparator,
-                                                                AuthorizationItemSeparator
-                                                            }, StringSplitOptions.RemoveEmptyEntries);
-
             var itemDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (var item in items)
+            Match valueMatches = AuthorizationRegex.Match(authorizationString);
+
+            for (int i = 0; i < valueMatches.Groups.Count; i++)
             {
-                string[] parts;
+                SetAuthorizationValue(valueMatches, i, itemDictionary);
+            }
 
-                if (!item.EndsWith(NameValueSeparator, StringComparison.Ordinal))
-                {
-                    parts = item.Split(new[] { NameValueSeparator }, 2, StringSplitOptions.RemoveEmptyEntries);
-                }
-                else
-                {
-                    parts = new[] { item };
-                }
+            MatchCollection parameterMatches = AuthorizationParameterRegex.Matches(authorizationString);
 
-                if (parts.Length == 1 && itemDictionary.Count == 0)
-                {
-                    itemDictionary[AuthenticationTypeKey] = parts[0];
-                }
-                else if (parts.Length == 1 && itemDictionary.Count > 0)
-                {
-                    itemDictionary[AuthenticationCredentialsKey] = parts[0];
-                }
-                else if (parts.Length == 2)
-                {
-                    itemDictionary[parts[0].Trim().ToLowerInvariant()] = parts[1].Trim().Trim('"');
-                }
+            foreach (Match match in parameterMatches)
+            {
+                SetAuthorizationParameter(match, itemDictionary);
             }
 
             return itemDictionary;
+        }
+
+        private static string DecodeApiKey(string authorizationString, string authenticationType)
+        {
+            return Regex.Replace(authorizationString.Split(',')[0].TrimEnd(),
+                                 String.Concat("^", authenticationType, @"\s+"),
+                                 String.Empty,
+                                 RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         }
 
         private static NameValueCollection GenerateParameters(IEnumerable<KeyValuePair<string, string>> items)

@@ -12,7 +12,10 @@ namespace RestFoundation.UnitTesting
     /// </summary>
     public static class MockContextManager
     {
-        private const string RootVirtualPath = "~/";
+        /// <summary>
+        /// Gets the application root virtual path.
+        /// </summary>
+        public const string RootVirtualPath = "~/";
 
         /// <summary>
         /// Creates the current HTTP context.
@@ -56,6 +59,33 @@ namespace RestFoundation.UnitTesting
             }
 
             TestHttpContext.Context = new TestHttpContext(virtualPath, method.ToString().ToUpperInvariant());
+
+            return Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
+        }
+
+        /// <summary>
+        /// Creates the current HTTP context with the provided virtual path and the HTTP method.
+        /// </summary>
+        /// <param name="virtualPath">The virtual path.</param>
+        /// <param name="method">The HTTP method.</param>
+        /// <param name="headers">A collection of headers to initialize the context with.</param>
+        /// <returns>The service context.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If the current HTTP context has already been initialized.
+        /// </exception>
+        public static IServiceContext GenerateContext(string virtualPath, HttpMethod method, NameValueCollection headers)
+        {
+            if (TestHttpContext.Context != null)
+            {
+                throw new InvalidOperationException(Resources.Global.AlreadyInitializedHttpContext);
+            }
+
+            TestHttpContext.Context = new TestHttpContext(virtualPath, method.ToString().ToUpperInvariant());
+
+            if (headers != null)
+            {
+                TestHttpContext.Context.Request.Headers.Add(headers);
+            }
 
             return Rest.Configuration.ServiceLocator.GetService<IServiceContext>();
         }

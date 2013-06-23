@@ -37,11 +37,14 @@ ul.auto-list > li:hover,ul.auto-list > li[data-selected=true]{color:#fff;backgro
 .has-right-margin{margin-right:7px}
 .schema-section{padding-top:20px}
 .spacer{padding-left:30px}
+.spacer-left{padding-left:3px;}
+.spacer-right{padding-right:3px;}
 .strong{font-weight:700;}
 .toggle-option{float:left;margin:13px 0 0 30px}
 .underlined{text-decoration:underline}
 .validation-summary-errors{font-weight:700;color:#f00}
 #AllServices{float:right;font-size:15px;padding-right:10px;padding-top:10px}
+#Authentication{padding-bottom:5px}
 #Content{margin-left:30px;font-size:11px}
 #Execute{font-weight:700}
 #Footer{font-family:Verdana;font-size:11px;color:#666;padding:25px 0 10px 30px}

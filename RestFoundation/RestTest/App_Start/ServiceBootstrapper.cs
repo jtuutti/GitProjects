@@ -101,7 +101,7 @@ namespace RestTest.App_Start
                       .WithBehaviors(new HttpsOnlyBehavior());
 
             urlBuilder.MapUrl("hello")
-                      .ToServiceContract<HelloService>();
+                      .ToServiceContract<HelloService>().WithBehaviors(new CustomHmacAuthenticationBehavior());
 
             urlBuilder.MapUrl("feed.{format}")
                       .ToHttpHandler<FeedHandler>(null, new RouteHash(format => "^atom|rss$"));

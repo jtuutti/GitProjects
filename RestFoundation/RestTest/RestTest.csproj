@@ -109,6 +109,7 @@
     <Compile Include="App_Start\ServiceBootstrapper.cs" />
     <Compile Include="Handlers\DownloadHandler.cs" />
     <Compile Include="Handlers\FeedHandler.cs" />
+    <Compile Include="Security\CustomHmacAuthenticationBehavior.cs" />
     <Compile Include="Security\ProxyAuthorizationManager.cs" />
     <Compile Include="Security\ServiceAuthorizationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

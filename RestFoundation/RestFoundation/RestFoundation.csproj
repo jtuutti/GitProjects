@@ -75,6 +75,7 @@
     <Compile Include="Behaviors\Attributes\HttpsOnlyAttribute.cs" />
     <Compile Include="Behaviors\Attributes\NoCacheAttribute.cs" />
     <Compile Include="Behaviors\Attributes\ServiceMethodBehaviorAttribute.cs" />
+    <Compile Include="Behaviors\HmacAuthenticationBehavior.cs" />
     <Compile Include="Behaviors\ThrottlingBehavior.cs" />
     <Compile Include="CachePriority.cs" />
     <Compile Include="Client\IRestClient.cs" />
