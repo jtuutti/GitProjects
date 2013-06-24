@@ -43,10 +43,11 @@ namespace RestTest.SimpleServices
             ForMethod(x => x.Get(Arg<IHttpRequest>())).SetAuthentication(AuthenticationType.HMAC,
                                                                          "RestTest",
                                                                          "~/secure-hello",
-                                                                         "HMAC username=\"RestTest\", sig=\"eE5ypbNBOJPJ2M1Lh/PLa7eVHNE=\"")
+                                                                         "HMAC username=\"RestTest\", sig=\"/JkQTv7Ft3FrcNFvRk6zR7tdVHQ=\"")
                                                       .SetDescription("Prints 'Hello world!'")
                                                       .SetResponseResourceExample("Hello world!")
-                                                      .SetHeader("Accept-Language", "en-US");
+                                                      .SetHeader("Accept-Language", "en-US")
+                                                      .SetHeader("Date", "Thu, 31 Dec 2020 12:00:00 GMT");
         }
     }
 }

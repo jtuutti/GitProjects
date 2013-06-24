@@ -11,6 +11,7 @@ namespace RestFoundation.ServiceProxy
     /// </summary>
     public sealed class ProxyWebClient : WebClient
     {
+        private const string DateHeader = "Date";
         private const string IfModifiedSinceHeader = "If-Modified-Since";
 
         private WebHeaderCollection m_responseHeaders;
@@ -56,7 +57,13 @@ namespace RestFoundation.ServiceProxy
         /// <param name="address">A <see cref="T:System.Uri"/> that identifies the resource to request.</param>
         protected override WebRequest GetWebRequest(Uri address)
         {
-            DateTime modifiedSince = DateTime.MinValue;
+            DateTime modifiedSince = DateTime.MinValue, date = DateTime.MinValue;
+
+            if (Headers[DateHeader] != null)
+            {
+                DateTime.TryParse(Headers[DateHeader], out date);
+                Headers.Remove(DateHeader);
+            }
 
             if (Headers[IfModifiedSinceHeader] != null)
             {
@@ -64,7 +71,7 @@ namespace RestFoundation.ServiceProxy
                 Headers.Remove(IfModifiedSinceHeader);
             }
 
-            WebRequest request = base.GetWebRequest(address);
+            var request = base.GetWebRequest(address) as HttpWebRequest;
 
             if (request == null)
             {
@@ -73,9 +80,14 @@ namespace RestFoundation.ServiceProxy
 
             request.Timeout = 120000;
 
+            if (date > DateTime.MinValue)
+            {
+                request.Date = date;
+            }
+
             if (modifiedSince > DateTime.MinValue)
             {
-                ((HttpWebRequest) request).IfModifiedSince = modifiedSince;
+                request.IfModifiedSince = modifiedSince;
             }
 
             if (Options && String.Equals("GET", request.Method, StringComparison.OrdinalIgnoreCase))

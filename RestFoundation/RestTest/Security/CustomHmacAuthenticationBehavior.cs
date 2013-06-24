@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using RestFoundation;
 using RestFoundation.Behaviors;
 using RestFoundation.Security;
@@ -11,25 +12,47 @@ namespace RestTest.Security
         {
         }
 
-        protected override bool TryGetRequestedSignature(IHttpRequest request, out string userId, out string signature)
+        protected override bool TryGetRequestedSignature(IHttpRequest request, out string userId, out string signature, out DateTime timestamp)
         {
-            userId = request.QueryString.TryGet("apiuser");
-            signature = request.QueryString.TryGet("apisig");
+            AuthorizationHeader header;
 
-            if ((userId == null || signature == null) && request.Headers.Authorization != null)
+            if (!AuthorizationHeaderParser.TryParse(request.Headers.Authorization, out header) ||
+                !String.Equals("HMAC", header.AuthenticationType, StringComparison.OrdinalIgnoreCase))
             {
-                Tuple<string, string> credentials = GetSignatureFromAuthorizationHeader(request);
-
-                userId = credentials.Item1;
-                signature = credentials.Item2;
+                userId = null;
+                signature = null;
+                timestamp = default(DateTime);
+                return false;
             }
 
-            return !String.IsNullOrWhiteSpace(signature) && !String.IsNullOrWhiteSpace(signature);
+            userId = header.UserName;
+            signature = header.Parameters.Get("sig");
+
+            if (String.IsNullOrWhiteSpace(userId) ||
+                String.IsNullOrWhiteSpace(signature) ||
+                !DateTime.TryParse(request.Headers.TryGet("Date"), CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out timestamp))
+            {
+                userId = null;
+                signature = null;
+                timestamp = default(DateTime);
+                return false;
+            }
+
+            return true;
         }
 
-        protected override string GenerateServerSignature(IServiceContext context)
+        protected override bool IsRequestValid(IHttpRequest request, string userId, DateTime timestamp)
         {
-            return context.Request.Url.GetLeftPart(UriPartial.Path).TrimEnd(' ', '/', '?', '#').ToLowerInvariant();
+            return (DateTime.UtcNow - timestamp) <= TimeSpan.FromMinutes(15);
+        }
+
+        protected override string GenerateServerSignature(IServiceContext context, string userId, DateTime timespan)
+        {
+            string urlPaRT = context.Request.Url.GetLeftPart(UriPartial.Path).TrimEnd(' ', '/', '?', '#').ToLowerInvariant();
+            string dateTimePart = timespan.ToString("yyyyMMddhhmmss");
+            const string salt = "HM@CS1G";
+
+            return urlPaRT + dateTimePart + userId + salt;
         }
 
         protected override string GetUserPrivateKey(string userId, IHttpRequest request)
@@ -40,19 +63,6 @@ namespace RestTest.Security
             }
 
             return "SECRET_" + userId.Trim().ToUpperInvariant();
-        }
-
-        private static Tuple<string, string> GetSignatureFromAuthorizationHeader(IHttpRequest request)
-        {
-            AuthorizationHeader header;
-
-            if (!AuthorizationHeaderParser.TryParse(request.Headers.Authorization, out header) ||
-                !String.Equals("HMAC", header.AuthenticationType, StringComparison.OrdinalIgnoreCase))
-            {
-                return new Tuple<string, string>(null, null);
-            }
-
-            return Tuple.Create(header.UserName, header.Parameters.Get("sig"));
         }
     }
 }

@@ -74,18 +74,24 @@ namespace RestFoundation.Behaviors
                 throw new ArgumentNullException("serviceContext");
             }
 
-            string userId;
-            string signature;
+            string userId, signature;
+            DateTime timestamp;
 
-            if (!TryGetRequestedSignature(serviceContext.Request, out userId, out signature) ||
+            if (!TryGetRequestedSignature(serviceContext.Request, out userId, out signature, out timestamp) ||
                 String.IsNullOrWhiteSpace(userId) ||
                 String.IsNullOrWhiteSpace(signature))
             {
-                serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Resources.Global.Unauthorized);
+                serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Global.Unauthorized);
                 return BehaviorMethodAction.Stop;
             }
 
-            string hashedServerSignature = HashSignature(userId, GenerateServerSignature(serviceContext), serviceContext.Request);
+            if (!IsRequestValid(serviceContext.Request, userId, timestamp))
+            {
+                serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Global.Unauthorized);
+                return BehaviorMethodAction.Stop;
+            }
+
+            string hashedServerSignature = HashSignature(userId, GenerateServerSignature(serviceContext, userId, timestamp), serviceContext.Request);
 
             return signature == hashedServerSignature ? BehaviorMethodAction.Execute : BehaviorMethodAction.Stop;
         }
@@ -118,25 +124,41 @@ namespace RestFoundation.Behaviors
         }
 
         /// <summary>
+        /// Returns a value indicating whether the request is valid or expired based on the date/time
+        /// of the request. The base implementation does not expire requests.
+        /// </summary>
+        /// <param name="request">The HTTP request.</param>
+        /// <param name="userId">The user id (key or user name).</param>
+        /// <param name="timestamp">The date/time of the request adjusted to UTC.</param>
+        /// <returns>true if the request is still valid; false if the request has expired.</returns>
+        protected virtual bool IsRequestValid(IHttpRequest request, string userId, DateTime timestamp)
+        {
+            return true;
+        }
+
+        /// <summary>
         /// Tries to get the security signature for the current web request. This method should also
         /// be used to validate timestamps or nonces.
         /// </summary>
         /// <param name="request">The HTTP request.</param>
         /// <param name="userId">The user id (key or user name).</param>
         /// <param name="signatureHash">The hashed and base64 encoded signature.</param>
+        /// <param name="timestamp">The date/time of the request adjusted to UTC.</param>
         /// <returns>
         /// True if the request signature was found and all the request criteria was satisfied;
         /// otherwise false.
         /// </returns>
-        protected abstract bool TryGetRequestedSignature(IHttpRequest request, out string userId, out string signatureHash);
+        protected abstract bool TryGetRequestedSignature(IHttpRequest request, out string userId, out string signatureHash, out DateTime timestamp);
 
         /// <summary>
         /// Generates the signature for the web request on the server to validate against the user
         /// provided signature.
         /// </summary>
         /// <param name="context">The service context.</param>
+        /// /// <param name="userId">The user id (key or user name).</param>
+        /// <param name="timestamp">The date/time of the request adjusted to UTC.</param>
         /// <returns>The generated signature.</returns>
-        protected abstract string GenerateServerSignature(IServiceContext context);
+        protected abstract string GenerateServerSignature(IServiceContext context, string userId, DateTime timestamp);
 
         /// <summary>
         /// Gets the web requests user's private key.
