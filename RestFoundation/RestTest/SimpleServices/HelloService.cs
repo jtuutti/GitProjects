@@ -21,14 +21,13 @@ namespace RestTest.SimpleServices
         [Url(Url.Root)]
         public ContentResult Get(IHttpRequest request)
         {
-            if (request.Headers.AcceptLanguageCulture == null)
-            {
-                return Result.Content(resultLanguageMap["en"], true, "text/plain");
-            }
-
             string value;
 
-            if (!resultLanguageMap.TryGetValue(request.Headers.AcceptLanguageCulture.TwoLetterISOLanguageName, out value))
+            if (request.Headers.AcceptLanguageCulture == null)
+            {
+                value = resultLanguageMap["en"];
+            }
+            else if (!resultLanguageMap.TryGetValue(request.Headers.AcceptLanguageCulture.TwoLetterISOLanguageName, out value))
             {
                 throw new HttpResponseException(HttpStatusCode.NotImplemented, "Unsupported Language");
             }

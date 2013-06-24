@@ -41,7 +41,7 @@ namespace RestTest.Security
             return true;
         }
 
-        protected override bool IsRequestValid(IHttpRequest request, string userId, DateTime timestamp)
+        protected override bool IsRequestedSignatureValid(IServiceContext serviceContext, string signatureHash, DateTime timestamp)
         {
             return (DateTime.UtcNow - timestamp) <= TimeSpan.FromMinutes(15);
         }

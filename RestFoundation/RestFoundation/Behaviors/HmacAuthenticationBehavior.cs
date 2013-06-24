@@ -74,37 +74,37 @@ namespace RestFoundation.Behaviors
                 throw new ArgumentNullException("serviceContext");
             }
 
-            string userId, signature;
+            string userId, signatureHash;
             DateTime timestamp;
 
-            if (!TryGetRequestedSignature(serviceContext.Request, out userId, out signature, out timestamp) ||
+            if (!TryGetRequestedSignature(serviceContext.Request, out userId, out signatureHash, out timestamp) ||
                 String.IsNullOrWhiteSpace(userId) ||
-                String.IsNullOrWhiteSpace(signature))
+                String.IsNullOrWhiteSpace(signatureHash))
             {
                 serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Global.Unauthorized);
                 return BehaviorMethodAction.Stop;
             }
 
-            if (!IsRequestValid(serviceContext.Request, userId, timestamp))
+            if (!IsRequestedSignatureValid(serviceContext, signatureHash, timestamp))
             {
                 serviceContext.Response.SetStatus(HttpStatusCode.Unauthorized, Global.Unauthorized);
                 return BehaviorMethodAction.Stop;
             }
 
-            string hashedServerSignature = HashSignature(userId, GenerateServerSignature(serviceContext, userId, timestamp), serviceContext.Request);
+            string hashedServerSignature = HashSignature(serviceContext.Request, userId, GenerateServerSignature(serviceContext, userId, timestamp));
 
-            return signature == hashedServerSignature ? BehaviorMethodAction.Execute : BehaviorMethodAction.Stop;
+            return signatureHash == hashedServerSignature ? BehaviorMethodAction.Execute : BehaviorMethodAction.Stop;
         }
 
         /// <summary>
         /// Hashes and base64 encodes a string signature using the hash algorithm during the class instantiation.
         /// </summary>
+        /// <param name="request">The HTTP request.</param>
         /// <param name="userId">The user id (key or user name).</param>
         /// <param name="signature">The signature.</param>
-        /// <param name="request">The HTTP request.</param>
         /// <returns>The hashed and base64 encoded signature.</returns>
         /// <exception cref="SecurityException">If a user's private key is missing or an invalid hash type is used.</exception>
-        protected virtual string HashSignature(string userId, string signature, IHttpRequest request)
+        protected virtual string HashSignature(IHttpRequest request, string userId, string signature)
         {
             if (userId == null)
             {
@@ -127,11 +127,11 @@ namespace RestFoundation.Behaviors
         /// Returns a value indicating whether the request is valid or expired based on the date/time
         /// of the request. The base implementation does not expire requests.
         /// </summary>
-        /// <param name="request">The HTTP request.</param>
-        /// <param name="userId">The user id (key or user name).</param>
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="signatureHash">The hashed and base64 encoded signature.</param>
         /// <param name="timestamp">The date/time of the request adjusted to UTC.</param>
         /// <returns>true if the request is still valid; false if the request has expired.</returns>
-        protected virtual bool IsRequestValid(IHttpRequest request, string userId, DateTime timestamp)
+        protected virtual bool IsRequestedSignatureValid(IServiceContext serviceContext, string signatureHash, DateTime timestamp)
         {
             return true;
         }
