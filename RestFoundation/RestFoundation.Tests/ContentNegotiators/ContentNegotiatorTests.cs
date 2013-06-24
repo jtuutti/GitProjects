@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Web;
 using NUnit.Framework;
-using RestFoundation.Runtime.Handlers;
-using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
 namespace RestFoundation.Tests.ContentNegotiators
@@ -14,20 +11,18 @@ namespace RestFoundation.Tests.ContentNegotiators
         private const string XmlMediaType = "application/xml";
         private const string XmlMediaTypeAlt = "text/xml";
 
-        private MockHandlerFactory m_factory;
         private IContentNegotiator m_contentNegotiator;
 
         [SetUp]
         public void Initialize()
         {
             m_contentNegotiator = Rest.Configuration.ServiceLocator.GetService<IContentNegotiator>();
-            m_factory = new MockHandlerFactory();
         }
 
         [TearDown]
         public void ShutDown()
         {
-            m_factory.Dispose();
+            MockContextManager.DestroyContext();
         }
 
         [Test]
@@ -201,48 +196,40 @@ namespace RestFoundation.Tests.ContentNegotiators
             Assert.That(isBrowser, Is.False);
         }
 
-        private IHttpRequest CreateRequest(string acceptHeaderValue = null,
-                                           string contentTypeHeaderValue = null,
-                                           string acceptOverrideValue = null,
-                                           bool isAjax = false,
-                                           string userAgentValue = null)
+        private static IHttpRequest CreateRequest(string acceptHeaderValue = null,
+                                                  string contentTypeHeaderValue = null,
+                                                  string acceptOverrideValue = null,
+                                                  bool isAjax = false,
+                                                  string userAgentValue = null)
         {
-            IRestServiceHandler handler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post(null));
-            Assert.That(handler, Is.Not.Null);
-            Assert.That(handler.Context, Is.Not.Null);
-
-            HttpContextBase context = handler.Context.GetHttpContext();
-            Assert.That(context, Is.Not.Null);
-            Assert.That(context.Request, Is.Not.Null);
-            Assert.That(context.Request.Headers, Is.Not.Null);
-            Assert.That(context.Request.ServerVariables, Is.Not.Null);
+            var context = MockContextManager.GenerateContext("~/test-service/new", HttpMethod.Post);
 
             if (!String.IsNullOrEmpty(acceptHeaderValue))
             {
-                context.Request.Headers["Accept"] = acceptHeaderValue;
+                MockContextManager.SetHeader("Accept", acceptHeaderValue);
             }
 
             if (!String.IsNullOrEmpty(contentTypeHeaderValue))
             {
-                context.Request.Headers["Content-Type"] = contentTypeHeaderValue;
-            }
-
-            if (!String.IsNullOrEmpty(acceptOverrideValue))
-            {
-                context.Request.QueryString["X-Accept-Override"] = acceptOverrideValue;
+                MockContextManager.SetHeader("Content-Type", contentTypeHeaderValue);
             }
 
             if (isAjax)
             {
-                context.Request.Headers["X-Requested-With"] = "XMLHttpRequest";
+                MockContextManager.SetHeader("X-Requested-With", "XMLHttpRequest");
+            }
+
+            if (!String.IsNullOrEmpty(acceptOverrideValue))
+            {
+                MockContextManager.SetQuery("X-Accept-Override", acceptOverrideValue);
             }
 
             if (!String.IsNullOrEmpty(userAgentValue))
             {
-                context.Request.ServerVariables["HTTP_USER_AGENT"] = userAgentValue;
+                MockContextManager.SetServerVariable("HTTP_USER_AGENT", userAgentValue);
             }
 
-            return handler.Context.Request;
+            return context.Request;
         }
     }
 }

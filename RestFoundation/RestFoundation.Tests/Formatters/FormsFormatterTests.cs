@@ -4,34 +4,25 @@ using System.Web;
 using NUnit.Framework;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
-using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.Implementation.Models;
-using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 
 namespace RestFoundation.Tests.Formatters
 {
     public class FormsFormatterTests
     {
-        private MockHandlerFactory m_factory;
         private IServiceContext m_context;
 
         [SetUp]
         public void Initialize()
         {
-            m_factory = new MockHandlerFactory();
-
-            IRestServiceHandler handler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post(null));
-            Assert.That(handler, Is.Not.Null);
-            Assert.That(handler.Context, Is.Not.Null);
-
-            m_context = handler.Context;
+            m_context = MockContextManager.GenerateContext();
         }
 
         [TearDown]
         public void ShutDown()
         {
-            m_factory.Dispose();
+            MockContextManager.DestroyContext();
         }
 
         [Test]

@@ -8,9 +8,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using NUnit.Framework;
 using RestFoundation.Results;
-using RestFoundation.Runtime.Handlers;
 using RestFoundation.Tests.Implementation.Models;
-using RestFoundation.Tests.Implementation.ServiceContracts;
 using RestFoundation.UnitTesting;
 using SyndicationFormat = RestFoundation.Results.FeedResult.SyndicationFormat;
 
@@ -19,24 +17,16 @@ namespace RestFoundation.Tests.Results
     [TestFixture]
     public class FeedResultTests : ResultTestBase
     {
-        private MockHandlerFactory m_factory;
-
         [SetUp]
         public void Initialize()
         {
-            m_factory = new MockHandlerFactory();
-
-            IRestServiceHandler handler = m_factory.Create<ITestService>("~/test-service/new", m => m.Post(null));
-            Assert.That(handler, Is.Not.Null);
-            Assert.That(handler.Context, Is.Not.Null);
-            
-            Context = handler.Context;
+            Context = MockContextManager.GenerateContext();
         }
 
         [TearDown]
         public void ShutDown()
         {
-            m_factory.Dispose();
+            MockContextManager.DestroyContext();
         }
 
         [Test]
