@@ -87,7 +87,7 @@ namespace RestFoundation.Runtime
                     continue;
                 }
 
-                var constraintAttribute = Attribute.GetCustomAttribute(methodParameter, typeof(ParameterConstraintAttribute), false) as ParameterConstraintAttribute;
+                var constraintAttribute = Attribute.GetCustomAttribute(methodParameter, typeof(ConstraintAttribute), false) as ConstraintAttribute;
 
                 if (constraintAttribute != null)
                 {

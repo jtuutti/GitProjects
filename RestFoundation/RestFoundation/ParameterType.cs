@@ -1,9 +1,12 @@
-﻿namespace RestFoundation
+﻿// <copyright>
+// Dmitry Starosta, 2012-2013
+// </copyright>
+namespace RestFoundation
 {
     /// <summary>
-    /// Contains common parameter constaints.
+    /// Contains common parameter type constaints.
     /// </summary>
-    public static class ParameterConstraints
+    public static class ParameterType
     {
         /// <summary>
         /// Represents any integer number up to 7 digits.

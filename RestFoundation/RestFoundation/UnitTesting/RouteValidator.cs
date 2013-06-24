@@ -136,7 +136,7 @@ namespace RestFoundation.UnitTesting
                                                                  routeArgumentValue ?? "(null)"));
                 }
 
-                var constraintAttribute = Attribute.GetCustomAttribute(argument, typeof(ParameterConstraintAttribute), false) as ParameterConstraintAttribute;
+                var constraintAttribute = Attribute.GetCustomAttribute(argument, typeof(ConstraintAttribute), false) as ConstraintAttribute;
 
                 if (constraintAttribute != null && !constraintAttribute.PatternRegex.IsMatch(Convert.ToString(routeArgumentValue, CultureInfo.InvariantCulture)))
                 {

@@ -532,6 +532,87 @@
       <param name="serviceContext">The service context.</param>
       <param name="behaviorContext">The "method executed" behavior context.</param>
     </member>
+    <member name="T:RestFoundation.Behaviors.IAuthenticationBehavior">
+      <summary>
+            Defines a special case of a <see cref="T:RestFoundation.Behaviors.ISecureServiceBehavior" /> that must be invoked
+            before any other behaviors. Only a single <see cref="T:RestFoundation.Behaviors.IAuthenticationBehavior" /> can be
+            associated with a service method.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.Behaviors.HmacAuthenticationBehavior">
+      <summary>
+            Represents a base class to implement HMAC authentication behavior for a service or a
+            service method. This class cannot be instantiated.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.Behaviors.HmacAuthenticationBehavior.HashAlgorithmType">
+      <summary>
+            Represents a hash algorithm type.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.HmacAuthenticationBehavior.#ctor(RestFoundation.Behaviors.HmacAuthenticationBehavior.HashAlgorithmType)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.HmacAuthenticationBehavior" /> class.
+            </summary>
+      <param name="algorithmType">The hash algorithm.</param>
+    </member>
+    <member name="M:RestFoundation.Behaviors.HmacAuthenticationBehavior.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+      <summary>
+            Called during the authorization process before a service method or behavior is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method authorizing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.HmacAuthenticationBehavior.HashSignature(RestFoundation.IHttpRequest,System.String,System.String)">
+      <summary>
+            Hashes and base64 encodes a string signature using the hash algorithm during the class instantiation.
+            </summary>
+      <param name="request">The HTTP request.</param>
+      <param name="userId">The user id (key or user name).</param>
+      <param name="signature">The signature.</param>
+      <returns>The hashed and base64 encoded signature.</returns>
+      <exception cref="T:System.Security.SecurityException">If a user's private key is missing or an invalid hash type is used.</exception>
+    </member>
+    <member name="M:RestFoundation.Behaviors.HmacAuthenticationBehavior.IsRequestedSignatureValid(RestFoundation.IServiceContext,System.String,System.DateTime)">
+      <summary>
+            Returns a value indicating whether the request is valid or expired based on the date/time
+            of the request. The base implementation does not expire requests.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="signatureHash">The hashed and base64 encoded signature.</param>
+      <param name="timestamp">The date/time of the request adjusted to UTC.</param>
+      <returns>true if the request is still valid; false if the request has expired.</returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.HmacAuthenticationBehavior.TryGetRequestedSignature(RestFoundation.IHttpRequest,System.String@,System.String@,System.DateTime@)">
+      <summary>
+            Tries to get the security signature for the current web request. This method should also
+            be used to validate timestamps or nonces.
+            </summary>
+      <param name="request">The HTTP request.</param>
+      <param name="userId">The user id (key or user name).</param>
+      <param name="signatureHash">The hashed and base64 encoded signature.</param>
+      <param name="timestamp">The date/time of the request adjusted to UTC.</param>
+      <returns>
+            True if the request signature was found and all the request criteria was satisfied;
+            otherwise false.
+            </returns>
+    </member>
+    <member name="M:RestFoundation.Behaviors.HmacAuthenticationBehavior.GenerateServerSignature(RestFoundation.IServiceContext,System.String,System.DateTime)">
+      <summary>
+            Generates the signature for the web request on the server to validate against the user
+            provided signature.
+            </summary>
+      <param name="context">The service context.</param>
+            /// <param name="userId">The user id (key or user name).</param><param name="timestamp">The date/time of the request adjusted to UTC.</param><returns>The generated signature.</returns></member>
+    <member name="M:RestFoundation.Behaviors.HmacAuthenticationBehavior.GetUserPrivateKey(System.String,RestFoundation.IHttpRequest)">
+      <summary>
+            Gets the web requests user's private key.
+            </summary>
+      <param name="userId">The user id (key or user name).</param>
+      <param name="request">The HTTP request.</param>
+      <returns>The private key.</returns>
+    </member>
     <member name="T:RestFoundation.Behaviors.ThrottlingBehavior">
       <summary>
             Represents a bandwidth throttling behavior for a service.
@@ -1699,37 +1780,37 @@
             If the <paramref name="format" /> string does not match the arguments.
             </exception>
     </member>
-    <member name="T:RestFoundation.ParameterConstraints">
+    <member name="T:RestFoundation.ParameterType">
       <summary>
-            Contains common parameter constaints.
+            Contains common parameter type constaints.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterConstraints.AnyInteger">
+    <member name="F:RestFoundation.ParameterType.AnyInteger">
       <summary>
             Represents any integer number up to 7 digits.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterConstraints.UnsignedInteger">
+    <member name="F:RestFoundation.ParameterType.UnsignedInteger">
       <summary>
             Represents a non-negative integer number up to 7 digits.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterConstraints.AnyNumber">
+    <member name="F:RestFoundation.ParameterType.AnyNumber">
       <summary>
             Represents any decimal/floating point number.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterConstraints.UnsignedNumber">
+    <member name="F:RestFoundation.ParameterType.UnsignedNumber">
       <summary>
             Represents a non-negative decimal/floating point number.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterConstraints.Boolean">
+    <member name="F:RestFoundation.ParameterType.Boolean">
       <summary>
             Represents a boolean true/false value.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterConstraints.Guid">
+    <member name="F:RestFoundation.ParameterType.Guid">
       <summary>
             Represents a GUID value.
             </summary>
@@ -2734,6 +2815,11 @@
               Looks up a localized string similar to Invalid hash key provided..
             </summary>
     </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidHashType">
+      <summary>
+              Looks up a localized string similar to Invalid hash type was specified..
+            </summary>
+    </member>
     <member name="P:RestFoundation.Resources.Global.InvalidHttpMethodForResource">
       <summary>
               Looks up a localized string similar to A resource cannot be set for the current HTTP method..
@@ -2929,6 +3015,11 @@
               Looks up a localized string similar to No description provided.
             </summary>
     </member>
+    <member name="P:RestFoundation.Resources.Global.MissingHmacPrivateKey">
+      <summary>
+              Looks up a localized string similar to No private key was found..
+            </summary>
+    </member>
     <member name="P:RestFoundation.Resources.Global.MissingHttpContext">
       <summary>
               Looks up a localized string similar to No HTTP context was found..
@@ -2991,17 +3082,17 @@
     </member>
     <member name="P:RestFoundation.Resources.Global.NonAcceptedContentCharset">
       <summary>
-              Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header..
+              Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header.
             </summary>
     </member>
     <member name="P:RestFoundation.Resources.Global.NonAcceptedContentLanguage">
       <summary>
-              Looks up a localized string similar to The accepted language provided in the Accept-Language header is not supported..
+              Looks up a localized string similar to No accepted language was provided in the Accept-Language header.
             </summary>
     </member>
     <member name="P:RestFoundation.Resources.Global.NonAcceptedMediaType">
       <summary>
-              Looks up a localized string similar to Resulting media type is not accepted by the client.
+              Looks up a localized string similar to No accepted media type was provided in the Accept header.
             </summary>
     </member>
     <member name="P:RestFoundation.Resources.Global.NonErrorHttpStatusCode">
@@ -3317,6 +3408,11 @@
             </summary>
       <filterpriority>2</filterpriority>
     </member>
+    <member name="T:RestFoundation.Runtime.IRestContext">
+      <summary>
+            Represents a marker interface to allow service context object binding.
+            </summary>
+    </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyResponseData">
       <summary>
             Represents data from a Service Proxy response.
@@ -3624,13 +3720,6 @@
       <param name="preferredMediaType">The preferred media type.</param>
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
-    </member>
-    <member name="T:RestFoundation.Behaviors.IAuthenticationBehavior">
-      <summary>
-            Defines a special case of a <see cref="T:RestFoundation.Behaviors.ISecureServiceBehavior" /> that must be invoked
-            before any other behaviors. Only a single <see cref="T:RestFoundation.Behaviors.IAuthenticationBehavior" /> can be
-            associated with a service method.
-            </summary>
     </member>
     <member name="T:RestFoundation.IContentNegotiator">
       <summary>
@@ -5661,7 +5750,12 @@
     </member>
     <member name="P:RestFoundation.ServiceProxy.OperationMetadata.AuthenticationMetadata.DefaultUserName">
       <summary>
-            Gets or sets the default username.
+            Gets or sets the default user name.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.AuthenticationMetadata.DefaultAuthorizationHeader">
+      <summary>
+            Gets or sets the default authorization header value.
             </summary>
     </member>
     <member name="P:RestFoundation.ServiceProxy.OperationMetadata.AuthenticationMetadata.RelativeUrlToMatch">
@@ -5682,6 +5776,11 @@
     <member name="F:RestFoundation.ServiceProxy.AuthenticationType.Digest">
       <summary>
             Digest authentication
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ServiceProxy.AuthenticationType.HMAC">
+      <summary>
+            HMAC authentication
             </summary>
     </member>
     <member name="T:RestFoundation.ServiceProxy.OperationMetadata.HeaderMetadata">
@@ -5776,6 +5875,16 @@
       <param name="type">The authentication type.</param>
       <param name="defaultUserName">The default user name.</param>
       <param name="relativeUrlToMatch">A relative URL to apply authentication to.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetAuthentication(RestFoundation.ServiceProxy.AuthenticationType,System.String,System.String,System.String)">
+      <summary>
+            Sets the authentication for the service operation.
+            </summary>
+      <param name="type">The authentication type.</param>
+      <param name="defaultUserName">The default user name.</param>
+      <param name="relativeUrlToMatch">A relative URL to apply authentication to.</param>
+      <param name="defaultAuthorizationHeader">The default Authorization header value.</param>
       <returns>The service method metadata.</returns>
     </member>
     <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetDescription(System.String)">
@@ -6273,6 +6382,15 @@
       <param name="type">The authentication type.</param>
       <param name="defaultUserName">The default user name.</param>
       <param name="relativeUrlToMatch">A relative URL to apply authentication to.</param>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.SetAuthentication(RestFoundation.ServiceProxy.AuthenticationType,System.String,System.String,System.String)">
+      <summary>
+            Sets the global service authentication.
+            </summary>
+      <param name="type">The authentication type.</param>
+      <param name="defaultUserName">The default user name.</param>
+      <param name="relativeUrlToMatch">A relative URL to apply authentication to.</param>
+      <param name="defaultAuthorizationHeader">The default Authorization header value.</param>
     </member>
     <member name="M:RestFoundation.ServiceProxy.ProxyMetadata`1.SetHeader(RestFoundation.ServiceProxy.ProxyHeader)">
       <summary>
@@ -7016,7 +7134,7 @@
             Gets an authenticated and authorized user credentials by the provided user name.
             </summary>
       <param name="userName">The user name.</param>
-      <returns>The user credentials; or null if the username is invalid.</returns>
+      <returns>The user credentials; or null if the user name is invalid.</returns>
     </member>
     <member name="T:RestFoundation.IServiceCache">
       <summary>
@@ -7460,6 +7578,11 @@
             Represents a mock service context manager.
             </summary>
     </member>
+    <member name="F:RestFoundation.UnitTesting.MockContextManager.RootVirtualPath">
+      <summary>
+            Gets the application root virtual path.
+            </summary>
+    </member>
     <member name="M:RestFoundation.UnitTesting.MockContextManager.GenerateContext">
       <summary>
             Creates the current HTTP context.
@@ -7485,6 +7608,18 @@
             </summary>
       <param name="virtualPath">The virtual path.</param>
       <param name="method">The HTTP method.</param>
+      <returns>The service context.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If the current HTTP context has already been initialized.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.UnitTesting.MockContextManager.GenerateContext(System.String,RestFoundation.HttpMethod,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Creates the current HTTP context with the provided virtual path and the HTTP method.
+            </summary>
+      <param name="virtualPath">The virtual path.</param>
+      <param name="method">The HTTP method.</param>
+      <param name="headers">A collection of headers to initialize the context with.</param>
       <returns>The service context.</returns>
       <exception cref="T:System.InvalidOperationException">
             If the current HTTP context has already been initialized.
@@ -8200,17 +8335,21 @@
             Represents an authorization header.
             </summary>
     </member>
-    <member name="M:RestFoundation.Security.AuthorizationHeader.#ctor(System.String,System.String,System.Collections.Specialized.NameValueCollection)">
+    <member name="M:RestFoundation.Security.AuthorizationHeader.#ctor(System.String,System.Collections.Specialized.NameValueCollection)">
       <summary>
             Initializes a new instance of the <see cref="T:RestFoundation.Security.AuthorizationHeader" /> class.
             </summary>
       <param name="authenticationType">The authentication type.</param>
-      <param name="userName">The user name.</param>
       <param name="parameters">A collection of additional parameters.</param>
     </member>
     <member name="P:RestFoundation.Security.AuthorizationHeader.AuthenticationType">
       <summary>
             Gets the authentication type.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Security.AuthorizationHeader.Parameters">
+      <summary>
+            Gets the parameter collection.
             </summary>
     </member>
     <member name="P:RestFoundation.Security.AuthorizationHeader.UserName">
@@ -8221,11 +8360,6 @@
     <member name="P:RestFoundation.Security.AuthorizationHeader.Password">
       <summary>
             Gets the password, if applicable.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Security.AuthorizationHeader.Parameters">
-      <summary>
-            Gets the parameter collection.
             </summary>
     </member>
     <member name="T:RestFoundation.Security.AuthorizationHeaderParser">
@@ -8261,15 +8395,15 @@
             Gets an authenticated and authorized user credentials by the provided user name.
             </summary>
       <param name="userName">The user name.</param>
-      <returns>The user credentials; or null if the username is invalid.</returns>
+      <returns>The user credentials; or null if the user name is invalid.</returns>
     </member>
-    <member name="T:RestFoundation.Context.ContextBase">
+    <member name="T:RestFoundation.Context.RestContextBase">
       <summary>
             Defines a base service context class.
             This class cannot be instantiated.
             </summary>
     </member>
-    <member name="P:RestFoundation.Context.ContextBase.Context">
+    <member name="P:RestFoundation.Context.RestContextBase.Context">
       <summary>
             Gets the underlying <see cref="T:System.Web.HttpContextBase" /> instance.
             </summary>
@@ -9510,13 +9644,6 @@
       <param name="obj">The object to serialize to JSON or XML.</param>
       <param name="format">The result content format ("JSON" or "XML").</param>
       <returns>The JSON or XML result.</returns>
-    </member>
-    <member name="M:RestFoundation.Result.Response(System.Action{RestFoundation.IServiceContext})">
-      <summary>
-            Returns a result with a custom response.
-            </summary>
-      <param name="action">The response action.</param>
-      <returns>The response result.</returns>
     </member>
     <member name="P:RestFoundation.Result.Accepted">
       <summary>
@@ -11621,18 +11748,18 @@
             service methods that are called through the HTTP GET or HEAD methods.
             </summary>
     </member>
-    <member name="T:RestFoundation.ParameterConstraintAttribute">
+    <member name="T:RestFoundation.ConstraintAttribute">
       <summary>
             Represents a regular expression constraint for a service method parameter.
             </summary>
     </member>
-    <member name="M:RestFoundation.ParameterConstraintAttribute.#ctor(System.String)">
+    <member name="M:RestFoundation.ConstraintAttribute.#ctor(System.String)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.ParameterConstraintAttribute" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.ConstraintAttribute" /> class.
             </summary>
       <param name="pattern">The regular expression pattern to match.</param>
     </member>
-    <member name="P:RestFoundation.ParameterConstraintAttribute.Pattern">
+    <member name="P:RestFoundation.ConstraintAttribute.Pattern">
       <summary>
             Gets the regular expression pattern of the constraint.
             </summary>

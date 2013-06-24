@@ -10,16 +10,16 @@ namespace RestFoundation
     /// Represents a regular expression constraint for a service method parameter.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
-    public sealed class ParameterConstraintAttribute : Attribute
+    public sealed class ConstraintAttribute : Attribute
     {
         private const char StartPatternSymbol = '^';
         private const char EndPatternSymbol = '$';
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParameterConstraintAttribute"/> class.
+        /// Initializes a new instance of the <see cref="ConstraintAttribute"/> class.
         /// </summary>
         /// <param name="pattern">The regular expression pattern to match.</param>
-        public ParameterConstraintAttribute(string pattern)
+        public ConstraintAttribute(string pattern)
         {
             if (pattern == null)
             {

@@ -96,7 +96,7 @@
     <Compile Include="LinkRelationValues.cs" />
     <Compile Include="LogWriterExtensions.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
-    <Compile Include="ParameterConstraints.cs" />
+    <Compile Include="ParameterType.cs" />
     <Compile Include="Results\FileResult.cs" />
     <Compile Include="Results\HtmlFileResult.cs" />
     <Compile Include="Results\IODataProvider.cs" />
@@ -385,7 +385,7 @@
     <Compile Include="UnitTesting\TestHttpServerUtility.cs" />
     <Compile Include="Url.cs" />
     <Compile Include="UrlAttribute.cs" />
-    <Compile Include="ParameterConstraintAttribute.cs" />
+    <Compile Include="ConstraintAttribute.cs" />
     <Compile Include="Validation\ValidateObjectAttribute.cs" />
     <Compile Include="Validation\ValidationError.cs" />
     <Compile Include="Configuration\XmlFormatterSettings.cs" />
