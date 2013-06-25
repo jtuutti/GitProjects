@@ -66,7 +66,7 @@ namespace RestFoundation.Configuration
 
             RouteTable.Routes.Add("ProxyCss", new Route(relativeUrl + "/help.css", new CssRouteHandler("help.css")));
             RouteTable.Routes.Add("ProxyIndexOp", new Route(relativeUrl + "/index.op.js", new JavaScriptRouteHandler("index.op.min.js")));
-            RouteTable.Routes.Add("ProxyJQuery", new Route(relativeUrl + "/jquery.js", new JavaScriptRouteHandler("jquery-1.9.1.min.js")));
+            RouteTable.Routes.Add("ProxyJQuery", new Route(relativeUrl + "/jquery.js", new JavaScriptRouteHandler("jquery-1.10.1.min.js")));
             RouteTable.Routes.Add("ProxyMetadataOp", new Route(relativeUrl + "/metadata.op.js", new JavaScriptRouteHandler("metadata.op.min.js")));
             RouteTable.Routes.Add("ProxyProxyOp", new Route(relativeUrl + "/proxy.op.js", new JavaScriptRouteHandler("proxy.op.min.js")));
             RouteTable.Routes.Add("ProxySubmit", new Route(relativeUrl + "/submit.js", new JavaScriptRouteHandler("submit.min.js")));

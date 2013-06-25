@@ -425,13 +425,13 @@
     <EmbeddedResource Include="ServiceProxy\Resources\metadata.op.min.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ServiceProxy\Resources\jquery-1.9.1.min.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="ServiceProxy\Resources\index.op.min.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ServiceProxy\Resources\submit.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ServiceProxy\Resources\jquery-1.10.1.min.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
