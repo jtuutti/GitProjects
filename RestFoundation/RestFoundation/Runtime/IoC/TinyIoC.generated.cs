@@ -1015,7 +1015,7 @@ namespace TinyIoC
                     throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, "types: The type {0} is not assignable from {1}", registrationType.FullName, type.FullName));
 
             if (implementationTypes.Count() != implementationTypes.Distinct().Count())
-                throw new ArgumentException("types: The same implementation type cannot be specificed multiple times");
+                throw new ArgumentException("types: The same implementation type cannot be specified multiple times");
 
             var registerOptions = new List<RegisterOptions>();
 
