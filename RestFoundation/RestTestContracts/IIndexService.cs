@@ -46,7 +46,7 @@ namespace RestTestContracts
         Person Patch([Constraint(ParameterType.UnsignedInteger)] int? id, Person resource);
 
         [Url("index/{name}")]
-        StatusResult Delete(string name);
+        StatusCodeResult Delete(string name);
 
         [Url("index/form-data", Priority = 10 /* need to be above the parameterized methods */)]
         Person PostMultipleParameters([FromBody] string name, [FromBody] int age, [FromBody] DateTime? timestamp);

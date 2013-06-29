@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using RestFoundation;
+using RestFoundation.Results;
 using RestFoundation.Runtime;
 using RestTestContracts;
 using RestTestContracts.Resources;
@@ -29,21 +30,28 @@ namespace RestTestServices
         {
             var sessionInfo = (SessionInfo) Context.Request.ResourceBag.SessionInfo;
 
-            string relativePath = Context.MapPath(String.Format(@"~\App_Data\{0}\{1}\{2}\TouchMap.xml",
-                                                  sessionInfo.CustomerId,
-                                                  sessionInfo.ApplicationId,
-                                                  sessionInfo.Culture));
+            string filePath = Context.MapPath(String.Format(@"~\App_Data\{0}\{1}\{2}\TouchMap.xml",
+                                              sessionInfo.CustomerId,
+                                              sessionInfo.ApplicationId,
+                                              sessionInfo.Culture));
 
-            if (File.Exists(relativePath))
-            {
-                Context.Response.SetFileDependencies(relativePath);
-            }
-            else
+            var file = new FileInfo(filePath);
+
+            if (!file.Exists)
             {
                 return Result.ResponseStatus(HttpStatusCode.NotFound, "Touchmap not found");
             }
 
-            using (var fileStream = new FileStream(relativePath, FileMode.Open, FileAccess.Read))
+            string etag = Context.Response.GenerateEtag(file);
+
+            if (etag == Context.Request.Headers.TryGet("If-None-Match"))
+            {
+                return new StatusCodeResult(HttpStatusCode.NotModified);
+            }
+
+            Context.Response.SetHeader(Context.Response.HeaderNames.ETag, etag);
+
+            using (FileStream fileStream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 var reader = new StreamReader(fileStream);
                 string xml = ModifyForEnvironment(reader.ReadToEnd(), sessionInfo.Environment);

@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -204,27 +205,48 @@ namespace RestFoundation
         void SetLink(Uri href, string rel, string title);
 
         /// <summary>
-        /// Adds the file as a response dependency to create an e-tag, last modified time and
-        /// set appropriate caching parameters.
+        /// Generates an e-tag for the file with the provided full path.
         /// </summary>
         /// <param name="filePath">The file path.</param>
-        void SetFileDependencies(string filePath);
+        /// <returns>The e-tag for the file.</returns>
+        /// <exception cref="FileNotFoundException">
+        /// If the provided file path is invalid.
+        /// </exception>
+        string GenerateEtag(string filePath);
 
         /// <summary>
-        /// Adds the file as a response dependency to create an e-tag, last modified time and
-        /// set appropriate caching parameters.
+        /// Generates an e-tag for the provided file.
         /// </summary>
-        /// <param name="filePath">The file path.</param>
-        /// <param name="maxAge">The time span before the cache expires.</param>
-        void SetFileDependencies(string filePath, TimeSpan maxAge);
+        /// <param name="file">The file.</param>
+        /// <returns>The e-tag for the file.</returns>
+        /// <exception cref="FileNotFoundException">
+        /// If the provided file path is invalid.
+        /// </exception>
+        string GenerateEtag(FileInfo file);
 
         /// <summary>
-        /// Adds the file as a response dependency to create an e-tag, last modified time and
-        /// set appropriate caching parameters.
+        /// Generates the last modified date for the file with the provided
+        /// full path.
         /// </summary>
         /// <param name="filePath">The file path.</param>
-        /// <param name="cacheability">The cacheability value.</param>
-        /// <param name="maxAge">The time span before the cache expires.</param>
-        void SetFileDependencies(string filePath, HttpCacheability cacheability, TimeSpan maxAge);
+        /// <returns>
+        /// The last modified date of the file int the RFC-1123 format.
+        /// </returns>
+        /// <exception cref="FileNotFoundException">
+        /// If the provided file path is invalid.
+        /// </exception>
+        string GenerateLastModifiedDate(string filePath);
+
+        /// <summary>
+        /// Generates the last modified date for the provided file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>
+        /// The last modified date of the file int the RFC-1123 format.
+        /// </returns>
+        /// <exception cref="FileNotFoundException">
+        /// If the provided file path is invalid.
+        /// </exception>
+        string GenerateLastModifiedDate(FileInfo file);
     }
 }

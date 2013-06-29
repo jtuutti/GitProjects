@@ -60,7 +60,7 @@ namespace RestFoundation.Results
 
             try
             {
-                using (var fileStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read))
+                using (var fileStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     context.Response.SetHeader(context.Response.HeaderNames.ContentLength, fileStream.Length.ToString(CultureInfo.InvariantCulture));
                     await fileStream.CopyToAsync(context.Response.Output.Stream, Convert.ToInt32(fileStream.Length), cancellationToken);

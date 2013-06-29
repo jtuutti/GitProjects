@@ -8,16 +8,26 @@ using System.Net;
 namespace RestFoundation.Results
 {
     /// <summary>
-    /// Represents an HTTP response status result.
+    /// Represents an HTTP status code result.
     /// </summary>
-    public class StatusResult : IResult
+    public class StatusCodeResult : IResult
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StatusResult"/> class.
+        /// Initializes a new instance of the <see cref="StatusCodeResult"/> class.
         /// </summary>
-        public StatusResult()
+        public StatusCodeResult()
         {
             ResponseHeaders = new Dictionary<string, string>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StatusCodeResult"/> class
+        /// with the provided HTTP status code.
+        /// </summary>
+        /// <param name="code">The HTTP status code.</param>
+        public StatusCodeResult(HttpStatusCode code) : this()
+        {
+            Code = code;
         }
         
         /// <summary>
@@ -28,12 +38,12 @@ namespace RestFoundation.Results
         /// <summary>
         /// Gets or sets an HTTP status code.
         /// </summary>
-        public HttpStatusCode StatusCode { get; set; }
+        public HttpStatusCode Code { get; set; }
 
         /// <summary>
         /// Gets or sets an HTTP status description.
         /// </summary>
-        public string StatusDescription { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
         /// Executes the result against the provided service context.
@@ -46,7 +56,7 @@ namespace RestFoundation.Results
                 throw new ArgumentNullException("context");
             }
 
-            if (StatusCode == HttpStatusCode.NoContent)
+            if (Code == HttpStatusCode.NoContent)
             {
                 context.Response.Output.Clear();
             }
@@ -56,13 +66,13 @@ namespace RestFoundation.Results
                 context.Response.SetHeader(header.Key, header.Value);
             }
 
-            if (!String.IsNullOrWhiteSpace(StatusDescription))
+            if (!String.IsNullOrWhiteSpace(Description))
             {
-                context.Response.SetStatus(StatusCode, StatusDescription);
+                context.Response.SetStatus(Code, Description);
             }
             else
             {
-                context.Response.SetStatus(StatusCode);
+                context.Response.SetStatus(Code);
             }
         }
 
@@ -74,9 +84,9 @@ namespace RestFoundation.Results
         /// </returns>
         public bool IsSuccessStatusCode()
         {
-            var numericStatusCode = (int) StatusCode;
+            var numericCode = (int) Code;
 
-            return numericStatusCode >= 200 && numericStatusCode < 300;
+            return numericCode >= 200 && numericCode < 300;
         }
     }
 }

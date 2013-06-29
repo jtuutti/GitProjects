@@ -29,14 +29,14 @@ namespace RestFoundation
         /// <summary>
         /// Gets a result with the status code set to Accepted (202).
         /// </summary>
-        public static StatusResult Accepted
+        public static StatusCodeResult Accepted
         {
             get
             {
-                var result = new StatusResult
+                var result = new StatusCodeResult
                              {
-                                 StatusCode = HttpStatusCode.Accepted,
-                                 StatusDescription = "Accepted"
+                                 Code = HttpStatusCode.Accepted,
+                                 Description = "Accepted"
                              };
 
                 return result;
@@ -46,14 +46,14 @@ namespace RestFoundation
         /// <summary>
         /// Gets a result with the status code set to Bad Request (400).
         /// </summary>
-        public static StatusResult BadRequest
+        public static StatusCodeResult BadRequest
         {
             get
             {
-                var result = new StatusResult
+                var result = new StatusCodeResult
                              {
-                                 StatusCode = HttpStatusCode.BadRequest,
-                                 StatusDescription = "Bad Request"
+                                 Code = HttpStatusCode.BadRequest,
+                                 Description = "Bad Request"
                              };
 
                 return result;
@@ -63,14 +63,14 @@ namespace RestFoundation
         /// <summary>
         /// Gets a result with the status code set to Conflict (409).
         /// </summary>
-        public static StatusResult Conflict
+        public static StatusCodeResult Conflict
         {
             get
             {
-                var result = new StatusResult
+                var result = new StatusCodeResult
                              {
-                                 StatusCode = HttpStatusCode.Conflict,
-                                 StatusDescription = "Conflict"
+                                 Code = HttpStatusCode.Conflict,
+                                 Description = "Conflict"
                              };
 
                 return result;
@@ -80,14 +80,14 @@ namespace RestFoundation
         /// <summary>
         /// Gets a result with the status code set to Forbidden (403).
         /// </summary>
-        public static StatusResult Forbidden
+        public static StatusCodeResult Forbidden
         {
             get
             {
-                var result = new StatusResult
+                var result = new StatusCodeResult
                              {
-                                 StatusCode = HttpStatusCode.Forbidden,
-                                 StatusDescription = "Forbidden"
+                                 Code = HttpStatusCode.Forbidden,
+                                 Description = "Forbidden"
                              };
 
                 return result;
@@ -97,14 +97,14 @@ namespace RestFoundation
         /// <summary>
         /// Gets a result with the status code set to No Content (204).
         /// </summary>
-        public static StatusResult NoContent
+        public static StatusCodeResult NoContent
         {
             get
             {
-                var result = new StatusResult
+                var result = new StatusCodeResult
                              {
-                                 StatusCode = HttpStatusCode.NoContent,
-                                 StatusDescription = "No Content"
+                                 Code = HttpStatusCode.NoContent,
+                                 Description = "No Content"
                              };
 
                 return result;
@@ -114,14 +114,14 @@ namespace RestFoundation
         /// <summary>
         /// Gets a result with the status code set to Not Found (404).
         /// </summary>
-        public static StatusResult NotFound
+        public static StatusCodeResult NotFound
         {
             get
             {
-                var result = new StatusResult
+                var result = new StatusCodeResult
                              {
-                                 StatusCode = HttpStatusCode.NotFound,
-                                 StatusDescription = Resources.Global.NotFound
+                                 Code = HttpStatusCode.NotFound,
+                                 Description = Resources.Global.NotFound
                              };
 
                 return result;
@@ -131,14 +131,14 @@ namespace RestFoundation
         /// <summary>
         /// Gets a result with the status code set to Not Implemented (501).
         /// </summary>
-        public static StatusResult NotImplemented
+        public static StatusCodeResult NotImplemented
         {
             get
             {
-                var result = new StatusResult
+                var result = new StatusCodeResult
                              {
-                                 StatusCode = HttpStatusCode.NotImplemented,
-                                 StatusDescription = "Not Implemented"
+                                 Code = HttpStatusCode.NotImplemented,
+                                 Description = "Not Implemented"
                              };
 
                 return result;
@@ -148,14 +148,14 @@ namespace RestFoundation
         /// <summary>
         /// Gets a result with the status code set to OK (200).
         /// </summary>
-        public static StatusResult Ok
+        public static StatusCodeResult Ok
         {
             get
             {
-                var result = new StatusResult
+                var result = new StatusCodeResult
                              {
-                                 StatusCode = HttpStatusCode.OK,
-                                 StatusDescription = "OK"
+                                 Code = HttpStatusCode.OK,
+                                 Description = "OK"
                              };
 
                 return result;
@@ -165,14 +165,14 @@ namespace RestFoundation
         /// <summary>
         /// Gets a result with the status code set to Service Unavailable (503).
         /// </summary>
-        public static StatusResult ServiceUnavailable
+        public static StatusCodeResult ServiceUnavailable
         {
             get
             {
-                var result = new StatusResult
+                var result = new StatusCodeResult
                              {
-                                 StatusCode = HttpStatusCode.ServiceUnavailable,
-                                 StatusDescription = "Service Unavailable"
+                                 Code = HttpStatusCode.ServiceUnavailable,
+                                 Description = "Service Unavailable"
                              };
 
                 return result;
@@ -568,7 +568,7 @@ namespace RestFoundation
         /// </summary>
         /// <param name="code">The HTTP status code.</param>
         /// <returns>The response status result.</returns>
-        public static StatusResult ResponseStatus(HttpStatusCode code)
+        public static StatusCodeResult ResponseStatus(HttpStatusCode code)
         {
             return ResponseStatus(code, null, null);
         }
@@ -579,7 +579,7 @@ namespace RestFoundation
         /// <param name="code">The HTTP status code.</param>
         /// <param name="description">The HTTP status description.</param>
         /// <returns>The response status result.</returns>
-        public static StatusResult ResponseStatus(HttpStatusCode code, string description)
+        public static StatusCodeResult ResponseStatus(HttpStatusCode code, string description)
         {
             return ResponseStatus(code, description, null);
         }
@@ -591,12 +591,12 @@ namespace RestFoundation
         /// <param name="description">The HTTP status description.</param>
         /// <param name="responseHeaders">A dictionary of response headers.</param>
         /// <returns>The response status result.</returns>
-        public static StatusResult ResponseStatus(HttpStatusCode code, string description, IDictionary<string, string> responseHeaders)
+        public static StatusCodeResult ResponseStatus(HttpStatusCode code, string description, IDictionary<string, string> responseHeaders)
         {
-            var result = new StatusResult
+            var result = new StatusCodeResult
                          {
-                             StatusCode = code,
-                             StatusDescription = description
+                             Code = code,
+                             Description = description
                          };
 
             if (responseHeaders != null)

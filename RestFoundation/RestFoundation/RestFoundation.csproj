@@ -368,7 +368,7 @@
     <Compile Include="HttpMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\Registries\ServiceContractTypeRegistry.cs" />
-    <Compile Include="Results\StatusResult.cs" />
+    <Compile Include="Results\StatusCodeResult.cs" />
     <Compile Include="UnitTesting\MockHandlerFactory.cs" />
     <Compile Include="UnitTesting\MockRestHandler.cs" />
     <Compile Include="UnitTesting\TestHttpApplication.cs" />

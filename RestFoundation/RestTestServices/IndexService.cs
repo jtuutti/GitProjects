@@ -122,7 +122,7 @@ namespace RestTestServices
             return resource;
         }
 
-        public StatusResult Delete(string name)
+        public StatusCodeResult Delete(string name)
         {
             if (String.IsNullOrWhiteSpace(name))
             {

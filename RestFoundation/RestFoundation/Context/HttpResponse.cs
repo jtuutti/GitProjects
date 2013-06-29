@@ -4,12 +4,15 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Web;
 using RestFoundation.Collections;
 using RestFoundation.Collections.Concrete;
+using RestFoundation.Resources;
 using RestFoundation.Runtime;
 
 namespace RestFoundation.Context
@@ -417,60 +420,70 @@ namespace RestFoundation.Context
         }
 
         /// <summary>
-        /// Adds the file as a response dependency to create an e-tag, last modified time and
-        /// set appropriate caching parameters.
+        /// Generates an e-tag for the file with the provided full path.
         /// </summary>
         /// <param name="filePath">The file path.</param>
-        public void SetFileDependencies(string filePath)
+        /// <returns>The e-tag for the file.</returns>
+        /// <exception cref="FileNotFoundException">
+        /// If the provided file path is invalid.
+        /// </exception>
+        public string GenerateEtag(string filePath)
         {
-            SetFileDependencies(filePath, HttpCacheability.ServerAndPrivate, TimeSpan.Zero);
+            var file = new FileInfo(filePath);
+
+            return GenerateEtag(file);
         }
 
         /// <summary>
-        /// Adds the file as a response dependency to create an e-tag, last modified time and
-        /// set appropriate caching parameters.
+        /// Generates an e-tag for the provided file.
         /// </summary>
-        /// <param name="filePath">The file path.</param>
-        /// <param name="maxAge">The time span before the cache expires.</param>
-        public void SetFileDependencies(string filePath, TimeSpan maxAge)
+        /// <param name="file">The file.</param>
+        /// <returns>The e-tag for the file.</returns>
+        /// <exception cref="FileNotFoundException">
+        /// If the provided file path is invalid.
+        /// </exception>
+        public string GenerateEtag(FileInfo file)
         {
-            SetFileDependencies(filePath, HttpCacheability.ServerAndPrivate, maxAge);
+            if (file == null)
+            {
+                throw new ArgumentNullException("file");
+            }
+
+            if (!file.Exists)
+            {
+                throw new FileNotFoundException(Global.InvalidFilePathOrUrl, file.FullName);
+            }
+
+            string fileString = String.Concat(file.Name, ':', file.LastWriteTimeUtc.Ticks);
+
+            using (var hashAlgorithm = MD5.Create())
+            {
+                var hash = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(fileString));
+
+                return String.Format(CultureInfo.InvariantCulture, "\"{0}\"", Convert.ToBase64String(hash));
+            }
         }
 
-        /// <summary>
-        /// Adds the file as a response dependency to create an e-tag, last modified time and
-        /// set appropriate caching parameters.
-        /// </summary>
-        /// <param name="filePath">The file path.</param>
-        /// <param name="cacheability">The cacheability value.</param>
-        /// <param name="maxAge">The time span before the cache expires.</param>
-        public void SetFileDependencies(string filePath, HttpCacheability cacheability, TimeSpan maxAge)
+        public string GenerateLastModifiedDate(string filePath)
         {
-            if (String.IsNullOrEmpty(filePath))
+            var file = new FileInfo(filePath);
+
+            return GenerateLastModifiedDate(file);
+        }
+
+        public string GenerateLastModifiedDate(FileInfo file)
+        {
+            if (file == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException("file");
             }
 
-            Context.Response.AddFileDependency(filePath);
-            Context.Response.Cache.SetCacheability(cacheability);
-            Context.Response.Cache.SetETagFromFileDependencies();
-            Context.Response.Cache.SetLastModifiedFromFileDependencies();
-
-            if (maxAge != TimeSpan.Zero)
+            if (!file.Exists)
             {
-                Context.Response.Cache.SetMaxAge(maxAge);
+                throw new FileNotFoundException(Global.InvalidFilePathOrUrl, file.FullName);
             }
 
-            Context.Response.Cache.VaryByParams["*"] = true;
-
-            foreach (string headerName in Context.Request.Headers.AllKeys)
-            {
-                if (headerName.StartsWith("Accept", StringComparison.OrdinalIgnoreCase) ||
-                    headerName.StartsWith("X-", StringComparison.OrdinalIgnoreCase))
-                {
-                    Context.Response.Cache.VaryByHeaders[headerName] = true;
-                }
-            }
+            return file.LastWriteTimeUtc.ToString("r", CultureInfo.InvariantCulture);
         }
 
         private void SetHeader(string headerName, string headerValue, bool overwriteHeader)
