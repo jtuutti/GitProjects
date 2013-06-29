@@ -14,6 +14,7 @@
     private const string AcceptHeader = "Accept";
     private const string AcceptCharsetHeader = "Accept-Charset";
     private const string ContentTypeHeader = "Content-Type";
+    private const string LocationHeader = "Location";
     private const string UserAgentHeader = "User-Agent";
     private const string UserAgent = "Rest Foundation Proxy";
 
@@ -173,7 +174,7 @@
         {
             using (var client = new ProxyWebClient())
             {
-                string url = String.Concat(serviceUrl, OperationUrl.Value.Replace("+", "%20"));
+                string url = Path.Combine(serviceUrl, OperationUrl.Value.TrimStart('/').Replace("+", "%20"));
 
                 if (operation.Credentials != null && !String.IsNullOrWhiteSpace(UserName.Value) && !String.IsNullOrEmpty(Password.Value))
                 {
@@ -196,7 +197,16 @@
                 SetEncoding(client);
 
                 ProxyResponseData response = await PerformRequest(url, HttpMethod.SelectedValue, client);
-                bool hasData = response.Data.Trim().Length > 0;
+                bool hasData = !String.IsNullOrWhiteSpace(response.Data);
+
+                if (hasData && response.IsPermanentRedirect)
+                {
+                    AddHeaders(client);
+                    SetEncoding(client);
+
+                    response = await PerformRequest(Path.Combine(serviceUrl, response.Data.TrimStart('/')), HttpMethod.SelectedValue, client);
+                    hasData = !String.IsNullOrWhiteSpace(response.Data);
+                }
 
                 if (hasData)
                 {
@@ -205,7 +215,7 @@
                 
                 if (client.ResponseHeaders != null)
                 {
-                    ContentType.Value = client.ResponseHeaders.Get("Content-Type");
+                    ContentType.Value = client.ResponseHeaders.Get(ContentTypeHeader);
                 }
 
                 if (hasData && !DoNotFormatBody.Checked)
@@ -229,7 +239,11 @@
         catch (HttpException ex)
         {
             ResponseText.Value = String.Format(CultureInfo.InvariantCulture, "HTTP/1.1: {0} - {1}", ex.GetHttpCode(), ex.Message);
-            RegisterErrorHighlightScript();
+
+            if (ex.GetHashCode() >= 400)
+            {
+                RegisterErrorHighlightScript();
+            }
         }
         catch (Exception ex)
         {
@@ -252,10 +266,11 @@
         return proxyResponse.ProtocolVersion.ToString();
     }
 
-    private static string GetStatusCode(WebResponse response)
+    private static string GetStatus(WebResponse response, out HttpStatusCode statusCode)
     {
         var proxyResponse = response as ProxyWebResponse ?? new ProxyWebResponse(response);
 
+        statusCode = proxyResponse.StatusCode;
         return String.Format(CultureInfo.InvariantCulture, "{0} - {1}", (int) proxyResponse.StatusCode, DecodeHttpStatus(proxyResponse.StatusCode, proxyResponse.StatusDescription));
     }
 
@@ -503,6 +518,8 @@
         var response = new ProxyResponseData();
         var timer = Stopwatch.StartNew();
 
+        HttpStatusCode statusCode;
+
         try
         {
             Task<string> responseDataTask;
@@ -533,7 +550,7 @@
             }
 
             response.Data = await responseDataTask;
-            response.Code = GetStatusCode(client.WebResponse);
+            response.Code = GetStatus(client.WebResponse, out statusCode);
             response.ProtocolVersion = GetProtocolVersion(client.WebResponse);
         }
         catch (WebException ex)
@@ -545,13 +562,23 @@
 
             if (ex.Response != null)
             {
+                string responseStatusCode = GetStatus(ex.Response, out statusCode);
+
                 client.ResponseHeaders.Add(headers);
 
-                response.Code = GetStatusCode(ex.Response);
+                response.Code = responseStatusCode;
                 response.ProtocolVersion = GetProtocolVersion(ex.Response);
+
+                if (responseStatusCode != null && (int) statusCode == 308)
+                {
+                    response.IsPermanentRedirect = true;
+                    response.Data = headers[LocationHeader]; 
+                }
             }
             else
             {
+                statusCode = HttpStatusCode.InternalServerError;
+
                 client.ResponseHeaders.Add(Context.Response.Headers);
 
                 response.Code = "500 - Internal Server Error";
@@ -564,8 +591,6 @@
                     response.ProtocolVersion = response.ProtocolVersion.Substring(indexOfSeparator + 1);
                 }
             }
-
-            RegisterErrorHighlightScript();
         }
         finally
         {
@@ -576,6 +601,11 @@
         if (response.Data == null)
         {
             response.Data = String.Empty;
+        }
+
+        if ((int) statusCode >= 400)
+        {        
+            RegisterErrorHighlightScript();
         }
 
         return response;

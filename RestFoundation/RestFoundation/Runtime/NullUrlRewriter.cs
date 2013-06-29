@@ -1,7 +1,6 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
-using System;
 using System.Collections.Specialized;
 
 namespace RestFoundation.Runtime
@@ -11,6 +10,17 @@ namespace RestFoundation.Runtime
     /// </summary>
     public sealed class NullUrlRewriter : IUrlRewriter
     {
+        /// <summary>
+        /// Gets a value indicating how the requests URLs will be rewritten.
+        /// </summary>
+        public UrlRewriteType RewriteType
+        {
+            get
+            {
+                return UrlRewriteType.Rewrite;
+            }
+        }
+
         /// <summary>
         /// Returns a rewritten URL for the current HTTP request.
         /// </summary>

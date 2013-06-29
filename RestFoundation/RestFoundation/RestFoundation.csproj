@@ -242,6 +242,7 @@
     <Compile Include="UnitTesting\MockContextManager.cs" />
     <Compile Include="UriSegments.cs" />
     <Compile Include="Runtime\HttpResourceFaultException.cs" />
+    <Compile Include="UrlRewriteType.cs" />
     <Compile Include="Validation\IResourceValidator.cs" />
     <Compile Include="IUploadedFile.cs" />
     <Compile Include="Odata\IModelFilter.cs" />

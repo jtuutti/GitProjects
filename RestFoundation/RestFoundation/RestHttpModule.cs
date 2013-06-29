@@ -26,10 +26,11 @@ namespace RestFoundation
     {
         private const int MinErrorStatusCode = 400;
         private const int UnauthorizedStatusCode = 401;
-        private const string DangerousRequestMessage = "A potentially dangerous Request.Path value was detected from the client";
-        private const string RequestTimeoutMessage = "Request timed out";
         private const string CatchAllRoute = "catch-all-route";
+        private const string DangerousRequestMessage = "A potentially dangerous Request.Path value was detected from the client";
+        private const string LocationHeaderName = "Location";
         private const string Options = "OPTIONS";
+        private const string RequestTimeoutMessage = "Request timed out";
 
         private static readonly object syncRoot = new object();
         private static bool catchAllRouteInitialized;
@@ -76,9 +77,9 @@ namespace RestFoundation
 
             var rewriter = Rest.Configuration.ServiceLocator.GetService<IUrlRewriter>();
 
-            if (rewriter != null && !(rewriter is NullUrlRewriter))
+            if (rewriter != null && !(rewriter is NullUrlRewriter) && RewriteUrl(rewriter, application))
             {
-                RewriterUrl(rewriter, application);
+                return;
             }
 
             if (catchAllRouteInitialized)
@@ -176,13 +177,32 @@ namespace RestFoundation
             OutputInternalException(application, exception);
         }
 
-        private static void RewriterUrl(IUrlRewriter rewriter, HttpApplication application)
+        private static bool RewriteUrl(IUrlRewriter rewriter, HttpApplication application)
         {
             string rewrittenUrl = rewriter.RewriteUrl(application.Context.Request.RawUrl, application.Request.Headers);
 
-            if (!String.IsNullOrWhiteSpace(rewrittenUrl))
+            if (String.IsNullOrWhiteSpace(rewrittenUrl))
             {
-                application.Context.RewritePath(rewrittenUrl);
+                return false;
+            }
+
+            switch (rewriter.RewriteType)
+            {
+                case UrlRewriteType.TemporaryRedirect:
+                    application.Context.Response.AppendHeader(LocationHeaderName, rewrittenUrl);
+                    application.Context.Response.StatusCode = (int) RedirectType.TemporaryRedirect;
+                    application.Context.Response.StatusDescription = PascalCaseToSentenceConverter.Convert(RedirectType.TemporaryRedirect.ToString());
+                    application.Context.Response.End();
+                    return true;
+                case UrlRewriteType.PermanentRedirect:
+                    application.Context.Response.AppendHeader(LocationHeaderName, rewrittenUrl);
+                    application.Context.Response.StatusCode = (int) RedirectType.PermanentRedirect;
+                    application.Context.Response.StatusDescription = PascalCaseToSentenceConverter.Convert(RedirectType.PermanentRedirect.ToString());
+                    application.Context.Response.End();
+                    return true;
+                default:
+                    application.Context.RewritePath(rewrittenUrl);
+                    return false;                   
             }
         }
 

@@ -26,5 +26,12 @@ namespace RestFoundation.ServiceProxy
         /// Gets or sets the service execution duration.
         /// </summary>
         public TimeSpan Duration { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the
+        /// request is a permanent redirect with the HTTP
+        /// status code 308.
+        /// </summary>
+        public bool IsPermanentRedirect { get; set; }
     }
 }

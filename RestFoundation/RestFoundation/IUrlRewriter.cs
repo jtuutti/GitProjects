@@ -1,7 +1,6 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
-using System;
 using System.Collections.Specialized;
 
 namespace RestFoundation
@@ -11,6 +10,11 @@ namespace RestFoundation
     /// </summary>
     public interface IUrlRewriter
     {
+        /// <summary>
+        /// Gets a value indicating how the requests URLs will be rewritten.
+        /// </summary>
+        UrlRewriteType RewriteType { get; }
+
         /// <summary>
         /// Returns a rewritten URL for the current HTTP request.
         /// </summary>

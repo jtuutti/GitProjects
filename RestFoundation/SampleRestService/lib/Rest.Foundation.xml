@@ -1401,6 +1401,11 @@
             URL does not need to be rewritten.
             </returns>
     </member>
+    <member name="P:RestFoundation.IUrlRewriter.RewriteType">
+      <summary>
+            Gets a value indicating how the requests URLs will be rewritten.
+            </summary>
+    </member>
     <member name="T:RestFoundation.LinkRelationValues">
       <summary>
             Defines most commonly used link "rel" element values.
@@ -3442,6 +3447,11 @@
       <param name="requestHeaders">The current request headers.</param>
       <returns>null</returns>
     </member>
+    <member name="P:RestFoundation.Runtime.NullUrlRewriter.RewriteType">
+      <summary>
+            Gets a value indicating how the requests URLs will be rewritten.
+            </summary>
+    </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyResponseData">
       <summary>
             Represents data from a Service Proxy response.
@@ -3465,6 +3475,13 @@
     <member name="P:RestFoundation.ServiceProxy.ProxyResponseData.Duration">
       <summary>
             Gets or sets the service execution duration.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.ProxyResponseData.IsPermanentRedirect">
+      <summary>
+            Gets or sets a value indicating whether the
+            request is a permanent redirect with the HTTP
+            status code 308.
             </summary>
     </member>
     <member name="T:RestFoundation.ServiceProxy.ProxySession">
@@ -3834,27 +3851,37 @@
             Represents a redirect type.
             </summary>
     </member>
-    <member name="F:RestFoundation.Results.RedirectType.Permanent">
+    <member name="F:RestFoundation.Results.RedirectType.MovedPermanently">
       <summary>
-            The resource was moved permanently. HTTP code: 301.
+            The resource was moved permanently using the GET HTTP method only.
+            HTTP code: 301.
             </summary>
     </member>
     <member name="F:RestFoundation.Results.RedirectType.Found">
       <summary>
-            The resource was found but a different URL should be used for the response.
-            This is the standard redirect used by the browsers even though it contradicts
-            the HTTP standard. HTTP code: 302.
+            The resource was found but another URL should be used for the response using
+            the GET HTTP method only. This is the standard redirect used by the browsers
+            even though it contradicts the HTTP standard. HTTP code: 302.
             </summary>
     </member>
     <member name="F:RestFoundation.Results.RedirectType.SeeOther">
       <summary>
-            The response to the request can be found at another URL. HTTP code: 303.
+            The response to the request can be found at another URL using the GET HTTP
+            method only. HTTP code: 303.
             </summary>
     </member>
-    <member name="F:RestFoundation.Results.RedirectType.Temporary">
+    <member name="F:RestFoundation.Results.RedirectType.TemporaryRedirect">
       <summary>
-            The resource was moved temporarily. Future requests can still use the original URL.
-            HTTP code: 307.
+            The request should be repeated with another URL; however, future requests should
+            still use the original URL. Future requests can still use the original URL.
+            Any HTTP method can be used. HTTP code: 307.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.Results.RedirectType.PermanentRedirect">
+      <summary>
+            The request, and all future requests should be repeated using another URL. Any
+            HTTP method can be used. Warning: this HTTP status code is still experimental and
+            is not supported by many clients. HTTP code: 308.
             </summary>
     </member>
     <member name="T:RestFoundation.Configuration.RouteBuilder">
@@ -7839,6 +7866,30 @@
     <member name="P:RestFoundation.Runtime.HttpResourceFaultException.FaultMessages">
       <summary>
             Gets a list of the exception specific general fault messages.
+            </summary>
+    </member>
+    <member name="T:RestFoundation.UrlRewriteType">
+      <summary>
+            Defines how a <see cref="T:RestFoundation.IUrlRewriter" /> rewrites request URLs.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.UrlRewriteType.Rewrite">
+      <summary>
+            Rewrites the original URL on the context level.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.UrlRewriteType.TemporaryRedirect">
+      <summary>
+            Redirects the request to the rewritten URL using the
+            HTTP status code 307 (Temporary Redirect).
+            </summary>
+    </member>
+    <member name="F:RestFoundation.UrlRewriteType.PermanentRedirect">
+      <summary>
+            Redirects the request to the rewritten URL using the
+            HTTP status code 308 (Permanent Redirect). Warning: this
+            HTTP status code is still experimental and is not supported
+            by many clients.
             </summary>
     </member>
     <member name="T:RestFoundation.Validation.IResourceValidator">

@@ -15,6 +15,14 @@ namespace SampleRestService.UrlRewriter
                                                                                                 RegexOptions.Compiled |
                                                                                                 RegexOptions.CultureInvariant);
 
+        public UrlRewriteType RewriteType
+        {
+            get
+            {
+                return UrlRewriteType.PermanentRedirect;
+            }
+        }
+
         public string RewriteUrl(string relativeUrl, NameValueCollection requestHeaders)
         {
             if (OldUrlSegmentRegex.IsMatch(relativeUrl))
