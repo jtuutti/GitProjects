@@ -1,5 +1,7 @@
-﻿using RestFoundation.Configuration;
+﻿using RestFoundation;
+using RestFoundation.Configuration;
 using SampleRestService.Contracts;
+using SampleRestService.UrlRewriter;
 
 namespace SampleRestService.App_Start
 {
@@ -7,10 +9,16 @@ namespace SampleRestService.App_Start
     {
         public static void Initialize()
         {
-            RestFoundation.Rest.Configuration
-                               .Initialize(typeof(Global).Assembly)
-                               .ConfigureServiceHelpAndProxy(c => c.Enable().WithServiceDescription("A sample REST service"))
-                               .WithUrls(RegisterUrls);
+            Rest.Configuration
+                .Initialize(RegisterServiceDependencies)
+                .ConfigureServiceHelpAndProxy(c => c.Enable().WithServiceDescription("A sample REST service"))
+                .WithUrls(RegisterUrls);
+        }
+
+        private static void RegisterServiceDependencies(DependencyBuilder builder)
+        {
+            builder.Register<IUrlRewriter, LegacyUrlRewriter>(InstanceLifetime.Singleton)
+                   .ScanAssemblies(typeof(Global).Assembly);
         }
 
         private static void RegisterUrls(UrlBuilder builder)

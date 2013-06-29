@@ -1385,6 +1385,22 @@
             Gets or sets a value indicating whether to wrap a JSON response.
             </summary>
     </member>
+    <member name="T:RestFoundation.IUrlRewriter">
+      <summary>
+            Defines a URL rewriting interface.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.IUrlRewriter.RewriteUrl(System.String,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Returns a rewritten URL for the current HTTP request.
+            </summary>
+      <param name="relativeUrl">The current request relative url.</param>
+      <param name="requestHeaders">The current request headers.</param>
+      <returns>
+            A <see cref="T:System.String" /> containing the rewritten URL, or null if the
+            URL does not need to be rewritten.
+            </returns>
+    </member>
     <member name="T:RestFoundation.LinkRelationValues">
       <summary>
             Defines most commonly used link "rel" element values.
@@ -3412,6 +3428,19 @@
       <summary>
             Represents a marker interface to allow service context object binding.
             </summary>
+    </member>
+    <member name="T:RestFoundation.Runtime.NullUrlRewriter">
+      <summary>
+            Represents the default URL rewriter that does not rewrite URLs.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Runtime.NullUrlRewriter.RewriteUrl(System.String,System.Collections.Specialized.NameValueCollection)">
+      <summary>
+            Returns a rewritten URL for the current HTTP request.
+            </summary>
+      <param name="relativeUrl">The current request relative url.</param>
+      <param name="requestHeaders">The current request headers.</param>
+      <returns>null</returns>
     </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyResponseData">
       <summary>

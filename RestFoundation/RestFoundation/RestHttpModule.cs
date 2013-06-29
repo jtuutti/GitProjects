@@ -67,14 +67,21 @@ namespace RestFoundation
 
         private static void OnBeginRequest(object sender)
         {
-            if (catchAllRouteInitialized)
+            var application = sender as HttpApplication;
+
+            if (application == null || application.Context == null)
             {
                 return;
             }
 
-            var application = sender as HttpApplication;
+            var rewriter = Rest.Configuration.ServiceLocator.GetService<IUrlRewriter>();
 
-            if (application == null || application.Context == null)
+            if (rewriter != null && !(rewriter is NullUrlRewriter))
+            {
+                RewriterUrl(rewriter, application);
+            }
+
+            if (catchAllRouteInitialized)
             {
                 return;
             }
@@ -167,6 +174,16 @@ namespace RestFoundation
             Rest.Configuration.Options.ExceptionAction(Rest.Configuration.ServiceLocator.GetService<IServiceContext>(), exception);
 
             OutputInternalException(application, exception);
+        }
+
+        private static void RewriterUrl(IUrlRewriter rewriter, HttpApplication application)
+        {
+            string rewrittenUrl = rewriter.RewriteUrl(application.Context.Request.RawUrl, application.Request.Headers);
+
+            if (!String.IsNullOrWhiteSpace(rewrittenUrl))
+            {
+                application.Context.RewritePath(rewrittenUrl);
+            }
         }
 
         private static bool IsRestHandler(HttpApplication application)

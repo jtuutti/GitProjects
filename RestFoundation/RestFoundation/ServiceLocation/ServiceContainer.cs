@@ -45,7 +45,8 @@ namespace RestFoundation.ServiceLocation
                 { typeof(IResourceValidator), typeof(ResourceValidator) },
                 { typeof(IResultWrapper), typeof(ResultWrapper) },
                 { typeof(IServiceCache), typeof(ServiceCache) },
-                { typeof(IStreamCompressor), typeof(StreamCompressor) }
+                { typeof(IStreamCompressor), typeof(StreamCompressor) },
+                { typeof(IUrlRewriter), typeof(NullUrlRewriter) }
             };
 
             m_transientServices = new Dictionary<Type, Type>

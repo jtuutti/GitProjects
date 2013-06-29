@@ -93,6 +93,7 @@
     <Compile Include="InstanceLifetime.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="Configuration\JsonFormatterSettings.cs" />
+    <Compile Include="IUrlRewriter.cs" />
     <Compile Include="LinkRelationValues.cs" />
     <Compile Include="LogWriterExtensions.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Context\IRestContext.cs" />
     <Compile Include="Runtime\JsonSerializerFactory.cs" />
     <Compile Include="Runtime\NonGenericCollectionValidator.cs" />
+    <Compile Include="Runtime\NullUrlRewriter.cs" />
     <Compile Include="Runtime\Registries\XmlClientSerializerRegistry.cs" />
     <Compile Include="Runtime\Handlers\ProxyExportHandler.cs" />
     <Compile Include="Runtime\Handlers\ProxyOutputHandler.cs" />
