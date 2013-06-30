@@ -223,6 +223,7 @@
     <Compile Include="ServiceProxy\OperationMetadata\StatusCodeMetadata.cs" />
     <Compile Include="HttpHandler.cs" />
     <Compile Include="TaskResult.cs" />
+    <Compile Include="TypeBinders\DoNotBindAttribute.cs" />
     <Compile Include="TypeBinders\FromBodyAttribute.cs" />
     <Compile Include="TypeBinders\FromHeaderAttribute.cs" />
     <Compile Include="TypeBinders\FromUriAsComplexTypeAttribute.cs" />

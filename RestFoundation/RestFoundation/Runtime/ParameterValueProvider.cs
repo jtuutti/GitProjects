@@ -56,6 +56,12 @@ namespace RestFoundation.Runtime
             IServiceContext context = handler.Context;
             ITypeBinder typeBinder = GetParameterBinder(parameter);
 
+            if (typeBinder is DoNotBindAttribute)
+            {
+                isResource = false;
+                return null;
+            }
+
             if (typeBinder != null)
             {
                 isResource = IsResourceParameter(context, parameter);

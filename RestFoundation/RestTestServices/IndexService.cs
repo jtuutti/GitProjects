@@ -88,6 +88,11 @@ namespace RestTestServices
 
         public ContentResult Get(int? id, string dummy)
         {
+            if (!id.HasValue)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "No person ID provided");
+            }
+
             Context.Response.Output.WriteFormat("GET : {0}", id);
 
             if (!String.IsNullOrEmpty(dummy))
@@ -110,6 +115,11 @@ namespace RestTestServices
 
         public Person Put(int? id, Person personToUpdate)
         {
+            if (!id.HasValue)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "No person ID provided");
+            }
+
             personToUpdate.Values = new[] { String.Format("Person #{0} updated", id) };
 
             return personToUpdate;
@@ -117,6 +127,11 @@ namespace RestTestServices
 
         public Person Patch(int? id, Person resource)
         {
+            if (!id.HasValue)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, "No person ID provided");
+            }
+
             resource.Values = new[] { String.Format("Person #{0} partially updated", id) };
 
             return resource;
