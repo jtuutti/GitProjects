@@ -115,6 +115,9 @@ namespace RestTest.App_Start
             urlBuilder.MapUrl("upload")
                       .ToHttpHandler<UploadHandler>();
 
+            urlBuilder.MapUrl("index")
+                      .ToHtmlPage("~/index.html");
+
             urlBuilder.MapUrl("faq")
                       .ToWebFormsPage("~/Views/Faq.aspx");
         }

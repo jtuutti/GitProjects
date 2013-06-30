@@ -19,6 +19,7 @@ namespace RestFoundation.Results
     public class HtmlFileResult : IResultAsync
     {
         private const string DefaultHtmlContentType = "text/html";
+        private const string IfNoneMatchHeaderName = "If-None-Match";
 
         /// <summary>
         /// Gets or sets the content type.
@@ -55,14 +56,24 @@ namespace RestFoundation.Results
         {
             context.Response.Output.Buffer = false;
             context.Response.Output.Clear();
-            context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
-            context.Response.SetHeader(context.Response.HeaderNames.ContentType, ContentType ?? DefaultHtmlContentType);
+
+            string etag = context.Response.GenerateEtag(FilePath);
+
+            if (etag == context.Request.Headers.TryGet(IfNoneMatchHeaderName))
+            {
+                context.Response.SetStatus(HttpStatusCode.NotModified);
+                return;
+            }
 
             try
             {
                 using (var fileStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     context.Response.SetHeader(context.Response.HeaderNames.ContentLength, fileStream.Length.ToString(CultureInfo.InvariantCulture));
+                    context.Response.SetHeader(context.Response.HeaderNames.ContentType, ContentType ?? DefaultHtmlContentType);
+                    context.Response.SetHeader(context.Response.HeaderNames.ETag, etag);
+                    context.Response.SetCharsetEncoding(context.Request.Headers.AcceptCharsetEncoding);
+
                     await fileStream.CopyToAsync(context.Response.Output.Stream, Convert.ToInt32(fileStream.Length), cancellationToken);
                 }
             }

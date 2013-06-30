@@ -2,10 +2,11 @@
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
+using RestFoundation;
 
-[assembly: AssemblyVersion("2.5.0.0")]
-[assembly: AssemblyFileVersion("2.5.0.287")]
-[assembly: AssemblyInformationalVersion("2.5.0.287")]
+[assembly: AssemblyVersion(VersionInfo.AssemblyVersion)]
+[assembly: AssemblyFileVersion(VersionInfo.BuildVersion)]
+[assembly: AssemblyInformationalVersion(VersionInfo.BuildVersion)]
 [assembly: AssemblyTitle("REST Foundation")]
 [assembly: AssemblyDescription("REST Service Framework")]
 [assembly: AssemblyConfiguration("")]

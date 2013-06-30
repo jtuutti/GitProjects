@@ -168,9 +168,35 @@ namespace RestFoundation.Configuration
         }
 
         /// <summary>
+        /// Maps the relative URL to an HTML page.
+        /// </summary>
+        /// <param name="virtualPageUrl">A virtual URL to an HTML file.</param>
+        public void ToHtmlPage(string virtualPageUrl)
+        {
+            ToHtmlPage(virtualPageUrl, null);
+        }
+
+        /// <summary>
+        /// Maps the relative URL to an HTML page.
+        /// </summary>
+        /// <param name="virtualPageUrl">A virtual URL to an HTML file.</param>
+        /// <param name="defaults">
+        /// The values to use for route parameters if they are missing in the URL.
+        /// </param>
+        public void ToHtmlPage(string virtualPageUrl, RouteHash defaults)
+        {
+            if (virtualPageUrl == null)
+            {
+                throw new ArgumentNullException("virtualPageUrl");
+            }
+
+            m_routes.Add(null, new Route(m_relativeUrl, defaults, new HtmlRouteHandler(virtualPageUrl)));
+        }
+
+        /// <summary>
         /// Maps the relative URL to a web forms page.
         /// </summary>
-        /// <param name="virtualPageUrl">A virtual URL to the ASPX file.</param>
+        /// <param name="virtualPageUrl">A virtual URL to an ASPX file.</param>
         public void ToWebFormsPage(string virtualPageUrl)
         {
             ToWebFormsPage(virtualPageUrl, null);
@@ -179,7 +205,7 @@ namespace RestFoundation.Configuration
         /// <summary>
         /// Maps the relative URL to a web forms page.
         /// </summary>
-        /// <param name="virtualPageUrl">A virtual URL to the ASPX file.</param>
+        /// <param name="virtualPageUrl">A virtual URL to an ASPX file.</param>
         /// <param name="defaults">
         /// The values to use for route parameters if they are missing in the URL.
         /// </param>

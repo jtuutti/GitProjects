@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Resources;
+using RestFoundation;
 
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion(VersionInfo.AssemblyVersion)]
+[assembly: AssemblyFileVersion(VersionInfo.AssemblyVersion)]
 [assembly: AssemblyTitle("REST Foundation StructureMap")]
 [assembly: AssemblyDescription("REST Foundation - StructureMap Configuration")]
 [assembly: AssemblyConfiguration("")]

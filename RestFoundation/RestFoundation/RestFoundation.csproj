@@ -98,6 +98,7 @@
     <Compile Include="LogWriterExtensions.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
     <Compile Include="ParameterType.cs" />
+    <Compile Include="Properties\VersionInfo.cs" />
     <Compile Include="Results\FileResult.cs" />
     <Compile Include="Results\HtmlFileResult.cs" />
     <Compile Include="Results\IODataProvider.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Runtime\DefaultODataProvider.cs" />
     <Compile Include="Runtime\Fault.cs" />
     <Compile Include="Runtime\FaultCollection.cs" />
+    <Compile Include="Runtime\Handlers\HtmlRouteHandler.cs" />
     <Compile Include="Runtime\Handlers\RestServiceRouteInfo.cs" />
     <Compile Include="Runtime\Handlers\RestServiceRouteInitializer.cs" />
     <Compile Include="Runtime\Handlers\ServiceContextHandler.cs" />
@@ -140,7 +142,7 @@
     <Compile Include="ServiceProxy\ProxyResponseData.cs" />
     <Compile Include="ServiceProxy\ProxySession.cs" />
     <Compile Include="ServiceProxy\ProxyUrlHelper.cs" />
-    <Compile Include="Runtime\StatusCodeFormatter.cs" />
+    <Compile Include="Runtime\PascalCaseToSentenceConverter.cs" />
     <Compile Include="Runtime\RouteNameHelper.cs" />
     <Compile Include="Runtime\StatusDescriptionFormatter.cs" />
     <Compile Include="Runtime\TaskExceptionUnwrapper.cs" />

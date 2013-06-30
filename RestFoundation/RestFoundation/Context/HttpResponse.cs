@@ -464,6 +464,17 @@ namespace RestFoundation.Context
             }
         }
 
+        /// <summary>
+        /// Generates the last modified date for the file with the provided
+        /// full path.
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>
+        /// The last modified date of the file int the RFC-1123 format.
+        /// </returns>
+        /// <exception cref="FileNotFoundException">
+        /// If the provided file path is invalid.
+        /// </exception>
         public string GenerateLastModifiedDate(string filePath)
         {
             var file = new FileInfo(filePath);
@@ -471,6 +482,16 @@ namespace RestFoundation.Context
             return GenerateLastModifiedDate(file);
         }
 
+        /// <summary>
+        /// Generates the last modified date for the provided file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>
+        /// The last modified date of the file int the RFC-1123 format.
+        /// </returns>
+        /// <exception cref="FileNotFoundException">
+        /// If the provided file path is invalid.
+        /// </exception>
         public string GenerateLastModifiedDate(FileInfo file)
         {
             if (file == null)

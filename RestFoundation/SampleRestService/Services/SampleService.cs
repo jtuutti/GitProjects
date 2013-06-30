@@ -111,7 +111,7 @@ namespace SampleRestService.Services
             return Result.ObjectWithResponseStatus(updatedResource, HttpStatusCode.OK, "Product updated");
         }
 
-        public StatusResult DeleteById(int id)
+        public StatusCodeResult DeleteById(int id)
         {
             try
             {

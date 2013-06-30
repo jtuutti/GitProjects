@@ -1836,6 +1836,21 @@
             Represents a GUID value.
             </summary>
     </member>
+    <member name="T:RestFoundation.VersionInfo">
+      <summary>
+            Defines the assembly and build versions of the <see cref="N:RestFoundation" /> assembly.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.VersionInfo.AssemblyVersion">
+      <summary>
+            Gets the assembly version.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.VersionInfo.BuildVersion">
+      <summary>
+            Gets the build version.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Results.IResult">
       <summary>
             Defines a service method result.
@@ -1973,23 +1988,6 @@
             A <see cref="T:System.Collections.Specialized.NameValueCollection" /> containing the HTTP request query string parameters.
             </param>
       <returns>The resulting collection.</returns>
-    </member>
-    <member name="T:RestFoundation.Results.ResponseResult">
-      <summary>
-            Represents a result with a custom response action.
-            </summary>
-    </member>
-    <member name="M:RestFoundation.Results.ResponseResult.#ctor(System.Action{RestFoundation.IServiceContext})">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Results.ResponseResult" /> class.
-            </summary>
-      <param name="responseAction">The response action.</param>
-    </member>
-    <member name="M:RestFoundation.Results.ResponseResult.Execute(RestFoundation.IServiceContext)">
-      <summary>
-            Executes the result against the provided service context.
-            </summary>
-      <param name="context">The service context.</param>
     </member>
     <member name="T:RestFoundation.Results.StreamResult">
       <summary>
@@ -3532,6 +3530,19 @@
       <param name="routeName">The route name.</param>
       <returns>The generated URL.</returns>
     </member>
+    <member name="T:RestFoundation.Runtime.PascalCaseToSentenceConverter">
+      <summary>
+            Converts a pascal-case descriptor into a sentence.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Runtime.PascalCaseToSentenceConverter.Convert(System.String)">
+      <summary>
+            Separates pascal case descriptor into separate words.
+            Ex: FileNotFound -&gt; File Not Found
+            </summary>
+      <param name="input">The input <see cref="T:System.String" />.</param>
+      <returns>A <see cref="T:System.String" /> containing the converted input.</returns>
+    </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyJsonConvert">
       <summary>
             Represents an JSON object converter.
@@ -3957,17 +3968,32 @@
             If the HTTP handler type is not a concrete class.
             </exception>
     </member>
+    <member name="M:RestFoundation.Configuration.RouteBuilder.ToHtmlPage(System.String)">
+      <summary>
+            Maps the relative URL to an HTML page.
+            </summary>
+      <param name="virtualPageUrl">A virtual URL to an HTML file.</param>
+    </member>
+    <member name="M:RestFoundation.Configuration.RouteBuilder.ToHtmlPage(System.String,RestFoundation.RouteHash)">
+      <summary>
+            Maps the relative URL to an HTML page.
+            </summary>
+      <param name="virtualPageUrl">A virtual URL to an HTML file.</param>
+      <param name="defaults">
+            The values to use for route parameters if they are missing in the URL.
+            </param>
+    </member>
     <member name="M:RestFoundation.Configuration.RouteBuilder.ToWebFormsPage(System.String)">
       <summary>
             Maps the relative URL to a web forms page.
             </summary>
-      <param name="virtualPageUrl">A virtual URL to the ASPX file.</param>
+      <param name="virtualPageUrl">A virtual URL to an ASPX file.</param>
     </member>
     <member name="M:RestFoundation.Configuration.RouteBuilder.ToWebFormsPage(System.String,RestFoundation.RouteHash)">
       <summary>
             Maps the relative URL to a web forms page.
             </summary>
-      <param name="virtualPageUrl">A virtual URL to the ASPX file.</param>
+      <param name="virtualPageUrl">A virtual URL to an ASPX file.</param>
       <param name="defaults">
             The values to use for route parameters if they are missing in the URL.
             </param>
@@ -10146,29 +10172,50 @@
       <param name="rel">The relationship value.</param>
       <param name="title">The link title.</param>
     </member>
-    <member name="M:RestFoundation.IHttpResponse.SetFileDependencies(System.String)">
+    <member name="M:RestFoundation.IHttpResponse.GenerateEtag(System.String)">
       <summary>
-            Adds the file as a response dependency to create an e-tag, last modified time and
-            set appropriate caching parameters.
+            Generates an e-tag for the file with the provided full path.
             </summary>
       <param name="filePath">The file path.</param>
+      <returns>The e-tag for the file.</returns>
+      <exception cref="T:System.IO.FileNotFoundException">
+            If the provided file path is invalid.
+            </exception>
     </member>
-    <member name="M:RestFoundation.IHttpResponse.SetFileDependencies(System.String,System.TimeSpan)">
+    <member name="M:RestFoundation.IHttpResponse.GenerateEtag(System.IO.FileInfo)">
       <summary>
-            Adds the file as a response dependency to create an e-tag, last modified time and
-            set appropriate caching parameters.
+            Generates an e-tag for the provided file.
             </summary>
-      <param name="filePath">The file path.</param>
-      <param name="maxAge">The time span before the cache expires.</param>
+      <param name="file">The file.</param>
+      <returns>The e-tag for the file.</returns>
+      <exception cref="T:System.IO.FileNotFoundException">
+            If the provided file path is invalid.
+            </exception>
     </member>
-    <member name="M:RestFoundation.IHttpResponse.SetFileDependencies(System.String,System.Web.HttpCacheability,System.TimeSpan)">
+    <member name="M:RestFoundation.IHttpResponse.GenerateLastModifiedDate(System.String)">
       <summary>
-            Adds the file as a response dependency to create an e-tag, last modified time and
-            set appropriate caching parameters.
+            Generates the last modified date for the file with the provided
+            full path.
             </summary>
       <param name="filePath">The file path.</param>
-      <param name="cacheability">The cacheability value.</param>
-      <param name="maxAge">The time span before the cache expires.</param>
+      <returns>
+            The last modified date of the file int the RFC-1123 format.
+            </returns>
+      <exception cref="T:System.IO.FileNotFoundException">
+            If the provided file path is invalid.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.IHttpResponse.GenerateLastModifiedDate(System.IO.FileInfo)">
+      <summary>
+            Generates the last modified date for the provided file.
+            </summary>
+      <param name="file">The file.</param>
+      <returns>
+            The last modified date of the file int the RFC-1123 format.
+            </returns>
+      <exception cref="T:System.IO.FileNotFoundException">
+            If the provided file path is invalid.
+            </exception>
     </member>
     <member name="P:RestFoundation.IHttpResponse.Output">
       <summary>
@@ -10719,29 +10766,50 @@
       <param name="title">The link title.</param>
       <exception cref="T:System.ArgumentException">If href or rel contain invalid characters.</exception>
     </member>
-    <member name="M:RestFoundation.Context.HttpResponse.SetFileDependencies(System.String)">
+    <member name="M:RestFoundation.Context.HttpResponse.GenerateEtag(System.String)">
       <summary>
-            Adds the file as a response dependency to create an e-tag, last modified time and
-            set appropriate caching parameters.
+            Generates an e-tag for the file with the provided full path.
             </summary>
       <param name="filePath">The file path.</param>
+      <returns>The e-tag for the file.</returns>
+      <exception cref="T:System.IO.FileNotFoundException">
+            If the provided file path is invalid.
+            </exception>
     </member>
-    <member name="M:RestFoundation.Context.HttpResponse.SetFileDependencies(System.String,System.TimeSpan)">
+    <member name="M:RestFoundation.Context.HttpResponse.GenerateEtag(System.IO.FileInfo)">
       <summary>
-            Adds the file as a response dependency to create an e-tag, last modified time and
-            set appropriate caching parameters.
+            Generates an e-tag for the provided file.
             </summary>
-      <param name="filePath">The file path.</param>
-      <param name="maxAge">The time span before the cache expires.</param>
+      <param name="file">The file.</param>
+      <returns>The e-tag for the file.</returns>
+      <exception cref="T:System.IO.FileNotFoundException">
+            If the provided file path is invalid.
+            </exception>
     </member>
-    <member name="M:RestFoundation.Context.HttpResponse.SetFileDependencies(System.String,System.Web.HttpCacheability,System.TimeSpan)">
+    <member name="M:RestFoundation.Context.HttpResponse.GenerateLastModifiedDate(System.String)">
       <summary>
-            Adds the file as a response dependency to create an e-tag, last modified time and
-            set appropriate caching parameters.
+            Generates the last modified date for the file with the provided
+            full path.
             </summary>
       <param name="filePath">The file path.</param>
-      <param name="cacheability">The cacheability value.</param>
-      <param name="maxAge">The time span before the cache expires.</param>
+      <returns>
+            The last modified date of the file int the RFC-1123 format.
+            </returns>
+      <exception cref="T:System.IO.FileNotFoundException">
+            If the provided file path is invalid.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Context.HttpResponse.GenerateLastModifiedDate(System.IO.FileInfo)">
+      <summary>
+            Generates the last modified date for the provided file.
+            </summary>
+      <param name="file">The file.</param>
+      <returns>
+            The last modified date of the file int the RFC-1123 format.
+            </returns>
+      <exception cref="T:System.IO.FileNotFoundException">
+            If the provided file path is invalid.
+            </exception>
     </member>
     <member name="P:RestFoundation.Context.HttpResponse.Output">
       <summary>
@@ -11501,23 +11569,30 @@
             OPTIONS
             </summary>
     </member>
-    <member name="T:RestFoundation.Results.StatusResult">
+    <member name="T:RestFoundation.Results.StatusCodeResult">
       <summary>
-            Represents an HTTP response status result.
+            Represents an HTTP status code result.
             </summary>
     </member>
-    <member name="M:RestFoundation.Results.StatusResult.#ctor">
+    <member name="M:RestFoundation.Results.StatusCodeResult.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Results.StatusResult" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Results.StatusCodeResult" /> class.
             </summary>
     </member>
-    <member name="M:RestFoundation.Results.StatusResult.Execute(RestFoundation.IServiceContext)">
+    <member name="M:RestFoundation.Results.StatusCodeResult.#ctor(System.Net.HttpStatusCode)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Results.StatusCodeResult" /> class
+            with the provided HTTP status code.
+            </summary>
+      <param name="code">The HTTP status code.</param>
+    </member>
+    <member name="M:RestFoundation.Results.StatusCodeResult.Execute(RestFoundation.IServiceContext)">
       <summary>
             Executes the result against the provided service context.
             </summary>
       <param name="context">The service context.</param>
     </member>
-    <member name="M:RestFoundation.Results.StatusResult.IsSuccessStatusCode">
+    <member name="M:RestFoundation.Results.StatusCodeResult.IsSuccessStatusCode">
       <summary>
             Gets a <see cref="T:System.Boolean" /> indicating whether the status code was successful.
             </summary>
@@ -11525,17 +11600,17 @@
             true if the status code is in the 200-299 range; otherwise false.
             </returns>
     </member>
-    <member name="P:RestFoundation.Results.StatusResult.ResponseHeaders">
+    <member name="P:RestFoundation.Results.StatusCodeResult.ResponseHeaders">
       <summary>
             Gets a dictionary of response headers to set along with the status code.
             </summary>
     </member>
-    <member name="P:RestFoundation.Results.StatusResult.StatusCode">
+    <member name="P:RestFoundation.Results.StatusCodeResult.Code">
       <summary>
             Gets or sets an HTTP status code.
             </summary>
     </member>
-    <member name="P:RestFoundation.Results.StatusResult.StatusDescription">
+    <member name="P:RestFoundation.Results.StatusCodeResult.Description">
       <summary>
             Gets or sets an HTTP status description.
             </summary>

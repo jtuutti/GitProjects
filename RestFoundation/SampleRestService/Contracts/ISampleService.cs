@@ -28,6 +28,6 @@ namespace SampleRestService.Contracts
         Product PatchStockStatus([Constraint(ParameterType.UnsignedInteger)] int id, bool inStock = true);
 
         [Url("product/{id}")]
-        StatusResult DeleteById([Constraint(ParameterType.UnsignedInteger)] int id);
+        StatusCodeResult DeleteById([Constraint(ParameterType.UnsignedInteger)] int id);
     }
 }
