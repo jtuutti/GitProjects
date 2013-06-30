@@ -297,6 +297,12 @@
             return ResourceOutputFormatter.FormatXml(data);
         }
 
+        if (contentType.IndexOf("application/javascript", StringComparison.OrdinalIgnoreCase) >= 0 ||
+            contentType.IndexOf("text/javascript", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            return ResourceOutputFormatter.FormatJsonP(data);
+        }
+
         return data;
     }
 

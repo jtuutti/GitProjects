@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 
@@ -13,6 +14,8 @@ namespace RestFoundation.Runtime
     /// </summary>
     public static class ResourceOutputFormatter
     {
+        private static readonly Regex JsonPRegex = new Regex(@"^(jsonpCallback\()(.+)(\);?)$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+            
         /// <summary>
         /// Formats the input JSON with whitespace.
         /// </summary>
@@ -32,6 +35,39 @@ namespace RestFoundation.Runtime
 
                 options.Formatting = Formatting.Indented;
                 return JsonConvert.SerializeObject(jsonObject, options);
+            }
+            catch (Exception)
+            {
+                return input;
+            }
+        }
+
+        /// <summary>
+        /// Formats the input JSONP with whitespace.
+        /// </summary>
+        /// <param name="input">The input JSONP string</param>
+        /// <returns>The formatted JSONP output.</returns>
+        public static string FormatJsonP(string input)
+        {
+            if (String.IsNullOrWhiteSpace(input))
+            {
+                return input;
+            }
+
+            var match = JsonPRegex.Match(input);
+
+            if (match.Groups.Count != 4)
+            {
+                return input;
+            }
+
+            try
+            {
+                var options = Rest.Configuration.Options.JsonSettings.ToJsonSerializerSettings();
+                object jsonObject = JsonConvert.DeserializeObject(match.Groups[2].Value, options);
+
+                options.Formatting = Formatting.Indented;
+                return String.Concat(match.Groups[1].Value, JsonConvert.SerializeObject(jsonObject, options), match.Groups[3].Value);
             }
             catch (Exception)
             {
