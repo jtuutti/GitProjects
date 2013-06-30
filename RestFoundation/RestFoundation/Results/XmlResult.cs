@@ -233,14 +233,14 @@ namespace RestFoundation.Results
                 return true;
             }
 
-            if (Rest.Configuration.Options.EnumerableAsChunked && returnedGenericType == typeof(IEnumerable<>))
+            if (Rest.Configuration.Options.EnumerableChunkedSupport && returnedGenericType == typeof(IEnumerable<>))
             {
                 SerializeAsChunkedSequence(context, xmlWriter);
                 return true;
             }
 
-            if (returnedGenericType == typeof(IQueryable<>) ||
-                ReturnedType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryable<>)))
+            if (Rest.Configuration.Options.QueryableODataSupport && (returnedGenericType == typeof(IQueryable<>) ||
+                ReturnedType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryable<>))))
             {
                 var odataProvider = Rest.Configuration.ServiceLocator.GetService<IODataProvider>();
                 Content = odataProvider.PerformQuery((IQueryable) Content, context.Request.QueryString.ToNameValueCollection());

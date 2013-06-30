@@ -19,7 +19,9 @@ namespace RestFoundation.Configuration
     {
         internal RestOptions()
         {
-            EnumerableAsChunked = true;
+            EnumerableChunkedSupport = true;
+            QueryableODataSupport = true;
+
             FaultDetail = FaultDetail.DetailedInDebugMode;
 
             JsonSettings = new JsonFormatterSettings();
@@ -52,7 +54,8 @@ namespace RestFoundation.Configuration
         internal string ServiceProxyRelativeUrl { get; set; }
         internal string DefaultMediaType { get; private set; }
         internal bool ForceDefaultMediaType { get; private set; }
-        internal bool EnumerableAsChunked { get; private set; }
+        internal bool EnumerableChunkedSupport { get; private set; }
+        internal bool QueryableODataSupport { get; set; }
         internal FaultDetail FaultDetail { get; private set; }
         internal bool RetainWebServerHeaders { get; private set; }
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
@@ -115,16 +118,33 @@ namespace RestFoundation.Configuration
         }
 
         /// <summary>
-        /// Sets a value indicating whether <see cref="T:System.Collections.Generic.IEnumerable`1"/> collection
+        /// Sets a value indicating whether an <see cref="T:System.Collections.Generic.IEnumerable`1"/> collection
         /// results should be output as chunked HTTP requests. The default value is true.
         /// </summary>
-        /// <param name="enumerableAsChunked">
-        /// true if collections should be output as chunked HTTP requests; otherwise false.
+        /// <param name="supportChunkedOutput">
+        /// true if <see cref="T:System.Collections.Generic.IEnumerable`1"/>  collections should be output as
+        /// chunked HTTP requests; otherwise false.
         /// </param>
         /// <returns>The configuration options object.</returns>
-        public RestOptions OutputEnumerableAsChunked(bool enumerableAsChunked)
+        public RestOptions WithEnumerableChunkedSupport(bool supportChunkedOutput)
         {
-            EnumerableAsChunked = enumerableAsChunked;
+            EnumerableChunkedSupport = supportChunkedOutput;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets a value indicating whether an <see cref="T:System.Linq.IQueryable`1"/> collection
+        /// results should support OData operations provided in the query string. The default value
+        /// is true.
+        /// </summary>
+        /// <param name="supportODataOperations">
+        /// true if <see cref="T:System.Linq.IQueryable`1"/> collections should support OData operations;
+        /// otherwise false.
+        /// </param>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions WithQueryableODataSupport(bool supportODataOperations)
+        {
+            QueryableODataSupport = supportODataOperations;
             return this;
         }
 
