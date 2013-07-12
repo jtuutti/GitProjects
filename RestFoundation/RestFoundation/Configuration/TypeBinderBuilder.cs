@@ -2,6 +2,8 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using RestFoundation.Runtime;
 using RestFoundation.TypeBinders;
 
@@ -29,6 +31,15 @@ namespace RestFoundation.Configuration
             }
 
             return TypeBinderRegistry.GetBinder(objectType);
+        }
+
+        /// <summary>
+        /// Gets a sequence of all the type binders.
+        /// </summary>
+        /// <returns>The type binders.</returns>
+        public IEnumerable<ITypeBinder> GetAll()
+        {
+            return TypeBinderRegistry.GetBinders().Distinct();
         }
 
         /// <summary>
@@ -67,6 +78,16 @@ namespace RestFoundation.Configuration
             }
 
             return TypeBinderRegistry.RemoveBinder(objectType);
+        }
+
+        /// <summary>
+        /// Removes the provided type binders.
+        /// </summary>
+        /// <param name="binder">The type binder.</param>
+        /// <returns>true if the type binder was removed; false otherwise.</returns>
+        public bool Remove(ITypeBinder binder)
+        {
+            return TypeBinderRegistry.RemoveBinder(binder);
         }
 
         /// <summary>

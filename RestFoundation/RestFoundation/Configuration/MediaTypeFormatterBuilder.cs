@@ -2,6 +2,7 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using RestFoundation.Formatters;
@@ -10,7 +11,7 @@ using RestFoundation.Runtime;
 namespace RestFoundation.Configuration
 {
     /// <summary>
-    /// Represents a media type formatter builder.
+    /// Represents a global media type formatter builder.
     /// </summary>
     public sealed class MediaTypeFormatterBuilder
     {
@@ -19,7 +20,7 @@ namespace RestFoundation.Configuration
         }
 
         /// <summary>
-        /// Gets a formatter by the media type.
+        /// Gets a global formatter by the media type.
         /// </summary>
         /// <param name="mediaType">The media type.</param>
         /// <returns>The associated media type formatter or null.</returns>
@@ -40,7 +41,16 @@ namespace RestFoundation.Configuration
         }
 
         /// <summary>
-        /// Sets a formatter for its supported types.
+        /// Gets a sequence of all global media formatters.
+        /// </summary>
+        /// <returns>The media formatters.</returns>
+        public IEnumerable<IMediaTypeFormatter> GetAll()
+        {
+            return MediaTypeFormatterRegistry.GetMediaFormatters().Distinct();
+        }
+
+        /// <summary>
+        /// Sets a global formatter for its supported types.
         /// </summary>
         /// <param name="formatter">The media type formatter.</param>
         /// <exception cref="ArgumentException">If media type parameters are provided.</exception>
@@ -66,7 +76,7 @@ namespace RestFoundation.Configuration
         }
 
         /// <summary>
-        /// Sets a formatter for the provided media type.
+        /// Sets a global formatter for the provided media type.
         /// </summary>
         /// <param name="mediaType">The media type.</param>
         /// <param name="formatter">The media type formatter.</param>
@@ -92,7 +102,7 @@ namespace RestFoundation.Configuration
         }
 
         /// <summary>
-        /// Removes an associated formatter for the provided media type.
+        /// Removes a global formatter for the provided media type.
         /// </summary>
         /// <param name="mediaType">The media type.</param>
         /// <returns>
@@ -116,7 +126,17 @@ namespace RestFoundation.Configuration
         }
 
         /// <summary>
-        /// Clears all associated media type formatters.
+        /// Removes the provided media type formatter.
+        /// </summary>
+        /// <param name="formatter">The media formatter.</param>
+        /// <returns>true if the media type formatter was removed; false otherwise.</returns>
+        public bool Remove(IMediaTypeFormatter formatter)
+        {
+            return MediaTypeFormatterRegistry.RemoveFormatter(formatter);
+        }
+
+        /// <summary>
+        /// Clears all global media type formatters.
         /// </summary>
         public void Clear()
         {

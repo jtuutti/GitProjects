@@ -28,6 +28,14 @@ namespace RestFoundation.Runtime
             return formatters.TryGetValue(mediaType, out formatter) ? formatter : null;
         }
 
+        public static IEnumerable<IMediaTypeFormatter> GetMediaFormatters()
+        {
+            foreach (var formatterRegistration in formatters)
+            {
+                yield return formatterRegistration.Value;
+            }
+        }
+
         public static IReadOnlyCollection<string> GetMediaTypes()
         {
             return formatters.Keys.ToArray();
@@ -53,6 +61,33 @@ namespace RestFoundation.Runtime
             IMediaTypeFormatter formatter;
 
             return formatters.TryRemove(mediaType, out formatter);
+        }
+
+        public static bool RemoveFormatter(IMediaTypeFormatter formatter)
+        {
+            if (formatter == null)
+            {
+                throw new ArgumentNullException("formatter");
+            }
+
+            var mediaTypes = new List<string>();
+
+            foreach (var formatterRegistration in formatters)
+            {
+                if (formatterRegistration.Value == formatter)
+                {
+                    mediaTypes.Add(formatterRegistration.Key);
+                }
+            }
+
+            IMediaTypeFormatter tempValue = null;
+
+            foreach (string mediaType in mediaTypes)
+            {
+                formatters.TryRemove(mediaType, out tempValue);
+            }
+
+            return tempValue != null;
         }
 
         public static void Clear()
