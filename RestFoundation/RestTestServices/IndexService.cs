@@ -100,7 +100,7 @@ namespace RestTestServices
                 Context.Response.Output.WriteFormat("<br/><br/>Dummy variable: {0}", dummy);
             }
 
-            return Result.Content("<br/><br/>GET completed", false, "text/html");
+            return Result.Content("a=b&b=c", true, "application/x-www-form-urlencoded");
         }
 
         public object Post(Person resource)

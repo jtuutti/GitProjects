@@ -189,7 +189,7 @@ namespace RestFoundation.Runtime
             IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, contentType) ??
                                             MediaTypeFormatterRegistry.GetFormatter(contentType);
 
-            if (formatter == null || formatter is BlockFormatter)
+            if (formatter == null || !formatter.CanFormatRequest)
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType, Resources.Global.MissingOrInvalidContentType);
             }

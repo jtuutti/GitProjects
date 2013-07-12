@@ -378,7 +378,7 @@ namespace RestFoundation.Context
 
             IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetFormatter(Headers.ContentType);
 
-            if (formatter == null || formatter is BlockFormatter)
+            if (formatter == null || !formatter.CanFormatRequest)
             {
                 return null;
             }

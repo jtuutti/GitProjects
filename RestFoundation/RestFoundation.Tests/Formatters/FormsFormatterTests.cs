@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Web;
 using NUnit.Framework;
@@ -48,9 +49,10 @@ namespace RestFoundation.Tests.Formatters
             Model model = CreateModel();
 
             var formatter = new FormsFormatter();
+            Assert.That(formatter.CanFormatResponse, Is.False);
 
             // "application/x-www-form-urlencoded" be used as an accepted media type
-            Assert.Throws(typeof(HttpResponseException), () => formatter.FormatResponse(m_context, typeof(Model), model, null));
+            Assert.Throws(typeof(NotSupportedException), () => formatter.FormatResponse(m_context, typeof(Model), model, null));
         }
 
         private static Model CreateModel()

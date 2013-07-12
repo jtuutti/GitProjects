@@ -57,7 +57,7 @@ namespace RestFoundation.Runtime
             IMediaTypeFormatter formatter = MediaTypeFormatterRegistry.GetHandlerFormatter(handler, preferredMediaType) ??
                                             MediaTypeFormatterRegistry.GetFormatter(preferredMediaType);
 
-            if (formatter == null)
+            if (formatter == null || !formatter.CanFormatResponse)
             {
                 throw new HttpResponseException(HttpStatusCode.NotAcceptable, Resources.Global.MissingOrInvalidAcceptType);
             }

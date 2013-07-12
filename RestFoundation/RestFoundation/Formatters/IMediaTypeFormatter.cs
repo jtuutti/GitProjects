@@ -13,6 +13,18 @@ namespace RestFoundation.Formatters
     public interface IMediaTypeFormatter
     {
         /// <summary>
+        /// Gets a value indicating whether the formatter can format message body in HTTP
+        /// requests.
+        /// </summary>
+        bool CanFormatRequest { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the formatter can format objects returned by service
+        /// methods into HTTP response.
+        /// </summary>
+        bool CanFormatResponse { get; }
+
+        /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.
         /// </summary>
         /// <param name="context">The service context.</param>

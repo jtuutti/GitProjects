@@ -12,6 +12,30 @@ namespace RestFoundation.Formatters
     public sealed class BlockFormatter : IMediaTypeFormatter
     {
         /// <summary>
+        /// Gets a value indicating whether the formatter can format message body in HTTP
+        /// requests.
+        /// </summary>
+        public bool CanFormatRequest
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the formatter can format objects returned by service
+        /// methods into HTTP response.
+        /// </summary>
+        public bool CanFormatResponse
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.
         /// </summary>
         /// <param name="context">The service context.</param>

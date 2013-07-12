@@ -20,6 +20,30 @@ namespace RestFoundation.Formatters
         private static readonly HashSet<string> supportedMediaTypes = GetSupportedMediaTypes();
 
         /// <summary>
+        /// Gets a value indicating whether the formatter can format message body in HTTP
+        /// requests.
+        /// </summary>
+        public virtual bool CanFormatRequest
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the formatter can format objects returned by service
+        /// methods into HTTP response.
+        /// </summary>
+        public virtual bool CanFormatResponse
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Deserializes HTTP message body data into an object instance of the provided type.
         /// </summary>
         /// <param name="context">The service context.</param>
