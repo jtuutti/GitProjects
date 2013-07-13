@@ -97,7 +97,7 @@
     <Compile Include="LinkRelationValues.cs" />
     <Compile Include="LogWriterExtensions.cs" />
     <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
-    <Compile Include="ParameterType.cs" />
+    <Compile Include="ConstraintType.cs" />
     <Compile Include="Properties\VersionInfo.cs" />
     <Compile Include="Results\FileResult.cs" />
     <Compile Include="Results\HtmlFileResult.cs" />
