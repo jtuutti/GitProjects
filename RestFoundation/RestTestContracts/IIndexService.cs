@@ -34,16 +34,16 @@ namespace RestTestContracts
         IResult GetAllByFormat(string format);
 
         [Url("index/{id}")]
-        ContentResult Get([Constraint(ConstraintType.UnsignedInteger)] int? id = 1, [FromUri] string dummy = "N/A");
+        ContentResult Get([Constraint(Constraint.UnsignedInteger)] int? id = 1, [FromUri] string dummy = "N/A");
 
         [Url("index"), AssertValidation(true)]
         object Post(Person resource);
 
         [Url("index/{id}"), AssertValidation(true)]
-        Person Put([Constraint(ConstraintType.UnsignedInteger)] int? id, [Resource] Person personToUpdate);
+        Person Put([Constraint(Constraint.UnsignedInteger)] int? id, [Resource] Person personToUpdate);
 
         [Url("index/{id}"), AssertValidation(true)]
-        Person Patch([Constraint(ConstraintType.UnsignedInteger)] int? id, Person resource);
+        Person Patch([Constraint(Constraint.UnsignedInteger)] int? id, Person resource);
 
         [Url("index/{name}")]
         StatusCodeResult Delete(string name);

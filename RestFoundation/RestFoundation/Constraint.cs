@@ -6,7 +6,7 @@ namespace RestFoundation
     /// <summary>
     /// Contains common parameter type constaints.
     /// </summary>
-    public static class ConstraintType
+    public static class Constraint
     {
         /// <summary>
         /// Represents an string containing English letters.

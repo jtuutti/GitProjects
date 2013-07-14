@@ -13,6 +13,6 @@ namespace RestFoundation
         /// <summary>
         /// Gets the build version.
         /// </summary>
-        public const string BuildVersion = "2.5.0.296";
+        public const string BuildVersion = "2.5.0.308";
     }
 }

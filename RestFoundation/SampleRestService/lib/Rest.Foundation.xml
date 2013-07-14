@@ -1801,37 +1801,67 @@
             If the <paramref name="format" /> string does not match the arguments.
             </exception>
     </member>
-    <member name="T:RestFoundation.ParameterType">
+    <member name="T:RestFoundation.Constraint">
       <summary>
             Contains common parameter type constaints.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterType.AnyInteger">
+    <member name="F:RestFoundation.Constraint.Alpha">
       <summary>
-            Represents any integer number up to 7 digits.
+            Represents an string containing English letters.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterType.UnsignedInteger">
+    <member name="F:RestFoundation.Constraint.AlphaWithDashesAndUnderscores">
       <summary>
-            Represents a non-negative integer number up to 7 digits.
+            Represents an string containing English letters, dashes and underscores.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterType.AnyNumber">
+    <member name="F:RestFoundation.Constraint.AlphaNumeric">
+      <summary>
+            Represents an string containing English letters and digits.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.Constraint.AlphaNumericWithDashesAndUnderscores">
+      <summary>
+            Represents an string containing English letters, digits, dashes and underscores.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.Constraint.AnyInteger">
+      <summary>
+            Represents any integer number up to 10 digits.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.Constraint.UnsignedInteger">
+      <summary>
+            Represents a non-negative integer number up to 10 digits.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.Constraint.AnyLong">
+      <summary>
+            Represents any long integer number up to 19 digits.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.Constraint.UnsignedLong">
+      <summary>
+            Represents a non-negative long integer number up to 19 digits.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.Constraint.AnyNumber">
       <summary>
             Represents any decimal/floating point number.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterType.UnsignedNumber">
+    <member name="F:RestFoundation.Constraint.UnsignedNumber">
       <summary>
             Represents a non-negative decimal/floating point number.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterType.Boolean">
+    <member name="F:RestFoundation.Constraint.Boolean">
       <summary>
             Represents a boolean true/false value.
             </summary>
     </member>
-    <member name="F:RestFoundation.ParameterType.Guid">
+    <member name="F:RestFoundation.Constraint.Guid">
       <summary>
             Represents a GUID value.
             </summary>
@@ -2506,13 +2536,26 @@
             </param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.Configuration.RestOptions.OutputEnumerableAsChunked(System.Boolean)">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithEnumerableChunkedSupport(System.Boolean)">
       <summary>
-            Sets a value indicating whether <see cref="T:System.Collections.Generic.IEnumerable`1" /> collection
+            Sets a value indicating whether an <see cref="T:System.Collections.Generic.IEnumerable`1" /> collection
             results should be output as chunked HTTP requests. The default value is true.
             </summary>
-      <param name="enumerableAsChunked">
-            true if collections should be output as chunked HTTP requests; otherwise false.
+      <param name="supportChunkedOutput">
+            true if <see cref="T:System.Collections.Generic.IEnumerable`1" />  collections should be output as
+            chunked HTTP requests; otherwise false.
+            </param>
+      <returns>The configuration options object.</returns>
+    </member>
+    <member name="M:RestFoundation.Configuration.RestOptions.WithQueryableODataSupport(System.Boolean)">
+      <summary>
+            Sets a value indicating whether an <see cref="T:System.Linq.IQueryable`1" /> collection
+            results should support OData operations provided in the query string. The default value
+            is true.
+            </summary>
+      <param name="supportODataOperations">
+            true if <see cref="T:System.Linq.IQueryable`1" /> collections should support OData operations;
+            otherwise false.
             </param>
       <returns>The configuration options object.</returns>
     </member>
@@ -3724,6 +3767,18 @@
             If the object could not be serialized.
             </exception>
     </member>
+    <member name="P:RestFoundation.Formatters.IMediaTypeFormatter.CanFormatRequest">
+      <summary>
+            Gets a value indicating whether the formatter can format message body in HTTP
+            requests.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Formatters.IMediaTypeFormatter.CanFormatResponse">
+      <summary>
+            Gets a value indicating whether the formatter can format objects returned by service
+            methods into HTTP response.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Formatters.BlockFormatter">
       <summary>
             Represents a media type formatter to block globally supported media types for specific routes.
@@ -3753,6 +3808,18 @@
             If the object could not be serialized.
             </exception>
     </member>
+    <member name="P:RestFoundation.Formatters.BlockFormatter.CanFormatRequest">
+      <summary>
+            Gets a value indicating whether the formatter can format message body in HTTP
+            requests.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Formatters.BlockFormatter.CanFormatResponse">
+      <summary>
+            Gets a value indicating whether the formatter can format objects returned by service
+            methods into HTTP response.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Formatters.JsonPFormatter">
       <summary>
             Represents a JSONP media type formatter.
@@ -3777,6 +3844,18 @@
       <param name="preferredMediaType">The preferred media type.</param>
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
+    </member>
+    <member name="P:RestFoundation.Formatters.JsonPFormatter.CanFormatRequest">
+      <summary>
+            Gets a value indicating whether the formatter can format message body in HTTP
+            requests.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Formatters.JsonPFormatter.CanFormatResponse">
+      <summary>
+            Gets a value indicating whether the formatter can format objects returned by service
+            methods into HTTP response.
+            </summary>
     </member>
     <member name="T:RestFoundation.IContentNegotiator">
       <summary>
@@ -7036,6 +7115,21 @@
       <param name="context">The service context.</param>
       <returns>The object instance with the data or null.</returns>
     </member>
+    <member name="T:RestFoundation.TypeBinders.DoNotBindAttribute">
+      <summary>
+            Represents a type binder that prevents the parameter from getting binded.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.TypeBinders.DoNotBindAttribute.Bind(System.String,System.Type,RestFoundation.IServiceContext)">
+      <summary>
+            Binds data from an HTTP route, query string or message to a service method parameter.
+            </summary>
+      <param name="name">The service method parameter name.</param>
+      <param name="objectType">The binded object type.</param>
+      <param name="context">The service context.</param>
+      <returns>The object instance with the data or null.</returns>
+      <exception cref="T:System.NotSupportedException">This method is not supposed to be executed.</exception>
+    </member>
     <member name="T:RestFoundation.TypeBinders.FromBodyAttribute">
       <summary>
             Represents a type binder that binds simple types from HTTP body key value pairs.
@@ -7140,6 +7234,12 @@
       <param name="objectType">The object type.</param>
       <returns>The associated type binder or null.</returns>
     </member>
+    <member name="M:RestFoundation.Configuration.TypeBinderBuilder.GetAll">
+      <summary>
+            Gets a sequence of all the type binders.
+            </summary>
+      <returns>The type binders.</returns>
+    </member>
     <member name="M:RestFoundation.Configuration.TypeBinderBuilder.Set(System.Type,RestFoundation.TypeBinders.ITypeBinder)">
       <summary>
             Sets a type binder for the provided object type.
@@ -7157,6 +7257,13 @@
             for the object type.
             </returns>
     </member>
+    <member name="M:RestFoundation.Configuration.TypeBinderBuilder.Remove(RestFoundation.TypeBinders.ITypeBinder)">
+      <summary>
+            Removes the provided type binders.
+            </summary>
+      <param name="binder">The type binder.</param>
+      <returns>true if the type binder was removed; false otherwise.</returns>
+    </member>
     <member name="M:RestFoundation.Configuration.TypeBinderBuilder.Clear">
       <summary>
             Clears all associated type binders.
@@ -7164,27 +7271,33 @@
     </member>
     <member name="T:RestFoundation.Configuration.MediaTypeFormatterBuilder">
       <summary>
-            Represents a media type formatter builder.
+            Represents a global media type formatter builder.
             </summary>
     </member>
     <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.Get(System.String)">
       <summary>
-            Gets a formatter by the media type.
+            Gets a global formatter by the media type.
             </summary>
       <param name="mediaType">The media type.</param>
       <returns>The associated media type formatter or null.</returns>
       <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
     </member>
+    <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.GetAll">
+      <summary>
+            Gets a sequence of all global media formatters.
+            </summary>
+      <returns>The media formatters.</returns>
+    </member>
     <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.Set(RestFoundation.Formatters.IMediaTypeFormatter)">
       <summary>
-            Sets a formatter for its supported types.
+            Sets a global formatter for its supported types.
             </summary>
       <param name="formatter">The media type formatter.</param>
       <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
     </member>
     <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.Set(System.String,RestFoundation.Formatters.IMediaTypeFormatter)">
       <summary>
-            Sets a formatter for the provided media type.
+            Sets a global formatter for the provided media type.
             </summary>
       <param name="mediaType">The media type.</param>
       <param name="formatter">The media type formatter.</param>
@@ -7192,7 +7305,7 @@
     </member>
     <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.Remove(System.String)">
       <summary>
-            Removes an associated formatter for the provided media type.
+            Removes a global formatter for the provided media type.
             </summary>
       <param name="mediaType">The media type.</param>
       <returns>
@@ -7201,9 +7314,16 @@
             </returns>
       <exception cref="T:System.ArgumentException">If media type parameters are provided.</exception>
     </member>
+    <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.Remove(RestFoundation.Formatters.IMediaTypeFormatter)">
+      <summary>
+            Removes the provided media type formatter.
+            </summary>
+      <param name="formatter">The media formatter.</param>
+      <returns>true if the media type formatter was removed; false otherwise.</returns>
+    </member>
     <member name="M:RestFoundation.Configuration.MediaTypeFormatterBuilder.Clear">
       <summary>
-            Clears all associated media type formatters.
+            Clears all global media type formatters.
             </summary>
     </member>
     <member name="T:RestFoundation.Security.IAuthorizationManager">
@@ -9385,6 +9505,18 @@
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
+    <member name="P:RestFoundation.Formatters.FormsFormatter.CanFormatRequest">
+      <summary>
+            Gets a value indicating whether the formatter can format message body in HTTP
+            requests.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Formatters.FormsFormatter.CanFormatResponse">
+      <summary>
+            Gets a value indicating whether the formatter can format objects returned by service
+            methods into HTTP response.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Result">
       <summary>
             Generates results to return from service methods.
@@ -9913,6 +10045,18 @@
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
     </member>
+    <member name="P:RestFoundation.Formatters.JsonFormatter.CanFormatRequest">
+      <summary>
+            Gets a value indicating whether the formatter can format message body in HTTP
+            requests.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Formatters.JsonFormatter.CanFormatResponse">
+      <summary>
+            Gets a value indicating whether the formatter can format objects returned by service
+            methods into HTTP response.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Formatters.XmlFormatter">
       <summary>
             Represents an XML media type formatter.
@@ -9937,6 +10081,18 @@
       <param name="preferredMediaType">The preferred media type.</param>
       <returns>A service method result containing the serialized object representation.</returns>
       <exception cref="T:RestFoundation.Runtime.HttpResponseException">If the object could not be serialized.</exception>
+    </member>
+    <member name="P:RestFoundation.Formatters.XmlFormatter.CanFormatRequest">
+      <summary>
+            Gets a value indicating whether the formatter can format message body in HTTP
+            requests.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Formatters.XmlFormatter.CanFormatResponse">
+      <summary>
+            Gets a value indicating whether the formatter can format objects returned by service
+            methods into HTTP response.
+            </summary>
     </member>
     <member name="T:RestFoundation.RestHttpModule">
       <summary>
@@ -11365,6 +11521,13 @@
             </summary>
       <param name="input">The input JSON string</param>
       <returns>The formatted JSON output.</returns>
+    </member>
+    <member name="M:RestFoundation.Runtime.ResourceOutputFormatter.FormatJsonP(System.String)">
+      <summary>
+            Formats the input JSONP with whitespace.
+            </summary>
+      <param name="input">The input JSONP string</param>
+      <returns>The formatted JSONP output.</returns>
     </member>
     <member name="M:RestFoundation.Runtime.ResourceOutputFormatter.FormatXml(System.String)">
       <summary>

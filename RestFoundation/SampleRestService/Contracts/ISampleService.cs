@@ -13,7 +13,7 @@ namespace SampleRestService.Contracts
     public interface ISampleService
     {
         [Url("product/{id}")]
-        Product GetById([Constraint(ParameterType.UnsignedInteger)] int id);
+        Product GetById([Constraint(Constraint.UnsignedInteger)] int id);
 
         [Url("products")]
         IQueryable<Product> GetAll();
@@ -22,12 +22,12 @@ namespace SampleRestService.Contracts
         Task<Product> PostAsync(Product resource);
 
         [Url("product/{id}"), AssertValidation(true)]
-        Task<Product> PutAsync([Constraint(ParameterType.UnsignedInteger)] int id, Product resource);
+        Task<Product> PutAsync([Constraint(Constraint.UnsignedInteger)] int id, Product resource);
 
         [Url("product/{id}/in-stock/{inStock}")]
-        Product PatchStockStatus([Constraint(ParameterType.UnsignedInteger)] int id, bool inStock = true);
+        Product PatchStockStatus([Constraint(Constraint.UnsignedInteger)] int id, bool inStock = true);
 
         [Url("product/{id}")]
-        StatusCodeResult DeleteById([Constraint(ParameterType.UnsignedInteger)] int id);
+        StatusCodeResult DeleteById([Constraint(Constraint.UnsignedInteger)] int id);
     }
 }
