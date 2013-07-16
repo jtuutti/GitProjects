@@ -101,7 +101,7 @@
     <Compile Include="Properties\VersionInfo.cs" />
     <Compile Include="Results\FileResult.cs" />
     <Compile Include="Results\HtmlFileResult.cs" />
-    <Compile Include="Results\IODataProvider.cs" />
+    <Compile Include="Runtime\IODataProvider.cs" />
     <Compile Include="Results\IResultAsync.cs" />
     <Compile Include="Results\StreamResult.cs" />
     <Compile Include="RouteHash.cs" />

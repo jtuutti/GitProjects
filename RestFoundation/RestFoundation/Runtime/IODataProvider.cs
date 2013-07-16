@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace RestFoundation.Results
+namespace RestFoundation.Runtime
 {
     /// <summary>
     /// Defines an OData provider for <see cref="T:System.Linq.IQueryable`1"/> collection
