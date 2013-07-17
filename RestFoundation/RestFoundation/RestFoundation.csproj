@@ -41,6 +41,10 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Linq2Rest, Version=3.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Linq2Rest.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
@@ -96,7 +100,6 @@
     <Compile Include="IUrlRewriter.cs" />
     <Compile Include="LinkRelationValues.cs" />
     <Compile Include="LogWriterExtensions.cs" />
-    <Compile Include="Odata\Parser\MemberNameResolverContracts.cs" />
     <Compile Include="Constraint.cs" />
     <Compile Include="Properties\VersionInfo.cs" />
     <Compile Include="Results\FileResult.cs" />
@@ -108,7 +111,7 @@
     <Compile Include="Runtime\AllowHeaderParser.cs" />
     <Compile Include="Runtime\ConsoleLogger.cs" />
     <Compile Include="Runtime\DebugLogger.cs" />
-    <Compile Include="Runtime\DefaultODataProvider.cs" />
+    <Compile Include="Runtime\Linq2RestODataProvider.cs" />
     <Compile Include="Runtime\Fault.cs" />
     <Compile Include="Runtime\FaultCollection.cs" />
     <Compile Include="Runtime\Handlers\HtmlRouteHandler.cs" />
@@ -247,31 +250,6 @@
     <Compile Include="UrlRewriteType.cs" />
     <Compile Include="Validation\IResourceValidator.cs" />
     <Compile Include="IUploadedFile.cs" />
-    <Compile Include="Odata\IModelFilter.cs" />
-    <Compile Include="Odata\IRuntimeTypeProvider.cs" />
-    <Compile Include="Odata\LinqExtensions.cs" />
-    <Compile Include="Odata\MethodProvider.cs" />
-    <Compile Include="Odata\ModelFilter.cs" />
-    <Compile Include="Odata\ModelFilterContracts.cs" />
-    <Compile Include="Odata\Parser\ExpressionTokenizer.cs" />
-    <Compile Include="Odata\Parser\FilterExpressionFactory.cs" />
-    <Compile Include="Odata\Parser\FunctionTokenSet.cs" />
-    <Compile Include="Odata\Parser\IFilterExpressionFactory.cs" />
-    <Compile Include="Odata\Parser\IMemberNameResolver.cs" />
-    <Compile Include="Odata\Parser\IParameterParser.cs" />
-    <Compile Include="Odata\Parser\ISelectExpressionFactory.cs" />
-    <Compile Include="Odata\Parser\ISortExpressionFactory.cs" />
-    <Compile Include="Odata\Parser\MemberNameResolver.cs" />
-    <Compile Include="Odata\Parser\ParameterParser.cs" />
-    <Compile Include="Odata\Parser\SelectExpressionFactory.cs" />
-    <Compile Include="Odata\Parser\SortDescription.cs" />
-    <Compile Include="Odata\Parser\SortExpressionFactory.cs" />
-    <Compile Include="Odata\Parser\TokenOperatorExtensions.cs" />
-    <Compile Include="Odata\Parser\TokenSet.cs" />
-    <Compile Include="Odata\QueryableHelper.cs" />
-    <Compile Include="Odata\RuntimeTypeProvider.cs" />
-    <Compile Include="Odata\RuntimeTypeProviderContracts.cs" />
-    <Compile Include="Odata\StringConstants.cs" />
     <Compile Include="Rest.cs" />
     <Compile Include="Results\ContentResult.cs" />
     <Compile Include="Results\FeedResult.cs" />

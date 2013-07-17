@@ -661,4 +661,8 @@
     <value>Invalid hash type was specified.</value>
     <comment>Invalid hash type was specified.</comment>
   </data>
+  <data name="NullODataPropertyReference" xml:space="preserve">
+    <value>OData operation cannot be performed against a NULL property value.</value>
+    <comment>OData operation cannot be performed against a NULL property value.</comment>
+  </data>
 </root>

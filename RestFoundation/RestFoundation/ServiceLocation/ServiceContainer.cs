@@ -40,7 +40,7 @@ namespace RestFoundation.ServiceLocation
                 { typeof(IContentNegotiator), typeof(ContentNegotiator) },
                 { typeof(IHttpMethodResolver), typeof(HttpMethodResolver) },
                 { typeof(ILogWriter), typeof(NullLogWriter) },
-                { typeof(IODataProvider), typeof(DefaultODataProvider) },
+                { typeof(IODataProvider), typeof(Linq2RestODataProvider) },
                 { typeof(IParameterValueProvider), typeof(ParameterValueProvider) },
                 { typeof(IResourceValidator), typeof(ResourceValidator) },
                 { typeof(IResultWrapper), typeof(ResultWrapper) },
