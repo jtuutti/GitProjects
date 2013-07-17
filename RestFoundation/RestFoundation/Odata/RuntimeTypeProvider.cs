@@ -214,7 +214,7 @@ namespace RestFoundation.Odata
                 throw new ArgumentNullException("fields");
             }
 
-            return fields.Aggregate(sourceType.Name, (current, field) => current + (field.Key + field.Value.MemberType));
+            return fields.Aggregate(sourceType.Name, (current, field) => current + field.Key);
         }
     }
 }
