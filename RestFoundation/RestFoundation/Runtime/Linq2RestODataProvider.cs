@@ -5,11 +5,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Linq2Rest.Parser;
+using RestFoundation.Collections;
 
 namespace RestFoundation.Runtime
 {
@@ -19,20 +21,23 @@ namespace RestFoundation.Runtime
     /// </summary>
     public class Linq2RestODataProvider : IODataProvider
     {
+        private const string ContentRangeHeader = "Content-Range";
+        private const string InlineCountKey = "$inlinecount";
+        private const string InlineCountValue = "allpages";
+        private const string SkipKey = "$skip";
+
         /// <summary>
         /// Performs a query on a collection and returns the resulting collection of
         /// objects.
         /// </summary>
+        /// <param name="context">The service context.</param>
         /// <param name="collection">The collection to perform the query on.</param>
-        /// <param name="queryString">
-        /// A <see cref="NameValueCollection"/> containing the HTTP request query string parameters.
-        /// </param>
         /// <returns>The resulting collection.</returns>
-        public virtual IEnumerable PerformQuery(IQueryable collection, NameValueCollection queryString)
+        public virtual IEnumerable PerformQuery(IServiceContext context, IQueryable collection)
         {
-            if (queryString == null)
+            if (context == null)
             {
-                throw new ArgumentNullException("queryString");
+                throw new ArgumentNullException("context");
             }
 
             if (collection == null)
@@ -40,16 +45,51 @@ namespace RestFoundation.Runtime
                 return null;
             }
 
-            List<object> filteredCollection = TryConvertToFilteredCollection(collection, queryString);
+            var range = GetContentRanges(context.Request.QueryString, collection);
+
+            List<object> filteredCollection = TryConvertToFilteredCollection(collection, context.Request.QueryString.ToNameValueCollection());
             object filteredObject = filteredCollection.FirstOrDefault(o => o != null);
             Type objectType = filteredObject != null ? filteredObject.GetType() : typeof(object);
-
+                
             if (objectType.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0)
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.UnsupportedObjectTypeForOData);
             }
 
+            TrySetContentRange(context, filteredCollection, range);
+
             return GenerateFilteredCollection(filteredCollection, objectType);
+        }
+
+        private static Tuple<int, int> GetContentRanges(IStringValueCollection queryString, IQueryable collection)
+        {
+            if (!String.Equals(InlineCountValue, queryString.TryGet(InlineCountKey), StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            int skip, count = Queryable.Count((dynamic) collection);
+
+            if (!Int32.TryParse(queryString.TryGet(SkipKey), out skip) || skip < 0)
+            {
+                skip = 0;
+            }
+
+            return Tuple.Create(skip + 1, count);
+        }
+
+        private static void TrySetContentRange(IServiceContext context, List<object> filteredCollection, Tuple<int, int> range)
+        {
+            if (filteredCollection.Count == 0 || range == null)
+            {
+                return;
+            }
+
+            context.Response.SetHeader(ContentRangeHeader, String.Format(CultureInfo.InvariantCulture,
+                                                                         "results {0}-{1}/{2}",
+                                                                         range.Item1,
+                                                                         range.Item1 + filteredCollection.Count - 1,
+                                                                         range.Item2));
         }
 
         private static List<object> TryConvertToFilteredCollection(IQueryable collection, NameValueCollection queryString)

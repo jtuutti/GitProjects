@@ -2,7 +2,6 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System.Collections;
-using System.Collections.Specialized;
 using System.Linq;
 
 namespace RestFoundation.Runtime
@@ -17,11 +16,9 @@ namespace RestFoundation.Runtime
         /// Performs a query on a collection and returns the resulting collection of
         /// objects.
         /// </summary>
+        /// <param name="context">The service context.</param>
         /// <param name="collection">The collection to perform the query on.</param>
-        /// <param name="queryString">
-        /// A <see cref="NameValueCollection"/> containing the HTTP request query string parameters.
-        /// </param>
         /// <returns>The resulting collection.</returns>
-        IEnumerable PerformQuery(IQueryable collection, NameValueCollection queryString);
+        IEnumerable PerformQuery(IServiceContext context, IQueryable collection);
     }
 }
