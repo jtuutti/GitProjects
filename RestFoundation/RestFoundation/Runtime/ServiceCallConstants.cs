@@ -7,6 +7,7 @@ namespace RestFoundation.Runtime
     {
         public const string AllowedHttpMethods = "_allowedHttpMethods";
         public const string BrowserConstraint = "_browserConstraint";
+        public const string MaxQueryResults = "_maxQueryableResults";
         public const string RouteMethodConstraintFailed = "_routeMethodConstraintFailed";
         public const string RouteConstraint = "_routeConstraint";
         public const string ServiceContractType = "_serviceContractType";

@@ -25,6 +25,7 @@ namespace RestFoundation.Runtime
         private const string InlineCountKey = "$inlinecount";
         private const string InlineCountValue = "allpages";
         private const string SkipKey = "$skip";
+        private const string TopKey = "$top";
 
         /// <summary>
         /// Performs a query on a collection and returns the resulting collection of
@@ -45,9 +46,12 @@ namespace RestFoundation.Runtime
                 return null;
             }
 
-            var range = GetContentRanges(context.Request.QueryString, collection);
+            Tuple<int, int> range = GetContentRanges(context.Request.QueryString, collection);
 
-            List<object> filteredCollection = TryConvertToFilteredCollection(collection, context.Request.QueryString.ToNameValueCollection());
+            NameValueCollection queryString = context.Request.QueryString.ToNameValueCollection();
+            TrySetMaxQueryResults(context, queryString);
+
+            List<object> filteredCollection = TryConvertToFilteredCollection(collection, queryString);
             object filteredObject = filteredCollection.FirstOrDefault(o => o != null);
             Type objectType = filteredObject != null ? filteredObject.GetType() : typeof(object);
                 
@@ -90,6 +94,42 @@ namespace RestFoundation.Runtime
                                                                          range.Item1,
                                                                          range.Item1 + filteredCollection.Count - 1,
                                                                          range.Item2));
+        }
+
+        private static void TrySetMaxQueryResults(IServiceContext context, NameValueCollection queryString)
+        {
+            int maxQueryResults = Convert.ToInt32(context.GetHttpContext().Items[ServiceCallConstants.MaxQueryResults], CultureInfo.InvariantCulture);
+
+            if (maxQueryResults < 0)
+            {
+                if (!String.IsNullOrEmpty(queryString[TopKey]))
+                {
+                    return;
+                }
+
+                queryString[TopKey] = (maxQueryResults * -1).ToString(CultureInfo.InvariantCulture);
+            }
+            else if (maxQueryResults > 0)
+            {
+                string topValue = queryString[TopKey];
+
+                if (!String.IsNullOrEmpty(topValue))
+                {
+                    int top;
+
+                    if (!Int32.TryParse(topValue, out top))
+                    {
+                        return;
+                    }
+
+                    if (top > 0 && top < maxQueryResults)
+                    {
+                        maxQueryResults = top;
+                    }
+                }
+
+                queryString[TopKey] = maxQueryResults.ToString(CultureInfo.InvariantCulture);
+            }
         }
 
         private static List<object> TryConvertToFilteredCollection(IQueryable collection, NameValueCollection queryString)

@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Behaviors\AjaxOnlyBehavior.cs" />
     <Compile Include="Behaviors\Attributes\AjaxOnlyAttribute.cs" />
+    <Compile Include="Behaviors\Attributes\MaxQueryResultsAttribute.cs" />
     <Compile Include="Behaviors\Attributes\OutputCacheAttribute.cs" />
     <Compile Include="Behaviors\Attributes\AsyncTimeoutAttribute.cs" />
     <Compile Include="Behaviors\Attributes\ThrottlingAttribute.cs" />
