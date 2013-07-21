@@ -28,10 +28,10 @@ namespace RestFoundation.Behaviors.Attributes
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the number of maximum results should
-        /// be enforced even if a $top value has been provided.
+        /// Gets or sets a value indicating whether the number of maximum results can be overridden
+        /// by providing a $take value in the query string.
         /// </summary>
-        public bool Force { get; set; }
+        public bool AllowOverride { get; set; }
 
         /// <summary>
         /// Gets the maximum number of results to return.
@@ -51,7 +51,7 @@ namespace RestFoundation.Behaviors.Attributes
                 throw new ArgumentNullException("serviceContext");
             }
 
-            serviceContext.GetHttpContext().Items[ServiceCallConstants.MaxQueryResults] = Force ? MaxResults : (MaxResults * -1);
+            serviceContext.GetHttpContext().Items[ServiceCallConstants.MaxQueryResults] = AllowOverride ? (MaxResults * -1) : MaxResults;
 
             return BehaviorMethodAction.Execute;
         }

@@ -33,7 +33,7 @@ namespace RestFoundation
         private const string RequestTimeoutMessage = "Request timed out";
 
         private static readonly object syncRoot = new object();
-        private static bool catchAllRouteInitialized;
+        private static volatile bool catchAllRouteInitialized;
 
         internal static bool IsInitialized { get; set; }
 

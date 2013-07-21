@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using System.Runtime.Serialization;
-using RestFoundation.Runtime;
 
 namespace RestFoundation.Runtime
 {

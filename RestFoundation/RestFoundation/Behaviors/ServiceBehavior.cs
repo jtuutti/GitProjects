@@ -1,9 +1,6 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2013
 // </copyright>
-using System;
-using System.Reflection;
-
 namespace RestFoundation.Behaviors
 {
     /// <summary>

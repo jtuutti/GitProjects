@@ -37,7 +37,7 @@ namespace RestFoundation.Context
         private readonly object m_serverVariablesCollectionSyncRoot = new Object();
 
         private readonly RestContextContainer m_contextContainer;
-        private DynamicDictionary m_resourceBag;
+        private volatile DynamicDictionary m_resourceBag;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpRequest"/> class.
