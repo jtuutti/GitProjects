@@ -665,4 +665,8 @@
     <value>OData operation cannot be performed against a NULL property value.</value>
     <comment>OData operation cannot be performed against a NULL property value.</comment>
   </data>
+  <data name="InvalidODataPagingParameter" xml:space="preserve">
+    <value>Invalid {0} query string value provided. It must be a non-negative integer.</value>
+    <comment>Invalid {0} query string value provided. It must be a non-negative integer.</comment>
+  </data>
 </root>

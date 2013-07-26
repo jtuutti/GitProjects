@@ -11,7 +11,7 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Linq2Rest.Parser;
-using RestFoundation.Collections;
+using RestFoundation.Resources;
 
 namespace RestFoundation.Runtime
 {
@@ -46,10 +46,10 @@ namespace RestFoundation.Runtime
                 return null;
             }
 
-            Tuple<int, int> range = GetContentRanges(context.Request.QueryString, collection);
-
             NameValueCollection queryString = context.Request.QueryString.ToNameValueCollection();
             TrySetMaxQueryResults(context, queryString);
+
+            Tuple<int, int> range = GetContentRanges(queryString, collection);
 
             List<object> filteredCollection = TryConvertToFilteredCollection(collection, queryString);
             object filteredObject = filteredCollection.FirstOrDefault(o => o != null);
@@ -57,7 +57,7 @@ namespace RestFoundation.Runtime
                 
             if (objectType.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0)
             {
-                throw new HttpResponseException(HttpStatusCode.InternalServerError, Resources.Global.UnsupportedObjectTypeForOData);
+                throw new HttpResponseException(HttpStatusCode.InternalServerError, Global.UnsupportedObjectTypeForOData);
             }
 
             TrySetContentRange(context, filteredCollection, range);
@@ -65,21 +65,32 @@ namespace RestFoundation.Runtime
             return GenerateFilteredCollection(filteredCollection, objectType);
         }
 
-        private static Tuple<int, int> GetContentRanges(IStringValueCollection queryString, IQueryable collection)
+        private static Tuple<int, int> GetContentRanges(NameValueCollection queryString, IQueryable collection)
         {
-            if (!String.Equals(InlineCountValue, queryString.TryGet(InlineCountKey), StringComparison.OrdinalIgnoreCase))
+            int take, skip;
+            int count = -1;
+
+            if (!Int32.TryParse(queryString.Get(TopKey) ?? "0", out take) || take < 0)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, String.Format(CultureInfo.InvariantCulture, Global.InvalidODataPagingParameter, TopKey));
+            }
+
+            if (!Int32.TryParse(queryString.Get(SkipKey) ?? "0", out skip) || skip < 0)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, String.Format(CultureInfo.InvariantCulture, Global.InvalidODataPagingParameter, SkipKey));
+            }
+
+            if (take == 0 && skip == 0)
             {
                 return null;
             }
 
-            int skip, count = Queryable.Count((dynamic) collection);
-
-            if (!Int32.TryParse(queryString.TryGet(SkipKey), out skip) || skip < 0)
+            if (String.Equals(InlineCountValue, queryString.Get(InlineCountKey), StringComparison.OrdinalIgnoreCase))
             {
-                skip = 0;
+                count = Queryable.Count((dynamic) collection);
             }
 
-            return Tuple.Create(skip + 1, count);
+            return Tuple.Create(skip, count);
         }
 
         private static void TrySetContentRange(IServiceContext context, List<object> filteredCollection, Tuple<int, int> range)
@@ -91,9 +102,9 @@ namespace RestFoundation.Runtime
 
             context.Response.SetHeader(ContentRangeHeader, String.Format(CultureInfo.InvariantCulture,
                                                                          "results {0}-{1}/{2}",
-                                                                         range.Item1,
-                                                                         range.Item1 + filteredCollection.Count - 1,
-                                                                         range.Item2));
+                                                                         range.Item1 + 1,
+                                                                         range.Item1 + filteredCollection.Count,
+                                                                         range.Item2 < 0 ? "*" : range.Item2.ToString(CultureInfo.InvariantCulture)));
         }
 
         private static void TrySetMaxQueryResults(IServiceContext context, NameValueCollection queryString)

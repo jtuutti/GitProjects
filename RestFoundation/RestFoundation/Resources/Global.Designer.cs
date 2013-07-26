@@ -457,6 +457,15 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid {0} query string value provided. It must be a non-negative integer..
+        /// </summary>
+        internal static string InvalidODataPagingParameter {
+            get {
+                return ResourceManager.GetString("InvalidODataPagingParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid OData parameters provided..
         /// </summary>
         internal static string InvalidODataParameters {
