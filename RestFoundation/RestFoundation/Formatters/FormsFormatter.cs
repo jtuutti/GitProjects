@@ -64,11 +64,7 @@ namespace RestFoundation.Formatters
                 throw new ArgumentNullException("objectType");
             }
 
-            // A hack to trigger form collection validation
-            if (context.GetHttpContext().Request.Form.ToString().Length == 0)
-            {
-                return null;
-            }
+            TryValidateFormValues(context.GetHttpContext());
 
             object resource = InitializeResource(objectType);
 
@@ -108,6 +104,15 @@ namespace RestFoundation.Formatters
         public virtual IResult FormatResponse(IServiceContext context, Type methodReturnType, object obj, string preferredMediaType)
         {
             throw new NotSupportedException();
+        }
+
+        private static void TryValidateFormValues(HttpContextBase httpContext)
+        {
+            if (!ServiceRequestValidator.IsUnvalidatedRequest(httpContext))
+            {
+                // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+                httpContext.Request.Form.ToString();
+            }
         }
 
         private static NameValueCollection PopulateFormData(IServiceContext context)
