@@ -210,6 +210,37 @@
             Gets the HTTP status description in case of a security exception.
             </summary>
     </member>
+    <member name="T:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute">
+      <summary>
+            Represents a service method that returns performs an OData operation and returns
+            the specified maximum number of results, if the $top value has not been provided.
+            </summary>
+    </member>
+    <member name="M:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute.#ctor(System.Int32)">
+      <summary>
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute" /> class.
+            </summary>
+      <param name="maxResults">The maximum number of results to return.</param>
+    </member>
+    <member name="M:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+      <summary>
+            Called before a service method is executed.
+            </summary>
+      <param name="serviceContext">The service context.</param>
+      <param name="behaviorContext">The "method executing" behavior context.</param>
+      <returns>A service method action.</returns>
+    </member>
+    <member name="P:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute.AllowOverride">
+      <summary>
+            Gets or sets a value indicating whether the number of maximum results can be overridden
+            by providing a $take value in the query string.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute.MaxResults">
+      <summary>
+            Gets the maximum number of results to return.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Behaviors.OutputCacheAttribute">
       <summary>
             Represents a service method with a specific HTTP caching behavior.
@@ -2008,15 +2039,13 @@
             results.
             </summary>
     </member>
-    <member name="M:RestFoundation.Runtime.IODataProvider.PerformQuery(System.Linq.IQueryable,System.Collections.Specialized.NameValueCollection)">
+    <member name="M:RestFoundation.Runtime.IODataProvider.PerformQuery(RestFoundation.IServiceContext,System.Linq.IQueryable)">
       <summary>
             Performs a query on a collection and returns the resulting collection of
             objects.
             </summary>
+      <param name="context">The service context.</param>
       <param name="collection">The collection to perform the query on.</param>
-      <param name="queryString">
-            A <see cref="T:System.Collections.Specialized.NameValueCollection" /> containing the HTTP request query string parameters.
-            </param>
       <returns>The resulting collection.</returns>
     </member>
     <member name="T:RestFoundation.Results.StreamResult">
@@ -2223,15 +2252,13 @@
             results.
             </summary>
     </member>
-    <member name="M:RestFoundation.Runtime.Linq2RestODataProvider.PerformQuery(System.Linq.IQueryable,System.Collections.Specialized.NameValueCollection)">
+    <member name="M:RestFoundation.Runtime.Linq2RestODataProvider.PerformQuery(RestFoundation.IServiceContext,System.Linq.IQueryable)">
       <summary>
             Performs a query on a collection and returns the resulting collection of
             objects.
             </summary>
+      <param name="context">The service context.</param>
       <param name="collection">The collection to perform the query on.</param>
-      <param name="queryString">
-            A <see cref="T:System.Collections.Specialized.NameValueCollection" /> containing the HTTP request query string parameters.
-            </param>
       <returns>The resulting collection.</returns>
     </member>
     <member name="T:RestFoundation.Runtime.Fault">
@@ -2920,6 +2947,11 @@
     <member name="P:RestFoundation.Resources.Global.InvalidNamedRoute">
       <summary>
               Looks up a localized string similar to Invalid route '{0}' specified..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidODataPagingParameter">
+      <summary>
+              Looks up a localized string similar to Invalid {0} query string value provided. It must be a non-negative integer..
             </summary>
     </member>
     <member name="P:RestFoundation.Resources.Global.InvalidODataParameters">
