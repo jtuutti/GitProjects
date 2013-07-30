@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using RestFoundation;
-using RestFoundation.Behaviors.Attributes;
+using RestFoundation.Behaviors;
 using RestFoundation.Results;
 using RestFoundation.ServiceProxy;
 using SampleRestService.Contracts.Metadata;

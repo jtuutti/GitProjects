@@ -210,19 +210,19 @@
             Gets the HTTP status description in case of a security exception.
             </summary>
     </member>
-    <member name="T:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute">
+    <member name="T:RestFoundation.Behaviors.MaxQueryResultsAttribute">
       <summary>
             Represents a service method that returns performs an OData operation and returns
             the specified maximum number of results, if the $top value has not been provided.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute.#ctor(System.Int32)">
+    <member name="M:RestFoundation.Behaviors.MaxQueryResultsAttribute.#ctor(System.Int32)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.MaxQueryResultsAttribute" /> class.
             </summary>
       <param name="maxResults">The maximum number of results to return.</param>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+    <member name="M:RestFoundation.Behaviors.MaxQueryResultsAttribute.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
       <summary>
             Called before a service method is executed.
             </summary>
@@ -230,13 +230,13 @@
       <param name="behaviorContext">The "method executing" behavior context.</param>
       <returns>A service method action.</returns>
     </member>
-    <member name="P:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute.AllowOverride">
+    <member name="P:RestFoundation.Behaviors.MaxQueryResultsAttribute.AllowOverride">
       <summary>
             Gets or sets a value indicating whether the number of maximum results can be overridden
             by providing a $take value in the query string.
             </summary>
     </member>
-    <member name="P:RestFoundation.Behaviors.Attributes.MaxQueryResultsAttribute.MaxResults">
+    <member name="P:RestFoundation.Behaviors.MaxQueryResultsAttribute.MaxResults">
       <summary>
             Gets the maximum number of results to return.
             </summary>
@@ -293,33 +293,33 @@
             Gets or sets a comma delimited set of query string or form POST parameters used to vary the cache entry.
             </summary>
     </member>
-    <member name="T:RestFoundation.Behaviors.Attributes.AsyncTimeoutAttribute">
+    <member name="T:RestFoundation.Behaviors.AsyncTimeoutAttribute">
       <summary>
             Represents service method execution and result processing timeouts.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.AsyncTimeoutAttribute.#ctor(System.Int32)">
+    <member name="M:RestFoundation.Behaviors.AsyncTimeoutAttribute.#ctor(System.Int32)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.AsyncTimeoutAttribute" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.AsyncTimeoutAttribute" /> class.
             </summary>
       <param name="timeoutInSeconds">
             A timeout for an asynchronous task returned by the service method in seconds.
             Set the value to <see cref="F:System.TimeSpan.Zero" /> for an infinite timeout.
             </param>
     </member>
-    <member name="P:RestFoundation.Behaviors.Attributes.AsyncTimeoutAttribute.TimeoutInSeconds">
+    <member name="P:RestFoundation.Behaviors.AsyncTimeoutAttribute.TimeoutInSeconds">
       <summary>
             Gets the service method execution timeout value in seconds.
             </summary>
     </member>
-    <member name="T:RestFoundation.Behaviors.Attributes.ThrottlingAttribute">
+    <member name="T:RestFoundation.Behaviors.ThrottlingAttribute">
       <summary>
             Represents a bandwidth throttling behavior for a service method.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.ThrottlingAttribute.#ctor(System.Int32)">
+    <member name="M:RestFoundation.Behaviors.ThrottlingAttribute.#ctor(System.Int32)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.ThrottlingAttribute" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.ThrottlingAttribute" /> class.
             </summary>
       <param name="delayInMilliseconds">
             The number of milliseconds allowed between the calls for a user.
@@ -328,7 +328,7 @@
             If the delay is a non-positive number.
             </exception>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.ThrottlingAttribute.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
+    <member name="M:RestFoundation.Behaviors.ThrottlingAttribute.OnMethodAuthorizing(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodAuthorizingContext)">
       <summary>
             Called during the authorization process before a service method or behavior is executed.
             </summary>
@@ -336,41 +336,41 @@
       <param name="behaviorContext">The "method authorizing" behavior context.</param>
       <returns>A service method action.</returns>
     </member>
-    <member name="P:RestFoundation.Behaviors.Attributes.ThrottlingAttribute.StatusCode">
+    <member name="P:RestFoundation.Behaviors.ThrottlingAttribute.StatusCode">
       <summary>
             Gets the HTTP status code in case of a security exception.
             </summary>
     </member>
-    <member name="P:RestFoundation.Behaviors.Attributes.ThrottlingAttribute.StatusDescription">
+    <member name="P:RestFoundation.Behaviors.ThrottlingAttribute.StatusDescription">
       <summary>
             Gets the HTTP status description in case of a security exception.
             </summary>
     </member>
-    <member name="P:RestFoundation.Behaviors.Attributes.ThrottlingAttribute.DelayInMilliseconds">
+    <member name="P:RestFoundation.Behaviors.ThrottlingAttribute.DelayInMilliseconds">
       <summary>
             Gets the number of milliseconds allowed between the calls for a user.
             </summary>
     </member>
-    <member name="T:RestFoundation.Behaviors.Attributes.AssertValidationAttribute">
+    <member name="T:RestFoundation.Behaviors.AssertValidationAttribute">
       <summary>
             Represents a service method that creates and returns a fault collection if the resource validation
             failed before the method execution.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.AssertValidationAttribute.#ctor">
+    <member name="M:RestFoundation.Behaviors.AssertValidationAttribute.#ctor">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.AssertValidationAttribute" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.AssertValidationAttribute" /> class.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.AssertValidationAttribute.#ctor(System.Boolean)">
+    <member name="M:RestFoundation.Behaviors.AssertValidationAttribute.#ctor(System.Boolean)">
       <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.Attributes.AssertValidationAttribute" /> class.
+            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.AssertValidationAttribute" /> class.
             </summary>
       <param name="throwOnNullResource">
             A value indicating whether there should be a fault created if the resource is null.
             </param>
     </member>
-    <member name="M:RestFoundation.Behaviors.Attributes.AssertValidationAttribute.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
+    <member name="M:RestFoundation.Behaviors.AssertValidationAttribute.OnMethodExecuting(RestFoundation.IServiceContext,RestFoundation.Behaviors.MethodExecutingContext)">
       <summary>
             Called before a service method is executed.
             </summary>
@@ -378,7 +378,7 @@
       <param name="behaviorContext">The "method executing" behavior context.</param>
       <returns>A service method action.</returns>
     </member>
-    <member name="P:RestFoundation.Behaviors.Attributes.AssertValidationAttribute.ThrowOnNullResource">
+    <member name="P:RestFoundation.Behaviors.AssertValidationAttribute.ThrowOnNullResource">
       <summary>
             Gets a value indicating whether a null resource is allowed.
             </summary>
