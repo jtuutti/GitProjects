@@ -108,17 +108,14 @@ namespace RestFoundation.Runtime
                                                 .OrderBy(b => b.Order)
                                                 .ToList();
 
-                if (LogUtility.CanLog)
-                {
-                    foreach (ServiceMethodBehaviorAttribute methodBehaviorAttribute in methodBehaviorAttributes)
-                    {
-                        Type behaviorAttributeType = methodBehaviorAttribute.GetType();
+                var methodBehaviorTypes = new HashSet<Type>(methodBehaviorAttributes.Select(x => x.GetType()));
 
-                        if (!behaviorAttributeType.IsSealed)
-                        {
-                            LogUtility.LogUnsealedBehaviorAttribute(behaviorAttributeType);
-                        }
-                    }
+                if (m.DeclaringType != null)
+                {
+                    methodBehaviorAttributes.AddRange(m.DeclaringType.GetCustomAttributes(typeof(ServiceMethodBehaviorAttribute), false)
+                                                       .Where(b => !methodBehaviorTypes.Contains(b.GetType()))
+                                                       .Cast<ServiceMethodBehaviorAttribute>()
+                                                       .OrderBy(b => b.Order));
                 }
 
                 return methodBehaviorAttributes;

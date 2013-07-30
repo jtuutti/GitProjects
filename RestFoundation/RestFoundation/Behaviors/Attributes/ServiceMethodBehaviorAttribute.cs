@@ -12,7 +12,7 @@ namespace RestFoundation.Behaviors
     /// Represents a service method behavior defined on a service contract.
     /// This class cannot be instantiated.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
     public abstract class ServiceMethodBehaviorAttribute : Attribute, ISecureServiceBehavior
     {
         /// <summary>

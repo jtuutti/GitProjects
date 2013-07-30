@@ -177,21 +177,5 @@ namespace RestFoundation.Runtime
                 }
             }
         }
-
-        public static void LogUnsealedBehaviorAttribute(Type behaviorAttributeType)
-        {
-            if (!CanLog)
-            {
-                return;
-            }
-
-            lock (syncRoot)
-            {
-                if (CanLog)
-                {
-                    Writer.WriteWarning(String.Format(CultureInfo.InvariantCulture, Resources.Global.UnsealedBehaviorAttributeClass, behaviorAttributeType.FullName));
-                }
-            }
-        }
     }
 }

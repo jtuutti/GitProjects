@@ -1,11 +1,14 @@
-﻿using System;
+﻿// <copyright>
+// Dmitry Starosta, 2012-2013
+// </copyright>
+using System;
 
-namespace RestFoundation.Behaviors.Attributes
+namespace RestFoundation.Behaviors
 {
     /// <summary>
     /// Represents service method execution and result processing timeouts.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class AsyncTimeoutAttribute : Attribute
     {
         /// <summary>

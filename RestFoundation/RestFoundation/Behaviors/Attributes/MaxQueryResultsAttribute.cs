@@ -4,13 +4,13 @@
 using System;
 using RestFoundation.Runtime;
 
-namespace RestFoundation.Behaviors.Attributes
+namespace RestFoundation.Behaviors
 {
     /// <summary>
     /// Represents a service method that returns performs an OData operation and returns
     /// the specified maximum number of results, if the $top value has not been provided.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class MaxQueryResultsAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>

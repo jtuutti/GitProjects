@@ -5,13 +5,13 @@ using System;
 using System.Net;
 using RestFoundation.Runtime;
 
-namespace RestFoundation.Behaviors.Attributes
+namespace RestFoundation.Behaviors
 {
     /// <summary>
     /// Represents a service method that creates and returns a fault collection if the resource validation
     /// failed before the method execution.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class AssertValidationAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>

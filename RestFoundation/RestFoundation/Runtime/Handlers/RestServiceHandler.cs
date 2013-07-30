@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
-using RestFoundation.Behaviors.Attributes;
+using RestFoundation.Behaviors;
 
 namespace RestFoundation.Runtime.Handlers
 {

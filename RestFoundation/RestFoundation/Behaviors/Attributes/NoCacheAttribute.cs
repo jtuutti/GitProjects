@@ -9,7 +9,7 @@ namespace RestFoundation.Behaviors
     /// <summary>
     /// Represents a service method that prevents HTTP caching.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class NoCacheAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>

@@ -4,12 +4,12 @@
 using System;
 using System.Net;
 
-namespace RestFoundation.Behaviors.Attributes
+namespace RestFoundation.Behaviors
 {
     /// <summary>
     /// Represents a bandwidth throttling behavior for a service method.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class ThrottlingAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>

@@ -11,7 +11,7 @@ namespace RestFoundation.Behaviors
     /// HTTP connection will set a 404 (Not Found) HTTP status code if the service method
     /// was not called using AJAX.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class AjaxOnlyAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>

@@ -11,7 +11,7 @@ namespace RestFoundation.Behaviors
     /// <summary>
     /// Represents a service method with a specific HTTP caching behavior.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class OutputCacheAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>

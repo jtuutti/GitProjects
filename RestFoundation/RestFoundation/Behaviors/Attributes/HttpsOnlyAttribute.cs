@@ -10,7 +10,7 @@ namespace RestFoundation.Behaviors
     /// Represents a service method that can only be called over HTTPS/SSL.
     /// HTTP connection will set a 403 (Forbidden) HTTP status code if the connection is not secure.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class HttpsOnlyAttribute : ServiceMethodBehaviorAttribute
     {
         /// <summary>
