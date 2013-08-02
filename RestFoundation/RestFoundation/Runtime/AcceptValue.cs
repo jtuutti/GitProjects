@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
-using System.Web;
+using RestFoundation.Resources;
 
 namespace RestFoundation.Runtime
 {
@@ -243,11 +243,11 @@ namespace RestFoundation.Runtime
             }
             catch (ArgumentException)
             {
-                throw new HttpException((int) HttpStatusCode.BadRequest, Resources.Global.InvalidAcceptHeaderFormat);
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Global.InvalidAcceptHeaderFormat);
             }
             catch (InvalidOperationException)
             {
-                throw new HttpException((int) HttpStatusCode.BadRequest, Resources.Global.InvalidAcceptHeaderFormat);
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Global.InvalidAcceptHeaderFormat);
             }
         }
 
@@ -368,7 +368,7 @@ namespace RestFoundation.Runtime
 
             if (acceptItem == null || String.IsNullOrWhiteSpace(acceptItem.Item1) || String.IsNullOrWhiteSpace(acceptItem.Item2))
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidAcceptHeaderValue, "accept"));
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Global.InvalidAcceptHeaderFormat);
             }
 
             return acceptItem.Item2;
@@ -385,7 +385,7 @@ namespace RestFoundation.Runtime
             }
             else if (!Decimal.TryParse(weightItem.Item2, NumberStyles.Any, CultureInfo.InvariantCulture, out weight))
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidAcceptHeaderValue, "weight"));
+                throw new HttpResponseException(HttpStatusCode.BadRequest, String.Format(CultureInfo.InvariantCulture, Global.InvalidAcceptHeaderValue, "weight"));
             }
 
             return weight;
@@ -402,7 +402,7 @@ namespace RestFoundation.Runtime
             }
             else if (!Int32.TryParse(levelItem.Item2, NumberStyles.Integer, CultureInfo.InvariantCulture, out level))
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidAcceptHeaderValue, "level"));
+                throw new HttpResponseException(HttpStatusCode.BadRequest, String.Format(CultureInfo.InvariantCulture, Global.InvalidAcceptHeaderValue, "level"));
             }
 
             return level;
@@ -426,7 +426,7 @@ namespace RestFoundation.Runtime
             }
             else if (!Decimal.TryParse(versionItem.Item2, NumberStyles.Any, CultureInfo.InvariantCulture, out version) || version < 0)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidAcceptHeaderValue, "version"));
+                throw new HttpResponseException(HttpStatusCode.BadRequest, String.Format(CultureInfo.InvariantCulture, Global.InvalidAcceptHeaderValue, "version"));
             }
 
             return version;
