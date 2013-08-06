@@ -3254,6 +3254,11 @@
               Looks up a localized string similar to Service proxy UI is already enabled..
             </summary>
     </member>
+    <member name="P:RestFoundation.Resources.Global.RedirectMethodParameterTooComplex">
+      <summary>
+              Looks up a localized string similar to The method parameter '{0}' is too complex to process. Try storing the parameter value in a variable, then passing it to the method..
+            </summary>
+    </member>
     <member name="P:RestFoundation.Resources.Global.ResourceValidationFailed">
       <summary>
               Looks up a localized string similar to Validation Failed.
