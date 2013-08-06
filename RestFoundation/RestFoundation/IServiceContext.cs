@@ -53,7 +53,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(Expression<Action<TContract>> serviceMethod);
+        string GetUrl<TContract>(Expression<Action<TContract>> serviceMethod);
 
         /// <summary>
         /// Gets the application relative URL for a service contract method.
@@ -65,7 +65,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(Expression<Action<TContract>> serviceMethod, RouteHash routeValues);
+        string GetUrl<TContract>(Expression<Action<TContract>> serviceMethod, RouteHash routeValues);
 
         /// <summary>
         /// Gets the application relative URL for a service contract method.
@@ -80,7 +80,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod);
+        string GetUrl<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod);
 
         /// <summary>
         /// Gets the application relative URL for a service contract method.
@@ -96,7 +96,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues);
+        string GetUrl<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues);
 
         /// <summary>
         /// Gets the application absolute URL for a service contract method.
@@ -113,7 +113,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues, UriSegments segments);
+        string GetUrl<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues, UriSegments segments);
 
         /// <summary>
         /// Gets the application relative URL for a service contract method.
@@ -124,7 +124,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(Expression<Func<TContract, object>> serviceMethod);
+        string GetUrl<TContract>(Expression<Func<TContract, object>> serviceMethod);
        
         /// <summary>
         /// Gets the application relative URL for a service contract method.
@@ -136,7 +136,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues);
+        string GetUrl<TContract>(Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues);
 
         /// <summary>
         /// Gets the application relative URL for a service contract method.
@@ -151,7 +151,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod);
+        string GetUrl<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod);
 
         /// <summary>
         /// Gets the application relative URL for a service contract method.
@@ -167,7 +167,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues);
+        string GetUrl<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues);
 
         /// <summary>
         /// Gets the application absolute URL for a service contract method.
@@ -184,7 +184,30 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues, UriSegments segments);
+        string GetUrl<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues, UriSegments segments);
+
+        /// <summary>
+        /// Gets the URL template for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <returns>The service method URL template.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        string GetUrlTemplate<TContract>(Expression<Func<TContract, object>> serviceMethod);
+
+        /// <summary>
+        /// Gets the URL template for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <param name="segments">URI segments necessary to generate an absolute URL. Set it to null to generate a relative URL.</param>
+        /// <returns>The service method URL template.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        string GetUrlTemplate<TContract>(Expression<Func<TContract, object>> serviceMethod, UriSegments segments);
 
         /// <summary>
         /// Returns the physical path associated to the virtual path of the file.

@@ -126,9 +126,9 @@ namespace RestFoundation.Context
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        public string GetPath<TContract>(Expression<Action<TContract>> serviceMethod)
+        public string GetUrl<TContract>(Expression<Action<TContract>> serviceMethod)
         {
-            return GetPath(null, serviceMethod, new RouteHash(), null);
+            return GetUrl(null, serviceMethod, new RouteHash(), null);
         }
 
         /// <summary>
@@ -141,9 +141,9 @@ namespace RestFoundation.Context
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        public string GetPath<TContract>(Expression<Action<TContract>> serviceMethod, RouteHash routeValues)
+        public string GetUrl<TContract>(Expression<Action<TContract>> serviceMethod, RouteHash routeValues)
         {
-            return GetPath(null, serviceMethod, routeValues, null);
+            return GetUrl(null, serviceMethod, routeValues, null);
         }
 
         /// <summary>
@@ -159,9 +159,9 @@ namespace RestFoundation.Context
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        public string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod)
+        public string GetUrl<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod)
         {
-            return GetPath(serviceUrl, serviceMethod, new RouteHash(), null);
+            return GetUrl(serviceUrl, serviceMethod, new RouteHash(), null);
         }
 
         /// <summary>
@@ -178,9 +178,9 @@ namespace RestFoundation.Context
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        public string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues)
+        public string GetUrl<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues)
         {
-            return GetPath(serviceUrl, serviceMethod, routeValues, null);
+            return GetUrl(serviceUrl, serviceMethod, routeValues, null);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace RestFoundation.Context
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        public string GetPath<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues, UriSegments segments)
+        public string GetUrl<TContract>(string serviceUrl, Expression<Action<TContract>> serviceMethod, RouteHash routeValues, UriSegments segments)
         {
             if (serviceMethod == null)
             {
@@ -236,9 +236,9 @@ namespace RestFoundation.Context
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        public string GetPath<TContract>(Expression<Func<TContract, object>> serviceMethod)
+        public string GetUrl<TContract>(Expression<Func<TContract, object>> serviceMethod)
         {
-            return GetPath(null, serviceMethod, new RouteHash(), null);
+            return GetUrl(null, serviceMethod, new RouteHash(), null);
         }
 
         /// <summary>
@@ -251,9 +251,9 @@ namespace RestFoundation.Context
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        public string GetPath<TContract>(Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues)
+        public string GetUrl<TContract>(Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues)
         {
-            return GetPath(null, serviceMethod, routeValues, null);
+            return GetUrl(null, serviceMethod, routeValues, null);
         }
 
         /// <summary>
@@ -269,9 +269,9 @@ namespace RestFoundation.Context
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        public string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod)
+        public string GetUrl<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod)
         {
-            return GetPath(serviceUrl, serviceMethod, new RouteHash(), null);
+            return GetUrl(serviceUrl, serviceMethod, new RouteHash(), null);
         }
 
         /// <summary>
@@ -288,9 +288,9 @@ namespace RestFoundation.Context
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        public string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues)
+        public string GetUrl<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues)
         {
-            return GetPath(serviceUrl, serviceMethod, routeValues, null);
+            return GetUrl(serviceUrl, serviceMethod, routeValues, null);
         }
 
         /// <summary>
@@ -308,26 +308,14 @@ namespace RestFoundation.Context
         /// <exception cref="InvalidOperationException">
         /// If an invalid service URL or a service method provided.
         /// </exception>
-        public string GetPath<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues, UriSegments segments)
+        public string GetUrl<TContract>(string serviceUrl, Expression<Func<TContract, object>> serviceMethod, RouteHash routeValues, UriSegments segments)
         {
             if (serviceMethod == null)
             {
                 throw new ArgumentNullException("serviceMethod");
             }
 
-            Type contractType = typeof(TContract);
-
-            if (!ServiceContractTypeRegistry.IsServiceContract(contractType))
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidServiceContractType, contractType.Name));
-            }
-
-            var methodExpression = serviceMethod.Body as MethodCallExpression;
-
-            if (methodExpression == null || methodExpression.Method == null)
-            {
-                throw new InvalidOperationException(Resources.Global.InvalidServiceMethodExpression);
-            }
+            MethodCallExpression methodExpression = GetMethodExpression(serviceMethod);
 
             if (serviceUrl == null)
             {
@@ -335,6 +323,49 @@ namespace RestFoundation.Context
             }
 
             return GetPathFromMethodExpression(serviceUrl, methodExpression, routeValues, segments);
+        }
+
+        /// <summary>
+        /// Gets the URL template for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <returns>The service method URL template.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        public string GetUrlTemplate<TContract>(Expression<Func<TContract, object>> serviceMethod)
+        {
+            return GetUrlTemplate(serviceMethod, null);
+        }
+
+        /// <summary>
+        /// Gets the URL template for a service contract method.
+        /// </summary>
+        /// <typeparam name="TContract">The service contract type.</typeparam>
+        /// <param name="serviceMethod">The service contract method.</param>
+        /// <param name="segments">URI segments necessary to generate an absolute URL. Set it to null to generate a relative URL.</param>
+        /// <returns>The service method URL template.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// If an invalid service URL or a service method provided.
+        /// </exception>
+        public string GetUrlTemplate<TContract>(Expression<Func<TContract, object>> serviceMethod, UriSegments segments)
+        {
+            if (serviceMethod == null)
+            {
+                throw new ArgumentNullException("serviceMethod");
+            }
+
+            MethodCallExpression methodExpression = GetMethodExpression(serviceMethod);
+
+            string template = TryGetMatchingUrlTemplate(methodExpression);
+
+            if (segments == null || String.IsNullOrEmpty(template) || Context.Request.Url == null)
+            {
+                return template;
+            }
+
+            return Context.Server.UrlDecode(segments.GenerateUri(Context.Request.Url.Host, template));
         }
 
         /// <summary>
@@ -354,6 +385,25 @@ namespace RestFoundation.Context
         public HttpContextBase GetHttpContext()
         {
             return Context;
+        }
+
+        private static MethodCallExpression GetMethodExpression<TContract>(Expression<Func<TContract, object>> serviceMethod)
+        {
+            Type contractType = typeof(TContract);
+
+            if (!ServiceContractTypeRegistry.IsServiceContract(contractType))
+            {
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidServiceContractType, contractType.Name));
+            }
+
+            var methodExpression = serviceMethod.Body as MethodCallExpression;
+
+            if (methodExpression == null || methodExpression.Method == null)
+            {
+                throw new InvalidOperationException(Resources.Global.InvalidServiceMethodExpression);
+            }
+
+            return methodExpression;
         }
 
         private string TryGetMatchingServiceUrl(MethodCallExpression methodExpression)
@@ -404,6 +454,57 @@ namespace RestFoundation.Context
             }
 
             serviceUrl = null;
+            return false;
+        }
+
+        private string TryGetMatchingUrlTemplate(MethodCallExpression methodExpression)
+        {
+            IList<ServiceMethodMetadata> serviceMethodList = ServiceMethodRegistry.GetMethodMetadata(methodExpression.Method);
+
+            if (serviceMethodList.Count == 0)
+            {
+                throw new InvalidOperationException(Resources.Global.InvalidServiceMethodExpression);
+            }
+
+            if (serviceMethodList.Count > 1)
+            {
+                string urlTemplate;
+
+                if (TryGetCurrentUrlTemplate(serviceMethodList, out urlTemplate))
+                {
+                    return urlTemplate;
+                }
+
+                throw new InvalidOperationException(Resources.Global.MissingAmbiguousServiceUrl);
+            }
+
+            return serviceMethodList[0].UrlInfo != null ? serviceMethodList[0].UrlInfo.UrlTemplate : null;
+        }
+
+        private bool TryGetCurrentUrlTemplate(IEnumerable<ServiceMethodMetadata> serviceMethodList, out string urlTemplate)
+        {
+            var routeTable = RouteTable.Routes.GetRouteData(Context);
+
+            if (routeTable == null)
+            {
+                urlTemplate = null;
+                return false;
+            }
+
+            object currentServiceUrl;
+
+            if (routeTable.Values.TryGetValue(ServiceCallConstants.ServiceUrl, out currentServiceUrl) && currentServiceUrl != null)
+            {
+                var serviceMethod = serviceMethodList.FirstOrDefault(m => String.Equals(currentServiceUrl.ToString(), m.ServiceUrl, StringComparison.OrdinalIgnoreCase));
+
+                if (!String.IsNullOrEmpty(serviceMethod.ServiceUrl) && serviceMethod.UrlInfo != null)
+                {
+                    urlTemplate = serviceMethod.UrlInfo.UrlTemplate;
+                    return true;
+                }
+            }
+
+            urlTemplate = null;
             return false;
         }
 

@@ -10,6 +10,12 @@ namespace RestFoundation
     /// </summary>
     public sealed class UriSegments
     {
+        private const int DefaultHttpPort = 80;
+        private const int DefaultHttpsPort = 443;
+        private const string DefaultDomain = "localhost";
+        private const string Http = "http";
+        private const string Https = "https";
+
         private readonly bool m_usesHttps;
         private readonly string m_host;
         private readonly int? m_port;
@@ -83,7 +89,7 @@ namespace RestFoundation
         /// <exception cref="InvalidOperationException">If no host name could be determined.</exception>
         public string GenerateUri(string relativePath)
         {
-            return GenerateUri("localhost", relativePath);
+            return GenerateUri(DefaultDomain, relativePath);
         }
 
         internal string GenerateUri(string host, string relativePath)
@@ -100,11 +106,13 @@ namespace RestFoundation
 
             var uriBuilder = new UriBuilder
             {
-                Scheme = m_usesHttps ? "https" : "http",
+                Scheme = m_usesHttps ? Https : Http,
                 Host = host.Trim()
             };           
 
-            if (m_port.HasValue && m_port.Value > 0)
+            if (m_port.HasValue && m_port.Value > 0 &&
+                !(!m_usesHttps && m_port.Value == DefaultHttpPort) &&
+                !(m_usesHttps && m_port.Value == DefaultHttpsPort))
             {
                 uriBuilder.Port = m_port.Value;
             }

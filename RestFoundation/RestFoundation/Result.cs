@@ -401,7 +401,7 @@ namespace RestFoundation
 
             return new RedirectResult
             {
-                RedirectUrl = GetServiceContext().GetPath(serviceUrl, serviceMethod, routeValues),
+                RedirectUrl = GetServiceContext().GetUrl(serviceUrl, serviceMethod, routeValues),
                 RedirectType = redirectType
             };
         }
@@ -503,7 +503,7 @@ namespace RestFoundation
 
             return new RedirectResult
             {
-                RedirectUrl = GetServiceContext().GetPath(serviceUrl, serviceMethod, routeValues),
+                RedirectUrl = GetServiceContext().GetUrl(serviceUrl, serviceMethod, routeValues),
                 RedirectType = redirectType
             };
         }
