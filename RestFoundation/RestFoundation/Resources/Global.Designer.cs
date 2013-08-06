@@ -1006,6 +1006,15 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The method parameter &apos;{0}&apos; is too complex to process. Try storing the parameter value in a variable, then passing it to the method..
+        /// </summary>
+        internal static string RedirectMethodParameterTooComplex {
+            get {
+                return ResourceManager.GetString("RedirectMethodParameterTooComplex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation Failed.
         /// </summary>
         internal static string ResourceValidationFailed {

@@ -4,9 +4,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using RestFoundation.Resources;
 
 namespace RestFoundation.Runtime
 {
@@ -46,16 +48,23 @@ namespace RestFoundation.Runtime
 
         private static bool TryGenerateArgument(Expression argumentExpression, ParameterInfo parameter, out ExpressionArgument argument)
         {
-            object value = ExtractValues(argumentExpression).FirstOrDefault();
-
-            if (value == null)
+            try
             {
-                argument = default(ExpressionArgument);
-                return false;
-            }
+                object value = ExtractValues(argumentExpression).FirstOrDefault();
 
-            argument = new ExpressionArgument(parameter.Name, value);
-            return true;
+                if (value == null)
+                {
+                    argument = default(ExpressionArgument);
+                    return false;
+                }
+
+                argument = new ExpressionArgument(parameter.Name, value);
+                return true;
+            }
+            catch (NotSupportedException)
+            {
+                throw new NotSupportedException(String.Format(CultureInfo.InvariantCulture, Global.RedirectMethodParameterTooComplex, parameter.Name));
+            }
         }
 
         private static IEnumerable<object> ExtractValues(Expression expression)
@@ -100,11 +109,30 @@ namespace RestFoundation.Runtime
                 return ExtractValues(unaryExpression);
             }
 
+            var conditionalExpression = expression as ConditionalExpression;
+
+            if (conditionalExpression != null)
+            {
+                return ExtractValues(conditionalExpression);
+            }
+
             var methodCallExpression = expression as MethodCallExpression;
 
             if (methodCallExpression != null)
             {
                 return ExtractValues(methodCallExpression);
+            }
+
+            throw new NotSupportedException();
+        }
+
+        private static IList CreateList(Type type)
+        {
+            ConstructorInfo defaultConstructor = typeof(List<>).MakeGenericType(type).GetConstructor(new Type[0]);
+
+            if (defaultConstructor != null)
+            {
+                return (IList) defaultConstructor.Invoke(BindingFlags.CreateInstance, null, null, null);
             }
 
             return new object[0];
@@ -113,6 +141,11 @@ namespace RestFoundation.Runtime
         private static IEnumerable<object> ExtractValues(UnaryExpression unaryExpression)
         {
             return ExtractValues(unaryExpression.Operand);
+        }
+
+        private static IEnumerable<object> ExtractValues(ConditionalExpression conditionalExpression)
+        {
+            return new[] { Expression.Lambda(conditionalExpression).Compile().DynamicInvoke() };
         }
 
         private static IEnumerable<object> ExtractValues(NewExpression newExpression)
@@ -164,18 +197,6 @@ namespace RestFoundation.Runtime
             }
 
             return arrayElements.Cast<object>().ToArray();
-        }
-
-        private static IList CreateList(Type type)
-        {
-            ConstructorInfo defaultConstructor = typeof(List<>).MakeGenericType(type).GetConstructor(new Type[0]);
-
-            if (defaultConstructor != null)
-            {
-                return (IList) defaultConstructor.Invoke(BindingFlags.CreateInstance, null, null, null);
-            }
-
-            return new object[0];
         }
 
         private static IEnumerable<object> ExtractConvertibleTypeArrayConstants(NewArrayExpression newArrayExpression, Type type)

@@ -29,9 +29,9 @@ namespace RestTestServices
 
         public IServiceContext Context { get; set; }
 
-        public RedirectResult RedirectToGet10()
+        public RedirectResult RedirectToGet(int id)
         {
-            return Result.RedirectToAction<IIndexService>(c => c.Get(10, null));
+            return Result.RedirectToAction<IIndexService>(c => c.Get(id > 0 ? id : 1, String.Empty));
         }
 
         public dynamic GetDynamicDict()

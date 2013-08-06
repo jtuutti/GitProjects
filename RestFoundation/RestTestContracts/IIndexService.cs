@@ -15,8 +15,8 @@ namespace RestTestContracts
     [ProxyMetadata(typeof(IndexServiceMetadata))]
     public interface IIndexService
     {
-        [Url("index/get-10", HttpMethod.Get)]
-        RedirectResult RedirectToGet10();
+        [Url("index/{id}/with-redirect", HttpMethod.Get)]
+        RedirectResult RedirectToGet(int id);
 
         [Url("dyn")]
         dynamic GetDynamicDict();

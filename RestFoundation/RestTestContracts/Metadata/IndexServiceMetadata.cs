@@ -15,7 +15,7 @@ Use with caution!!!";
         {
             SetAuthentication(AuthenticationType.Digest, "admin", "~/secure");
 
-            ForMethod(x => x.RedirectToGet10()).SetHidden();
+            ForMethod(x => x.RedirectToGet(Arg<int>())).SetHidden();
             ForMethod(x => x.GetAllByFormat("json")).SetHidden();
 
             ForMethod(x => x.GetAll()).SetDescription("Gets all resources of type 'Person'")

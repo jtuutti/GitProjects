@@ -669,4 +669,8 @@
     <value>Invalid {0} query string value provided. It must be a non-negative integer.</value>
     <comment>Invalid {0} query string value provided. It must be a non-negative integer.</comment>
   </data>
+  <data name="RedirectMethodParameterTooComplex" xml:space="preserve">
+    <value>The method parameter '{0}' is too complex to process. Try storing the parameter value in a variable, then passing it to the method.</value>
+    <comment>The method parameter '{0}' is too complex to process. Try storing the parameter value in a variable, then passing it to the method.</comment>
+  </data>
 </root>
