@@ -7632,7 +7632,7 @@
             Defines a service context.
             </summary>
     </member>
-    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.Linq.Expressions.Expression{System.Action{``0}})">
+    <member name="M:RestFoundation.IServiceContext.GetUrl``1(System.Linq.Expressions.Expression{System.Action{``0}})">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -7643,7 +7643,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash)">
+    <member name="M:RestFoundation.IServiceContext.GetUrl``1(System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash)">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -7655,7 +7655,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}})">
+    <member name="M:RestFoundation.IServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}})">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -7670,7 +7670,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash)">
+    <member name="M:RestFoundation.IServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash)">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -7686,7 +7686,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash,RestFoundation.UriSegments)">
+    <member name="M:RestFoundation.IServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash,RestFoundation.UriSegments)">
       <summary>
             Gets the application absolute URL for a service contract method.
             </summary>
@@ -7703,7 +7703,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+    <member name="M:RestFoundation.IServiceContext.GetUrl``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -7714,7 +7714,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash)">
+    <member name="M:RestFoundation.IServiceContext.GetUrl``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash)">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -7726,7 +7726,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+    <member name="M:RestFoundation.IServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -7741,7 +7741,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash)">
+    <member name="M:RestFoundation.IServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash)">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -7757,7 +7757,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.IServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash,RestFoundation.UriSegments)">
+    <member name="M:RestFoundation.IServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash,RestFoundation.UriSegments)">
       <summary>
             Gets the application absolute URL for a service contract method.
             </summary>
@@ -7770,6 +7770,29 @@
       <param name="routeValues">Additional route values.</param>
       <param name="segments">URI segments necessary to generate an absolute URL. Set it to null to generate a relative URL.</param>
       <returns>The application absolute URL for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or a service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.IServiceContext.GetUrlTemplate``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+      <summary>
+            Gets the URL template for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceMethod">The service contract method.</param>
+      <returns>The service method URL template.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or a service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.IServiceContext.GetUrlTemplate``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.UriSegments)">
+      <summary>
+            Gets the URL template for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceMethod">The service contract method.</param>
+      <param name="segments">URI segments necessary to generate an absolute URL. Set it to null to generate a relative URL.</param>
+      <returns>The service method URL template.</returns>
       <exception cref="T:System.InvalidOperationException">
             If an invalid service URL or a service method provided.
             </exception>
@@ -9113,7 +9136,7 @@
       <param name="response">The current HTTP response.</param>
       <param name="cache">The service cache.</param>
     </member>
-    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.Linq.Expressions.Expression{System.Action{``0}})">
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrl``1(System.Linq.Expressions.Expression{System.Action{``0}})">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -9124,7 +9147,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash)">
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrl``1(System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash)">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -9136,7 +9159,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}})">
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}})">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -9151,7 +9174,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash)">
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash)">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -9167,7 +9190,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash,RestFoundation.UriSegments)">
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Action{``0}},RestFoundation.RouteHash,RestFoundation.UriSegments)">
       <summary>
             Gets the application absolute URL for a service contract method.
             </summary>
@@ -9184,7 +9207,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrl``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -9195,7 +9218,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash)">
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrl``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash)">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -9207,7 +9230,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -9222,7 +9245,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash)">
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash)">
       <summary>
             Gets the application relative URL for a service contract method.
             </summary>
@@ -9238,7 +9261,7 @@
             If an invalid service URL or a service method provided.
             </exception>
     </member>
-    <member name="M:RestFoundation.Context.ServiceContext.GetPath``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash,RestFoundation.UriSegments)">
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrl``1(System.String,System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.RouteHash,RestFoundation.UriSegments)">
       <summary>
             Gets the application absolute URL for a service contract method.
             </summary>
@@ -9251,6 +9274,29 @@
       <param name="routeValues">Additional route values.</param>
       <param name="segments">URI segments necessary to generate an absolute URL. Set it to null to generate a relative URL.</param>
       <returns>The application absolute URL for the service method.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or a service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrlTemplate``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+      <summary>
+            Gets the URL template for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceMethod">The service contract method.</param>
+      <returns>The service method URL template.</returns>
+      <exception cref="T:System.InvalidOperationException">
+            If an invalid service URL or a service method provided.
+            </exception>
+    </member>
+    <member name="M:RestFoundation.Context.ServiceContext.GetUrlTemplate``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},RestFoundation.UriSegments)">
+      <summary>
+            Gets the URL template for a service contract method.
+            </summary>
+      <typeparam name="TContract">The service contract type.</typeparam>
+      <param name="serviceMethod">The service contract method.</param>
+      <param name="segments">URI segments necessary to generate an absolute URL. Set it to null to generate a relative URL.</param>
+      <returns>The service method URL template.</returns>
       <exception cref="T:System.InvalidOperationException">
             If an invalid service URL or a service method provided.
             </exception>

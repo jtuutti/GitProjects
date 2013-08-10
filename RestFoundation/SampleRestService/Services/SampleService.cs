@@ -69,7 +69,7 @@ namespace SampleRestService.Services
             {
                 { // Location header with a fully qualified GET URL pointing to the resource by its ID
                     m_context.Response.HeaderNames.Location,
-                    m_context.GetPath<ISampleService>(null, m => m.GetById(resource.ID), null, UriSegments.CreateFromHttpRequest(m_context.Request))
+                    m_context.GetUrl<ISampleService>(null, m => m.GetById(resource.ID), null, UriSegments.CreateFromHttpRequest(m_context.Request))
                 }
             };
 
