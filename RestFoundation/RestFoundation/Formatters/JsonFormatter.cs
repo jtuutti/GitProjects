@@ -17,7 +17,7 @@ namespace RestFoundation.Formatters
     [SupportedMediaType("application/json", Priority = 2)]
     public class JsonFormatter : IMediaTypeFormatter
     {
-        private static readonly HashSet<string> supportedMediaTypes = GetSupportedMediaTypes();
+        private static readonly HashSet<string> supportedMediaTypes = MediaTypeExtractor.GetMediaTypes<JsonFormatter>();
 
         /// <summary>
         /// Gets a value indicating whether the formatter can format message body in HTTP
@@ -101,13 +101,6 @@ namespace RestFoundation.Formatters
                 ContentType = preferredMediaType != null && supportedMediaTypes.Contains(preferredMediaType) ? preferredMediaType : supportedMediaTypes.First(),
                 ReturnedType = methodReturnType
             };
-        }
-
-        private static HashSet<string> GetSupportedMediaTypes()
-        {
-            var supportedMediaTypeAttributes = typeof(JsonFormatter).GetCustomAttributes(typeof(SupportedMediaTypeAttribute), false).Cast<SupportedMediaTypeAttribute>();
-
-            return new HashSet<string>(supportedMediaTypeAttributes.Select(a => a.MediaType), StringComparer.OrdinalIgnoreCase);
         }
     }
 }

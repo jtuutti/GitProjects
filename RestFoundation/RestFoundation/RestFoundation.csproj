@@ -93,6 +93,7 @@
     <Compile Include="Configuration\DependencyBuilder.cs" />
     <Compile Include="Configuration\FaultDetail.cs" />
     <Compile Include="Context\HttpContextExtensions.cs" />
+    <Compile Include="Formatters\MediaTypeExtractor.cs" />
     <Compile Include="Formatters\SupportedMediaTypeAttribute.cs" />
     <Compile Include="ILogWriter.cs" />
     <Compile Include="InstanceLifetime.cs" />

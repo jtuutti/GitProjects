@@ -18,7 +18,7 @@ namespace RestFoundation.Formatters
     [SupportedMediaType("text/xml", Priority = 1)]
     public class XmlFormatter : IMediaTypeFormatter
     {
-        private static readonly HashSet<string> supportedMediaTypes = GetSupportedMediaTypes();
+        private static readonly HashSet<string> supportedMediaTypes = MediaTypeExtractor.GetMediaTypes<XmlFormatter>();
 
         /// <summary>
         /// Gets a value indicating whether the formatter can format message body in HTTP
@@ -103,13 +103,6 @@ namespace RestFoundation.Formatters
                 ContentType = preferredMediaType != null && supportedMediaTypes.Contains(preferredMediaType) ? preferredMediaType : supportedMediaTypes.First(),
                 ReturnedType = methodReturnType
             };
-        }
-
-        private static HashSet<string> GetSupportedMediaTypes()
-        {
-            var supportedMediaTypeAttributes = typeof(XmlFormatter).GetCustomAttributes(typeof(SupportedMediaTypeAttribute), false).Cast<SupportedMediaTypeAttribute>();
-
-            return new HashSet<string>(supportedMediaTypeAttributes.Select(a => a.MediaType), StringComparer.OrdinalIgnoreCase);
         }
     }
 }
