@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 
@@ -62,11 +63,13 @@ namespace RestFoundation.Configuration
             }
 
             Type formatterType = formatter.GetType();
-            var supportedMediaTypes = formatterType.GetCustomAttributes(typeof(SupportedMediaTypeAttribute), false).Cast<SupportedMediaTypeAttribute>().ToList();
+            var supportedMediaTypes = formatterType.GetCustomAttributes<SupportedMediaTypeAttribute>(false).ToList();
 
             if (supportedMediaTypes.Count == 0)
             {
-                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture, Resources.Global.MissingSupportedMediaTypeForFormatter, formatterType.Name), "formatter");
+                throw new ArgumentException(String.Format(CultureInfo.InvariantCulture,
+                                                          Resources.Global.MissingSupportedMediaTypeForFormatter,
+                                                          formatterType.Name), "formatter");
             }
 
             foreach (SupportedMediaTypeAttribute supportedMediaType in supportedMediaTypes)

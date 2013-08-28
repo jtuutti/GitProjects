@@ -87,11 +87,12 @@ namespace RestFoundation.Runtime
                     continue;
                 }
 
-                var constraintAttribute = Attribute.GetCustomAttribute(methodParameter, typeof(ConstraintAttribute), false) as ConstraintAttribute;
+                var constraintAttribute = methodParameter.GetCustomAttribute<ConstraintAttribute>(false);
 
                 if (constraintAttribute != null)
                 {
-                    routeParameters.Add(methodParameter.Name, new RouteParameter(methodParameter.Name.ToLowerInvariant(), constraintAttribute.PatternRegex));
+                    routeParameters.Add(methodParameter.Name, new RouteParameter(methodParameter.Name.ToLowerInvariant(),
+                                                                                 constraintAttribute.PatternRegex));
                 }
                 else
                 {

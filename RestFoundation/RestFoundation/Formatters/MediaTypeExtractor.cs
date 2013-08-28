@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace RestFoundation.Formatters
 {
@@ -12,9 +13,10 @@ namespace RestFoundation.Formatters
         public static HashSet<string> GetMediaTypes<T>()
             where T : class, IMediaTypeFormatter
         {
-            var supportedMediaTypeAttributes = typeof(T).GetCustomAttributes(typeof(SupportedMediaTypeAttribute), false).Cast<SupportedMediaTypeAttribute>();
+            var supportedMediaTypes = typeof(T).GetCustomAttributes<SupportedMediaTypeAttribute>(false)
+                                               .Select(a => a.MediaType);
 
-            return new HashSet<string>(supportedMediaTypeAttributes.Select(a => a.MediaType), StringComparer.OrdinalIgnoreCase);
+            return new HashSet<string>(supportedMediaTypes, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

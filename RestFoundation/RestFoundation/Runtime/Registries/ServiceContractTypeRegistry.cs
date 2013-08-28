@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using RestFoundation.ServiceProxy;
 
 namespace RestFoundation.Runtime
@@ -53,7 +54,7 @@ namespace RestFoundation.Runtime
                 return InitializeProxyMetadata(contractType);
             }
 
-            var metadataAttribute = Attribute.GetCustomAttribute(contractType, typeof(ProxyMetadataAttribute), false) as ProxyMetadataAttribute;
+            var metadataAttribute = contractType.GetCustomAttribute<ProxyMetadataAttribute>(false);
 
             if (metadataAttribute == null || metadataAttribute.ProxyMetadataType == null)
             {
@@ -69,7 +70,9 @@ namespace RestFoundation.Runtime
 
             if (proxyMetadata == null)
             {
-                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Resources.Global.InvalidProxyMetadataType, proxyMetadataType.Name));
+                throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture,
+                                                                  Resources.Global.InvalidProxyMetadataType,
+                                                                  proxyMetadataType.Name));
             }
 
             proxyMetadata.Initialize();

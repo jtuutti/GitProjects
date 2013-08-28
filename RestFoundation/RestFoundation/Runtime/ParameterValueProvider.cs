@@ -227,7 +227,7 @@ namespace RestFoundation.Runtime
         {
             try
             {
-                var typeBinderAttribute = Attribute.GetCustomAttribute(parameter, typeof(TypeBinderAttribute), false) as TypeBinderAttribute;
+                var typeBinderAttribute = parameter.GetCustomAttribute<TypeBinderAttribute>(false);
 
                 return typeBinderAttribute ?? TypeBinderRegistry.GetBinder(parameter.ParameterType);
             }

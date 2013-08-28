@@ -188,7 +188,7 @@ namespace RestFoundation.Runtime.Handlers
 
         private void TrySetServiceMethodTimeout(MethodInfo method)
         {
-            var timeoutAttribute = Attribute.GetCustomAttribute(method, typeof(AsyncTimeoutAttribute), false) as AsyncTimeoutAttribute;
+            var timeoutAttribute = method.GetCustomAttribute<AsyncTimeoutAttribute>(false);
 
             if (timeoutAttribute == null)
             {

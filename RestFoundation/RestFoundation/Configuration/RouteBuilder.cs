@@ -259,7 +259,7 @@ namespace RestFoundation.Configuration
             var httpMethodResolver = Rest.Configuration.ServiceLocator.GetService<IHttpMethodResolver>();
 
             var metadataCollection = from m in methods
-                                     from a in Attribute.GetCustomAttributes(m, urlAttributeType, false).Cast<UrlAttribute>()
+                                     from a in m.GetCustomAttributes<UrlAttribute>(false)
                                      select new { Method = m, Attribute = a };
 
             foreach (var metadata in metadataCollection)

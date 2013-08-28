@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime.Handlers;
 
@@ -141,7 +142,7 @@ namespace RestFoundation.Runtime
 
         private static void InitializeFormatter(IMediaTypeFormatter formatter, ConcurrentDictionary<string, IMediaTypeFormatter> defaultFormatters)
         {
-            var mediaTypes = formatter.GetType().GetCustomAttributes(typeof(SupportedMediaTypeAttribute), false).Cast<SupportedMediaTypeAttribute>();
+            var mediaTypes = formatter.GetType().GetTypeInfo().GetCustomAttributes<SupportedMediaTypeAttribute>(false);
 
             foreach (SupportedMediaTypeAttribute mediaType in mediaTypes)
             {

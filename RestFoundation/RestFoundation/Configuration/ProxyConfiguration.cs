@@ -128,10 +128,9 @@ namespace RestFoundation.Configuration
 
             const BindingFlags SectionBindingFlags = BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic;
 
-            Type sectionType = typeof(SettingsSection).GetTypeInfo()
-                                                      .Assembly
-                                                      .DefinedTypes
-                                                      .FirstOrDefault(x => x.FullName == SectionTypeName);
+            TypeInfo sectionType = typeof(SettingsSection).Assembly
+                                                          .DefinedTypes
+                                                          .FirstOrDefault(x => x.FullName == SectionTypeName);
 
             if (sectionType == null)
             {
@@ -150,9 +149,7 @@ namespace RestFoundation.Configuration
                 return;
             }
 
-            FieldInfo unsafeHeaderField = sectionType.GetTypeInfo()
-                                                     .DeclaredFields
-                                                     .FirstOrDefault(x => x.Name == FieldName);
+            FieldInfo unsafeHeaderField = sectionType.DeclaredFields.FirstOrDefault(x => x.Name == FieldName);
 
             if (unsafeHeaderField != null)
             {

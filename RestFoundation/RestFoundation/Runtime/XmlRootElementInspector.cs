@@ -4,6 +4,7 @@
 using System;
 using System.Data.Entity.Design.PluralizationServices;
 using System.Globalization;
+using System.Reflection;
 using System.Xml.Serialization;
 
 namespace RestFoundation.Runtime
@@ -12,8 +13,7 @@ namespace RestFoundation.Runtime
     {
         public static string GetRootElementName(Type objectType, out string rootNamespace)
         {           
-            var xmlRootAttribute = Attribute.GetCustomAttribute(objectType, typeof(XmlRootAttribute), true) as XmlRootAttribute;
-
+            var xmlRootAttribute = objectType.GetCustomAttribute<XmlRootAttribute>(true);
             string elementName;
 
             if (xmlRootAttribute != null)

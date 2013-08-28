@@ -103,8 +103,7 @@ namespace RestFoundation.Runtime
         {
             List<ServiceMethodBehaviorAttribute> methodBehaviorList = methodBehaviors.GetOrAdd(method, m =>
             {
-                var methodBehaviorAttributes = m.GetCustomAttributes(typeof(ServiceMethodBehaviorAttribute), false)
-                                                .Cast<ServiceMethodBehaviorAttribute>()
+                var methodBehaviorAttributes = m.GetCustomAttributes<ServiceMethodBehaviorAttribute>(false)
                                                 .OrderBy(b => b.Order)
                                                 .ToList();
 
@@ -112,9 +111,9 @@ namespace RestFoundation.Runtime
 
                 if (m.DeclaringType != null)
                 {
-                    methodBehaviorAttributes.AddRange(m.DeclaringType.GetCustomAttributes(typeof(ServiceMethodBehaviorAttribute), false)
+                    methodBehaviorAttributes.AddRange(m.DeclaringType
+                                                       .GetCustomAttributes<ServiceMethodBehaviorAttribute>(false)
                                                        .Where(b => !methodBehaviorTypes.Contains(b.GetType()))
-                                                       .Cast<ServiceMethodBehaviorAttribute>()
                                                        .OrderBy(b => b.Order));
                 }
 

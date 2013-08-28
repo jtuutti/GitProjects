@@ -51,7 +51,7 @@
 
     private static string GetAssemblyInformationVersion()
     {
-        var versionAttribute = Attribute.GetCustomAttribute(Rest.FoundationAssembly, typeof(AssemblyInformationalVersionAttribute)) as AssemblyInformationalVersionAttribute;
+        var versionAttribute = Rest.FoundationAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
 
         return versionAttribute != null ? String.Concat("v", versionAttribute.InformationalVersion) : "v1.0.0.0";
     }

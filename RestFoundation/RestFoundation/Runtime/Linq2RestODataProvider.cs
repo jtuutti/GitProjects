@@ -54,8 +54,8 @@ namespace RestFoundation.Runtime
             List<object> filteredCollection = TryConvertToFilteredCollection(collection, queryString);
             object filteredObject = filteredCollection.FirstOrDefault(o => o != null);
             Type objectType = filteredObject != null ? filteredObject.GetType() : typeof(object);
-                
-            if (objectType.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0)
+
+            if (Attribute.IsDefined(objectType, typeof(CompilerGeneratedAttribute), false))
             {
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, Global.UnsupportedObjectTypeForOData);
             }

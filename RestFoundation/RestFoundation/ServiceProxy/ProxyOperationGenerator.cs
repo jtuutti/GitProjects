@@ -240,7 +240,7 @@ namespace RestFoundation.ServiceProxy
 
         private static string GetParameterConstraint(ParameterInfo parameter)
         {
-            var constraintAttribute = Attribute.GetCustomAttribute(parameter, typeof(ConstraintAttribute), false) as ConstraintAttribute;
+            var constraintAttribute = parameter.GetCustomAttribute<ConstraintAttribute>(false);
 
             return constraintAttribute != null ? constraintAttribute.Pattern.TrimStart('^').TrimEnd('$') : null;
         }

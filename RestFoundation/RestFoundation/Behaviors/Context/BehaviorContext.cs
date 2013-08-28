@@ -128,7 +128,7 @@ namespace RestFoundation.Behaviors
                 return new HttpMethod[0];
             }
 
-            var urlAttribute = Attribute.GetCustomAttribute(m_method, typeof(UrlAttribute), false) as UrlAttribute;
+            var urlAttribute = m_method.GetCustomAttribute<UrlAttribute>(false);
 
             if (urlAttribute != null && urlAttribute.HttpMethods != null)
             {
@@ -151,7 +151,7 @@ namespace RestFoundation.Behaviors
                 return null;
             }
 
-            var urlAttribute = Attribute.GetCustomAttribute(m_method, typeof(UrlAttribute), false) as UrlAttribute;
+            var urlAttribute = m_method.GetCustomAttribute<UrlAttribute>(false);
 
             return urlAttribute != null ? urlAttribute.UrlTemplate : null;
         }

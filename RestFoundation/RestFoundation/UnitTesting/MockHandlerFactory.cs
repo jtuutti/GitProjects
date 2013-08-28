@@ -157,7 +157,7 @@ namespace RestFoundation.UnitTesting
                 throw new ArgumentException(Resources.Global.InvalidServiceMethod, "serviceMethodDelegate");
             }
 
-            var urlAttribute = Attribute.GetCustomAttribute(serviceMethod, typeof(UrlAttribute), false) as UrlAttribute;
+            var urlAttribute = serviceMethod.GetCustomAttribute<UrlAttribute>(false);
 
             if (urlAttribute == null || urlAttribute.UrlTemplate == null)
             {
