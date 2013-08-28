@@ -3,6 +3,8 @@
 // </copyright>
 using System;
 using System.Globalization;
+using System.Linq;
+using System.Net.Configuration;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web.Routing;
@@ -120,35 +122,37 @@ namespace RestFoundation.Configuration
 
         private static void SetAllowUnsafeHeaderParsing()
         {
-            const string AssemblyName = "System.Net.Configuration.SettingsSectionInternal";
-            const string SectionName = "Section";
             const string FieldName = "useUnsafeHeaderParsing";
+            const string SectionMemberName = "Section";
+            const string SectionTypeName = "System.Net.Configuration.SettingsSectionInternal";
 
             const BindingFlags SectionBindingFlags = BindingFlags.Static | BindingFlags.GetProperty | BindingFlags.NonPublic;
-            const BindingFlags FieldBindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
 
-            Assembly assembly = Assembly.GetAssembly(typeof(System.Net.Configuration.SettingsSection));
+            Type sectionType = typeof(SettingsSection).GetTypeInfo()
+                                                      .Assembly
+                                                      .DefinedTypes
+                                                      .FirstOrDefault(x => x.FullName == SectionTypeName);
 
-            if (assembly == null)
+            if (sectionType == null)
             {
                 return;
             }
 
-            Type assemblyType = assembly.GetType(AssemblyName);
-
-            if (assemblyType == null)
-            {
-                return;
-            }
-
-            object section = assemblyType.InvokeMember(SectionName, SectionBindingFlags, null, null, new object[0], CultureInfo.InvariantCulture);
+            object section = sectionType.InvokeMember(SectionMemberName,
+                                                      SectionBindingFlags,
+                                                      null,
+                                                      null,
+                                                      new object[0],
+                                                      CultureInfo.InvariantCulture);
 
             if (section == null)
             {
                 return;
             }
 
-            FieldInfo unsafeHeaderField = assemblyType.GetField(FieldName, FieldBindingFlags);
+            FieldInfo unsafeHeaderField = sectionType.GetTypeInfo()
+                                                     .DeclaredFields
+                                                     .FirstOrDefault(x => x.Name == FieldName);
 
             if (unsafeHeaderField != null)
             {
