@@ -17,10 +17,7 @@ namespace RestFoundation.Behaviors
         private readonly object m_service;
         private readonly MethodInfo m_method;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorContext"/> class.
-        /// </summary>
-        protected BehaviorContext()
+        internal BehaviorContext()
         {
         }
 
