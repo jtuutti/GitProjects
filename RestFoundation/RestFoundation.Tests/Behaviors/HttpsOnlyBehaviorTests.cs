@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Specialized;
+using System.Net;
 using NUnit.Framework;
 using RestFoundation.Behaviors;
 using RestFoundation.Runtime;
@@ -9,33 +10,45 @@ namespace RestFoundation.Tests.Behaviors
     [TestFixture]
     public class HttpsOnlyBehaviorTests
     {
-        private IServiceContext m_context;
-
-        [SetUp]
-        public void Initialize()
+        [Test]
+        public void SecureServiceRequestShouldNotThrow403()
         {
-            m_context = MockContextManager.GenerateContext();
-        }
+            var context = MockContextManager.GenerateContext(MockContextManager.RootVirtualPath, HttpMethod.Get, new NameValueCollection
+            {
+                { "X-Forwarded-Proto", "https" }
+            });
 
-        [TearDown]
-        public void ShutDown()
-        {
-            MockContextManager.DestroyContext();
+            try
+            {
+                ISecureServiceBehavior behavior = new HttpsOnlyBehavior(true);
+
+                behavior.OnMethodAuthorizing(context, null);
+            }
+            finally
+            {
+                MockContextManager.DestroyContext();
+            }
         }
 
         [Test]
         public void UnsecureServiceRequestShouldThrow403()
         {
-            ISecureServiceBehavior behavior = new HttpsOnlyBehavior();
+            var context = MockContextManager.GenerateContext();
 
             try
             {
-                behavior.OnMethodAuthorizing(m_context, null);
+                ISecureServiceBehavior behavior = new HttpsOnlyBehavior();
+
+                behavior.OnMethodAuthorizing(context, null);
                 Assert.Fail();
             }
             catch (HttpResponseException ex)
             {
                 Assert.That(ex.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
+            }
+            finally
+            {
+                MockContextManager.DestroyContext();
             }
         }
     }

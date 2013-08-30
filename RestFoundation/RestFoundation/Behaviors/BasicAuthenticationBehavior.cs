@@ -38,7 +38,21 @@ namespace RestFoundation.Behaviors
             }
 
             m_authorizationManager = authorizationManager;
+
+            RequiresSsl = true;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the authentication requires a secure connection
+        /// over HTTPS.
+        /// </summary>
+        public bool RequiresSsl { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the load balancer support for forwarding HTTPS traffic
+        /// over an HTTP channel is supported.
+        /// </summary>
+        public bool LoadBalancerSupport { get; set; }
 
         /// <summary>
         /// Called during the authorization process before a service method or behavior is executed.
@@ -51,6 +65,12 @@ namespace RestFoundation.Behaviors
             if (serviceContext == null)
             {
                 throw new ArgumentNullException("serviceContext");
+            }
+
+            if (RequiresSsl && AuthorizeConnection(serviceContext.Request) == BehaviorMethodAction.Stop)
+            {
+                SetStatusDescription(Resources.Global.HttpsRequiredStatusDescription);
+                return BehaviorMethodAction.Stop;
             }
 
             AuthorizationHeader header;
@@ -78,6 +98,21 @@ namespace RestFoundation.Behaviors
         private static void GenerateAuthenticationHeader(IServiceContext serviceContext)
         {
             serviceContext.Response.SetHeader("WWW-Authenticate", String.Format(CultureInfo.InvariantCulture, "{0} realm=\"{1}\"", AuthenticationType, serviceContext.Request.Url.OperationUrl));
+        }
+
+        private BehaviorMethodAction AuthorizeConnection(IHttpRequest request)
+        {
+            if (LoadBalancerSupport && !request.IsSecure)
+            {
+                return BehaviorMethodAction.Stop;
+            }
+
+            if (!LoadBalancerSupport && !String.Equals("https", request.Url.Scheme, StringComparison.OrdinalIgnoreCase))
+            {
+                return BehaviorMethodAction.Stop;
+            }
+
+            return BehaviorMethodAction.Execute;
         }
     }
 }
