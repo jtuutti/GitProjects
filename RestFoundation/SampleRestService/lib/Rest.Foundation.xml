@@ -389,11 +389,6 @@
             This class cannot be instantiated.
             </summary>
     </member>
-    <member name="M:RestFoundation.Behaviors.BehaviorContext.#ctor">
-      <summary>
-            Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.BehaviorContext" /> class.
-            </summary>
-    </member>
     <member name="M:RestFoundation.Behaviors.BehaviorContext.#ctor(System.Object,System.Reflection.MethodInfo)">
       <summary>
             Initializes a new instance of the <see cref="T:RestFoundation.Behaviors.BehaviorContext" /> class.
@@ -5130,6 +5125,18 @@
       <param name="serviceContext">The service context.</param>
       <param name="behaviorContext">The "method authorizing" behavior context.</param>
       <returns>A service method action.</returns>
+    </member>
+    <member name="P:RestFoundation.Behaviors.BasicAuthenticationBehavior.RequiresSsl">
+      <summary>
+            Gets or sets a value indicating whether the authentication requires a secure connection
+            over HTTPS.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Behaviors.BasicAuthenticationBehavior.LoadBalancerSupport">
+      <summary>
+            Gets or sets a value indicating whether the load balancer support for forwarding HTTPS traffic
+            over an HTTP channel is supported.
+            </summary>
     </member>
     <member name="T:RestFoundation.Behaviors.HttpsOnlyBehavior">
       <summary>
