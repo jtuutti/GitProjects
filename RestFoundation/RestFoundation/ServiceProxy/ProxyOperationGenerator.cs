@@ -170,36 +170,6 @@ namespace RestFoundation.ServiceProxy
             return parameters.Distinct().ToList();
         }
 
-        private static IEnumerable<ParameterMetadata> GetRouteParameters(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
-        {
-            var routeParameters = new List<ParameterMetadata>();
-
-            foreach (ParameterInfo parameter in metadata.MethodInfo.GetParameters())
-            {
-                if (metadata.UrlInfo.UrlTemplate.IndexOf(String.Concat("{", parameter.Name, "}"), StringComparison.OrdinalIgnoreCase) < 0)
-                {
-                    continue;
-                }
-
-                ParameterMetadata parameterMetadata = proxyMetadata.GetParameter(metadata.MethodInfo, parameter.Name, true);
-
-                var routeParameter = new ParameterMetadata
-                {
-                    Name = parameter.Name.ToLowerInvariant(),
-                    Type = parameter.ParameterType,
-                    IsRouteParameter = true,
-                    IsOptionalParameter = parameter.DefaultValue != DBNull.Value,
-                    RegexConstraint = GetParameterConstraint(parameter),
-                    ExampleValue = parameterMetadata != null ? parameterMetadata.ExampleValue : null,
-                    AllowedValues = parameterMetadata != null ? parameterMetadata.AllowedValues : null
-                };
-
-                routeParameters.Add(routeParameter);
-            }
-
-            return routeParameters;
-        }
-
         private static IEnumerable<ParameterMetadata> GetQueryStringParameters(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
         {
             var queryParameters = new List<ParameterMetadata>();
@@ -223,6 +193,36 @@ namespace RestFoundation.ServiceProxy
             }
 
             return queryParameters;
+        }
+
+        private static IEnumerable<ParameterMetadata> GetRouteParameters(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
+        {
+            var routeParameters = new List<ParameterMetadata>();
+
+            foreach (ParameterInfo parameter in metadata.MethodInfo.GetParameters())
+            {
+                if (metadata.UrlInfo.UrlTemplate.IndexOf(String.Concat("{", parameter.Name, "}"), StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    continue;
+                }
+
+                ParameterMetadata parameterMetadata = proxyMetadata != null ? proxyMetadata.GetParameter(metadata.MethodInfo, parameter.Name, true) : null;
+
+                var routeParameter = new ParameterMetadata
+                {
+                    Name = parameter.Name.ToLowerInvariant(),
+                    Type = parameter.ParameterType,
+                    IsRouteParameter = true,
+                    IsOptionalParameter = parameter.DefaultValue != DBNull.Value,
+                    RegexConstraint = GetParameterConstraint(parameter),
+                    ExampleValue = parameterMetadata != null ? parameterMetadata.ExampleValue : null,
+                    AllowedValues = parameterMetadata != null ? parameterMetadata.AllowedValues : null
+                };
+
+                routeParameters.Add(routeParameter);
+            }
+
+            return routeParameters;
         }
 
         private static Tuple<ResourceExampleMetadata, ResourceExampleMetadata> GetResourceExampleTypes(MethodInfo method, IProxyMetadata proxyMetadata)
