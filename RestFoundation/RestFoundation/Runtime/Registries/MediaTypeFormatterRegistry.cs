@@ -39,7 +39,10 @@ namespace RestFoundation.Runtime
 
         public static IReadOnlyCollection<string> GetMediaTypes()
         {
-            return formatters.Keys.ToArray();
+            return formatters.Keys.Concat(handlerFormatters.Values.SelectMany(x => x.Keys))
+                                  .Select(x => x.ToLowerInvariant())
+                                  .Distinct()
+                                  .ToArray();
         }
 
         public static IReadOnlyCollection<string> GetPrioritizedMediaTypes()
