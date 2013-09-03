@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using RestFoundation;
 using RestFoundation.Client;
 using RestFoundation.Results;
@@ -54,10 +55,8 @@ namespace RestTestServices
 
         public async Task<IQueryable<Person>> GetAllAsync()
         {
-            var client = RestClientFactory.Create();    
-            var allowedMethods = await client.OptionsAsync(Context.Request.Url);
-
-            if (!allowedMethods.Contains(HttpMethod.Get))
+            // simulating a heavy operation with a real thread
+            if (await Task.Factory.StartNew(m => (HttpMethod) m != HttpMethod.Get, Context.Request.Method, TaskCreationOptions.LongRunning))
             {
                 throw new HttpResponseException(HttpStatusCode.MethodNotAllowed, "GET is not allowed");
             }
