@@ -22,6 +22,7 @@ ul.auto-list > li:hover,ul.auto-list > li[data-selected=true]{color:#fff;backgro
 .clear{clear:both}
 .field-validation-error{color:red}
 .field-validation-valid,.validation-summary-valid{display:none}
+.has-right-margin{margin-right:7px}
 .heading1{background-color:#036;border-bottom:#369 6px solid;color:#fff;font-family:Tahoma;font-size:26px;font-weight:400;padding-bottom:8px;padding-left:30px;padding-top:16px;margin:0 0 10px -20px}
 .heading1 a:link,.heading1 a:visited,.heading1 a:active{color:#fff;font-family:Tahoma;font-size:26px;font-weight:400;text-decoration:none}
 .heading1 a:hover{color:#fff;font-family:Tahoma;font-size:26px;font-weight:400;text-decoration:underline}
@@ -31,10 +32,10 @@ ul.auto-list > li:hover,ul.auto-list > li[data-selected=true]{color:#fff;backgro
 .invisible{display:none;}
 .ip-filtered,.error-response-code{color:#800}
 .link-separator{display:inline-block;width:13px}
+.monospace{font-family:monospace;}
 .operation-uri,.operation-uri-custom{white-space:nowrap;vertical-align:middle}
 .operation-uri-custom a:link,.operation-uri-custom a:visited,.operation-uri-custom a:active{color:#036}
 .parameters{margin-bottom:15px}
-.has-right-margin{margin-right:7px}
 .schema-section{padding-top:20px}
 .spacer{padding-left:30px}
 .spacer-left{padding-left:3px;}

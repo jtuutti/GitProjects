@@ -230,6 +230,11 @@
 
                 ResponseText.Value = response.Data;
 
+                if (ContentType.Value.Trim().StartsWith("text/plain", StringComparison.OrdinalIgnoreCase))
+                {
+                    RegisterTextFontScript();
+                }
+
                 if (hasData)
                 {
                     ViewResponse.Visible = true;
@@ -615,6 +620,11 @@
         }
 
         return response;
+    }
+
+    private void RegisterTextFontScript()
+    {
+        ClientScript.RegisterStartupScript(GetType(), "RegisterErrorHighlightScript", "$('#ResponseText').addClass('monospace')", true);
     }
 
     private void RegisterErrorHighlightScript()
