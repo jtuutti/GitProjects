@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Web;
 using System.Web.Routing;
@@ -19,6 +20,7 @@ namespace RestFoundation.Runtime.Handlers
     public class RootRouteHandler : IServiceContextHandler
     {
         private const char Slash = '/';
+        private const string DefaultIndexPage = "~/index.html";
 
         private readonly IServiceContext m_serviceContext;
         private readonly IContentNegotiator m_contentNegotiator;
@@ -174,7 +176,15 @@ namespace RestFoundation.Runtime.Handlers
                 return false;
             }
 
-            context.Response.Redirect(GenerateProxyUrl(options), false);
+            if (File.Exists(context.Server.MapPath(DefaultIndexPage)))
+            {
+                context.Response.Redirect(DefaultIndexPage, false);
+            }
+            else
+            {
+                context.Response.Redirect(GenerateProxyUrl(options), false);
+            }
+            
             return true;
         }
 
