@@ -277,7 +277,11 @@
         <th>Condition</th>
     </tr>
     <%  foreach (var statusCode in operation.StatusCodes) { %>
-    <tr<%: statusCode.GetNumericStatusCode() >= 400 ? " class=\"error-response-code\"" : "" %>>
+    <% if (statusCode.GetNumericStatusCode() >= 400) { %>
+    <tr class="error-response-code">
+    <% } else { %>
+    <tr>
+    <% } %>
         <td><%: statusCode.GetNumericStatusCode() %></td>
         <td><%: statusCode.Condition %></td>
     </tr>
