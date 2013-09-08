@@ -165,6 +165,7 @@ namespace RestFoundation.ServiceProxy
         private static ICollection<ParameterMetadata> GetParameters(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
         {
             var parameters = new List<ParameterMetadata>(GetQueryStringParameters(metadata, proxyMetadata));
+            parameters.AddRange(GetBodyParameters(metadata, proxyMetadata));
             parameters.AddRange(GetRouteParameters(metadata, proxyMetadata));
 
             return parameters.Distinct().ToList();
@@ -172,27 +173,54 @@ namespace RestFoundation.ServiceProxy
 
         private static IEnumerable<ParameterMetadata> GetQueryStringParameters(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
         {
-            var queryParameters = new List<ParameterMetadata>();
+            var parameters = new List<ParameterMetadata>();
 
             if (proxyMetadata == null)
             {
-                return queryParameters;
+                return parameters;
             }
 
-            foreach (var queryParameter in proxyMetadata.GetParameters(metadata.MethodInfo, false))
+            foreach (var parameter in proxyMetadata.GetParameters(metadata.MethodInfo, RequestParameterType.Query))
             {
-                queryParameters.Add(new ParameterMetadata
+                parameters.Add(new ParameterMetadata
                 {
-                    Name = queryParameter.Name.ToLowerInvariant(),
-                    Type = queryParameter.Type,
-                    IsOptionalParameter = queryParameter.IsOptionalParameter,
-                    RegexConstraint = queryParameter.RegexConstraint,
-                    ExampleValue = queryParameter.ExampleValue,
-                    AllowedValues = queryParameter.AllowedValues
+                    Name = parameter.Name.ToLowerInvariant(),
+                    ParameterType = parameter.ParameterType,
+                    Type = parameter.Type,
+                    IsOptionalParameter = parameter.IsOptionalParameter,
+                    RegexConstraint = parameter.RegexConstraint,
+                    ExampleValue = parameter.ExampleValue,
+                    AllowedValues = parameter.AllowedValues
                 });
             }
 
-            return queryParameters;
+            return parameters;
+        }
+
+        private static IEnumerable<ParameterMetadata> GetBodyParameters(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
+        {
+            var parameters = new List<ParameterMetadata>();
+
+            if (proxyMetadata == null)
+            {
+                return parameters;
+            }
+
+            foreach (var parameter in proxyMetadata.GetParameters(metadata.MethodInfo, RequestParameterType.Body))
+            {
+                parameters.Add(new ParameterMetadata
+                {
+                    Name = parameter.Name.ToLowerInvariant(),
+                    ParameterType = parameter.ParameterType,
+                    Type = parameter.Type,
+                    IsOptionalParameter = parameter.IsOptionalParameter,
+                    RegexConstraint = parameter.RegexConstraint,
+                    ExampleValue = parameter.ExampleValue,
+                    AllowedValues = parameter.AllowedValues
+                });
+            }
+
+            return parameters;
         }
 
         private static IEnumerable<ParameterMetadata> GetRouteParameters(ServiceMethodMetadata metadata, IProxyMetadata proxyMetadata)
@@ -206,13 +234,15 @@ namespace RestFoundation.ServiceProxy
                     continue;
                 }
 
-                ParameterMetadata parameterMetadata = proxyMetadata != null ? proxyMetadata.GetParameter(metadata.MethodInfo, parameter.Name, true) : null;
+                ParameterMetadata parameterMetadata = proxyMetadata != null ?
+                                                                proxyMetadata.GetParameter(metadata.MethodInfo, parameter.Name, RequestParameterType.Route) :
+                                                                null;
 
                 var routeParameter = new ParameterMetadata
                 {
                     Name = parameter.Name.ToLowerInvariant(),
+                    ParameterType = RequestParameterType.Route,
                     Type = parameter.ParameterType,
-                    IsRouteParameter = true,
                     IsOptionalParameter = parameter.DefaultValue != DBNull.Value,
                     RegexConstraint = GetParameterConstraint(parameter),
                     ExampleValue = parameterMetadata != null ? parameterMetadata.ExampleValue : null,

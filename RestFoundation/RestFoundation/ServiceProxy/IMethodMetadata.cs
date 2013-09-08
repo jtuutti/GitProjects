@@ -175,6 +175,54 @@ namespace RestFoundation.ServiceProxy
         IMethodMetadata SetQueryParameter(string name, Type type, object exampleValue, IList<string> allowedValues, string regexConstraint);
 
         /// <summary>
+        /// Sets an HTTP body parameter for the service operation.
+        /// </summary>
+        /// <param name="name">The parameter name.</param>
+        /// <param name="type">The parameter type.</param>
+        /// <returns>The service method metadata.</returns>
+        IMethodMetadata SetBodyParameter(string name, Type type);
+
+        /// <summary>
+        /// Sets an HTTP body parameter for the service operation.
+        /// </summary>
+        /// <param name="name">The parameter name.</param>
+        /// <param name="type">The parameter type.</param>
+        /// <param name="exampleValue">An example value.</param>
+        /// <returns>The service method metadata.</returns>
+        IMethodMetadata SetBodyParameter(string name, Type type, object exampleValue);
+
+        /// <summary>
+        /// Sets an HTTP body parameter for the service operation.
+        /// </summary>
+        /// <param name="name">The parameter name.</param>
+        /// <param name="type">The parameter type.</param>
+        /// <param name="exampleValue">An example value.</param>
+        /// <param name="allowedValues">An optional list of allowed values.</param>
+        /// <returns>The service method metadata.</returns>
+        IMethodMetadata SetBodyParameter(string name, Type type, object exampleValue, IList<string> allowedValues);
+
+        /// <summary>
+        /// Sets an HTTP body parameter for the service operation.
+        /// </summary>
+        /// <param name="name">The parameter name.</param>
+        /// <param name="type">The parameter type.</param>
+        /// <param name="exampleValue">An example value.</param>
+        /// <param name="regexConstraint">An optional regular expression constraint.</param>
+        /// <returns>The service method metadata.</returns>
+        IMethodMetadata SetBodyParameter(string name, Type type, object exampleValue, string regexConstraint);
+
+        /// <summary>
+        /// Sets an HTTP body parameter for the service operation.
+        /// </summary>
+        /// <param name="name">The parameter name.</param>
+        /// <param name="type">The parameter type.</param>
+        /// <param name="exampleValue">An example value.</param>
+        /// <param name="allowedValues">An optional list of allowed values.</param>
+        /// <param name="regexConstraint">An optional regular expression constraint.</param>
+        /// <returns>The service method metadata.</returns>
+        IMethodMetadata SetBodyParameter(string name, Type type, object exampleValue, IList<string> allowedValues, string regexConstraint);
+
+        /// <summary>
         /// Sets a route parameter, that was not inferred by the lambda expression or has additional information such as list of allowed values,
         /// for the service operation.
         /// </summary>

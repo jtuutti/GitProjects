@@ -87,21 +87,17 @@ namespace RestFoundation.ServiceProxy
         /// </summary>
         /// <param name="serviceMethod">The service method.</param>
         /// <param name="name">The parameter name.</param>
-        /// <param name="isRouteParameter">
-        /// A bool indicating whether the parameter is a route parameter (true) or a query string parameter (false).
-        /// </param>
+        /// <param name="parameterType">The parameter type.</param>
         /// <returns>The operation parameter information.</returns>
-        ParameterMetadata GetParameter(MethodInfo serviceMethod, string name, bool isRouteParameter);
+        ParameterMetadata GetParameter(MethodInfo serviceMethod, string name, RequestParameterType parameterType);
 
         /// <summary>
         /// Returns all operation parameters with the provided type.
         /// </summary>
         /// <param name="serviceMethod">The service method.</param>
-        /// <param name="isRouteParameter">
-        /// A bool indicating whether the parameters are route parameter (true) or query string parameters (false).
-        /// </param>
+        /// <param name="parameterType">The parameter type.</param>
         /// <returns>The operation parameters.</returns>
-        IList<ParameterMetadata> GetParameters(MethodInfo serviceMethod, bool isRouteParameter);
+        IList<ParameterMetadata> GetParameters(MethodInfo serviceMethod, RequestParameterType parameterType);
 
         /// <summary>
         /// Gets all additional HTTP headers associated with the operation.

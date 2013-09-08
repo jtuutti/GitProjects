@@ -60,12 +60,12 @@ namespace RestFoundation.ServiceProxy
             return null;
         }
 
-        public ParameterMetadata GetParameter(MethodInfo serviceMethod, string name, bool isRouteParameter)
+        public ParameterMetadata GetParameter(MethodInfo serviceMethod, string name, RequestParameterType parameterType)
         {
             return null;
         }
 
-        public IList<ParameterMetadata> GetParameters(MethodInfo serviceMethod, bool isRouteParameter)
+        public IList<ParameterMetadata> GetParameters(MethodInfo serviceMethod, RequestParameterType parameterType)
         {
             return null;
         }

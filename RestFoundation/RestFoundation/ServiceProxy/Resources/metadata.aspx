@@ -169,8 +169,8 @@
     <table class="parameters">
     <tr>
         <th>URL parameter</th>
-        <th>Query parameter?</th>
-        <th>Type</th>
+        <th>Parameter type</th>
+        <th>Data type</th>
         <th>Optional?</th>
         <th>Constraint</th>
         <th>Allowed values</th>
@@ -179,7 +179,7 @@
     <% foreach (var routeParameter in operation.RouteParameters) { %>
     <tr>
         <td><%: "{" + routeParameter.Name + "}" %></td>
-        <td><%: routeParameter.IsRouteParameter ? "N" : "Y" %></td>
+        <td><%: routeParameter.ParameterType.ToString().ToLower() %></td>
         <td><%: routeParameter.GetTypeDescription() %></td>
         <td><%: routeParameter.IsOptionalParameter ? "Y" : "N" %></td>
         <td><%: routeParameter.RegexConstraint ?? String.Empty %></td>

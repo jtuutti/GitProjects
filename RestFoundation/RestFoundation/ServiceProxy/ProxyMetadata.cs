@@ -481,7 +481,40 @@ namespace RestFoundation.ServiceProxy
                 throw new ArgumentNullException("name");
             }
 
-            SetParameter(name, type, exampleValue, allowedValues, regexConstraint, false);
+            SetParameter(name, type, exampleValue, allowedValues, regexConstraint, RequestParameterType.Query);
+            return this;
+        }
+
+        IMethodMetadata IMethodMetadata.SetBodyParameter(string name, Type type)
+        {
+            return ((IMethodMetadata) this).SetBodyParameter(name, type, null, null, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetBodyParameter(string name, Type type, object exampleValue)
+        {
+            return ((IMethodMetadata) this).SetBodyParameter(name, type, exampleValue, null, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetBodyParameter(string name, Type type, object exampleValue, IList<string> allowedValues)
+        {
+            return ((IMethodMetadata) this).SetBodyParameter(name, type, exampleValue, allowedValues, null);
+        }
+
+        IMethodMetadata IMethodMetadata.SetBodyParameter(string name, Type type, object exampleValue, string regexConstraint)
+        {
+            return ((IMethodMetadata) this).SetQueryParameter(name, type, exampleValue, null, regexConstraint);
+        }
+
+        IMethodMetadata IMethodMetadata.SetBodyParameter(string name, Type type, object exampleValue, IList<string> allowedValues, string regexConstraint)
+        {
+            ValidateCurrentServiceMethod();
+
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            SetParameter(name, type, exampleValue, allowedValues, regexConstraint, RequestParameterType.Body);
             return this;
         }
 
@@ -509,7 +542,7 @@ namespace RestFoundation.ServiceProxy
                 throw new ArgumentException(Resources.Global.InvalidMethodParameterName, "name");
             }
 
-            SetParameter(name, null, exampleValue, allowedValues, null, true);
+            SetParameter(name, null, exampleValue, allowedValues, null, RequestParameterType.Route);
             return this;
         }
 
@@ -793,7 +826,7 @@ namespace RestFoundation.ServiceProxy
             return resourceExample;
         }
 
-        ParameterMetadata IProxyMetadata.GetParameter(MethodInfo serviceMethod, string name, bool isRouteParameter)
+        ParameterMetadata IProxyMetadata.GetParameter(MethodInfo serviceMethod, string name, RequestParameterType parameterType)
         {
             HashSet<ParameterMetadata> parameters;
 
@@ -802,10 +835,10 @@ namespace RestFoundation.ServiceProxy
                 return null;
             }
 
-            return parameters.FirstOrDefault(p => p.Name == name && p.IsRouteParameter == isRouteParameter);
+            return parameters.FirstOrDefault(p => p.Name == name && p.ParameterType == parameterType);
         }
 
-        IList<ParameterMetadata> IProxyMetadata.GetParameters(MethodInfo serviceMethod, bool isRouteParameter)
+        IList<ParameterMetadata> IProxyMetadata.GetParameters(MethodInfo serviceMethod, RequestParameterType parameterType)
         {
             if (serviceMethod == null)
             {
@@ -819,7 +852,7 @@ namespace RestFoundation.ServiceProxy
                 return new List<ParameterMetadata>();
             }
 
-            return parameters.Where(p => p.IsRouteParameter == isRouteParameter).ToList();
+            return parameters.Where(p => p.ParameterType == parameterType).ToList();
         }
 
         IList<HeaderMetadata> IProxyMetadata.GetHeaders(MethodInfo serviceMethod)
@@ -883,7 +916,7 @@ namespace RestFoundation.ServiceProxy
             }
         }
 
-        private void SetParameter(string name, Type type, object exampleValue, IEnumerable<string> allowedValues, string regexConstraint, bool isRouteParameter)
+        private void SetParameter(string name, Type type, object exampleValue, IEnumerable<string> allowedValues, string regexConstraint, RequestParameterType parameterType)
         {
             HashSet<ParameterMetadata> parameters;
 
@@ -899,7 +932,7 @@ namespace RestFoundation.ServiceProxy
                 ExampleValue = exampleValue is bool ? exampleValue.ToString().ToLowerInvariant() : exampleValue,
                 AllowedValues = allowedValues != null ? String.Join(", ", allowedValues.Where(o => o != null).ToArray()) : null,
                 RegexConstraint = regexConstraint,
-                IsRouteParameter = isRouteParameter
+                ParameterType = parameterType
             };
 
             // trying to delete existing parameters to allow overridding inferred values from the lambda expressions

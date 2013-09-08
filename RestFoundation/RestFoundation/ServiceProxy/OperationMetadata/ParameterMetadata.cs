@@ -20,10 +20,9 @@ namespace RestFoundation.ServiceProxy.OperationMetadata
         public Type Type { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the parameter is a route parameter (true),
-        /// or a query string parameter (false).
+        /// Gets or sets a value representing the parameter type.
         /// </summary>
-        public bool IsRouteParameter { get; set; }
+        public RequestParameterType ParameterType { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the parameter is optional.
