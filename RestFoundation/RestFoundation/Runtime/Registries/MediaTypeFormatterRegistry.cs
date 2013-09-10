@@ -101,6 +101,11 @@ namespace RestFoundation.Runtime
 
         public static IMediaTypeFormatter GetHandlerFormatter(IServiceContextHandler handler, string mediaType)
         {
+            if (handler == null || String.IsNullOrEmpty(mediaType))
+            {
+                return null;
+            }
+
             Dictionary<string, IMediaTypeFormatter> formatterDictionary;
 
             if (!handlerFormatters.TryGetValue(handler, out formatterDictionary))
