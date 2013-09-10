@@ -95,7 +95,7 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("request");
             }
 
-            string userAgent = request.ServerVariables.Get(UserAgentVariableName);
+            string userAgent = request.ServerVariables.TryGet(UserAgentVariableName);
 
             if (userAgent == null)
             {
