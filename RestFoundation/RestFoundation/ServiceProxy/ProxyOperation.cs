@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using RestFoundation.Results;
 using RestFoundation.ServiceProxy.OperationMetadata;
@@ -140,7 +141,11 @@ namespace RestFoundation.ServiceProxy
         {
             get
             {
-                return ResultType != null && ResultType.IsGenericType && ResultType.GetGenericTypeDefinition() == typeof(IQueryable<>);
+                return ResultType != null && ResultType.IsGenericType &&
+                       (ResultType.GetGenericTypeDefinition() == typeof(IQueryable<>) ||
+                        (ResultType.GetGenericTypeDefinition() == typeof(Task<>) &&
+                         ResultType.GetGenericArguments()[0].IsGenericType &&
+                         ResultType.GetGenericArguments()[0].GetGenericTypeDefinition() == typeof(IQueryable<>)));
             }
         }
 
