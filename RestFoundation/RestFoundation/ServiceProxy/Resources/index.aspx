@@ -60,8 +60,13 @@
             <% foreach (ProxyOperation operation in operations) { %>
             <tr>
                 <% if (!String.IsNullOrEmpty(operation.UrlTempate)) { %>
-                    <td class="<%: operation.IsIPFiltered ? "operation-uri ip-filtered" : "operation-uri" %>" rowspan="<%: operation.RepeatedTemplateCount + 1 %>">
-                        <span class="strong"><%: operation.UrlTempate %></span>
+                    <td class="<%: operation.IsIPFiltered ? "operation-uri ip-filtered" : "operation-uri" %>" rowspan="<%: operation.RepeatedTemplateCount + 1 %>">                       
+                        <% string[] templateParts = operation.UrlTempate.Split(new [] { '?' }, StringSplitOptions.RemoveEmptyEntries); %>
+                        <% if (templateParts.Length == 2) { %>
+                            <span class="strong"><%: templateParts[0] %></span>?<%: templateParts[1] %>
+                        <% } else { %>
+                            <span class="strong"><%: templateParts[0] %></span>
+                        <% } %>
                     </td>
                 <% } %>
                 <td><span class="strong"><%: operation.HttpMethod.ToString().ToUpperInvariant() %></span></td>
