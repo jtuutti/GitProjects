@@ -20,6 +20,7 @@ namespace RestFoundation.Runtime
     public class ServiceMethodInvoker : IServiceMethodInvoker
     {
         private static readonly ConcurrentDictionary<MethodInfo, List<ServiceMethodBehaviorAttribute>> methodBehaviors = new ConcurrentDictionary<MethodInfo, List<ServiceMethodBehaviorAttribute>>();
+        private static readonly object syncRoot = new Object();
 
         private readonly IServiceBehaviorInvoker m_behaviorInvoker;
         private readonly IParameterValueProvider m_parameterValueProvider;
@@ -101,7 +102,17 @@ namespace RestFoundation.Runtime
 
         private static void AddServiceBehaviors(MethodInfo method, List<IServiceBehavior> behaviors)
         {
-            List<ServiceMethodBehaviorAttribute> methodBehaviorList = methodBehaviors.GetOrAdd(method, m =>
+            List<ServiceMethodBehaviorAttribute> methodBehaviorList = methodBehaviors.GetOrAdd(method, AddServiceBehaviors);
+
+            foreach (ServiceMethodBehaviorAttribute methodBehavior in methodBehaviorList)
+            {
+                behaviors.Add(methodBehavior);
+            }
+        }
+
+        private static List<ServiceMethodBehaviorAttribute> AddServiceBehaviors(MethodInfo m)
+        {
+            lock (syncRoot)
             {
                 var methodBehaviorAttributes = m.GetCustomAttributes<ServiceMethodBehaviorAttribute>(false)
                                                 .OrderBy(b => b.Order)
@@ -118,11 +129,6 @@ namespace RestFoundation.Runtime
                 }
 
                 return methodBehaviorAttributes;
-            });
-
-            foreach (ServiceMethodBehaviorAttribute methodBehavior in methodBehaviorList)
-            {
-                behaviors.Add(methodBehavior);
             }
         }
 

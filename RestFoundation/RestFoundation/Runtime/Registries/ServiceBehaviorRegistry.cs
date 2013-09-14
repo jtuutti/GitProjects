@@ -18,8 +18,9 @@ namespace RestFoundation.Runtime
         };
 
         private static readonly ConcurrentDictionary<IRestServiceHandler, List<IServiceBehavior>> handlerBehaviors = new ConcurrentDictionary<IRestServiceHandler, List<IServiceBehavior>>();
-        private static readonly object globalSyncRoot = new object();
-        private static readonly object handlerSyncRoot = new object();
+        private static readonly object behaviorSyncRoot = new Object();
+        private static readonly object addHandlerSyncRoot = new Object();
+        private static readonly object updateHandlerSyncRoot = new Object();
 
         public static IList<IServiceBehavior> GetBehaviors(IRestServiceHandler handler)
         {
@@ -43,34 +44,13 @@ namespace RestFoundation.Runtime
         public static void AddBehavior(IRestServiceHandler handler, IServiceBehavior behavior)
         {
             handlerBehaviors.AddOrUpdate(handler,
-                                         handlerToAdd =>
-                                         {
-                                             var behaviorsToAdd = new List<IServiceBehavior>
-                                             {
-                                                 behavior
-                                             };
-
-                                             return behaviorsToAdd;
-                                         },
-                                         (handlerToUpdate, behaviorsToUpdate) =>
-                                         {
-                                             lock (handlerSyncRoot)
-                                             {
-                                                 if (behaviorsToUpdate.Contains(behavior, ServiceBehaviorEqualityComparer.Default))
-                                                 {
-                                                     behaviorsToUpdate.RemoveAll(b => b.GetType() == behavior.GetType());
-                                                 }
-
-                                                 behaviorsToUpdate.Add(behavior);
-                                             }
-
-                                             return behaviorsToUpdate;
-                                         });
+                                         handlerToAdd => AddHandlerFactory(behavior),
+                                         (handlerToUpdate, behaviorsToUpdate) => UpdateHandlerFactory(behavior, behaviorsToUpdate));
         }
 
         public static void AddGlobalBehavior(IServiceBehavior behavior)
         {
-            lock (globalSyncRoot)
+            lock (behaviorSyncRoot)
             {
                 if (!globalBehaviors.Contains(behavior, ServiceBehaviorEqualityComparer.Default))
                 {
@@ -135,6 +115,34 @@ namespace RestFoundation.Runtime
 
             behaviors.RemoveAt(authBehaviorIndex);
             behaviors.Insert(0, authBehavior);
+        }
+
+        private static List<IServiceBehavior> AddHandlerFactory(IServiceBehavior behavior)
+        {
+            lock (addHandlerSyncRoot)
+            {
+                var behaviorsToAdd = new List<IServiceBehavior>
+                {
+                    behavior
+                };
+
+                return behaviorsToAdd;
+            }
+        }
+
+        private static List<IServiceBehavior> UpdateHandlerFactory(IServiceBehavior behavior, List<IServiceBehavior> behaviorsToUpdate)
+        {
+            lock (updateHandlerSyncRoot)
+            {
+                if (behaviorsToUpdate.Contains(behavior, ServiceBehaviorEqualityComparer.Default))
+                {
+                    behaviorsToUpdate.RemoveAll(b => b.GetType() == behavior.GetType());
+                }
+
+                behaviorsToUpdate.Add(behavior);
+
+                return behaviorsToUpdate;
+            }
         }
 
         #region Equality Comparer

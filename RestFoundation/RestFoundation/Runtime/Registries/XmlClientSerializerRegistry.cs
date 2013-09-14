@@ -11,6 +11,7 @@ namespace RestFoundation.Runtime
     internal static class XmlSerializerRegistry
     {
         private static readonly ConcurrentDictionary<Type, XmlSerializer> serializers = new ConcurrentDictionary<Type, XmlSerializer>();
+        private static readonly object syncRoot = new Object();
 
         public static XmlSerializer Get(Type objectType)
         {
@@ -24,19 +25,22 @@ namespace RestFoundation.Runtime
 
         private static XmlSerializer InitializeXmlSerializer(Type objectType)
         {
-            if (objectType.IsArray)
+            lock (syncRoot)
             {
-                return GetSerializerForCollection(objectType, objectType.GetElementType());
+                if (objectType.IsArray)
+                {
+                    return GetSerializerForCollection(objectType, objectType.GetElementType());
+                }
+
+                if (objectType.IsGenericType && objectType.GetGenericTypeDefinition().GetInterface(typeof(IEnumerable<>).FullName) != null)
+                {
+                    return GetSerializerForCollection(objectType, objectType.GetGenericArguments()[0]);
+                }
+
+                string rootNamespace = XmlNamespaceManager.GetDefault();
+
+                return !String.IsNullOrWhiteSpace(rootNamespace) ? new XmlSerializer(objectType, rootNamespace) : new XmlSerializer(objectType);
             }
-
-            if (objectType.IsGenericType && objectType.GetGenericTypeDefinition().GetInterface(typeof(IEnumerable<>).FullName) != null)
-            {
-                return GetSerializerForCollection(objectType, objectType.GetGenericArguments()[0]);
-            }
-
-            string rootNamespace = XmlNamespaceManager.GetDefault();
-
-            return !String.IsNullOrWhiteSpace(rootNamespace) ? new XmlSerializer(objectType, rootNamespace) : new XmlSerializer(objectType);
         }
 
         private static XmlSerializer GetSerializerForCollection(Type objectType, Type elementType)

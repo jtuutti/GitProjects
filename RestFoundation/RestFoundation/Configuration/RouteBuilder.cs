@@ -23,9 +23,10 @@ namespace RestFoundation.Configuration
         private const char Tilda = '~';
 
         private static readonly Type urlAttributeType = typeof(UrlAttribute);
-        private static readonly object syncRoot = new object();
         private static readonly Regex serviceNameRegex = new Regex(@"^[_a-zA-Z0-9\-]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
         private static readonly Regex urlParameterRegex = new Regex(@"\{([_a-zA-Z0-9]+)\}", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static readonly object addSyncRoot = new Object();
+        private static readonly object updateSyncRoot = new Object();
 
         private readonly string m_relativeUrl;
         private readonly RouteCollection m_routes;
@@ -228,24 +229,30 @@ namespace RestFoundation.Configuration
 
         private static HashSet<HttpMethod> AddHttpMethods(IEnumerable<HttpMethod> urlMethods)
         {
-            var allowedMethods = new HashSet<HttpMethod>();
-
-            foreach (var urlMethod in urlMethods)
+            lock (addSyncRoot)
             {
-                allowedMethods.Add(urlMethod);
-            }
+                var allowedMethods = new HashSet<HttpMethod>();
 
-            return allowedMethods;
+                foreach (var urlMethod in urlMethods)
+                {
+                    allowedMethods.Add(urlMethod);
+                }
+
+                return allowedMethods;
+            }
         }
 
         private static HashSet<HttpMethod> UpdateHttpMethods(HashSet<HttpMethod> allowedMethods, IEnumerable<HttpMethod> urlMethods)
         {
-            foreach (var urlMethod in urlMethods)
+            lock (updateSyncRoot)
             {
-                allowedMethods.Add(urlMethod);
-            }
+                foreach (var urlMethod in urlMethods)
+                {
+                    allowedMethods.Add(urlMethod);
+                }
 
-            return allowedMethods;
+                return allowedMethods;
+            }
         }
 
         private static string ConcatUrl(string url, string urlTemplate)
@@ -399,11 +406,7 @@ namespace RestFoundation.Configuration
                                              .Where(m => Attribute.IsDefined(m, urlAttributeType, false));
 
             List<ServiceMethodMetadata> methodMetadata = GenerateMethodMetadata(contractType, serviceMethods, m_relativeUrl);
-
-            lock (syncRoot)
-            {
-                AddServiceMethod(contractType, methodMetadata);
-            }
+            AddServiceMethod(contractType, methodMetadata);
 
             IEnumerable<IRestServiceHandler> routeHandlers = MapRoutes(contractType, methodMetadata);
             return new RouteConfiguration(routeHandlers);

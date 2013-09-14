@@ -16,6 +16,8 @@ namespace RestFoundation.Runtime
         private static readonly ConcurrentDictionary<IServiceContextHandler, Dictionary<string, IMediaTypeFormatter>> handlerFormatters = new ConcurrentDictionary<IServiceContextHandler, Dictionary<string, IMediaTypeFormatter>>();
         private static readonly ConcurrentDictionary<string, int> mediaTypePriorities = new ConcurrentDictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         private static readonly ConcurrentDictionary<string, IMediaTypeFormatter> formatters = InitializeDefaultFormatters();
+        private static readonly object addSyncRoot = new Object();
+        private static readonly object updateSyncRoot = new Object();
 
         public static IMediaTypeFormatter GetFormatter(string mediaType)
         {
@@ -121,21 +123,33 @@ namespace RestFoundation.Runtime
         public static void AddHandlerFormatter(IServiceContextHandler handler, string mediaType, IMediaTypeFormatter formatter)
         {
             handlerFormatters.AddOrUpdate(handler,
-                                          handlerToAdd =>
-                                          {
-                                              var formattersToAdd = new Dictionary<string, IMediaTypeFormatter>(StringComparer.OrdinalIgnoreCase)
-                                              {
-                                                  { mediaType, formatter }
-                                              };
+                                          handlerToAdd => AddHandlerFactory(mediaType, formatter),
+                                          (handlerToUpdate, formattersToUpdate) => UpdateHandlerFactory(mediaType, formatter, formattersToUpdate));
+        }
 
-                                              return formattersToAdd;
-                                          },
-                                          (handlerToUpdate, formattersToUpdate) =>
-                                          {
-                                              formattersToUpdate[mediaType] = formatter;
+        private static Dictionary<string, IMediaTypeFormatter> AddHandlerFactory(string mediaType, IMediaTypeFormatter formatter)
+        {
+            lock (addSyncRoot)
+            {
+                var formattersToAdd = new Dictionary<string, IMediaTypeFormatter>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { mediaType, formatter }
+                };
 
-                                              return formattersToUpdate;
-                                          });
+                return formattersToAdd;
+            }
+        }
+
+        private static Dictionary<string, IMediaTypeFormatter> UpdateHandlerFactory(string mediaType,
+                                                                                    IMediaTypeFormatter formatter,
+                                                                                    Dictionary<string, IMediaTypeFormatter> formattersToUpdate)
+        {
+            lock (updateSyncRoot)
+            {
+                formattersToUpdate[mediaType] = formatter;
+
+                return formattersToUpdate;
+            }
         }
 
         private static ConcurrentDictionary<string, IMediaTypeFormatter> InitializeDefaultFormatters()

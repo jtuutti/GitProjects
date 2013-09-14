@@ -14,6 +14,7 @@ namespace RestFoundation.Runtime
     {
         private static readonly ConcurrentDictionary<string, Type> serviceContractTypes = new ConcurrentDictionary<string, Type>();
         private static readonly ConcurrentDictionary<Type, IProxyMetadata> serviceContractMetadata = new ConcurrentDictionary<Type, IProxyMetadata>();
+        private static readonly object syncRoot = new Object();
 
         public static Type GetType(string typeAssemblyName)
         {
@@ -49,19 +50,22 @@ namespace RestFoundation.Runtime
 
         internal static IProxyMetadata GenerateProxyMetadata(Type contractType)
         {
-            if (contractType.IsClass && contractType.GetInterface(typeof(IProxyMetadata).FullName) != null)
+            lock (syncRoot)
             {
-                return InitializeProxyMetadata(contractType);
+                if (contractType.IsClass && contractType.GetInterface(typeof(IProxyMetadata).FullName) != null)
+                {
+                    return InitializeProxyMetadata(contractType);
+                }
+
+                var metadataAttribute = contractType.GetCustomAttribute<ProxyMetadataAttribute>(false);
+
+                if (metadataAttribute == null || metadataAttribute.ProxyMetadataType == null)
+                {
+                    return new NullProxyMetadata();
+                }
+
+                return InitializeProxyMetadata(metadataAttribute.ProxyMetadataType);
             }
-
-            var metadataAttribute = contractType.GetCustomAttribute<ProxyMetadataAttribute>(false);
-
-            if (metadataAttribute == null || metadataAttribute.ProxyMetadataType == null)
-            {
-                return new NullProxyMetadata();
-            }
-
-            return InitializeProxyMetadata(metadataAttribute.ProxyMetadataType);
         }
 
         private static IProxyMetadata InitializeProxyMetadata(Type proxyMetadataType)

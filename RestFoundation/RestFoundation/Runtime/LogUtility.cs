@@ -11,7 +11,7 @@ namespace RestFoundation.Runtime
     {
         private const string DefaultContentType = "text/html";
 
-        private static readonly object syncRoot = new object();
+        private static readonly object syncRoot = new Object();
         private static ILogWriter writer;
 
         public static bool CanLog
