@@ -77,23 +77,29 @@ namespace MessageBus.Test
             Console.ResetColor();
             Console.WriteLine();
 
-            await bus.SendAndReceive<ITestMessage, string>(message =>
+            string result = await bus.SendAndReceive<ITestMessage, string>(message =>
             {
                 message.ID = 20;
                 message.Name = "ABC";
             });
 
-            await bus.SendAndReceive<TestMessage2, string>(message =>
+            Console.WriteLine("--- {0} ---", result);
+
+            result = await bus.SendAndReceive<TestMessage2, string>(message =>
             {
                 message.ID = 25;
                 message.Name = "EFG";
             });
 
-            await bus.SendAndReceive<TestMessage, string>(message =>
+            Console.WriteLine("--- {0} ---", result);
+
+            result = await bus.SendAndReceive<TestMessage, string>(message =>
             {
                 message.ID = 26;
                 message.Name = "ABC";
             });
+
+            Console.WriteLine("--- {0} ---", result);
         }
 
         private static void DisplayException(Exception ex)

@@ -86,41 +86,25 @@ namespace MessageBus
         /// <param name="messages">An array of messages.</param>
         /// <returns>The batch id on the bus.</returns>
         string SendBatch<T>(params T[] messages) where T : IMessage;
-
-        Task<TResponse> SendAndReceive<TResponse>(IMessage message);
-
-        Task<TResponse> SendAndReceive<T, TResponse>(Action<T> messageInitializer) where T : IMessage;
-
-        /*
+        
         /// <summary>
-        /// Begins an asynchronous 2-way operation that sends a message onto the bus and returns a response.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="callback">The asynchronous callback.</param>
-        /// <returns>The <see cref="IAsyncResult"/> that identifies the posted asynchronous request.</returns>
-        /// <exception cref="TimeoutException">If no active message handler sent a response within the specified timeout.</exception>
-        /// <exception cref="SerializationException">If the response type is not serializable.</exception>
-        IAsyncResult SendAsync(IMessage message, AsyncCallback callback);
-
-        /// <summary>
-        /// Begins an asynchronous 2-way operation that sends the newly initialized message onto the bus and returns a response.
-        /// </summary>
-        /// <typeparam name="T">The message type.</typeparam>
-        /// <param name="messageInitializer">A delegate populating the created message with data.</param>
-        /// <param name="callback">The asynchronous callback.</param>
-        /// <returns>The <see cref="IAsyncResult"/> that identifies the posted asynchronous request.</returns>
-        /// <exception cref="TimeoutException">If no active message handler sent a response within the specified timeout.</exception>
-        /// <exception cref="SerializationException">If the response type is not serializable.</exception>
-        IAsyncResult SendAsync<T>(Action<T> messageInitializer, AsyncCallback callback) where T : IMessage;
-
-        /// <summary>
-        /// Completes a pending asynchronous 2-way operation.
+        /// Sends a message onto the bus and returns a response.
         /// </summary>
         /// <typeparam name="TResponse">The response type.</typeparam>
-        /// <param name="result">An <see cref="IAsyncResult"/> that stores state information for this asynchronous operation.</param>
-        /// <returns>The message id on the bus.</returns>
-        TResponse SendComplete<TResponse>(IAsyncResult result);
-        */
+        /// <param name="message">The message.</param>
+        /// <exception cref="TimeoutException">If no active message handler sent a response within the specified timeout.</exception>
+        /// <exception cref="SerializationException">If the response type is not serializable.</exception>
+        Task<TResponse> SendAndReceive<TResponse>(IMessage message);
+
+        /// <summary>
+        /// Sends a newly initialized message onto the bus and returns a response.
+        /// </summary>
+        /// <typeparam name="T">The message type.</typeparam>
+        /// <typeparam name="TResponse">The response type.</typeparam>
+        /// <param name="messageInitializer">A delegate populating the created message with data.</param>
+        /// <exception cref="TimeoutException">If no active message handler sent a response within the specified timeout.</exception>
+        /// <exception cref="SerializationException">If the response type is not serializable.</exception>
+        Task<TResponse> SendAndReceive<T, TResponse>(Action<T> messageInitializer) where T : IMessage;
 
         /// <summary>
         /// Replies to a message that was received from the bus. This method should be called from message handlers.
