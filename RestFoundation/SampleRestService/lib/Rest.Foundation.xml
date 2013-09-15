@@ -3530,6 +3530,26 @@
             Gets a value indicating how the requests URLs will be rewritten.
             </summary>
     </member>
+    <member name="T:RestFoundation.ServiceProxy.OperationMetadata.RequestParameterType">
+      <summary>
+            Defines an HTTP request parameter type.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ServiceProxy.OperationMetadata.RequestParameterType.Route">
+      <summary>
+            A route parameter.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ServiceProxy.OperationMetadata.RequestParameterType.Query">
+      <summary>
+            A query string parameter.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.ServiceProxy.OperationMetadata.RequestParameterType.Body">
+      <summary>
+            A request body parameter.
+            </summary>
+    </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyResponseData">
       <summary>
             Represents data from a Service Proxy response.
@@ -6224,6 +6244,54 @@
       <param name="regexConstraint">An optional regular expression constraint.</param>
       <returns>The service method metadata.</returns>
     </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetBodyParameter(System.String,System.Type)">
+      <summary>
+            Sets an HTTP body parameter for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="type">The parameter type.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetBodyParameter(System.String,System.Type,System.Object)">
+      <summary>
+            Sets an HTTP body parameter for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="type">The parameter type.</param>
+      <param name="exampleValue">An example value.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetBodyParameter(System.String,System.Type,System.Object,System.Collections.Generic.IList{System.String})">
+      <summary>
+            Sets an HTTP body parameter for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="type">The parameter type.</param>
+      <param name="exampleValue">An example value.</param>
+      <param name="allowedValues">An optional list of allowed values.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetBodyParameter(System.String,System.Type,System.Object,System.String)">
+      <summary>
+            Sets an HTTP body parameter for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="type">The parameter type.</param>
+      <param name="exampleValue">An example value.</param>
+      <param name="regexConstraint">An optional regular expression constraint.</param>
+      <returns>The service method metadata.</returns>
+    </member>
+    <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetBodyParameter(System.String,System.Type,System.Object,System.Collections.Generic.IList{System.String},System.String)">
+      <summary>
+            Sets an HTTP body parameter for the service operation.
+            </summary>
+      <param name="name">The parameter name.</param>
+      <param name="type">The parameter type.</param>
+      <param name="exampleValue">An example value.</param>
+      <param name="allowedValues">An optional list of allowed values.</param>
+      <param name="regexConstraint">An optional regular expression constraint.</param>
+      <returns>The service method metadata.</returns>
+    </member>
     <member name="M:RestFoundation.ServiceProxy.IMethodMetadata.SetRouteParameter(System.String)">
       <summary>
             Sets a route parameter, that was not inferred by the lambda expression or has additional information such as list of allowed values,
@@ -6385,25 +6453,21 @@
       <param name="serviceMethod">The service method.</param>
       <returns>The response resource example.</returns>
     </member>
-    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetParameter(System.Reflection.MethodInfo,System.String,System.Boolean)">
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetParameter(System.Reflection.MethodInfo,System.String,RestFoundation.ServiceProxy.OperationMetadata.RequestParameterType)">
       <summary>
             Returns an operation parameter with the provided name and type.
             </summary>
       <param name="serviceMethod">The service method.</param>
       <param name="name">The parameter name.</param>
-      <param name="isRouteParameter">
-            A bool indicating whether the parameter is a route parameter (true) or a query string parameter (false).
-            </param>
+      <param name="parameterType">The parameter type.</param>
       <returns>The operation parameter information.</returns>
     </member>
-    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetParameters(System.Reflection.MethodInfo,System.Boolean)">
+    <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetParameters(System.Reflection.MethodInfo,RestFoundation.ServiceProxy.OperationMetadata.RequestParameterType)">
       <summary>
             Returns all operation parameters with the provided type.
             </summary>
       <param name="serviceMethod">The service method.</param>
-      <param name="isRouteParameter">
-            A bool indicating whether the parameters are route parameter (true) or query string parameters (false).
-            </param>
+      <param name="parameterType">The parameter type.</param>
       <returns>The operation parameters.</returns>
     </member>
     <member name="M:RestFoundation.ServiceProxy.IProxyMetadata.GetHeaders(System.Reflection.MethodInfo)">
@@ -6474,10 +6538,9 @@
             Gets or sets the parameter type.
             </summary>
     </member>
-    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.IsRouteParameter">
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.ParameterType">
       <summary>
-            Gets or sets a value indicating whether the parameter is a route parameter (true),
-            or a query string parameter (false).
+            Gets or sets a value representing the parameter type.
             </summary>
     </member>
     <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.IsOptionalParameter">

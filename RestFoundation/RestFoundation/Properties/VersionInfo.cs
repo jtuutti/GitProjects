@@ -8,11 +8,11 @@ namespace RestFoundation
         /// <summary>
         /// Gets the assembly version.
         /// </summary>
-        public const string AssemblyVersion = "2.5.0.0";
+        public const string AssemblyVersion = "2.6.0.0";
 
         /// <summary>
         /// Gets the build version.
         /// </summary>
-        public const string BuildVersion = "2.5.0.339";
+        public const string BuildVersion = "2.6.0.361";
     }
 }
