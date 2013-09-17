@@ -9,7 +9,7 @@ namespace RestFoundation.Tests.TypeBinders
     public class FromUriBinderTests
     {
         private IServiceContext m_context;
-        private ITypeBinder m_binder;
+        private FromUriAttribute m_binder;
 
         [SetUp]
         public void Initialize()
@@ -48,6 +48,40 @@ namespace RestFoundation.Tests.TypeBinders
 
             var id = (Guid) m_binder.Bind("id", typeof(Guid), m_context);
             Assert.That(id, Is.EqualTo(Guid.Parse(queryString.Get("id"))));
+        }
+
+        [Test]
+        public void Test_Object_Binding_WithName()
+        {
+            MockContextManager.SetQuery("aName", "User");
+            MockContextManager.SetQuery("anAge", "15");
+            MockContextManager.SetQuery("anId", Guid.NewGuid().ToString());
+
+            var formData = m_context.GetHttpContext().Request.QueryString;
+            Assert.That(formData["aName"], Is.Not.Null);
+            Assert.That(formData["aName"], Is.Not.Empty);
+            Assert.That(formData["aName"], Is.Not.Null);
+            Assert.That(formData["anAge"], Is.Not.Empty);
+            Assert.That(formData["anId"], Is.Not.Null);
+            Assert.That(formData["anId"], Is.Not.Empty);
+
+            m_binder.Name = "aName";
+
+            var name = m_binder.Bind("name", typeof(string), m_context) as string;
+            Assert.That(name, Is.Not.Null);
+            Assert.That(name, Is.EqualTo(formData["aName"]));
+
+            m_binder.Name = "anAge";
+
+            var age = (int) m_binder.Bind("age", typeof(int), m_context);
+            Assert.That(age, Is.EqualTo(Int32.Parse(formData["anAge"])));
+
+            m_binder.Name = "anId";
+
+            var id = (Guid) m_binder.Bind("id", typeof(Guid), m_context);
+            Assert.That(id, Is.EqualTo(Guid.Parse(formData["anId"])));
+
+            m_binder.Name = null;
         }
 
         [Test]
