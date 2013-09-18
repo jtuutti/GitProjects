@@ -49,9 +49,9 @@ namespace RestFoundation.Runtime
             NameValueCollection queryString = context.Request.QueryString.ToNameValueCollection();
             TrySetMaxQueryResults(context, queryString);
 
-            Tuple<int, int> range = GetContentRanges(queryString, collection);
+            int count;
 
-            List<object> filteredCollection = TryConvertToFilteredCollection(collection, queryString);
+            List<object> filteredCollection = TryConvertToFilteredCollection(collection, queryString, out count);
             object filteredObject = filteredCollection.FirstOrDefault(o => o != null);
             Type objectType = filteredObject != null ? filteredObject.GetType() : typeof(object);
 
@@ -60,15 +60,16 @@ namespace RestFoundation.Runtime
                 throw new HttpResponseException(HttpStatusCode.InternalServerError, Global.UnsupportedObjectTypeForOData);
             }
 
+            Tuple<int, int> range = GetContentRanges(queryString, count);
+
             TrySetContentRange(context, filteredCollection, range);
 
             return GenerateFilteredCollection(filteredCollection, objectType);
         }
 
-        private static Tuple<int, int> GetContentRanges(NameValueCollection queryString, IQueryable collection)
+        private static Tuple<int, int> GetContentRanges(NameValueCollection queryString, int count)
         {
             int take, skip;
-            int count = -1;
 
             if (!Int32.TryParse(queryString.Get(TopKey) ?? "0", out take) || take < 0)
             {
@@ -83,11 +84,6 @@ namespace RestFoundation.Runtime
             if (take == 0 && skip == 0)
             {
                 return null;
-            }
-
-            if (String.Equals(InlineCountValue, queryString.Get(InlineCountKey), StringComparison.OrdinalIgnoreCase))
-            {
-                count = Queryable.Count((dynamic) collection);
             }
 
             return Tuple.Create(skip, count);
@@ -143,7 +139,7 @@ namespace RestFoundation.Runtime
             }
         }
 
-        private static List<object> TryConvertToFilteredCollection(IQueryable collection, NameValueCollection queryString)
+        private static List<object> TryConvertToFilteredCollection(IQueryable collection, NameValueCollection queryString, out int returnedTotal)
         {
             if (collection == null)
             {
@@ -164,11 +160,30 @@ namespace RestFoundation.Runtime
                 var filter = parserType.GetMethod("Parse").Invoke(parser, new object[] { queryString });
                 var filteredCollection = filter != null ? filter.GetType().GetMethod("Filter").Invoke(filter, new object[] { collection }) : collection;
 
+                if (!String.Equals(InlineCountValue, queryString.Get(InlineCountKey), StringComparison.OrdinalIgnoreCase))
+                {
+                    returnedTotal = -1;
+                }
+                else if (queryString.Get(TopKey) == null && queryString.Get(SkipKey) == null)
+                {
+                    returnedTotal = Queryable.Count((dynamic) filteredCollection);
+                }
+                else
+                {
+                    var totalQueryString = new NameValueCollection(queryString);
+                    totalQueryString.Remove(TopKey);
+                    totalQueryString.Remove(SkipKey);
+
+                    var totalFilter = parserType.GetMethod("Parse").Invoke(parser, new object[] { totalQueryString });
+                    var totalFilteredCollection = filter != null ? filter.GetType().GetMethod("Filter").Invoke(totalFilter, new object[] { collection }) : collection;
+                    returnedTotal = Queryable.Count((dynamic) totalFilteredCollection);
+                }
+
                 return new List<object>((IQueryable<object>) filteredCollection);
             }
             catch (Exception)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.InvalidODataParameters);
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Global.InvalidODataParameters);
             }
         }
 
@@ -188,7 +203,7 @@ namespace RestFoundation.Runtime
             }
             catch (ArgumentNullException)
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest, Resources.Global.NullODataPropertyReference);
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Global.NullODataPropertyReference);
             }
 
             return (IEnumerable) filteredListType.GetMethod("ToArray").Invoke(filteredList, null);
