@@ -94,7 +94,7 @@ namespace RestFoundation.Formatters
 
             return new JsonPResult
             {
-                Callback = context.Request.QueryString.TryGet("callback"),
+                Callback = context.Request.QueryString.TryGet("callback") ?? context.Request.QueryString.TryGet("$callback"),
                 Content = obj
             };
         }

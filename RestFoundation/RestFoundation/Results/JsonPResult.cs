@@ -20,6 +20,14 @@ namespace RestFoundation.Results
         private static readonly Regex methodNamePattern = new Regex("^[A-Za-z_][A-Za-z0-9_]*$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="JsonPResult"/> class.
+        /// </summary>
+        public JsonPResult()
+        {
+            WrapContent = Rest.Configuration.Options.JsonSettings.WrapContentResponse;
+        }
+
+        /// <summary>
         /// Gets or sets the object to serialize to JSONP/JavaScript function.
         /// </summary>
         public object Content { get; set; }
@@ -34,6 +42,11 @@ namespace RestFoundation.Results
         /// if no value is set to this property.
         /// </summary>
         public string Callback { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to wrap the content.
+        /// </summary>
+        public bool WrapContent { get; set; }
 
         /// <summary>
         /// Executes the result against the provided service context.
@@ -79,7 +92,9 @@ namespace RestFoundation.Results
 
             string response = new StringBuilder().Append(Callback)
                                                  .Append("(")
+                                                 .Append(WrapContent ? "{\"d\":" : String.Empty)
                                                  .Append(Content != null ? JsonConvert.SerializeObject(Content, settings) : "null")
+                                                 .Append(WrapContent ? "}" : String.Empty)
                                                  .Append(");")
                                                  .ToString();
 
