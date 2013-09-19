@@ -2,8 +2,10 @@
 // Dmitry Starosta, 2012-2013
 // </copyright>
 using System;
-using System.IO;
-using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using RestFoundation.Resources;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
 
@@ -16,6 +18,8 @@ namespace RestFoundation.Formatters
     [SupportedMediaType("text/javascript")]
     public class JsonPFormatter : IMediaTypeFormatter
     {
+        private static readonly HashSet<string> supportedMediaTypes = MediaTypeExtractor.GetMediaTypes<JsonPFormatter>();
+
         /// <summary>
         /// Gets a value indicating whether the formatter can format message body in HTTP
         /// requests.
@@ -24,7 +28,7 @@ namespace RestFoundation.Formatters
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
@@ -49,31 +53,7 @@ namespace RestFoundation.Formatters
         /// <exception cref="HttpResponseException">If the object cannot be deserialized.</exception>
         public virtual object FormatRequest(IServiceContext context, Type objectType)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
-
-            if (objectType == null)
-            {
-                throw new ArgumentNullException("objectType");
-            }
-
-            if (context.Request.Body.CanSeek)
-            {
-                context.Request.Body.Seek(0, SeekOrigin.Begin);
-            }
-
-            var streamReader = new StreamReader(context.Request.Body, context.Request.Headers.ContentCharsetEncoding);
-            var serializer = JsonSerializerFactory.Create();
-            var reader = new JsonTextReader(streamReader);
-
-            if (objectType == typeof(object))
-            {
-                return serializer.Deserialize(reader);
-            }
-
-            return serializer.Deserialize(reader, objectType);
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -92,11 +72,20 @@ namespace RestFoundation.Formatters
                 throw new ArgumentNullException("context");
             }
 
-            return new JsonPResult
+            var result = new JsonResult
             {
                 Callback = context.Request.QueryString.TryGet("callback") ?? context.Request.QueryString.TryGet("$callback"),
-                Content = obj
+                Content = obj,
+                ContentType = preferredMediaType != null && supportedMediaTypes.Contains(preferredMediaType) ? preferredMediaType : supportedMediaTypes.First(),
+                ReturnedType = methodReturnType
             };
+
+            if (String.IsNullOrWhiteSpace(result.Callback))
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Global.InvalidJsonPCallback);
+            }
+
+            return result;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net;
 using System.ServiceModel.Syndication;
+using RestFoundation.Resources;
 using RestFoundation.Results;
 using RestFoundation.Runtime;
 
@@ -696,9 +697,9 @@ namespace RestFoundation
         /// </summary>
         /// <param name="obj">The object to serialize to JSONP.</param>
         /// <returns>The JSONP result.</returns>
-        public static JsonPResult JsonP(object obj)
+        public static JsonResult JsonP(object obj)
         {
-            return JsonP(obj, null);
+            return JsonP(obj, "callback");
         }
 
         /// <summary>
@@ -707,15 +708,18 @@ namespace RestFoundation
         /// <param name="obj">The object to serialize to JSONP.</param>
         /// <param name="callback">The callback function name.</param>
         /// <returns>The JSONP result.</returns>
-        public static JsonPResult JsonP(object obj, string callback)
+        public static JsonResult JsonP(object obj, string callback)
         {
-            var result = new JsonPResult
+            if (String.IsNullOrWhiteSpace(callback))
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Global.InvalidJsonPCallback);
+            }
+
+            return new JsonResult
             {
                 Content = obj,
                 Callback = callback,
             };
-
-            return result;
         }
 
         /// <summary>

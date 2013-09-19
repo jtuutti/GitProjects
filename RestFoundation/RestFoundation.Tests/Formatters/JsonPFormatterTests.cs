@@ -22,6 +22,9 @@ namespace RestFoundation.Tests.Formatters
         public void Initialize()
         {
             m_context = MockContextManager.GenerateContext();
+
+            MockContextManager.SetQuery("callback", "callback");
+            MockContextManager.SetHeader("X-Requested-With", "XMLHttpRequest");
         }
 
         [TearDown]
@@ -31,29 +34,12 @@ namespace RestFoundation.Tests.Formatters
         }
 
         [Test]
-        public void FormatRequest()
-        {
-            Model model = CreateModel();
-
-            WriteBodyAsJson(model);
-
-            var formatter = new JsonPFormatter();
-            var resource = formatter.FormatRequest(m_context, typeof(Model)) as Model;
-
-            Assert.That(resource, Is.Not.Null);
-            Assert.That(resource.Id, Is.EqualTo(model.Id));
-            Assert.That(resource.Name, Is.EqualTo(model.Name));
-            Assert.That(resource.Items, Is.Not.Null);
-            CollectionAssert.AreEqual(model.Items, resource.Items);
-        }
-
-        [Test]
         public void FormatResponse()
         {
             Model model = CreateModel();
 
             var formatter = new JsonPFormatter();
-            var result = formatter.FormatResponse(m_context, typeof(Model), model, null) as JsonPResult;
+            var result = formatter.FormatResponse(m_context, typeof(Model), model, null) as JsonResult;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Content, Is.SameAs(model));

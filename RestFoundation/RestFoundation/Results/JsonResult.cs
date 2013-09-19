@@ -5,8 +5,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestFoundation.Resources;
@@ -19,6 +21,8 @@ namespace RestFoundation.Results
     /// </summary>
     public class JsonResult : IResult
     {
+        private static readonly Regex methodNamePattern = new Regex("^[A-Za-z$_][A-Za-z0-9$_]*$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonResult"/> class.
         /// </summary>
@@ -36,6 +40,12 @@ namespace RestFoundation.Results
         /// Gets or sets the content type. The "application/json" content type is used by default.
         /// </summary>
         public string ContentType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the JSONP callback function name. JSON is returned if this property is
+        /// set to null.
+        /// </summary>
+        public string Callback { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to wrap the content.
@@ -62,6 +72,11 @@ namespace RestFoundation.Results
             else if (context.Request.Headers.AcceptVersion > 0 && ContentType.IndexOf("version=", StringComparison.OrdinalIgnoreCase) < 0)
             {
                 ContentType += String.Format(CultureInfo.InvariantCulture, "; version={0}", context.Request.Headers.AcceptVersion);
+            }
+
+            if (!String.IsNullOrEmpty(Callback) && !methodNamePattern.IsMatch(Callback))
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, Global.InvalidJsonPCallback);
             }
 
             context.Response.Output.Clear();
@@ -92,7 +107,9 @@ namespace RestFoundation.Results
 
             OutputCompressionManager.FilterResponse(context);
 
+            TryAddCallbackStart(context.Response.Output.Writer);
             serializer.Serialize(context.Response.Output.Writer, WrapContent ? new { d = Content } : Content);
+            TryAddCallbackEnd(context.Response.Output.Writer);
 
             LogResponse(Content);
         }
@@ -100,6 +117,8 @@ namespace RestFoundation.Results
         private void SerializeAsChunkedSequence(IServiceContext context, JsonSerializer serializer)
         {
             var enumerableContent = (IEnumerable) Content;
+
+            TryAddCallbackStart(context.Response.Output.Writer);
             context.Response.Output.Write(WrapContent ? "{\"d\":[" : "[").Flush();
 
             bool arrayStart = true;
@@ -122,6 +141,7 @@ namespace RestFoundation.Results
             }
 
             context.Response.Output.Write(WrapContent ? "]}" : "]");
+            TryAddCallbackEnd(context.Response.Output.Writer);
         }
 
         private bool SerializeAsSpecializedCollection(IServiceContext context, JsonSerializer serializer)
@@ -144,6 +164,22 @@ namespace RestFoundation.Results
             return false;
         }
 
+        private void TryAddCallbackStart(TextWriter writer)
+        {
+            if (!String.IsNullOrEmpty(Callback))
+            {
+                writer.Write("{0}(", Callback);
+            }
+        }
+
+        private void TryAddCallbackEnd(TextWriter writer)
+        {
+            if (!String.IsNullOrWhiteSpace(Callback))
+            {
+                writer.Write(");");
+            }
+        }
+
         private void LogResponse(object content)
         {
             if (content == null || !LogUtility.CanLog)
@@ -155,6 +191,12 @@ namespace RestFoundation.Results
             options.Formatting = Formatting.Indented;
 
             string serializedContent = JsonConvert.SerializeObject(WrapContent ? new { d = content } : content, options);
+
+            if (!String.IsNullOrEmpty(Callback))
+            {
+                serializedContent = String.Concat(Callback, "(", serializedContent, ");");
+            }
+
             LogUtility.LogResponseBody(serializedContent, ContentType);
         }
     }

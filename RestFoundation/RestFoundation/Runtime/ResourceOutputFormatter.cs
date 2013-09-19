@@ -14,7 +14,7 @@ namespace RestFoundation.Runtime
     /// </summary>
     public static class ResourceOutputFormatter
     {
-        private static readonly Regex JsonPRegex = new Regex(@"^(jsonpCallback\()(.+)(\);?)$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static readonly Regex JsonPRegex = new Regex(@"^([A-Za-z$_][A-Za-z0-9$_]*\()(.+)(\);?)$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
             
         /// <summary>
         /// Formats the input JSON with whitespace.

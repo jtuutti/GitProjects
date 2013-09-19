@@ -170,7 +170,6 @@
     <Compile Include="IContentNegotiator.cs" />
     <Compile Include="IServiceExceptionHandler.cs" />
     <Compile Include="IServiceMethodLocator.cs" />
-    <Compile Include="Results\JsonPResult.cs" />
     <Compile Include="Results\RedirectType.cs" />
     <Compile Include="Configuration\RouteBuilder.cs" />
     <Compile Include="Runtime\ContentNegotiator.cs" />
