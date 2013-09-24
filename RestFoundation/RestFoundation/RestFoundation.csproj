@@ -362,7 +362,7 @@
     <Compile Include="UnitTesting\MockHttpResponse.cs" />
     <Compile Include="UnitTesting\MockHttpResponseOutput.cs" />
     <Compile Include="UnitTesting\MockServiceContext.cs" />
-    <Compile Include="UnitTesting\RouteAssert.cs" />
+    <Compile Include="UnitTesting\AssertThat.cs" />
     <Compile Include="UnitTesting\RouteAssertException.cs" />
     <Compile Include="UnitTesting\RouteValidatorBuilder.cs" />
     <Compile Include="UnitTesting\TestHttpContext.cs" />

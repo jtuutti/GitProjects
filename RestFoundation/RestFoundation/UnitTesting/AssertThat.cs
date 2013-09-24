@@ -6,9 +6,9 @@ using System;
 namespace RestFoundation.UnitTesting
 {
     /// <summary>
-    /// Represents a class to test routes.
+    /// Represents an assertion class to test routes.
     /// </summary>
-    public static class RouteAssert
+    public static class AssertThat
     {
         /// <summary>
         /// Specifies the route relative URL to test.
