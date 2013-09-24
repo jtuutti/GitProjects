@@ -53,6 +53,11 @@ namespace RestFoundation.ServiceProxy
                     continue;
                 }
 
+                if (metadata.MethodInfo.DeclaringType.GetCustomAttribute<ProxyHiddenAttribute>() != null)
+                {
+                    continue;
+                }
+
                 foreach (HttpMethod httpMethod in metadata.UrlInfo.HttpMethods)
                 {
                     if (httpMethod == HttpMethod.Head || httpMethod == HttpMethod.Options)
