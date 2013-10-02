@@ -338,14 +338,17 @@ namespace RestFoundation.Configuration
         /// <summary>
         /// Sets custom JSON formatter and result settings.
         /// </summary>
-        /// <param name="settings">The JSON formatter settings.</param>
+        /// <param name="builder">The JSON formatter settings builder.</param>
         /// <returns>The configuration options object.</returns>
-        public RestOptions WithJsonFormatterSettings(JsonFormatterSettings settings)
+        public RestOptions WithJsonFormatterSettings(Action<JsonFormatterSettings> builder)
         {
-            if (settings == null)
+            if (builder == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException("builder");
             }
+
+            var settings = new JsonFormatterSettings();
+            builder(settings);
 
             JsonSettings = settings;
             return this;
@@ -354,14 +357,17 @@ namespace RestFoundation.Configuration
         /// <summary>
         /// Sets custom XML formatter and result settings.
         /// </summary>
-        /// <param name="settings">The XML formatter settings.</param>
+        /// <param name="builder">The XML formatter settings builder.</param>
         /// <returns>The configuration options object.</returns>
-        public RestOptions WithXmlFormatterSettings(XmlFormatterSettings settings)
+        public RestOptions WithXmlFormatterSettings(Action<XmlFormatterSettings> builder)
         {
-            if (settings == null)
+            if (builder == null)
             {
-                throw new ArgumentNullException("settings");
+                throw new ArgumentNullException("builder");
             }
+
+            var settings = new XmlFormatterSettings();
+            builder(settings);
 
             XmlSettings = settings;
             return this;
