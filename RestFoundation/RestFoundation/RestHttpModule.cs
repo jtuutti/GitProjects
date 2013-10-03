@@ -342,7 +342,18 @@ namespace RestFoundation
             }
 
             var resultWrapper = Rest.Configuration.ServiceLocator.GetService<IResultWrapper>();
-            IResult result = resultWrapper.Wrap(handler, faults, faults.GetType());
+
+            IResult result;
+
+            try
+            {
+                result = resultWrapper.Wrap(handler, faults, faults.GetType());
+            }
+            catch (HttpResponseException ex)
+            {
+                context.Response.SetStatus(ex.StatusCode, ex.StatusDescription);
+                return;
+            }
 
             if (result != null)
             {
