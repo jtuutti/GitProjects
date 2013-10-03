@@ -402,6 +402,11 @@ namespace RestFoundation.Configuration
                 throw new InvalidOperationException(String.Format(CultureInfo.InvariantCulture, Global.InvalidServiceName, m_relativeUrl));
             }
 
+            if (ServiceContractTypeRegistry.GetType(contractType.AssemblyQualifiedName) == null)
+            {
+                throw new ArgumentException(Global.InvalidServiceContract, "contractType");
+            }
+
             var serviceMethods = contractType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
                                              .Where(m => Attribute.IsDefined(m, urlAttributeType, false));
 
