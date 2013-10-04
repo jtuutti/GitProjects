@@ -148,6 +148,43 @@ namespace RestFoundation.Runtime.Handlers
                     await methodTask;
                 }
             }
+            catch (Exception ex)
+            {
+                Exception unwrappedException = ExceptionUnwrapper.Unwrap(ex);
+
+                if (ExceptionUnwrapper.IsDirectResponseException(unwrappedException))
+                {
+                    if (ex == unwrappedException)
+                    {
+                        throw;
+                    }
+
+                    throw unwrappedException;
+                }
+
+                try
+                {
+                    IServiceExceptionHandler exceptionHandler = ServiceExceptionHandlerRegistry.GetExceptionHandler(this);
+
+                    if (exceptionHandler == null ||
+                        exceptionHandler.Handle(Context, serviceMethodData.Service, serviceMethodData.Method, unwrappedException) != ExceptionAction.Handle)
+                    {
+                        throw new ServiceRuntimeException(unwrappedException);
+                    }
+                }
+                catch (HttpResponseException)
+                {
+                    throw;
+                }
+                catch (ServiceRuntimeException)
+                {
+                    throw;
+                }
+                catch (Exception innerEx)
+                {
+                    throw new ServiceRuntimeException(ExceptionUnwrapper.Unwrap(innerEx), ex);
+                }
+            }
             finally
             {
                 TryDisposeService(serviceMethodData.Service);

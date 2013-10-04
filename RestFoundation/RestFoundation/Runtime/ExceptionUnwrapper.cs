@@ -21,12 +21,12 @@ namespace RestFoundation.Runtime
                 return null;
             }
 
-            return IsWrapperException(ex) ? ex.InnerException : ex;
+            return IsWrapperException(ex) ? Unwrap(ex.InnerException) : ex;
         }
 
         private static bool IsWrapperException(Exception ex)
         {
-            return (ex is ServiceRuntimeException || ex is TargetInvocationException || ex is AggregateException) && ex.InnerException != null;
+            return ex.InnerException != null && (ex is ServiceRuntimeException || ex is TargetInvocationException || ex is AggregateException);
         }
     }
 }

@@ -83,7 +83,7 @@ namespace RestFoundation.Runtime
 
             LogUtility.LogRequestData(handler.Context.GetHttpContext());
 
-            object returnedObject = InvokeAndProcessExceptions(handler, service, method, behaviors);
+            object returnedObject = InvokeWithBehaviors(handler, service, method, behaviors);
             Task invocationTask = CreateResultTask(handler, returnedObject, method.ReturnType);
 
             LogUtility.LogResponseData(handler.Context.GetHttpContext());
@@ -153,48 +153,6 @@ namespace RestFoundation.Runtime
             var dynamicTask = (dynamic) task;
 
             return new Tuple<object, Type>(dynamicTask.Result, taskResultType);
-        }
-
-        private object InvokeAndProcessExceptions(IRestServiceHandler handler, object service, MethodInfo method, List<IServiceBehavior> behaviors)
-        {
-            try
-            {
-                return InvokeWithBehaviors(handler, service, method, behaviors);
-            }
-            catch (Exception ex)
-            {
-                Exception unwrappedException = ExceptionUnwrapper.Unwrap(ex);
-
-                if (ExceptionUnwrapper.IsDirectResponseException(unwrappedException))
-                {
-                    if (ex == unwrappedException)
-                    {
-                        throw;
-                    }
-
-                    throw unwrappedException;
-                }
-
-                try
-                {
-                    IServiceExceptionHandler exceptionHandler = ServiceExceptionHandlerRegistry.GetExceptionHandler(handler);
-
-                    if (exceptionHandler != null && exceptionHandler.Handle(handler.Context, service, method, unwrappedException) == ExceptionAction.Handle)
-                    {
-                        return null;
-                    }
-
-                    throw new ServiceRuntimeException(unwrappedException);
-                }
-                catch (ServiceRuntimeException)
-                {
-                    throw;
-                }
-                catch (Exception innerEx)
-                {
-                    throw new ServiceRuntimeException(ExceptionUnwrapper.Unwrap(innerEx), ex);
-                }
-            }
         }
 
         private object InvokeWithBehaviors(IRestServiceHandler handler, object service, MethodInfo method, List<IServiceBehavior> behaviors)
