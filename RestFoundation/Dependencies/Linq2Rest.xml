@@ -549,6 +549,18 @@
       <requires exception="T:System.ArgumentNullException" csharp="source != null" vb="source &lt;&gt; Nothing">source != null</requires>
       <exception cref="T:System.ArgumentNullException">source == null</exception>
     </member>
+    <member name="T:Linq2Rest.ParserSettings">
+      <summary>
+            Defines OData parser settings.
+            </summary>
+    </member>
+    <member name="P:Linq2Rest.ParserSettings.InsensitiveCaseComparison">
+      <summary>
+            Gets or sets a value indicating whether the <see cref="T:System.String" />
+            operations should be case insensitive. This settings needs to be
+            set before any parser class is initialized.
+            </summary>
+    </member>
     <member name="T:Linq2Rest.Parser.FilterExpressionFactory">
       <summary>
             Defines the FilterExpressionFactory.
@@ -1045,6 +1057,36 @@
       <requires csharp="source != null" vb="source &lt;&gt; Nothing">source != null</requires>
       <requires csharp="keySelector != null" vb="keySelector &lt;&gt; Nothing">keySelector != null</requires>
     </member>
+    <member name="T:Linq2Rest.UntypedQueryable`1">
+      <invariant>_source != null</invariant>
+    </member>
+    <member name="M:Linq2Rest.UntypedQueryable`1.#ctor(System.Linq.IQueryable{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
+      <requires csharp="projection == default(System.Linq.Expressions.Expression&lt;System.Func&lt;T, object&gt;&gt;) || source != null" vb="projection = Nothing OrElse source &lt;&gt; Nothing">projection == default(System.Linq.Expressions.Expression&lt;System.Func&lt;T, object&gt;&gt;) || source != null</requires>
+    </member>
+    <member name="M:Linq2Rest.UntypedQueryable`1.GetEnumerator">
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_Model == this.get_Model" vb="result.get_Model = Me.get_Model">result.get_Model == this.get_Model</ensures>
+    </member>
+    <member name="M:Linq2Rest.UntypedQueryable`1.System#Collections#IEnumerable#GetEnumerator">
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_Model == this.get_Model" vb="result.get_Model = Me.get_Model">result.get_Model == this.get_Model</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_CurrentIndex == -1" vb="result.get_CurrentIndex = -1">result.get_CurrentIndex == -1</ensures>
+    </member>
+    <member name="P:Linq2Rest.UntypedQueryable`1.Expression">
+      <getter>
+        <ensures inheritedFrom="M:System.Linq.IQueryable.get_Expression" inheritedFromTypeName="IQueryable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      </getter>
+    </member>
+    <member name="P:Linq2Rest.UntypedQueryable`1.ElementType">
+      <getter>
+        <ensures inheritedFrom="M:System.Linq.IQueryable.get_ElementType" inheritedFromTypeName="IQueryable" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="P:Linq2Rest.UntypedQueryable`1.Provider">
+      <getter>
+        <ensures inheritedFrom="M:System.Linq.IQueryable.get_Provider" inheritedFromTypeName="IQueryable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      </getter>
+    </member>
     <member name="M:Linq2Rest.Implementations.HttpWebRequestAdapter.GetRequestStream">
       <ensures inheritedFrom="M:Linq2Rest.Provider.IHttpRequest.GetRequestStream" inheritedFromTypeName="IHttpRequest" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
       <ensures inheritedFrom="M:Linq2Rest.Provider.IHttpRequest.GetRequestStream" inheritedFromTypeName="IHttpRequest" csharp="result.CanWrite" vb="result.CanWrite">result.CanWrite</ensures>
@@ -1231,6 +1273,344 @@
         <ensures csharp="result != (System.Reflection.MethodInfo)null" vb="result &lt;&gt; ((System.Reflection.MethodInfo)Nothing) ">result != (System.Reflection.MethodInfo)null</ensures>
       </getter>
     </member>
+    <member name="M:Linq2Rest.Provider.QueryableExtensions.ResolvePropertyName``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+      <requires csharp="property != null" vb="property &lt;&gt; Nothing">property != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor)">
+      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.MathFloorMethodWriter.MethodName">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.MathMethodWriter.get_MethodName" inheritedFromTypeName="MathMethodWriter" csharp="!IsNullOrWhiteSpace(result)" vb="Not IsNullOrWhiteSpace(result)">!string.IsNullOrWhiteSpace(result)</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringContainsMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringContainsMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.TimeSpanValueWriter.Write(System.Object)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.TimeSpanValueWriter.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.MathCeilingMethodWriter.MethodName">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.MathMethodWriter.get_MethodName" inheritedFromTypeName="MathMethodWriter" csharp="!IsNullOrWhiteSpace(result)" vb="Not IsNullOrWhiteSpace(result)">!string.IsNullOrWhiteSpace(result)</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.ByteArrayValueWriter.Write(System.Object)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.ByteArrayValueWriter.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.DefaultMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.DefaultMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.DefaultMethodWriter.GetValue(System.Linq.Expressions.Expression)">
+      <requires csharp="input != null" vb="input &lt;&gt; Nothing">input != null</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.MathRoundMethodWriter.MethodName">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.MathMethodWriter.get_MethodName" inheritedFromTypeName="MathMethodWriter" csharp="!IsNullOrWhiteSpace(result)" vb="Not IsNullOrWhiteSpace(result)">!string.IsNullOrWhiteSpace(result)</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.IntegerValueWriter.Write(System.Object)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.IntegerValueWriter.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.GuidValueWriter.Write(System.Object)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.GuidValueWriter.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringSubstringMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringSubstringMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.DateTimeOffsetValueWriter.Write(System.Object)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.DateTimeOffsetValueWriter.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.EqualsMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.EqualsMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringEndsWithMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringEndsWithMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)">
+      <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.IValueWriter.Handles">
+      <getter>
+        <ensures csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.BooleanValueWriter.Write(System.Object)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.BooleanValueWriter.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.DateTimeValueWriter.Write(System.Object)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.DateTimeValueWriter.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringReplaceMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringReplaceMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.RationalValueWriter.Write(System.Object)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.RationalValueWriter.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.ByteValueWriter.Write(System.Object)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.ByteValueWriter.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.AnyAllMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.AnyAllMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringValueWriter.Write(System.Object)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.StringValueWriter.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringToUpperMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringToUpperMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringToLowerMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringToLowerMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.EmptyAnyMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.EmptyAnyMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringIndexOfMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringIndexOfMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringStartsWithMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringStartsWithMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StreamValueWriter.Write(System.Object)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.StreamValueWriter.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.MathMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.MathMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Provider.Writers.MathMethodWriter.MethodName">
+      <getter>
+        <ensures csharp="!IsNullOrWhiteSpace(result)" vb="Not IsNullOrWhiteSpace(result)">!string.IsNullOrWhiteSpace(result)</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringTrimMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.Writers.StringTrimMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.IExpressionProcessor.ProcessMethodCall``1(System.Linq.Expressions.MethodCallExpression,Linq2Rest.Provider.ParameterBuilder,System.Func{Linq2Rest.Provider.ParameterBuilder,System.Collections.Generic.IEnumerable{``0}},System.Func{System.Type,Linq2Rest.Provider.ParameterBuilder,System.Collections.IEnumerable})">
+      <requires csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+      <requires csharp="resultLoader != null" vb="resultLoader &lt;&gt; Nothing">resultLoader != null</requires>
+      <requires csharp="intermediateResultLoader != null" vb="intermediateResultLoader &lt;&gt; Nothing">intermediateResultLoader != null</requires>
+    </member>
+    <member name="T:Linq2Rest.Provider.RestPostQueryProvider`1">
+      <invariant>_inputData != null</invariant>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor,System.IO.Stream)">
+      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
+      <requires csharp="inputData != null" vb="inputData &lt;&gt; Nothing">inputData != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+    </member>
+    <member name="T:Linq2Rest.Provider.RestDeleteQueryable`1">
+      <invariant>_restDeleteQueryProvider != null</invariant>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestDeleteQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory)">
+      <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <exception cref="T:System.ArgumentNullException">client == null</exception>
+      <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <exception cref="T:System.ArgumentNullException">serializerFactory == null</exception>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestDeleteQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression)">
+      <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <exception cref="T:System.ArgumentNullException">client == null</exception>
+      <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <exception cref="T:System.ArgumentNullException">serializerFactory == null</exception>
+      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <exception cref="T:System.ArgumentNullException">expression == null</exception>
+    </member>
+    <member name="T:Linq2Rest.Provider.RestQueryProvider`1">
+      <invariant>Client != null</invariant>
+      <invariant>SerializerFactory != null</invariant>
+      <invariant>_expressionProcessor != null</invariant>
+      <invariant>_parameterBuilder != null</invariant>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor)">
+      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
+      <requires csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+      <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
+      <requires csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+    </member>
+    <member name="P:Linq2Rest.Provider.RestQueryProvider`1.Client">
+      <getter>
+        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      </getter>
+      <setter>
+        <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      </setter>
+    </member>
+    <member name="P:Linq2Rest.Provider.RestQueryProvider`1.SerializerFactory">
+      <getter>
+        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      </getter>
+      <setter>
+        <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      </setter>
+    </member>
     <member name="T:Linq2Rest.Provider.RestQueryableBase`1">
       <invariant>Client != null</invariant>
       <invariant>Expression != null</invariant>
@@ -1258,256 +1638,21 @@
         <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
       </setter>
     </member>
-    <member name="P:Linq2Rest.Provider.Writers.MathRoundMethodWriter.MethodName">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.MathMethodWriter.get_MethodName" inheritedFromTypeName="MathMethodWriter" csharp="!IsNullOrWhiteSpace(result)" vb="Not IsNullOrWhiteSpace(result)">!string.IsNullOrWhiteSpace(result)</ensures>
-      </getter>
+    <member name="T:Linq2Rest.Provider.RestPutQueryProvider`1">
+      <invariant>_inputData != null</invariant>
     </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringSubstringMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor,System.IO.Stream)">
+      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
+      <requires csharp="inputData != null" vb="inputData &lt;&gt; Nothing">inputData != null</requires>
     </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringSubstringMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
     </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringEndsWithMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringEndsWithMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.EmptyAnyMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.EmptyAnyMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.MathFloorMethodWriter.MethodName">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.MathMethodWriter.get_MethodName" inheritedFromTypeName="MathMethodWriter" csharp="!IsNullOrWhiteSpace(result)" vb="Not IsNullOrWhiteSpace(result)">!string.IsNullOrWhiteSpace(result)</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.ByteValueWriter.Write(System.Object)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.ByteValueWriter.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringToLowerMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringToLowerMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.DateTimeValueWriter.Write(System.Object)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.DateTimeValueWriter.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.GuidValueWriter.Write(System.Object)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.GuidValueWriter.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.MathMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.MathMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.MathMethodWriter.MethodName">
-      <getter>
-        <ensures csharp="!IsNullOrWhiteSpace(result)" vb="Not IsNullOrWhiteSpace(result)">!string.IsNullOrWhiteSpace(result)</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringIndexOfMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringIndexOfMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.BooleanValueWriter.Write(System.Object)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.BooleanValueWriter.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.ByteArrayValueWriter.Write(System.Object)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.ByteArrayValueWriter.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.RationalValueWriter.Write(System.Object)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.RationalValueWriter.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringStartsWithMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringStartsWithMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StreamValueWriter.Write(System.Object)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.StreamValueWriter.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.DateTimeOffsetValueWriter.Write(System.Object)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.DateTimeOffsetValueWriter.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)">
-      <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.IValueWriter.Handles">
-      <getter>
-        <ensures csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.IntegerValueWriter.Write(System.Object)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.IntegerValueWriter.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.TimeSpanValueWriter.Write(System.Object)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.TimeSpanValueWriter.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringTrimMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringTrimMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringToUpperMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringToUpperMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.EqualsMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.EqualsMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.AnyAllMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.AnyAllMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringReplaceMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringReplaceMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringContainsMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringContainsMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.DefaultMethodWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.CanHandle(System.Linq.Expressions.MethodCallExpression)" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.DefaultMethodWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="expressionWriter != null" vb="expressionWriter &lt;&gt; Nothing">expressionWriter != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IMethodCallWriter.Handle(System.Linq.Expressions.MethodCallExpression,System.Func{System.Linq.Expressions.Expression,System.String})" inheritedFromTypeName="IMethodCallWriter" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.DefaultMethodWriter.GetValue(System.Linq.Expressions.Expression)">
-      <requires csharp="input != null" vb="input &lt;&gt; Nothing">input != null</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.MathCeilingMethodWriter.MethodName">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.MathMethodWriter.get_MethodName" inheritedFromTypeName="MathMethodWriter" csharp="!IsNullOrWhiteSpace(result)" vb="Not IsNullOrWhiteSpace(result)">!string.IsNullOrWhiteSpace(result)</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Provider.Writers.StringValueWriter.Write(System.Object)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      <requires inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.Write(System.Object)" inheritedFromTypeName="IValueWriter" csharp="this.Handles.IsAssignableFrom(value.GetType())" vb="Me.Handles.IsAssignableFrom(value.GetType())">this.Handles.IsAssignableFrom(value.GetType())</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.Writers.StringValueWriter.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.IValueWriter.get_Handles" inheritedFromTypeName="IValueWriter" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
+    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
     </member>
     <member name="T:Linq2Rest.Provider.ExpressionProcessor">
       <invariant>_writer != null</invariant>
@@ -1551,10 +1696,10 @@
       <requires csharp="intermediateResultLoader != null" vb="intermediateResultLoader &lt;&gt; Nothing">intermediateResultLoader != null</requires>
       <requires csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
     </member>
-    <member name="T:Linq2Rest.Provider.RestPutQueryable`1">
-      <invariant>_restPutQueryProvider != null</invariant>
+    <member name="T:Linq2Rest.Provider.RestPostQueryable`1">
+      <invariant>_restPostQueryProvider != null</invariant>
     </member>
-    <member name="M:Linq2Rest.Provider.RestPutQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression,System.IO.Stream)">
+    <member name="M:Linq2Rest.Provider.RestPostQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression,System.IO.Stream)">
       <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
       <exception cref="T:System.ArgumentNullException">client == null</exception>
       <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
@@ -1562,25 +1707,10 @@
       <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
       <exception cref="T:System.ArgumentNullException">expression == null</exception>
     </member>
-    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor)">
-      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
+    <member name="T:Linq2Rest.Provider.RestPutQueryable`1">
+      <invariant>_restPutQueryProvider != null</invariant>
     </member>
-    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.QueryableExtensions.ResolvePropertyName``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
-      <requires csharp="property != null" vb="property &lt;&gt; Nothing">property != null</requires>
-    </member>
-    <member name="T:Linq2Rest.Provider.RestPostQueryable`1">
-      <invariant>_restPostQueryProvider != null</invariant>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestPostQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression,System.IO.Stream)">
+    <member name="M:Linq2Rest.Provider.RestPutQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression,System.IO.Stream)">
       <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
       <exception cref="T:System.ArgumentNullException">client == null</exception>
       <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
@@ -1609,20 +1739,16 @@
         <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
       </setter>
     </member>
-    <member name="T:Linq2Rest.Provider.RestPostQueryProvider`1">
-      <invariant>_inputData != null</invariant>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor,System.IO.Stream)">
+    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor)">
       <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
       <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
       <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
-      <requires csharp="inputData != null" vb="inputData &lt;&gt; Nothing">inputData != null</requires>
     </member>
-    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
+    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
       <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
       <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
     </member>
-    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
+    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
       <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
     </member>
     <member name="M:Linq2Rest.Provider.ExpressionWriter.GetUnconvertedType(System.Linq.Expressions.Expression)">
@@ -1666,344 +1792,29 @@
       <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
       <exception cref="T:System.ArgumentNullException">expression == null</exception>
     </member>
-    <member name="T:Linq2Rest.Provider.RestQueryProvider`1">
-      <invariant>Client != null</invariant>
-      <invariant>SerializerFactory != null</invariant>
-      <invariant>_expressionProcessor != null</invariant>
-      <invariant>_parameterBuilder != null</invariant>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor)">
-      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
-      <requires csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-      <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
-      <requires csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-    </member>
-    <member name="P:Linq2Rest.Provider.RestQueryProvider`1.Client">
-      <getter>
-        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-      </getter>
-      <setter>
-        <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      </setter>
-    </member>
-    <member name="P:Linq2Rest.Provider.RestQueryProvider`1.SerializerFactory">
-      <getter>
-        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-      </getter>
-      <setter>
-        <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      </setter>
-    </member>
-    <member name="T:Linq2Rest.Provider.RestDeleteQueryable`1">
-      <invariant>_restDeleteQueryProvider != null</invariant>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestDeleteQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory)">
-      <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <exception cref="T:System.ArgumentNullException">client == null</exception>
-      <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <exception cref="T:System.ArgumentNullException">serializerFactory == null</exception>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestDeleteQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression)">
-      <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <exception cref="T:System.ArgumentNullException">client == null</exception>
-      <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <exception cref="T:System.ArgumentNullException">serializerFactory == null</exception>
-      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <exception cref="T:System.ArgumentNullException">expression == null</exception>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor)">
-      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.IExpressionProcessor.ProcessMethodCall``1(System.Linq.Expressions.MethodCallExpression,Linq2Rest.Provider.ParameterBuilder,System.Func{Linq2Rest.Provider.ParameterBuilder,System.Collections.Generic.IEnumerable{``0}},System.Func{System.Type,Linq2Rest.Provider.ParameterBuilder,System.Collections.IEnumerable})">
-      <requires csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-      <requires csharp="resultLoader != null" vb="resultLoader &lt;&gt; Nothing">resultLoader != null</requires>
-      <requires csharp="intermediateResultLoader != null" vb="intermediateResultLoader &lt;&gt; Nothing">intermediateResultLoader != null</requires>
-    </member>
-    <member name="T:Linq2Rest.Provider.RestPutQueryProvider`1">
-      <invariant>_inputData != null</invariant>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor,System.IO.Stream)">
-      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
-      <requires csharp="inputData != null" vb="inputData &lt;&gt; Nothing">inputData != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-    </member>
-    <member name="T:Linq2Rest.Parser.TokenSet">
-      <invariant>_left != null</invariant>
-      <invariant>_right != null</invariant>
-      <invariant>_operation != null</invariant>
-    </member>
-    <member name="M:Linq2Rest.Parser.TokenSet.ToString">
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.TokenSet.Left">
-      <getter>
-        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-      </getter>
-      <setter>
-        <requires exception="T:System.ArgumentNullException" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      </setter>
-      <exception cref="T:System.ArgumentNullException">value == null</exception>
-    </member>
-    <member name="P:Linq2Rest.Parser.TokenSet.Operation">
-      <getter>
-        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-      </getter>
-      <setter>
-        <requires exception="T:System.ArgumentNullException" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      </setter>
-      <exception cref="T:System.ArgumentNullException">value == null</exception>
-    </member>
-    <member name="P:Linq2Rest.Parser.TokenSet.Right">
-      <getter>
-        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-      </getter>
-      <setter>
-        <requires exception="T:System.ArgumentNullException" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      </setter>
-      <exception cref="T:System.ArgumentNullException">value == null</exception>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.DoubleExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.DoubleExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.DateTimeOffsetExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.DateTimeOffsetExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.DecimalExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.DecimalExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.ShortExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.ShortExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.BooleanExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.BooleanExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.ByteExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.ByteExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.UnsignedShortExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.UnsignedShortExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.ParameterValueReader.Read(System.Type,System.String,System.IFormatProvider)">
-      <requires csharp="(() =&gt; {&#xD;&#xA;    {&#xD;&#xA;        Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2 local_1 = new Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2();&#xD;&#xA;        local_1.type = type;&#xD;&#xA;    }&#xD;&#xA;    return token != null; })()" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2 local_1 = New Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2();&#xD;&#xA;    local_1.type = type&#xD;&#xA;    return token &lt;&gt; Nothing; })()">(() =&gt; {
+    <member name="M:Linq2Rest.Parser.ExpressionTokenizer.GetArithmeticToken(System.String)">
+      <requires exception="T:System.ArgumentNullException" csharp="(() =&gt; {&#xD;&#xA;    {&#xD;&#xA;        Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = new Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();&#xD;&#xA;    }&#xD;&#xA;    return expression != null; })()" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = New Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();&#xD;&#xA;    return expression &lt;&gt; Nothing; })()">(() =&gt; {
     {
-        Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2 local_1 = new Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2();
-        local_1.type = type;
+        Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = new Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();
     }
-    return token != null; })()</requires>
-      <requires csharp="local_1.type != (System.Type)null" vb="local_1.type &lt;&gt; ((System.Type)Nothing) ">local_1.type != (System.Type)null</requires>
+    return expression != null; })()</requires>
+      <exception cref="T:System.ArgumentNullException">!(() =&gt; {
+    {
+        Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = new Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();
+    }
+    return (expression != null); })()</exception>
     </member>
-    <member name="M:Linq2Rest.Parser.Readers.ParameterValueReader.GetKnownConstant(System.Type,System.String,System.IFormatProvider)">
-      <requires csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <requires csharp="type != (System.Type)null" vb="type &lt;&gt; ((System.Type)Nothing) ">type != (System.Type)null</requires>
+    <member name="M:Linq2Rest.Parser.ExpressionTokenizer.GetAnyAllFunctionTokens(System.String)">
+      <requires csharp="filter != null" vb="filter &lt;&gt; Nothing">filter != null</requires>
     </member>
-    <member name="M:Linq2Rest.Parser.Readers.ParameterValueReader.GetParseExpression(System.String,System.IFormatProvider,System.Type)">
-      <requires csharp="type != (System.Type)null" vb="type &lt;&gt; ((System.Type)Nothing) ">type != (System.Type)null</requires>
+    <member name="M:Linq2Rest.Parser.ExpressionTokenizer.GetFunctionTokens(System.String)">
+      <requires csharp="filter != null" vb="filter &lt;&gt; Nothing">filter != null</requires>
     </member>
-    <member name="M:Linq2Rest.Parser.Readers.ByteArrayExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    <member name="M:Linq2Rest.Parser.ExpressionTokenizer.GetArithmeticOperationIndex(System.Collections.Generic.IList{System.String})">
+      <requires csharp="blocks != null" vb="blocks &lt;&gt; Nothing">blocks != null</requires>
     </member>
-    <member name="P:Linq2Rest.Parser.Readers.ByteArrayExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.SingleExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.SingleExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.UnsignedIntExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.UnsignedIntExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.UnsignedLongExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.UnsignedLongExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.TimeSpanExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.TimeSpanExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.IntExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.IntExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)">
-      <requires csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.IValueExpressionFactory.Handles">
-      <getter>
-        <ensures csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.GuidExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.GuidExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.LongExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.LongExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.Readers.DateTimeExpressionFactory.Convert(System.String)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="P:Linq2Rest.Parser.Readers.DateTimeExpressionFactory.Handles">
-      <getter>
-        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
-      </getter>
-    </member>
-    <member name="M:Linq2Rest.Parser.MemberNameResolver.ResolveName(System.Reflection.MemberInfo)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.IMemberNameResolver.ResolveName(System.Reflection.MemberInfo)" inheritedFromTypeName="IMemberNameResolver" exception="T:System.ArgumentNullException" csharp="member != (System.Reflection.MemberInfo)null" vb="member &lt;&gt; ((System.Reflection.MemberInfo)Nothing) ">member != (System.Reflection.MemberInfo)null</requires>
-      <exception cref="T:System.ArgumentNullException">!member != (System.Reflection.MemberInfo)null</exception>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.IMemberNameResolver.ResolveName(System.Reflection.MemberInfo)" inheritedFromTypeName="IMemberNameResolver" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Parser.MemberNameResolver.ResolveNameInternal(System.Reflection.MemberInfo)">
-      <requires csharp="member != (System.Reflection.MemberInfo)null" vb="member &lt;&gt; ((System.Reflection.MemberInfo)Nothing) ">member != (System.Reflection.MemberInfo)null</requires>
-    </member>
-    <member name="M:Linq2Rest.Parser.FunctionTokenSet.ToString">
-      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsCombinationOperation(System.String)">
-      <requires exception="T:System.ArgumentNullException" csharp="new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass1(){&#xD;&#xA;    operation = operation, &#xD;&#xA;}.operation != null" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass1 local_0_prime = New Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass1();&#xD;&#xA;    (local_0_prime.operation = operation)&#xD;&#xA;    return local_0_prime; })().operation &lt;&gt; Nothing">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass1(){
-    operation = operation, 
-}.operation != null</requires>
-      <exception cref="T:System.ArgumentNullException">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass1(){
-    operation = operation, 
-}.operation == null</exception>
-    </member>
-    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsOperation(System.String)">
-      <requires exception="T:System.ArgumentNullException" csharp="new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass4(){&#xD;&#xA;    operation = operation, &#xD;&#xA;}.operation != null" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass4 local_0_prime = New Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass4();&#xD;&#xA;    (local_0_prime.operation = operation)&#xD;&#xA;    return local_0_prime; })().operation &lt;&gt; Nothing">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass4(){
-    operation = operation, 
-}.operation != null</requires>
-      <exception cref="T:System.ArgumentNullException">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass4(){
-    operation = operation, 
-}.operation == null</exception>
-    </member>
-    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsArithmetic(System.String)">
-      <requires exception="T:System.ArgumentNullException" csharp="new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass7(){&#xD;&#xA;    operation = operation, &#xD;&#xA;}.operation != null" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass7 local_0_prime = New Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass7();&#xD;&#xA;    (local_0_prime.operation = operation)&#xD;&#xA;    return local_0_prime; })().operation &lt;&gt; Nothing">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass7(){
-    operation = operation, 
-}.operation != null</requires>
-      <exception cref="T:System.ArgumentNullException">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass7(){
-    operation = operation, 
-}.operation == null</exception>
-    </member>
-    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsImpliedBoolean(System.String)">
-      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <exception cref="T:System.ArgumentNullException">expression == null</exception>
-    </member>
-    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.EnclosedMatch(System.String)">
-      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <exception cref="T:System.ArgumentNullException">expression == null</exception>
-    </member>
-    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsEnclosed(System.String)">
-      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <exception cref="T:System.ArgumentNullException">expression == null</exception>
-    </member>
-    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsFunction(System.String)">
-      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <exception cref="T:System.ArgumentNullException">expression == null</exception>
+    <member name="M:Linq2Rest.Parser.ExpressionTokenizer.HasOrphanedOpenParenthesis(System.String)">
+      <requires csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
     </member>
     <member name="M:Linq2Rest.Parser.FilterExpressionFactory.GetFunctionParameterType(System.String)">
       <requires csharp="operation != null" vb="operation &lt;&gt; Nothing">operation != null</requires>
@@ -2082,59 +1893,260 @@
       <requires csharp="expr != null" vb="expr &lt;&gt; Nothing">expr != null</requires>
       <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
     </member>
-    <member name="M:Linq2Rest.Parser.ExpressionTokenizer.GetArithmeticToken(System.String)">
-      <requires exception="T:System.ArgumentNullException" csharp="(() =&gt; {&#xD;&#xA;    {&#xD;&#xA;        Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = new Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();&#xD;&#xA;    }&#xD;&#xA;    return expression != null; })()" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = New Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();&#xD;&#xA;    return expression &lt;&gt; Nothing; })()">(() =&gt; {
+    <member name="M:Linq2Rest.Parser.Readers.DecimalExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.DecimalExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.DateTimeExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.DateTimeExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.DateTimeOffsetExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.DateTimeOffsetExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.ParameterValueReader.Read(System.Type,System.String,System.IFormatProvider)">
+      <requires csharp="(() =&gt; {&#xD;&#xA;    {&#xD;&#xA;        Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2 local_1 = new Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2();&#xD;&#xA;        local_1.type = type;&#xD;&#xA;    }&#xD;&#xA;    return token != null; })()" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2 local_1 = New Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2();&#xD;&#xA;    local_1.type = type&#xD;&#xA;    return token &lt;&gt; Nothing; })()">(() =&gt; {
     {
-        Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = new Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();
+        Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2 local_1 = new Linq2Rest.Parser.Readers.ParameterValueReader.&lt;&gt;c__DisplayClass2();
+        local_1.type = type;
     }
-    return expression != null; })()</requires>
-      <exception cref="T:System.ArgumentNullException">!(() =&gt; {
-    {
-        Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = new Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();
-    }
-    return (expression != null); })()</exception>
+    return token != null; })()</requires>
+      <requires csharp="local_1.type != (System.Type)null" vb="local_1.type &lt;&gt; ((System.Type)Nothing) ">local_1.type != (System.Type)null</requires>
     </member>
-    <member name="M:Linq2Rest.Parser.ExpressionTokenizer.GetAnyAllFunctionTokens(System.String)">
-      <requires csharp="filter != null" vb="filter &lt;&gt; Nothing">filter != null</requires>
+    <member name="M:Linq2Rest.Parser.Readers.ParameterValueReader.GetKnownConstant(System.Type,System.String,System.IFormatProvider)">
+      <requires csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <requires csharp="type != (System.Type)null" vb="type &lt;&gt; ((System.Type)Nothing) ">type != (System.Type)null</requires>
     </member>
-    <member name="M:Linq2Rest.Parser.ExpressionTokenizer.GetFunctionTokens(System.String)">
-      <requires csharp="filter != null" vb="filter &lt;&gt; Nothing">filter != null</requires>
+    <member name="M:Linq2Rest.Parser.Readers.ParameterValueReader.GetParseExpression(System.String,System.IFormatProvider,System.Type)">
+      <requires csharp="type != (System.Type)null" vb="type &lt;&gt; ((System.Type)Nothing) ">type != (System.Type)null</requires>
     </member>
-    <member name="M:Linq2Rest.Parser.ExpressionTokenizer.GetArithmeticOperationIndex(System.Collections.Generic.IList{System.String})">
-      <requires csharp="blocks != null" vb="blocks &lt;&gt; Nothing">blocks != null</requires>
+    <member name="M:Linq2Rest.Parser.Readers.UnsignedShortExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
     </member>
-    <member name="M:Linq2Rest.Parser.ExpressionTokenizer.HasOrphanedOpenParenthesis(System.String)">
-      <requires csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-    </member>
-    <member name="T:Linq2Rest.UntypedQueryable`1">
-      <invariant>_source != null</invariant>
-    </member>
-    <member name="M:Linq2Rest.UntypedQueryable`1.#ctor(System.Linq.IQueryable{`0},System.Linq.Expressions.Expression{System.Func{`0,System.Object}})">
-      <requires csharp="projection == default(System.Linq.Expressions.Expression&lt;System.Func&lt;T, object&gt;&gt;) || source != null" vb="projection = Nothing OrElse source &lt;&gt; Nothing">projection == default(System.Linq.Expressions.Expression&lt;System.Func&lt;T, object&gt;&gt;) || source != null</requires>
-    </member>
-    <member name="M:Linq2Rest.UntypedQueryable`1.GetEnumerator">
-      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_Model == this.get_Model" vb="result.get_Model = Me.get_Model">result.get_Model == this.get_Model</ensures>
-    </member>
-    <member name="M:Linq2Rest.UntypedQueryable`1.System#Collections#IEnumerable#GetEnumerator">
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_Model == this.get_Model" vb="result.get_Model = Me.get_Model">result.get_Model == this.get_Model</ensures>
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_CurrentIndex == -1" vb="result.get_CurrentIndex = -1">result.get_CurrentIndex == -1</ensures>
-    </member>
-    <member name="P:Linq2Rest.UntypedQueryable`1.Expression">
+    <member name="P:Linq2Rest.Parser.Readers.UnsignedShortExpressionFactory.Handles">
       <getter>
-        <ensures inheritedFrom="M:System.Linq.IQueryable.get_Expression" inheritedFromTypeName="IQueryable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
       </getter>
     </member>
-    <member name="P:Linq2Rest.UntypedQueryable`1.ElementType">
+    <member name="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)">
+      <requires csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.IValueExpressionFactory.Handles">
       <getter>
-        <ensures inheritedFrom="M:System.Linq.IQueryable.get_ElementType" inheritedFromTypeName="IQueryable" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+        <ensures csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
       </getter>
     </member>
-    <member name="P:Linq2Rest.UntypedQueryable`1.Provider">
+    <member name="M:Linq2Rest.Parser.Readers.ByteArrayExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.ByteArrayExpressionFactory.Handles">
       <getter>
-        <ensures inheritedFrom="M:System.Linq.IQueryable.get_Provider" inheritedFromTypeName="IQueryable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
       </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.UnsignedLongExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.UnsignedLongExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.LongExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.LongExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.BooleanExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.BooleanExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.ShortExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.ShortExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.TimeSpanExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.TimeSpanExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.UnsignedIntExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.UnsignedIntExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.SingleExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.SingleExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.GuidExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.GuidExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.DoubleExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.DoubleExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.ByteExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.ByteExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.Readers.IntExpressionFactory.Convert(System.String)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="token != null" vb="token &lt;&gt; Nothing">token != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.Convert(System.String)" inheritedFromTypeName="IValueExpressionFactory" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.Readers.IntExpressionFactory.Handles">
+      <getter>
+        <ensures inheritedFrom="M:Linq2Rest.Parser.Readers.IValueExpressionFactory.get_Handles" inheritedFromTypeName="IValueExpressionFactory" csharp="result != (System.Type)null" vb="result &lt;&gt; ((System.Type)Nothing) ">result != (System.Type)null</ensures>
+      </getter>
+    </member>
+    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsCombinationOperation(System.String)">
+      <requires exception="T:System.ArgumentNullException" csharp="new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass1(){&#xD;&#xA;    operation = operation, &#xD;&#xA;}.operation != null" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass1 local_0_prime = New Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass1();&#xD;&#xA;    (local_0_prime.operation = operation)&#xD;&#xA;    return local_0_prime; })().operation &lt;&gt; Nothing">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass1(){
+    operation = operation, 
+}.operation != null</requires>
+      <exception cref="T:System.ArgumentNullException">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass1(){
+    operation = operation, 
+}.operation == null</exception>
+    </member>
+    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsOperation(System.String)">
+      <requires exception="T:System.ArgumentNullException" csharp="new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass4(){&#xD;&#xA;    operation = operation, &#xD;&#xA;}.operation != null" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass4 local_0_prime = New Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass4();&#xD;&#xA;    (local_0_prime.operation = operation)&#xD;&#xA;    return local_0_prime; })().operation &lt;&gt; Nothing">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass4(){
+    operation = operation, 
+}.operation != null</requires>
+      <exception cref="T:System.ArgumentNullException">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass4(){
+    operation = operation, 
+}.operation == null</exception>
+    </member>
+    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsArithmetic(System.String)">
+      <requires exception="T:System.ArgumentNullException" csharp="new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass7(){&#xD;&#xA;    operation = operation, &#xD;&#xA;}.operation != null" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass7 local_0_prime = New Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass7();&#xD;&#xA;    (local_0_prime.operation = operation)&#xD;&#xA;    return local_0_prime; })().operation &lt;&gt; Nothing">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass7(){
+    operation = operation, 
+}.operation != null</requires>
+      <exception cref="T:System.ArgumentNullException">new Linq2Rest.Parser.TokenOperatorExtensions.&lt;&gt;c__DisplayClass7(){
+    operation = operation, 
+}.operation == null</exception>
+    </member>
+    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsImpliedBoolean(System.String)">
+      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <exception cref="T:System.ArgumentNullException">expression == null</exception>
+    </member>
+    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.EnclosedMatch(System.String)">
+      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <exception cref="T:System.ArgumentNullException">expression == null</exception>
+    </member>
+    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsEnclosed(System.String)">
+      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <exception cref="T:System.ArgumentNullException">expression == null</exception>
+    </member>
+    <member name="M:Linq2Rest.Parser.TokenOperatorExtensions.IsFunction(System.String)">
+      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <exception cref="T:System.ArgumentNullException">expression == null</exception>
+    </member>
+    <member name="T:Linq2Rest.Parser.TokenSet">
+      <invariant>_left != null</invariant>
+      <invariant>_right != null</invariant>
+      <invariant>_operation != null</invariant>
+    </member>
+    <member name="M:Linq2Rest.Parser.TokenSet.ToString">
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="P:Linq2Rest.Parser.TokenSet.Left">
+      <getter>
+        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      </getter>
+      <setter>
+        <requires exception="T:System.ArgumentNullException" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      </setter>
+      <exception cref="T:System.ArgumentNullException">value == null</exception>
+    </member>
+    <member name="P:Linq2Rest.Parser.TokenSet.Operation">
+      <getter>
+        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      </getter>
+      <setter>
+        <requires exception="T:System.ArgumentNullException" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      </setter>
+      <exception cref="T:System.ArgumentNullException">value == null</exception>
+    </member>
+    <member name="P:Linq2Rest.Parser.TokenSet.Right">
+      <getter>
+        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      </getter>
+      <setter>
+        <requires exception="T:System.ArgumentNullException" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      </setter>
+      <exception cref="T:System.ArgumentNullException">value == null</exception>
+    </member>
+    <member name="M:Linq2Rest.Parser.MemberNameResolver.ResolveName(System.Reflection.MemberInfo)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.IMemberNameResolver.ResolveName(System.Reflection.MemberInfo)" inheritedFromTypeName="IMemberNameResolver" exception="T:System.ArgumentNullException" csharp="member != (System.Reflection.MemberInfo)null" vb="member &lt;&gt; ((System.Reflection.MemberInfo)Nothing) ">member != (System.Reflection.MemberInfo)null</requires>
+      <exception cref="T:System.ArgumentNullException">!member != (System.Reflection.MemberInfo)null</exception>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.IMemberNameResolver.ResolveName(System.Reflection.MemberInfo)" inheritedFromTypeName="IMemberNameResolver" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Parser.MemberNameResolver.ResolveNameInternal(System.Reflection.MemberInfo)">
+      <requires csharp="member != (System.Reflection.MemberInfo)null" vb="member &lt;&gt; ((System.Reflection.MemberInfo)Nothing) ">member != (System.Reflection.MemberInfo)null</requires>
+    </member>
+    <member name="M:Linq2Rest.Parser.FunctionTokenSet.ToString">
+      <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
     </member>
   </members>
 </doc>

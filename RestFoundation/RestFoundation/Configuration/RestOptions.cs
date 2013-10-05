@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Web.Routing;
+using Linq2Rest;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 using RestFoundation.Security;
@@ -20,12 +21,12 @@ namespace RestFoundation.Configuration
         internal RestOptions()
         {
             EnumerableChunkedSupport = true;
-            QueryableODataSupport = true;
 
             FaultDetail = FaultDetail.DetailedInDebugMode;
 
             JsonSettings = new JsonFormatterSettings();
             XmlSettings = new XmlFormatterSettings();
+            ODataSettings = new ODataSettings();
 
             BeginRequestAction = context => { };
             EndRequestAction = context => { };
@@ -55,13 +56,13 @@ namespace RestFoundation.Configuration
         internal string DefaultMediaType { get; private set; }
         internal bool ForceDefaultMediaType { get; private set; }
         internal bool EnumerableChunkedSupport { get; private set; }
-        internal bool QueryableODataSupport { get; set; }
         internal FaultDetail FaultDetail { get; private set; }
         internal bool RetainWebServerHeaders { get; private set; }
         internal IDictionary<string, string> ResponseHeaders { get; private set; }
         internal string IndexPageRelativeUrl { get; private set; }
         internal JsonFormatterSettings JsonSettings { get; private set; }
         internal XmlFormatterSettings XmlSettings { get; private set; }
+        internal ODataSettings ODataSettings { get; private set; }
         internal Action<IServiceContext> BeginRequestAction { get; private set; }
         internal Action<IServiceContext> EndRequestAction { get; private set; }
         internal Action<IServiceContext, Exception> ExceptionAction { get; private set; }
@@ -129,22 +130,6 @@ namespace RestFoundation.Configuration
         public RestOptions WithEnumerableChunkedSupport(bool supportChunkedOutput)
         {
             EnumerableChunkedSupport = supportChunkedOutput;
-            return this;
-        }
-
-        /// <summary>
-        /// Sets a value indicating whether an <see cref="T:System.Linq.IQueryable`1"/> collection
-        /// results should support OData operations provided in the query string. The default value
-        /// is true.
-        /// </summary>
-        /// <param name="supportODataOperations">
-        /// true if <see cref="T:System.Linq.IQueryable`1"/> collections should support OData operations;
-        /// otherwise false.
-        /// </param>
-        /// <returns>The configuration options object.</returns>
-        public RestOptions WithQueryableODataSupport(bool supportODataOperations)
-        {
-            QueryableODataSupport = supportODataOperations;
             return this;
         }
 
@@ -370,6 +355,35 @@ namespace RestFoundation.Configuration
             builder(settings);
 
             XmlSettings = settings;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets custom OData operation settings.
+        /// </summary>
+        /// <param name="builder">The OData operation settings builder.</param>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions WithODataSettings(Action<ODataSettings> builder)
+        {
+            if (builder == null)
+            {
+                throw new ArgumentNullException("builder");
+            }
+
+            var settings = new ODataSettings();
+            builder(settings);
+
+            if (settings.MaxResults < 0)
+            {
+                settings.MaxResults = 0;
+            }
+
+            if (settings.CaseInsensitiveStringComparison)
+            {
+                ParserSettings.InsensitiveCaseComparison = true;
+            }
+
+            ODataSettings = settings;
             return this;
         }
 

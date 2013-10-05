@@ -239,7 +239,7 @@ namespace RestFoundation.Results
                 return true;
             }
 
-            if (Rest.Configuration.Options.QueryableODataSupport && (returnedGenericType == typeof(IQueryable<>) ||
+            if (!Rest.Configuration.Options.ODataSettings.DisableIQueryableSupport && (returnedGenericType == typeof(IQueryable<>) ||
                 ReturnedType.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryable<>))))
             {
                 var odataProvider = Rest.Configuration.ServiceLocator.GetService<IODataProvider>();

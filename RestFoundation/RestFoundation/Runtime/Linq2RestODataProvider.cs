@@ -105,7 +105,10 @@ namespace RestFoundation.Runtime
 
         private static void TrySetMaxQueryResults(IServiceContext context, NameValueCollection queryString)
         {
-            int maxQueryResults = Convert.ToInt32(context.GetHttpContext().Items[ServiceCallConstants.MaxQueryResults], CultureInfo.InvariantCulture);
+            object maxResultString = context.GetHttpContext().Items[ServiceCallConstants.MaxQueryResults] ??
+                                     Rest.Configuration.Options.ODataSettings.MaxResults.ToString(CultureInfo.InvariantCulture);
+
+            int maxQueryResults = Convert.ToInt32(maxResultString, CultureInfo.InvariantCulture);
 
             if (maxQueryResults < 0)
             {

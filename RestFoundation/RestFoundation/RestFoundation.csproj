@@ -89,6 +89,7 @@
     <Compile Include="Collections\IUploadedFileCollection.cs" />
     <Compile Include="Collections\Specialized\HttpMethodCollection.cs" />
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
+    <Compile Include="Configuration\ODataSettings.cs" />
     <Compile Include="Context\RestContextContainer.cs" />
     <Compile Include="Configuration\DependencyBuilder.cs" />
     <Compile Include="Configuration\FaultDetail.cs" />
