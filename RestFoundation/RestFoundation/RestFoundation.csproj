@@ -144,6 +144,7 @@
     <Compile Include="Runtime\Registries\XmlClientSerializerRegistry.cs" />
     <Compile Include="Runtime\Handlers\ProxyExportHandler.cs" />
     <Compile Include="Runtime\Handlers\ProxyOutputHandler.cs" />
+    <Compile Include="Runtime\TypeExtensions.cs" />
     <Compile Include="ServiceProxy\OperationMetadata\RequestParameterType.cs" />
     <Compile Include="ServiceProxy\ProxyHiddenAttribute.cs" />
     <Compile Include="ServiceProxy\ProxyResponseData.cs" />

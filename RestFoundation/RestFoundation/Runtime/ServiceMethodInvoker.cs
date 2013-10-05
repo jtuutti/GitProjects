@@ -136,10 +136,10 @@ namespace RestFoundation.Runtime
         {
             Type taskType = task.GetType();
 
-            bool isVoidTask = taskType == typeof(Task);
-            bool isTypedTask = taskType.IsGenericType && taskType.GetGenericTypeDefinition() == typeof(Task<>);
+            bool isTypedTask = taskType.IsGenericTask();
+            bool isVoidTask = !isTypedTask && typeof(Task).IsAssignableFrom(taskType);
 
-            if (!isVoidTask && !isTypedTask)
+            if (!isTypedTask && !isVoidTask)
             {
                 throw new InvalidOperationException(Resources.Global.InvalidIAsyncResultReturned);
             }
