@@ -1108,6 +1108,36 @@
             </returns>
       <filterpriority>1</filterpriority>
     </member>
+    <member name="T:RestFoundation.Configuration.ODataSettings">
+      <summary>
+            Contains settings used by OData providers.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Configuration.ODataSettings.DisableIQueryableSupport">
+      <summary>
+            Gets or sets a value indicating whether service methods that return
+            <see cref="T:System.Linq.IQueryable`1" /> should support OData operations.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Configuration.ODataSettings.CaseInsensitiveStringComparison">
+      <summary>
+            Gets or sets a value indicating whether string comparison operations should
+            be case insensitive. This setting should only be enabeld for Linq-to-Objects
+            providers. Most database providers do not support this feature and can throw
+            an exception or perform string comparisons based on the table collation
+            instead.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Configuration.ODataSettings.MaxResults">
+      <summary>
+            Gets or sets a value indicating the maximum number of results an OData enabled
+            service should return. By default this value cannot be overridden using a $take
+            in the query string. To override this behavior, decorate specific services or
+            action methods with the <see cref="T:RestFoundation.Behaviors.MaxQueryResultsAttribute" /> attribute. Set
+            this value to 0 (default) if you do not want to limit the number of results
+            returned.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Configuration.DependencyBuilder">
       <summary>
             Represents a dependency builder for the default service locator.
@@ -2569,18 +2599,6 @@
             </param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.Configuration.RestOptions.WithQueryableODataSupport(System.Boolean)">
-      <summary>
-            Sets a value indicating whether an <see cref="T:System.Linq.IQueryable`1" /> collection
-            results should support OData operations provided in the query string. The default value
-            is true.
-            </summary>
-      <param name="supportODataOperations">
-            true if <see cref="T:System.Linq.IQueryable`1" /> collections should support OData operations;
-            otherwise false.
-            </param>
-      <returns>The configuration options object.</returns>
-    </member>
     <member name="M:RestFoundation.Configuration.RestOptions.WithFaultDetail(RestFoundation.Configuration.FaultDetail)">
       <summary>
             Sets the detail of information being returned in the fault collection object during an unhandled service
@@ -2650,18 +2668,25 @@
       <param name="builder">The builder.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.Configuration.RestOptions.WithJsonFormatterSettings(RestFoundation.Configuration.JsonFormatterSettings)">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithJsonFormatterSettings(System.Action{RestFoundation.Configuration.JsonFormatterSettings})">
       <summary>
             Sets custom JSON formatter and result settings.
             </summary>
-      <param name="settings">The JSON formatter settings.</param>
+      <param name="builder">The JSON formatter settings builder.</param>
       <returns>The configuration options object.</returns>
     </member>
-    <member name="M:RestFoundation.Configuration.RestOptions.WithXmlFormatterSettings(RestFoundation.Configuration.XmlFormatterSettings)">
+    <member name="M:RestFoundation.Configuration.RestOptions.WithXmlFormatterSettings(System.Action{RestFoundation.Configuration.XmlFormatterSettings})">
       <summary>
             Sets custom XML formatter and result settings.
             </summary>
-      <param name="settings">The XML formatter settings.</param>
+      <param name="builder">The XML formatter settings builder.</param>
+      <returns>The configuration options object.</returns>
+    </member>
+    <member name="M:RestFoundation.Configuration.RestOptions.WithODataSettings(System.Action{RestFoundation.Configuration.ODataSettings})">
+      <summary>
+            Sets custom OData operation settings.
+            </summary>
+      <param name="builder">The OData operation settings builder.</param>
       <returns>The configuration options object.</returns>
     </member>
     <member name="M:RestFoundation.Configuration.RestOptions.DoNotRemoveWebServerHeaders">
@@ -21216,6 +21241,18 @@
       <returns>A filtered and projected enumeration of the source collection.</returns>
       <requires exception="T:System.ArgumentNullException" csharp="source != null" vb="source &lt;&gt; Nothing">source != null</requires>
       <exception cref="T:System.ArgumentNullException">source == null</exception>
+    </member>
+    <member name="T:Linq2Rest.ParserSettings">
+      <summary>
+            Defines OData parser settings.
+            </summary>
+    </member>
+    <member name="P:Linq2Rest.ParserSettings.InsensitiveCaseComparison">
+      <summary>
+            Gets or sets a value indicating whether the <see cref="T:System.String" />
+            operations should be case insensitive. This settings needs to be
+            set before any parser class is initialized.
+            </summary>
     </member>
     <member name="M:Linq2Rest.Parser.ExpressionTokenizer.GetArithmeticToken(System.String)">
       <requires exception="T:System.ArgumentNullException" csharp="(() =&gt; {&#xD;&#xA;    {&#xD;&#xA;        Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = new Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();&#xD;&#xA;    }&#xD;&#xA;    return expression != null; })()" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = New Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();&#xD;&#xA;    return expression &lt;&gt; Nothing; })()">(() =&gt; {
