@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RestFoundation.Runtime
 {
-    internal static class AssignableExtensions
+    internal static class TypeExtensions
     {
         private static readonly Type genericTaskType = typeof(Task<>);
         private static readonly Type voidTaskType = typeof(Task);
