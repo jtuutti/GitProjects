@@ -561,6 +561,13 @@
             set before any parser class is initialized.
             </summary>
     </member>
+    <member name="P:Linq2Rest.ParserSettings.InvariantCaseConversion">
+      <summary>
+            Gets or sets a value indicating whether the <see cref="T:System.String" />
+            case operaetions should be culture invariant. This settings needs
+            to be set before any parser class is initialized.
+            </summary>
+    </member>
     <member name="T:Linq2Rest.Parser.FilterExpressionFactory">
       <summary>
             Defines the FilterExpressionFactory.
@@ -1276,18 +1283,6 @@
     <member name="M:Linq2Rest.Provider.QueryableExtensions.ResolvePropertyName``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
       <requires csharp="property != null" vb="property &lt;&gt; Nothing">property != null</requires>
     </member>
-    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor)">
-      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-    </member>
     <member name="P:Linq2Rest.Provider.Writers.MathFloorMethodWriter.MethodName">
       <getter>
         <ensures inheritedFrom="M:Linq2Rest.Provider.Writers.MathMethodWriter.get_MethodName" inheritedFromTypeName="MathMethodWriter" csharp="!IsNullOrWhiteSpace(result)" vb="Not IsNullOrWhiteSpace(result)">!string.IsNullOrWhiteSpace(result)</ensures>
@@ -1544,32 +1539,37 @@
       <requires csharp="resultLoader != null" vb="resultLoader &lt;&gt; Nothing">resultLoader != null</requires>
       <requires csharp="intermediateResultLoader != null" vb="intermediateResultLoader &lt;&gt; Nothing">intermediateResultLoader != null</requires>
     </member>
-    <member name="T:Linq2Rest.Provider.RestPostQueryProvider`1">
-      <invariant>_inputData != null</invariant>
+    <member name="T:Linq2Rest.Provider.RestQueryableBase`1">
+      <invariant>Client != null</invariant>
+      <invariant>Expression != null</invariant>
     </member>
-    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor,System.IO.Stream)">
-      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
-      <requires csharp="inputData != null" vb="inputData &lt;&gt; Nothing">inputData != null</requires>
+    <member name="M:Linq2Rest.Provider.RestQueryableBase`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory)">
+      <requires exception="T:System.ArgumentException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <exception cref="T:System.ArgumentException">client == null</exception>
+      <requires exception="T:System.ArgumentException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <exception cref="T:System.ArgumentException">serializerFactory == null</exception>
     </member>
-    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
-      <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    <member name="M:Linq2Rest.Provider.RestQueryableBase`1.GetEnumerator">
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_Model == this.get_Model" vb="result.get_Model = Me.get_Model">result.get_Model == this.get_Model</ensures>
     </member>
-    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
-      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+    <member name="M:Linq2Rest.Provider.RestQueryableBase`1.System#Collections#IEnumerable#GetEnumerator">
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_Model == this.get_Model" vb="result.get_Model = Me.get_Model">result.get_Model == this.get_Model</ensures>
+      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_CurrentIndex == -1" vb="result.get_CurrentIndex = -1">result.get_CurrentIndex == -1</ensures>
     </member>
-    <member name="T:Linq2Rest.Provider.RestDeleteQueryable`1">
-      <invariant>_restDeleteQueryProvider != null</invariant>
+    <member name="P:Linq2Rest.Provider.RestQueryableBase`1.Client">
+      <getter>
+        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+      </getter>
+      <setter>
+        <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
+      </setter>
     </member>
-    <member name="M:Linq2Rest.Provider.RestDeleteQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory)">
-      <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <exception cref="T:System.ArgumentNullException">client == null</exception>
-      <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <exception cref="T:System.ArgumentNullException">serializerFactory == null</exception>
+    <member name="T:Linq2Rest.Provider.RestPostQueryable`1">
+      <invariant>_restPostQueryProvider != null</invariant>
     </member>
-    <member name="M:Linq2Rest.Provider.RestDeleteQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression)">
+    <member name="M:Linq2Rest.Provider.RestPostQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression,System.IO.Stream)">
       <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
       <exception cref="T:System.ArgumentNullException">client == null</exception>
       <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
@@ -1611,47 +1611,16 @@
         <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
       </setter>
     </member>
-    <member name="T:Linq2Rest.Provider.RestQueryableBase`1">
-      <invariant>Client != null</invariant>
-      <invariant>Expression != null</invariant>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestQueryableBase`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory)">
-      <requires exception="T:System.ArgumentException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <exception cref="T:System.ArgumentException">client == null</exception>
-      <requires exception="T:System.ArgumentException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <exception cref="T:System.ArgumentException">serializerFactory == null</exception>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestQueryableBase`1.GetEnumerator">
-      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-      <ensures inheritedFrom="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_Model == this.get_Model" vb="result.get_Model = Me.get_Model">result.get_Model == this.get_Model</ensures>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestQueryableBase`1.System#Collections#IEnumerable#GetEnumerator">
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_Model == this.get_Model" vb="result.get_Model = Me.get_Model">result.get_Model == this.get_Model</ensures>
-      <ensures inheritedFrom="M:System.Collections.IEnumerable.GetEnumerator" inheritedFromTypeName="IEnumerable" csharp="result.get_CurrentIndex == -1" vb="result.get_CurrentIndex = -1">result.get_CurrentIndex == -1</ensures>
-    </member>
-    <member name="P:Linq2Rest.Provider.RestQueryableBase`1.Client">
-      <getter>
-        <ensures csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-      </getter>
-      <setter>
-        <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
-      </setter>
-    </member>
-    <member name="T:Linq2Rest.Provider.RestPutQueryProvider`1">
-      <invariant>_inputData != null</invariant>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor,System.IO.Stream)">
+    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor)">
       <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
       <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
       <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
-      <requires csharp="inputData != null" vb="inputData &lt;&gt; Nothing">inputData != null</requires>
     </member>
-    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
+    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
       <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
       <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
     </member>
-    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
+    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
       <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
     </member>
     <member name="T:Linq2Rest.Provider.ExpressionProcessor">
@@ -1696,21 +1665,16 @@
       <requires csharp="intermediateResultLoader != null" vb="intermediateResultLoader &lt;&gt; Nothing">intermediateResultLoader != null</requires>
       <requires csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
     </member>
-    <member name="T:Linq2Rest.Provider.RestPostQueryable`1">
-      <invariant>_restPostQueryProvider != null</invariant>
+    <member name="T:Linq2Rest.Provider.RestDeleteQueryable`1">
+      <invariant>_restDeleteQueryProvider != null</invariant>
     </member>
-    <member name="M:Linq2Rest.Provider.RestPostQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression,System.IO.Stream)">
+    <member name="M:Linq2Rest.Provider.RestDeleteQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory)">
       <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
       <exception cref="T:System.ArgumentNullException">client == null</exception>
       <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
       <exception cref="T:System.ArgumentNullException">serializerFactory == null</exception>
-      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <exception cref="T:System.ArgumentNullException">expression == null</exception>
     </member>
-    <member name="T:Linq2Rest.Provider.RestPutQueryable`1">
-      <invariant>_restPutQueryProvider != null</invariant>
-    </member>
-    <member name="M:Linq2Rest.Provider.RestPutQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression,System.IO.Stream)">
+    <member name="M:Linq2Rest.Provider.RestDeleteQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression)">
       <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
       <exception cref="T:System.ArgumentNullException">client == null</exception>
       <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
@@ -1739,17 +1703,49 @@
         <requires csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
       </setter>
     </member>
-    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor)">
+    <member name="T:Linq2Rest.Provider.RestPutQueryable`1">
+      <invariant>_restPutQueryProvider != null</invariant>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestPutQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression,System.IO.Stream)">
+      <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <exception cref="T:System.ArgumentNullException">client == null</exception>
+      <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <exception cref="T:System.ArgumentNullException">serializerFactory == null</exception>
+      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <exception cref="T:System.ArgumentNullException">expression == null</exception>
+    </member>
+    <member name="T:Linq2Rest.Provider.RestPutQueryProvider`1">
+      <invariant>_inputData != null</invariant>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor,System.IO.Stream)">
       <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
       <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
       <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
+      <requires csharp="inputData != null" vb="inputData &lt;&gt; Nothing">inputData != null</requires>
     </member>
-    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
+    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
       <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
       <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
     </member>
-    <member name="M:Linq2Rest.Provider.RestDeleteQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
+    <member name="M:Linq2Rest.Provider.RestPutQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
       <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+    </member>
+    <member name="T:Linq2Rest.Provider.RestGetQueryable`1">
+      <invariant>_restGetQueryProvider != null</invariant>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestGetQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory)">
+      <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <exception cref="T:System.ArgumentNullException">client == null</exception>
+      <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <exception cref="T:System.ArgumentNullException">serializerFactory == null</exception>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestGetQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression)">
+      <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <exception cref="T:System.ArgumentNullException">client == null</exception>
+      <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <exception cref="T:System.ArgumentNullException">serializerFactory == null</exception>
+      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
+      <exception cref="T:System.ArgumentNullException">expression == null</exception>
     </member>
     <member name="M:Linq2Rest.Provider.ExpressionWriter.GetUnconvertedType(System.Linq.Expressions.Expression)">
       <requires csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
@@ -1775,22 +1771,41 @@
     &lt;&gt;4__this = this, 
 }.expression != null</requires>
     </member>
-    <member name="T:Linq2Rest.Provider.RestGetQueryable`1">
-      <invariant>_restGetQueryProvider != null</invariant>
+    <member name="T:Linq2Rest.Provider.RestPostQueryProvider`1">
+      <invariant>_inputData != null</invariant>
     </member>
-    <member name="M:Linq2Rest.Provider.RestGetQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory)">
-      <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <exception cref="T:System.ArgumentNullException">client == null</exception>
-      <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <exception cref="T:System.ArgumentNullException">serializerFactory == null</exception>
+    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor,System.IO.Stream)">
+      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
+      <requires csharp="inputData != null" vb="inputData &lt;&gt; Nothing">inputData != null</requires>
     </member>
-    <member name="M:Linq2Rest.Provider.RestGetQueryable`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,System.Linq.Expressions.Expression)">
-      <requires exception="T:System.ArgumentNullException" csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
-      <exception cref="T:System.ArgumentNullException">client == null</exception>
-      <requires exception="T:System.ArgumentNullException" csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
-      <exception cref="T:System.ArgumentNullException">serializerFactory == null</exception>
-      <requires exception="T:System.ArgumentNullException" csharp="expression != null" vb="expression &lt;&gt; Nothing">expression != null</requires>
-      <exception cref="T:System.ArgumentNullException">expression == null</exception>
+    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestPostQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.#ctor(Linq2Rest.Provider.IRestClient,Linq2Rest.Provider.ISerializerFactory,Linq2Rest.Provider.IExpressionProcessor)">
+      <requires csharp="client != null" vb="client &lt;&gt; Nothing">client != null</requires>
+      <requires csharp="serializerFactory != null" vb="serializerFactory &lt;&gt; Nothing">serializerFactory != null</requires>
+      <requires csharp="expressionProcessor != null" vb="expressionProcessor &lt;&gt; Nothing">expressionProcessor != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+      <ensures inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetResults(Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Provider.RestGetQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)">
+      <requires inheritedFrom="M:Linq2Rest.Provider.RestQueryProvider`1.GetIntermediateResults(System.Type,Linq2Rest.Provider.ParameterBuilder)" inheritedFromTypeName="RestQueryProvider" csharp="builder != null" vb="builder &lt;&gt; Nothing">builder != null</requires>
+    </member>
+    <member name="M:Linq2Rest.Parser.MemberNameResolver.ResolveName(System.Reflection.MemberInfo)">
+      <requires inheritedFrom="M:Linq2Rest.Parser.IMemberNameResolver.ResolveName(System.Reflection.MemberInfo)" inheritedFromTypeName="IMemberNameResolver" exception="T:System.ArgumentNullException" csharp="member != (System.Reflection.MemberInfo)null" vb="member &lt;&gt; ((System.Reflection.MemberInfo)Nothing) ">member != (System.Reflection.MemberInfo)null</requires>
+      <exception cref="T:System.ArgumentNullException">!member != (System.Reflection.MemberInfo)null</exception>
+      <ensures inheritedFrom="M:Linq2Rest.Parser.IMemberNameResolver.ResolveName(System.Reflection.MemberInfo)" inheritedFromTypeName="IMemberNameResolver" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
+    </member>
+    <member name="M:Linq2Rest.Parser.MemberNameResolver.ResolveNameInternal(System.Reflection.MemberInfo)">
+      <requires csharp="member != (System.Reflection.MemberInfo)null" vb="member &lt;&gt; ((System.Reflection.MemberInfo)Nothing) ">member != (System.Reflection.MemberInfo)null</requires>
     </member>
     <member name="M:Linq2Rest.Parser.ExpressionTokenizer.GetArithmeticToken(System.String)">
       <requires exception="T:System.ArgumentNullException" csharp="(() =&gt; {&#xD;&#xA;    {&#xD;&#xA;        Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = new Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();&#xD;&#xA;    }&#xD;&#xA;    return expression != null; })()" vb="(() =&gt; {&#xD;&#xA;    Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19 local_8 = New Linq2Rest.Parser.ExpressionTokenizer.&lt;&gt;c__DisplayClass19();&#xD;&#xA;    return expression &lt;&gt; Nothing; })()">(() =&gt; {
@@ -2136,14 +2151,6 @@
         <requires exception="T:System.ArgumentNullException" csharp="value != null" vb="value &lt;&gt; Nothing">value != null</requires>
       </setter>
       <exception cref="T:System.ArgumentNullException">value == null</exception>
-    </member>
-    <member name="M:Linq2Rest.Parser.MemberNameResolver.ResolveName(System.Reflection.MemberInfo)">
-      <requires inheritedFrom="M:Linq2Rest.Parser.IMemberNameResolver.ResolveName(System.Reflection.MemberInfo)" inheritedFromTypeName="IMemberNameResolver" exception="T:System.ArgumentNullException" csharp="member != (System.Reflection.MemberInfo)null" vb="member &lt;&gt; ((System.Reflection.MemberInfo)Nothing) ">member != (System.Reflection.MemberInfo)null</requires>
-      <exception cref="T:System.ArgumentNullException">!member != (System.Reflection.MemberInfo)null</exception>
-      <ensures inheritedFrom="M:Linq2Rest.Parser.IMemberNameResolver.ResolveName(System.Reflection.MemberInfo)" inheritedFromTypeName="IMemberNameResolver" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
-    </member>
-    <member name="M:Linq2Rest.Parser.MemberNameResolver.ResolveNameInternal(System.Reflection.MemberInfo)">
-      <requires csharp="member != (System.Reflection.MemberInfo)null" vb="member &lt;&gt; ((System.Reflection.MemberInfo)Nothing) ">member != (System.Reflection.MemberInfo)null</requires>
     </member>
     <member name="M:Linq2Rest.Parser.FunctionTokenSet.ToString">
       <ensures inheritedFrom="M:System.Object.ToString" inheritedFromTypeName="Object" csharp="result != null" vb="result &lt;&gt; Nothing">result != null</ensures>
