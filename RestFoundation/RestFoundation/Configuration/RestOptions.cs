@@ -383,6 +383,11 @@ namespace RestFoundation.Configuration
                 ParserSettings.InsensitiveCaseComparison = true;
             }
 
+            if (settings.InvariantCultureCaseConversion)
+            {
+                ParserSettings.InvariantCaseConversion = true;
+            }
+
             ODataSettings = settings;
             return this;
         }

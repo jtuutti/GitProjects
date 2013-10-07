@@ -15,12 +15,19 @@ namespace RestFoundation.Configuration
 
         /// <summary>
         /// Gets or sets a value indicating whether string comparison operations should
-        /// be case insensitive. This setting should only be enabeld for Linq-to-Objects
+        /// be case insensitive. This setting should only be enabled for Linq-to-Objects
         /// providers. Most database providers do not support this feature and can throw
-        /// an exception or perform string comparisons based on the table collation
-        /// instead.
+        /// an exception or perform string comparisons based on the table collation.
         /// </summary>
         public bool CaseInsensitiveStringComparison { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether string case conversion operations should
+        /// use an invariant culture. This setting should only be enabled for Linq-to-Objects
+        /// providers. Most database providers do not support this feature and can throw
+        /// an exception or perform string conversions based on the table collation.
+        /// </summary>
+        public bool InvariantCultureCaseConversion { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating the maximum number of results an OData enabled
