@@ -145,4 +145,8 @@
     <value>Partial view '{0}' is referenced recursively</value>
     <comment>Partial view '{0}' is referenced recursively</comment>
   </data>
+  <data name="InvalidControllerType" xml:space="preserve">
+    <value>Controller type '{0}' could not be created or does not subclass the IController interface</value>
+    <comment>Controller type '{0}' could not be created or does not subclass the IController interface</comment>
+  </data>
 </root>

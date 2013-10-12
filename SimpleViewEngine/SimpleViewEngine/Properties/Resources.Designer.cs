@@ -61,6 +61,15 @@ namespace SimpleViewEngine.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Controller type &apos;{0}&apos; could not be created or does not subclass the IController interface.
+        /// </summary>
+        internal static string InvalidControllerType {
+            get {
+                return ResourceManager.GetString("InvalidControllerType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Layout &apos;{0}&apos; does not have the &apos;.layout.html&apos; file extension.
         /// </summary>
         internal static string InvalidLayoutViewExtension {
