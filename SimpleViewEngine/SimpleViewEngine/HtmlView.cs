@@ -23,6 +23,11 @@ namespace SimpleViewEngine
         private static readonly Regex IncludeFileDirectiveRegex = new Regex(@"<!--\s*#include\s+(.+)\s*=\s*\""(.+)\""\s*-->",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex TitleRegex = new Regex(@"<title>.*</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex TitleDirectiveRegex = new Regex(@"<!--\s*#title value=\""(.*)\""\s*-->",
+                                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static readonly Regex BodyDirectiveRegex = new Regex(@"<!--\s*#body\s*-->",
                                                                      RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -74,11 +79,24 @@ namespace SimpleViewEngine
             }
 
             string html = ReadHtml(m_filePath, ViewType.View);
+
+            Match titleMatch = TitleDirectiveRegex.Match(html);
+
+            if (titleMatch.Success)
+            {
+                html = TitleDirectiveRegex.Replace(html, String.Empty);
+            }
+
             Match layoutMatch = ReferenceDirectiveRegex.Match(html);
 
             if (layoutMatch.Success)
             {
                 html = ParseLayout(layoutMatch, html);
+
+                if (titleMatch.Success)
+                {
+                    html = TitleRegex.Replace(html, m => String.Concat("<title>", titleMatch.Groups[1].Value, "</title>"));
+                }
             }
 
             string fileHtml = Parse(html, m_filePath);
