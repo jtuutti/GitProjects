@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 
 namespace SimpleViewEngine.Controllers
 {
@@ -25,7 +26,7 @@ namespace SimpleViewEngine.Controllers
         [HttpOptions, ActionName("Index")]
         public EmptyResult Options()
         {
-            Response.AppendHeader("Allow", "GET, HEAD, OPTIONS");
+            Response.AppendHeader(HttpGetHeadAttribute.AllowHeader, String.Join(", ", HttpGetHeadAttribute.AllowedMethods));
 
             return new EmptyResult();
         }

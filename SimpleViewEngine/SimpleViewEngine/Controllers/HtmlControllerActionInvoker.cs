@@ -6,6 +6,8 @@ namespace SimpleViewEngine.Controllers
 {
     internal sealed class HtmlControllerActionInvoker : ControllerActionInvoker
     {
+        private const string ActionNotFoundPartialMessage = "was not found";
+
         protected override ResultExecutedContext InvokeActionResultWithFilters(ControllerContext controllerContext,
                                                                                IList<IResultFilter> filters,
                                                                                ActionResult actionResult)
@@ -15,18 +17,13 @@ namespace SimpleViewEngine.Controllers
                 throw new ArgumentNullException("controllerContext");
             }
 
-            if (!(controllerContext.Controller is HtmlController))
-            {
-                return base.InvokeActionResultWithFilters(controllerContext, filters, actionResult);
-            }
-
             try
             {
                 return base.InvokeActionResultWithFilters(controllerContext, filters, actionResult);
             }
             catch (InvalidOperationException ex)
             {
-                if (ex.Message.Contains("was not found"))
+                if (controllerContext.Controller is HtmlController && ex.Message.Contains(ActionNotFoundPartialMessage))
                 {
                     return base.InvokeActionResultWithFilters(controllerContext, filters, new HttpNotFoundResult());
                 }
