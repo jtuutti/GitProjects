@@ -28,6 +28,12 @@ namespace SimpleViewEngine
         private static readonly Regex TitleDirectiveRegex = new Regex(@"<!--\s*#title value=\""(.*)\""\s*-->",
                                                                      RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex HeadDirectiveRegex = new Regex(@"<!--\s*#head\s*-->",
+                                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+        private static readonly Regex HeadBodyDirectiveRegex = new Regex(@"<!--\s*#head(.*)/#head\s*-->",
+                                                                        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
         private static readonly Regex BodyDirectiveRegex = new Regex(@"<!--\s*#body\s*-->",
                                                                      RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -114,6 +120,11 @@ namespace SimpleViewEngine
             writer.Write(fileHtml);
         }
 
+        private static string TrimLine(string line)
+        {
+            return line.Trim(' ', '\n', '\r', '\t');
+        }
+
         private static string ReadHtml(string filePath, ViewType viewType)
         {
             filePath = filePath.Trim(' ', '\t');
@@ -142,7 +153,7 @@ namespace SimpleViewEngine
 
             string html = File.ReadAllText(filePath, Encoding.UTF8);
 
-            return html.Trim(' ', '\n', '\r', '\t');
+            return TrimLine(html);
         }
 
         private static string GenerateLayout(string layoutFilePath, string html)
@@ -153,7 +164,22 @@ namespace SimpleViewEngine
             }
 
             string layoutHtml = ReadHtml(layoutFilePath, ViewType.Layout);
-            layoutHtml = BodyDirectiveRegex.Replace(layoutHtml, html);
+
+            Match headHtmlMatch = HeadBodyDirectiveRegex.Match(html);
+
+            if (headHtmlMatch.Success)
+            {
+                string headHtml = headHtmlMatch.Groups[1].Value;
+
+                html = HeadBodyDirectiveRegex.Replace(html, String.Empty);
+                layoutHtml = HeadDirectiveRegex.Replace(layoutHtml, TrimLine(headHtml));
+            }
+            else
+            {
+                layoutHtml = HeadDirectiveRegex.Replace(layoutHtml, String.Empty);
+            }
+
+            layoutHtml = BodyDirectiveRegex.Replace(layoutHtml, TrimLine(html));
 
             return layoutHtml;
         }
