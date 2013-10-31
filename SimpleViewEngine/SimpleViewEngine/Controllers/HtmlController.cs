@@ -26,7 +26,7 @@ namespace SimpleViewEngine.Controllers
         [HttpOptions, ActionName("Index")]
         public EmptyResult Options()
         {
-            Response.AppendHeader(HttpGetHeadAttribute.AllowHeader, String.Join(", ", HttpGetHeadAttribute.AllowedMethods));
+            Response.AppendHeader(HttpGetHeadAttribute.AllowHeader, HttpGetHeadAttribute.AllowedMethods);
 
             return new EmptyResult();
         }

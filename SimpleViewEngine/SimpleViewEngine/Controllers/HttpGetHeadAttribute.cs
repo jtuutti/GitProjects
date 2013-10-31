@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
 
@@ -10,13 +9,18 @@ namespace SimpleViewEngine.Controllers
     {
         public const string AllowHeader = "Allow";
 
-        private static readonly string[] allowedMethods = { "GET", "HEAD", "OPTIONS" };
+        private static readonly string[] allowedMethodArray = { "GET", "HEAD", "OPTIONS" };
+        private static readonly object syncRoot = new Object();
+        private static string allowedMethods;
 
-        public static IEnumerable<string> AllowedMethods
+        public static string AllowedMethods
         {
             get
             {
-                return allowedMethods;
+                lock (syncRoot)
+                {
+                    return allowedMethods ?? (allowedMethods = String.Join(", ", allowedMethodArray));
+                }
             }
         }
 
@@ -29,15 +33,15 @@ namespace SimpleViewEngine.Controllers
 
             string httpMethodOverride = filterContext.HttpContext.Request.GetHttpMethodOverride();
 
-            for (int i = 0; i < allowedMethods.Length; i++)
+            for (int i = 0; i < allowedMethodArray.Length; i++)
             {
-                if (String.Equals(httpMethodOverride, allowedMethods[i], StringComparison.OrdinalIgnoreCase))
+                if (String.Equals(httpMethodOverride, allowedMethodArray[i], StringComparison.OrdinalIgnoreCase))
                 {
                     return;
                 }
             }
 
-            filterContext.HttpContext.Response.AppendHeader(AllowHeader, String.Join(", ", allowedMethods));
+            filterContext.HttpContext.Response.AppendHeader(AllowHeader, AllowedMethods);
             filterContext.Result = new HttpStatusCodeResult((int) HttpStatusCode.MethodNotAllowed);
         }
     }
