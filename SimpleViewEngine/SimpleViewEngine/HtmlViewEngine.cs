@@ -13,8 +13,8 @@ namespace SimpleViewEngine
         /// </summary>
         public HtmlViewEngine()
         {
-            ViewLocationFormats = new[] { "~/Views/{1}/{0}.html", "~/Views/Shared/{0}.html" };
-            PartialViewLocationFormats = new[] { "~/Views/{1}/{0}.html", "~/Views/Shared/{0}.html" };
+            ViewLocationFormats = new[] { "~/views/{1}/{0}.html", "~/views/shared/{0}.html" };
+            PartialViewLocationFormats = new[] { "~/views/{1}/{0}.partial.html", "~/views/shared/{0}.partial.html" };
             FileExtensions = new [] { "html" };
         }
 

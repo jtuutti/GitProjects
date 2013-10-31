@@ -86,23 +86,13 @@ namespace SimpleViewEngine
 
             string html = ReadHtml(m_filePath, ViewType.View);
 
-            Match titleMatch = TitleDirectiveRegex.Match(html);
-
-            if (titleMatch.Success)
+            if (m_filePath.IndexOf(PartialViewExtension, StringComparison.OrdinalIgnoreCase) < 0)
             {
-                html = TitleDirectiveRegex.Replace(html, String.Empty);
+                html = ParseViewDirectives(html);
             }
-
-            Match layoutMatch = ReferenceDirectiveRegex.Match(html);
-
-            if (layoutMatch.Success)
+            else
             {
-                html = ParseLayout(layoutMatch, html);
-
-                if (titleMatch.Success)
-                {
-                    html = TitleRegex.Replace(html, m => String.Concat("<title>", titleMatch.Groups[1].Value, "</title>"));
-                }
+                html = RemoveViewDirectives(html);
             }
 
             string fileHtml = Parse(html, m_filePath);
@@ -182,6 +172,56 @@ namespace SimpleViewEngine
             layoutHtml = BodyDirectiveRegex.Replace(layoutHtml, TrimLine(html));
 
             return layoutHtml;
+        }
+
+        private static string RemoveViewDirectives(string html)
+        {
+            Match titleMatch = TitleDirectiveRegex.Match(html);
+
+            if (titleMatch.Success)
+            {
+                html = TitleDirectiveRegex.Replace(html, String.Empty);
+            }
+
+            Match layoutMatch = ReferenceDirectiveRegex.Match(html);
+
+            if (layoutMatch.Success)
+            {
+                html = ReferenceDirectiveRegex.Replace(html, String.Empty);
+            }
+
+            Match headMatch = HeadBodyDirectiveRegex.Match(html);
+
+            if (headMatch.Success)
+            {
+                html = HeadBodyDirectiveRegex.Replace(html, String.Empty);
+            }
+
+            return html;
+        }
+
+        private string ParseViewDirectives(string html)
+        {
+            Match titleMatch = TitleDirectiveRegex.Match(html);
+
+            if (titleMatch.Success)
+            {
+                html = TitleDirectiveRegex.Replace(html, String.Empty);
+            }
+
+            Match layoutMatch = ReferenceDirectiveRegex.Match(html);
+
+            if (layoutMatch.Success)
+            {
+                html = ParseLayout(layoutMatch, html);
+
+                if (titleMatch.Success)
+                {
+                    html = TitleRegex.Replace(html, m => String.Concat("<title>", titleMatch.Groups[1].Value, "</title>"));
+                }
+            }
+
+            return html;
         }
 
         private string ParseLayout(Match layoutMatch, string html)
