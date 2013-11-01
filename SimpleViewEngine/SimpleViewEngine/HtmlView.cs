@@ -26,13 +26,19 @@ namespace SimpleViewEngine
         private static readonly Regex TitleRegex = new Regex(@"<title>.*</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex TitleDirectiveRegex = new Regex(@"<!--\s*#title value=\""(.*)\""\s*-->",
-                                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                                                                      RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex HeadDirectiveRegex = new Regex(@"<!--\s*#head\s*-->",
                                                                      RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         private static readonly Regex HeadBodyDirectiveRegex = new Regex(@"<!--\s*#head(.*)/#head\s*-->",
+                                                                         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+        private static readonly Regex ScriptsDirectiveRegex = new Regex(@"<!--\s*#scripts\s*-->",
                                                                         RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+        private static readonly Regex ScriptsBodyDirectiveRegex = new Regex(@"<!--\s*#scripts(.*)/#scripts\s*-->",
+                                                                            RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         private static readonly Regex BodyDirectiveRegex = new Regex(@"<!--\s*#body\s*-->",
                                                                      RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -167,6 +173,20 @@ namespace SimpleViewEngine
             else
             {
                 layoutHtml = HeadDirectiveRegex.Replace(layoutHtml, String.Empty);
+            }
+
+            Match scriptsHtmlMatch = ScriptsBodyDirectiveRegex.Match(html);
+
+            if (scriptsHtmlMatch.Success)
+            {
+                string scriptsHtml = scriptsHtmlMatch.Groups[1].Value;
+
+                html = ScriptsBodyDirectiveRegex.Replace(html, String.Empty);
+                layoutHtml = ScriptsDirectiveRegex.Replace(layoutHtml, TrimLine(scriptsHtml));
+            }
+            else
+            {
+                layoutHtml = ScriptsDirectiveRegex.Replace(layoutHtml, String.Empty);
             }
 
             layoutHtml = BodyDirectiveRegex.Replace(layoutHtml, TrimLine(html));
