@@ -25,7 +25,7 @@ namespace SimpleViewEngine
 
         private static readonly Regex TitleRegex = new Regex(@"<title>.*</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex TitleDirectiveRegex = new Regex(@"<!--\s*#title value=\""(.*)\""\s*-->",
+        private static readonly Regex TitleDirectiveRegex = new Regex(@"<!--\s*#title text=\""(.*)\""\s*-->",
                                                                       RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex HeadDirectiveRegex = new Regex(@"<!--\s*#head\s*-->",

@@ -55,7 +55,6 @@
     <Compile Include="Controllers\HtmlControllerActionInvoker.cs" />
     <Compile Include="Controllers\HtmlController.cs" />
     <Compile Include="Controllers\HtmlControllerFactory.cs" />
-    <Compile Include="Controllers\HttpGetHeadAttribute.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HtmlView.cs" />
     <Compile Include="HtmlViewEngine.cs" />

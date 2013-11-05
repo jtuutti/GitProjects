@@ -1,34 +1,45 @@
 ﻿using System;
+using System.Net;
 using System.Web.Mvc;
 
 namespace SimpleViewEngine.Controllers
 {
     /// <summary>
-    /// Represents a controller that returns <see cref="HtmlView"/> instances and
-    /// also provides support for HEAD and OPTIONS HTTP methods.
+    /// Represents a controller that returns <see cref="HtmlView"/> instances based
+    /// on routing rules.
     /// </summary>
     public class HtmlController : Controller
     {
         /// <summary>
-        /// Returns an HTML view based on routing.
+        /// Called when a request matches this controller, but no method with the specified action name is found in the controller.
         /// </summary>
-        /// <returns>A view result.</returns>
-        [HttpGetHead]
-        public ViewResult Index()
+        /// <param name="actionName">The name of the attempted action.</param>
+        protected override void HandleUnknownAction(string actionName)
         {
-            return View();
-        }
+            if (String.IsNullOrEmpty(actionName))
+            {
+                var notFoundResult = new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                notFoundResult.ExecuteResult(ControllerContext);
+                return;
+            }
 
-        /// <summary>
-        /// Returns a list of allowed HTTP methods in the HTTP Allow header.
-        /// </summary>
-        /// <returns>An empty result.</returns>
-        [HttpOptions, ActionName("Index")]
-        public EmptyResult Options()
-        {
-            Response.AppendHeader(HttpGetHeadAttribute.AllowHeader, HttpGetHeadAttribute.AllowedMethods);
+            if (!String.Equals(HttpVerbs.Get.ToString(), HttpContext.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) &&
+                !String.Equals(HttpVerbs.Head.ToString(), HttpContext.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
+            {
+                var notFoundResult = new HttpStatusCodeResult(HttpStatusCode.MethodNotAllowed);
+                notFoundResult.ExecuteResult(ControllerContext);
+                return;
+            }
 
-            return new EmptyResult();
+            try
+            {
+                View(actionName).ExecuteResult(ControllerContext);
+            }
+            catch (InvalidOperationException)
+            {
+                var notFoundResult = new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                notFoundResult.ExecuteResult(ControllerContext);
+            }
         }
     }
 }
