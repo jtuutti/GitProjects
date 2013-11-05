@@ -149,4 +149,8 @@
     <value>Controller type '{0}' could not be created or does not subclass the IController interface</value>
     <comment>Controller type '{0}' could not be created or does not subclass the IController interface</comment>
   </data>
+  <data name="UnsupportedLayoutName" xml:space="preserve">
+    <value>Layouts cannot be referenced by name. Use the 'url' attribute instead and specify a relative path to the layout file.</value>
+    <comment>Layouts cannot be referenced by name. Use the 'url' attribute instead and specify a relative path to the layout file.</comment>
+  </data>
 </root>

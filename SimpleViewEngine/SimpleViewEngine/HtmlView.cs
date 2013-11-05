@@ -20,7 +20,7 @@ namespace SimpleViewEngine
         private static readonly Regex ReferenceDirectiveRegex = new Regex(@"^<!--\s*#layout\s+(.+)\s*=\s*\""(.+)\""\s*-->\s*",
                                                                           RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex IncludeFileDirectiveRegex = new Regex(@"<!--\s*#include\s+(.+)\s*=\s*\""(.+)\""\s*-->",
+        private static readonly Regex PartialViewDirectiveRegex = new Regex(@"<!--\s*#partial\s+(.+)\s*=\s*\""(.+)\""\s*-->",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex TitleRegex = new Regex(@"<title>.*</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -101,7 +101,7 @@ namespace SimpleViewEngine
                 html = RemoveViewDirectives(html);
             }
 
-            string fileHtml = Parse(html, m_filePath);
+            string fileHtml = Parse(viewContext.Controller.ControllerContext, html, m_filePath);
 
             fileHtml = LinkRegex.Replace(fileHtml, m =>
             {
@@ -112,6 +112,8 @@ namespace SimpleViewEngine
 
                 return String.Concat(group1, group2, group3, applicationPath, group5);
             });
+
+            
 
             writer.Write(fileHtml);
         }
@@ -194,6 +196,29 @@ namespace SimpleViewEngine
             return layoutHtml;
         }
 
+        private static string ParsePartialView(ControllerContext controllerContext, string viewName)
+        {
+            if (String.IsNullOrEmpty(viewName))
+            {
+                return String.Empty;
+            }
+
+            using (var writer = new StringWriter())
+            {
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(controllerContext, viewName);
+
+                if (viewResult == null || viewResult.View == null)
+                {
+                    throw new FileNotFoundException(String.Format(Resources.PartialViewNotFound, viewName));
+                }
+
+                var viewContext = new ViewContext(controllerContext, viewResult.View, new ViewDataDictionary(), new TempDataDictionary(), writer);
+                viewResult.View.Render(viewContext, writer);
+
+                return writer.GetStringBuilder().ToString();
+            }
+        }
+
         private static string RemoveViewDirectives(string html)
         {
             Match titleMatch = TitleDirectiveRegex.Match(html);
@@ -244,30 +269,6 @@ namespace SimpleViewEngine
             return html;
         }
 
-        private string ParseLayout(Match layoutMatch, string html)
-        {
-            string layoutFileType = layoutMatch.Result("$1").Trim();
-            string layoutFilePath;
-
-            if (String.Equals("virtual", layoutFileType, StringComparison.OrdinalIgnoreCase))
-            {
-                layoutFilePath = MapPath(layoutMatch.Result("$2"));
-            }
-            else if (String.Equals("file", layoutFileType, StringComparison.OrdinalIgnoreCase))
-            {
-                layoutFilePath = layoutMatch.Result("$2").Trim();
-            }
-            else
-            {
-                return html;
-            }
-
-            html = ReferenceDirectiveRegex.Replace(html, String.Empty);
-            html = GenerateLayout(layoutFilePath, html);
-
-            return html;
-        }
-
         private string MapPath(string viewPath)
         {
             if (viewPath.IndexOf('~') == 0)
@@ -278,32 +279,51 @@ namespace SimpleViewEngine
             return m_filePath.Substring(0, m_filePath.LastIndexOf('\\') + 1) + viewPath.Trim();
         }
 
-        private string Parse(string html, string masterFilePath)
+        private string ParseLayout(Match layoutMatch, string html)
         {
-            return IncludeFileDirectiveRegex.Replace(html, match => GetMatch(match, masterFilePath));
+            string layoutFileType = layoutMatch.Result("$1").Trim().ToUpperInvariant(), layoutFilePath;
+            
+            switch (layoutFileType)
+            {
+                case "URL":
+                    layoutFilePath = MapPath(layoutMatch.Result("$2"));
+                    break;
+                case "FILE":
+                    layoutFilePath = layoutMatch.Result("$2").Trim();
+                    break;
+                case "NAME":
+                    throw new InvalidOperationException(Resources.UnsupportedLayoutName);
+                default:
+                    return html;
+            }
+
+            html = ReferenceDirectiveRegex.Replace(html, String.Empty);
+            html = GenerateLayout(layoutFilePath, html);
+
+            return html;
         }
 
-        private string GetMatch(Match match, string masterFilePath)
+        private string GetPartialMatch(ControllerContext controllerContext, Match match, string masterFilePath)
         {
             if (!match.Success)
             {
                 return String.Empty;
             }
 
-            string fileType = match.Result("$1").Trim();
-            string filePath;
+            string fileType = match.Result("$1").Trim().ToUpperInvariant(), filePath;
 
-            if (String.Equals("virtual", fileType, StringComparison.OrdinalIgnoreCase))
+            switch (fileType)
             {
-                filePath = MapPath(match.Result("$2"));
-            }
-            else if (String.Equals("file", fileType, StringComparison.OrdinalIgnoreCase))
-            {
-                filePath = match.Result("$2").Trim();
-            }
-            else
-            {
-                return match.Result("$0");
+                case "URL":
+                    filePath = MapPath(match.Result("$2").Trim());
+                    break;
+                case "FILE":
+                    filePath = match.Result("$2").Trim();
+                    break;
+                case "NAME":
+                    return ParsePartialView(controllerContext, match.Result("$2").Trim());
+                default:
+                    return match.Result("$0");
             }
 
             if (String.Equals(masterFilePath, filePath, StringComparison.OrdinalIgnoreCase))
@@ -318,7 +338,12 @@ namespace SimpleViewEngine
 
             string html = ReadHtml(filePath, ViewType.PartialView);
 
-            return Parse(html, filePath);
+            return Parse(controllerContext, html, filePath);
+        }
+
+        private string Parse(ControllerContext controllerContext, string html, string masterFilePath)
+        {
+            return PartialViewDirectiveRegex.Replace(html, match => GetPartialMatch(controllerContext, match, masterFilePath));
         }
     }
 }
