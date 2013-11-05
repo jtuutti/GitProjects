@@ -19,7 +19,7 @@ namespace SimpleViewEngine
         private const string PartialViewExtension = ".partial.html";
         private const string ViewExtension = ".html";
 
-        private static readonly Regex referenceDirectiveRegex = new Regex(@"^<!--\s*#layout\s+(.+)\s*=\s*\""(.+)\""\s*-->\s*",
+        private static readonly Regex referenceDirectiveRegex = new Regex(@"<!--\s*#layout\s+(.+)\s*=\s*\""(.+)\""\s*-->",
                                                                           RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex partialViewDirectiveRegex = new Regex(@"<!--\s*#partial\s+(.+)\s*=\s*\""(.+)\""\s*-->",
@@ -351,7 +351,14 @@ namespace SimpleViewEngine
                     filePath = match.Result("$2").Trim();
                     break;
                 case "NAME":
-                    return ParsePartialView(context, match.Result("$2").Trim());
+                    string viewName = match.Result("$2").Trim();
+
+                    if (masterFilePath != null && masterFilePath.EndsWith(viewName + PartialViewExtension, StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new RecursiveViewReferenceException(String.Format(Resources.RecursivePartialViewReference, masterFilePath));
+                    }
+
+                    return ParsePartialView(context, viewName);
                 default:
                     return match.Result("$0");
             }
