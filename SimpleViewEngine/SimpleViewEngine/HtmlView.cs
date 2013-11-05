@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,6 +15,7 @@ namespace SimpleViewEngine
     public class HtmlView : IView
     {
         private const string LayoutViewExtension = ".layout.html";
+        private const string LayoutViewLocation = "~/views/{0}" + LayoutViewExtension;
         private const string PartialViewExtension = ".partial.html";
         private const string ViewExtension = ".html";
 
@@ -292,7 +294,8 @@ namespace SimpleViewEngine
                     layoutFilePath = layoutMatch.Result("$2").Trim();
                     break;
                 case "NAME":
-                    throw new InvalidOperationException(Resources.UnsupportedLayoutName);
+                    layoutFilePath = MapPath(String.Format(CultureInfo.InvariantCulture, LayoutViewLocation, layoutMatch.Result("$2").Trim()));
+                    break;
                 default:
                     return html;
             }
