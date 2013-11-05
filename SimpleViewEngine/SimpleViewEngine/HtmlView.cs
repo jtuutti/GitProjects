@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using SimpleViewEngine.Properties;
@@ -42,8 +43,9 @@ namespace SimpleViewEngine
         private static readonly Regex ScriptsBodyDirectiveRegex = new Regex(@"<!--\s*#scripts(.*)/#scripts\s*-->",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-        private static readonly Regex BodyDirectiveRegex = new Regex(@"<!--\s*#body\s*-->",
-                                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex ModelDirectiveRegex = new Regex(@"<!--\s*#model\s*-->", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex BodyDirectiveRegex = new Regex(@"<!--\s*#body\s*-->", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex LinkRegex = new Regex(@"(\s+)(src|href|data\-[A-Za-z0-9_\-]*\-?href)(\s*=\s*[\""'])(~)([^\""^']*[\""'])",
                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -96,7 +98,7 @@ namespace SimpleViewEngine
 
             if (m_filePath.IndexOf(PartialViewExtension, StringComparison.OrdinalIgnoreCase) < 0)
             {
-                html = ParseViewDirectives(html);
+                html = GenerateModel(ParseViewDirectives(html), viewContext.ViewData.Model);
             }
             else
             {
@@ -114,8 +116,6 @@ namespace SimpleViewEngine
 
                 return String.Concat(group1, group2, group3, applicationPath, group5);
             });
-
-            
 
             writer.Write(fileHtml);
         }
@@ -154,6 +154,34 @@ namespace SimpleViewEngine
             string html = File.ReadAllText(filePath, Encoding.UTF8);
 
             return TrimLine(html);
+        }
+
+        private static string GenerateModel(string html, object model)
+        {
+            Match modelMatch = ModelDirectiveRegex.Match(html);
+
+            if (!modelMatch.Success)
+            {
+                return html;
+            }
+
+            if (model != null)
+            {
+                string serializedModel = Json.Encode(model);
+
+                var modelBuilder = new StringBuilder();
+                modelBuilder.AppendLine("<script type=\"text/javascript\">");
+                modelBuilder.Append("window.Model = ").Append(serializedModel).AppendLine(";");
+                modelBuilder.AppendLine("</script>");
+
+                html = ModelDirectiveRegex.Replace(html, TrimLine(modelBuilder.ToString()));
+            }
+            else
+            {
+                html = ModelDirectiveRegex.Replace(html, String.Empty);
+            }
+
+            return html;
         }
 
         private static string GenerateLayout(string layoutFilePath, string html)

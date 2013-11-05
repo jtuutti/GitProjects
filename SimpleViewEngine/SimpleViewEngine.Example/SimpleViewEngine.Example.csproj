@@ -60,6 +60,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CopyrightController.cs" />
+    <Compile Include="Controllers\HomeAltController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -73,6 +74,9 @@
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\HomeAlt\index-details.partial.html" />
+    <Content Include="Views\HomeAlt\index-subdetails.partial.html" />
+    <Content Include="Views\HomeAlt\index.html" />
     <Content Include="Views\Home\index-details.partial.html" />
     <Content Include="Views\Home\index-subdetails.partial.html" />
     <Content Include="Views\Home\index.html" />
