@@ -52,7 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\HtmlControllerActionInvoker.cs" />
     <Compile Include="Controllers\HtmlController.cs" />
     <Compile Include="Controllers\HtmlControllerFactory.cs" />
     <Compile Include="GlobalSuppressions.cs" />

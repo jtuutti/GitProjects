@@ -21,10 +21,7 @@ namespace SimpleViewEngine.Controllers
         {
             if (controllerType == null)
             {
-                return new HtmlController
-                {
-                    ActionInvoker = new HtmlControllerActionInvoker()
-                };
+                return new HtmlController();
             }
 
             IDependencyResolver dependencyResolver = DependencyResolver.Current;
