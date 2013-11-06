@@ -69,6 +69,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RecursiveViewReferenceException.cs" />
+    <Compile Include="Utilities\RegularExpressions.cs" />
+    <Compile Include="Utilities\ModelScriptTagCreator.cs" />
+    <Compile Include="Utilities\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

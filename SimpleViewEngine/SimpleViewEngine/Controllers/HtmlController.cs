@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Web.Mvc;
+using System.Web.SessionState;
 
 namespace SimpleViewEngine.Controllers
 {
@@ -8,6 +9,7 @@ namespace SimpleViewEngine.Controllers
     /// Represents a controller that returns <see cref="HtmlView"/> instances based
     /// on routing rules.
     /// </summary>
+    [SessionState(SessionStateBehavior.Disabled)]
     public class HtmlController : Controller
     {
         private const string ActionNotFoundPartialMessage = "was not found";
