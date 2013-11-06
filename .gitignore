@@ -25,6 +25,7 @@
 *.sdf
 *.opensdf
 *.unsuccessfulbuild
+*.sln.DotSettings
 ipch/
 obj/
 [Bb]in
