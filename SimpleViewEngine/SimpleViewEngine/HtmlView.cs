@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -17,6 +18,7 @@ namespace SimpleViewEngine
         private const string LayoutViewExtension = ".layout.html";
         private const string LayoutViewLocation = "~/views/{0}" + LayoutViewExtension;
         private const string PartialViewExtension = ".partial.html";
+        private const string RenderedPartialFilePathKey = "_RenderedPartialFilePaths";
         private const string ViewExtension = ".html";
 
         private static readonly Regex referenceDirectiveRegex = new Regex(@"<!--\s*#layout\s+(.+)\s*=\s*\""(.+)\""\s*-->",
@@ -93,18 +95,18 @@ namespace SimpleViewEngine
                 throw new FileNotFoundException(String.Format(Resources.ViewNotFound, m_filePath));
             }
 
-            string html = ReadHtml(m_filePath, ViewType.View);
+            string html = ReadViewFileHtml(m_filePath, ViewType.View);
 
             if (m_filePath.IndexOf(PartialViewExtension, StringComparison.OrdinalIgnoreCase) < 0)
             {
-                html = GenerateModel(ParseViewDirectives(viewContext, html), viewContext.ViewData.Model);
+                html = GenerateModelScript(ParseViewEngineDirectives(viewContext, html), viewContext.ViewData.Model);
             }
             else
             {
-                html = RemoveViewDirectives(html);
+                html = RemoveViewEngineDirectives(html);
             }
 
-            string fileHtml = Parse(viewContext, html, m_filePath);
+            string fileHtml = ParseViewContent(viewContext, html);
 
             fileHtml = linkRegex.Replace(fileHtml, m =>
             {
@@ -117,45 +119,11 @@ namespace SimpleViewEngine
             });
 
             writer.Write(fileHtml);
+
+            viewContext.HttpContext.Items[RenderedPartialFilePathKey] = null;
         }
 
-        private static string TrimLine(string line)
-        {
-            return line.Trim(' ', '\n', '\r', '\t');
-        }
-
-        private static string ReadHtml(string filePath, ViewType viewType)
-        {
-            filePath = filePath.Trim(' ', '\t');
-
-            switch (viewType)
-            {
-                case ViewType.PartialView:
-                    if (!filePath.EndsWith(PartialViewExtension, StringComparison.OrdinalIgnoreCase))
-                    {
-                        throw new InvalidOperationException(String.Format(Resources.InvalidPartialViewExtension, filePath));
-                    }
-                    break;
-                case ViewType.Layout:
-                    if (!filePath.EndsWith(LayoutViewExtension, StringComparison.OrdinalIgnoreCase))
-                    {
-                        throw new InvalidOperationException(String.Format(Resources.InvalidLayoutViewExtension, filePath));
-                    }
-                    break;
-                default:
-                    if (!filePath.EndsWith(ViewExtension, StringComparison.OrdinalIgnoreCase))
-                    {
-                        throw new InvalidOperationException(String.Format(Resources.InvalidViewExtension, filePath));
-                    }
-                    break;
-            }
-
-            string html = File.ReadAllText(filePath, Encoding.UTF8);
-
-            return TrimLine(html);
-        }
-
-        private static string GenerateModel(string html, object model)
+        private static string GenerateModelScript(string html, object model)
         {
             Match modelMatch = modelDirectiveRegex.Match(html);
 
@@ -183,14 +151,29 @@ namespace SimpleViewEngine
             return html;
         }
 
-        private static string GenerateLayout(string layoutFilePath, string html)
+        private static Stack<string> GetRenderedPartialFilePaths(ControllerContext context)
+        {
+            var filePaths = context.HttpContext.Items[RenderedPartialFilePathKey] as Stack<string>;
+
+            if (filePaths != null)
+            {
+                return filePaths;
+            }
+
+            filePaths = new Stack<string>();
+            context.HttpContext.Items[RenderedPartialFilePathKey] = filePaths;
+
+            return filePaths;
+        }
+
+        private static string ParseLayoutViewContent(string layoutFilePath, string html)
         {
             if (!File.Exists(layoutFilePath))
             {
                 throw new FileNotFoundException(String.Format(Resources.LayoutViewNotFound, layoutFilePath));
             }
 
-            string layoutHtml = ReadHtml(layoutFilePath, ViewType.Layout);
+            string layoutHtml = ReadViewFileHtml(layoutFilePath, ViewType.Layout);
 
             Match headHtmlMatch = headBodyDirectiveRegex.Match(html);
 
@@ -225,30 +208,38 @@ namespace SimpleViewEngine
             return layoutHtml;
         }
 
-        private static string ParsePartialView(ControllerContext context, string viewName)
+        private static string ReadViewFileHtml(string filePath, ViewType viewType)
         {
-            if (String.IsNullOrEmpty(viewName))
+            filePath = filePath.Trim(' ', '\t');
+
+            switch (viewType)
             {
-                return String.Empty;
+                case ViewType.PartialView:
+                    if (!filePath.EndsWith(PartialViewExtension, StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new InvalidOperationException(String.Format(Resources.InvalidPartialViewExtension, filePath));
+                    }
+                    break;
+                case ViewType.Layout:
+                    if (!filePath.EndsWith(LayoutViewExtension, StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new InvalidOperationException(String.Format(Resources.InvalidLayoutViewExtension, filePath));
+                    }
+                    break;
+                default:
+                    if (!filePath.EndsWith(ViewExtension, StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new InvalidOperationException(String.Format(Resources.InvalidViewExtension, filePath));
+                    }
+                    break;
             }
 
-            using (var writer = new StringWriter())
-            {
-                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(context, viewName);
+            string html = File.ReadAllText(filePath, Encoding.UTF8);
 
-                if (viewResult == null || viewResult.View == null)
-                {
-                    throw new FileNotFoundException(String.Format(Resources.PartialViewNotFound, viewName));
-                }
-
-                var viewContext = new ViewContext(context, viewResult.View, new ViewDataDictionary(), new TempDataDictionary(), writer);
-                viewResult.View.Render(viewContext, writer);
-
-                return writer.GetStringBuilder().ToString();
-            }
+            return TrimLine(html);
         }
-
-        private static string RemoveViewDirectives(string html)
+        
+        private static string RemoveViewEngineDirectives(string html)
         {
             Match titleMatch = titleDirectiveRegex.Match(html);
 
@@ -274,28 +265,52 @@ namespace SimpleViewEngine
             return html;
         }
 
-        private string ParseViewDirectives(ControllerContext context, string html)
+        private static string RenderPartialView(ControllerContext context, string viewName)
         {
-            Match titleMatch = titleDirectiveRegex.Match(html);
-
-            if (titleMatch.Success)
+            if (String.IsNullOrEmpty(viewName))
             {
-                html = titleDirectiveRegex.Replace(html, String.Empty);
+                return String.Empty;
             }
 
-            Match layoutMatch = referenceDirectiveRegex.Match(html);
-
-            if (layoutMatch.Success)
+            using (var writer = new StringWriter())
             {
-                html = ParseLayout(context, layoutMatch, html);
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(context, viewName);
 
-                if (titleMatch.Success)
+                if (viewResult == null || viewResult.View == null)
                 {
-                    html = titleRegex.Replace(html, m => String.Concat("<title>", titleMatch.Groups[1].Value, "</title>"));
+                    throw new FileNotFoundException(String.Format(Resources.PartialViewNotFound, viewName));
                 }
-            }
 
-            return html;
+                var htmlView = viewResult.View as HtmlView;
+                Stack<string> partialViewStack = null;
+
+                if (htmlView != null && htmlView.m_filePath != null)
+                {
+                    partialViewStack = GetRenderedPartialFilePaths(context);
+
+                    if (partialViewStack.Contains(htmlView.m_filePath.ToUpperInvariant()))
+                    {
+                        throw new RecursiveViewReferenceException(String.Format(Resources.RecursivePartialViewReference, htmlView.m_filePath));
+                    }
+
+                    partialViewStack.Push(htmlView.m_filePath.ToUpperInvariant());
+                }
+
+                var viewContext = new ViewContext(context, viewResult.View, new ViewDataDictionary(), new TempDataDictionary(), writer);
+                viewResult.View.Render(viewContext, writer);
+
+                if (partialViewStack != null)
+                {
+                    partialViewStack.Pop();
+                }
+
+                return writer.GetStringBuilder().ToString();
+            }
+        }
+
+        private static string TrimLine(string line)
+        {
+            return line.Trim(' ', '\n', '\r', '\t');
         }
 
         private string MapPath(ControllerContext context, string viewPath)
@@ -308,7 +323,7 @@ namespace SimpleViewEngine
             return m_filePath.Substring(0, m_filePath.LastIndexOf('\\') + 1) + viewPath.Trim();
         }
 
-        private string ParseLayout(ControllerContext context, Match layoutMatch, string html)
+        private string ParseLayoutView(ControllerContext context, Match layoutMatch, string html)
         {
             string layoutFileType = layoutMatch.Result("$1").Trim().ToUpperInvariant(), layoutFilePath;
             
@@ -328,12 +343,12 @@ namespace SimpleViewEngine
             }
 
             html = referenceDirectiveRegex.Replace(html, String.Empty);
-            html = GenerateLayout(layoutFilePath, html);
+            html = ParseLayoutViewContent(layoutFilePath, html);
 
             return html;
         }
 
-        private string GetPartialMatch(ControllerContext context, Match match, string masterFilePath)
+        private string ParsePartialView(ControllerContext context, Match match)
         {
             if (!match.Success)
             {
@@ -351,21 +366,9 @@ namespace SimpleViewEngine
                     filePath = match.Result("$2").Trim();
                     break;
                 case "NAME":
-                    string viewName = match.Result("$2").Trim();
-
-                    if (masterFilePath != null && masterFilePath.EndsWith(viewName + PartialViewExtension, StringComparison.OrdinalIgnoreCase))
-                    {
-                        throw new RecursiveViewReferenceException(String.Format(Resources.RecursivePartialViewReference, masterFilePath));
-                    }
-
-                    return ParsePartialView(context, viewName);
+                    return RenderPartialView(context, match.Result("$2").Trim());
                 default:
                     return match.Result("$0");
-            }
-
-            if (String.Equals(masterFilePath, filePath, StringComparison.OrdinalIgnoreCase))
-            {
-                throw new RecursiveViewReferenceException(String.Format(Resources.RecursivePartialViewReference, filePath));
             }
 
             if (filePath == null || !File.Exists(filePath))
@@ -373,14 +376,50 @@ namespace SimpleViewEngine
                 throw new FileNotFoundException(String.Format(Resources.PartialViewNotFound, filePath));
             }
 
-            string html = ReadHtml(filePath, ViewType.PartialView);
+            Stack<string> partialViewStack = GetRenderedPartialFilePaths(context);
 
-            return Parse(context, html, filePath);
+            if (partialViewStack.Contains(filePath.ToUpperInvariant()))
+            {
+                throw new RecursiveViewReferenceException(String.Format(Resources.RecursivePartialViewReference, filePath));
+            }
+
+            partialViewStack.Push(filePath.ToUpperInvariant());
+
+            string html = ReadViewFileHtml(filePath, ViewType.PartialView);
+            html = ParseViewContent(context, html);
+
+            partialViewStack.Pop();
+
+            return html;
         }
 
-        private string Parse(ControllerContext context, string html, string masterFilePath)
+        private string ParseViewContent(ControllerContext context, string html)
         {
-            return partialViewDirectiveRegex.Replace(html, match => GetPartialMatch(context, match, masterFilePath));
+            return partialViewDirectiveRegex.Replace(html, match => ParsePartialView(context, match));
+        }
+
+        private string ParseViewEngineDirectives(ControllerContext context, string html)
+        {
+            Match titleMatch = titleDirectiveRegex.Match(html);
+
+            if (titleMatch.Success)
+            {
+                html = titleDirectiveRegex.Replace(html, String.Empty);
+            }
+
+            Match layoutMatch = referenceDirectiveRegex.Match(html);
+
+            if (layoutMatch.Success)
+            {
+                html = ParseLayoutView(context, layoutMatch, html);
+
+                if (titleMatch.Success)
+                {
+                    html = titleRegex.Replace(html, m => String.Concat("<title>", titleMatch.Groups[1].Value, "</title>"));
+                }
+            }
+
+            return html;
         }
     }
 }
