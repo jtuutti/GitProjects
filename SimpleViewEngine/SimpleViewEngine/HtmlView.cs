@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
 using SimpleViewEngine.Properties;
 using SimpleViewEngine.Utilities;
@@ -20,17 +23,25 @@ namespace SimpleViewEngine
         private const string LayoutViewLocation = "~/views/{0}" + LayoutViewExtension;
         private const string NameValueType = "NAME";
         private const string PartialViewExtension = ".partial.html";
+        private const string ReferencedFilePathKey = "_ReferencedFilePaths";
         private const string RenderedPartialFilePathKey = "_RenderedPartialFilePaths";
         private const string UrlValueType = "URL";
         private const string ViewExtension = ".html";
+        private const string ViewKeyPrefix = "HTMLView_";
 
         private readonly string m_filePath;
+        private readonly bool m_cacheHtml;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HtmlView"/> class.
         /// </summary>
         /// <param name="filePath">The local view file path.</param>
-        public HtmlView(string filePath)
+        /// <param name="cacheHtml">
+        /// A <see cref="bool"/> indicating whether the view HTML content should be cached
+        /// in the ASP .NET server-side cache. File dependencies monitor file changes and
+        /// invalidate cache if the content had been changed.
+        /// </param>
+        public HtmlView(string filePath, bool cacheHtml)
         {
             if (filePath == null)
             {
@@ -38,6 +49,7 @@ namespace SimpleViewEngine
             }
 
             m_filePath = filePath;
+            m_cacheHtml = cacheHtml;
         }
 
         /// <summary>
@@ -68,32 +80,54 @@ namespace SimpleViewEngine
                 throw new FileNotFoundException(String.Format(Resources.ViewNotFound, m_filePath));
             }
 
+
+            bool isView = m_filePath.IndexOf(PartialViewExtension, StringComparison.OrdinalIgnoreCase) < 0;
+            string cacheKey = null;
+
+            if (m_cacheHtml && isView)
+            {
+                cacheKey = String.Concat(ViewKeyPrefix, m_filePath.ToUpperInvariant());
+
+                var cachedHtml = HttpRuntime.Cache[cacheKey] as string;
+
+                if (!String.IsNullOrEmpty(cachedHtml))
+                {
+                    writer.Write(GenerateModelScript(cachedHtml, viewContext.ViewData.Model));
+                    return;
+                }
+            }
+
+            GetReferencedFilePaths(viewContext).Add(m_filePath);
+
             string html = ReadViewFileHtml(m_filePath, ViewType.View);
+            html = isView ? ParseViewEngineDirectives(viewContext, html) : RemoveViewEngineDirectives(html);
 
-            if (m_filePath.IndexOf(PartialViewExtension, StringComparison.OrdinalIgnoreCase) < 0)
-            {
-                html = GenerateModelScript(ParseViewEngineDirectives(viewContext, html), viewContext.ViewData.Model);
-            }
-            else
-            {
-                html = RemoveViewEngineDirectives(html);
-            }
+            string viewHtml = ParseViewContent(viewContext, html);
 
-            string fileHtml = ParseViewContent(viewContext, html);
-
-            fileHtml = RegularExpressions.Link.Replace(fileHtml, m =>
+            viewHtml = RegularExpressions.Link.Replace(viewHtml, m =>
             {
                 string group1 = m.Result("$1"), group2 = m.Result("$2"), group3 = m.Result("$3"), group5 = m.Result("$5");
                 string applicationPath = viewContext.HttpContext.Request.ApplicationPath != null ?
-                                            viewContext.HttpContext.Request.ApplicationPath.TrimEnd('/') :
-                                            String.Empty;
+                    viewContext.HttpContext.Request.ApplicationPath.TrimEnd('/') :
+                    String.Empty;
 
                 return String.Concat(group1, group2, group3, applicationPath, group5);
             });
 
-            writer.Write(fileHtml);
-
             viewContext.HttpContext.Items[RenderedPartialFilePathKey] = null;
+
+            if (cacheKey != null)
+            {
+                HttpRuntime.Cache.Add(cacheKey,
+                                      viewHtml,
+                                      new CacheDependency(GetReferencedFilePaths(viewContext).ToArray()),
+                                      DateTime.Now.AddMinutes(60),
+                                      Cache.NoSlidingExpiration,
+                                      CacheItemPriority.Normal,
+                                      null);
+            }
+
+            writer.Write(isView ? GenerateModelScript(viewHtml, viewContext.ViewData.Model) : viewHtml);
         }
 
         private static string GenerateModelScript(string html, object model)
@@ -108,6 +142,21 @@ namespace SimpleViewEngine
             return RegularExpressions.ModelDirective.Replace(html, model != null ?
                                                                         ModelScriptTagCreator.Create(model) :
                                                                         String.Empty);
+        }
+
+        private static HashSet<string> GetReferencedFilePaths(ControllerContext context)
+        {
+            var filePaths = context.HttpContext.Items[ReferencedFilePathKey] as HashSet<string>;
+
+            if (filePaths != null)
+            {
+                return filePaths;
+            }
+
+            filePaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            context.HttpContext.Items[ReferencedFilePathKey] = filePaths;
+
+            return filePaths;
         }
 
         private static Stack<string> GetRenderedPartialFilePaths(ControllerContext context)
@@ -125,12 +174,14 @@ namespace SimpleViewEngine
             return filePaths;
         }
 
-        private static string ParseLayoutViewContent(string layoutFilePath, string html)
+        private static string ParseLayoutViewContent(ControllerContext context, string layoutFilePath, string html)
         {
             if (!File.Exists(layoutFilePath))
             {
                 throw new FileNotFoundException(String.Format(Resources.LayoutViewNotFound, layoutFilePath));
             }
+
+            GetReferencedFilePaths(context).Add(layoutFilePath);
 
             string layoutHtml = ReadViewFileHtml(layoutFilePath, ViewType.Layout);
 
@@ -243,14 +294,18 @@ namespace SimpleViewEngine
 
                 if (htmlView != null && htmlView.m_filePath != null)
                 {
+                    GetReferencedFilePaths(context).Add(htmlView.m_filePath);
+
+                    string upperCaseFilePath = htmlView.m_filePath.ToUpperInvariant();
+
                     partialViewStack = GetRenderedPartialFilePaths(context);
 
-                    if (partialViewStack.Contains(htmlView.m_filePath.ToUpperInvariant()))
+                    if (partialViewStack.Contains(upperCaseFilePath))
                     {
                         throw new RecursiveViewReferenceException(String.Format(Resources.RecursivePartialViewReference, htmlView.m_filePath));
                     }
 
-                    partialViewStack.Push(htmlView.m_filePath.ToUpperInvariant());
+                    partialViewStack.Push(upperCaseFilePath);
                 }
 
                 var viewContext = new ViewContext(context, viewResult.View, new ViewDataDictionary(), new TempDataDictionary(), writer);
@@ -297,7 +352,7 @@ namespace SimpleViewEngine
             }
 
             html = RegularExpressions.ReferenceDirective.Replace(html, String.Empty);
-            html = ParseLayoutViewContent(layoutFilePath, html);
+            html = ParseLayoutViewContent(context, layoutFilePath, html);
 
             return html;
         }
@@ -339,6 +394,7 @@ namespace SimpleViewEngine
                 throw new RecursiveViewReferenceException(String.Format(Resources.RecursivePartialViewReference, partialViewFilePath));
             }
 
+            GetReferencedFilePaths(context).Add(partialViewFilePath);
             partialViewStack.Push(partialViewFilePath.ToUpperInvariant());
 
             string html = ReadViewFileHtml(partialViewFilePath, ViewType.PartialView);

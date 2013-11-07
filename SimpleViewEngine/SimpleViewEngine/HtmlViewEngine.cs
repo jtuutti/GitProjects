@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Web;
 using System.Web.Mvc;
+using SimpleViewEngine.Properties;
 
 namespace SimpleViewEngine
 {
@@ -8,11 +10,25 @@ namespace SimpleViewEngine
     /// </summary>
     public class HtmlViewEngine : VirtualPathProviderViewEngine
     {
+        private readonly bool m_cacheHtml;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HtmlViewEngine"/> class.
         /// </summary>
-        public HtmlViewEngine()
+        /// <param name="cacheHtml">
+        /// A <see cref="bool"/> indicating whether the view HTML content should be cached
+        /// in the ASP .NET server-side cache. File dependencies monitor file changes and
+        /// invalidate cache if the content had been changed.
+        /// </param>
+        public HtmlViewEngine(bool cacheHtml = true)
         {
+            if (cacheHtml && HttpRuntime.Cache == null)
+            {
+                throw new InvalidOperationException(Resources.UnavailableAspCache);
+            }
+
+            m_cacheHtml = cacheHtml;
+
             ViewLocationFormats = new[] { "~/views/{1}/{0}.html", "~/views/shared/{0}.html" };
             PartialViewLocationFormats = new[] { "~/views/{1}/{0}.partial.html", "~/views/shared/{0}.partial.html" };
             FileExtensions = new [] { "html" };
@@ -40,7 +56,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(partialPath);
 
-            return new HtmlView(filePath);
+            return new HtmlView(filePath, m_cacheHtml);
         }
 
         /// <summary>
@@ -67,7 +83,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(viewPath);
 
-            return new HtmlView(filePath);
+            return new HtmlView(filePath, m_cacheHtml);
         }
     }
 }

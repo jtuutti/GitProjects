@@ -153,4 +153,9 @@
     <value>Layouts cannot be referenced by name. Use the 'url' attribute instead and specify a relative path to the layout file.</value>
     <comment>Layouts cannot be referenced by name. Use the 'url' attribute instead and specify a relative path to the layout file.</comment>
   </data>
+  <data name="UnavailableAspCache" xml:space="preserve">
+    <value>ASP .NET server cache is disabled or not available. Instantiate the HtmlViewCache without the HTML cache by passing false in the constructor.</value>
+    <comment>ASP .NET server cache is disabled or not available. Instantiate the HtmlViewCache without the HTML cache by passing false in the constructor.
+</comment>
+  </data>
 </root>

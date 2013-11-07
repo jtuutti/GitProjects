@@ -124,6 +124,15 @@ namespace SimpleViewEngine.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ASP .NET server cache is disabled or not available. Instantiate the HtmlViewCache without the HTML cache by passing false in the constructor..
+        /// </summary>
+        internal static string UnavailableAspCache {
+            get {
+                return ResourceManager.GetString("UnavailableAspCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Layouts cannot be referenced by name. Use the &apos;url&apos; attribute instead and specify a relative path to the layout file..
         /// </summary>
         internal static string UnsupportedLayoutName {
