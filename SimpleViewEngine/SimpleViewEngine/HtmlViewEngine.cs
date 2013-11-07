@@ -10,24 +10,40 @@ namespace SimpleViewEngine
     /// </summary>
     public class HtmlViewEngine : VirtualPathProviderViewEngine
     {
-        private readonly bool m_cacheHtml;
+        private readonly DateTime? m_cacheExpiration;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HtmlViewEngine"/> class.
         /// </summary>
         /// <param name="cacheHtml">
         /// A <see cref="bool"/> indicating whether the view HTML content should be cached
-        /// in the ASP .NET server-side cache. File dependencies monitor file changes and
-        /// invalidate cache if the content had been changed.
+        /// in the ASP .NET server-side cache. The default expiration time is 60 minutes.
+        /// File dependencies monitor file changes and invalidate cache if the file content
+        /// had been changed.
         /// </param>
-        public HtmlViewEngine(bool cacheHtml = true)
+        public HtmlViewEngine(bool cacheHtml = true) :
+            this(cacheHtml ? TimeSpan.FromMinutes(60) : TimeSpan.Zero)
         {
-            if (cacheHtml && HttpRuntime.Cache == null)
-            {
-                throw new InvalidOperationException(Resources.UnavailableAspCache);
-            }
+        }
 
-            m_cacheHtml = cacheHtml;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HtmlViewEngine"/> class.
+        /// </summary>
+        /// <param name="cacheExpiration">
+        /// Sets the HTML cache expiration interval. Set this parameter to
+        /// <see cref="TimeSpan.Zero"/> to disable the HTML cache.
+        /// </param>
+        public HtmlViewEngine(TimeSpan cacheExpiration)
+        {
+            if (cacheExpiration > TimeSpan.Zero)
+            {
+                if (HttpRuntime.Cache == null)
+                {
+                    throw new InvalidOperationException(Resources.UnavailableAspCache);
+                }
+
+                m_cacheExpiration = DateTime.Now.Add(cacheExpiration);
+            }
 
             ViewLocationFormats = new[] { "~/views/{1}/{0}.html", "~/views/shared/{0}.html" };
             PartialViewLocationFormats = new[] { "~/views/{1}/{0}.partial.html", "~/views/shared/{0}.partial.html" };
@@ -56,7 +72,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(partialPath);
 
-            return new HtmlView(filePath, m_cacheHtml);
+            return new HtmlView(filePath, null);
         }
 
         /// <summary>
@@ -83,7 +99,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(viewPath);
 
-            return new HtmlView(filePath, m_cacheHtml);
+            return new HtmlView(filePath, m_cacheExpiration);
         }
     }
 }

@@ -30,18 +30,14 @@ namespace SimpleViewEngine
         private const string ViewKeyPrefix = "HTMLView_";
 
         private readonly string m_filePath;
-        private readonly bool m_cacheHtml;
+        private readonly DateTime? m_cacheExpiration;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HtmlView"/> class.
         /// </summary>
         /// <param name="filePath">The local view file path.</param>
-        /// <param name="cacheHtml">
-        /// A <see cref="bool"/> indicating whether the view HTML content should be cached
-        /// in the ASP .NET server-side cache. File dependencies monitor file changes and
-        /// invalidate cache if the content had been changed.
-        /// </param>
-        public HtmlView(string filePath, bool cacheHtml)
+        /// <param name="cacheExpiration">An HTML cache expiration time.</param>
+        public HtmlView(string filePath, DateTime? cacheExpiration)
         {
             if (filePath == null)
             {
@@ -49,7 +45,7 @@ namespace SimpleViewEngine
             }
 
             m_filePath = filePath;
-            m_cacheHtml = cacheHtml;
+            m_cacheExpiration = cacheExpiration;
         }
 
         /// <summary>
@@ -84,7 +80,7 @@ namespace SimpleViewEngine
             bool isView = m_filePath.IndexOf(PartialViewExtension, StringComparison.OrdinalIgnoreCase) < 0;
             string cacheKey = null;
 
-            if (m_cacheHtml && isView)
+            if (m_cacheExpiration.HasValue && isView)
             {
                 cacheKey = String.Concat(ViewKeyPrefix, m_filePath.ToUpperInvariant());
 
@@ -121,7 +117,7 @@ namespace SimpleViewEngine
                 HttpRuntime.Cache.Add(cacheKey,
                                       viewHtml,
                                       new CacheDependency(GetReferencedFilePaths(viewContext).ToArray()),
-                                      DateTime.Now.AddMinutes(60),
+                                      m_cacheExpiration.Value,
                                       Cache.NoSlidingExpiration,
                                       CacheItemPriority.Normal,
                                       null);
