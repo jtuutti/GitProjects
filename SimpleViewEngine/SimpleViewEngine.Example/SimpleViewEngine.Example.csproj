@@ -80,7 +80,7 @@
     <Content Include="Views\Home\index-details.partial.html" />
     <Content Include="Views\Home\index-subdetails.partial.html" />
     <Content Include="Views\Home\index.html" />
-    <Content Include="Views\master.layout.html" />
+    <Content Include="Views\Shared\master.layout.html" />
     <Content Include="Views\Shared\footer.partial.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

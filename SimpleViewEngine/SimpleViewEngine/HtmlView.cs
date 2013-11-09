@@ -20,7 +20,7 @@ namespace SimpleViewEngine
     {
         private const string FileValueType = "FILE";
         private const string LayoutViewExtension = ".layout.html";
-        private const string LayoutViewLocation = "~/views/{0}" + LayoutViewExtension;
+        private const string LayoutViewLocation = "~/views/shared/{0}" + LayoutViewExtension;
         private const string NameValueType = "NAME";
         private const string PartialViewExtension = ".partial.html";
         private const string ReferencedFilePathKey = "_ReferencedFilePaths";
