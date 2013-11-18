@@ -22,6 +22,7 @@ namespace RestFoundation.Results
     public class JsonResult : IResult
     {
         private static readonly Regex methodNamePattern = new Regex("^[A-Za-z$_][A-Za-z0-9$_]*$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static readonly DefaultContractResolver contractResolver = new CamelCasePropertyNamesContractResolver();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonResult"/> class.
@@ -87,7 +88,7 @@ namespace RestFoundation.Results
 
             if (context.Request.IsAjax && Rest.Configuration.Options.JsonSettings.LowerPropertiesForAjax)
             {
-                serializer.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                serializer.ContractResolver = contractResolver;
             }
 
             if (ReturnedType == null && Content != null)
