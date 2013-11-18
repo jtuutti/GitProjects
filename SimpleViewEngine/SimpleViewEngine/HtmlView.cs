@@ -88,7 +88,14 @@ namespace SimpleViewEngine
 
                 if (!String.IsNullOrEmpty(cachedHtml))
                 {
-                    writer.Write(GenerateModelScript(cachedHtml, viewContext.ViewData.Model));
+                    if (viewContext.ViewData.Model == null)
+                    {
+                        writer.Write(cachedHtml);
+                    }
+                    else
+                    {
+                        writer.Write(GenerateModelScript(cachedHtml, viewContext.ViewData.Model));
+                    }
                     return;
                 }
             }
@@ -135,9 +142,7 @@ namespace SimpleViewEngine
                 return html;
             }
 
-            return RegularExpressions.ModelDirective.Replace(html, model != null ?
-                                                                        ModelScriptTagCreator.Create(model) :
-                                                                        String.Empty);
+            return RegularExpressions.ModelDirective.Replace(html, ModelScriptTagCreator.Create(model));
         }
 
         private static HashSet<string> GetReferencedFilePaths(ControllerContext context)
