@@ -30,14 +30,16 @@ namespace SimpleViewEngine
         private const string ViewKeyPrefix = "HTMLView_";
 
         private readonly string m_filePath;
+        private readonly string m_version;
         private readonly DateTime? m_cacheExpiration;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HtmlView"/> class.
         /// </summary>
         /// <param name="filePath">The local view file path.</param>
-        /// <param name="cacheExpiration">An HTML cache expiration time.</param>
-        public HtmlView(string filePath, DateTime? cacheExpiration)
+        /// <param name="version">An optional application version.</param>
+        /// <param name="cacheExpiration">An optional HTML cache expiration time.</param>
+        public HtmlView(string filePath, string version, DateTime? cacheExpiration)
         {
             if (filePath == null)
             {
@@ -45,6 +47,7 @@ namespace SimpleViewEngine
             }
 
             m_filePath = filePath;
+            m_version = version;
             m_cacheExpiration = cacheExpiration;
         }
 
@@ -115,6 +118,13 @@ namespace SimpleViewEngine
                     String.Empty;
 
                 return String.Concat(group1, group2, group3, applicationPath, group5);
+            });
+
+            viewHtml = RegularExpressions.Version.Replace(viewHtml, m =>
+            {
+                string group1 = m.Result("$1"), group2 = m.Result("$2"), group3 = m.Result("$3"), group5 = m.Result("$5");
+
+                return String.Concat(group1, group2, group3, !String.IsNullOrWhiteSpace(m_version) ? m_version : "0", group5);
             });
 
             viewContext.HttpContext.Items[RenderedPartialFilePathKey] = null;

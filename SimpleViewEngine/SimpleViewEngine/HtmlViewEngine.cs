@@ -51,6 +51,12 @@ namespace SimpleViewEngine
         }
 
         /// <summary>
+        /// Gets or sets the application version. It can be appended to CSS and JavaScript
+        /// links using the <code>:version</code> URL variable.
+        /// </summary>
+        public string AppVersion { get; set; }
+
+        /// <summary>
         /// Creates the specified partial view by using the specified controller context.
         /// </summary>
         /// <returns>
@@ -72,7 +78,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(partialPath);
 
-            return new HtmlView(filePath, null);
+            return new HtmlView(filePath, AppVersion, null);
         }
 
         /// <summary>
@@ -99,7 +105,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(viewPath);
 
-            return new HtmlView(filePath, m_cacheExpiration);
+            return new HtmlView(filePath, AppVersion, m_cacheExpiration);
         }
     }
 }

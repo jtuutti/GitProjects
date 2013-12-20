@@ -17,7 +17,10 @@ namespace SimpleViewEngine.Example
             ControllerBuilder.Current.SetControllerFactory(new HtmlControllerFactory());
 
             ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new HtmlViewEngine());
+            ViewEngines.Engines.Add(new HtmlViewEngine
+            {
+                AppVersion = "1.0"
+            });
         }
     }
 }
