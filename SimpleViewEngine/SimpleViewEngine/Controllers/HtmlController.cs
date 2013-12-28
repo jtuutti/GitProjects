@@ -23,8 +23,8 @@ namespace SimpleViewEngine.Controllers
             if (!String.Equals(HttpVerbs.Get.ToString(), HttpContext.Request.HttpMethod, StringComparison.OrdinalIgnoreCase) &&
                 !String.Equals(HttpVerbs.Head.ToString(), HttpContext.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
             {
-                var notFoundResult = new HttpStatusCodeResult(HttpStatusCode.MethodNotAllowed);
-                notFoundResult.ExecuteResult(ControllerContext);
+                var methodNotAllowedResult = new HttpStatusCodeResult(HttpStatusCode.MethodNotAllowed);
+                methodNotAllowedResult.ExecuteResult(ControllerContext);
                 return;
             }
 
