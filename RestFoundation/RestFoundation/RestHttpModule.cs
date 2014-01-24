@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -26,8 +27,10 @@ namespace RestFoundation
     {
         private const int MinErrorStatusCode = 400;
         private const int UnauthorizedStatusCode = 401;
+        private const string AcceptPatchHeaderName = "Accept-Patch";
         private const string CatchAllRoute = "catch-all-route";
         private const string DangerousRequestMessage = "A potentially dangerous Request.Path value was detected from the client";
+        private const string HeaderValueSeparator = ", ";
         private const string LocationHeaderName = "Location";
         private const string Options = "OPTIONS";
         private const string RequestTimeoutMessage = "Request timed out";
@@ -326,12 +329,24 @@ namespace RestFoundation
             statusDescription = Global.DisallowedHttpMethod;
         }
 
-        private static void SetAllowHeaderForNotSupportedHttpMethod(HttpApplication application)
+        private static IEnumerable<HttpMethod> SetAllowHeaderForNotSupportedHttpMethod(HttpApplication application)
         {
             var allowedHttpMethods = application.Context.Items[ServiceCallConstants.AllowedHttpMethods] as HttpMethodCollection;
             string allowedMethodString = allowedHttpMethods != null ? allowedHttpMethods.ToString() : "GET, HEAD";
 
-            application.Context.Response.AppendHeader("Allow", String.Concat(allowedMethodString, ", ", Options));
+            application.Context.Response.AppendHeader("Allow", String.Concat(allowedMethodString, HeaderValueSeparator, Options));
+
+            return allowedHttpMethods != null ? allowedHttpMethods.ToList() : new ReadOnlyCollection<HttpMethod>(new[] { HttpMethod.Get, HttpMethod.Head });
+        }
+
+        private static void SetAcceptPatchHeader(IServiceContext context)
+        {
+            IReadOnlyCollection<string> mediaTypes = MediaTypeFormatterRegistry.GetPrioritizedMediaTypes();
+
+            if (mediaTypes != null && mediaTypes.Count > 0)
+            {
+                context.Response.AppendHeader(AcceptPatchHeaderName, String.Join(HeaderValueSeparator, mediaTypes));
+            }
         }
 
         private static void GenerateFaultBody(IServiceContext context, IServiceContextHandler handler, FaultCollection faults)
@@ -379,7 +394,12 @@ namespace RestFoundation
 
             if (statusCode == HttpStatusCode.MethodNotAllowed)
             {
-                SetAllowHeaderForNotSupportedHttpMethod(application);
+                IEnumerable<HttpMethod> methods = SetAllowHeaderForNotSupportedHttpMethod(application);
+
+                if (methods.Contains(HttpMethod.Patch))
+                {
+                    SetAcceptPatchHeader(context);
+                }
 
                 if (String.Equals(Options, application.Context.Request.HttpMethod, StringComparison.OrdinalIgnoreCase))
                 {

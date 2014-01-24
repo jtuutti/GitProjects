@@ -1122,10 +1122,17 @@
     <member name="P:RestFoundation.Configuration.ODataSettings.CaseInsensitiveStringComparison">
       <summary>
             Gets or sets a value indicating whether string comparison operations should
-            be case insensitive. This setting should only be enabeld for Linq-to-Objects
+            be case insensitive. This setting should only be enabled for Linq-to-Objects
             providers. Most database providers do not support this feature and can throw
-            an exception or perform string comparisons based on the table collation
-            instead.
+            an exception or perform string comparisons based on the table collation.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Configuration.ODataSettings.InvariantCultureCaseConversion">
+      <summary>
+            Gets or sets a value indicating whether string case conversion operations should
+            use an invariant culture. This setting should only be enabled for Linq-to-Objects
+            providers. Most database providers do not support this feature and can throw
+            an exception or perform string conversions based on the table collation.
             </summary>
     </member>
     <member name="P:RestFoundation.Configuration.ODataSettings.MaxResults">
@@ -21252,6 +21259,13 @@
             Gets or sets a value indicating whether the <see cref="T:System.String" />
             operations should be case insensitive. This settings needs to be
             set before any parser class is initialized.
+            </summary>
+    </member>
+    <member name="P:Linq2Rest.ParserSettings.InvariantCaseConversion">
+      <summary>
+            Gets or sets a value indicating whether the <see cref="T:System.String" />
+            case operaetions should be culture invariant. This settings needs
+            to be set before any parser class is initialized.
             </summary>
     </member>
     <member name="M:Linq2Rest.Parser.ExpressionTokenizer.GetArithmeticToken(System.String)">

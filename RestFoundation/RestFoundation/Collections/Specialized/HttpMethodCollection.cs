@@ -3,6 +3,7 @@
 // </copyright>
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace RestFoundation.Collections.Specialized
@@ -44,6 +45,11 @@ namespace RestFoundation.Collections.Specialized
         public void MarkFinalized()
         {
             IsFinalized = true;
+        }
+
+        public IReadOnlyList<HttpMethod> ToList()
+        {
+            return new ReadOnlyCollection<HttpMethod>(m_methods.ToList());
         }
 
         public override string ToString()
