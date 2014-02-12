@@ -38,6 +38,7 @@ namespace RestTest.App_Start
                 .EnableJsonPSupport()
                 .ConfigureServiceHelpAndProxy(c => c.Enable()
                                                     .WithServiceDescription("RESTFul test service")
+                                                    .UseXmlDocFile(@"bin\RestTestContracts.xml", XmlDocPathType.AppDomain)
                                                     .RequireAuthorization(new ProxyAuthorizationManager()));
         }
 

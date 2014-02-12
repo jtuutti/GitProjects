@@ -45,6 +45,11 @@ namespace RestFoundation.ServiceProxy.OperationMetadata
         public string RegexConstraint { get; set; }
 
         /// <summary>
+        /// Gets or sets a parameter description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets the parameter type description for the service proxy.
         /// </summary>
         /// <returns>The parameter type description.</returns>

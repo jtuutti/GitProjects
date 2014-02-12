@@ -45,6 +45,14 @@ namespace RestTestContracts
         [Url("index/{id}"), AssertValidation(true)]
         Person Patch([Constraint(Constraint.UnsignedInteger)] int? id, Person resource);
 
+        /// <summary>
+        /// Deletes a contact by the name.
+        /// </summary>
+        /// <remarks>
+        /// This is a truely RESTful method that uses URL to identify the resource and a proper HTTP method.
+        /// </remarks>
+        /// <param name="name">The contact name.</param>
+        /// <returns>The status code.</returns>
         [Url("index/{name}")]
         StatusCodeResult Delete(string name);
 

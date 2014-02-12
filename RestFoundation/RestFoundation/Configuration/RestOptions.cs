@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Web.Routing;
+using System.Xml.Linq;
 using Linq2Rest;
 using RestFoundation.Formatters;
 using RestFoundation.Runtime;
 using RestFoundation.Security;
+using RestFoundation.ServiceProxy;
 
 namespace RestFoundation.Configuration
 {
@@ -53,6 +55,7 @@ namespace RestFoundation.Configuration
 
         internal bool IsServiceProxyInitialized { get; set; }
         internal string ServiceProxyRelativeUrl { get; set; }
+        internal Dictionary<Type, IReadOnlyList<XmlDocMetadata>> XmlDocumentation { get; set; }
         internal string DefaultMediaType { get; private set; }
         internal bool ForceDefaultMediaType { get; private set; }
         internal bool EnumerableChunkedSupport { get; private set; }

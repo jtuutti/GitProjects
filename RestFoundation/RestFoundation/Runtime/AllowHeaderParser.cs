@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright>
+// Dmitry Starosta, 2012-2013
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 

@@ -45,8 +45,7 @@ Use with caution!!!";
                                                      .SetRequestResourceExample(CreatePersonRequestExample())
                                                      .SetResponseResourceExample(CreatePersonResponseExample());
 
-            ForMethod(x => x.Delete("John Doe")).SetDescription("Deletes an existing resource of type 'Person' by name")
-                                                .SetResponseStatus(HttpStatusCode.NoContent, "Resource is deleted");
+            ForMethod(x => x.Delete("John Doe")).SetResponseStatus(HttpStatusCode.NoContent, "Resource is deleted");
 
             ForMethod(x => x.PostMultipleParameters(Arg<string>(), 0, Arg<DateTime?>())).SetDescription("Creates a new resource of type 'Person' from the body name-value attributes.")
                                                                                         .SetHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")

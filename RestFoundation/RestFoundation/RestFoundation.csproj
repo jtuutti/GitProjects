@@ -90,6 +90,7 @@
     <Compile Include="Collections\Specialized\HttpMethodCollection.cs" />
     <Compile Include="Collections\Specialized\LinkCollection.cs" />
     <Compile Include="Configuration\ODataSettings.cs" />
+    <Compile Include="Configuration\XmlDocPathType.cs" />
     <Compile Include="Context\RestContextContainer.cs" />
     <Compile Include="Configuration\DependencyBuilder.cs" />
     <Compile Include="Configuration\FaultDetail.cs" />
@@ -230,6 +231,8 @@
     <Compile Include="ServiceProxy\OperationMetadata\ResourceExampleMetadata.cs" />
     <Compile Include="ServiceProxy\OperationMetadata\StatusCodeMetadata.cs" />
     <Compile Include="HttpHandler.cs" />
+    <Compile Include="ServiceProxy\XmlDocMetadata.cs" />
+    <Compile Include="ServiceProxy\XmlDocParser.cs" />
     <Compile Include="TaskResult.cs" />
     <Compile Include="TypeBinders\DoNotBindAttribute.cs" />
     <Compile Include="TypeBinders\FromBodyAttribute.cs" />
@@ -382,7 +385,7 @@
     <EmbeddedResource Include="Resources\Global.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
-      <LastGenOutput>Global.Designer.cs</LastGenOutput>
+      <LastGenOutput>Global1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ServiceProxy\Resources\index.aspx">
       <SubType>ASPXCodeBehind</SubType>

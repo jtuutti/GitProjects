@@ -112,24 +112,38 @@ namespace RestFoundation.ServiceProxy
             return String.Join(", ", metadata.UrlInfo.HttpMethods.Where(m => m != metadata.UrlInfo.HttpMethods.First()).Select(m => m.ToString().ToUpperInvariant()));
         }
 
-        private static string GetDescription(MethodInfo method, IProxyMetadata proxyMetadata)
+        private static string GetDescription(MethodInfo method, IProxyMetadata proxyMetadata, XmlDocMetadata methodDocumentation)
         {
             if (proxyMetadata == null)
             {
                 return Resources.Global.MissingDescription;
             }
 
-            return (proxyMetadata.GetDescription(method) ?? Resources.Global.MissingDescription).Trim();
+            string description = proxyMetadata.GetDescription(method);
+
+            if (description == null && methodDocumentation != null)
+            {
+                description = methodDocumentation.Summary;
+            }
+
+            return (description ?? Resources.Global.MissingDescription).Trim();
         }
 
-        private static string GetLongDescription(MethodInfo method, IProxyMetadata proxyMetadata)
+        private static string GetLongDescription(MethodInfo method, IProxyMetadata proxyMetadata, XmlDocMetadata methodDocumentation)
         {
             if (proxyMetadata == null)
             {
                 return Resources.Global.MissingDescription;
             }
 
-            return proxyMetadata.GetLongDescription(method);
+            string description = proxyMetadata.GetLongDescription(method);
+
+            if (description == null && methodDocumentation != null)
+            {
+                description = methodDocumentation.Remarks;
+            }
+
+            return (description ?? Resources.Global.MissingDescription).Trim();
         }
 
         private static List<StatusCodeMetadata> GetStatusCodes(MethodInfo method, IProxyMetadata proxyMetadata, bool hasResource, bool hasResponse, bool requiresHttps)
@@ -172,6 +186,30 @@ namespace RestFoundation.ServiceProxy
             var parameters = new List<ParameterMetadata>(GetQueryStringParameters(metadata, proxyMetadata));
             parameters.AddRange(GetBodyParameters(metadata, proxyMetadata));
             parameters.AddRange(GetRouteParameters(metadata, proxyMetadata));
+
+            IReadOnlyList<XmlDocMetadata> contractDocumentation;
+            XmlDocMetadata methodDocumentation = null;
+
+            var xmlDocumentation = Rest.Configuration.Options.XmlDocumentation;
+
+            if (xmlDocumentation != null && metadata.MethodInfo.DeclaringType != null &&
+                xmlDocumentation.TryGetValue(metadata.MethodInfo.DeclaringType, out contractDocumentation))
+            {
+                methodDocumentation = contractDocumentation.FirstOrDefault(x => x.Method == metadata.MethodInfo);
+            }
+
+            if (methodDocumentation != null)
+            {
+                foreach (ParameterMetadata parameter in parameters)
+                {
+                    string description;
+
+                    if (methodDocumentation.Parameters.TryGetValue(parameter.Name, out description))
+                    {
+                        parameter.Description = description;
+                    }
+                }
+            }
 
             return parameters.Distinct().ToList();
         }
@@ -322,6 +360,11 @@ namespace RestFoundation.ServiceProxy
 
         private static ProxyOperation GenerateProxyOperation(ServiceMethodMetadata metadata)
         {
+            if (metadata.MethodInfo.DeclaringType == null)
+            {
+                return null;
+            }
+
             IProxyMetadata proxyMetadata = ServiceContractTypeRegistry.GetProxyMetadata(metadata.MethodInfo.DeclaringType);
 
             if (proxyMetadata != null && proxyMetadata.IsHidden(metadata.MethodInfo))
@@ -329,25 +372,35 @@ namespace RestFoundation.ServiceProxy
                 return null;
             }
 
+            IReadOnlyList<XmlDocMetadata> contractDocumentation;
+            XmlDocMetadata methodDocumentation = null;
+
+            var xmlDocumentation = Rest.Configuration.Options.XmlDocumentation;
+
+            if (xmlDocumentation != null && xmlDocumentation.TryGetValue(metadata.MethodInfo.DeclaringType, out contractDocumentation))
+            {
+                methodDocumentation = contractDocumentation.FirstOrDefault(x => x.Method == metadata.MethodInfo);
+            }
+
             var operation = new ProxyOperation
-                            {
-                                ServiceUrl = metadata.ServiceUrl,
-                                UrlTempate = GetUrlTemplate(metadata, proxyMetadata),
-                                HttpMethod = metadata.UrlInfo.HttpMethods.First(),
-                                SupportedHttpMethods = GetSupportedHttpMethods(metadata),
-                                MetadataUrl = String.Concat("metadata?oid=", metadata.ServiceMethodId),
-                                ProxyUrl = String.Concat("proxy?oid=", metadata.ServiceMethodId),
-                                Description = GetDescription(metadata.MethodInfo, proxyMetadata),
-                                LongDescription = GetLongDescription(metadata.MethodInfo, proxyMetadata),
-                                ResultType = metadata.MethodInfo.ReturnType,
-                                RouteParameters = GetParameters(metadata, proxyMetadata),
-                                HttpsPort = proxyMetadata != null && proxyMetadata.GetHttps(metadata.MethodInfo) != null ? proxyMetadata.GetHttps(metadata.MethodInfo).Port : 0,
-                                IsIPFiltered = proxyMetadata != null && proxyMetadata.IsIPFiltered(metadata.MethodInfo),
-                                DoesNotSupportJson = proxyMetadata != null && !proxyMetadata.HasJsonSupport(metadata.MethodInfo),
-                                DoesNotSupportXml = proxyMetadata != null && !proxyMetadata.HasXmlSupport(metadata.MethodInfo),
-                                Credentials = GetCredentials(metadata, proxyMetadata),
-                                AdditionalHeaders = proxyMetadata != null ? proxyMetadata.GetHeaders(metadata.MethodInfo) : new List<HeaderMetadata>()
-                            };
+            {
+                ServiceUrl = metadata.ServiceUrl,
+                UrlTempate = GetUrlTemplate(metadata, proxyMetadata),
+                HttpMethod = metadata.UrlInfo.HttpMethods.First(),
+                SupportedHttpMethods = GetSupportedHttpMethods(metadata),
+                MetadataUrl = String.Concat("metadata?oid=", metadata.ServiceMethodId),
+                ProxyUrl = String.Concat("proxy?oid=", metadata.ServiceMethodId),
+                Description = GetDescription(metadata.MethodInfo, proxyMetadata, methodDocumentation),
+                LongDescription = GetLongDescription(metadata.MethodInfo, proxyMetadata, methodDocumentation),
+                ResultType = metadata.MethodInfo.ReturnType,
+                RouteParameters = GetParameters(metadata, proxyMetadata),
+                HttpsPort = proxyMetadata != null && proxyMetadata.GetHttps(metadata.MethodInfo) != null ? proxyMetadata.GetHttps(metadata.MethodInfo).Port : 0,
+                IsIPFiltered = proxyMetadata != null && proxyMetadata.IsIPFiltered(metadata.MethodInfo),
+                DoesNotSupportJson = proxyMetadata != null && !proxyMetadata.HasJsonSupport(metadata.MethodInfo),
+                DoesNotSupportXml = proxyMetadata != null && !proxyMetadata.HasXmlSupport(metadata.MethodInfo),
+                Credentials = GetCredentials(metadata, proxyMetadata),
+                AdditionalHeaders = proxyMetadata != null ? proxyMetadata.GetHeaders(metadata.MethodInfo) : new List<HeaderMetadata>()
+            };
 
             operation.StatusCodes = GetStatusCodes(metadata.MethodInfo, proxyMetadata, operation.HasResource, operation.HasResponse, operation.HttpsPort > 0);
             operation.HasResource = HasResource(metadata, operation.HttpMethod);

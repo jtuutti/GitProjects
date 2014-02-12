@@ -175,6 +175,7 @@
         <th>Constraint</th>
         <th>Allowed values</th>
         <th>Example</th>
+        <th>Description</th>
     </tr>
     <% foreach (var routeParameter in operation.RouteParameters) { %>
     <tr>
@@ -185,6 +186,7 @@
         <td><%: routeParameter.RegexConstraint ?? String.Empty %></td>
         <td><%: routeParameter.AllowedValues ?? String.Empty %></td>
         <td><%: routeParameter.ExampleValue ?? String.Empty %></td>
+        <td><%: routeParameter.Description ?? String.Empty %></td>
     </tr>
     <% } %>
     </table>

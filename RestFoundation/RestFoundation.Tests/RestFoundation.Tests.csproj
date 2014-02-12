@@ -98,6 +98,7 @@
     <Compile Include="TypeBinders\FromBodyBinderTests.cs" />
     <Compile Include="TypeBinders\FromUriAsComplexTypeTests.cs" />
     <Compile Include="TypeBinders\FromUriBinderTests.cs" />
+    <Compile Include="XmlDoc\XmlDocParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestFoundation.StructureMap\RestFoundation.StructureMap.csproj">
@@ -115,6 +116,10 @@
     <ProjectReference Include="..\RestTestContracts\RestTestContracts.csproj">
       <Project>{bd354ec2-ba78-40a0-85ff-1209200166bf}</Project>
       <Name>RestTestContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SampleRestService\SampleRestService.csproj">
+      <Project>{189072bf-2dee-4616-8baa-2c28fbb09617}</Project>
+      <Name>SampleRestService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
