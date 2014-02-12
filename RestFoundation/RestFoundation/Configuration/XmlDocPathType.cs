@@ -1,4 +1,7 @@
-﻿namespace RestFoundation.Configuration
+﻿// <copyright>
+// Dmitry Starosta, 2012-2014
+// </copyright>
+namespace RestFoundation.Configuration
 {
     /// <summary>
     /// Defines XMLDOC file path types.

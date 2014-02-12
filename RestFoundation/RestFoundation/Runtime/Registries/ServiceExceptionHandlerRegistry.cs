@@ -1,5 +1,5 @@
 ﻿// <copyright>
-// Dmitry Starosta, 2012-2013
+// Dmitry Starosta, 2012-2014
 // </copyright>
 using System.Collections.Concurrent;
 using RestFoundation.Runtime.Handlers;

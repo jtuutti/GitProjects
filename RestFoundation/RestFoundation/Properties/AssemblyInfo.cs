@@ -12,7 +12,7 @@ using RestFoundation;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("REST Foundation")]
-[assembly: AssemblyCopyright("Copyright © Dmitry Starosta 2012-2013")]
+[assembly: AssemblyCopyright("Copyright © Dmitry Starosta 2012-2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
