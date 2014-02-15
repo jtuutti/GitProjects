@@ -84,9 +84,9 @@ namespace RestFoundation.ServiceProxy
 
             Type[] genericParameters = parameter.ParameterType.GetGenericArguments();
 
-            for (int j = 0; j < genericParameters.Length; j++)
+            for (int i = 0; i < genericParameters.Length; i++)
             {
-                if (j > 0)
+                if (i > 0)
                 {
                     parameterNameBuilder.Append(',');
                 }
