@@ -5,19 +5,31 @@ using RestFoundation.Behaviors;
 
 namespace RestTestContracts.Behaviors
 {
+    /// <summary>
+    /// Represents a service behavior responsible for service statistics.
+    /// </summary>
     public class StatisticsBehavior : ServiceBehavior
     {
         private Stopwatch timer;
 
-        public StatisticsBehavior()
-        {
-        }
-
+        /// <summary>
+        /// Returns a value indicating whether to apply the behavior to the provided method of the specified
+        /// service type.
+        /// </summary>
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="methodContext">The "method applies" context.</param>
+        /// <returns>true to apply the behavior; false to bypass.</returns>
         public override bool AppliesTo(IServiceContext serviceContext, MethodAppliesContext methodContext)
         {
             return methodContext.GetSupportedHttpMethods().Contains(HttpMethod.Get);
         }
 
+        /// <summary>
+        /// Called before a service method is executed.
+        /// </summary>
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="behaviorContext">The "method executing" behavior context.</param>
+        /// <returns>A service method action.</returns>
         public override BehaviorMethodAction OnMethodExecuting(IServiceContext serviceContext, MethodExecutingContext behaviorContext)
         {
             timer = Stopwatch.StartNew();
@@ -66,6 +78,11 @@ namespace RestTestContracts.Behaviors
             return BehaviorMethodAction.Execute;
         }
 
+        /// <summary>
+        /// Called after a service method is executed.
+        /// </summary>
+        /// <param name="serviceContext">The service context.</param>
+        /// <param name="behaviorContext">The "method executed" behavior context.</param>
         public override void OnMethodExecuted(IServiceContext serviceContext, MethodExecutedContext behaviorContext)
         {
             timer.Stop();
