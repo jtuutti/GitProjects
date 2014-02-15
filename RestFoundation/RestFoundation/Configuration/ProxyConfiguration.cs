@@ -143,10 +143,6 @@ namespace RestFoundation.Configuration
         /// <param name="filePath">The XMLDOC file path.</param>
         /// <param name="filePathType">The file path type.</param>
         /// <returns>The configuration object.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// If the <paramref name="filePathType"/> contains a virtual path of type <see cref="XmlDocPathType.Virtual"/>
-        /// and is not rooted.
-        /// </exception>
         /// <exception cref="FileNotFoundException">If the documentation file was not found.</exception>
         public ProxyConfiguration UseXmlDocFile(string filePath, XmlDocPathType filePathType)
         {
