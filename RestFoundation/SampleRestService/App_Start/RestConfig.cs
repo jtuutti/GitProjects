@@ -11,7 +11,9 @@ namespace SampleRestService.App_Start
         {
             Rest.Configuration
                 .Initialize(RegisterServiceDependencies)
-                .ConfigureServiceHelpAndProxy(c => c.Enable().WithServiceDescription("A sample REST service"))
+                .ConfigureServiceHelpAndProxy(c => c.Enable()
+                                                    .WithServiceDescription("A sample REST service")
+                                                    .UseXmlDocFile(@"bin\SampleRestService.xml", XmlDocPathType.AppDomain))
                 .WithUrls(RegisterUrls);
         }
 

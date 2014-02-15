@@ -23,28 +23,22 @@ namespace SampleRestService.Contracts.Metadata
 
         public override void Initialize()
         {
-            ForMethod(x => x.GetById(1)).SetDescription("Get a product by ID")
-                                        .SetResponseResourceExample(GetProduct());
+            ForMethod(x => x.GetById(1)).SetResponseResourceExample(GetProduct());
 
-            ForMethod(x => x.GetAll()).SetDescription("Gets all products")
-                                      .SetResponseResourceExample(GetProductArray());
+            ForMethod(x => x.GetAll()).SetResponseResourceExample(GetProductArray());
 
-            ForMethod(x => x.PostAsync(Arg<Product>())).SetDescription("Creates a new product")
-                                                  .SetRequestResourceExample(CreateNewProduct())
-                                                  .SetResponseResourceExample(GetProduct())
-                                                  .SetResponseStatus(HttpStatusCode.Created, "Product created");
-
-            ForMethod(x => x.PutAsync(1, Arg<Product>())).SetDescription("Updates a product")
-                                                    .SetRequestResourceExample(GetProduct())
-                                                    .SetResponseResourceExample(GetProduct())
-                                                    .SetResponseStatus(HttpStatusCode.OK, "Product updated");
-
-            ForMethod(x => x.PatchStockStatus(1, true)).SetDescription("Modifies product stock status")
+            ForMethod(x => x.PostAsync(Arg<Product>())).SetRequestResourceExample(CreateNewProduct())
                                                        .SetResponseResourceExample(GetProduct())
+                                                       .SetResponseStatus(HttpStatusCode.Created, "Product created");
+
+            ForMethod(x => x.PutAsync(1, Arg<Product>())).SetRequestResourceExample(GetProduct())
+                                                         .SetResponseResourceExample(GetProduct())
+                                                         .SetResponseStatus(HttpStatusCode.OK, "Product updated");
+
+            ForMethod(x => x.PatchStockStatus(1, true)).SetResponseResourceExample(GetProduct())
                                                        .SetResponseStatus(HttpStatusCode.OK, "Product updated");
 
-            ForMethod(x => x.DeleteById(1)).SetDescription("Delete a product by ID")
-                                           .SetResponseStatus(HttpStatusCode.NoContent, "Product deleted");
+            ForMethod(x => x.DeleteById(1)).SetResponseStatus(HttpStatusCode.NoContent, "Product deleted");
         }
 
         private static Product CreateNewProduct()

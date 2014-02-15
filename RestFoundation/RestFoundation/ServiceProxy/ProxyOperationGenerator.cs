@@ -191,10 +191,10 @@ namespace RestFoundation.ServiceProxy
             IReadOnlyList<XmlDocMetadata> contractDocumentation;
             XmlDocMetadata methodDocumentation = null;
 
-            var xmlDocumentation = Rest.Configuration.Options.XmlDocumentation;
+            var xmlDocFactory = Rest.Configuration.Options.XmlDocFactory;
 
-            if (xmlDocumentation != null && metadata.MethodInfo.DeclaringType != null &&
-                xmlDocumentation.TryGetValue(metadata.MethodInfo.DeclaringType, out contractDocumentation))
+            if (xmlDocFactory != null && metadata.MethodInfo.DeclaringType != null &&
+                xmlDocFactory.Value.TryGetValue(metadata.MethodInfo.DeclaringType, out contractDocumentation))
             {
                 methodDocumentation = contractDocumentation.FirstOrDefault(x => x.Method == metadata.MethodInfo);
             }
@@ -407,9 +407,9 @@ namespace RestFoundation.ServiceProxy
             IReadOnlyList<XmlDocMetadata> contractDocumentation;
             XmlDocMetadata methodDocumentation = null;
 
-            var xmlDocumentation = Rest.Configuration.Options.XmlDocumentation;
+            var xmlDocFactory = Rest.Configuration.Options.XmlDocFactory;
 
-            if (xmlDocumentation != null && xmlDocumentation.TryGetValue(metadata.MethodInfo.DeclaringType, out contractDocumentation))
+            if (xmlDocFactory != null && xmlDocFactory.Value.TryGetValue(metadata.MethodInfo.DeclaringType, out contractDocumentation))
             {
                 methodDocumentation = contractDocumentation.FirstOrDefault(x => x.Method == metadata.MethodInfo);
             }

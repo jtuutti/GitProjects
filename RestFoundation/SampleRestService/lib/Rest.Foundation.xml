@@ -1145,6 +1145,21 @@
             returned.
             </summary>
     </member>
+    <member name="T:RestFoundation.Configuration.XmlDocPathType">
+      <summary>
+            Defines XMLDOC file path types.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.Configuration.XmlDocPathType.Absolute">
+      <summary>
+            An absolute file path.
+            </summary>
+    </member>
+    <member name="F:RestFoundation.Configuration.XmlDocPathType.AppDomain">
+      <summary>
+            A file path relative to the current application root folder.
+            </summary>
+    </member>
     <member name="T:RestFoundation.Configuration.DependencyBuilder">
       <summary>
             Represents a dependency builder for the default service locator.
@@ -1944,6 +1959,717 @@
             Gets the build version.
             </summary>
     </member>
+    <member name="T:RestFoundation.Resources.Global">
+      <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ResourceManager">
+      <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.Culture">
+      <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.AbstractHttpHandler">
+      <summary>
+              Looks up a localized string similar to The HTTP handler cannot be abstract..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.AlreadyConfigured">
+      <summary>
+              Looks up a localized string similar to REST Foundation has already been configured..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.AlreadyInitializedHttpContext">
+      <summary>
+              Looks up a localized string similar to HTTP context has already been initialized..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.AlreadyMapped">
+      <summary>
+              Looks up a localized string similar to The relative URL '{0}' has already been mapped..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ConfigurationNotInitialized">
+      <summary>
+              Looks up a localized string similar to REST Foundation configuration has not been initialized. Make sure to add a call to one of the Initialize methods of the RestFoundation.Rest.Configuration object on the application start..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ConstraintMismatchedRouteParameter">
+      <summary>
+              Looks up a localized string similar to Route parameter '{0}' with value '{1}' does not match the constraint pattern '{2}'..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.DependencyRegistrationError">
+      <summary>
+              Looks up a localized string similar to There was a problem registering a service: {0}.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.DependencyResolutionError">
+      <summary>
+              Looks up a localized string similar to There was a problem resolving a service: {0}.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.DisallowedHttpMethod">
+      <summary>
+              Looks up a localized string similar to HTTP method is not allowed..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.DisallowedMediaTypeParameters">
+      <summary>
+              Looks up a localized string similar to Media type parameters are not allowed..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.DuplicateAuthenticationBehavior">
+      <summary>
+              Looks up a localized string similar to Only a single authentication behavior can be associated with a service method. That includes global behaviors..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.DuplicateGlobalBehaviors">
+      <summary>
+              Looks up a localized string similar to Multiple global service behaviors of the same type are not allowed..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.DuplicateRouteBehaviors">
+      <summary>
+              Looks up a localized string similar to Multiple service behaviors of the same type are not allowed for the same route..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.EmptyFileName">
+      <summary>
+              Looks up a localized string similar to File name cannot be empty..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.EmptyHttpHeader">
+      <summary>
+              Looks up a localized string similar to HTTP headers cannot be empty or have white-space in the name..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.FailedRequest">
+      <summary>
+              Looks up a localized string similar to HTTP request failed to process..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.FailedRouteInvokedSuccessfully">
+      <summary>
+              Looks up a localized string similar to REST Foundation service route was invoked successfully when it should have failed..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.FailedRouteWithInvalidExceptionMessage">
+      <summary>
+              Looks up a localized string similar to REST Foundation service route invocation failed with the exception message "{0}". Exception message "{1}" was expected..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.FileNameContainsPath">
+      <summary>
+              Looks up a localized string similar to Only a file name can be specified. Relative or absolute paths/URLs are not supported..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.Forbidden">
+      <summary>
+              Looks up a localized string similar to Forbidden.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.HttpsRequiredStatusDescription">
+      <summary>
+              Looks up a localized string similar to HTTPS required.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InaccessibleFile">
+      <summary>
+              Looks up a localized string similar to The requested file cannot be accessed..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InternalServerError">
+      <summary>
+              Looks up a localized string similar to Internal Server Error.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidAcceptHeaderFormat">
+      <summary>
+              Looks up a localized string similar to One of the Accept* HTTP headers has an invalid format..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidAcceptHeaderValue">
+      <summary>
+              Looks up a localized string similar to Invalid '{0}' header value to parse..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidArgumentValue">
+      <summary>
+              Looks up a localized string similar to The argument contains invalid elements..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidAsyncTimeout">
+      <summary>
+              Looks up a localized string similar to Invalid service async timeout value provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidBrewOperation">
+      <summary>
+              Looks up a localized string similar to I'm a teapot.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidCatchAllUrlTemplate">
+      <summary>
+              Looks up a localized string similar to URL templates cannot contain catch-all parameters. Template: '{0}'.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidComplexType">
+      <summary>
+              Looks up a localized string similar to Object type must be a concrete class..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidComplexTypePropertyValue">
+      <summary>
+              Looks up a localized string similar to Value '{0}' could not be assigned to the property '{1}' (type: {2}) of the complex type '{3}'..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidConnectionTimeout">
+      <summary>
+              Looks up a localized string similar to Connection timeout is invalid..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidDynamicPropertyName">
+      <summary>
+              Looks up a localized string similar to Invalid dynamic class property name provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidFilePathOrUrl">
+      <summary>
+              Looks up a localized string similar to No valid file path/URL provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidHashKey">
+      <summary>
+              Looks up a localized string similar to Invalid hash key provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidHashType">
+      <summary>
+              Looks up a localized string similar to Invalid hash type was specified..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidHttpMethodForResource">
+      <summary>
+              Looks up a localized string similar to A resource cannot be set for the current HTTP method..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidIAsyncResultReturned">
+      <summary>
+              Looks up a localized string similar to An unsupported asynchronous result was returned from the service method. Only objects of Task and Task&lt;T&gt; types are supported. Nested generic tasks are not supported..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidIndexFileException">
+      <summary>
+              Looks up a localized string similar to Index files can only have .html or .htm extensions..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidJsonPCallback">
+      <summary>
+              Looks up a localized string similar to Invalid JSONP callback method provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidKey">
+      <summary>
+              Looks up a localized string similar to Invalid key provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidMethodInvocationTaskState">
+      <summary>
+              Looks up a localized string similar to The task returned by the IServiceMethodInvoker must be in the 'Created' state. It cannot be started..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidMethodParameterName">
+      <summary>
+              Looks up a localized string similar to Invalid method parameter name provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidNamedRoute">
+      <summary>
+              Looks up a localized string similar to Invalid route '{0}' specified..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidODataPagingParameter">
+      <summary>
+              Looks up a localized string similar to Invalid {0} query string value provided. It must be a non-negative integer..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidODataParameters">
+      <summary>
+              Looks up a localized string similar to Invalid OData parameters provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidPortNumber">
+      <summary>
+              Looks up a localized string similar to Port must be greater than 0..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidProxyMetadataType">
+      <summary>
+              Looks up a localized string similar to The type '{0}' is not a valid proxy metadata type..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidResourceBody">
+      <summary>
+              Looks up a localized string similar to Invalid resource body provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidResourceExampleType">
+      <summary>
+              Looks up a localized string similar to A resource example type must be a class implementing the RestFoundation.ServiceProxy.IResourceExample interface..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidResultContentFormat">
+      <summary>
+              Looks up a localized string similar to Invalid content result format provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceContract">
+      <summary>
+              Looks up a localized string similar to Service contract type must be an interface or a concrete class that defines its own contract..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceContractType">
+      <summary>
+              Looks up a localized string similar to Type '{0}' is not a service contract..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceImplementation">
+      <summary>
+              Looks up a localized string similar to A service implementation that defines its own contract must be non-abstract and marked with the 'ServiceContract' attribute..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceMethod">
+      <summary>
+              Looks up a localized string similar to No valid service method provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceMethodArgument">
+      <summary>
+              Looks up a localized string similar to There was a problem validating service method argument '{0}'..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceMethodExpression">
+      <summary>
+              Looks up a localized string similar to Invalid or mismatched service method lambda expression provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceName">
+      <summary>
+              Looks up a localized string similar to Invalid relative service URL name '{0}' provided. It can only contain letters, digits, underscores and dashes..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceProxyRelativeUrl">
+      <summary>
+              Looks up a localized string similar to Service help/proxy relative URL can only contain letters and numbers with optional dashes in between. Relative URL '{0}' does not meet those requirements..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidServiceUrlOrMethodExpression">
+      <summary>
+              Looks up a localized string similar to Invalid service URL or method lambda expression provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidSocketTimeout">
+      <summary>
+              Looks up a localized string similar to Socket timeout is invalid..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidUploadedFileType">
+      <summary>
+              Looks up a localized string similar to The resource type must be IUploadedFile or a collection that implements IEnumerable&lt;IUploadedFile&gt;..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidUpperBoundAddress">
+      <summary>
+              Looks up a localized string similar to The upper bound address is from a different family than the lower bound address..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidVirtualUrl">
+      <summary>
+              Looks up a localized string similar to Virtual URL must start with ~/.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.InvalidWebResponse">
+      <summary>
+              Looks up a localized string similar to Invalid web response provided..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ManuallyDefinedOptionsHttpMethod">
+      <summary>
+              Looks up a localized string similar to HTTP method OPTIONS cannot be manually defined on a service method..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MismatchedServiceMethod">
+      <summary>
+              Looks up a localized string similar to No matching service type or service method was found..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MismatchedServiceMethodExpression">
+      <summary>
+              Looks up a localized string similar to Service method delegate value of the argument '{0}' does not match the corresponding route value: {1} != {2}..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MismatchedServiceMethodRoute">
+      <summary>
+              Looks up a localized string similar to Provided service method delegate does not match the route..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MismatchedUrl">
+      <summary>
+              Looks up a localized string similar to URL '{0}' does not match any routes..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingAmbiguousServiceUrl">
+      <summary>
+              Looks up a localized string similar to An ambiguous route match was found for the service method. A specific 'serviceUrl' parameter must be specified..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingAuthorizationManager">
+      <summary>
+              Looks up a localized string similar to No authorization manager could be found..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingCssResource">
+      <summary>
+              Looks up a localized string similar to CSS resource not found..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingCurrentServiceMethod">
+      <summary>
+              Looks up a localized string similar to No current service method has been set..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingDefaultConstructor">
+      <summary>
+              Looks up a localized string similar to Created type does not have a default constructor..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingDescription">
+      <summary>
+              Looks up a localized string similar to No description provided.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingHmacPrivateKey">
+      <summary>
+              Looks up a localized string similar to No private key was found..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingHttpContext">
+      <summary>
+              Looks up a localized string similar to No HTTP context was found..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingJavaScriptResource">
+      <summary>
+              Looks up a localized string similar to JavaScript resource not found..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingOrInvalidAcceptType">
+      <summary>
+              Looks up a localized string similar to No supported media type was provided in the Accept header..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingOrInvalidContentType">
+      <summary>
+              Looks up a localized string similar to No supported media type was provided in the Content-Type header..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingPropertyDefinition">
+      <summary>
+              Looks up a localized string similar to Properties must have at least 1 property definition..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingRestHttpModule">
+      <summary>
+              Looks up a localized string similar to No REST HTTP module detected. Make sure to add a reference to the RestFoundation.RestHttpModule HTTP module in the Web.config file..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingRouteData">
+      <summary>
+              Looks up a localized string similar to No route data found..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingRouteHandler">
+      <summary>
+              Looks up a localized string similar to No route handler was passed to the service method invoker..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingServiceContext">
+      <summary>
+              Looks up a localized string similar to No service context was passed to the service method invoker..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MissingSupportedMediaTypeForFormatter">
+      <summary>
+              Looks up a localized string similar to No supported media types are defined for the media type formatter of type '{0}'..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.MultipleTypeBindersPerParameter">
+      <summary>
+              Looks up a localized string similar to Parameter '{0}' of the method '{1}' in the service contract of type '{2}' is decorated with multiple type binder attributes..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NoContent">
+      <summary>
+              Looks up a localized string similar to No Content.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NonAcceptedContentCharset">
+      <summary>
+              Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NonAcceptedContentLanguage">
+      <summary>
+              Looks up a localized string similar to No accepted language was provided in the Accept-Language header.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NonAcceptedMediaType">
+      <summary>
+              Looks up a localized string similar to No accepted media type was provided in the Accept header.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NonErrorHttpStatusCode">
+      <summary>
+              Looks up a localized string similar to The HTTP status code is not an error code..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NonGenericResultCollections">
+      <summary>
+              Looks up a localized string similar to Non-generic collections cannot be returned as service method results. Return typed arrays (recommended) or generic collections instead..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NonStringOutputType">
+      <summary>
+              Looks up a localized string similar to The output type is not a string..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NoResourceProvided">
+      <summary>
+              Looks up a localized string similar to No resource provided.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NotFound">
+      <summary>
+              Looks up a localized string similar to Not Found.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NotImplemented">
+      <summary>
+              Looks up a localized string similar to Not Implemented.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NullODataPropertyReference">
+      <summary>
+              Looks up a localized string similar to OData operation cannot be performed against a NULL property value..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NullOrInvalidAcceptedName">
+      <summary>
+              Looks up a localized string similar to An accepted name cannot be null or contain a wildcard..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.NullResourceBody">
+      <summary>
+              Looks up a localized string similar to Resource body cannot be null..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.OK">
+      <summary>
+              Looks up a localized string similar to OK.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.OvercomplicatedMethodArgument">
+      <summary>
+              Looks up a localized string similar to Method argument '{0}' has a value that is to complex to process. It must be a simple constant or variable value..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.PartialContent">
+      <summary>
+              Looks up a localized string similar to Partial Content.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ProxyAlreadyInitialized">
+      <summary>
+              Looks up a localized string similar to Service proxy UI is already enabled..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.RedirectMethodParameterTooComplex">
+      <summary>
+              Looks up a localized string similar to The method parameter '{0}' is too complex to process. Try storing the parameter value in a variable, then passing it to the method..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ResourceValidationFailed">
+      <summary>
+              Looks up a localized string similar to Validation Failed.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ServiceCallEnded">
+      <summary>
+              Looks up a localized string similar to -- SERVICE CALL ENDED --.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ServiceCallStarted">
+      <summary>
+              Looks up a localized string similar to -- SERVICE CALL STARTED --.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ServiceTimedOut">
+      <summary>
+              Looks up a localized string similar to Service timed out.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ServiceUnavailable">
+      <summary>
+              Looks up a localized string similar to Service is not available.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.SuccessfulOperation">
+      <summary>
+              Looks up a localized string similar to Operation is successful.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.TooManyRequests">
+      <summary>
+              Looks up a localized string similar to Too many requests.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnableToCreateServiceType">
+      <summary>
+              Looks up a localized string similar to Service with contract of type '{0}' could not be created..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnableToInitializeCache">
+      <summary>
+              Looks up a localized string similar to Cache could not be initialized..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnableToLoadIndexPage">
+      <summary>
+              Looks up a localized string similar to Index page file could not be loaded. Make sure the specified index file is available and not locked..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.Unauthorized">
+      <summary>
+              Looks up a localized string similar to Unauthorized.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UndefinedHttpMethodsForServiceMethod">
+      <summary>
+              Looks up a localized string similar to Method '{0}' of the service contract type '{1}' does not have any HTTP methods defined in the UrlAttribute declaration..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UndefinedServiceMethodUrl">
+      <summary>
+              Looks up a localized string similar to Service with contract of type '{0}' could not match the URL with a method..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UndeterminedServiceContract">
+      <summary>
+              Looks up a localized string similar to Service contract of type '{0}' could not be determined..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UndeterminedUriHostName">
+      <summary>
+              Looks up a localized string similar to Could not determine the URI host name..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnmappedResourceType">
+      <summary>
+              Looks up a localized string similar to HTTP resource type provided has not been mapped..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnregisteredLogWriter">
+      <summary>
+              Looks up a localized string similar to No log writer has been registered..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsatisfiableRequestedRange">
+      <summary>
+              Looks up a localized string similar to Range not satisfiable..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsealedBehaviorAttributeClass">
+      <summary>
+              Looks up a localized string similar to Service method behavior attribute class '{0}' should be sealed for performance benefits..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedContentCharset">
+      <summary>
+              Looks up a localized string similar to The content charset provided is not supported..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedContentLanguage">
+      <summary>
+              Looks up a localized string similar to The content language provided is not supported..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedFormData">
+      <summary>
+              Looks up a localized string similar to The current service method does not support HTTP body form data..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedFromHeaderBinderParameter">
+      <summary>
+              Looks up a localized string similar to Array parameters are not supported by the FromHeader type binder..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedHttpMethod">
+      <summary>
+              Looks up a localized string similar to HTTP Method '{0}' is not supported..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedLogWriterAsyncFlush">
+      <summary>
+              Looks up a localized string similar to The current log writer does not support asynchronous flushes..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedMediaType">
+      <summary>
+              Looks up a localized string similar to Media type is not supported.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedMultiFormData">
+      <summary>
+              Looks up a localized string similar to The current service method does not support multi-form data..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedObjectTypeForOData">
+      <summary>
+              Looks up a localized string similar to OData operations are not supported for anonymous objects..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedOperation">
+      <summary>
+              Looks up a localized string similar to Unsupported operation.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedRequestedFormat">
+      <summary>
+              Looks up a localized string similar to The service is configured not to list its contents in the requested format..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.UnsupportedSyncExecutionForAsyncResult">
+      <summary>
+              Looks up a localized string similar to Asynchronous service method results must be executed by calling the ExecuteAsync(context) method..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ValidationFailed">
+      <summary>
+              Looks up a localized string similar to Validation for '{0}' failed..
+            </summary>
+    </member>
+    <member name="P:RestFoundation.Resources.Global.ValidationRequestFailed">
+      <summary>
+              Looks up a localized string similar to A potentially dangerous value was found in the HTTP request..
+            </summary>
+    </member>
     <member name="T:RestFoundation.Results.IResult">
       <summary>
             Defines a service method result.
@@ -2738,717 +3464,6 @@
     <member name="P:RestFoundation.Configuration.RestOptions.ServiceDescription">
       <summary>
             Gets the service description.
-            </summary>
-    </member>
-    <member name="T:RestFoundation.Resources.Global">
-      <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ResourceManager">
-      <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.Culture">
-      <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.AbstractHttpHandler">
-      <summary>
-              Looks up a localized string similar to The HTTP handler cannot be abstract..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.AlreadyConfigured">
-      <summary>
-              Looks up a localized string similar to REST Foundation has already been configured..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.AlreadyInitializedHttpContext">
-      <summary>
-              Looks up a localized string similar to HTTP context has already been initialized..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.AlreadyMapped">
-      <summary>
-              Looks up a localized string similar to The relative URL '{0}' has already been mapped..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ConfigurationNotInitialized">
-      <summary>
-              Looks up a localized string similar to REST Foundation configuration has not been initialized. Make sure to add a call to one of the Initialize methods of the RestFoundation.Rest.Configuration object on the application start..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ConstraintMismatchedRouteParameter">
-      <summary>
-              Looks up a localized string similar to Route parameter '{0}' with value '{1}' does not match the constraint pattern '{2}'..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.DependencyRegistrationError">
-      <summary>
-              Looks up a localized string similar to There was a problem registering a service: {0}.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.DependencyResolutionError">
-      <summary>
-              Looks up a localized string similar to There was a problem resolving a service: {0}.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.DisallowedHttpMethod">
-      <summary>
-              Looks up a localized string similar to HTTP method is not allowed..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.DisallowedMediaTypeParameters">
-      <summary>
-              Looks up a localized string similar to Media type parameters are not allowed..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.DuplicateAuthenticationBehavior">
-      <summary>
-              Looks up a localized string similar to Only a single authentication behavior can be associated with a service method. That includes global behaviors..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.DuplicateGlobalBehaviors">
-      <summary>
-              Looks up a localized string similar to Multiple global service behaviors of the same type are not allowed..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.DuplicateRouteBehaviors">
-      <summary>
-              Looks up a localized string similar to Multiple service behaviors of the same type are not allowed for the same route..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.EmptyFileName">
-      <summary>
-              Looks up a localized string similar to File name cannot be empty..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.EmptyHttpHeader">
-      <summary>
-              Looks up a localized string similar to HTTP headers cannot be empty or have white-space in the name..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.FailedRequest">
-      <summary>
-              Looks up a localized string similar to HTTP request failed to process..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.FailedRouteInvokedSuccessfully">
-      <summary>
-              Looks up a localized string similar to REST Foundation service route was invoked successfully when it should have failed..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.FailedRouteWithInvalidExceptionMessage">
-      <summary>
-              Looks up a localized string similar to REST Foundation service route invocation failed with the exception message "{0}". Exception message "{1}" was expected..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.FileNameContainsPath">
-      <summary>
-              Looks up a localized string similar to Only a file name can be specified. Relative or absolute paths/URLs are not supported..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.Forbidden">
-      <summary>
-              Looks up a localized string similar to Forbidden.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.HttpsRequiredStatusDescription">
-      <summary>
-              Looks up a localized string similar to HTTPS required.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InaccessibleFile">
-      <summary>
-              Looks up a localized string similar to The requested file cannot be accessed..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InternalServerError">
-      <summary>
-              Looks up a localized string similar to Internal Server Error.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidAcceptHeaderFormat">
-      <summary>
-              Looks up a localized string similar to One of the Accept* HTTP headers has an invalid format..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidAcceptHeaderValue">
-      <summary>
-              Looks up a localized string similar to Invalid '{0}' header value to parse..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidArgumentValue">
-      <summary>
-              Looks up a localized string similar to The argument contains invalid elements..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidAsyncTimeout">
-      <summary>
-              Looks up a localized string similar to Invalid service async timeout value provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidBrewOperation">
-      <summary>
-              Looks up a localized string similar to I'm a teapot.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidCatchAllUrlTemplate">
-      <summary>
-              Looks up a localized string similar to URL templates cannot contain catch-all parameters. Template: '{0}'.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidComplexType">
-      <summary>
-              Looks up a localized string similar to Object type must be a concrete class..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidComplexTypePropertyValue">
-      <summary>
-              Looks up a localized string similar to Value '{0}' could not be assigned to the property '{1}' (type: {2}) of the complex type '{3}'..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidConnectionTimeout">
-      <summary>
-              Looks up a localized string similar to Connection timeout is invalid..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidDynamicPropertyName">
-      <summary>
-              Looks up a localized string similar to Invalid dynamic class property name provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidFilePathOrUrl">
-      <summary>
-              Looks up a localized string similar to No valid file path/URL provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidHashKey">
-      <summary>
-              Looks up a localized string similar to Invalid hash key provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidHashType">
-      <summary>
-              Looks up a localized string similar to Invalid hash type was specified..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidHttpMethodForResource">
-      <summary>
-              Looks up a localized string similar to A resource cannot be set for the current HTTP method..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidIAsyncResultReturned">
-      <summary>
-              Looks up a localized string similar to An unsupported asynchronous result was returned from the service method. Only objects of Task and Task&lt;T&gt; types are supported. Nested generic tasks are not supported..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidIndexFileException">
-      <summary>
-              Looks up a localized string similar to Index files can only have .html or .htm extensions..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidJsonPCallback">
-      <summary>
-              Looks up a localized string similar to Invalid JSONP callback method provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidKey">
-      <summary>
-              Looks up a localized string similar to Invalid key provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidMethodInvocationTaskState">
-      <summary>
-              Looks up a localized string similar to The task returned by the IServiceMethodInvoker must be in the 'Created' state. It cannot be started..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidMethodParameterName">
-      <summary>
-              Looks up a localized string similar to Invalid method parameter name provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidNamedRoute">
-      <summary>
-              Looks up a localized string similar to Invalid route '{0}' specified..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidODataPagingParameter">
-      <summary>
-              Looks up a localized string similar to Invalid {0} query string value provided. It must be a non-negative integer..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidODataParameters">
-      <summary>
-              Looks up a localized string similar to Invalid OData parameters provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidPortNumber">
-      <summary>
-              Looks up a localized string similar to Port must be greater than 0..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidProxyMetadataType">
-      <summary>
-              Looks up a localized string similar to The type '{0}' is not a valid proxy metadata type..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidResourceBody">
-      <summary>
-              Looks up a localized string similar to Invalid resource body provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidResourceExampleType">
-      <summary>
-              Looks up a localized string similar to A resource example type must be a class implementing the RestFoundation.ServiceProxy.IResourceExample interface..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidResultContentFormat">
-      <summary>
-              Looks up a localized string similar to Invalid content result format provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidServiceContract">
-      <summary>
-              Looks up a localized string similar to Service contract type must be an interface or a concrete class that defines its own contract..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidServiceContractType">
-      <summary>
-              Looks up a localized string similar to Type '{0}' is not a service contract..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidServiceImplementation">
-      <summary>
-              Looks up a localized string similar to A service implementation that defines its own contract must be non-abstract and marked with the 'ServiceContract' attribute..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidServiceMethod">
-      <summary>
-              Looks up a localized string similar to No valid service method provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidServiceMethodArgument">
-      <summary>
-              Looks up a localized string similar to There was a problem validating service method argument '{0}'..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidServiceMethodExpression">
-      <summary>
-              Looks up a localized string similar to Invalid or mismatched service method lambda expression provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidServiceName">
-      <summary>
-              Looks up a localized string similar to Invalid relative service URL name '{0}' provided. It can only contain letters, digits, underscores and dashes..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidServiceProxyRelativeUrl">
-      <summary>
-              Looks up a localized string similar to Service help/proxy relative URL can only contain letters and numbers with optional dashes in between. Relative URL '{0}' does not meet those requirements..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidServiceUrlOrMethodExpression">
-      <summary>
-              Looks up a localized string similar to Invalid service URL or method lambda expression provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidSocketTimeout">
-      <summary>
-              Looks up a localized string similar to Socket timeout is invalid..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidUploadedFileType">
-      <summary>
-              Looks up a localized string similar to The resource type must be IUploadedFile or a collection that implements IEnumerable&lt;IUploadedFile&gt;..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidUpperBoundAddress">
-      <summary>
-              Looks up a localized string similar to The upper bound address is from a different family than the lower bound address..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidVirtualUrl">
-      <summary>
-              Looks up a localized string similar to Virtual URL must start with ~/.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.InvalidWebResponse">
-      <summary>
-              Looks up a localized string similar to Invalid web response provided..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ManuallyDefinedOptionsHttpMethod">
-      <summary>
-              Looks up a localized string similar to HTTP method OPTIONS cannot be manually defined on a service method..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MismatchedServiceMethod">
-      <summary>
-              Looks up a localized string similar to No matching service type or service method was found..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MismatchedServiceMethodExpression">
-      <summary>
-              Looks up a localized string similar to Service method delegate value of the argument '{0}' does not match the corresponding route value: {1} != {2}..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MismatchedServiceMethodRoute">
-      <summary>
-              Looks up a localized string similar to Provided service method delegate does not match the route..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MismatchedUrl">
-      <summary>
-              Looks up a localized string similar to URL '{0}' does not match any routes..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingAmbiguousServiceUrl">
-      <summary>
-              Looks up a localized string similar to An ambiguous route match was found for the service method. A specific 'serviceUrl' parameter must be specified..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingAuthorizationManager">
-      <summary>
-              Looks up a localized string similar to No authorization manager could be found..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingCssResource">
-      <summary>
-              Looks up a localized string similar to CSS resource not found..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingCurrentServiceMethod">
-      <summary>
-              Looks up a localized string similar to No current service method has been set..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingDefaultConstructor">
-      <summary>
-              Looks up a localized string similar to Created type does not have a default constructor..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingDescription">
-      <summary>
-              Looks up a localized string similar to No description provided.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingHmacPrivateKey">
-      <summary>
-              Looks up a localized string similar to No private key was found..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingHttpContext">
-      <summary>
-              Looks up a localized string similar to No HTTP context was found..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingJavaScriptResource">
-      <summary>
-              Looks up a localized string similar to JavaScript resource not found..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingOrInvalidAcceptType">
-      <summary>
-              Looks up a localized string similar to No supported media type was provided in the Accept header..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingOrInvalidContentType">
-      <summary>
-              Looks up a localized string similar to No supported media type was provided in the Content-Type header..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingPropertyDefinition">
-      <summary>
-              Looks up a localized string similar to Properties must have at least 1 property definition..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingRestHttpModule">
-      <summary>
-              Looks up a localized string similar to No REST HTTP module detected. Make sure to add a reference to the RestFoundation.RestHttpModule HTTP module in the Web.config file..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingRouteData">
-      <summary>
-              Looks up a localized string similar to No route data found..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingRouteHandler">
-      <summary>
-              Looks up a localized string similar to No route handler was passed to the service method invoker..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingServiceContext">
-      <summary>
-              Looks up a localized string similar to No service context was passed to the service method invoker..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MissingSupportedMediaTypeForFormatter">
-      <summary>
-              Looks up a localized string similar to No supported media types are defined for the media type formatter of type '{0}'..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.MultipleTypeBindersPerParameter">
-      <summary>
-              Looks up a localized string similar to Parameter '{0}' of the method '{1}' in the service contract of type '{2}' is decorated with multiple type binder attributes..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NoContent">
-      <summary>
-              Looks up a localized string similar to No Content.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NonAcceptedContentCharset">
-      <summary>
-              Looks up a localized string similar to No accepted charset was provided in the Accept-Charset header.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NonAcceptedContentLanguage">
-      <summary>
-              Looks up a localized string similar to No accepted language was provided in the Accept-Language header.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NonAcceptedMediaType">
-      <summary>
-              Looks up a localized string similar to No accepted media type was provided in the Accept header.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NonErrorHttpStatusCode">
-      <summary>
-              Looks up a localized string similar to The HTTP status code is not an error code..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NonGenericResultCollections">
-      <summary>
-              Looks up a localized string similar to Non-generic collections cannot be returned as service method results. Return typed arrays (recommended) or generic collections instead..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NonStringOutputType">
-      <summary>
-              Looks up a localized string similar to The output type is not a string..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NoResourceProvided">
-      <summary>
-              Looks up a localized string similar to No resource provided.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NotFound">
-      <summary>
-              Looks up a localized string similar to Not Found.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NotImplemented">
-      <summary>
-              Looks up a localized string similar to Not Implemented.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NullODataPropertyReference">
-      <summary>
-              Looks up a localized string similar to OData operation cannot be performed against a NULL property value..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NullOrInvalidAcceptedName">
-      <summary>
-              Looks up a localized string similar to An accepted name cannot be null or contain a wildcard..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.NullResourceBody">
-      <summary>
-              Looks up a localized string similar to Resource body cannot be null..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.OK">
-      <summary>
-              Looks up a localized string similar to OK.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.OvercomplicatedMethodArgument">
-      <summary>
-              Looks up a localized string similar to Method argument '{0}' has a value that is to complex to process. It must be a simple constant or variable value..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.PartialContent">
-      <summary>
-              Looks up a localized string similar to Partial Content.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ProxyAlreadyInitialized">
-      <summary>
-              Looks up a localized string similar to Service proxy UI is already enabled..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.RedirectMethodParameterTooComplex">
-      <summary>
-              Looks up a localized string similar to The method parameter '{0}' is too complex to process. Try storing the parameter value in a variable, then passing it to the method..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ResourceValidationFailed">
-      <summary>
-              Looks up a localized string similar to Validation Failed.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ServiceCallEnded">
-      <summary>
-              Looks up a localized string similar to -- SERVICE CALL ENDED --.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ServiceCallStarted">
-      <summary>
-              Looks up a localized string similar to -- SERVICE CALL STARTED --.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ServiceTimedOut">
-      <summary>
-              Looks up a localized string similar to Service timed out.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ServiceUnavailable">
-      <summary>
-              Looks up a localized string similar to Service is not available.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.SuccessfulOperation">
-      <summary>
-              Looks up a localized string similar to Operation is successful.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.TooManyRequests">
-      <summary>
-              Looks up a localized string similar to Too many requests.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnableToCreateServiceType">
-      <summary>
-              Looks up a localized string similar to Service with contract of type '{0}' could not be created..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnableToInitializeCache">
-      <summary>
-              Looks up a localized string similar to Cache could not be initialized..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnableToLoadIndexPage">
-      <summary>
-              Looks up a localized string similar to Index page file could not be loaded. Make sure the specified index file is available and not locked..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.Unauthorized">
-      <summary>
-              Looks up a localized string similar to Unauthorized.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UndefinedHttpMethodsForServiceMethod">
-      <summary>
-              Looks up a localized string similar to Method '{0}' of the service contract type '{1}' does not have any HTTP methods defined in the UrlAttribute declaration..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UndefinedServiceMethodUrl">
-      <summary>
-              Looks up a localized string similar to Service with contract of type '{0}' could not match the URL with a method..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UndeterminedServiceContract">
-      <summary>
-              Looks up a localized string similar to Service contract of type '{0}' could not be determined..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UndeterminedUriHostName">
-      <summary>
-              Looks up a localized string similar to Could not determine the URI host name..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnmappedResourceType">
-      <summary>
-              Looks up a localized string similar to HTTP resource type provided has not been mapped..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnregisteredLogWriter">
-      <summary>
-              Looks up a localized string similar to No log writer has been registered..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsatisfiableRequestedRange">
-      <summary>
-              Looks up a localized string similar to Range not satisfiable..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsealedBehaviorAttributeClass">
-      <summary>
-              Looks up a localized string similar to Service method behavior attribute class '{0}' should be sealed for performance benefits..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedContentCharset">
-      <summary>
-              Looks up a localized string similar to The content charset provided is not supported..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedContentLanguage">
-      <summary>
-              Looks up a localized string similar to The content language provided is not supported..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedFormData">
-      <summary>
-              Looks up a localized string similar to The current service method does not support HTTP body form data..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedFromHeaderBinderParameter">
-      <summary>
-              Looks up a localized string similar to Array parameters are not supported by the FromHeader type binder..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedHttpMethod">
-      <summary>
-              Looks up a localized string similar to HTTP Method '{0}' is not supported..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedLogWriterAsyncFlush">
-      <summary>
-              Looks up a localized string similar to The current log writer does not support asynchronous flushes..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedMediaType">
-      <summary>
-              Looks up a localized string similar to Media type is not supported.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedMultiFormData">
-      <summary>
-              Looks up a localized string similar to The current service method does not support multi-form data..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedObjectTypeForOData">
-      <summary>
-              Looks up a localized string similar to OData operations are not supported for anonymous objects..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedOperation">
-      <summary>
-              Looks up a localized string similar to Unsupported operation.
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedRequestedFormat">
-      <summary>
-              Looks up a localized string similar to The service is configured not to list its contents in the requested format..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.UnsupportedSyncExecutionForAsyncResult">
-      <summary>
-              Looks up a localized string similar to Asynchronous service method results must be executed by calling the ExecuteAsync(context) method..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ValidationFailed">
-      <summary>
-              Looks up a localized string similar to Validation for '{0}' failed..
-            </summary>
-    </member>
-    <member name="P:RestFoundation.Resources.Global.ValidationRequestFailed">
-      <summary>
-              Looks up a localized string similar to A potentially dangerous value was found in the HTTP request..
             </summary>
     </member>
     <member name="T:RestFoundation.ServiceLocation.IServiceLocator">
@@ -6571,6 +6586,11 @@
     <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.RegexConstraint">
       <summary>
             Gets or sets a regular expression constraint.
+            </summary>
+    </member>
+    <member name="P:RestFoundation.ServiceProxy.OperationMetadata.ParameterMetadata.Description">
+      <summary>
+            Gets or sets a parameter description.
             </summary>
     </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyHeader">
@@ -11258,6 +11278,25 @@
             </summary>
       <param name="authorizationManager">The authorization manager.</param>
       <returns>The configuration object.</returns>
+    </member>
+    <member name="M:RestFoundation.Configuration.ProxyConfiguration.UseXmlDocFile(System.String)">
+      <summary>
+            Specifies an XML documentation file generated by the .NET compiler for the service contract interfaces/classes.
+            Service methods must be documented.
+            </summary>
+      <param name="filePath">The absolute XMLDOC file path.</param>
+      <returns>The configuration object.</returns>
+      <exception cref="T:System.IO.FileNotFoundException">If the documentation file was not found.</exception>
+    </member>
+    <member name="M:RestFoundation.Configuration.ProxyConfiguration.UseXmlDocFile(System.String,RestFoundation.Configuration.XmlDocPathType)">
+      <summary>
+            Specifies an XML documentation file generated by the .NET compiler for the service contract interfaces/classes.
+            Service methods must be documented.
+            </summary>
+      <param name="filePath">The XMLDOC file path.</param>
+      <param name="filePathType">The file path type.</param>
+      <returns>The configuration object.</returns>
+      <exception cref="T:System.IO.FileNotFoundException">If the documentation file was not found.</exception>
     </member>
     <member name="T:RestFoundation.ServiceProxy.ProxyOperation">
       <summary>

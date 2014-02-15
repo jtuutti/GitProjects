@@ -151,21 +151,7 @@ namespace RestFoundation.Configuration
                 throw new ArgumentNullException("filePath");
             }
 
-            ICollection<Type> contractTypes = ServiceContractTypeRegistry.GetContractTypes();
-            var documentation = new Dictionary<Type, IReadOnlyList<XmlDocMetadata>>();
-
-            if (filePathType == XmlDocPathType.AppDomain)
-            {
-                filePath = Path.Combine(HttpRuntime.AppDomainAppPath, filePath);
-            }
-
-            foreach (Type contractType in contractTypes)
-            {
-                var parser = new XmlDocParser(contractType, filePath);
-                documentation[contractType] = parser.GetMetadata();
-            }
-
-            Rest.Configuration.Options.XmlDocumentation = documentation;
+            Rest.Configuration.Options.XmlDocFactory = new Lazy<Dictionary<Type, IReadOnlyList<XmlDocMetadata>>>(() => GenerateXmlDoc(filePath, filePathType));
             return this;
         }
 
@@ -204,6 +190,25 @@ namespace RestFoundation.Configuration
             {
                 unsafeHeaderField.SetValue(section, true);
             }
+        }
+
+        private static Dictionary<Type, IReadOnlyList<XmlDocMetadata>> GenerateXmlDoc(string filePath, XmlDocPathType filePathType)
+        {
+            ICollection<Type> contractTypes = ServiceContractTypeRegistry.GetContractTypes();
+            var documentation = new Dictionary<Type, IReadOnlyList<XmlDocMetadata>>();
+
+            if (filePathType == XmlDocPathType.AppDomain)
+            {
+                filePath = Path.Combine(HttpRuntime.AppDomainAppPath, filePath);
+            }
+
+            foreach (Type contractType in contractTypes)
+            {
+                var parser = new XmlDocParser(contractType, filePath);
+                documentation[contractType] = parser.GetMetadata();
+            }
+
+            return documentation;
         }
     }
 }
