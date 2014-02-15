@@ -135,10 +135,11 @@
 </script>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Service Proxy</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="en" />
     <link type="text/css" rel="stylesheet" href="<%= ProxyUrlHelper.GetByRouteName(Response, "ProxyCss") %>" />
     <script type="text/javascript" src="<%= ProxyUrlHelper.GetByRouteName(Response, "ProxyJQuery") %>"></script>
 </head>
