@@ -11,6 +11,7 @@ using System.Text;
 using System.Web;
 using RestFoundation.Runtime;
 using RestFoundation.ServiceProxy.OperationMetadata;
+using RestFoundation.TypeBinders;
 
 namespace RestFoundation.ServiceProxy
 {
@@ -237,6 +238,22 @@ namespace RestFoundation.ServiceProxy
                 });
             }
 
+            var queryParameters = metadata.MethodInfo.GetParameters()
+                                                     .Where(x => Attribute.IsDefined(x, typeof(FromUriAttribute)) &&
+                                                                 parameters.All(p => p.Name != x.Name.ToLowerInvariant()))
+                                                     .ToArray();
+
+            foreach (ParameterInfo queryParameter in queryParameters)
+            {
+                parameters.Add(new ParameterMetadata
+                {
+                    Name = queryParameter.Name.ToLowerInvariant(),
+                    ParameterType = RequestParameterType.Query,
+                    Type = queryParameter.ParameterType,
+                    IsOptionalParameter = queryParameter.DefaultValue != DBNull.Value
+                });
+            }
+
             return parameters;
         }
 
@@ -260,6 +277,21 @@ namespace RestFoundation.ServiceProxy
                     RegexConstraint = parameter.RegexConstraint,
                     ExampleValue = parameter.ExampleValue,
                     AllowedValues = parameter.AllowedValues
+                });
+            }
+
+            var bodyParameters = metadata.MethodInfo.GetParameters()
+                                                    .Where(x => Attribute.IsDefined(x, typeof(FromBodyAttribute)) &&
+                                                                parameters.All(p => p.Name != x.Name.ToLowerInvariant()))
+                                                    .ToArray();
+
+            foreach (ParameterInfo bodyParameter in bodyParameters)
+            {
+                parameters.Add(new ParameterMetadata
+                {
+                    Name = bodyParameter.Name.ToLowerInvariant(),
+                    ParameterType = RequestParameterType.Body,
+                    Type = bodyParameter.ParameterType
                 });
             }
 
