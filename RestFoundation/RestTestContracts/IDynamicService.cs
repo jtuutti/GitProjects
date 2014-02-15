@@ -1,5 +1,6 @@
 ﻿using RestFoundation;
 using RestFoundation.ServiceProxy;
+using RestFoundation.TypeBinders;
 using RestTestContracts.Metadata;
 
 namespace RestTestContracts
@@ -14,9 +15,10 @@ namespace RestTestContracts
         /// Posts a dynamic resource.
         /// </summary>
         /// <param name="resource">The resource</param>
+        /// <param name="id">The resource id.</param>
         /// <param name="request">The HTTP request.</param>
         /// <returns>The response.</returns>
         [Url(Url.Root)]
-        dynamic Post(dynamic resource, IHttpRequest request);
+        dynamic Post(dynamic resource, [FromUri] int? id, IHttpRequest request);
     }
 }

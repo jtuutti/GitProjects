@@ -69,6 +69,35 @@ namespace RestFoundation.ServiceProxy
 
             return metadataList.AsReadOnly();
         }
+        
+        private static string GenerateParameterName(ParameterInfo parameter)
+        {
+            if (!parameter.ParameterType.IsGenericType)
+            {
+                return parameter.ParameterType.FullName;
+            }
+
+            var parameterNameBuilder = new StringBuilder();
+
+            string genericTypeName = parameter.ParameterType.GetGenericTypeDefinition().FullName;
+            parameterNameBuilder.Append(genericTypeName.Substring(0, genericTypeName.IndexOf('`'))).Append('{');
+
+            Type[] genericParameters = parameter.ParameterType.GetGenericArguments();
+
+            for (int j = 0; j < genericParameters.Length; j++)
+            {
+                if (j > 0)
+                {
+                    parameterNameBuilder.Append(',');
+                }
+
+                parameterNameBuilder.Append(genericParameters[0].FullName);
+            }
+
+            parameterNameBuilder.Append('}');
+
+            return parameterNameBuilder.ToString();
+        }
 
         private string GetMethodSignature(MethodInfo method, ParameterInfo[] parameters)
         {
@@ -84,7 +113,7 @@ namespace RestFoundation.ServiceProxy
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                methodSignatureBuilder.Append(parameters[i].ParameterType.FullName);
+                methodSignatureBuilder.Append(GenerateParameterName(parameters[i]));
 
                 if (i < parameters.Length - 1)
                 {

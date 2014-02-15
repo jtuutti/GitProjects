@@ -8,23 +8,22 @@ namespace RestTestContracts.Metadata
     {
         public override void Initialize()
         {
-            ForMethod(x => x.Post(DynamicArg(), Arg<IHttpRequest>())).SetDescription("Makes use of dynamically typed resource capabilities")
-                                                                     .SetRequestResourceExample(new ComplexType
-                                                                     {
-                                                                        Name = "Joe Doe",
-                                                                        Age = 40
-                                                                     })
-                                                                     .SetResponseResourceExample(new ComplexType
-                                                                     {
-                                                                        Id = "2",
-                                                                        Name = "Joe Doe",
-                                                                        Age = 40
-                                                                     })
-                                                                     .SetQueryParameter("Id", typeof(string), "2");
+            ForMethod(x => x.Post(DynamicArg(), Arg<int?>(), Arg<IHttpRequest>())).SetRequestResourceExample(new ComplexType
+                                                                                   {
+                                                                                       Name = "Joe Doe",
+                                                                                       Age = 40
+                                                                                   })
+                                                                                   .SetResponseResourceExample(new ComplexType
+                                                                                   {
+                                                                                       Id = "2",
+                                                                                       Name = "Joe Doe",
+                                                                                       Age = 40
+                                                                                   })
+                                                                                   .SetQueryParameter("id", typeof(string), "2");
 
         }
 
-        public class ComplexType
+        private class ComplexType
         {
             public string Id { get; set; }
             public string Name { get; set; }

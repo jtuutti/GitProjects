@@ -8,7 +8,7 @@ namespace RestTestServices
 {
     public class DynamicService : IDynamicService
     {
-        public dynamic Post(dynamic resource, IHttpRequest request)
+        public dynamic Post(dynamic resource, int? id, IHttpRequest request)
         {
             if (resource == null)
             {
@@ -17,7 +17,7 @@ namespace RestTestServices
 
             dynamic result = new
             {
-                Id = Convert.ToInt32(request.QueryString.TryGet("id") ?? "0"),
+                Id = Convert.ToInt32(id.HasValue ? id.Value : 0),
                 resource.Name,
                 resource.Age
             };

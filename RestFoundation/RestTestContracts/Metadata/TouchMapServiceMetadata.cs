@@ -10,7 +10,7 @@ namespace RestTestContracts.Metadata
             SetHeaders(GetServiceHeaders());
             SetHttps(8443);
 
-            ForMethod(x => x.Get()).SetDescription("Get a touchmap");
+            ForMethod(x => x.Get());
         }
 
         public static IList<ProxyHeader> GetServiceHeaders()
