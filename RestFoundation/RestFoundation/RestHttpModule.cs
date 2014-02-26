@@ -36,6 +36,7 @@ namespace RestFoundation
         private const string RequestTimeoutMessage = "Request timed out";
 
         private static readonly object syncRoot = new Object();
+        private static readonly string[] systemHeaders = { "Server", "X-AspNet-Version", "X-Powered-By" };
         private static volatile bool catchAllRouteInitialized;
 
         internal static bool IsInitialized { get; set; }
@@ -58,6 +59,7 @@ namespace RestFoundation
 
             context.BeginRequest += (sender, args) => OnBeginRequest(sender);
             context.PreRequestHandlerExecute += (sender, args) => OnPreRequestHandlerExecute(sender);
+            context.PostReleaseRequestState += (sender, args) => OnPostReleaseRequestState(sender);
             context.EndRequest += (sender, args) => OnEndRequest(sender);
             context.Error += (sender, args) => OnError(sender);
         }
@@ -131,6 +133,19 @@ namespace RestFoundation
             {
                 TryInjectPageDependencies(application);
             }
+        }
+
+        private static void OnPostReleaseRequestState(object sender)
+        {
+            var application = sender as HttpApplication;
+
+            if (application == null)
+            {
+                return;
+            }
+
+            RemoveSystemHeaders(application);
+            AddCustomHeaders(application);
         }
 
         private static void OnEndRequest(object sender)
@@ -525,6 +540,35 @@ namespace RestFoundation
                     Message = e.Message
                 }).ToArray()
             };
+        }
+
+        private static void AddCustomHeaders(HttpApplication application)
+        {
+            IDictionary<string, string> responseHeaders = Rest.Configuration.Options.ResponseHeaders;
+
+            if (responseHeaders == null || responseHeaders.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var header in responseHeaders)
+            {
+                application.Response.AppendHeader(header.Key, header.Value);
+            }
+        }
+
+        private static void RemoveSystemHeaders(HttpApplication application)
+        {
+            foreach (string headerName in systemHeaders)
+            {
+                try
+                {
+                    application.Response.Headers.Remove(headerName);
+                }
+                catch (NotSupportedException)
+                {
+                }
+            }
         }
 
         private static void LogServiceCallEnd()

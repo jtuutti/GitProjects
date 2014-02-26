@@ -2,7 +2,6 @@
 // Dmitry Starosta, 2012-2014
 // </copyright>
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using RestFoundation.Results;
@@ -17,8 +16,6 @@ namespace RestFoundation.Runtime
             {
                 throw new ArgumentNullException("context");
             }
-
-            SetResponseHeaders(context);
 
             if (context.Response.GetStatusCode() != HttpStatusCode.OK)
             {
@@ -41,8 +38,6 @@ namespace RestFoundation.Runtime
                 throw new ArgumentNullException("context");
             }
 
-            SetResponseHeaders(context);
-
             if (result == null)
             {
                 return;
@@ -60,21 +55,6 @@ namespace RestFoundation.Runtime
             }
 
             TryDisposeResult(result);
-        }
-
-        private static void SetResponseHeaders(IServiceContext context)
-        {
-            IDictionary<string, string> responseHeaders = Rest.Configuration.Options.ResponseHeaders;
-
-            if (responseHeaders == null || responseHeaders.Count == 0)
-            {
-                return;
-            }
-
-            foreach (var header in responseHeaders)
-            {
-                context.Response.AppendHeader(header.Key, header.Value);
-            }
         }
 
         private static void TryDisposeResult(IResult result)
