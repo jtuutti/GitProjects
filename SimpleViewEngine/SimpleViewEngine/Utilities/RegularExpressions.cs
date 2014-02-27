@@ -4,6 +4,8 @@ namespace SimpleViewEngine.Utilities
 {
     internal static class RegularExpressions
     {
+        public readonly static Regex AntiForgeryDirective = new Regex(@"<!--\s*#anti\-forgery\s*-->", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public readonly static Regex BodyDirective = new Regex(@"<!--\s*#body\s*-->", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex HeadBodyDirective = new Regex(@"<!--\s*#head(.*)/#head\s*-->",

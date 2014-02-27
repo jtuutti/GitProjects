@@ -16,7 +16,7 @@ namespace SimpleViewEngine
     /// <summary>
     /// Represents an HTML view for the <see cref="HtmlViewEngine"/>.
     /// </summary>
-    public class HtmlView : IView
+    public class HtmlView : IView, IViewDataContainer
     {
         private const string FileValueType = "FILE";
         private const string LayoutViewExtension = ".layout.html";
@@ -49,6 +49,24 @@ namespace SimpleViewEngine
             m_filePath = filePath;
             m_version = version;
             m_cacheExpiration = cacheExpiration;
+        }
+
+        /// <summary>
+        /// Gets or sets the view data dictionary. This property is not supported.
+        /// </summary>
+        /// <returns>
+        /// The view data dictionary.
+        /// </returns>
+        public ViewDataDictionary ViewData
+        {
+            get
+            {
+                throw new NotSupportedException();
+            }
+            set
+            {
+                throw new NotSupportedException();
+            }
         }
 
         /// <summary>
@@ -91,14 +109,7 @@ namespace SimpleViewEngine
 
                 if (!String.IsNullOrEmpty(cachedHtml))
                 {
-                    if (viewContext.ViewData.Model == null)
-                    {
-                        writer.Write(cachedHtml);
-                    }
-                    else
-                    {
-                        writer.Write(GenerateModelScript(cachedHtml, viewContext.ViewData.Model));
-                    }
+                    writer.Write(PostRender(viewContext, cachedHtml, viewContext.ViewData.Model));
                     return;
                 }
             }
@@ -140,19 +151,7 @@ namespace SimpleViewEngine
                                       null);
             }
 
-            writer.Write(isView ? GenerateModelScript(viewHtml, viewContext.ViewData.Model) : viewHtml);
-        }
-
-        private static string GenerateModelScript(string html, object model)
-        {
-            Match modelMatch = RegularExpressions.ModelDirective.Match(html);
-
-            if (!modelMatch.Success)
-            {
-                return html;
-            }
-
-            return RegularExpressions.ModelDirective.Replace(html, ModelScriptTagCreator.Create(model));
+            writer.Write(isView ? PostRender(viewContext, viewHtml, viewContext.ViewData.Model) : viewHtml);
         }
 
         private static HashSet<string> GetReferencedFilePaths(ControllerContext context)
@@ -329,6 +328,27 @@ namespace SimpleViewEngine
 
                 return writer.GetStringBuilder().ToString();
             }
+        }
+
+        private string PostRender(ViewContext viewContext, string html, object model)
+        {
+            Match antiForgeryMatch = RegularExpressions.AntiForgeryDirective.Match(html);
+
+            if (antiForgeryMatch.Success)
+            {
+                var helper = new HtmlHelper(viewContext, this);
+
+                html = RegularExpressions.AntiForgeryDirective.Replace(html, helper.AntiForgeryToken().ToHtmlString());
+            }
+
+            Match modelMatch = RegularExpressions.ModelDirective.Match(html);
+
+            if (modelMatch.Success)
+            {
+                return RegularExpressions.ModelDirective.Replace(html, ModelScriptTagCreator.Create(model));
+            }
+
+            return html;
         }
 
         private string MapPath(ControllerContext context, string viewPath)
