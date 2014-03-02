@@ -6,7 +6,7 @@ using SimpleViewEngine.Properties;
 namespace SimpleViewEngine.Controllers
 {
     /// <summary>
-    /// Represents a controller factory that creates actionless HTML views.
+    /// Represents a controller factory that creates action-less HTML views.
     /// </summary>
     public class HtmlControllerFactory : DefaultControllerFactory
     {

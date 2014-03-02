@@ -47,7 +47,7 @@ namespace SimpleViewEngine
 
             ViewLocationFormats = new[] { "~/views/{1}/{0}.html", "~/views/shared/{0}.html" };
             PartialViewLocationFormats = new[] { "~/views/{1}/{0}.partial.html", "~/views/shared/{0}.partial.html" };
-            FileExtensions = new [] { "html" };
+            FileExtensions = new[] { "html" };
         }
 
         /// <summary>
@@ -55,6 +55,18 @@ namespace SimpleViewEngine
         /// links using the <code>:version</code> URL variable.
         /// </summary>
         public string AppVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the view engine supports view models passed
+        /// to the view from the controller. The default value is false.
+        /// </summary>
+        public bool AntiForgeryTokenSupport { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the view engine supports anti-forgery tokens.
+        /// The default value is false.
+        /// </summary>
+        public bool ViewModelSupport { get; set; }
 
         /// <summary>
         /// Creates the specified partial view by using the specified controller context.
@@ -78,7 +90,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(partialPath);
 
-            return new HtmlView(filePath, AppVersion, null);
+            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, ViewModelSupport, null);
         }
 
         /// <summary>
@@ -105,7 +117,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(viewPath);
 
-            return new HtmlView(filePath, AppVersion, m_cacheExpiration);
+            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, ViewModelSupport, m_cacheExpiration);
         }
     }
 }

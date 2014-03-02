@@ -31,6 +31,8 @@ namespace SimpleViewEngine
 
         private readonly string m_filePath;
         private readonly string m_version;
+        private readonly bool m_antiForgeryTokenSupport;
+        private readonly bool m_viewModelSupport;
         private readonly DateTime? m_cacheExpiration;
 
         /// <summary>
@@ -38,8 +40,14 @@ namespace SimpleViewEngine
         /// </summary>
         /// <param name="filePath">The local view file path.</param>
         /// <param name="version">An optional application version.</param>
+        /// <param name="antiForgeryTokenSupport">
+        /// A value indicating whether anti-forgery tokens are supported.
+        /// </param>
+        /// <param name="viewModelSupport">
+        /// A value indicating whether view models passed from the controller are supported.
+        /// </param>
         /// <param name="cacheExpiration">An optional HTML cache expiration time.</param>
-        public HtmlView(string filePath, string version, DateTime? cacheExpiration)
+        public HtmlView(string filePath, string version, bool antiForgeryTokenSupport, bool viewModelSupport, DateTime? cacheExpiration)
         {
             if (filePath == null)
             {
@@ -48,6 +56,8 @@ namespace SimpleViewEngine
 
             m_filePath = filePath;
             m_version = version;
+            m_antiForgeryTokenSupport = antiForgeryTokenSupport;
+            m_viewModelSupport = viewModelSupport;
             m_cacheExpiration = cacheExpiration;
         }
 
@@ -96,7 +106,6 @@ namespace SimpleViewEngine
             {
                 throw new FileNotFoundException(String.Format(Resources.ViewNotFound, m_filePath));
             }
-
 
             bool isView = m_filePath.IndexOf(PartialViewExtension, StringComparison.OrdinalIgnoreCase) < 0;
             string cacheKey = null;
@@ -332,20 +341,26 @@ namespace SimpleViewEngine
 
         private string PostRender(ViewContext viewContext, string html, object model)
         {
-            Match antiForgeryMatch = RegularExpressions.AntiForgeryDirective.Match(html);
-
-            if (antiForgeryMatch.Success)
+            if (m_antiForgeryTokenSupport)
             {
-                var helper = new HtmlHelper(viewContext, this);
+                Match antiForgeryMatch = RegularExpressions.AntiForgeryDirective.Match(html);
 
-                html = RegularExpressions.AntiForgeryDirective.Replace(html, helper.AntiForgeryToken().ToHtmlString());
+                if (antiForgeryMatch.Success)
+                {
+                    var helper = new HtmlHelper(viewContext, this);
+
+                    html = RegularExpressions.AntiForgeryDirective.Replace(html, helper.AntiForgeryToken().ToHtmlString());
+                }
             }
 
-            Match modelMatch = RegularExpressions.ModelDirective.Match(html);
-
-            if (modelMatch.Success)
+            if (m_viewModelSupport)
             {
-                return RegularExpressions.ModelDirective.Replace(html, ModelScriptTagCreator.Create(model));
+                Match modelMatch = RegularExpressions.ModelDirective.Match(html);
+
+                if (modelMatch.Success)
+                {
+                    return RegularExpressions.ModelDirective.Replace(html, ModelScriptTagCreator.Create(model));
+                }
             }
 
             return html;
