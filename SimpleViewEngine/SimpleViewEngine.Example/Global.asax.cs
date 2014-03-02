@@ -19,7 +19,8 @@ namespace SimpleViewEngine.Example
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new HtmlViewEngine
             {
-                AppVersion = "1.0"
+                AppVersion = "1.0",
+                ViewModelSupport = true
             });
         }
     }
