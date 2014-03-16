@@ -268,6 +268,13 @@ namespace SimpleViewEngine
         
         private static string RemoveViewEngineDirectives(string html)
         {
+            Match baseMatch = RegularExpressions.BaseDirective.Match(html);
+
+            if (baseMatch.Success)
+            {
+                html = RegularExpressions.BaseDirective.Replace(html, String.Empty);
+            }
+
             Match titleMatch = RegularExpressions.TitleDirective.Match(html);
 
             if (titleMatch.Success)
@@ -458,6 +465,13 @@ namespace SimpleViewEngine
 
         private string ParseViewEngineDirectives(ControllerContext context, string html)
         {
+            Match baseMatch = RegularExpressions.BaseDirective.Match(html);
+
+            if (baseMatch.Success)
+            {
+                html = RegularExpressions.BaseDirective.Replace(html, String.Empty);
+            }
+
             Match titleMatch = RegularExpressions.TitleDirective.Match(html);
 
             if (titleMatch.Success)
@@ -467,14 +481,28 @@ namespace SimpleViewEngine
 
             Match layoutMatch = RegularExpressions.ReferenceDirective.Match(html);
 
-            if (layoutMatch.Success)
+            if (!layoutMatch.Success)
             {
-                html = ParseLayoutView(context, layoutMatch, html);
+                return html;
+            }
 
-                if (titleMatch.Success)
-                {
-                    html = RegularExpressions.Title.Replace(html, m => String.Concat("<title>", titleMatch.Groups[1].Value, "</title>"));
-                }
+            html = ParseLayoutView(context, layoutMatch, html);
+
+            if (baseMatch.Success)
+            {
+                html = !String.IsNullOrWhiteSpace(baseMatch.Groups[3].Value) ?
+                    RegularExpressions.Base.Replace(html, m => String.Format(CultureInfo.InvariantCulture,
+                                                                             "<base href=\"{0}\" target=\"{1}\" />",
+                                                                             baseMatch.Groups[1].Value,
+                                                                             baseMatch.Groups[3].Value)) :
+                    RegularExpressions.Base.Replace(html, m => String.Format(CultureInfo.InvariantCulture,
+                                                                             "<base href=\"{0}\" />",
+                                                                             baseMatch.Groups[1].Value));
+            }
+
+            if (titleMatch.Success)
+            {
+                html = RegularExpressions.Title.Replace(html, m => String.Concat("<title>", titleMatch.Groups[1].Value, "</title>"));
             }
 
             return html;

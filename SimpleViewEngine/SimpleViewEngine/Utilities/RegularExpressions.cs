@@ -6,6 +6,11 @@ namespace SimpleViewEngine.Utilities
     {
         public readonly static Regex AntiForgeryDirective = new Regex(@"<!--\s*#anti\-forgery\s*-->", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        public readonly static Regex Base = new Regex(@"<base\s*.*>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public readonly static Regex BaseDirective = new Regex(@"<!--\s*#base\s+href=\""([^\s]*)\""(\s+target=\""([^\s]*)\"")?\s*?-->",
+                                                               RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public readonly static Regex BodyDirective = new Regex(@"<!--\s*#body\s*-->", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex HeadBodyDirective = new Regex(@"<!--\s*#head(.*)/#head\s*-->",
@@ -31,7 +36,7 @@ namespace SimpleViewEngine.Utilities
         public readonly static Regex ScriptsDirective = new Regex(@"<!--\s*#scripts\s*-->",
                                                                   RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-        public readonly static Regex TitleDirective = new Regex(@"<!--\s*#title text=\""(.*)\""\s*-->",
+        public readonly static Regex TitleDirective = new Regex(@"<!--\s*#title\s+text=\""(.*)\""\s*-->",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex Title = new Regex(@"<title>.*</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
