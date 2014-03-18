@@ -319,7 +319,7 @@ namespace RestFoundation
             }
         }
 
-        private static void HandleNotSupportedHttpMethod(HttpApplication application, FaultCollection faults, ref HttpStatusCode statusCode, ref string statusDescription)
+        private static void HandleUnsupportedHttpMethod(HttpApplication application, FaultCollection faults, ref HttpStatusCode statusCode, ref string statusDescription)
         {
             if (statusCode != HttpStatusCode.NotFound)
             {
@@ -344,7 +344,7 @@ namespace RestFoundation
             statusDescription = Global.DisallowedHttpMethod;
         }
 
-        private static IEnumerable<HttpMethod> SetAllowHeaderForNotSupportedHttpMethod(HttpApplication application)
+        private static IEnumerable<HttpMethod> SetAllowHeaderForUnsupportedHttpMethod(HttpApplication application)
         {
             var allowedHttpMethods = application.Context.Items[ServiceCallConstants.AllowedHttpMethods] as HttpMethodCollection;
             string allowedMethodString = allowedHttpMethods != null ? allowedHttpMethods.ToString() : "GET, HEAD";
@@ -404,12 +404,12 @@ namespace RestFoundation
             application.Server.ClearError();
             application.Response.Clear();
 
-            HandleNotSupportedHttpMethod(application, faults, ref statusCode, ref statusDescription);
+            HandleUnsupportedHttpMethod(application, faults, ref statusCode, ref statusDescription);
             context.Response.SetStatus(statusCode, statusDescription);
 
             if (statusCode == HttpStatusCode.MethodNotAllowed)
             {
-                IEnumerable<HttpMethod> methods = SetAllowHeaderForNotSupportedHttpMethod(application);
+                IEnumerable<HttpMethod> methods = SetAllowHeaderForUnsupportedHttpMethod(application);
 
                 if (methods.Contains(HttpMethod.Patch))
                 {
