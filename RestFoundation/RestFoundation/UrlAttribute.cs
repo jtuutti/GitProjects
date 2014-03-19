@@ -28,9 +28,17 @@ namespace RestFoundation
                 throw new ArgumentNullException("urlTemplate");
             }
 
-            if (httpMethods != null && Array.IndexOf(httpMethods, HttpMethod.Options) >= 0)
+            if (httpMethods != null)
             {
-                throw new InvalidOperationException(Resources.Global.ManuallyDefinedOptionsHttpMethod);
+                if (Array.IndexOf(httpMethods, HttpMethod.Options) >= 0)
+                {
+                    throw new InvalidOperationException(Resources.Global.ManuallyDefinedOptionsHttpMethod);
+                }
+
+                if (Array.IndexOf(httpMethods, HttpMethod.Trace) >= 0)
+                {
+                    throw new InvalidOperationException(Resources.Global.ManuallyDefinedTraceHttpMethod);
+                }
             }
 
             UrlTemplate = urlTemplate.Trim();
@@ -106,6 +114,11 @@ namespace RestFoundation
                 if (httpMethod == HttpMethod.Options)
                 {
                     throw new InvalidOperationException(Resources.Global.ManuallyDefinedOptionsHttpMethod);
+                }
+
+                if (httpMethod == HttpMethod.Trace)
+                {
+                    throw new InvalidOperationException(Resources.Global.ManuallyDefinedTraceHttpMethod);
                 }
 
                 if (!httpMethodList.Contains(httpMethod))

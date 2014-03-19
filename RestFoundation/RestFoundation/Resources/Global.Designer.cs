@@ -655,6 +655,15 @@ namespace RestFoundation.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HTTP method TRACE cannot be manually defined on a service method..
+        /// </summary>
+        internal static string ManuallyDefinedTraceHttpMethod {
+            get {
+                return ResourceManager.GetString("ManuallyDefinedTraceHttpMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No matching service type or service method was found..
         /// </summary>
         internal static string MismatchedServiceMethod {

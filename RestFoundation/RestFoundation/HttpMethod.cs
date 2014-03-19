@@ -1,6 +1,9 @@
 ﻿// <copyright>
 // Dmitry Starosta, 2012-2014
 // </copyright>
+
+using System.ComponentModel;
+
 namespace RestFoundation
 {
     /// <summary>
@@ -41,6 +44,13 @@ namespace RestFoundation
         /// <summary>
         /// OPTIONS
         /// </summary>
-        Options
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        Options,
+
+        /// <summary>
+        /// TRACE
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        Trace
     }
 }

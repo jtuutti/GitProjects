@@ -352,9 +352,16 @@ namespace RestFoundation
         private static IEnumerable<HttpMethod> SetAllowHeaderForUnsupportedHttpMethod(HttpApplication application)
         {
             var allowedHttpMethods = application.Context.Items[ServiceCallConstants.AllowedHttpMethods] as HttpMethodCollection;
+            
             string allowedMethodString = allowedHttpMethods != null ? allowedHttpMethods.ToString() : "GET, HEAD";
+            string allowedHeaderValue = String.Concat(allowedMethodString, HeaderValueSeparator, Options);
 
-            application.Context.Response.AppendHeader("Allow", String.Concat(allowedMethodString, HeaderValueSeparator, Options));
+            if (Rest.Configuration.Options.AllowTraceMethod)
+            {
+                allowedHeaderValue = String.Concat(allowedHeaderValue, HeaderValueSeparator, Trace);
+            }
+
+            application.Context.Response.AppendHeader("Allow", allowedHeaderValue);
 
             return allowedHttpMethods != null ? allowedHttpMethods.ToList() : new ReadOnlyCollection<HttpMethod>(new[] { HttpMethod.Get, HttpMethod.Head });
         }
@@ -419,17 +426,10 @@ namespace RestFoundation
             application.Server.ClearError();
             application.Response.Clear();
 
-            if (application.Request.HttpMethod == Trace)
+            if (application.Request.HttpMethod == Trace && Rest.Configuration.Options.AllowTraceMethod)
             {
-                if (Rest.Configuration.Options.AllowTraceMethod)
-                {
-                    OutputTraceData(context);
-                }
-                else
-                {
-                    SetAllowHeaderForUnsupportedHttpMethod(application);
-                    context.Response.SetStatus(HttpStatusCode.MethodNotAllowed, Global.DisallowedHttpMethod);
-                }
+                OutputTraceData(context);
+                application.CompleteRequest();
                 return;
             }
 

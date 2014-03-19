@@ -673,4 +673,8 @@
     <value>The method parameter '{0}' is too complex to process. Try storing the parameter value in a variable, then passing it to the method.</value>
     <comment>The method parameter '{0}' is too complex to process. Try storing the parameter value in a variable, then passing it to the method.</comment>
   </data>
+  <data name="ManuallyDefinedTraceHttpMethod" xml:space="preserve">
+    <value>HTTP method TRACE cannot be manually defined on a service method.</value>
+    <comment>HTTP method TRACE cannot be manually defined on a service method.</comment>
+  </data>
 </root>
