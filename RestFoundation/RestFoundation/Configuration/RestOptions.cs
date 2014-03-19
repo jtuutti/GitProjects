@@ -53,6 +53,7 @@ namespace RestFoundation.Configuration
         public string ServiceDescription { get; internal set; }
 
         internal bool IsServiceProxyInitialized { get; set; }
+        internal bool AllowTraceMethod { get; set; }
         internal string ServiceProxyRelativeUrl { get; set; }
         internal Lazy<Dictionary<Type, IReadOnlyList<XmlDocMetadata>>> XmlDocFactory { get; set; }
         internal string DefaultMediaType { get; private set; }
@@ -451,6 +452,17 @@ namespace RestFoundation.Configuration
             }
 
             ExceptionAction = action;
+            return this;
+        }
+
+        /// <summary>
+        /// Enables TRACE HTTP method support. Do not enable TRACE in a production
+        /// environment as this capability can be abused by malicious applications.
+        /// </summary>
+        /// <returns>The configuration options object.</returns>
+        public RestOptions EnableTraceMethod()
+        {
+            AllowTraceMethod = true;
             return this;
         }
     }

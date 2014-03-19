@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -23,6 +24,8 @@ namespace RestFoundation
     /// <summary>
     /// Represents an HTTP module required by the REST foundation.
     /// </summary>
+    [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling",
+                     Justification = "This is a complex HTTP module.")]
     public sealed class RestHttpModule : IHttpModule
     {
         private const int MinErrorStatusCode = 400;
@@ -33,6 +36,8 @@ namespace RestFoundation
         private const string HeaderValueSeparator = ", ";
         private const string LocationHeaderName = "Location";
         private const string Options = "OPTIONS";
+        private const string Trace = "TRACE";
+        private const string TraceMimeType = "message/http; charset=iso-8859-1";
         private const string RequestTimeoutMessage = "Request timed out";
 
         private static readonly object syncRoot = new Object();
@@ -391,6 +396,16 @@ namespace RestFoundation
             }
         }
 
+        private static void OutputTraceData(IServiceContext context)
+        {
+            context.Response.AppendHeader(context.Response.HeaderNames.ContentType, TraceMimeType);
+
+            foreach (string headerName in context.Request.Headers.Keys.OrderBy(key => key))
+            {
+                context.Response.Output.WriteFormat("{0}: {1}\n", headerName, context.Request.Headers.Get(headerName));
+            }
+        }
+
         private static void OutputFaults(HttpApplication application, HttpStatusCode statusCode, string statusDescription, FaultCollection faults)
         {
             if (faults == null)
@@ -403,6 +418,20 @@ namespace RestFoundation
 
             application.Server.ClearError();
             application.Response.Clear();
+
+            if (application.Request.HttpMethod == Trace)
+            {
+                if (Rest.Configuration.Options.AllowTraceMethod)
+                {
+                    OutputTraceData(context);
+                }
+                else
+                {
+                    SetAllowHeaderForUnsupportedHttpMethod(application);
+                    context.Response.SetStatus(HttpStatusCode.MethodNotAllowed, Global.DisallowedHttpMethod);
+                }
+                return;
+            }
 
             HandleUnsupportedHttpMethod(application, faults, ref statusCode, ref statusDescription);
             context.Response.SetStatus(statusCode, statusDescription);
