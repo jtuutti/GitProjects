@@ -115,6 +115,14 @@ namespace RestFoundation.Runtime
         }
 
         /// <summary>
+        /// Releases and disposes all HTTP context scoped objects.
+        /// </summary>
+        public void ReleaseHttpScopedResources()
+        {
+            m_container.ReleaseAndDisposePerRequestObjects();
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         /// <filterpriority>2</filterpriority>

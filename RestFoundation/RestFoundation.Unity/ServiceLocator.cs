@@ -12,7 +12,7 @@ namespace RestFoundation.Unity
     /// <summary>
     /// Represents a service locator that abstracts a Unity container.
     /// </summary>
-    public sealed class ServiceLocator : IServiceLocator
+    public class ServiceLocator : IServiceLocator
     {
         private readonly IUnityContainer m_container;
 
@@ -35,7 +35,7 @@ namespace RestFoundation.Unity
         /// </returns>
         /// <param name="serviceType">An object that specifies the type of service object to get.</param>
         /// <filterpriority>2</filterpriority>
-        public object GetService(Type serviceType)
+        public virtual object GetService(Type serviceType)
         {
             if (serviceType == null) throw new ArgumentNullException("serviceType");
 
@@ -68,7 +68,7 @@ namespace RestFoundation.Unity
         /// of type <typeparamref name="T"/>.
         /// </returns>
         /// <filterpriority>2</filterpriority>
-        public T GetService<T>()
+        public virtual T GetService<T>()
         {
             Type serviceType = typeof(T);
 
@@ -100,7 +100,7 @@ namespace RestFoundation.Unity
         /// A sequence of service objects of type <paramref name="serviceType"/>.
         /// </returns>
         /// <filterpriority>2</filterpriority>
-        public IEnumerable<object> GetServices(Type serviceType)
+        public virtual IEnumerable<object> GetServices(Type serviceType)
         {
             if (serviceType == null) throw new ArgumentNullException("serviceType");
 
@@ -131,7 +131,7 @@ namespace RestFoundation.Unity
         /// A sequence of service objects of type <typeparamref name="T"/>.
         /// </returns>
         /// <filterpriority>2</filterpriority>
-        public IEnumerable<T> GetServices<T>()
+        public virtual IEnumerable<T> GetServices<T>()
         {
             try
             {
@@ -153,12 +153,35 @@ namespace RestFoundation.Unity
         }
 
         /// <summary>
+        /// Releases and disposes all HTTP context scoped objects.
+        /// </summary>
+        public virtual void ReleaseHttpScopedResources()
+        {
+            // Unity has no HTTP context lifetime by default - requires custom implementation
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
-            m_container.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases the unmanaged resources used by the <see cref="ServiceLocator"/> and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">
+        /// true to release both managed and unmanaged resources; false to release only unmanaged resources.
+        /// </param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                m_container.Dispose();
+            }
         }
     }
 }

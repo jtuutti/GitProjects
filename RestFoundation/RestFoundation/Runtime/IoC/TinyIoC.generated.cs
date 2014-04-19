@@ -58,6 +58,9 @@
 #endif
 
 #endregion
+
+using System.Collections;
+
 namespace TinyIoC
 {
     using System;
@@ -2889,7 +2892,44 @@ namespace TinyIoC
     {
         internal static TinyIoC.TinyIoCContainer.RegisterOptions AsPerRequestSingleton(this TinyIoC.TinyIoCContainer.RegisterOptions registerOptions)
         {
+            if (registerOptions == null)
+            {
+                throw new ArgumentNullException("registerOptions");
+            }
+
             return TinyIoCContainer.RegisterOptions.ToCustomLifetimeManager(registerOptions, new HttpContextLifetimeProvider(), "per request singleton");
+        }
+
+        internal static void ReleaseAndDisposePerRequestObjects(this TinyIoC.TinyIoCContainer container)
+        {
+            if (container == null)
+            {
+                throw new ArgumentNullException("container");
+            }
+
+            HttpContext context = HttpContext.Current;
+
+            if (context == null || context.Items.Count == 0)
+            {
+                return;
+            }
+
+            foreach (DictionaryEntry item in context.Items)
+            {
+                if (!item.Key.ToString().StartsWith("TinyIoC.HttpContext.", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                var disposableItem = item.Value as IDisposable;
+
+                if (disposableItem != null)
+                {
+                    disposableItem.Dispose();
+                }
+
+                context.Items[item.Key] = null;
+            }
         }
     }
 }

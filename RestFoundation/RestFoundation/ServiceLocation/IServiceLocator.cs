@@ -41,5 +41,10 @@ namespace RestFoundation.ServiceLocation
         /// </returns>
         /// <filterpriority>2</filterpriority>
         IEnumerable<T> GetServices<T>();
+
+        /// <summary>
+        /// Releases and disposes all HTTP context scoped objects.
+        /// </summary>
+        void ReleaseHttpScopedResources();
     }
 }

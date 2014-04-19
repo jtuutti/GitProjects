@@ -175,6 +175,7 @@ namespace RestFoundation
             }
             finally
             {
+                Rest.Configuration.ServiceLocator.ReleaseHttpScopedResources();
                 LogServiceCallEnd();
             }
         }
