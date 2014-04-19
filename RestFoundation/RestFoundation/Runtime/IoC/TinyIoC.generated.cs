@@ -2914,21 +2914,23 @@ namespace TinyIoC
                 return;
             }
 
-            foreach (DictionaryEntry item in context.Items)
+            var keys = context.Items.Keys.OfType<string>().ToArray();
+
+            foreach (string key in keys)
             {
-                if (!item.Key.ToString().StartsWith("TinyIoC.HttpContext.", StringComparison.Ordinal))
+                if (!key.StartsWith("TinyIoC.HttpContext.", StringComparison.Ordinal))
                 {
                     continue;
                 }
 
-                var disposableItem = item.Value as IDisposable;
+                var disposableItem = context.Items[key] as IDisposable;
 
                 if (disposableItem != null)
                 {
                     disposableItem.Dispose();
                 }
 
-                context.Items[item.Key] = null;
+                context.Items[key] = null;
             }
         }
     }
