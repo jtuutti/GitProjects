@@ -24,8 +24,8 @@ namespace RestTest.App_Start
             DynamicModuleUtility.RegisterModule(typeof(RestHttpModule));
 
             Rest.Configuration
-                .Initialize(RegisterServiceDependencies)
-                // .InitializeWithStructureMap(CreateStructureMapContainer())
+                // .Initialize(RegisterServiceDependencies)
+                .InitializeWithStructureMap(CreateStructureMapContainer())
                 // .InitializeWithUnity(CreateUnityContainer())
                 .WithUrls(RegisterUrls)
                 .WithMediaTypeFormatters(RegisterFormatters)
@@ -68,7 +68,7 @@ namespace RestTest.App_Start
                     scanner.WithDefaultConventions();
                 });
 
-                registry.SetAllProperties(convention => convention.TypeMatches(type => Rest.ServiceContextTypes.Contains(type)));
+                registry.Policies.SetAllProperties(convention => convention.TypeMatches(type => Rest.ServiceContextTypes.Contains(type)));
             });
         }
 

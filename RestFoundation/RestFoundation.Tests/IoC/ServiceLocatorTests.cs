@@ -12,6 +12,7 @@ using RestFoundation.Tests.Implementation.Services;
 using RestFoundation.UnitTesting;
 using RestFoundation.Validation;
 using StructureMap;
+using StructureMap.Graph;
 
 namespace RestFoundation.Tests.IoC
 {
@@ -93,7 +94,7 @@ namespace RestFoundation.Tests.IoC
             var container = new Container(registry =>
             {
                 registry.For<ITestService>().Use<TestService>();
-                registry.SetAllProperties(convention => convention.TypeMatches(t => t == typeof(IServiceContext)));
+                registry.Policies.SetAllProperties(convention => convention.TypeMatches(t => t == typeof(IServiceContext)));
             });
 
             using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForStructureMap(container, true))
@@ -115,7 +116,7 @@ namespace RestFoundation.Tests.IoC
                     action.TheCallingAssembly();
                     action.WithDefaultConventions();
                 });
-                registry.SetAllProperties(convention => convention.TypeMatches(t => t == typeof(IServiceContext)));
+                registry.Policies.SetAllProperties(convention => convention.TypeMatches(t => t == typeof(IServiceContext)));
             });
 
             using (IServiceLocator serviceLocator = Rest.Configuration.CreateServiceLocatorForStructureMap(container, true))

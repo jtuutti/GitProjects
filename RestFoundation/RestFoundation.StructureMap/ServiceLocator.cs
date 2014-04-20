@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Linq;
 using RestFoundation.ServiceLocation;
 using StructureMap;
-using StructureMap.Pipeline;
+using StructureMap.Web.Pipeline;
 
 namespace RestFoundation.StructureMap
 {

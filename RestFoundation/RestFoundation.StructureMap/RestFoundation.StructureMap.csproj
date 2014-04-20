@@ -41,6 +41,12 @@
     <Reference Include="StructureMap">
       <HintPath>..\Dependencies\IoC\StructureMap.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap.Net4">
+      <HintPath>..\Dependencies\IoC\StructureMap.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap.Web">
+      <HintPath>..\Dependencies\IoC\StructureMap.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
