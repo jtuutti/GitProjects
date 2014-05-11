@@ -64,7 +64,6 @@ namespace RestFoundation
 
             context.BeginRequest += (sender, args) => OnBeginRequest(sender);
             context.PreRequestHandlerExecute += (sender, args) => OnPreRequestHandlerExecute(sender);
-            context.PostReleaseRequestState += (sender, args) => OnPostReleaseRequestState(sender);
             context.EndRequest += (sender, args) => OnEndRequest(sender);
             context.Error += (sender, args) => OnError(sender);
         }
@@ -84,6 +83,8 @@ namespace RestFoundation
             {
                 return;
             }
+
+            application.Context.Response.AddOnSendingHeaders(OnSendingHeaders);
 
             var rewriter = Rest.Configuration.ServiceLocator.GetService<IUrlRewriter>();
 
@@ -140,19 +141,6 @@ namespace RestFoundation
             }
         }
 
-        private static void OnPostReleaseRequestState(object sender)
-        {
-            var application = sender as HttpApplication;
-
-            if (application == null)
-            {
-                return;
-            }
-
-            RemoveSystemHeaders(application);
-            AddCustomHeaders(application);
-        }
-
         private static void OnEndRequest(object sender)
         {
             var application = sender as HttpApplication;
@@ -199,6 +187,16 @@ namespace RestFoundation
             Rest.Configuration.Options.ExceptionAction(Rest.Configuration.ServiceLocator.GetService<IServiceContext>(), exception);
 
             OutputInternalException(application, exception);
+        }
+        private static void OnSendingHeaders(HttpContext context)
+        {
+            if (context == null)
+            {
+                return;
+            }
+
+            RemoveSystemHeaders(context);
+            AddCustomHeaders(context);
         }
 
         private static bool RewriteUrl(IUrlRewriter rewriter, HttpApplication application)
@@ -572,7 +570,7 @@ namespace RestFoundation
             };
         }
 
-        private static void AddCustomHeaders(HttpApplication application)
+        private static void AddCustomHeaders(HttpContext context)
         {
             IDictionary<string, string> responseHeaders = Rest.Configuration.Options.ResponseHeaders;
 
@@ -583,17 +581,17 @@ namespace RestFoundation
 
             foreach (var header in responseHeaders)
             {
-                application.Response.AppendHeader(header.Key, header.Value);
+                context.Response.AppendHeader(header.Key, header.Value);
             }
         }
 
-        private static void RemoveSystemHeaders(HttpApplication application)
+        private static void RemoveSystemHeaders(HttpContext context)
         {
             foreach (string headerName in systemHeaders)
             {
                 try
                 {
-                    application.Response.Headers.Remove(headerName);
+                    context.Response.Headers.Remove(headerName);
                 }
                 catch (NotSupportedException)
                 {
