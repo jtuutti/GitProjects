@@ -158,4 +158,8 @@
     <comment>ASP .NET server cache is disabled or not available. Instantiate the HtmlViewCache without the HTML cache by passing false in the constructor.
 </comment>
   </data>
+  <data name="NoClientActions" xml:space="preserve">
+    <value>No client action names were provided.</value>
+    <comment>No client action names were provided.</comment>
+  </data>
 </root>

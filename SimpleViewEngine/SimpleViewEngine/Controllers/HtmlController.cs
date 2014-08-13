@@ -2,6 +2,7 @@
 using System.Net;
 using System.Web.Mvc;
 using System.Web.SessionState;
+using SimpleViewEngine.Routing;
 
 namespace SimpleViewEngine.Controllers
 {
@@ -28,9 +29,17 @@ namespace SimpleViewEngine.Controllers
                 return;
             }
 
+            string targetActionName = null;
+
+            if (ClientRouteConfiguration.Any)
+            {
+                targetActionName = ClientRouteConfiguration.GetTargetAction(RouteData.GetRequiredString("controller"),
+                                                                            RouteData.GetRequiredString("action"));
+            }
+
             try
             {
-                View(actionName).ExecuteResult(ControllerContext);
+                View(targetActionName ?? actionName).ExecuteResult(ControllerContext);
             }
             catch (InvalidOperationException ex)
             {
