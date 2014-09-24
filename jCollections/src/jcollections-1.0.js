@@ -1,7 +1,7 @@
 /*!
  * jCollections JavaScript Library v1.0
  * Copyright 2014, Dmitry Starosta
- * Release under the MIT license
+ * Released under the MIT license
  */
 var __collectionsInitialized = (function (undefined) {
     'use strict';
