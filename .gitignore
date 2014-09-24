@@ -49,6 +49,9 @@ _ReSharper*/
 #Subversion files
 .svn
 
+#Idea files
+.idea
+
 # Office Temp Files
 ~$*
 
