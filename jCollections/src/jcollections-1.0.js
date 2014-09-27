@@ -6,6 +6,7 @@
 var __collectionsInitialized = (function (undefined) {
     'use strict';
 
+    // Private variable declarations
     var dataStructures = {},
         errorMessages = {
             ABSTRACT_COLLECTION_INIT: '"Collection" is an abstract class that cannot be initialized directly',
@@ -16,9 +17,10 @@ var __collectionsInitialized = (function (undefined) {
             INVALID_KEY_SELECTOR: 'Invalid key selector function provided',
             INVALID_KEY_VALUE_COLLECTION: 'The initial item collection can only contain key/value objects',
             INVALID_RESULT_SELECTOR: 'Invalid result selector function provided',
-            INVALID_VALUE_ARRAY: 'Invalid array of values provided',
+            INVALID_ITEM_ARRAY: 'Invalid array of items provided',
             UNCOMPARABLE_OBJECT: 'Object(s) cannot be compared using a built-in comparer',
             RESERVED_PROPERTY_NAME: 'Reserved property name "%s"',
+            UNDEFINED_ITEM: 'Item must be defined',
             UNDEFINED_KEY: 'Key must be defined',
             UNDEFINED_VALUE: 'Value must be defined',
             UNINITIALIZED_CLASS: 'The keyword "this" is not defined. Did you forget the "new" operator?'
@@ -84,6 +86,7 @@ var __collectionsInitialized = (function (undefined) {
             }
             return format;
         };
+
 
     // Comparer implementations
     dataStructures.Comparer = {
@@ -290,14 +293,14 @@ var __collectionsInitialized = (function (undefined) {
             transformProperty = transform && (typeof transform === "string"),
             items = this.toArray(),
             transformedItems = [],
-            value,
+            transformedItem,
             i;
         if (!transformDelegate && !transformProperty) {
             return[];
         }
         for (i = 0; i < items.length; i++) {
-            value = transformDelegate ? transform.call(items[i]) : items[i][transform];
-            transformedItems.push(value);
+            transformedItem = transformDelegate ? transform.call(items[i]) : items[i][transform];
+            transformedItems.push(transformedItem);
         }
         return transformedItems;
     };
@@ -337,6 +340,8 @@ var __collectionsInitialized = (function (undefined) {
         return this.toArray().join(',');
     };
 
+
+    // Static collection methods
     dataStructures.Collection.avg = function (col) {
         var arr = convertToArray(col);
         if (arr.length === 0) {
@@ -413,8 +418,8 @@ var __collectionsInitialized = (function (undefined) {
         }
         flattenedArr = tempArr.concat.apply(tempArr, arr);
         if (recursive) {
-            flattenedArr.forEach(function (value) {
-                if (Array.isArray(value) || value instanceof dataStructures.Collection) {
+            flattenedArr.forEach(function (flattenedItem) {
+                if (Array.isArray(flattenedItem) || flattenedItem instanceof dataStructures.Collection) {
                     isFlattened = false;
                 }
             });
@@ -520,494 +525,6 @@ var __collectionsInitialized = (function (undefined) {
     };
 
 
-    // List collection implementation
-    dataStructures.List = function List() {
-        dataStructures.Collection.prototype.constructor.apply(this, arguments);
-        this.__inner.items = initializeItems(arguments);
-        this.length = this.__inner.items.length;
-    };
-    dataStructures.List.prototype = new dataStructures.Collection();
-    dataStructures.List.prototype.constructor = dataStructures.List;
-
-    dataStructures.List.prototype.findIndex = function (item) {
-        return this.__inner.items.indexOf(item);
-    };
-
-    dataStructures.List.prototype.findLastIndex = function (item) {
-        return this.__inner.items.lastIndexOf(item);
-    };
-
-    dataStructures.List.prototype.get = function (index) {
-        if (index !== parseInt(index, 10) || index < 0) {
-            throw new Error(errorMessages.INVALID_INDEX);
-        }
-        var size = this.size();
-        if (size === 0 || index > (size - 1)) {
-            return undefined;
-        }
-        return this.__inner.items[index];
-    };
-
-    dataStructures.List.prototype.contains = function (item) {
-        return this.__inner.items.indexOf(item) >= 0;
-    };
-
-    dataStructures.List.prototype.add = function (item) {
-        this.__inner.items.push(item);
-        this.length = this.__inner.items.length;
-    };
-
-    dataStructures.List.prototype.addRange = function () {
-        var items = initializeItems(arguments), i;
-        for (i = 0; i < items.length; i++) {
-            this.add(items[i]);
-        }
-    };
-
-    dataStructures.List.prototype.insert = function (index, item) {
-        this.__inner.items.splice(index, 0, item);
-        this.length = this.__inner.items.length;
-    };
-
-    dataStructures.List.prototype.moveTo = function (index, item) {
-        if (!this.remove(item)) {
-            return false;
-        }
-        this.__inner.items.splice(index, 0, item);
-        this.length++;
-        return true;
-    };
-
-    dataStructures.List.prototype.remove = function (item) {
-        var index = this.findIndex(item), i;
-        if (index < 0) {
-            return false;
-        }
-        for (i = this.__inner.items.length - 1; i >= 0; i--) {
-            if (this.__inner.items[i] === item) {
-                this.__inner.items.splice(i, 1);
-            }
-        }
-        this.length = this.__inner.items.length;
-        return true;
-    };
-
-    dataStructures.List.prototype.removeAt = function (index) {
-        var originalLength = this.__inner.items.length;
-        this.__inner.items.splice(index, 1);
-        this.length = this.__inner.items.length;
-        return originalLength > this.length;
-    };
-
-    dataStructures.List.prototype.removeWhere = function (predicate) {
-        if (this.isEmpty() || !isFunction(predicate)) {
-            return false;
-        }
-        var originalLength = this.__inner.items.length, i;
-        for (i = originalLength - 1; i >= 0; i--) {
-            if (predicate.call(this.__inner.items[i], i)) {
-                this.__inner.items.splice(i, 1);
-            }
-        }
-        this.length = this.__inner.items.length;
-        return originalLength > this.length;
-    };
-    
-    dataStructures.List.prototype.reverse = function () {
-        this.__inner.items.reverse();
-        return this;
-    };
-
-    dataStructures.List.prototype.clear = function () {
-        if (this.isEmpty()) {
-            return;
-        }
-        clearItems(this);
-    };
-
-    dataStructures.List.parse = function (arr) {
-        if (!Array.isArray(arr)) {
-            throw new Error(errorMessages.INVALID_VALUE_ARRAY);
-        }
-        return new dataStructures.List(arr);
-    };
-
-
-    // Linked List collection implementation
-    dataStructures.LinkedList = function LinkedList() {
-        dataStructures.Collection.prototype.constructor.apply(this, arguments);
-        this.head = null;
-        this.tail = null;
-        this.length = 0;
-        var items = initializeItems(arguments), i;
-        for (i = 0; i < items.length; i++) {
-            this.addLast(items[i]);
-        }
-    };
-    dataStructures.LinkedList.prototype = new dataStructures.Collection();
-    dataStructures.LinkedList.prototype.constructor = dataStructures.LinkedList;
-
-    dataStructures.LinkedList.Node = function (value) {
-        if (value === undefined) {
-            throw new Error(errorMessages.UNDEFINED_VALUE);
-        }
-        this.value = value;
-        this.prev = null;
-        this.next = null;
-    };
-
-    dataStructures.LinkedList.prototype.size = function () {
-        var i = 0,
-            node = this.head;
-        while (node) {
-            i++;
-            node = node.next;
-        }
-        return i;
-    };
-
-    dataStructures.LinkedList.prototype.contains = function (value) {
-        var node = this.head;
-        while (node) {
-            if (node.value === value) {
-                return true;
-            }
-            node = node.next;
-        }
-        return false;
-    };
-
-    dataStructures.LinkedList.prototype.findIndex = function (value) {
-        var i = 0,
-            node = this.head;
-        while (node) {
-            if (node.value === value) {
-                return i;
-            }
-            i++;
-            node = node.next;
-        }
-        return -1;
-    };
-
-    dataStructures.LinkedList.prototype.findLastIndex = function (value) {
-        var i = this.length - 1,
-            node = (i <= 1) ? this.head : this.tail;
-        while (node && i >= 0) {
-            if (node.value === value) {
-                return i;
-            }
-            i--;
-            node = node.prev;
-        }
-        return -1;
-    };
-
-    dataStructures.LinkedList.prototype.get = function (index) {
-        if (index !== parseInt(index, 10) || index < 0) {
-            throw new Error(errorMessages.INVALID_INDEX);
-        }
-        var i = 0,
-            node = this.head;
-        while (node && i <= index) {
-            if (i === index) {
-                return node.value;
-            }
-            i++;
-            node = node.next;
-        }
-        return undefined;
-    };
-
-    dataStructures.LinkedList.prototype.addFirst = function (value) {
-        if (value === undefined) {
-            throw new Error(errorMessages.UNDEFINED_VALUE);
-        }
-        var node = new dataStructures.LinkedList.Node(value),
-            firstNode;
-        if (!this.head) {
-            this.head = node;
-        } else {
-            firstNode = this.head;
-            this.head = node;
-            this.head.next = firstNode;
-            firstNode.prev = this.head;
-            if (!this.tail) {
-                this.tail = firstNode;
-                this.tail.next = null;
-            }
-        }
-        this.length++;
-    };
-
-    dataStructures.LinkedList.prototype.addLast = function (value) {
-        if (value === undefined) {
-            throw new Error(errorMessages.UNDEFINED_VALUE);
-        }
-        var node = new dataStructures.LinkedList.Node(value),
-            lastNode;
-        if (!this.head) {
-            this.head = node;
-        } else if (!this.tail) {
-            this.tail = node;
-            this.tail.prev = this.head;
-            this.head.next = this.tail;
-        } else {
-            lastNode = this.tail;
-            this.tail = node;
-            this.tail.prev = lastNode;
-            lastNode.next = this.tail;
-        }
-        this.length++;
-    };
-
-    dataStructures.LinkedList.prototype.removeFirst = function () {
-        if (!this.head) {
-            return false;
-        }
-        this.head = this.head.next;
-        if (this.tail === this.head) {
-            this.tail = null;
-        }
-        this.length--;
-        return true;
-    };
-
-    dataStructures.LinkedList.prototype.removeLast = function () {
-        if (!this.head && !this.tail) {
-            return false;
-        }
-        if (!this.tail) {
-            this.head = null;
-        } else if (this.tail.prev && this.tail.prev !== this.head) {
-            this.tail.prev.next = null;
-            this.tail = this.tail.prev;
-        } else {
-            this.head.next = null;
-            this.tail = null;
-        }
-        this.length--;
-        return true;
-    };
-
-    dataStructures.LinkedList.prototype.remove = function (value) {
-        if (value === undefined) {
-            throw new Error(errorMessages.UNDEFINED_VALUE);
-        }
-        if (!this.head) {
-            return false;
-        }
-        var originalLength = this.length,
-            node = this.head;
-        while (node) {
-            if (node.value === value) {
-                if (!node.prev) {
-                    this.head = node.next;
-                    if (this.head) {
-                        this.head.prev = null;
-                        if (this.head === this.tail) {
-                            this.tail = null;
-                        }
-                    }
-                } else if (!node.next) {
-                    this.tail = node.prev;
-                    if (this.tail) {
-                        this.tail.next = null;
-                        if (this.head === this.tail) {
-                            this.tail = null;
-                        }
-                    }
-                } else {
-                    node.next.prev = node.prev;
-                    node.prev.next = node.next;
-                }
-                this.length--;
-            }
-            node = node.next;
-        }
-        return this.length < originalLength;
-    };
-
-    dataStructures.LinkedList.prototype.clear = function () {
-        this.head = null;
-        this.tail = null;
-        this.length = 0;
-    };
-
-    dataStructures.LinkedList.prototype.toArray = function () {
-        var values = [],
-            node = this.head;
-        while (node) {
-            values.push(node.value);
-            node = node.next;
-        }
-        return values;
-    };
-
-    dataStructures.LinkedList.prototype.toReverseArray = function () {
-        var values = [],
-            node = this.tail || this.head;
-        while (node) {
-            values.push(node.value);
-            node = node.prev;
-        }
-        return values;
-    };
-
-    dataStructures.LinkedList.parse = function (arr) {
-        if (!Array.isArray(arr)) {
-            throw new Error(errorMessages.INVALID_VALUE_ARRAY);
-        }
-        return new dataStructures.LinkedList(arr);
-    };
-
-
-    // Set collection implementation
-    dataStructures.Set = function Set() {
-        dataStructures.Collection.prototype.constructor.apply(this, arguments);
-        var items = initializeItems(arguments), i;
-        if (arguments.length > 0 && isFunction(items[0])) {
-            this.__inner.equalityComparer = items[0];
-            items.splice(0, 1);
-            items = initializeItems(items);
-        } else {
-            this.__inner.equalityComparer = dataStructures.EqualityComparer.standard;
-        }
-        this.__inner.items = [];
-        for (i = 0; i < items.length; i++) {
-            this.add(items[i]);
-        }
-    };
-    dataStructures.Set.prototype = new dataStructures.Collection();
-    dataStructures.Set.prototype.constructor = dataStructures.Set;
-
-    dataStructures.Set.prototype.getEqualityComparer = function () {
-        return this.__inner.equalityComparer;
-    };
-
-    dataStructures.Set.prototype.contains = function (item) {
-        return findIndex(item, this.__inner.items, this.__inner.equalityComparer) >= 0;
-    };
-
-    dataStructures.Set.prototype.add = function (item) {
-        if (this.contains(item)) {
-            return false;
-        }
-        this.__inner.items.push(item);
-        this.length = this.__inner.items.length;
-        return true;
-    };
-
-    dataStructures.Set.prototype.addRange = function () {
-        var items = initializeItems(arguments), i;
-        for (i = 0; i < items.length; i++) {
-            this.add(items[i]);
-        }
-    };
-
-    dataStructures.Set.prototype.remove = function (item) {
-        var index = findIndex(item, this.__inner.items, this.__inner.equalityComparer);
-        if (index < 0) {
-            return false;
-        }
-        this.__inner.items.splice(index, 1);
-        this.length = this.__inner.items.length;
-        return true;
-    };
-
-    dataStructures.Set.prototype.clear = function () {
-        if (this.isEmpty()) {
-            return;
-        }
-        clearItems(this);
-    };
-
-    dataStructures.Set.prototype.union = function (set) {
-        var targetSet = new dataStructures.Set(this.__inner.equalityComparer, this.__inner.items);
-        targetSet.addRange(set);
-        return targetSet;
-    };
-
-    dataStructures.Set.prototype.intersection = function (set) {
-        var targetSet = new dataStructures.Set(this.__inner.equalityComparer),
-            items = initializeItems(arguments),
-            item,
-            i;
-        for (i = 0; i < items.length; i++) {
-            item = items[i];
-            if (this.contains(item)) {
-                targetSet.add(item);
-            }
-        }
-        return targetSet;
-    };
-
-    dataStructures.Set.prototype.difference = function (set) {
-        var targetSet = new dataStructures.Set(this.__inner.equalityComparer),
-            items = initializeItems(arguments),
-            item1,
-            item2,
-            found,
-            i,
-            j;
-        for (i = 0; i < this.__inner.items.length; i++) {
-            item1 = this.__inner.items[i];
-            found = false;
-            for (j = 0; j < items.length; j++) {
-                item2 = items[j];
-                if (this.__inner.equalityComparer(item1, item2)) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                targetSet.add(item1);
-            }
-        }
-        return targetSet;
-    };
-    
-    dataStructures.Set.prototype.equals = function (set) {
-        var items = initializeItems(arguments), i;
-        if (items.length !== this.__inner.items.length) {
-            return false;
-        }
-        for (i = 0; i < this.__inner.items.length; i++) {
-            if (!this.__inner.equalityComparer(items[i], this.__inner.items[i])) {
-                return false;
-            }
-        }
-        return true;
-    };
-
-    dataStructures.Set.prototype.isProperSubsetOf = function (set) {
-        var items = new dataStructures.Set(this.__inner.equalityComparer, initializeItems(arguments));
-        return this.difference(items).length === 0 && !this.equals(items);
-    };
-
-    dataStructures.Set.prototype.isProperSupersetOf = function (set) {
-        var items = new dataStructures.Set(this.__inner.equalityComparer, initializeItems(arguments));
-        return items.difference(this).length === 0 && !this.equals(items);
-    };
-
-    dataStructures.Set.prototype.isSubsetOf = function (set) {
-        var items = new dataStructures.Set(this.__inner.equalityComparer, initializeItems(arguments));
-        return this.difference(items).length === 0;
-    };
-
-    dataStructures.Set.prototype.isSupersetOf = function (set) {
-        var items = new dataStructures.Set(this.__inner.equalityComparer, initializeItems(arguments));
-        return items.difference(this).length === 0;
-    };
-
-    dataStructures.Set.parse = function (arr) {
-        if (!Array.isArray(arr)) {
-            throw new Error(errorMessages.INVALID_VALUE_ARRAY);
-        }
-        return new dataStructures.Set(arr);
-    };
-
-
     // Bag collection implementation
     dataStructures.Bag = function Bag () {
         dataStructures.Collection.prototype.constructor.apply(this, arguments);
@@ -1019,7 +536,7 @@ var __collectionsInitialized = (function (undefined) {
         } else {
             this.__inner.equalityComparer = dataStructures.EqualityComparer.standard;
         }
-        this.__inner.values = [];
+        this.__inner.items = [];
         this.__inner.counts = [];
         for (i = 0; i < items.length; i++) {
             this.add(items[i]);
@@ -1041,26 +558,26 @@ var __collectionsInitialized = (function (undefined) {
     };
 
     dataStructures.Bag.prototype.distinctSize = function () {
-        return this.__inner.values.length;
+        return this.__inner.items.length;
     };
 
-    dataStructures.Bag.prototype.contains = function (value) {
-        return findIndex(value, this.__inner.values, this.__inner.equalityComparer) >= 0;
+    dataStructures.Bag.prototype.contains = function (item) {
+        return findIndex(item, this.__inner.items, this.__inner.equalityComparer) >= 0;
     };
 
-    dataStructures.Bag.prototype.count = function (value) {
-        if (value === undefined) {
-            throw new Error(errorMessages.UNDEFINED_VALUE);
+    dataStructures.Bag.prototype.count = function (item) {
+        if (item === undefined) {
+            throw new Error(errorMessages.UNDEFINED_ITEM);
         }
-        var index = findIndex(value, this.__inner.values, this.__inner.equalityComparer);
+        var index = findIndex(item, this.__inner.items, this.__inner.equalityComparer);
         if (index < 0) {
             return 0;
         }
         return this.__inner.counts[index];
     };
 
-    dataStructures.Bag.prototype.add = function (value, count) {
-        var index = findIndex(value, this.__inner.values, this.__inner.equalityComparer);
+    dataStructures.Bag.prototype.add = function (item, count) {
+        var index = findIndex(item, this.__inner.items, this.__inner.equalityComparer);
         if (count === undefined) {
             count = 1;
         }
@@ -1070,63 +587,63 @@ var __collectionsInitialized = (function (undefined) {
         if (index >= 0) {
             this.__inner.counts[index] += count;
         } else {
-            this.__inner.values.push(value);
+            this.__inner.items.push(item);
             this.__inner.counts.push(count);
         }
         this.length = this.size();
     };
 
-    dataStructures.Bag.prototype.setCount = function (value, count) {
-        var index = findIndex(value, this.__inner.values, this.__inner.equalityComparer);
+    dataStructures.Bag.prototype.setCount = function (item, count) {
+        var index = findIndex(item, this.__inner.items, this.__inner.equalityComparer);
         if (count === undefined || count === null || count !== parseInt(count, 10) || count < 1) {
             throw new Error(errorMessages.INVALID_COUNT_VALUE);
         }
         if (index >= 0) {
             this.__inner.counts[index] = count;
         } else {
-            this.__inner.values.push(value);
+            this.__inner.items.push(item);
             this.__inner.counts.push(count);
         }
         this.length = this.size();
     };
 
-    dataStructures.Bag.prototype.remove = function (value) {
-        var index = findIndex(value, this.__inner.values, this.__inner.equalityComparer);
+    dataStructures.Bag.prototype.remove = function (item) {
+        var index = findIndex(item, this.__inner.items, this.__inner.equalityComparer);
         if (index < 0) {
             return false;
         }
-        this.__inner.values.splice(index, 1);
+        this.__inner.items.splice(index, 1);
         this.__inner.counts.splice(index, 1);
         this.length = this.size();
         return true;
     };
 
     dataStructures.Bag.prototype.toArray = function () {
-        var values = [], value, count, i, j;
-        for (i = 0; i < this.__inner.values.length; i++) {
-            value = this.__inner.values[i];
+        var items = [], item, count, i, j;
+        for (i = 0; i < this.__inner.items.length; i++) {
+            item = this.__inner.items[i];
             count = this.__inner.counts[i];
             for (j = 0; j < count; j++) {
-                values.push(value);
+                items.push(item);
             }
         }
-        return values;
+        return items;
     };
 
     dataStructures.Bag.prototype.toDistinctArray = function () {
-        return this.__inner.values.slice(0);
+        return this.__inner.items.slice(0);
     };
 
     dataStructures.Bag.prototype.toString = function () {
-        var str = '', value, count, i, j;
-        for (i = 0; i < this.__inner.values.length; i++) {
-            value = this.__inner.values[i];
+        var str = '', item, count, i, j;
+        for (i = 0; i < this.__inner.items.length; i++) {
+            item = this.__inner.items[i];
             count = this.__inner.counts[i];
             for (j = 0; j < count; j++) {
                 if (str.length > 0) {
                     str += ',';
                 }
-                str += value;
+                str += item;
             }
         }
         return str;
@@ -1136,16 +653,16 @@ var __collectionsInitialized = (function (undefined) {
         if (this.isEmpty()) {
             return;
         }
-        delete this.__inner.values;
+        delete this.__inner.items;
         delete this.__inner.counts;
-        this.__inner.values = [];
+        this.__inner.items = [];
         this.__inner.counts = [];
         this.length = 0;
     };
 
     dataStructures.Bag.parse = function (arr) {
         if (!Array.isArray(arr)) {
-            throw new Error(errorMessages.INVALID_VALUE_ARRAY);
+            throw new Error(errorMessages.INVALID_ITEM_ARRAY);
         }
         return new dataStructures.Bag(arr);
     };
@@ -1166,7 +683,7 @@ var __collectionsInitialized = (function (undefined) {
             this.__inner.equalityComparer = dataStructures.EqualityComparer.standard;
         }
         this.__inner.keys = [];
-        this.__inner.values = [];
+        this.__inner.items = [];
         this.__inner.findIndex = function (key) {
             return findIndex(key, ctor.__inner.keys, ctor.__inner.equalityComparer);
         };
@@ -1201,7 +718,7 @@ var __collectionsInitialized = (function (undefined) {
         if (index < 0) {
             return undefined;
         }
-        return this.__inner.values[index];
+        return this.__inner.items[index];
     };
 
     dataStructures.Dictionary.prototype.add = function (key, value) {
@@ -1215,7 +732,7 @@ var __collectionsInitialized = (function (undefined) {
             throw new Error(errorMessages.DUPLICATE_KEY);
         }
         this.__inner.keys.push(key);
-        this.__inner.values.push(value);
+        this.__inner.items.push(value);
         this.length = this.__inner.keys.length;
     };
 
@@ -1228,11 +745,11 @@ var __collectionsInitialized = (function (undefined) {
         }
         var index = this.__inner.findIndex(key);
         if (index >= 0) {
-            this.__inner.values[index] = value;
+            this.__inner.items[index] = value;
             return;
         }
         this.__inner.keys.push(key);
-        this.__inner.values.push(value);
+        this.__inner.items.push(value);
         this.length = this.__inner.keys.length;
     };
 
@@ -1245,7 +762,7 @@ var __collectionsInitialized = (function (undefined) {
             return false;
         }
         this.__inner.keys.splice(index, 1);
-        this.__inner.values.splice(index, 1);
+        this.__inner.items.splice(index, 1);
         this.length = this.__inner.keys.length;
         return true;
     };
@@ -1256,8 +773,8 @@ var __collectionsInitialized = (function (undefined) {
 
     dataStructures.Dictionary.prototype.values = function () {
         var values = [], value, i;
-        for (i = 0; i < this.__inner.values.length; i++) {
-            value = this.__inner.values[i];
+        for (i = 0; i < this.__inner.items.length; i++) {
+            value = this.__inner.items[i];
             if (values.indexOf(value) < 0) {
                 values.push(value);
             }
@@ -1268,7 +785,7 @@ var __collectionsInitialized = (function (undefined) {
     dataStructures.Dictionary.prototype.toArray = function () {
         var items = [], i;
         for (i = 0; i < this.__inner.keys.length; i++) {
-            items.push(new dataStructures.KeyValue(this.__inner.keys[i], this.__inner.values[i]));
+            items.push(new dataStructures.KeyValue(this.__inner.keys[i], this.__inner.items[i]));
         }
         return items;
     };
@@ -1281,7 +798,7 @@ var __collectionsInitialized = (function (undefined) {
         keys.sort(comparer);
         for (i = 0; i < keys.length; i++) {
             key = keys[i];
-            items.push(new dataStructures.KeyValue(key, this.__inner.values[this.__inner.keys.indexOf(key)]));
+            items.push(new dataStructures.KeyValue(key, this.__inner.items[this.__inner.keys.indexOf(key)]));
         }
         return items;
     };
@@ -1291,7 +808,7 @@ var __collectionsInitialized = (function (undefined) {
         for (i = 0; i < this.__inner.keys.length; i++) {
             key = this.__inner.keys[i].toString();
             if (key.toLocaleLowerCase() !== 'constructor' && key.toLocaleLowerCase() !== 'prototype') {
-                obj[key] = this.__inner.values[i];
+                obj[key] = this.__inner.items[i];
             } else {
                 throw new Error(stringFormat(errorMessages.RESERVED_PROPERTY_NAME, key));
             }
@@ -1306,7 +823,7 @@ var __collectionsInitialized = (function (undefined) {
                 str += ',';
             }
             key = this.__inner.keys[i];
-            value = this.__inner.values[i];
+            value = this.__inner.items[i];
             str += key.toString() + ':' + (value !== null ? value.toString() : '');
         }
         return str;
@@ -1317,15 +834,15 @@ var __collectionsInitialized = (function (undefined) {
             return;
         }
         delete this.__inner.keys;
-        delete this.__inner.values;
+        delete this.__inner.items;
         this.__inner.keys = [];
-        this.__inner.values = [];
+        this.__inner.items = [];
         this.length = 0;
     };
 
     dataStructures.Dictionary.parse = function (arr) {
         if (!Array.isArray(arr)) {
-            throw new Error(errorMessages.INVALID_VALUE_ARRAY);
+            throw new Error(errorMessages.INVALID_ITEM_ARRAY);
         }
         return new dataStructures.Dictionary(arr);
     };
@@ -1582,9 +1099,542 @@ var __collectionsInitialized = (function (undefined) {
 
     dataStructures.Hashtable.parse = function (arr) {
         if (!Array.isArray(arr)) {
-            throw new Error(errorMessages.INVALID_VALUE_ARRAY);
+            throw new Error(errorMessages.INVALID_ITEM_ARRAY);
         }
         return new dataStructures.Hashtable(arr);
+    };
+
+
+    // Linked List collection implementation
+    dataStructures.LinkedList = function LinkedList() {
+        dataStructures.Collection.prototype.constructor.apply(this, arguments);
+        this.head = null;
+        this.tail = null;
+        this.length = 0;
+        var items = initializeItems(arguments), i;
+        for (i = 0; i < items.length; i++) {
+            this.addLast(items[i]);
+        }
+    };
+    dataStructures.LinkedList.prototype = new dataStructures.Collection();
+    dataStructures.LinkedList.prototype.constructor = dataStructures.LinkedList;
+
+    dataStructures.LinkedList.Node = function (value) {
+        if (value === undefined) {
+            throw new Error(errorMessages.UNDEFINED_VALUE);
+        }
+        this.value = value;
+        this.prev = null;
+        this.next = null;
+    };
+
+    dataStructures.LinkedList.prototype.size = function () {
+        var i = 0,
+            node = this.head;
+        while (node) {
+            i++;
+            node = node.next;
+        }
+        return i;
+    };
+
+    dataStructures.LinkedList.prototype.contains = function (item) {
+        var node = this.head;
+        while (node) {
+            if (node.value === item) {
+                return true;
+            }
+            node = node.next;
+        }
+        return false;
+    };
+
+    dataStructures.LinkedList.prototype.findIndex = function (item) {
+        var i = 0,
+            node = this.head;
+        while (node) {
+            if (node.value === item) {
+                return i;
+            }
+            i++;
+            node = node.next;
+        }
+        return -1;
+    };
+
+    dataStructures.LinkedList.prototype.findLastIndex = function (item) {
+        var i = this.length - 1,
+            node = (i <= 1) ? this.head : this.tail;
+        while (node && i >= 0) {
+            if (node.value === item) {
+                return i;
+            }
+            i--;
+            node = node.prev;
+        }
+        return -1;
+    };
+
+    dataStructures.LinkedList.prototype.get = function (item) {
+        if (item !== parseInt(item, 10) || item < 0) {
+            throw new Error(errorMessages.INVALID_INDEX);
+        }
+        var i = 0,
+            node = this.head;
+        while (node && i <= item) {
+            if (i === item) {
+                return node.value;
+            }
+            i++;
+            node = node.next;
+        }
+        return undefined;
+    };
+
+    dataStructures.LinkedList.prototype.addFirst = function (item) {
+        if (item === undefined) {
+            throw new Error(errorMessages.UNDEFINED_ITEM);
+        }
+        var node = new dataStructures.LinkedList.Node(item),
+            firstNode;
+        if (!this.head) {
+            this.head = node;
+        } else {
+            firstNode = this.head;
+            this.head = node;
+            this.head.next = firstNode;
+            firstNode.prev = this.head;
+            if (!this.tail) {
+                this.tail = firstNode;
+                this.tail.next = null;
+            }
+        }
+        this.length++;
+    };
+
+    dataStructures.LinkedList.prototype.addLast = function (item) {
+        if (item === undefined) {
+            throw new Error(errorMessages.UNDEFINED_ITEM);
+        }
+        var node = new dataStructures.LinkedList.Node(item),
+            lastNode;
+        if (!this.head) {
+            this.head = node;
+        } else if (!this.tail) {
+            this.tail = node;
+            this.tail.prev = this.head;
+            this.head.next = this.tail;
+        } else {
+            lastNode = this.tail;
+            this.tail = node;
+            this.tail.prev = lastNode;
+            lastNode.next = this.tail;
+        }
+        this.length++;
+    };
+
+    dataStructures.LinkedList.prototype.removeFirst = function () {
+        if (!this.head) {
+            return false;
+        }
+        this.head = this.head.next;
+        if (this.tail === this.head) {
+            this.tail = null;
+        }
+        this.length--;
+        return true;
+    };
+
+    dataStructures.LinkedList.prototype.removeLast = function () {
+        if (!this.head && !this.tail) {
+            return false;
+        }
+        if (!this.tail) {
+            this.head = null;
+        } else if (this.tail.prev && this.tail.prev !== this.head) {
+            this.tail.prev.next = null;
+            this.tail = this.tail.prev;
+        } else {
+            this.head.next = null;
+            this.tail = null;
+        }
+        this.length--;
+        return true;
+    };
+
+    dataStructures.LinkedList.prototype.remove = function (item) {
+        if (item === undefined) {
+            throw new Error(errorMessages.UNDEFINED_ITEM);
+        }
+        if (!this.head) {
+            return false;
+        }
+        var originalLength = this.length,
+            node = this.head;
+        while (node) {
+            if (node.value === item) {
+                if (!node.prev) {
+                    this.head = node.next;
+                    if (this.head) {
+                        this.head.prev = null;
+                        if (this.head === this.tail) {
+                            this.tail = null;
+                        }
+                    }
+                } else if (!node.next) {
+                    this.tail = node.prev;
+                    if (this.tail) {
+                        this.tail.next = null;
+                        if (this.head === this.tail) {
+                            this.tail = null;
+                        }
+                    }
+                } else {
+                    node.next.prev = node.prev;
+                    node.prev.next = node.next;
+                }
+                this.length--;
+            }
+            node = node.next;
+        }
+        return this.length < originalLength;
+    };
+
+    dataStructures.LinkedList.prototype.clear = function () {
+        this.head = null;
+        this.tail = null;
+        this.length = 0;
+    };
+
+    dataStructures.LinkedList.prototype.toArray = function () {
+        var items = [],
+            node = this.head;
+        while (node) {
+            items.push(node.value);
+            node = node.next;
+        }
+        return items;
+    };
+
+    dataStructures.LinkedList.prototype.toReverseArray = function () {
+        var items = [],
+            node = this.tail || this.head;
+        while (node) {
+            items.push(node.value);
+            node = node.prev;
+        }
+        return items;
+    };
+
+    dataStructures.LinkedList.parse = function (arr) {
+        if (!Array.isArray(arr)) {
+            throw new Error(errorMessages.INVALID_ITEM_ARRAY);
+        }
+        return new dataStructures.LinkedList(arr);
+    };
+
+
+    // List collection implementation
+    dataStructures.List = function List() {
+        dataStructures.Collection.prototype.constructor.apply(this, arguments);
+        this.__inner.items = initializeItems(arguments);
+        this.length = this.__inner.items.length;
+    };
+    dataStructures.List.prototype = new dataStructures.Collection();
+    dataStructures.List.prototype.constructor = dataStructures.List;
+
+    dataStructures.List.prototype.findIndex = function (item) {
+        return this.__inner.items.indexOf(item);
+    };
+
+    dataStructures.List.prototype.findLastIndex = function (item) {
+        return this.__inner.items.lastIndexOf(item);
+    };
+
+    dataStructures.List.prototype.get = function (index) {
+        if (index !== parseInt(index, 10) || index < 0) {
+            throw new Error(errorMessages.INVALID_INDEX);
+        }
+        var size = this.size();
+        if (size === 0 || index > (size - 1)) {
+            return undefined;
+        }
+        return this.__inner.items[index];
+    };
+
+    dataStructures.List.prototype.contains = function (item) {
+        return this.__inner.items.indexOf(item) >= 0;
+    };
+
+    dataStructures.List.prototype.add = function (item) {
+        this.__inner.items.push(item);
+        this.length = this.__inner.items.length;
+    };
+
+    dataStructures.List.prototype.addRange = function () {
+        var items = initializeItems(arguments), i;
+        for (i = 0; i < items.length; i++) {
+            this.add(items[i]);
+        }
+    };
+
+    dataStructures.List.prototype.insert = function (index, item) {
+        this.__inner.items.splice(index, 0, item);
+        this.length = this.__inner.items.length;
+    };
+
+    dataStructures.List.prototype.moveTo = function (index, item) {
+        if (!this.remove(item)) {
+            return false;
+        }
+        this.__inner.items.splice(index, 0, item);
+        this.length++;
+        return true;
+    };
+
+    dataStructures.List.prototype.remove = function (item) {
+        var index = this.findIndex(item), i;
+        if (index < 0) {
+            return false;
+        }
+        for (i = this.__inner.items.length - 1; i >= 0; i--) {
+            if (this.__inner.items[i] === item) {
+                this.__inner.items.splice(i, 1);
+            }
+        }
+        this.length = this.__inner.items.length;
+        return true;
+    };
+
+    dataStructures.List.prototype.removeAt = function (index) {
+        var originalLength = this.__inner.items.length;
+        this.__inner.items.splice(index, 1);
+        this.length = this.__inner.items.length;
+        return originalLength > this.length;
+    };
+
+    dataStructures.List.prototype.removeWhere = function (predicate) {
+        if (this.isEmpty() || !isFunction(predicate)) {
+            return false;
+        }
+        var originalLength = this.__inner.items.length, i;
+        for (i = originalLength - 1; i >= 0; i--) {
+            if (predicate.call(this.__inner.items[i], i)) {
+                this.__inner.items.splice(i, 1);
+            }
+        }
+        this.length = this.__inner.items.length;
+        return originalLength > this.length;
+    };
+    
+    dataStructures.List.prototype.reverse = function () {
+        this.__inner.items.reverse();
+        return this;
+    };
+
+    dataStructures.List.prototype.clear = function () {
+        if (this.isEmpty()) {
+            return;
+        }
+        clearItems(this);
+    };
+
+    dataStructures.List.parse = function (arr) {
+        if (!Array.isArray(arr)) {
+            throw new Error(errorMessages.INVALID_ITEM_ARRAY);
+        }
+        return new dataStructures.List(arr);
+    };
+
+
+    // Queue collection implementation
+    dataStructures.Queue = function Queue() {
+        dataStructures.Collection.prototype.constructor.apply(this, arguments);
+        this.__inner.items = initializeItems(arguments);
+        this.length = this.__inner.items.length;
+    };
+    dataStructures.Queue.prototype = new dataStructures.Collection();
+    dataStructures.Queue.prototype.constructor = dataStructures.Queue;
+
+    dataStructures.Queue.prototype.enqueue = function (item) {
+        this.__inner.items.push(item);
+        this.length = this.__inner.items.length;
+    };
+
+    dataStructures.Queue.prototype.dequeue = function () {
+        if (this.isEmpty()) {
+            return undefined;
+        }
+        var item = this.__inner.items.shift();
+        this.length = this.__inner.items.length;
+        return item;
+    };
+
+    dataStructures.Queue.prototype.peek = function () {
+        if (this.isEmpty()) {
+            return undefined;
+        }
+        return this.__inner.items[0];
+    };
+
+    dataStructures.Queue.prototype.clear = function () {
+        if (this.isEmpty()) {
+            return;
+        }
+        clearItems(this);
+    };
+
+    dataStructures.Queue.parse = function (arr) {
+        if (!Array.isArray(arr)) {
+            throw new Error(errorMessages.INVALID_ITEM_ARRAY);
+        }
+        return new dataStructures.Queue(arr);
+    };
+
+
+    // Set collection implementation
+    dataStructures.Set = function Set() {
+        dataStructures.Collection.prototype.constructor.apply(this, arguments);
+        var items = initializeItems(arguments), i;
+        if (arguments.length > 0 && isFunction(items[0])) {
+            this.__inner.equalityComparer = items[0];
+            items.splice(0, 1);
+            items = initializeItems(items);
+        } else {
+            this.__inner.equalityComparer = dataStructures.EqualityComparer.standard;
+        }
+        this.__inner.items = [];
+        for (i = 0; i < items.length; i++) {
+            this.add(items[i]);
+        }
+    };
+    dataStructures.Set.prototype = new dataStructures.Collection();
+    dataStructures.Set.prototype.constructor = dataStructures.Set;
+
+    dataStructures.Set.prototype.getEqualityComparer = function () {
+        return this.__inner.equalityComparer;
+    };
+
+    dataStructures.Set.prototype.contains = function (item) {
+        return findIndex(item, this.__inner.items, this.__inner.equalityComparer) >= 0;
+    };
+
+    dataStructures.Set.prototype.add = function (item) {
+        if (this.contains(item)) {
+            return false;
+        }
+        this.__inner.items.push(item);
+        this.length = this.__inner.items.length;
+        return true;
+    };
+
+    dataStructures.Set.prototype.addRange = function () {
+        var items = initializeItems(arguments), i;
+        for (i = 0; i < items.length; i++) {
+            this.add(items[i]);
+        }
+    };
+
+    dataStructures.Set.prototype.remove = function (item) {
+        var index = findIndex(item, this.__inner.items, this.__inner.equalityComparer);
+        if (index < 0) {
+            return false;
+        }
+        this.__inner.items.splice(index, 1);
+        this.length = this.__inner.items.length;
+        return true;
+    };
+
+    dataStructures.Set.prototype.clear = function () {
+        if (this.isEmpty()) {
+            return;
+        }
+        clearItems(this);
+    };
+
+    dataStructures.Set.prototype.union = function (set) {
+        var targetSet = new dataStructures.Set(this.__inner.equalityComparer, this.__inner.items);
+        targetSet.addRange(set);
+        return targetSet;
+    };
+
+    dataStructures.Set.prototype.intersection = function (set) {
+        var targetSet = new dataStructures.Set(this.__inner.equalityComparer),
+            items = initializeItems(arguments),
+            item,
+            i;
+        for (i = 0; i < items.length; i++) {
+            item = items[i];
+            if (this.contains(item)) {
+                targetSet.add(item);
+            }
+        }
+        return targetSet;
+    };
+
+    dataStructures.Set.prototype.difference = function (set) {
+        var targetSet = new dataStructures.Set(this.__inner.equalityComparer),
+            items = initializeItems(arguments),
+            item1,
+            item2,
+            found,
+            i,
+            j;
+        for (i = 0; i < this.__inner.items.length; i++) {
+            item1 = this.__inner.items[i];
+            found = false;
+            for (j = 0; j < items.length; j++) {
+                item2 = items[j];
+                if (this.__inner.equalityComparer(item1, item2)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                targetSet.add(item1);
+            }
+        }
+        return targetSet;
+    };
+    
+    dataStructures.Set.prototype.equals = function (set) {
+        var items = initializeItems(arguments), i;
+        if (items.length !== this.__inner.items.length) {
+            return false;
+        }
+        for (i = 0; i < this.__inner.items.length; i++) {
+            if (!this.__inner.equalityComparer(items[i], this.__inner.items[i])) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    dataStructures.Set.prototype.isProperSubsetOf = function (set) {
+        var items = new dataStructures.Set(this.__inner.equalityComparer, initializeItems(arguments));
+        return this.difference(items).length === 0 && !this.equals(items);
+    };
+
+    dataStructures.Set.prototype.isProperSupersetOf = function (set) {
+        var items = new dataStructures.Set(this.__inner.equalityComparer, initializeItems(arguments));
+        return items.difference(this).length === 0 && !this.equals(items);
+    };
+
+    dataStructures.Set.prototype.isSubsetOf = function (set) {
+        var items = new dataStructures.Set(this.__inner.equalityComparer, initializeItems(arguments));
+        return this.difference(items).length === 0;
+    };
+
+    dataStructures.Set.prototype.isSupersetOf = function (set) {
+        var items = new dataStructures.Set(this.__inner.equalityComparer, initializeItems(arguments));
+        return items.difference(this).length === 0;
+    };
+
+    dataStructures.Set.parse = function (arr) {
+        if (!Array.isArray(arr)) {
+            throw new Error(errorMessages.INVALID_ITEM_ARRAY);
+        }
+        return new dataStructures.Set(arr);
     };
 
 
@@ -1637,54 +1687,9 @@ var __collectionsInitialized = (function (undefined) {
 
     dataStructures.Stack.parse = function (arr) {
         if (!Array.isArray(arr)) {
-            throw new Error(errorMessages.INVALID_VALUE_ARRAY);
+            throw new Error(errorMessages.INVALID_ITEM_ARRAY);
         }
         return new dataStructures.Stack(arr);
-    };
-
-
-    // Queue collection implementation
-    dataStructures.Queue = function Queue() {
-        dataStructures.Collection.prototype.constructor.apply(this, arguments);
-        this.__inner.items = initializeItems(arguments);
-        this.length = this.__inner.items.length;
-    };
-    dataStructures.Queue.prototype = new dataStructures.Collection();
-    dataStructures.Queue.prototype.constructor = dataStructures.Queue;
-
-    dataStructures.Queue.prototype.enqueue = function (item) {
-        this.__inner.items.push(item);
-        this.length = this.__inner.items.length;
-    };
-
-    dataStructures.Queue.prototype.dequeue = function () {
-        if (this.isEmpty()) {
-            return undefined;
-        }
-        var item = this.__inner.items.shift();
-        this.length = this.__inner.items.length;
-        return item;
-    };
-
-    dataStructures.Queue.prototype.peek = function () {
-        if (this.isEmpty()) {
-            return undefined;
-        }
-        return this.__inner.items[0];
-    };
-
-    dataStructures.Queue.prototype.clear = function () {
-        if (this.isEmpty()) {
-            return;
-        }
-        clearItems(this);
-    };
-
-    dataStructures.Queue.parse = function (arr) {
-        if (!Array.isArray(arr)) {
-            throw new Error(errorMessages.INVALID_VALUE_ARRAY);
-        }
-        return new dataStructures.Queue(arr);
     };
 
 
@@ -1767,20 +1772,20 @@ var __collectionsInitialized = (function (undefined) {
         traverse(this.root, callback);
     };
 
-    dataStructures.Tree.prototype.contains = function (value) {
+    dataStructures.Tree.prototype.contains = function (item) {
         var self = this,
             found = false;
         this.forEach(function () {
-            if (!found && self.__inner.comparer(this, value) === 0) {
+            if (!found && self.__inner.comparer(this, item) === 0) {
                 found = true;
             }
         });
         return found;
     };
 
-    dataStructures.Tree.prototype.add = function (value) {
-        if (value === undefined) {
-            throw new Error(errorMessages.UNDEFINED_VALUE);
+    dataStructures.Tree.prototype.add = function (item) {
+        if (item === undefined) {
+            throw new Error(errorMessages.UNDEFINED_ITEM);
         }
         var self = this,
             addNode = function (node) {
@@ -1809,7 +1814,7 @@ var __collectionsInitialized = (function (undefined) {
                 }
                 return node;
             };
-        if (addNode(new dataStructures.Tree.Node(value)) === null) {
+        if (addNode(new dataStructures.Tree.Node(item)) === null) {
             return false;
         }
         this.length++;
@@ -1823,15 +1828,15 @@ var __collectionsInitialized = (function (undefined) {
         }
     };
 
-    dataStructures.Tree.prototype.remove = function (value) {
-        if (value === undefined) {
-            throw new Error(errorMessages.UNDEFINED_VALUE);
+    dataStructures.Tree.prototype.remove = function (item) {
+        if (item === undefined) {
+            throw new Error(errorMessages.UNDEFINED_ITEM);
         }
         var self = this,
-            searchNode = function (node, value) {
+            searchNode = function (node, searchItem) {
                 var compareValue;
                 while (node !== null && compareValue !== 0) {
-                    compareValue = self.__inner.comparer(value, node.value);
+                    compareValue = self.__inner.comparer(searchItem, node.value);
                     if (compareValue < 0) {
                         node = node.left;
                     } else if (compareValue > 0) {
@@ -1840,7 +1845,7 @@ var __collectionsInitialized = (function (undefined) {
                 }
                 return node;
             },
-            node = searchNode(this.root, value),
+            node = searchNode(this.root, item),
             removeNode = function (node) {
                 var swap = function (node1, node2) {
                         if (node1.parent === null) {
@@ -1889,11 +1894,11 @@ var __collectionsInitialized = (function (undefined) {
     };
 
     dataStructures.Tree.prototype.toArray = function () {
-        var values = [];
+        var items = [];
         this.forEach(function () {
-            values.push(this);
+            items.push(this);
         });
-        return values;
+        return items;
     };
 
     dataStructures.Tree.prototype.toSortedArray = function (comparer) {
@@ -1906,7 +1911,7 @@ var __collectionsInitialized = (function (undefined) {
 
     dataStructures.Tree.parse = function (arr) {
         if (!Array.isArray(arr)) {
-            throw new Error(errorMessages.INVALID_VALUE_ARRAY);
+            throw new Error(errorMessages.INVALID_ITEM_ARRAY);
         }
         return new dataStructures.Tree(arr);
     };
@@ -1918,11 +1923,11 @@ var __collectionsInitialized = (function (undefined) {
             return false;
         }
 
-        window.Comparer = dataStructures.Comparer;
-        window.EqualityComparer = dataStructures.EqualityComparer;
         window.Bag = dataStructures.Bag;
         window.Collection = dataStructures.Collection;
+        window.Comparer = dataStructures.Comparer;
         window.Dictionary = dataStructures.Dictionary;
+        window.EqualityComparer = dataStructures.EqualityComparer;
         window.Hashtable = dataStructures.Hashtable;
         window.LinkedList = dataStructures.LinkedList;
         window.List = dataStructures.List;
