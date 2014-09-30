@@ -1918,20 +1918,20 @@
 
 
     // Collection initialization
-	if (global.Collection instanceof dataStructures.Collection) {
-		return;
-	}
+    if (global.Collection instanceof dataStructures.Collection) {
+        return;
+    }
 
-	global.Bag = dataStructures.Bag;
-	global.Collection = dataStructures.Collection;
-	global.Comparer = dataStructures.Comparer;
-	global.Dictionary = dataStructures.Dictionary;
-	global.EqualityComparer = dataStructures.EqualityComparer;
-	global.Hashtable = dataStructures.Hashtable;
-	global.LinkedList = dataStructures.LinkedList;
-	global.List = dataStructures.List;
-	global.Queue = dataStructures.Queue;
-	global.Set = dataStructures.Set;
-	global.Stack = dataStructures.Stack;
-	global.Tree = dataStructures.Tree;
+    global.Bag = dataStructures.Bag;
+    global.Collection = dataStructures.Collection;
+    global.Comparer = dataStructures.Comparer;
+    global.Dictionary = dataStructures.Dictionary;
+    global.EqualityComparer = dataStructures.EqualityComparer;
+    global.Hashtable = dataStructures.Hashtable;
+    global.LinkedList = dataStructures.LinkedList;
+    global.List = dataStructures.List;
+    global.Queue = dataStructures.Queue;
+    global.Set = dataStructures.Set;
+    global.Stack = dataStructures.Stack;
+    global.Tree = dataStructures.Tree;
 })(this);
