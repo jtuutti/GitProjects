@@ -3,7 +3,7 @@
  * Copyright 2014, Dmitry Starosta
  * Released under the MIT license
  */
-var __collectionsInitialized = (function (undefined) {
+(function (global, undefined) {
     'use strict';
 
     // Private variable declarations
@@ -166,7 +166,7 @@ var __collectionsInitialized = (function (undefined) {
         if (this === undefined) {
             throw new TypeError(errorMessages.UNINITIALIZED_CLASS);
         }
-        if (__collectionsInitialized && this.constructor.name === 'Collection') {
+        if (global.Collection && this.constructor.name === 'Collection') {
             throw new TypeError(errorMessages.ABSTRACT_COLLECTION_INIT);
         }
         this.__inner = {};
@@ -1919,25 +1919,25 @@ var __collectionsInitialized = (function (undefined) {
 
     // Collection initialization
     var init = function () {
-        if (__collectionsInitialized) {
-            return false;
-        }
+		if (global.Collection instanceof dataStructures.Collection) {
+			return false;
+		}
 
-        window.Bag = dataStructures.Bag;
-        window.Collection = dataStructures.Collection;
-        window.Comparer = dataStructures.Comparer;
-        window.Dictionary = dataStructures.Dictionary;
-        window.EqualityComparer = dataStructures.EqualityComparer;
-        window.Hashtable = dataStructures.Hashtable;
-        window.LinkedList = dataStructures.LinkedList;
-        window.List = dataStructures.List;
-        window.Queue = dataStructures.Queue;
-        window.Set = dataStructures.Set;
-        window.Stack = dataStructures.Stack;
-        window.Tree = dataStructures.Tree;
+		global.Bag = dataStructures.Bag;
+		global.Collection = dataStructures.Collection;
+		global.Comparer = dataStructures.Comparer;
+		global.Dictionary = dataStructures.Dictionary;
+		global.EqualityComparer = dataStructures.EqualityComparer;
+		global.Hashtable = dataStructures.Hashtable;
+		global.LinkedList = dataStructures.LinkedList;
+		global.List = dataStructures.List;
+		global.Queue = dataStructures.Queue;
+		global.Set = dataStructures.Set;
+		global.Stack = dataStructures.Stack;
+		global.Tree = dataStructures.Tree;
 
-        return true;
-    };
+		return true;
+	};
 
     return init();
-})();
+})(this);
