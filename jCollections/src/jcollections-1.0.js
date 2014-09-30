@@ -1919,7 +1919,7 @@
 
     // Collection initialization
 	if (global.Collection instanceof dataStructures.Collection) {
-		return;
+            return;
 	}
 
 	global.Bag = dataStructures.Bag;
