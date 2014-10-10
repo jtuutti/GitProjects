@@ -1934,4 +1934,4 @@
     global.Set = dataStructures.Set;
     global.Stack = dataStructures.Stack;
     global.Tree = dataStructures.Tree;
-})(this);
+})(window);
