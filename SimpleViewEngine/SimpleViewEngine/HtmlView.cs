@@ -147,6 +147,8 @@ namespace SimpleViewEngine
                 return String.Concat(group1, group2, group3, !String.IsNullOrWhiteSpace(m_version) ? m_version : "0", group5);
             });
 
+            viewHtml = RegularExpressions.ServerCommentDirective.Replace(viewHtml, String.Empty);
+
             viewContext.HttpContext.Items[RenderedPartialFilePathKey] = null;
 
             if (cacheKey != null)

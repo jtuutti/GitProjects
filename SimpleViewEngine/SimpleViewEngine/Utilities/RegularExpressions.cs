@@ -36,6 +36,8 @@ namespace SimpleViewEngine.Utilities
         public readonly static Regex ScriptsDirective = new Regex(@"<!--\s*#scripts\s*-->",
                                                                   RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
+        public readonly static Regex ServerCommentDirective = new Regex(@"<!--@[^(-->)]*-->[\r\n]*", RegexOptions.Compiled | RegexOptions.Multiline);
+
         public readonly static Regex TitleDirective = new Regex(@"<!--\s*#title\s+text=\""(.*)\""\s*-->",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
