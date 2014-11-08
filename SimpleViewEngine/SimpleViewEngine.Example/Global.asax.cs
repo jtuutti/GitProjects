@@ -20,7 +20,7 @@ namespace SimpleViewEngine.Example
             ViewEngines.Engines.Add(new HtmlViewEngine
             {
                 AppVersion = "1.0",
-                ViewModelSupport = true
+                ModelPropertyName = "model"
             });
         }
     }

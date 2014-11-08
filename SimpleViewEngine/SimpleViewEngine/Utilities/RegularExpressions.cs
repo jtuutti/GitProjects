@@ -24,6 +24,8 @@ namespace SimpleViewEngine.Utilities
 
         public readonly static Regex ModelDirective = new Regex(@"<!--\s*#model\s*-->", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        public readonly static Regex ModelPropertyNameDirective = new Regex(@"^[_$a-zA-Z][_$a-zA-Z0-9]+$", RegexOptions.Compiled);
+
         public readonly static Regex PartialViewDirective = new Regex(@"<!--\s*#partial\s+(.+)\s*=\s*\""(.+)\""\s*-->",
                                                                       RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

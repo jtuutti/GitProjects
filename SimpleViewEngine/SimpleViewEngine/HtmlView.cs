@@ -32,8 +32,8 @@ namespace SimpleViewEngine
         private readonly string m_filePath;
         private readonly string m_version;
         private readonly bool m_antiForgeryTokenSupport;
-        private readonly bool m_viewModelSupport;
         private readonly DateTime? m_cacheExpiration;
+        private readonly string m_modelPropertyName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HtmlView"/> class.
@@ -43,11 +43,11 @@ namespace SimpleViewEngine
         /// <param name="antiForgeryTokenSupport">
         /// A value indicating whether anti-forgery tokens are supported.
         /// </param>
-        /// <param name="viewModelSupport">
-        /// A value indicating whether view models passed from the controller are supported.
-        /// </param>
         /// <param name="cacheExpiration">An optional HTML cache expiration time.</param>
-        public HtmlView(string filePath, string version, bool antiForgeryTokenSupport, bool viewModelSupport, DateTime? cacheExpiration)
+        /// <param name="modelPropertyName">
+        /// An optional model property name returned from the controller.
+        /// </param>
+        public HtmlView(string filePath, string version, bool antiForgeryTokenSupport, DateTime? cacheExpiration, string modelPropertyName)
         {
             if (filePath == null)
             {
@@ -57,8 +57,12 @@ namespace SimpleViewEngine
             m_filePath = filePath;
             m_version = version;
             m_antiForgeryTokenSupport = antiForgeryTokenSupport;
-            m_viewModelSupport = viewModelSupport;
             m_cacheExpiration = cacheExpiration;
+
+            if (!String.IsNullOrWhiteSpace(modelPropertyName))
+            {
+                m_modelPropertyName = modelPropertyName.Trim();
+            }
         }
 
         /// <summary>
@@ -362,13 +366,13 @@ namespace SimpleViewEngine
                 }
             }
 
-            if (m_viewModelSupport)
+            if (m_modelPropertyName != null && RegularExpressions.ModelPropertyNameDirective.IsMatch(m_modelPropertyName))
             {
                 Match modelMatch = RegularExpressions.ModelDirective.Match(html);
 
                 if (modelMatch.Success)
                 {
-                    return RegularExpressions.ModelDirective.Replace(html, ModelScriptTagCreator.Create(model));
+                    return RegularExpressions.ModelDirective.Replace(html, ModelScriptTagCreator.Create(m_modelPropertyName, model));
                 }
             }
 

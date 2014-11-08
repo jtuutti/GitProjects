@@ -63,10 +63,12 @@ namespace SimpleViewEngine
         public bool AntiForgeryTokenSupport { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the view engine supports anti-forgery tokens.
-        /// The default value is false.
+        /// Gets or sets a value for the model variable name that gets returned from the controller.
+        /// Set this property to "null" (default) to disable JavaScript model support. The field
+        /// name must support JavaScript naming conventions (no extended characters) or it will be
+        /// ignored.
         /// </summary>
-        public bool ViewModelSupport { get; set; }
+        public string ModelPropertyName { get; set; }
 
         /// <summary>
         /// Creates the specified partial view by using the specified controller context.
@@ -90,7 +92,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(partialPath);
 
-            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, ViewModelSupport, null);
+            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, null, ModelPropertyName);
         }
 
         /// <summary>
@@ -117,7 +119,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(viewPath);
 
-            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, ViewModelSupport, m_cacheExpiration);
+            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, m_cacheExpiration, ModelPropertyName);
         }
     }
 }
