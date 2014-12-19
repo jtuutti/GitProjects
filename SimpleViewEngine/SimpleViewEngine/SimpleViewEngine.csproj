@@ -69,8 +69,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RecursiveViewReferenceException.cs" />
-    <Compile Include="Routing\RouteInfo.cs" />
-    <Compile Include="Routing\ClientRouteConfiguration.cs" />
     <Compile Include="Utilities\RegularExpressions.cs" />
     <Compile Include="Utilities\ModelScriptTagCreator.cs" />
     <Compile Include="Utilities\StringExtensions.cs" />

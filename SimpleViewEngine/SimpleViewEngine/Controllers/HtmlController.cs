@@ -2,7 +2,6 @@
 using System.Net;
 using System.Web.Mvc;
 using System.Web.SessionState;
-using SimpleViewEngine.Routing;
 
 namespace SimpleViewEngine.Controllers
 {
@@ -14,6 +13,16 @@ namespace SimpleViewEngine.Controllers
     public class HtmlController : Controller
     {
         private const string ActionNotFoundPartialMessage = "was not found";
+
+        /// <summary>
+        /// Renders the view based on the routing data.
+        /// </summary>
+        /// <returns>The rendered view.</returns>
+        [HttpGet]
+        public ViewResult Render()
+        {
+            return View();
+        }
 
         /// <summary>
         /// Called when a request matches this controller, but no method with the specified action name is found in the controller.
@@ -29,17 +38,12 @@ namespace SimpleViewEngine.Controllers
                 return;
             }
 
-            string targetActionName = null;
-
-            if (ClientRouteConfiguration.Any)
-            {
-                targetActionName = ClientRouteConfiguration.GetTargetAction(RouteData.GetRequiredString("controller"),
-                                                                            RouteData.GetRequiredString("action"));
-            }
-
             try
             {
-                ActionInvoker.InvokeAction(ControllerContext, targetActionName ?? actionName);
+                if (!ActionInvoker.InvokeAction(ControllerContext, "Render"))
+                {
+                    GenerateNotFoundStatus();
+                }
             }
             catch (InvalidOperationException ex)
             {
@@ -48,9 +52,14 @@ namespace SimpleViewEngine.Controllers
                     throw;
                 }
 
-                var notFoundResult = new HttpStatusCodeResult(HttpStatusCode.NotFound);
-                notFoundResult.ExecuteResult(ControllerContext);
+                GenerateNotFoundStatus();
             }
+        }
+
+        private void GenerateNotFoundStatus()
+        {
+            var notFoundResult = new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            notFoundResult.ExecuteResult(ControllerContext);
         }
     }
 }
