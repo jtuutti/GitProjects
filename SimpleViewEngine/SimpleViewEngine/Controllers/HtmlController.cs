@@ -39,7 +39,7 @@ namespace SimpleViewEngine.Controllers
 
             try
             {
-                View(targetActionName ?? actionName).ExecuteResult(ControllerContext);
+                ActionInvoker.InvokeAction(ControllerContext, targetActionName ?? actionName);
             }
             catch (InvalidOperationException ex)
             {
