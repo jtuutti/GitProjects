@@ -142,11 +142,6 @@ namespace SimpleViewEngine
 
             viewHtml = RegularExpressions.Link.Replace(viewHtml, m =>
             {
-                if (m_bundleSupport && IsBundledUrl(m.Value))
-                {
-                    return m.Value;
-                }
-
                 string group1 = m.Result("$1"), group2 = m.Result("$2"), group3 = m.Result("$3"), group5 = m.Result("$5");
                 string applicationPath = viewContext.HttpContext.Request.ApplicationPath != null ?
                     viewContext.HttpContext.Request.ApplicationPath.TrimEnd('/') :
@@ -561,18 +556,6 @@ namespace SimpleViewEngine
             }
 
             return html;
-        }
-
-        private static bool IsBundledUrl(string url)
-        {
-            BundleCollection bundles = BundleTable.Bundles;
-
-            if (bundles == null || bundles.Count == 0)
-            {
-                return false;
-            }
-
-            return bundles.Any(x => url.Contains(x.Path));
         }
     }
 }
