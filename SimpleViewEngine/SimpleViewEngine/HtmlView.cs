@@ -267,6 +267,50 @@ namespace SimpleViewEngine
             return html;
         }
 
+        private static string ParseLayoutViewContent(ControllerContext context, string layoutFilePath, string html)
+        {
+            if (!File.Exists(layoutFilePath))
+            {
+                throw new FileNotFoundException(String.Format(Resources.LayoutViewNotFound, layoutFilePath));
+            }
+
+            GetReferencedFilePaths(context).Add(layoutFilePath);
+
+            string layoutHtml = ReadViewFileHtml(layoutFilePath, ViewType.Layout);
+
+            Match headHtmlMatch = RegularExpressions.HeadBodyDirective.Match(html);
+
+            if (headHtmlMatch.Success)
+            {
+                string headHtml = headHtmlMatch.Groups[1].Value;
+
+                html = RegularExpressions.HeadBodyDirective.Replace(html, String.Empty);
+                layoutHtml = RegularExpressions.HeadDirective.Replace(layoutHtml, headHtml.TrimLine());
+            }
+            else
+            {
+                layoutHtml = RegularExpressions.HeadDirective.Replace(layoutHtml, String.Empty);
+            }
+
+            Match scriptsHtmlMatch = RegularExpressions.ScriptsBodyDirective.Match(html);
+
+            if (scriptsHtmlMatch.Success)
+            {
+                string scriptsHtml = scriptsHtmlMatch.Groups[1].Value;
+
+                html = RegularExpressions.ScriptsBodyDirective.Replace(html, String.Empty);
+                layoutHtml = RegularExpressions.ScriptsDirective.Replace(layoutHtml, scriptsHtml.TrimLine());
+            }
+            else
+            {
+                layoutHtml = RegularExpressions.ScriptsDirective.Replace(layoutHtml, String.Empty);
+            }
+
+            layoutHtml = RegularExpressions.BodyDirective.Replace(layoutHtml, html.TrimLine());
+
+            return layoutHtml;
+        }
+
         private static string RenderPartialView(ControllerContext context, string viewName)
         {
             if (String.IsNullOrEmpty(viewName))
@@ -313,54 +357,6 @@ namespace SimpleViewEngine
                 return writer.GetStringBuilder().ToString();
             }
         }
-        private string ParseLayoutViewContent(ControllerContext context, string layoutFilePath, string html)
-        {
-            if (!File.Exists(layoutFilePath))
-            {
-                throw new FileNotFoundException(String.Format(Resources.LayoutViewNotFound, layoutFilePath));
-            }
-
-            GetReferencedFilePaths(context).Add(layoutFilePath);
-
-            string layoutHtml = ReadViewFileHtml(layoutFilePath, ViewType.Layout);
-
-            Match headHtmlMatch = RegularExpressions.HeadBodyDirective.Match(html);
-
-            if (headHtmlMatch.Success)
-            {
-                string headHtml = headHtmlMatch.Groups[1].Value;
-
-                html = RegularExpressions.HeadBodyDirective.Replace(html, String.Empty);
-                layoutHtml = RegularExpressions.HeadDirective.Replace(layoutHtml, headHtml.TrimLine());
-            }
-            else
-            {
-                layoutHtml = RegularExpressions.HeadDirective.Replace(layoutHtml, String.Empty);
-            }
-
-            Match scriptsHtmlMatch = RegularExpressions.ScriptsBodyDirective.Match(html);
-
-            if (scriptsHtmlMatch.Success)
-            {
-                string scriptsHtml = scriptsHtmlMatch.Groups[1].Value;
-
-                html = RegularExpressions.ScriptsBodyDirective.Replace(html, String.Empty);
-                layoutHtml = RegularExpressions.ScriptsDirective.Replace(layoutHtml, scriptsHtml.TrimLine());
-            }
-            else
-            {
-                layoutHtml = RegularExpressions.ScriptsDirective.Replace(layoutHtml, String.Empty);
-            }
-
-            if (m_bundleSupport)
-            {
-                layoutHtml = TransformBundles(layoutHtml);
-            }
-
-            layoutHtml = RegularExpressions.BodyDirective.Replace(layoutHtml, html.TrimLine());
-
-            return layoutHtml;
-        }
 
         private string PostRender(ViewContext viewContext, string html, object model)
         {
@@ -374,6 +370,11 @@ namespace SimpleViewEngine
 
                     html = RegularExpressions.AntiForgeryDirective.Replace(html, helper.AntiForgeryToken().ToHtmlString());
                 }
+            }
+
+            if (m_bundleSupport)
+            {
+                html = TransformBundles(html);
             }
 
             if (m_modelPropertyName != null && RegularExpressions.ModelPropertyNameDirective.IsMatch(m_modelPropertyName))
@@ -524,9 +525,9 @@ namespace SimpleViewEngine
             return html;
         }
 
-        private static string TransformBundles(string layoutHtml)
+        private static string TransformBundles(string html)
         {
-            MatchCollection cssBundleMatches = RegularExpressions.CssBundle.Matches(layoutHtml);
+            MatchCollection cssBundleMatches = RegularExpressions.CssBundle.Matches(html);
 
             foreach (Match cssBundleMatch in cssBundleMatches)
             {
@@ -537,10 +538,10 @@ namespace SimpleViewEngine
                     continue;
                 }
 
-                layoutHtml = layoutHtml.Replace(cssBundleMatch.Value, Styles.Render(bundleUrl.Trim()).ToHtmlString().TrimLine());
+                html = html.Replace(cssBundleMatch.Value, Styles.Render(bundleUrl.Trim()).ToHtmlString().TrimLine());
             }
 
-            MatchCollection scriptBundleMatches = RegularExpressions.ScriptBundle.Matches(layoutHtml);
+            MatchCollection scriptBundleMatches = RegularExpressions.ScriptBundle.Matches(html);
 
             foreach (Match scriptBundleMatch in scriptBundleMatches)
             {
@@ -551,10 +552,10 @@ namespace SimpleViewEngine
                     continue;
                 }
 
-                layoutHtml = layoutHtml.Replace(scriptBundleMatch.Value, Scripts.Render(bundleUrl.Trim()).ToHtmlString().TrimLine());
+                html = html.Replace(scriptBundleMatch.Value, Scripts.Render(bundleUrl.Trim()).ToHtmlString().TrimLine());
             }
 
-            return layoutHtml;
+            return html;
         }
     }
 }
