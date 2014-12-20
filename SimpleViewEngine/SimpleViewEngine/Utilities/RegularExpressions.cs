@@ -8,10 +8,12 @@ namespace SimpleViewEngine.Utilities
 
         public readonly static Regex Base = new Regex(@"<base\s*.*>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public readonly static Regex BaseDirective = new Regex(@"<!--\s*#base\s+href=\""([^\s]*)\""(\s+target=\""([^\s]*)\"")?\s*?-->",
+        public readonly static Regex BaseDirective = new Regex(@"<!--\s*#base\s+href\s*=\s*\""([^\s]*)\""(\s+target\s*=\s*\""([^\s]*)\"")?\s*?-->",
                                                                RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex BodyDirective = new Regex(@"<!--\s*#body\s*-->", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public readonly static Regex CssBundle = new Regex(@"<css\-bundle\s+href\s*=\s*\""([^\s]*)\""\s*/?>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex HeadBodyDirective = new Regex(@"<!--\s*#head(.*)/#head\s*-->",
                                                                    RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
@@ -31,6 +33,8 @@ namespace SimpleViewEngine.Utilities
 
         public readonly static Regex ReferenceDirective = new Regex(@"<!--\s*#layout\s+(.+)\s*=\s*\""(.+)\""\s*-->",
                                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public readonly static Regex ScriptBundle = new Regex(@"<script\-bundle\s+href\s*=\s*\""([^\s]*)\""\s*/?>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex ScriptsBodyDirective = new Regex(@"<!--\s*#scripts(.*)/#scripts\s*-->",
                                                                       RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);

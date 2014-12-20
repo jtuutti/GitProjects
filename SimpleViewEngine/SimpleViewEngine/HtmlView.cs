@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using SimpleViewEngine.Properties;
 using SimpleViewEngine.Utilities;
 
@@ -32,6 +33,7 @@ namespace SimpleViewEngine
         private readonly string m_filePath;
         private readonly string m_version;
         private readonly bool m_antiForgeryTokenSupport;
+        private readonly bool m_bundleSupport;
         private readonly DateTime? m_cacheExpiration;
         private readonly string m_modelPropertyName;
 
@@ -43,11 +45,14 @@ namespace SimpleViewEngine
         /// <param name="antiForgeryTokenSupport">
         /// A value indicating whether anti-forgery tokens are supported.
         /// </param>
+        /// <param name="bundleSupport">
+        /// A value indicating whether MVC bundles tokens are supported.
+        /// </param>
         /// <param name="cacheExpiration">An optional HTML cache expiration time.</param>
         /// <param name="modelPropertyName">
         /// An optional model property name returned from the controller.
         /// </param>
-        public HtmlView(string filePath, string version, bool antiForgeryTokenSupport, DateTime? cacheExpiration, string modelPropertyName)
+        public HtmlView(string filePath, string version, bool antiForgeryTokenSupport, bool bundleSupport, DateTime? cacheExpiration, string modelPropertyName)
         {
             if (filePath == null)
             {
@@ -57,6 +62,7 @@ namespace SimpleViewEngine
             m_filePath = filePath;
             m_version = version;
             m_antiForgeryTokenSupport = antiForgeryTokenSupport;
+            m_bundleSupport = bundleSupport;
             m_cacheExpiration = cacheExpiration;
 
             if (!String.IsNullOrWhiteSpace(modelPropertyName))
@@ -199,50 +205,6 @@ namespace SimpleViewEngine
             return filePaths;
         }
 
-        private static string ParseLayoutViewContent(ControllerContext context, string layoutFilePath, string html)
-        {
-            if (!File.Exists(layoutFilePath))
-            {
-                throw new FileNotFoundException(String.Format(Resources.LayoutViewNotFound, layoutFilePath));
-            }
-
-            GetReferencedFilePaths(context).Add(layoutFilePath);
-
-            string layoutHtml = ReadViewFileHtml(layoutFilePath, ViewType.Layout);
-
-            Match headHtmlMatch = RegularExpressions.HeadBodyDirective.Match(html);
-
-            if (headHtmlMatch.Success)
-            {
-                string headHtml = headHtmlMatch.Groups[1].Value;
-
-                html = RegularExpressions.HeadBodyDirective.Replace(html, String.Empty);
-                layoutHtml = RegularExpressions.HeadDirective.Replace(layoutHtml, headHtml.TrimLine());
-            }
-            else
-            {
-                layoutHtml = RegularExpressions.HeadDirective.Replace(layoutHtml, String.Empty);
-            }
-
-            Match scriptsHtmlMatch = RegularExpressions.ScriptsBodyDirective.Match(html);
-
-            if (scriptsHtmlMatch.Success)
-            {
-                string scriptsHtml = scriptsHtmlMatch.Groups[1].Value;
-
-                html = RegularExpressions.ScriptsBodyDirective.Replace(html, String.Empty);
-                layoutHtml = RegularExpressions.ScriptsDirective.Replace(layoutHtml, scriptsHtml.TrimLine());
-            }
-            else
-            {
-                layoutHtml = RegularExpressions.ScriptsDirective.Replace(layoutHtml, String.Empty);
-            }
-
-            layoutHtml = RegularExpressions.BodyDirective.Replace(layoutHtml, html.TrimLine());
-
-            return layoutHtml;
-        }
-
         private static string ReadViewFileHtml(string filePath, ViewType viewType)
         {
             filePath = filePath.TrimLine();
@@ -350,6 +312,54 @@ namespace SimpleViewEngine
 
                 return writer.GetStringBuilder().ToString();
             }
+        }
+        private string ParseLayoutViewContent(ControllerContext context, string layoutFilePath, string html)
+        {
+            if (!File.Exists(layoutFilePath))
+            {
+                throw new FileNotFoundException(String.Format(Resources.LayoutViewNotFound, layoutFilePath));
+            }
+
+            GetReferencedFilePaths(context).Add(layoutFilePath);
+
+            string layoutHtml = ReadViewFileHtml(layoutFilePath, ViewType.Layout);
+
+            Match headHtmlMatch = RegularExpressions.HeadBodyDirective.Match(html);
+
+            if (headHtmlMatch.Success)
+            {
+                string headHtml = headHtmlMatch.Groups[1].Value;
+
+                html = RegularExpressions.HeadBodyDirective.Replace(html, String.Empty);
+                layoutHtml = RegularExpressions.HeadDirective.Replace(layoutHtml, headHtml.TrimLine());
+            }
+            else
+            {
+                layoutHtml = RegularExpressions.HeadDirective.Replace(layoutHtml, String.Empty);
+            }
+
+            Match scriptsHtmlMatch = RegularExpressions.ScriptsBodyDirective.Match(html);
+
+            if (scriptsHtmlMatch.Success)
+            {
+                string scriptsHtml = scriptsHtmlMatch.Groups[1].Value;
+
+                html = RegularExpressions.ScriptsBodyDirective.Replace(html, String.Empty);
+                layoutHtml = RegularExpressions.ScriptsDirective.Replace(layoutHtml, scriptsHtml.TrimLine());
+            }
+            else
+            {
+                layoutHtml = RegularExpressions.ScriptsDirective.Replace(layoutHtml, String.Empty);
+            }
+
+            if (m_bundleSupport)
+            {
+                layoutHtml = TransformBundles(layoutHtml);
+            }
+
+            layoutHtml = RegularExpressions.BodyDirective.Replace(layoutHtml, html.TrimLine());
+
+            return layoutHtml;
         }
 
         private string PostRender(ViewContext viewContext, string html, object model)
@@ -512,6 +522,39 @@ namespace SimpleViewEngine
             }
 
             return html;
+        }
+
+        private static string TransformBundles(string layoutHtml)
+        {
+            MatchCollection cssBundleMatches = RegularExpressions.CssBundle.Matches(layoutHtml);
+
+            foreach (Match cssBundleMatch in cssBundleMatches)
+            {
+                string bundleUrl = cssBundleMatch.Groups[1].Value;
+
+                if (String.IsNullOrEmpty(bundleUrl))
+                {
+                    continue;
+                }
+
+                layoutHtml = layoutHtml.Replace(cssBundleMatch.Value, Styles.Render(bundleUrl.Trim()).ToHtmlString().TrimLine());
+            }
+
+            MatchCollection scriptBundleMatches = RegularExpressions.ScriptBundle.Matches(layoutHtml);
+
+            foreach (Match scriptBundleMatch in scriptBundleMatches)
+            {
+                string bundleUrl = scriptBundleMatch.Groups[1].Value;
+
+                if (String.IsNullOrEmpty(bundleUrl))
+                {
+                    continue;
+                }
+
+                layoutHtml = layoutHtml.Replace(scriptBundleMatch.Value, Scripts.Render(bundleUrl.Trim()).ToHtmlString().TrimLine());
+            }
+
+            return layoutHtml;
         }
     }
 }

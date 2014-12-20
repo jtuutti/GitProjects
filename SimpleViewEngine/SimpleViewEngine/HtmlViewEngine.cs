@@ -63,6 +63,12 @@ namespace SimpleViewEngine
         public bool AntiForgeryTokenSupport { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the view engine supports MVC content bundles.
+        /// The default value is false.
+        /// </summary>
+        public bool BundleSupport { get; set; }
+
+        /// <summary>
         /// Gets or sets a value for the model variable name that gets returned from the controller.
         /// Set this property to "null" (default) to disable JavaScript model support. The field
         /// name must support JavaScript naming conventions (no extended characters) or it will be
@@ -92,7 +98,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(partialPath);
 
-            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, null, ModelPropertyName);
+            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, BundleSupport, null, ModelPropertyName);
         }
 
         /// <summary>
@@ -119,7 +125,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(viewPath);
 
-            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, m_cacheExpiration, ModelPropertyName);
+            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, BundleSupport, m_cacheExpiration, ModelPropertyName);
         }
     }
 }
