@@ -15,7 +15,10 @@ namespace SimpleViewEngine.Utilities
 
         public readonly static Regex CssBundle = new Regex(@"<css\-bundle\s+url\s*=\s*[\""']([^\s]*)[\""']\s*/?>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public readonly static Regex HeadBodyDirective = new Regex(@"<!--\s*#head(.*)/#head\s*-->",
+        public readonly static Regex DebugDirective = new Regex(@"<debug>\s*(.*?)\s*</debug>",
+                                                      RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+        public readonly static Regex HeadBodyDirective = new Regex(@"<!--\s*#head(.*?)/#head\s*-->",
                                                                    RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         public readonly static Regex HeadDirective = new Regex(@"<!--\s*#head\s*-->",
@@ -34,9 +37,12 @@ namespace SimpleViewEngine.Utilities
         public readonly static Regex ReferenceDirective = new Regex(@"<!--\s*#layout\s+(.+)\s*=\s*\""(.+)\""\s*-->",
                                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        public readonly static Regex ReleaseDirective = new Regex(@"<release>\s*(.*?)\s*</release>",
+                                                        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
         public readonly static Regex ScriptBundle = new Regex(@"<script\-bundle\s+url\s*=\s*[\""']([^\s]*)[\""']\s*/?>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public readonly static Regex ScriptsBodyDirective = new Regex(@"<!--\s*#scripts(.*)/#scripts\s*-->",
+        public readonly static Regex ScriptsBodyDirective = new Regex(@"<!--\s*#scripts(.*?)/#scripts\s*-->",
                                                                       RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         public readonly static Regex ScriptsDirective = new Regex(@"<!--\s*#scripts\s*-->",
@@ -44,7 +50,7 @@ namespace SimpleViewEngine.Utilities
 
         public readonly static Regex ServerCommentDirective = new Regex(@"<!--@[^(-->)]*-->[\r\n]*", RegexOptions.Compiled | RegexOptions.Multiline);
 
-        public readonly static Regex TitleDirective = new Regex(@"<!--\s*#title\s+text=\""(.*)\""\s*-->",
+        public readonly static Regex TitleDirective = new Regex(@"<!--\s*#title\s+text=\""(.*?)\""\s*-->",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex Title = new Regex(@"<title>.*</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);

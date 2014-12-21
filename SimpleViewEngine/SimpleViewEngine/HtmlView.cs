@@ -383,7 +383,39 @@ namespace SimpleViewEngine
 
                 if (modelMatch.Success)
                 {
-                    return RegularExpressions.ModelDirective.Replace(html, ModelScriptTagCreator.Create(m_modelPropertyName, model));
+                    html = RegularExpressions.ModelDirective.Replace(html, ModelScriptTagCreator.Create(m_modelPropertyName, model));
+                }
+            }
+
+            MatchCollection debugHtmlMatches = RegularExpressions.DebugDirective.Matches(html);
+
+            foreach (Match debugHtmlMatch in debugHtmlMatches)
+            {
+                string debugHtml = debugHtmlMatch.Groups[1].Value;
+
+                if (viewContext.HttpContext.IsDebuggingEnabled)
+                {
+                    html = html.Replace(debugHtmlMatch.Value, debugHtml).TrimLine();
+                }
+                else
+                {
+                    html = html.Replace(debugHtmlMatch.Value, String.Empty);
+                }
+            }
+
+            MatchCollection releeaseHtmlMatches = RegularExpressions.ReleaseDirective.Matches(html);
+
+            foreach (Match releaseHtmlMatch in releeaseHtmlMatches)
+            {
+                string releaseHtml = releaseHtmlMatch.Groups[1].Value;
+
+                if (!viewContext.HttpContext.IsDebuggingEnabled)
+                {
+                    html = html.Replace(releaseHtmlMatch.Value, releaseHtml).TrimLine();
+                }
+                else
+                {
+                    html = html.Replace(releaseHtmlMatch.Value, String.Empty);
                 }
             }
 
