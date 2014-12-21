@@ -57,5 +57,9 @@ namespace SimpleViewEngine.Utilities
 
         public readonly static Regex Version = new Regex(@"(\s+)(src|href|data\-[A-Za-z0-9_\-]*\-?href)(\s*=\s*[\""'].*)(\:version)([^\""^']*[\""'])",
                                                          RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public readonly static Regex WhiteSpaceBetweenTags = new Regex(@">(?! )\s+", RegexOptions.Compiled);
+
+        public readonly static Regex WhiteSpaceBetweenLines = new Regex(@"([\n\s])+?(?<= {2,})<", RegexOptions.Compiled);
     }
 }

@@ -36,6 +36,7 @@ namespace SimpleViewEngine
         private readonly bool m_bundleSupport;
         private readonly DateTime? m_cacheExpiration;
         private readonly string m_modelPropertyName;
+        private readonly bool m_minifyHtml;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HtmlView"/> class.
@@ -52,7 +53,11 @@ namespace SimpleViewEngine
         /// <param name="modelPropertyName">
         /// An optional model property name returned from the controller.
         /// </param>
-        public HtmlView(string filePath, string version, bool antiForgeryTokenSupport, bool bundleSupport, DateTime? cacheExpiration, string modelPropertyName)
+        /// <param name="minifyHtml">
+        /// A value indicating whether the output HTML should be minified.
+        /// </param>
+        public HtmlView(string filePath, string version, bool antiForgeryTokenSupport, bool bundleSupport,
+                        DateTime? cacheExpiration, string modelPropertyName, bool minifyHtml)
         {
             if (filePath == null)
             {
@@ -64,6 +69,7 @@ namespace SimpleViewEngine
             m_antiForgeryTokenSupport = antiForgeryTokenSupport;
             m_bundleSupport = bundleSupport;
             m_cacheExpiration = cacheExpiration;
+            m_minifyHtml = minifyHtml;
 
             if (!String.IsNullOrWhiteSpace(modelPropertyName))
             {
@@ -417,6 +423,12 @@ namespace SimpleViewEngine
                 {
                     html = html.Replace(releaseHtmlMatch.Value, String.Empty);
                 }
+            }
+
+            if (m_minifyHtml)
+            {
+                html = RegularExpressions.WhiteSpaceBetweenTags.Replace(html, ">");
+                html = RegularExpressions.WhiteSpaceBetweenLines.Replace(html, "<");
             }
 
             return html;

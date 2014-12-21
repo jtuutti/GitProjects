@@ -51,22 +51,28 @@ namespace SimpleViewEngine
         }
 
         /// <summary>
-        /// Gets or sets the application version. It can be appended to CSS and JavaScript
-        /// links using the <code>:version</code> URL variable.
-        /// </summary>
-        public string AppVersion { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the view engine supports view models passed
         /// to the view from the controller. The default value is false.
         /// </summary>
         public bool AntiForgeryTokenSupport { get; set; }
 
         /// <summary>
+        /// Gets or sets the application version. It can be appended to CSS and JavaScript
+        /// links using the <code>:version</code> URL variable.
+        /// </summary>
+        public string AppVersion { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the view engine supports MVC content bundles.
         /// The default value is false.
         /// </summary>
         public bool BundleSupport { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the output HTML should be minified.
+        /// The default value is false.
+        /// </summary>
+        public bool MinifyHtml { get; set; }
 
         /// <summary>
         /// Gets or sets a value for the model variable name that gets returned from the controller.
@@ -98,7 +104,8 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(partialPath);
 
-            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, BundleSupport, null, ModelPropertyName);
+            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, BundleSupport, null,
+                                ModelPropertyName, MinifyHtml);
         }
 
         /// <summary>
@@ -125,7 +132,8 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(viewPath);
 
-            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, BundleSupport, m_cacheExpiration, ModelPropertyName);
+            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, BundleSupport,
+                                m_cacheExpiration, ModelPropertyName, MinifyHtml);
         }
     }
 }
