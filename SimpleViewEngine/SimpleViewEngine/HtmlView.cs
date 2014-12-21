@@ -427,8 +427,7 @@ namespace SimpleViewEngine
 
             if (m_minifyHtml)
             {
-                html = RegularExpressions.WhiteSpaceBetweenTags.Replace(html, ">");
-                html = RegularExpressions.WhiteSpaceBetweenLines.Replace(html, "<");
+                html = MinifyHtml(html);
             }
 
             return html;
@@ -598,6 +597,22 @@ namespace SimpleViewEngine
 
                 html = html.Replace(scriptBundleMatch.Value, Scripts.Render(bundleUrl.Trim()).ToHtmlString().TrimLine());
             }
+
+            return html;
+        }
+
+        private static string MinifyHtml(string html)
+        {
+            Match doNotMinify = RegularExpressions.DoNotMinify.Match(html);
+
+            if (doNotMinify.Success)
+            {
+                html = html.Replace(doNotMinify.Value, String.Empty).TrimLine();
+                return html;
+            }
+
+            html = RegularExpressions.WhiteSpaceBetweenTags.Replace(html, ">");
+            html = RegularExpressions.WhiteSpaceBetweenLines.Replace(html, "<");
 
             return html;
         }

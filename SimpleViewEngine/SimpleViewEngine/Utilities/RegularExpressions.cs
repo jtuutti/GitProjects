@@ -18,6 +18,8 @@ namespace SimpleViewEngine.Utilities
         public readonly static Regex DebugDirective = new Regex(@"<debug>\s*(.*?)\s*</debug>",
                                                       RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
+        public readonly static Regex DoNotMinify = new Regex(@"<!--\s*#do-not-minify\s*-->", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public readonly static Regex HeadBodyDirective = new Regex(@"<!--\s*#head(.*?)/#head\s*-->",
                                                                    RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
@@ -48,7 +50,7 @@ namespace SimpleViewEngine.Utilities
         public readonly static Regex ScriptsDirective = new Regex(@"<!--\s*#scripts\s*-->",
                                                                   RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-        public readonly static Regex ServerCommentDirective = new Regex(@"<!--@[^(-->)]*-->[\r\n]*", RegexOptions.Compiled | RegexOptions.Multiline);
+        public readonly static Regex ServerCommentDirective = new Regex(@"<!--@(.*?)-->[\r\n]*", RegexOptions.Compiled | RegexOptions.Multiline);
 
         public readonly static Regex TitleDirective = new Regex(@"<!--\s*#title\s+text=\""(.*?)\""\s*-->",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
