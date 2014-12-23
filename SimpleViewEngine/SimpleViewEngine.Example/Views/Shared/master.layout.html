@@ -1,18 +1,18 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:srv="http://starsoft.io/srvhtml">
 <head>
     <title>Sample Website</title>
     <meta charset="utf-8" />
-    <css-bundle url="~/bundles/css" />
-    <!-- #head -->
-    <!-- #model -->
+    <srv:css-bundle url="~/bundles/css" />
+    <srv:head-placeholder />
     <script type="text/javascript" src="~/scripts/jquery-2.0.3.min.js"></script>
 </head>
 <body>
-<!-- #body -->
-<!-- #scripts -->
-<footer>
-<!-- #partial url="~/views/shared/footer.partial.html" -->
-</footer>
+    <srv:model-placeholder />
+    <srv:body-placeholder />
+    <srv:scripts-placeholder />
+    <footer>
+        <srv:partial url="~/views/shared/footer.partial.html" />
+    </footer>
 </body>
 </html>

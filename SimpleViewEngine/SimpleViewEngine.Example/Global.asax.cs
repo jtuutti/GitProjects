@@ -22,8 +22,10 @@ namespace SimpleViewEngine.Example
             ViewEngines.Engines.Add(new HtmlViewEngine
             {
                 AppVersion = "1.0",
+                AntiForgeryTokenSupport = true,
                 ModelPropertyName = "model",
-                BundleSupport = true
+                BundleSupport = true,
+                MinifyHtml = true
             });
         }
     }

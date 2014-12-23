@@ -146,7 +146,7 @@ namespace SimpleViewEngine
 
             string viewHtml = ParseViewContent(viewContext, html);
 
-            viewHtml = RegularExpressions.Link.Replace(viewHtml, m =>
+            viewHtml = RegularExpressions.LinkUrl.Replace(viewHtml, m =>
             {
                 string group1 = m.Result("$1"), group2 = m.Result("$2"), group3 = m.Result("$3"), group5 = m.Result("$5");
                 string applicationPath = viewContext.HttpContext.Request.ApplicationPath != null ?
@@ -156,7 +156,7 @@ namespace SimpleViewEngine
                 return String.Concat(group1, group2, group3, applicationPath, group5);
             });
 
-            viewHtml = RegularExpressions.Version.Replace(viewHtml, m =>
+            viewHtml = RegularExpressions.VersionVariable.Replace(viewHtml, m =>
             {
                 string group1 = m.Result("$1"), group2 = m.Result("$2"), group3 = m.Result("$3"), group5 = m.Result("$5");
 
@@ -242,32 +242,32 @@ namespace SimpleViewEngine
         
         private static string RemoveViewEngineDirectives(string html)
         {
-            Match baseMatch = RegularExpressions.BaseDirective.Match(html);
+            Match baseMatch = RegularExpressions.BaseServerTag.Match(html);
 
             if (baseMatch.Success)
             {
-                html = RegularExpressions.BaseDirective.Replace(html, String.Empty);
+                html = RegularExpressions.BaseServerTag.Replace(html, String.Empty);
             }
 
-            Match titleMatch = RegularExpressions.TitleDirective.Match(html);
+            Match titleMatch = RegularExpressions.TitleServerTag.Match(html);
 
             if (titleMatch.Success)
             {
-                html = RegularExpressions.TitleDirective.Replace(html, String.Empty);
+                html = RegularExpressions.TitleServerTag.Replace(html, String.Empty);
             }
 
-            Match layoutMatch = RegularExpressions.ReferenceDirective.Match(html);
+            Match layoutMatch = RegularExpressions.LayoutServerTag.Match(html);
 
             if (layoutMatch.Success)
             {
-                html = RegularExpressions.ReferenceDirective.Replace(html, String.Empty);
+                html = RegularExpressions.LayoutServerTag.Replace(html, String.Empty);
             }
 
-            Match headMatch = RegularExpressions.HeadBodyDirective.Match(html);
+            Match headMatch = RegularExpressions.HeadServerTag.Match(html);
 
             if (headMatch.Success)
             {
-                html = RegularExpressions.HeadBodyDirective.Replace(html, String.Empty);
+                html = RegularExpressions.HeadServerTag.Replace(html, String.Empty);
             }
 
             return html;
@@ -284,35 +284,35 @@ namespace SimpleViewEngine
 
             string layoutHtml = ReadViewFileHtml(layoutFilePath, ViewType.Layout);
 
-            Match headHtmlMatch = RegularExpressions.HeadBodyDirective.Match(html);
+            Match headHtmlMatch = RegularExpressions.HeadServerTag.Match(html);
 
             if (headHtmlMatch.Success)
             {
                 string headHtml = headHtmlMatch.Groups[1].Value;
 
-                html = RegularExpressions.HeadBodyDirective.Replace(html, String.Empty);
-                layoutHtml = RegularExpressions.HeadDirective.Replace(layoutHtml, headHtml.TrimLine());
+                html = RegularExpressions.HeadServerTag.Replace(html, String.Empty);
+                layoutHtml = RegularExpressions.HeadPlaceholderTag.Replace(layoutHtml, headHtml.TrimLine());
             }
             else
             {
-                layoutHtml = RegularExpressions.HeadDirective.Replace(layoutHtml, String.Empty);
+                layoutHtml = RegularExpressions.HeadPlaceholderTag.Replace(layoutHtml, String.Empty);
             }
 
-            Match scriptsHtmlMatch = RegularExpressions.ScriptsBodyDirective.Match(html);
+            Match scriptsHtmlMatch = RegularExpressions.ScriptsServerTag.Match(html);
 
             if (scriptsHtmlMatch.Success)
             {
                 string scriptsHtml = scriptsHtmlMatch.Groups[1].Value;
 
-                html = RegularExpressions.ScriptsBodyDirective.Replace(html, String.Empty);
-                layoutHtml = RegularExpressions.ScriptsDirective.Replace(layoutHtml, scriptsHtml.TrimLine());
+                html = RegularExpressions.ScriptsServerTag.Replace(html, String.Empty);
+                layoutHtml = RegularExpressions.ScriptsPlaceholderServerTag.Replace(layoutHtml, scriptsHtml.TrimLine());
             }
             else
             {
-                layoutHtml = RegularExpressions.ScriptsDirective.Replace(layoutHtml, String.Empty);
+                layoutHtml = RegularExpressions.ScriptsPlaceholderServerTag.Replace(layoutHtml, String.Empty);
             }
 
-            layoutHtml = RegularExpressions.BodyDirective.Replace(layoutHtml, html.TrimLine());
+            layoutHtml = RegularExpressions.BodyPlaceholderServerTag.Replace(layoutHtml, html.TrimLine());
 
             return layoutHtml;
         }
@@ -368,13 +368,13 @@ namespace SimpleViewEngine
         {
             if (m_antiForgeryTokenSupport)
             {
-                Match antiForgeryMatch = RegularExpressions.AntiForgeryDirective.Match(html);
+                Match antiForgeryMatch = RegularExpressions.AntiForgeryServerTag.Match(html);
 
                 if (antiForgeryMatch.Success)
                 {
                     var helper = new HtmlHelper(viewContext, this);
 
-                    html = RegularExpressions.AntiForgeryDirective.Replace(html, helper.AntiForgeryToken().ToHtmlString());
+                    html = RegularExpressions.AntiForgeryServerTag.Replace(html, helper.AntiForgeryToken().ToHtmlString());
                 }
             }
 
@@ -383,17 +383,17 @@ namespace SimpleViewEngine
                 html = TransformBundles(html);
             }
 
-            if (m_modelPropertyName != null && RegularExpressions.ModelPropertyNameDirective.IsMatch(m_modelPropertyName))
+            if (m_modelPropertyName != null && RegularExpressions.ModelPropertyName.IsMatch(m_modelPropertyName))
             {
-                Match modelMatch = RegularExpressions.ModelDirective.Match(html);
+                Match modelMatch = RegularExpressions.ModelPlaceholderTag.Match(html);
 
                 if (modelMatch.Success)
                 {
-                    html = RegularExpressions.ModelDirective.Replace(html, ModelScriptTagCreator.Create(m_modelPropertyName, model));
+                    html = RegularExpressions.ModelPlaceholderTag.Replace(html, ModelScriptTagCreator.Create(m_modelPropertyName, model));
                 }
             }
 
-            MatchCollection debugHtmlMatches = RegularExpressions.DebugDirective.Matches(html);
+            MatchCollection debugHtmlMatches = RegularExpressions.DebugServerTag.Matches(html);
 
             foreach (Match debugHtmlMatch in debugHtmlMatches)
             {
@@ -409,9 +409,9 @@ namespace SimpleViewEngine
                 }
             }
 
-            MatchCollection releeaseHtmlMatches = RegularExpressions.ReleaseDirective.Matches(html);
+            MatchCollection releaseHtmlMatches = RegularExpressions.ReleaseServerTag.Matches(html);
 
-            foreach (Match releaseHtmlMatch in releeaseHtmlMatches)
+            foreach (Match releaseHtmlMatch in releaseHtmlMatches)
             {
                 string releaseHtml = releaseHtmlMatch.Groups[1].Value;
 
@@ -423,6 +423,13 @@ namespace SimpleViewEngine
                 {
                     html = html.Replace(releaseHtmlMatch.Value, String.Empty);
                 }
+            }
+
+            Match namespaceMatch = RegularExpressions.NamespaceAttribute.Match(html);
+
+            if (namespaceMatch.Success)
+            {
+                html = html.Replace(namespaceMatch.Groups[1].Value, String.Empty);
             }
 
             if (m_minifyHtml)
@@ -464,7 +471,7 @@ namespace SimpleViewEngine
                     return html;
             }
 
-            html = RegularExpressions.ReferenceDirective.Replace(html, String.Empty);
+            html = RegularExpressions.LayoutServerTag.Replace(html, String.Empty);
             html = ParseLayoutViewContent(context, layoutFilePath, html);
 
             return html;
@@ -520,26 +527,26 @@ namespace SimpleViewEngine
 
         private string ParseViewContent(ControllerContext context, string html)
         {
-            return RegularExpressions.PartialViewDirective.Replace(html, match => ParsePartialView(context, match));
+            return RegularExpressions.PartialServerTag.Replace(html, match => ParsePartialView(context, match));
         }
 
         private string ParseViewEngineDirectives(ControllerContext context, string html)
         {
-            Match baseMatch = RegularExpressions.BaseDirective.Match(html);
+            Match baseMatch = RegularExpressions.BaseServerTag.Match(html);
 
             if (baseMatch.Success)
             {
-                html = RegularExpressions.BaseDirective.Replace(html, String.Empty);
+                html = RegularExpressions.BaseServerTag.Replace(html, String.Empty);
             }
 
-            Match titleMatch = RegularExpressions.TitleDirective.Match(html);
+            Match titleMatch = RegularExpressions.TitleServerTag.Match(html);
 
             if (titleMatch.Success)
             {
-                html = RegularExpressions.TitleDirective.Replace(html, String.Empty);
+                html = RegularExpressions.TitleServerTag.Replace(html, String.Empty);
             }
 
-            Match layoutMatch = RegularExpressions.ReferenceDirective.Match(html);
+            Match layoutMatch = RegularExpressions.LayoutServerTag.Match(html);
 
             if (!layoutMatch.Success)
             {
@@ -550,19 +557,12 @@ namespace SimpleViewEngine
 
             if (baseMatch.Success)
             {
-                html = !String.IsNullOrWhiteSpace(baseMatch.Groups[3].Value) ?
-                    RegularExpressions.Base.Replace(html, m => String.Format(CultureInfo.InvariantCulture,
-                                                                             "<base href=\"{0}\" target=\"{1}\" />",
-                                                                             baseMatch.Groups[1].Value,
-                                                                             baseMatch.Groups[3].Value)) :
-                    RegularExpressions.Base.Replace(html, m => String.Format(CultureInfo.InvariantCulture,
-                                                                             "<base href=\"{0}\" />",
-                                                                             baseMatch.Groups[1].Value));
+                html = RegularExpressions.BaseTag.Replace(html, m => String.Format(CultureInfo.InvariantCulture, "<base{0}>", baseMatch.Groups[1].Value));
             }
 
             if (titleMatch.Success)
             {
-                html = RegularExpressions.Title.Replace(html, m => String.Concat("<title>", titleMatch.Groups[1].Value, "</title>"));
+                html = RegularExpressions.TitleTag.Replace(html, m => String.Concat("<title>", titleMatch.Groups[1].Value, "</title>"));
             }
 
             return html;
@@ -570,7 +570,7 @@ namespace SimpleViewEngine
 
         private static string TransformBundles(string html)
         {
-            MatchCollection cssBundleMatches = RegularExpressions.CssBundle.Matches(html);
+            MatchCollection cssBundleMatches = RegularExpressions.CssBundleServerTag.Matches(html);
 
             foreach (Match cssBundleMatch in cssBundleMatches)
             {
@@ -584,7 +584,7 @@ namespace SimpleViewEngine
                 html = html.Replace(cssBundleMatch.Value, Styles.Render(bundleUrl.Trim()).ToHtmlString().TrimLine());
             }
 
-            MatchCollection scriptBundleMatches = RegularExpressions.ScriptBundle.Matches(html);
+            MatchCollection scriptBundleMatches = RegularExpressions.ScriptBundleServerTag.Matches(html);
 
             foreach (Match scriptBundleMatch in scriptBundleMatches)
             {
@@ -603,7 +603,7 @@ namespace SimpleViewEngine
 
         private static string MinifyHtml(string html)
         {
-            Match doNotMinify = RegularExpressions.DoNotMinify.Match(html);
+            Match doNotMinify = RegularExpressions.DoNotMinifyTag.Match(html);
 
             if (doNotMinify.Success)
             {
