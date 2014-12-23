@@ -142,7 +142,11 @@ namespace SimpleViewEngine
             GetReferencedFilePaths(viewContext).Add(m_filePath);
 
             string html = ReadViewFileHtml(m_filePath, ViewType.View);
-            html = isView ? ParseViewEngineDirectives(viewContext, html) : RemoveViewEngineDirectives(html);
+
+            if (isView)
+            {
+                html = ParseViewEngineDirectives(viewContext, html);
+            }
 
             string viewHtml = ParseViewContent(viewContext, html);
 
@@ -238,39 +242,6 @@ namespace SimpleViewEngine
             }
 
             return File.ReadAllText(filePath, Encoding.UTF8).TrimLine();
-        }
-        
-        private static string RemoveViewEngineDirectives(string html)
-        {
-            Match baseMatch = RegularExpressions.BaseServerTag.Match(html);
-
-            if (baseMatch.Success)
-            {
-                html = RegularExpressions.BaseServerTag.Replace(html, String.Empty);
-            }
-
-            Match titleMatch = RegularExpressions.TitleServerTag.Match(html);
-
-            if (titleMatch.Success)
-            {
-                html = RegularExpressions.TitleServerTag.Replace(html, String.Empty);
-            }
-
-            Match layoutMatch = RegularExpressions.LayoutServerTag.Match(html);
-
-            if (layoutMatch.Success)
-            {
-                html = RegularExpressions.LayoutServerTag.Replace(html, String.Empty);
-            }
-
-            Match headMatch = RegularExpressions.HeadServerTag.Match(html);
-
-            if (headMatch.Success)
-            {
-                html = RegularExpressions.HeadServerTag.Replace(html, String.Empty);
-            }
-
-            return html;
         }
 
         private static string ParseLayoutViewContent(ControllerContext context, string layoutFilePath, string html)

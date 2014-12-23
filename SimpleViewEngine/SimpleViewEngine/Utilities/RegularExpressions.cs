@@ -17,7 +17,7 @@ namespace SimpleViewEngine.Utilities
         public readonly static Regex CssBundleServerTag = new Regex(@"<srv:css\-bundle\s+url\s*=\s*\""([^\s]*)\""\s*/?>",
                                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public readonly static Regex DebugServerTag = new Regex(@"<srv:debug>\s*(.*?)\s*</srv:debug>",
+        public readonly static Regex DebugServerTag = new Regex(@"<srv:debug>(.*?)</srv:debug>",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         public readonly static Regex DoNotMinifyTag = new Regex(@"<srv:minification\s*disabled(=\"".*?\"")?\s*/?>",
@@ -45,7 +45,7 @@ namespace SimpleViewEngine.Utilities
         public readonly static Regex NamespaceAttribute = new Regex(@"<html\s+.*?(\s*xmlns:srv\s*=\s*[\""'].*?[\""'])",
                                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-        public readonly static Regex ReleaseServerTag = new Regex(@"<srv:release>\s*(.*?)\s*</srv:release>",
+        public readonly static Regex ReleaseServerTag = new Regex(@"<srv:release>(.*?)</srv:release>",
                                                                   RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         public readonly static Regex ScriptBundleServerTag = new Regex(@"<srv:script\-bundle\s+url\s*=\s*\""([^\s]*)\""\s*/?>",
@@ -59,8 +59,7 @@ namespace SimpleViewEngine.Utilities
 
         public readonly static Regex ServerCommentDirective = new Regex(@"<!--@(.*?)-->[\r\n]*", RegexOptions.Compiled | RegexOptions.Multiline);
 
-        public readonly static Regex TitleServerTag = new Regex(@"<srv:title\s+text=\""(.*?)\""\s*/?>",
-                                                                RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        public readonly static Regex TitleServerTag = new Regex(@"<srv:title>(.*?)</srv:title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex TitleTag = new Regex(@"<title>.*?</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
