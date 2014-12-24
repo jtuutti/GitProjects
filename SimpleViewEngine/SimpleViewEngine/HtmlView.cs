@@ -169,6 +169,13 @@ namespace SimpleViewEngine
 
             viewHtml = RegularExpressions.ServerCommentDirective.Replace(viewHtml, String.Empty);
 
+            Match namespaceMatch = RegularExpressions.NamespaceAttribute.Match(html);
+
+            if (namespaceMatch.Success)
+            {
+                viewHtml = viewHtml.Replace(namespaceMatch.Groups[1].Value, String.Empty);
+            }
+
             viewContext.HttpContext.Items[RenderedPartialFilePathKey] = null;
 
             if (cacheKey != null)
@@ -349,11 +356,6 @@ namespace SimpleViewEngine
                 }
             }
 
-            if (m_bundleSupport)
-            {
-                html = TransformBundles(html);
-            }
-
             if (m_modelPropertyName != null && RegularExpressions.ModelPropertyName.IsMatch(m_modelPropertyName))
             {
                 Match modelMatch = RegularExpressions.ModelPlaceholderTag.Match(html);
@@ -362,45 +364,6 @@ namespace SimpleViewEngine
                 {
                     html = RegularExpressions.ModelPlaceholderTag.Replace(html, ModelScriptTagCreator.Create(m_modelPropertyName, model));
                 }
-            }
-
-            MatchCollection debugHtmlMatches = RegularExpressions.DebugServerTag.Matches(html);
-
-            foreach (Match debugHtmlMatch in debugHtmlMatches)
-            {
-                string debugHtml = debugHtmlMatch.Groups[1].Value;
-
-                if (viewContext.HttpContext.IsDebuggingEnabled)
-                {
-                    html = html.Replace(debugHtmlMatch.Value, debugHtml).TrimLine();
-                }
-                else
-                {
-                    html = html.Replace(debugHtmlMatch.Value, String.Empty);
-                }
-            }
-
-            MatchCollection releaseHtmlMatches = RegularExpressions.ReleaseServerTag.Matches(html);
-
-            foreach (Match releaseHtmlMatch in releaseHtmlMatches)
-            {
-                string releaseHtml = releaseHtmlMatch.Groups[1].Value;
-
-                if (!viewContext.HttpContext.IsDebuggingEnabled)
-                {
-                    html = html.Replace(releaseHtmlMatch.Value, releaseHtml).TrimLine();
-                }
-                else
-                {
-                    html = html.Replace(releaseHtmlMatch.Value, String.Empty);
-                }
-            }
-
-            Match namespaceMatch = RegularExpressions.NamespaceAttribute.Match(html);
-
-            if (namespaceMatch.Success)
-            {
-                html = html.Replace(namespaceMatch.Groups[1].Value, String.Empty);
             }
 
             if (m_minifyHtml)
@@ -498,7 +461,46 @@ namespace SimpleViewEngine
 
         private string ParseViewContent(ControllerContext context, string html)
         {
-            return RegularExpressions.PartialServerTag.Replace(html, match => ParsePartialView(context, match));
+            html = RegularExpressions.PartialServerTag.Replace(html, match => ParsePartialView(context, match));
+            
+            if (m_bundleSupport)
+            {
+                html = TransformBundles(html);
+            }
+
+            MatchCollection debugHtmlMatches = RegularExpressions.DebugServerTag.Matches(html);
+
+            foreach (Match debugHtmlMatch in debugHtmlMatches)
+            {
+                string debugHtml = debugHtmlMatch.Groups[1].Value;
+
+                if (context.HttpContext.IsDebuggingEnabled)
+                {
+                    html = html.Replace(debugHtmlMatch.Value, debugHtml).TrimLine();
+                }
+                else
+                {
+                    html = html.Replace(debugHtmlMatch.Value, String.Empty);
+                }
+            }
+
+            MatchCollection releaseHtmlMatches = RegularExpressions.ReleaseServerTag.Matches(html);
+
+            foreach (Match releaseHtmlMatch in releaseHtmlMatches)
+            {
+                string releaseHtml = releaseHtmlMatch.Groups[1].Value;
+
+                if (!context.HttpContext.IsDebuggingEnabled)
+                {
+                    html = html.Replace(releaseHtmlMatch.Value, releaseHtml).TrimLine();
+                }
+                else
+                {
+                    html = html.Replace(releaseHtmlMatch.Value, String.Empty);
+                }
+            }
+
+            return html;
         }
 
         private string ParseViewEngineDirectives(ControllerContext context, string html)
