@@ -4,12 +4,12 @@
     <title>Sample Website</title>
     <meta charset="utf-8" />
     <srv:css-bundle url="~/bundles/css" />
-    <srv:head-placeholder />
+    <srv:section name="head" />
     <script type="text/javascript" src="~/scripts/jquery-2.0.3.min.js"></script>
 </head>
 <body>
-    <srv:body-placeholder />
-    <srv:scripts-placeholder />
+    <srv:body />
+    <srv:section name="scripts" />
     <footer>
         <srv:partial url="~/views/shared/footer.partial.html" />
     </footer>

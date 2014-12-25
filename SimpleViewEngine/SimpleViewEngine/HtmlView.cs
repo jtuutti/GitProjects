@@ -141,47 +141,26 @@ namespace SimpleViewEngine
 
             GetReferencedFilePaths(viewContext).Add(m_filePath);
 
-            string html = ReadViewFileHtml(m_filePath, ViewType.View);
+            string html = ReadViewHtml(m_filePath, ViewType.View);
 
             if (isView)
             {
-                html = ParseViewEngineDirectives(viewContext, html);
+                html = GenerateView(viewContext, html);
             }
 
-            string viewHtml = ParseViewContent(viewContext, html);
-
-            viewHtml = RegularExpressions.LinkUrl.Replace(viewHtml, m =>
-            {
-                string group1 = m.Result("$1"), group2 = m.Result("$2"), group3 = m.Result("$3"), group5 = m.Result("$5");
-                string applicationPath = viewContext.HttpContext.Request.ApplicationPath != null ?
-                    viewContext.HttpContext.Request.ApplicationPath.TrimEnd('/') :
-                    String.Empty;
-
-                return String.Concat(group1, group2, group3, applicationPath, group5);
-            });
-
-            viewHtml = RegularExpressions.VersionVariable.Replace(viewHtml, m =>
-            {
-                string group1 = m.Result("$1"), group2 = m.Result("$2"), group3 = m.Result("$3"), group5 = m.Result("$5");
-
-                return String.Concat(group1, group2, group3, !String.IsNullOrWhiteSpace(m_version) ? m_version : "0", group5);
-            });
-
-            viewHtml = RegularExpressions.ServerCommentDirective.Replace(viewHtml, String.Empty);
-
-            Match namespaceMatch = RegularExpressions.NamespaceAttribute.Match(html);
-
-            if (namespaceMatch.Success)
-            {
-                viewHtml = viewHtml.Replace(namespaceMatch.Groups[1].Value, String.Empty);
-            }
+            html = ParseViewContent(viewContext, html);
 
             viewContext.HttpContext.Items[RenderedPartialFilePathKey] = null;
 
             if (cacheKey != null)
             {
+                if (m_minifyHtml)
+                {
+                    html = MinifyHtml(html);
+                }
+
                 HttpRuntime.Cache.Add(cacheKey,
-                                      viewHtml,
+                                      html,
                                       new CacheDependency(GetReferencedFilePaths(viewContext).ToArray()),
                                       m_cacheExpiration.Value,
                                       Cache.NoSlidingExpiration,
@@ -189,7 +168,7 @@ namespace SimpleViewEngine
                                       null);
             }
 
-            writer.Write(isView ? PostRender(viewContext, viewHtml, viewContext.ViewData.Model) : viewHtml);
+            writer.Write(isView ? PostRender(viewContext, html, viewContext.ViewData.Model) : html);
         }
 
         private static HashSet<string> GetReferencedFilePaths(ControllerContext context)
@@ -222,7 +201,7 @@ namespace SimpleViewEngine
             return filePaths;
         }
 
-        private static string ReadViewFileHtml(string filePath, ViewType viewType)
+        private static string ReadViewHtml(string filePath, ViewType viewType)
         {
             filePath = filePath.TrimLine();
 
@@ -251,51 +230,7 @@ namespace SimpleViewEngine
             return File.ReadAllText(filePath, Encoding.UTF8).TrimLine();
         }
 
-        private static string ParseLayoutViewContent(ControllerContext context, string layoutFilePath, string html)
-        {
-            if (!File.Exists(layoutFilePath))
-            {
-                throw new FileNotFoundException(String.Format(Resources.LayoutViewNotFound, layoutFilePath));
-            }
-
-            GetReferencedFilePaths(context).Add(layoutFilePath);
-
-            string layoutHtml = ReadViewFileHtml(layoutFilePath, ViewType.Layout);
-
-            Match headHtmlMatch = RegularExpressions.HeadServerTag.Match(html);
-
-            if (headHtmlMatch.Success)
-            {
-                string headHtml = headHtmlMatch.Groups[1].Value;
-
-                html = RegularExpressions.HeadServerTag.Replace(html, String.Empty);
-                layoutHtml = RegularExpressions.HeadPlaceholderTag.Replace(layoutHtml, headHtml.TrimLine());
-            }
-            else
-            {
-                layoutHtml = RegularExpressions.HeadPlaceholderTag.Replace(layoutHtml, String.Empty);
-            }
-
-            Match scriptsHtmlMatch = RegularExpressions.ScriptsServerTag.Match(html);
-
-            if (scriptsHtmlMatch.Success)
-            {
-                string scriptsHtml = scriptsHtmlMatch.Groups[1].Value;
-
-                html = RegularExpressions.ScriptsServerTag.Replace(html, String.Empty);
-                layoutHtml = RegularExpressions.ScriptsPlaceholderServerTag.Replace(layoutHtml, scriptsHtml.TrimLine());
-            }
-            else
-            {
-                layoutHtml = RegularExpressions.ScriptsPlaceholderServerTag.Replace(layoutHtml, String.Empty);
-            }
-
-            layoutHtml = RegularExpressions.BodyPlaceholderServerTag.Replace(layoutHtml, html.TrimLine());
-
-            return layoutHtml;
-        }
-
-        private static string RenderPartialView(ControllerContext context, string viewName)
+        private static string GeneratePartialView(ControllerContext context, string viewName)
         {
             if (String.IsNullOrEmpty(viewName))
             {
@@ -340,205 +275,6 @@ namespace SimpleViewEngine
 
                 return writer.GetStringBuilder().ToString();
             }
-        }
-
-        private string PostRender(ViewContext viewContext, string html, object model)
-        {
-            if (m_antiForgeryTokenSupport)
-            {
-                Match antiForgeryMatch = RegularExpressions.AntiForgeryServerTag.Match(html);
-
-                if (antiForgeryMatch.Success)
-                {
-                    var helper = new HtmlHelper(viewContext, this);
-
-                    html = RegularExpressions.AntiForgeryServerTag.Replace(html, helper.AntiForgeryToken().ToHtmlString());
-                }
-            }
-
-            if (m_modelPropertyName != null && RegularExpressions.ModelPropertyName.IsMatch(m_modelPropertyName))
-            {
-                Match modelMatch = RegularExpressions.ModelPlaceholderTag.Match(html);
-
-                if (modelMatch.Success)
-                {
-                    html = RegularExpressions.ModelPlaceholderTag.Replace(html, ModelScriptTagCreator.Create(m_modelPropertyName, model));
-                }
-            }
-
-            if (m_minifyHtml)
-            {
-                html = MinifyHtml(html);
-            }
-
-            return html;
-        }
-
-        private string MapPath(ControllerContext context, string viewPath)
-        {
-            if (viewPath.IndexOf('~') == 0)
-            {
-                return context.HttpContext.Server.MapPath(viewPath.Trim());
-            }
-            
-            return m_filePath.Substring(0, m_filePath.LastIndexOf('\\') + 1) + viewPath.Trim();
-        }
-
-        private string ParseLayoutView(ControllerContext context, Match layoutMatch, string html)
-        {
-            string layoutFileType = layoutMatch.Result("$1").Trim().ToUpperInvariant(),
-                   layoutValue = layoutMatch.Result("$2"),
-                   layoutFilePath;
-
-            switch (layoutFileType)
-            {
-                case UrlValueType:
-                    layoutFilePath = MapPath(context, layoutValue);
-                    break;
-                case FileValueType:
-                    layoutFilePath = layoutValue.Trim();
-                    break;
-                case NameValueType:
-                    layoutFilePath = MapPath(context, String.Format(CultureInfo.InvariantCulture, LayoutViewLocation, layoutValue.Trim()));
-                    break;
-                default:
-                    return html;
-            }
-
-            html = RegularExpressions.LayoutServerTag.Replace(html, String.Empty);
-            html = ParseLayoutViewContent(context, layoutFilePath, html);
-
-            return html;
-        }
-
-        private string ParsePartialView(ControllerContext context, Match match)
-        {
-            if (!match.Success)
-            {
-                return String.Empty;
-            }
-
-            string partialViewFileType = match.Result("$1").Trim().ToUpperInvariant(),
-                   partialViewValue = match.Result("$2").Trim(),
-                   partialViewFilePath;
-
-            switch (partialViewFileType)
-            {
-                case UrlValueType:
-                    partialViewFilePath = MapPath(context, partialViewValue);
-                    break;
-                case FileValueType:
-                    partialViewFilePath = partialViewValue;
-                    break;
-                case NameValueType:
-                    return RenderPartialView(context, partialViewValue);
-                default:
-                    return match.Result("$0");
-            }
-
-            if (partialViewFilePath == null || !File.Exists(partialViewFilePath))
-            {
-                throw new FileNotFoundException(String.Format(Resources.PartialViewNotFound, partialViewFilePath));
-            }
-
-            Stack<string> partialViewStack = GetRenderedPartialFilePaths(context);
-
-            if (partialViewStack.Contains(partialViewFilePath.ToUpperInvariant()))
-            {
-                throw new RecursiveViewReferenceException(String.Format(Resources.RecursivePartialViewReference, partialViewFilePath));
-            }
-
-            GetReferencedFilePaths(context).Add(partialViewFilePath);
-            partialViewStack.Push(partialViewFilePath.ToUpperInvariant());
-
-            string html = ReadViewFileHtml(partialViewFilePath, ViewType.PartialView);
-            html = ParseViewContent(context, html);
-
-            partialViewStack.Pop();
-
-            return html;
-        }
-
-        private string ParseViewContent(ControllerContext context, string html)
-        {
-            html = RegularExpressions.PartialServerTag.Replace(html, match => ParsePartialView(context, match));
-            
-            if (m_bundleSupport)
-            {
-                html = TransformBundles(html);
-            }
-
-            MatchCollection debugHtmlMatches = RegularExpressions.DebugServerTag.Matches(html);
-
-            foreach (Match debugHtmlMatch in debugHtmlMatches)
-            {
-                string debugHtml = debugHtmlMatch.Groups[1].Value;
-
-                if (context.HttpContext.IsDebuggingEnabled)
-                {
-                    html = html.Replace(debugHtmlMatch.Value, debugHtml).TrimLine();
-                }
-                else
-                {
-                    html = html.Replace(debugHtmlMatch.Value, String.Empty);
-                }
-            }
-
-            MatchCollection releaseHtmlMatches = RegularExpressions.ReleaseServerTag.Matches(html);
-
-            foreach (Match releaseHtmlMatch in releaseHtmlMatches)
-            {
-                string releaseHtml = releaseHtmlMatch.Groups[1].Value;
-
-                if (!context.HttpContext.IsDebuggingEnabled)
-                {
-                    html = html.Replace(releaseHtmlMatch.Value, releaseHtml).TrimLine();
-                }
-                else
-                {
-                    html = html.Replace(releaseHtmlMatch.Value, String.Empty);
-                }
-            }
-
-            return html;
-        }
-
-        private string ParseViewEngineDirectives(ControllerContext context, string html)
-        {
-            Match baseMatch = RegularExpressions.BaseServerTag.Match(html);
-
-            if (baseMatch.Success)
-            {
-                html = RegularExpressions.BaseServerTag.Replace(html, String.Empty);
-            }
-
-            Match titleMatch = RegularExpressions.TitleServerTag.Match(html);
-
-            if (titleMatch.Success)
-            {
-                html = RegularExpressions.TitleServerTag.Replace(html, String.Empty);
-            }
-
-            Match layoutMatch = RegularExpressions.LayoutServerTag.Match(html);
-
-            if (!layoutMatch.Success)
-            {
-                return html;
-            }
-
-            html = ParseLayoutView(context, layoutMatch, html);
-
-            if (baseMatch.Success)
-            {
-                html = RegularExpressions.BaseTag.Replace(html, m => String.Format(CultureInfo.InvariantCulture, "<base{0}>", baseMatch.Groups[1].Value));
-            }
-
-            if (titleMatch.Success)
-            {
-                html = RegularExpressions.TitleTag.Replace(html, m => String.Concat("<title>", titleMatch.Groups[1].Value, "</title>"));
-            }
-
-            return html;
         }
 
         private static string TransformBundles(string html)
@@ -588,6 +324,248 @@ namespace SimpleViewEngine
             html = RegularExpressions.WhiteSpaceBetweenLines.Replace(html, "<");
 
             return html;
+        }
+
+        private string GenerateView(ControllerContext context, string html)
+        {
+            Match baseMatch = RegularExpressions.BaseServerTag.Match(html);
+
+            if (baseMatch.Success)
+            {
+                html = RegularExpressions.BaseServerTag.Replace(html, String.Empty);
+            }
+
+            Match titleMatch = RegularExpressions.TitleServerTag.Match(html);
+
+            if (titleMatch.Success)
+            {
+                html = RegularExpressions.TitleServerTag.Replace(html, String.Empty);
+            }
+
+            Match layoutMatch = RegularExpressions.LayoutServerTag.Match(html);
+
+            if (layoutMatch.Success)
+            {
+                html = ParseLayoutViewContent(context, layoutMatch, html);
+
+                if (baseMatch.Success)
+                {
+                    html = RegularExpressions.BaseTag.Replace(html, m => String.Format(CultureInfo.InvariantCulture, "<base{0}>", baseMatch.Groups[1].Value));
+                }
+
+                if (titleMatch.Success)
+                {
+                    html = RegularExpressions.TitleTag.Replace(html, m => String.Concat("<title>", titleMatch.Groups[1].Value, "</title>"));
+                }
+            }
+
+            Match namespaceMatch = RegularExpressions.NamespaceAttribute.Match(html);
+
+            if (namespaceMatch.Success)
+            {
+                html = html.Replace(namespaceMatch.Groups[1].Value, String.Empty);
+            }
+
+            return html;
+        }
+
+        private string ParseLayoutViewContent(ControllerContext context, Match layoutMatch, string html)
+        {
+            string layoutFileType = layoutMatch.Result("$1").Trim().ToUpperInvariant(),
+                   layoutValue = layoutMatch.Result("$2"),
+                   layoutFilePath;
+
+            switch (layoutFileType)
+            {
+                case UrlValueType:
+                    layoutFilePath = MapPath(context, layoutValue);
+                    break;
+                case FileValueType:
+                    layoutFilePath = layoutValue.Trim();
+                    break;
+                case NameValueType:
+                    layoutFilePath = MapPath(context, String.Format(CultureInfo.InvariantCulture, LayoutViewLocation, layoutValue.Trim()));
+                    break;
+                default:
+                    return html;
+            }
+
+            html = RegularExpressions.LayoutServerTag.Replace(html, String.Empty);
+
+            if (!File.Exists(layoutFilePath))
+            {
+                throw new FileNotFoundException(String.Format(Resources.LayoutViewNotFound, layoutFilePath));
+            }
+
+            GetReferencedFilePaths(context).Add(layoutFilePath);
+
+            string layoutHtml = ReadViewHtml(layoutFilePath, ViewType.Layout);
+
+            MatchCollection sectionMatches = RegularExpressions.SectionServerTag.Matches(layoutHtml);
+
+            foreach (Match sectionMatch in sectionMatches)
+            {
+                var sectionTagRegex = new Regex(String.Format(CultureInfo.InvariantCulture, RegularExpressions.CustomSectionTagTemplate, sectionMatch.Groups[1].Value),
+                                                RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+                Match sectionTagMatch = sectionTagRegex.Match(html);
+                
+                layoutHtml = layoutHtml.Replace(sectionMatch.Value, sectionTagMatch.Success ? sectionTagMatch.Groups[1].Value.TrimLine() : String.Empty);
+                html = sectionTagRegex.Replace(html, String.Empty);
+            }
+
+            layoutHtml = RegularExpressions.BodyServerTag.Replace(layoutHtml, html.TrimLine());
+
+            return layoutHtml;
+        }
+
+        private string ParseViewContent(ControllerContext context, string html)
+        {
+            html = RegularExpressions.PartialServerTag.Replace(html, match => ParsePartialViewContent(context, match).TrimLine());
+
+            if (m_bundleSupport)
+            {
+                html = TransformBundles(html);
+            }
+
+            MatchCollection debugHtmlMatches = RegularExpressions.DebugServerTag.Matches(html);
+
+            foreach (Match debugHtmlMatch in debugHtmlMatches)
+            {
+                string debugHtml = debugHtmlMatch.Groups[1].Value;
+
+                if (context.HttpContext.IsDebuggingEnabled)
+                {
+                    html = html.Replace(debugHtmlMatch.Value, debugHtml.TrimLine());
+                }
+                else
+                {
+                    html = html.Replace(debugHtmlMatch.Value, String.Empty);
+                }
+            }
+
+            MatchCollection releaseHtmlMatches = RegularExpressions.ReleaseServerTag.Matches(html);
+
+            foreach (Match releaseHtmlMatch in releaseHtmlMatches)
+            {
+                string releaseHtml = releaseHtmlMatch.Groups[1].Value;
+
+                if (!context.HttpContext.IsDebuggingEnabled)
+                {
+                    html = html.Replace(releaseHtmlMatch.Value, releaseHtml.TrimLine());
+                }
+                else
+                {
+                    html = html.Replace(releaseHtmlMatch.Value, String.Empty);
+                }
+            }
+
+            html = RegularExpressions.LinkUrl.Replace(html, m =>
+            {
+                string group1 = m.Result("$1"), group2 = m.Result("$2"), group3 = m.Result("$3"), group5 = m.Result("$5");
+                string applicationPath = context.HttpContext.Request.ApplicationPath != null ?
+                                             context.HttpContext.Request.ApplicationPath.TrimEnd('/') :
+                                             String.Empty;
+
+                return String.Concat(group1, group2, group3, applicationPath, group5);
+            });
+
+            html = RegularExpressions.VersionVariable.Replace(html, m =>
+            {
+                string group1 = m.Result("$1"), group2 = m.Result("$2"), group3 = m.Result("$3"), group5 = m.Result("$5");
+
+                return String.Concat(group1, group2, group3, !String.IsNullOrWhiteSpace(m_version) ? m_version : "0", group5);
+            });
+
+            html = RegularExpressions.ServerCommentDirective.Replace(html, String.Empty);
+
+            return html;
+        }
+
+        private string ParsePartialViewContent(ControllerContext context, Match match)
+        {
+            if (!match.Success)
+            {
+                return String.Empty;
+            }
+
+            string partialViewFileType = match.Result("$1").Trim().ToUpperInvariant(),
+                   partialViewValue = match.Result("$2").Trim(),
+                   partialViewFilePath;
+
+            switch (partialViewFileType)
+            {
+                case UrlValueType:
+                    partialViewFilePath = MapPath(context, partialViewValue);
+                    break;
+                case FileValueType:
+                    partialViewFilePath = partialViewValue;
+                    break;
+                case NameValueType:
+                    return GeneratePartialView(context, partialViewValue);
+                default:
+                    return match.Result("$0");
+            }
+
+            if (partialViewFilePath == null || !File.Exists(partialViewFilePath))
+            {
+                throw new FileNotFoundException(String.Format(Resources.PartialViewNotFound, partialViewFilePath));
+            }
+
+            Stack<string> partialViewStack = GetRenderedPartialFilePaths(context);
+
+            if (partialViewStack.Contains(partialViewFilePath.ToUpperInvariant()))
+            {
+                throw new RecursiveViewReferenceException(String.Format(Resources.RecursivePartialViewReference, partialViewFilePath));
+            }
+
+            GetReferencedFilePaths(context).Add(partialViewFilePath);
+            partialViewStack.Push(partialViewFilePath.ToUpperInvariant());
+
+            string html = ReadViewHtml(partialViewFilePath, ViewType.PartialView);
+            html = ParseViewContent(context, html);
+
+            partialViewStack.Pop();
+
+            return html;
+        }
+
+        private string PostRender(ViewContext viewContext, string html, object model)
+        {
+            if (m_antiForgeryTokenSupport)
+            {
+                Match antiForgeryMatch = RegularExpressions.AntiForgeryServerTag.Match(html);
+
+                if (antiForgeryMatch.Success)
+                {
+                    var helper = new HtmlHelper(viewContext, this);
+
+                    string tokenTag = helper.AntiForgeryToken().ToHtmlString().TrimLine();
+                    html = RegularExpressions.AntiForgeryServerTag.Replace(html, tokenTag);
+                }
+            }
+
+            if (m_modelPropertyName != null && RegularExpressions.ModelPropertyName.IsMatch(m_modelPropertyName))
+            {
+                Match modelMatch = RegularExpressions.ModelServerTag.Match(html);
+
+                if (modelMatch.Success)
+                {
+                    html = RegularExpressions.ModelServerTag.Replace(html, ModelScriptTagCreator.Create(m_modelPropertyName, model));
+                }
+            }
+
+            return html;
+        }
+
+        private string MapPath(ControllerContext context, string viewPath)
+        {
+            if (viewPath.IndexOf('~') == 0)
+            {
+                return context.HttpContext.Server.MapPath(viewPath.Trim());
+            }
+
+            return m_filePath.Substring(0, m_filePath.LastIndexOf('\\') + 1) + viewPath.Trim();
         }
     }
 }
