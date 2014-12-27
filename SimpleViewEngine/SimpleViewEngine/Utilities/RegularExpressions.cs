@@ -4,8 +4,14 @@ namespace SimpleViewEngine.Utilities
 {
     internal static class RegularExpressions
     {
+        public readonly static Regex ActionLinkServerTag = new Regex(@"<srv:action-link(\s+.*?)\s*>(.*?)</srv:action-link>",
+                                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public readonly static Regex AntiForgeryServerTag = new Regex(@"<srv:anti\-forgery\s*/?>",
                                                                       RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public readonly static Regex AttributeNameValue = new Regex(@"\s+(.+?)\s*=\s*\""([^\""]*)\""",
+                                                                    RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex BaseServerTag = new Regex(@"<srv:base([\s/]+.*?)>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -19,7 +25,7 @@ namespace SimpleViewEngine.Utilities
         public readonly static Regex DebugServerTag = new Regex(@"<srv:debug>(.*?)</srv:debug>",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-        public readonly static Regex DoNotMinifyTag = new Regex(@"<srv:minification\s*disabled(=\"".*?\"")?\s*/?>",
+        public readonly static Regex DoNotMinifyTag = new Regex(@"<srv:minification\s*disabled(=\""[^\""]*\"")?\s*/?>",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex LinkUrl = new Regex(@"(\s+)(src|href|data\-[A-Za-z0-9_\-]*\-?href)(\s*=\s*[\""'])(~)([^\""^']*[\""'])",
@@ -29,23 +35,26 @@ namespace SimpleViewEngine.Utilities
 
         public readonly static Regex ModelPropertyName = new Regex(@"^[_$a-zA-Z][_$a-zA-Z0-9]+$", RegexOptions.Compiled);
 
-        public readonly static Regex LayoutServerTag = new Regex(@"<srv:layout\s+(.+?)\s*=\s*\""(.+?)\""\s*/?>",
+        public readonly static Regex LayoutServerTag = new Regex(@"<srv:layout\s+(.+?)\s*=\s*\""([^\""]+)\""\s*/?>",
                                                                  RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public readonly static Regex NamespaceAttribute = new Regex(@"<html\s+.*?(\s*xmlns:srv\s*=\s*[\""'].*?[\""'])",
+        public readonly static Regex NamespaceAttribute = new Regex(@"<html\s+.*?(\s*xmlns:srv\s*=\s*[\""'][^\""]*[\""'])",
                                                                     RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-        public readonly static Regex PartialServerTag = new Regex(@"<srv:partial\s+(.+?)\s*=\s*\""(.+?)\""\s*/?>",
+        public readonly static Regex PartialServerTag = new Regex(@"<srv:partial\s+(.+?)\s*=\s*\""([^\""]+)\""\s*/?>",
                                                                   RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex ReleaseServerTag = new Regex(@"<srv:release>(.*?)</srv:release>",
                                                                   RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
+        public readonly static Regex RouteLinkServerTag = new Regex(@"<srv:route-link(\s+.*?)\s*>(.*?)</srv:route-link>",
+                                                                    RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public readonly static Regex ScriptBundleServerTag = new Regex(@"<srv:script\-bundle\s+url\s*=\s*\""([^\s]*)\""\s*/?>",
                                                                        RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public readonly static Regex SectionServerTag = new Regex(@"<srv:section\s+name\s*=\s*\""([A-Za-z_][A-Za-z0-9\-_]*)\""\s*/?>",
-                                                        RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                                                                  RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
         public readonly static Regex ServerCommentDirective = new Regex(@"<!--@(.*?)-->[\r\n]*", RegexOptions.Compiled | RegexOptions.Multiline);
 

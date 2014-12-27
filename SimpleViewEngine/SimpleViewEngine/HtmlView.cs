@@ -171,7 +171,7 @@ namespace SimpleViewEngine
             writer.Write(isView ? PostRender(viewContext, html, viewContext.ViewData.Model) : html);
         }
 
-        private static HashSet<string> GetReferencedFilePaths(ControllerContext context)
+        private static HashSet<string> GetReferencedFilePaths(ViewContext context)
         {
             var filePaths = context.HttpContext.Items[ReferencedFilePathKey] as HashSet<string>;
 
@@ -186,7 +186,7 @@ namespace SimpleViewEngine
             return filePaths;
         }
 
-        private static Stack<string> GetRenderedPartialFilePaths(ControllerContext context)
+        private static Stack<string> GetRenderedPartialFilePaths(ViewContext context)
         {
             var filePaths = context.HttpContext.Items[RenderedPartialFilePathKey] as Stack<string>;
 
@@ -230,7 +230,7 @@ namespace SimpleViewEngine
             return File.ReadAllText(filePath, Encoding.UTF8).TrimLine();
         }
 
-        private static string GeneratePartialView(ControllerContext context, string viewName)
+        private static string GeneratePartialView(ViewContext context, string viewName)
         {
             if (String.IsNullOrEmpty(viewName))
             {
@@ -326,7 +326,7 @@ namespace SimpleViewEngine
             return html;
         }
 
-        private string GenerateView(ControllerContext context, string html)
+        private string GenerateView(ViewContext context, string html)
         {
             Match baseMatch = RegularExpressions.BaseServerTag.Match(html);
 
@@ -369,7 +369,7 @@ namespace SimpleViewEngine
             return html;
         }
 
-        private string ParseLayoutViewContent(ControllerContext context, Match layoutMatch, string html)
+        private string ParseLayoutViewContent(ViewContext context, Match layoutMatch, string html)
         {
             string layoutFileType = layoutMatch.Result("$1").Trim().ToUpperInvariant(),
                    layoutValue = layoutMatch.Result("$2"),
@@ -419,7 +419,7 @@ namespace SimpleViewEngine
             return layoutHtml;
         }
 
-        private string ParseViewContent(ControllerContext context, string html)
+        private string ParseViewContent(ViewContext context, string html)
         {
             html = RegularExpressions.PartialServerTag.Replace(html, match => ParsePartialViewContent(context, match).TrimLine());
 
@@ -460,6 +460,22 @@ namespace SimpleViewEngine
                 }
             }
 
+            MatchCollection actionLinkMatches = RegularExpressions.ActionLinkServerTag.Matches(html);
+
+            foreach (Match actionLinkMatch in actionLinkMatches)
+            {
+                string actionLink = LinkCreator.CreatorActionLink(this, context, actionLinkMatch);
+                html = html.Replace(actionLinkMatch.Value, actionLink);
+            }
+
+            MatchCollection routeLinkMatches = RegularExpressions.RouteLinkServerTag.Matches(html);
+
+            foreach (Match routeLinkMatch in routeLinkMatches)
+            {
+                string routeLink = LinkCreator.CreatorRouteLink(this, context, routeLinkMatch);
+                html = html.Replace(routeLinkMatch.Value, routeLink);
+            }
+
             html = RegularExpressions.LinkUrl.Replace(html, m =>
             {
                 string group1 = m.Result("$1"), group2 = m.Result("$2"), group3 = m.Result("$3"), group5 = m.Result("$5");
@@ -482,7 +498,7 @@ namespace SimpleViewEngine
             return html;
         }
 
-        private string ParsePartialViewContent(ControllerContext context, Match match)
+        private string ParsePartialViewContent(ViewContext context, Match match)
         {
             if (!match.Success)
             {
