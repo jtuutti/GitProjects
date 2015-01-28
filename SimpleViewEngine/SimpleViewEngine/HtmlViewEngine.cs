@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using SimpleViewEngine.Properties;
@@ -10,6 +11,8 @@ namespace SimpleViewEngine
     /// </summary>
     public class HtmlViewEngine : VirtualPathProviderViewEngine
     {
+        private static string serverTagPrefix = "srv";
+
         private readonly DateTime? m_cacheExpiration;
 
         /// <summary>
@@ -48,6 +51,41 @@ namespace SimpleViewEngine
             ViewLocationFormats = new[] { "~/views/{1}/{0}.html", "~/views/shared/{0}.html" };
             PartialViewLocationFormats = new[] { "~/views/{1}/{0}.partial.html", "~/views/shared/{0}.partial.html" };
             FileExtensions = new[] { "html" };
+        }
+
+        /// <summary>
+        /// Gets or sets the server tag prefix. The default value is "srv".
+        /// </summary>
+        /// <exception cref="ArgumentNullException">If the value is null.</exception>
+        /// <exception cref="ArgumentException">
+        /// If the value contains any other characters besides lowercase letters and dashes.
+        /// It cannot start or end with a dash.
+        /// </exception>
+        public static string ServerTagPrefix
+        {
+            get
+            {
+                return serverTagPrefix;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                if (!Regex.IsMatch(value, @"^[a-z\-]+$"))
+                {
+                    throw new ArgumentException(Resources.InvalidServerTagName, "value");
+                }
+
+                if (value.StartsWith("-") || value.EndsWith("-"))
+                {
+                    throw new ArgumentException(Resources.InvalidServerTagName, "value");
+                }
+
+                serverTagPrefix = value;
+            }
         }
 
         /// <summary>

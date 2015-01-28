@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using Newtonsoft.Json;
+using SimpleViewEngine.Properties;
 
 namespace SimpleViewEngine.Utilities
 {
@@ -128,7 +129,7 @@ namespace SimpleViewEngine.Utilities
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException(String.Concat("Attribute value is not a valid JSON object: ", serializedObject), ex);
+                throw new InvalidOperationException(String.Concat(Resources.InvalidAttribute, ": ", serializedObject), ex);
             }
         }
     }

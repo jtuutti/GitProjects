@@ -162,4 +162,12 @@
     <value>No client action names were provided.</value>
     <comment>No client action names were provided.</comment>
   </data>
+  <data name="InvalidServerTagName" xml:space="preserve">
+    <value>Server tag can only contain lowercase letters and dashes. It cannot start or end with a dash.</value>
+    <comment>Server tag can only contain lowercase letters and dashes. It cannot start or end with a dash.</comment>
+  </data>
+  <data name="InvalidAttribute" xml:space="preserve">
+    <value>Attribute value is not a valid JSON object</value>
+    <comment>Attribute value is not a valid JSON object</comment>
+  </data>
 </root>

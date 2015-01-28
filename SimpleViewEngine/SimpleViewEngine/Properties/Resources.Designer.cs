@@ -61,6 +61,15 @@ namespace SimpleViewEngine.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attribute value is not a valid JSON object.
+        /// </summary>
+        internal static string InvalidAttribute {
+            get {
+                return ResourceManager.GetString("InvalidAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Controller type &apos;{0}&apos; could not be created or does not subclass the IController interface.
         /// </summary>
         internal static string InvalidControllerType {
@@ -84,6 +93,15 @@ namespace SimpleViewEngine.Properties {
         internal static string InvalidPartialViewExtension {
             get {
                 return ResourceManager.GetString("InvalidPartialViewExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server tag can only contain lowercase letters and dashes. It cannot start or end with a dash..
+        /// </summary>
+        internal static string InvalidServerTagName {
+            get {
+                return ResourceManager.GetString("InvalidServerTagName", resourceCulture);
             }
         }
         
