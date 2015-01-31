@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using SimpleViewEngine.Controllers;
+using SimpleViewEngine.Example.Serializers;
 
 namespace SimpleViewEngine.Example
 {
@@ -25,7 +26,8 @@ namespace SimpleViewEngine.Example
                 AntiForgeryTokenSupport = true,
                 ModelPropertyName = "model",
                 BundleSupport = true,
-                MinifyHtml = true
+                MinifyHtml = true,
+                ModelSerializer = new ModelSerializer()
             });
         }
     }

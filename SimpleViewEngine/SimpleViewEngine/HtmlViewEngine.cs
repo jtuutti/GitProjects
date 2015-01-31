@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using SimpleViewEngine.Properties;
+using SimpleViewEngine.Serializer;
 
 namespace SimpleViewEngine
 {
@@ -14,6 +15,7 @@ namespace SimpleViewEngine
         private static string serverTagPrefix = "srv";
 
         private readonly DateTime? m_cacheExpiration;
+        private IModelSerializer m_serializer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HtmlViewEngine"/> class.
@@ -47,6 +49,8 @@ namespace SimpleViewEngine
 
                 m_cacheExpiration = DateTime.Now.Add(cacheExpiration);
             }
+
+            m_serializer = new DefaultModelSerializer();
 
             ViewLocationFormats = new[] { "~/views/{1}/{0}.html", "~/views/shared/{0}.html" };
             PartialViewLocationFormats = new[] { "~/views/{1}/{0}.partial.html", "~/views/shared/{0}.partial.html" };
@@ -121,6 +125,26 @@ namespace SimpleViewEngine
         public string ModelPropertyName { get; set; }
 
         /// <summary>
+        /// Gets or sets the model JSON serializer.
+        /// </summary>
+        public IModelSerializer ModelSerializer
+        {
+            get
+            {
+                return m_serializer;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                m_serializer = value;
+            }
+        }
+
+        /// <summary>
         /// Creates the specified partial view by using the specified controller context.
         /// </summary>
         /// <returns>
@@ -142,7 +166,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(partialPath);
 
-            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, BundleSupport, null,
+            return new HtmlView(m_serializer, filePath, AppVersion, AntiForgeryTokenSupport, BundleSupport, null,
                                 ModelPropertyName, MinifyHtml);
         }
 
@@ -170,7 +194,7 @@ namespace SimpleViewEngine
 
             var filePath = controllerContext.HttpContext.Server.MapPath(viewPath);
 
-            return new HtmlView(filePath, AppVersion, AntiForgeryTokenSupport, BundleSupport,
+            return new HtmlView(m_serializer, filePath, AppVersion, AntiForgeryTokenSupport, BundleSupport,
                                 m_cacheExpiration, ModelPropertyName, MinifyHtml);
         }
     }

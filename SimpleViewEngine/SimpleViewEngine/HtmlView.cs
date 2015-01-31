@@ -10,6 +10,7 @@ using System.Web.Caching;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using SimpleViewEngine.Properties;
+using SimpleViewEngine.Serializer;
 using SimpleViewEngine.Utilities;
 
 namespace SimpleViewEngine
@@ -30,6 +31,7 @@ namespace SimpleViewEngine
         private const string ViewExtension = ".html";
         private const string ViewKeyPrefix = "HTMLView_";
 
+        private readonly IModelSerializer m_serializer;
         private readonly string m_filePath;
         private readonly string m_version;
         private readonly bool m_antiForgeryTokenSupport;
@@ -41,6 +43,7 @@ namespace SimpleViewEngine
         /// <summary>
         /// Initializes a new instance of the <see cref="HtmlView"/> class.
         /// </summary>
+        /// <param name="serializer">The model serializer.</param>
         /// <param name="filePath">The local view file path.</param>
         /// <param name="version">An optional application version.</param>
         /// <param name="antiForgeryTokenSupport">
@@ -56,14 +59,26 @@ namespace SimpleViewEngine
         /// <param name="minifyHtml">
         /// A value indicating whether the output HTML should be minified.
         /// </param>
-        public HtmlView(string filePath, string version, bool antiForgeryTokenSupport, bool bundleSupport,
-                        DateTime? cacheExpiration, string modelPropertyName, bool minifyHtml)
+        public HtmlView(IModelSerializer serializer,
+                        string filePath,
+                        string version,
+                        bool antiForgeryTokenSupport,
+                        bool bundleSupport,
+                        DateTime? cacheExpiration,
+                        string modelPropertyName,
+                        bool minifyHtml)
         {
+            if (serializer == null)
+            {
+                throw new ArgumentNullException("serializer");
+            }
+
             if (filePath == null)
             {
                 throw new ArgumentNullException("filePath");
             }
 
+            m_serializer = serializer;
             m_filePath = filePath;
             m_version = version;
             m_antiForgeryTokenSupport = antiForgeryTokenSupport;
@@ -567,7 +582,7 @@ namespace SimpleViewEngine
 
                 if (modelMatch.Success)
                 {
-                    html = RegularExpressions.ModelServerTag.Replace(html, ModelScriptTagCreator.Create(m_modelPropertyName, model));
+                    html = RegularExpressions.ModelServerTag.Replace(html, ModelScriptTagCreator.Create(m_serializer, m_modelPropertyName, model));
                 }
             }
 

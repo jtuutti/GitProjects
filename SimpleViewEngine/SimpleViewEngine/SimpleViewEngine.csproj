@@ -86,6 +86,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RecursiveViewReferenceException.cs" />
+    <Compile Include="Serializer\DefaultModelSerializer.cs" />
+    <Compile Include="Serializer\IModelSerializer.cs" />
     <Compile Include="Utilities\LinkCreator.cs" />
     <Compile Include="Utilities\RegularExpressions.cs" />
     <Compile Include="Utilities\ModelScriptTagCreator.cs" />
